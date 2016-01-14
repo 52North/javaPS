@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.n52.javaps.commons.observerpattern.IObserver;
+import org.n52.javaps.commons.observerpattern.ISubject;
 import org.n52.javaps.io.GeneratorFactory;
 import org.n52.javaps.io.IGenerator;
 import org.n52.javaps.io.IParser;

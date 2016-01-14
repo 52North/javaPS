@@ -18,12 +18,12 @@ package org.n52.javaps.io;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Base64;
 import java.util.Date;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
+import org.apache.commons.codec.binary.Base64;
 import org.n52.javaps.io.data.IData;
 import org.n52.javaps.io.data.ILiteralData;
 import org.n52.javaps.io.literal.LiteralAnyURIBinding;
@@ -112,7 +112,7 @@ public class BasicXMLTypeFactory {
 				return null;
             }
 		} else if (xmlDataTypeURI.equalsIgnoreCase(BASE64BINARY_URI)) {
-			return new LiteralBase64BinaryBinding(Base64.decode(obj.getBytes()));
+			return new LiteralBase64BinaryBinding(Base64.decodeBase64(obj.getBytes()));
 		} else if (xmlDataTypeURI.equalsIgnoreCase(ANYURI_URI)) {
             try {
                 return new LiteralAnyURIBinding(new URI(obj));

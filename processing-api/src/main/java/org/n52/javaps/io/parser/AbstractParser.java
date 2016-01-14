@@ -21,6 +21,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.codec.binary.Base64InputStream;
+import org.n52.javaps.commons.WPSConfig;
 import org.n52.javaps.io.AbstractIOHandler;
 import org.n52.javaps.io.IOHandler;
 import org.n52.javaps.io.IParser;

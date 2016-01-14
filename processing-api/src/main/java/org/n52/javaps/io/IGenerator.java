@@ -19,6 +19,7 @@ package org.n52.javaps.io;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.n52.javaps.commons.WPSConfig;
 import org.n52.javaps.io.data.IData;
 
 /** 

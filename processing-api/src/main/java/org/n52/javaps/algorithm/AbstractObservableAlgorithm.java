@@ -22,15 +22,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import net.opengis.wps.x100.ProcessDescriptionType;
-import net.opengis.wps.x100.ProcessDescriptionsDocument;
-
+import org.n52.javaps.commons.observerpattern.IObserver;
+import org.n52.javaps.commons.observerpattern.ISubject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.xmlbeans.XmlException;
-import org.apache.xmlbeans.XmlOptions;
-import org.n52.wps.server.observerpattern.IObserver;
-import org.n52.wps.server.observerpattern.ISubject;
 
 public abstract class AbstractObservableAlgorithm implements IAlgorithm, ISubject{
 

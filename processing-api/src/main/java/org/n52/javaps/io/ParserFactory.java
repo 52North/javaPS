@@ -23,6 +23,7 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.n52.iceland.lifecycle.Constructable;
+import org.n52.javaps.commons.WPSConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
