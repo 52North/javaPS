@@ -17,7 +17,7 @@
 package org.n52.javaps.commons;
 
 /**
- * 
+ *
  * @author tkunicki
  */
 public class MIMEUtil {

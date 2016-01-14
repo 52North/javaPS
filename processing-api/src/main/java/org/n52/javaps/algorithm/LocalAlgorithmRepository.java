@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * A static repository to retrieve the available algorithms.
- * 
+ *
  * @author foerster
  *
  */
@@ -45,7 +45,7 @@ public class LocalAlgorithmRepository implements
 	private ParserFactory parserFactory;
 
 	public LocalAlgorithmRepository() {}
-		
+
 	public void init() {
 		processDescriptionMap = new HashMap<String, ProcessDescription>();
 		algorithmMap = new HashMap<String, IAlgorithm>();
@@ -63,9 +63,9 @@ public class LocalAlgorithmRepository implements
 	public Collection<String> getAlgorithmNames() {
 
 		Collection<String> algorithmNames = new ArrayList<>();
-		
+
                 //TODO
-		
+
 		return algorithmNames;
 	}
 
@@ -93,7 +93,7 @@ public class LocalAlgorithmRepository implements
 
 		algorithm.setGeneratorFactory(generatorFactory);
 		algorithm.setParserFactory(parserFactory);
-		
+
 		boolean isNoProcessDescriptionValid = false;
 
 		for (String supportedVersion : WPSConfig.SUPPORTED_VERSIONS) {
@@ -118,9 +118,9 @@ public class LocalAlgorithmRepository implements
 		String algorithmClassName = (String) processID;
 
 		try {
-			
+
 			IAlgorithm algorithm = loadAlgorithm(algorithmClassName);
-			
+
 			processDescriptionMap.put(algorithmClassName,
 					algorithm.getDescription());
 			algorithmMap.put(algorithmClassName, algorithm);
@@ -147,7 +147,7 @@ public class LocalAlgorithmRepository implements
 	}
 
     @Override
-    public void shutdown() {        
+    public void shutdown() {
     }
 
 }

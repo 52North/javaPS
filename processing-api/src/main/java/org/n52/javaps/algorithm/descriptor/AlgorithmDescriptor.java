@@ -52,7 +52,7 @@ public class AlgorithmDescriptor extends Descriptor {
         Preconditions.checkState(
                 builder.outputDescriptors.size() > 0,
                 "Need at minimum 1 output for algorithm.");
-        
+
         // LinkedHaskMap to preserve order
         Map<String, InputDescriptor> iMap = new LinkedHashMap<String, InputDescriptor>();
         for (InputDescriptor iDescriptor : builder.inputDescriptors) {
@@ -199,11 +199,11 @@ public class AlgorithmDescriptor extends Descriptor {
             this.outputDescriptors.addAll(outputDescriptors);
             return self();
         }
-        
+
         public AlgorithmDescriptor build() {
             return new AlgorithmDescriptor(this);
         }
 
     }
-    
+
 }

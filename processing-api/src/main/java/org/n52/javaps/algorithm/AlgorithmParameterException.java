@@ -23,7 +23,7 @@ public class AlgorithmParameterException extends RuntimeException {
 	public AlgorithmParameterException() {
 		super();
 	}
-	
+
 	public AlgorithmParameterException(String message) {
 		super(message);
 	}

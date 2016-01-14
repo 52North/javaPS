@@ -20,12 +20,12 @@ import org.n52.javaps.algorithm.descriptor.AlgorithmDescriptor;
 
 /**
  * TODO: javadoc
- * 
+ *
  * @author Benjamin Pross
  *
  */
 public class ProcessDescription {
-    
+
     private AlgorithmDescriptor algorithmDescriptor;
 
     public AlgorithmDescriptor getAlgorithmDescriptor() {

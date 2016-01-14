@@ -22,7 +22,7 @@ import java.net.URISyntaxException;
 
 public class LiteralAnyURIBinding extends AbstractLiteralDataBinding {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -1148340565647119514L;
 	private transient URI uri;

@@ -186,23 +186,19 @@ package org.n52.javaps.io;
           *
           * @param os
           *            stream to send this buffer's complete content to.
-          * @param pm
-          *            if not null progress updates are sent here. Caller should
-          *            initialize the task and the number of work units to
-          *            <code>{@link #length()}/1024</code>.
           * @throws IOException
           *             an error occurred reading from a temporary file on the local
           *             system, or writing to the output stream.
           */
          public void writeTo(final OutputStream os)
                          throws IOException {
-                
+
                  if (blocks != null) {
                          // Everything is in core so we can stream directly to   the output.
                          //
                         for (final Block b : blocks) {
                                  os.write(b.buffer, 0, b.count);
-                                 
+
                          }
                  } else {
                          // Reopen the temporary file and copy the contents.
@@ -213,7 +209,7 @@ package org.n52.javaps.io;
                                  final byte[] buf = new byte[Block.SZ];
                                  while ((cnt = in.read(buf)) >= 0) {
                                         os.write(buf, 0, cnt);
-                                       
+
                                 }
                          } finally {
                               in.close();

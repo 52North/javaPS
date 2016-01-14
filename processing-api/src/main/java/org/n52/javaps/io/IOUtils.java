@@ -16,9 +16,11 @@
  */
 package org.n52.javaps.io;
 
+import static org.apache.commons.io.IOUtils.closeQuietly;
+import static org.apache.commons.io.IOUtils.copyLarge;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
@@ -33,22 +35,15 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-
 import org.apache.commons.codec.binary.Base64InputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.DOMException;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 
 public class IOUtils {
 	/**
 	 * Reads the given input stream as a string and decodes that base64 string
 	 * into a file with the specified extension
-	 * 
+	 *
 	 * @param input
 	 *            the stream with the base64 string
 	 * @param extension
@@ -58,9 +53,9 @@ public class IOUtils {
 	 * @throws IOException
 	 *             if an error occurs while writing the contents to disk
 	 */
-	
+
 	private static Logger LOGGER = LoggerFactory.getLogger(IOUtils.class);
-	
+
 	public static File writeBase64ToFile(InputStream input, String extension)
 			throws IOException {
 
@@ -78,7 +73,7 @@ public class IOUtils {
 
 		return file;
 	}
-	
+
 	public static File writeStreamToFile(InputStream inputStream, String extension)
 	throws IOException {
 		File file = File.createTempFile("file" + UUID.randomUUID(), "." + extension);
@@ -88,7 +83,7 @@ public class IOUtils {
 	public static File writeStreamToFile(InputStream inputStream,
 			String extension, File file) throws IOException {
 		FileOutputStream output = new FileOutputStream(file);
-		
+
 		byte buf[]=new byte[1024];
 		int len;
 		while((len=inputStream.read(buf))>0){
@@ -97,31 +92,32 @@ public class IOUtils {
 		output.close();
 		inputStream.close();
 
-		return file;		
+		return file;
 	}
 
-	public static File writeBase64XMLToFile(InputStream stream, String extension)
-			throws SAXException, IOException, ParserConfigurationException,
-			DOMException, TransformerException {
-        
-		// ToDo:  look at StAX to stream XML parsing instead of in memory DOM
-		Document document = DocumentBuilderFactory.newInstance()
-				.newDocumentBuilder().parse(stream);
-		String binaryContent = XPathAPI.selectSingleNode(
-				document.getFirstChild(), "text()").getTextContent();
-
-		InputStream byteStream = null;
-        try {
-            byteStream = new ByteArrayInputStream(binaryContent.getBytes());
-            return writeBase64ToFile(byteStream, extension);
-        } finally {
-            closeQuietly(byteStream);
-        }
-	}
+	//TODO check if needed
+//	public static File writeBase64XMLToFile(InputStream stream, String extension)
+//			throws SAXException, IOException, ParserConfigurationException,
+//			DOMException, TransformerException {
+//
+//		// ToDo:  look at StAX to stream XML parsing instead of in memory DOM
+//		Document document = DocumentBuilderFactory.newInstance()
+//				.newDocumentBuilder().parse(stream);
+//		String binaryContent = XPathAPI.selectSingleNode(
+//				document.getFirstChild(), "text()").getTextContent();
+//
+//		InputStream byteStream = null;
+//        try {
+//            byteStream = new ByteArrayInputStream(binaryContent.getBytes());
+//            return writeBase64ToFile(byteStream, extension);
+//        } finally {
+//            closeQuietly(byteStream);
+//        }
+//	}
 
 	/**
 	 * Zip the files. Returns a zipped file and delete the specified files
-	 * 
+	 *
 	 * @param files
 	 *            files to zipped
 	 * @return the zipped file
@@ -162,7 +158,7 @@ public class IOUtils {
 	/**
 	 * Unzip the file. Returns the unzipped file with the specified extension
 	 * and deletes the zipped file
-	 * 
+	 *
 	 * @param file
 	 *            the file to unzip
 	 * @param extension
@@ -174,7 +170,7 @@ public class IOUtils {
 	public static List<File> unzip(File file, String extension) throws IOException {
 		return unzip(file, extension, null);
 	}
-	
+
 	public static List<File> unzip(File file, String extension, File directory) throws IOException {
 		int bufferLength = 2048;
 		byte buffer[] = new byte[bufferLength];
@@ -204,7 +200,7 @@ public class IOUtils {
 
 			if (entry.getName().endsWith("." + extension)) {
 				foundFiles.add(entryFile);
-				
+
 			}
 		}
 
@@ -214,7 +210,7 @@ public class IOUtils {
 
 		return foundFiles;
 	}
-	
+
 	public static List<File> unzipAll(File file) throws IOException {
 		int bufferLength = 2048;
 		byte buffer[] = new byte[bufferLength];
@@ -240,7 +236,7 @@ public class IOUtils {
 			dest.close();
 
 			foundFiles.add(entryFile);
-			
+
 		}
 
 		zipInputStream.close();
@@ -254,7 +250,7 @@ public class IOUtils {
 	 * Delete the given files and all the files with the same name but different
 	 * extension. If some file is <code>null</code> just doesn't process it and
 	 * continue to the next element of the array
-	 * 
+	 *
 	 * @param files
 	 *            the files to delete
 	 */
@@ -279,7 +275,7 @@ public class IOUtils {
 	 * Delete the given files and all the files with the same name but different
 	 * extension. If some file is <code>null</code> just doesn't process it and
 	 * continue to the next element of the array
-	 * 
+	 *
 	 * @param files
 	 *            the files to delete
 	 */

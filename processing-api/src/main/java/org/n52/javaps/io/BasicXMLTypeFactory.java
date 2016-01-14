@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
 public class BasicXMLTypeFactory {
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(BasicXMLTypeFactory.class);
-    
+
 	// List of supported basic XML datatypes.
 	public static final String DOUBLE_URI = "xs:double";
 	public static final String FLOAT_URI = "xs:float";
@@ -58,7 +58,7 @@ public class BasicXMLTypeFactory {
 	public static final String DATE_URI = "xs:date";
 	public static final String BASE64BINARY_URI = "xs:base64Binary";
     public static final String ANYURI_URI = "xs:anyURI";
-    
+
     private final static DatatypeFactory DATATYPE_FACTORY;
 
     static {
@@ -72,17 +72,18 @@ public class BasicXMLTypeFactory {
         }
         DATATYPE_FACTORY = datatypeFactory;
     }
-	
+
 	private BasicXMLTypeFactory(){
-		
+
 	}
-	
+
 	/**
 	 * This is a helper method to create always the correct Java Type out of a string.
 	 * It is based on the basic schema datatypes.
 	 * If xmlDataTypeURI is null, string dataType will be assumed.
 	 * @param xmlDataTypeURI the expected XML basicDataType
 	 * @param obj the XML object String
+	 * @return An IData object wrapping obj
 	 */
 	public static IData getBasicJavaObject(String xmlDataTypeURI, String obj) {
 		obj = obj.replace('\n', ' ').replace('\t', ' ').trim();
@@ -128,7 +129,7 @@ public class BasicXMLTypeFactory {
    public static String getStringRepresentation(String xmlDataTypeURI, IData obj) {
 	   return obj.getPayload().toString();
    }
-   
+
    public static Class<? extends ILiteralData> getBindingForPayloadType(Class<?> payloadType) {
         if (payloadType.equals(float.class) || payloadType.equals(Float.class)) {
             return LiteralFloatBinding.class;

@@ -20,7 +20,7 @@ import java.io.Serializable;
 
 public interface IData extends Serializable {
 	public Object getPayload();
-	
+
 	/*
 	 * Inheriting classes shall indicate which class they support.
 	 * For special cases like Grass, it is recommended to

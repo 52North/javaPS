@@ -24,7 +24,6 @@ import java.util.List;
 import org.apache.commons.codec.binary.Base64InputStream;
 import org.n52.javaps.commons.WPSConfig;
 import org.n52.javaps.io.AbstractIOHandler;
-import org.n52.javaps.io.IOHandler;
 import org.n52.javaps.io.IParser;
 import org.n52.javaps.io.data.IData;
 
@@ -33,14 +32,14 @@ import org.n52.javaps.io.data.IData;
  *
  */
 public abstract class AbstractParser extends AbstractIOHandler implements IParser{
-	
+
 	/**
 	 * A list of files that shall be deleted by destructor.
 	 * Convenience mechanism to delete temporary files that had
 	 * to be written during the generation procedure.
 	 */
 	protected List<File> finalizeFiles;
-	
+
 	public AbstractParser(){
 		super();
 	}
@@ -48,46 +47,46 @@ public abstract class AbstractParser extends AbstractIOHandler implements IParse
 	@Override
 	public IData parseBase64(InputStream input, String mimeType, String schema) {
 		return parse(new Base64InputStream(input), mimeType, schema);
-	}	
-	
-	public void init(WPSConfig wpsConfig) {
-		
-		// load Parser Properties		
-		this.properties = wpsConfig.getConfigurationEntriesForParserClass(this.getClass().getName());
-		
-		this.formats = wpsConfig.getFormatEntriesForParserClass(this.getClass().getName());
-				
-		for (FormatEntry format : formats) {			
+	}
 
-			if(format.getMimeType()!= null && !format.getMimeType().equals("")){
-				String mimetype = format.getMimeType();
-				supportedFormats.add(mimetype);
-			}
-			if(format.getSchema()!= null && !format.getSchema().equals("")){
-				String schema = format.getSchema();
-				supportedSchemas.add(schema);				
-			}
-			
-			if(format.getEncoding()!= null && !format.getEncoding().equals("")){
-				String encoding = format.getEncoding();
-				supportedEncodings.add(encoding);
-			}else{
-				supportedEncodings.add(IOHandler.DEFAULT_ENCODING);
-			}			
-		}
+	public void init(WPSConfig wpsConfig) {
+
+		// load Parser Properties
+		this.properties = new ArrayList<>();
+
+		this.formats = new ArrayList<>();
+
+//		for (FormatEntry format : formats) {
+//
+//			if(format.getMimeType()!= null && !format.getMimeType().equals("")){
+//				String mimetype = format.getMimeType();
+//				supportedFormats.add(mimetype);
+//			}
+//			if(format.getSchema()!= null && !format.getSchema().equals("")){
+//				String schema = format.getSchema();
+//				supportedSchemas.add(schema);
+//			}
+//
+//			if(format.getEncoding()!= null && !format.getEncoding().equals("")){
+//				String encoding = format.getEncoding();
+//				supportedEncodings.add(encoding);
+//			}else{
+//				supportedEncodings.add(IOHandler.DEFAULT_ENCODING);
+//			}
+//		}
 		finalizeFiles = new ArrayList<File>();
 	}
-	
+
 	/**
 	 * Destructor deletes generated temporary files.
 	 */
 	@Override
 	protected void finalize() throws Throwable {
-		
+
 		for (File currentFile : finalizeFiles){
 			currentFile.delete();
 		}
-		
+
 		super.finalize();
 	}
 

@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Extending subclasses of AbstractGenerator shall provide functionality to
  * generate serviceable output data for the processes offered by the 52N WPS framework.
- * 
+ *
  * @author Matthias Mueller
  *
  */
@@ -33,19 +33,19 @@ public abstract class AbstractIOHandler implements IOHandler {
 	protected List<String> supportedSchemas;
 	protected List<String> supportedEncodings;
 	protected List<Class<?>> supportedIDataTypes;
-	protected List<? extends ConfigurationEntry<?>> properties;
-	protected List<FormatEntry> formats;
-	
+	protected List<Object> properties;
+	protected List<Object> formats;
+
 	public AbstractIOHandler(){
 		this.supportedFormats = new ArrayList<String>();
 		this.supportedSchemas = new ArrayList<String>();
 		this.supportedEncodings = new ArrayList<String>();
 		this.supportedIDataTypes = new ArrayList<Class<?>>();
 	}
-	
+
 	/**
 	 * Returns true if the given format is supported, else false.
-	 */ 
+	 */
 	public boolean isSupportedFormat(String format) {
 	    String[] sf = getSupportedFormats();
 		for(String f : sf) {
@@ -55,7 +55,7 @@ public abstract class AbstractIOHandler implements IOHandler {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Returns an array having the supported formats (mimeTypes).
 	 */
@@ -63,8 +63,8 @@ public abstract class AbstractIOHandler implements IOHandler {
 		String[] resultArray = supportedFormats.toArray(new String[supportedFormats.size()]);
 		return resultArray;
 	}
-	
-	
+
+
 	/**
 	 * Returns an array having the supported schemas.
 	 */
@@ -92,7 +92,7 @@ public abstract class AbstractIOHandler implements IOHandler {
 		}
 		return false;
 	}
-	
+
 	public Class<?>[] getSupportedDataBindings() {
 		return supportedIDataTypes.toArray(new Class<?>[supportedIDataTypes.size()]);
 	}
@@ -106,17 +106,17 @@ public abstract class AbstractIOHandler implements IOHandler {
 		}
 		return false;
 	}
-	
+
 	public String[] getSupportedEncodings(){
 		String[] resultArray = supportedEncodings.toArray(new String[supportedEncodings.size()]);
 		return resultArray;
 		//return IOHandler.SUPPORTED_ENCODINGS;
 	}
-	
-	public List<FormatEntry> getSupportedFullFormats(){
+
+	public List<Object> getSupportedFullFormats(){
 		return formats;
 	}
-	
+
 	public boolean isSupportedEncoding(String encoding){
 		for (String currentEncoding : this.getSupportedEncodings()){
 			if (currentEncoding.equalsIgnoreCase(encoding)){
@@ -125,23 +125,23 @@ public abstract class AbstractIOHandler implements IOHandler {
 		}
 		return false;
 	}
-	
+
 	protected boolean isSupportedGenerate (Class<?> binding, String mimeType, String schema){
-		
+
 		if (!(this.isSupportedFormat(mimeType))){
 			return false;
 		}
-		
+
 		if (!(this.isSupportedSchema(schema))){
 			return false;
 		}
-		
+
 		if(!(this.isSupportedDataBinding(binding))){
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 }
 

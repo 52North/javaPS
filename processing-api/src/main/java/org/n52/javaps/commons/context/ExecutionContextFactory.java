@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 public class ExecutionContextFactory {
 
     private static Logger log = LoggerFactory.getLogger(ExecutionContextFactory.class);
-    
+
     private final static ThreadLocal<ExecutionContext> threadContexts = new ThreadLocal<ExecutionContext>();
 
     private static ExecutionContext defaultContext;
@@ -53,7 +53,7 @@ public class ExecutionContextFactory {
         synchronized (threadContexts) {
             threadContexts.set(context);
         }
-        
+
         log.info("Context registered");
     }
 

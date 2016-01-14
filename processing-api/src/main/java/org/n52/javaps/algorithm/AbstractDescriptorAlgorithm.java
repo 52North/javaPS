@@ -32,10 +32,10 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractDescriptorAlgorithm implements IAlgorithm, ISubject {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(AbstractDescriptorAlgorithm.class);
-    
+
     private AlgorithmDescriptor descriptor;
     private ProcessDescription description;
-    
+
     public AbstractDescriptorAlgorithm() {
         super();
     }
@@ -58,10 +58,10 @@ public abstract class AbstractDescriptorAlgorithm implements IAlgorithm, ISubjec
         AlgorithmDescriptor algorithmDescriptor = getAlgorithmDescriptor();
 
 	ProcessDescription processDescription = new ProcessDescription();
-	
+
 	processDescription.setAlgorithmDescriptor(algorithmDescriptor);
-	
-	return processDescription;	
+
+	return processDescription;
     }
 
     @Override
@@ -75,9 +75,9 @@ public abstract class AbstractDescriptorAlgorithm implements IAlgorithm, ISubjec
         }
         return descriptor;
     }
-    
+
     protected abstract AlgorithmDescriptor createAlgorithmDescriptor();
-    
+
     @Override
     public Class<? extends IData> getInputDataType(String identifier) {
         AlgorithmDescriptor algorithmDescriptor = getAlgorithmDescriptor();

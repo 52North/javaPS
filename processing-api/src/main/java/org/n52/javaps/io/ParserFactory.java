@@ -28,73 +28,73 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * XMLParserFactory. Will be initialized within each Framework. 
+ * XMLParserFactory. Will be initialized within each Framework.
  * @author foerster
  *
  */
 
 public class ParserFactory implements Constructable{
-	
+
 	public static String PROPERTY_NAME_REGISTERED_PARSERS = "registeredParsers";
 	private static ParserFactory factory;
 	private static Logger LOGGER = LoggerFactory.getLogger(ParserFactory.class);
-	
+
 	private List<IParser> registeredParsers;
-	
+
 	@Inject
 	private WPSConfig wpsConfig;
-	
-	public void init() {
-		loadAllParsers(wpsConfig.getActiveRegisteredParserModules());
-	}
-    
-    private void loadAllParsers(Map<String, ConfigurationModule> parserMap){
-        registeredParsers = new ArrayList<IParser>();
-		for(String currentParserName : parserMap.keySet()) {
-			
-			ConfigurationModule currentParser = parserMap.get(currentParserName);
-			
-			String parserClass = "";
-			
-			if(currentParser instanceof ClassKnowingModule){
-				parserClass = ((ClassKnowingModule)currentParser).getClassName();
-			}
-			
-			IParser parser = null;
-			try {
-				 parser = (IParser) this.getClass().getClassLoader().loadClass(parserClass).newInstance();
-                 parser.init(wpsConfig);
-			}
-			catch (ClassNotFoundException e) {
-				LOGGER.error("One of the parsers could not be loaded: " + parserClass, e);
-			}
-			catch(IllegalAccessException e) {
-				LOGGER.error("One of the parsers could not be loaded: " + parserClass, e);
-			}
-			catch(InstantiationException e) {
-				LOGGER.error("One of the parsers could not be loaded: " + parserClass, e);
-			}
 
-			if(parser != null) {
-				
-				LOGGER.info("Parser class registered: " + parserClass);
-				registeredParsers.add(parser);
-			}
-		}
+	public void init() {
+		loadAllParsers();
+	}
+
+    private void loadAllParsers(){
+        registeredParsers = new ArrayList<IParser>();
+//		for(String currentParserName : parserMap.keySet()) {
+//
+//			ConfigurationModule currentParser = parserMap.get(currentParserName);
+//
+//			String parserClass = "";
+//
+//			if(currentParser instanceof ClassKnowingModule){
+//				parserClass = ((ClassKnowingModule)currentParser).getClassName();
+//			}
+//
+//			IParser parser = null;
+//			try {
+//				 parser = (IParser) this.getClass().getClassLoader().loadClass(parserClass).newInstance();
+//                 parser.init(wpsConfig);
+//			}
+//			catch (ClassNotFoundException e) {
+//				LOGGER.error("One of the parsers could not be loaded: " + parserClass, e);
+//			}
+//			catch(IllegalAccessException e) {
+//				LOGGER.error("One of the parsers could not be loaded: " + parserClass, e);
+//			}
+//			catch(InstantiationException e) {
+//				LOGGER.error("One of the parsers could not be loaded: " + parserClass, e);
+//			}
+//
+//			if(parser != null) {
+//
+//				LOGGER.info("Parser class registered: " + parserClass);
+//				registeredParsers.add(parser);
+//			}
+//		}
     }
 
 	public static ParserFactory getInstance() {
 		return factory;
 	}
-	
+
 	public IParser getParser(String schema, String format, String encoding, Class<?> requiredInputClass) {
-		
+
 		// dealing with NULL encoding
 		if (encoding == null){
 			encoding = IOHandler.DEFAULT_ENCODING;
 		}
-		
-		//first, look if we can find a direct way		
+
+		//first, look if we can find a direct way
 		for(IParser parser : registeredParsers) {
 			Class<?>[] supportedClasses = parser.getSupportedDataBindings();
 			for(Class<?> clazz : supportedClasses){
@@ -106,7 +106,7 @@ public class ParserFactory implements Constructable{
 				}
 			}
 		}
-		
+
 		//no parser could be found
 		//try an indirect way by creating all permutations and look if one matches
 		//TODO

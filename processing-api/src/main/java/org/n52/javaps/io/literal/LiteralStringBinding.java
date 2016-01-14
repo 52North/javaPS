@@ -20,15 +20,15 @@ import java.io.IOException;
 
 public class LiteralStringBinding extends AbstractLiteralDataBinding {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 4918615178134884183L;
 	private transient String payload;
-	
+
 	public LiteralStringBinding(String payload){
 		this.payload = payload;
 	}
-	
+
 	public String getPayload() {
 		return payload;
 	}
@@ -41,7 +41,7 @@ public class LiteralStringBinding extends AbstractLiteralDataBinding {
 	{
 		oos.writeObject(payload);
 	}
-	
+
 	private synchronized void readObject(java.io.ObjectInputStream oos) throws IOException, ClassNotFoundException
 	{
 		payload = (String) oos.readObject();

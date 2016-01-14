@@ -51,18 +51,18 @@ import org.slf4j.LoggerFactory;
  * @author tkunicki
  */
 public abstract class AnnotationParser<A extends Annotation, M extends AccessibleObject & Member, B extends AnnotationBinding<M>> {
-    
+
     public final static Logger LOGGER = LoggerFactory.getLogger(AnnotationParser.class);
-     
+
     public B parse(M member) {
         A annotation = member.getAnnotation(getSupportedAnnotation());
         return annotation == null ? null : parse(annotation, member);
     }
-    
+
     public abstract B parse(A annotation, M member);
-    
+
     public abstract Class<? extends A> getSupportedAnnotation();
-    
+
     public static class ExecuteAnnotationParser extends AnnotationParser<Execute, Method, ExecuteMethodBinding> {
 
         @Override
@@ -75,27 +75,27 @@ public abstract class AnnotationParser<A extends Annotation, M extends Accessibl
         public Class<? extends Execute> getSupportedAnnotation() {
             return Execute.class;
         }
-        
+
     }
-    
+
     public abstract static class DataAnnotationParser<A extends Annotation, M extends AccessibleObject & Member, B extends AnnotationBinding.DataBinding<M, ? extends BoundDescriptor>>
         extends AnnotationParser<A,M,B> {
         protected abstract B createBinding(M member);
     }
-    
+
     public abstract static class InputAnnotationParser<A extends Annotation, M extends AccessibleObject & Member, B extends AnnotationBinding.InputBinding<M, ? extends InputDescriptor>>
         extends DataAnnotationParser<A,M,B> {}
-    
+
     public abstract static class OutputAnnotationParser<A extends Annotation, M extends AccessibleObject & Member, B extends AnnotationBinding.OutputBinding<M, ? extends OutputDescriptor>>
         extends DataAnnotationParser<A,M,B> {}
-    
+
     public abstract static class LiteralDataInputAnnotationParser<M extends AccessibleObject & Member, B extends AnnotationBinding.InputBinding<M, LiteralDataInputDescriptor>>
         extends InputAnnotationParser<LiteralDataInput, M, B> {
-        
+
         @Override
         public B parse(LiteralDataInput annotation, M member) {
-        
-            B annotatedBinding = createBinding(member); 
+
+            B annotatedBinding = createBinding(member);
             // auto generate binding if it's not explicitly declared
             Type payloadType = annotatedBinding.getPayloadType();
             Class<? extends ILiteralData> binding = annotation.binding();
@@ -184,10 +184,10 @@ public abstract class AnnotationParser<A extends Annotation, M extends Accessibl
             return LiteralDataInput.class;
         }
     }
-    
+
     public abstract static class LiteralDataOutputAnnotationParser<M extends AccessibleObject & Member, B extends AnnotationBinding.OutputBinding<M, LiteralDataOutputDescriptor>>
         extends OutputAnnotationParser<LiteralDataOutput, M, B> {
-        
+
         @Override
         public B parse(LiteralDataOutput annotation, M member) {
             B annotatedBinding = createBinding(member);
@@ -222,7 +222,7 @@ public abstract class AnnotationParser<A extends Annotation, M extends Accessibl
             return LiteralDataOutput.class;
         }
     }
-    
+
     public static class ComplexDataInputAnnotationParser<M extends AccessibleObject & Member, B extends AnnotationBinding.InputBinding<M, ComplexDataInputDescriptor>>
         extends InputAnnotationParser<ComplexDataInput, M, B> {
 
@@ -251,14 +251,14 @@ public abstract class AnnotationParser<A extends Annotation, M extends Accessibl
             throw new UnsupportedOperationException("Not supported yet.");
         }
     }
-    
+
     public abstract static class ComplexDataOutputAnnotationParser<M extends AccessibleObject & Member, B extends AnnotationBinding.OutputBinding<M, ComplexDataOutputDescriptor>>
         extends OutputAnnotationParser<ComplexDataOutput, M, B> {
-        
+
         @Override
         public B parse (ComplexDataOutput annotation, M member) {
             B annotatedBinding = createBinding(member);
-            ComplexDataOutputDescriptor descriptor = 
+            ComplexDataOutputDescriptor descriptor =
                     ComplexDataOutputDescriptor.builder(annotation.identifier(), annotation.binding()).
                     title(annotation.title()).
                     abstrakt(annotation.abstrakt()).
@@ -272,7 +272,7 @@ public abstract class AnnotationParser<A extends Annotation, M extends Accessibl
             return ComplexDataOutput.class;
         }
     }
-    
+
     public static class LiteralDataInputFieldAnnotationParser extends LiteralDataInputAnnotationParser<Field, AnnotationBinding.InputBinding<Field, LiteralDataInputDescriptor>> {
         @Override
         protected InputBinding<Field, LiteralDataInputDescriptor> createBinding(Field member) {
@@ -297,7 +297,7 @@ public abstract class AnnotationParser<A extends Annotation, M extends Accessibl
             return new OutputFieldBinding<ComplexDataOutputDescriptor>(member);
         }
     }
-    
+
     public static class LiteralDataInputMethodAnnotationParser extends LiteralDataInputAnnotationParser<Method, AnnotationBinding.InputBinding<Method, LiteralDataInputDescriptor>> {
         @Override
         protected InputBinding<Method, LiteralDataInputDescriptor> createBinding(Method member) {

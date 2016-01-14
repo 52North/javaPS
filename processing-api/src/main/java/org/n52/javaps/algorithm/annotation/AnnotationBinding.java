@@ -44,7 +44,7 @@ import org.slf4j.LoggerFactory;
 public abstract class AnnotationBinding<M extends AccessibleObject & Member> {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(AnnotationBinding.class);
-    
+
     private M member;
 
     public AnnotationBinding(M member) {
@@ -54,13 +54,13 @@ public abstract class AnnotationBinding<M extends AccessibleObject & Member> {
     public M getMember() {
         return member;
     }
-    
+
     protected boolean checkModifier() {
         return (getMember().getModifiers() & Modifier.PUBLIC) != 0;
     }
-    
+
     public abstract boolean validate();
-    
+
     public static class ExecuteMethodBinding extends AnnotationBinding<Method> {
 
         public ExecuteMethodBinding(Method method) {
@@ -84,7 +84,7 @@ public abstract class AnnotationBinding<M extends AccessibleObject & Member> {
             }
             return true;
         }
-        
+
         public void execute(Object annotatedInstance) {
             try {
                 getMember().invoke(annotatedInstance);
@@ -98,23 +98,23 @@ public abstract class AnnotationBinding<M extends AccessibleObject & Member> {
             }
         }
     }
-    
+
     public static abstract class DataBinding<M extends AccessibleObject & Member, D extends BoundDescriptor> extends AnnotationBinding<M> {
-        
+
         private D descriptor;
-        
+
         public DataBinding(M member) {
             super(member);
         }
-        
+
         public void setDescriptor(D descriptor) {
             this.descriptor = descriptor;
         }
-        
+
         public D getDescriptor() {
             return descriptor;
         }
-        
+
         public abstract Type getMemberType();
 
         public Type getType() {
@@ -142,7 +142,7 @@ public abstract class AnnotationBinding<M extends AccessibleObject & Member> {
     }
 
     public static abstract class InputBinding<M extends AccessibleObject & Member, D extends InputDescriptor> extends DataBinding<M,D> {
-        
+
         public InputBinding(M member) {
             super(member);
         }
@@ -181,7 +181,7 @@ public abstract class AnnotationBinding<M extends AccessibleObject & Member> {
             }
             return false;
         }
-        
+
         protected boolean checkType() {
             Type inputPayloadType = getPayloadType();
             Class<? extends IData> bindingClass = getDescriptor().getBinding();
@@ -222,7 +222,7 @@ public abstract class AnnotationBinding<M extends AccessibleObject & Member> {
             }
             return false;
         }
-        
+
         public Object unbindInput(List<IData> boundValueList) {
             Object value = null;
             if (boundValueList != null && boundValueList.size() > 0) {
@@ -245,22 +245,22 @@ public abstract class AnnotationBinding<M extends AccessibleObject & Member> {
             }
             return value;
         }
-        
+
         public abstract void set(Object annotatedObject, List<IData> boundInputList);
     }
 
     public static abstract class OutputBinding<M extends AccessibleObject & Member,  D extends OutputDescriptor> extends DataBinding<M,D> {
-        
+
         private Constructor<? extends IData> bindingConstructor;
-        
+
         public OutputBinding(M member) {
             super(member);
         }
-        
+
         protected boolean checkType( ) {
             return getConstructor() != null;
         }
-        
+
         public IData bindOutputValue(Object outputValue) {
             try {
                 if (isTypeEnum()) {
@@ -278,9 +278,9 @@ public abstract class AnnotationBinding<M extends AccessibleObject & Member> {
                 throw new RuntimeException(cause.getMessage(), cause);
             }
         }
-        
+
         public abstract IData get(Object annotatedInstance);
-        
+
         private synchronized Constructor<? extends IData> getConstructor() {
             if (bindingConstructor == null ){
                 try {
@@ -311,7 +311,7 @@ public abstract class AnnotationBinding<M extends AccessibleObject & Member> {
         public Type getMemberType() {
             return getMember().getGenericType();
         }
-        
+
         @Override
         public boolean validate() {
             if (!checkModifier()) {
@@ -328,7 +328,7 @@ public abstract class AnnotationBinding<M extends AccessibleObject & Member> {
             }
             return true;
         }
-        
+
         @Override
         public void set(Object annotatedObject, List<IData> boundInputList) {
             try {
@@ -352,7 +352,7 @@ public abstract class AnnotationBinding<M extends AccessibleObject & Member> {
             Type[] genericParameterTypes = getMember().getGenericParameterTypes();
             return (genericParameterTypes.length == 0) ? Void.class : genericParameterTypes[0];
         }
-        
+
         @Override
         public boolean validate() {
             if (!checkModifier()) {
@@ -369,7 +369,7 @@ public abstract class AnnotationBinding<M extends AccessibleObject & Member> {
             }
             return true;
         }
-        
+
         @Override
         public void set(Object annotatedObject, List<IData> boundInputList) {
             try {
@@ -395,7 +395,7 @@ public abstract class AnnotationBinding<M extends AccessibleObject & Member> {
         public Type getMemberType() {
             return getMember().getGenericType();
         }
-        
+
         @Override
         public boolean validate() {
             if (!checkModifier()) {
@@ -408,7 +408,7 @@ public abstract class AnnotationBinding<M extends AccessibleObject & Member> {
             }
             return true;
         }
-        
+
         @Override
         public IData get(Object annotatedInstance) {
             Object value;
@@ -433,7 +433,7 @@ public abstract class AnnotationBinding<M extends AccessibleObject & Member> {
         public Type getMemberType() {
             return getMember().getGenericReturnType();
         }
-        
+
         @Override
         public boolean validate() {
             Method method = getMember();
@@ -451,7 +451,7 @@ public abstract class AnnotationBinding<M extends AccessibleObject & Member> {
             }
             return true;
         }
-        
+
         @Override
         public IData get(Object annotatedInstance) {
             Object value;
@@ -468,10 +468,10 @@ public abstract class AnnotationBinding<M extends AccessibleObject & Member> {
             return value == null ? null : bindOutputValue(value);
         }
     }
-    
+
     // for example, a type reprecenting the <? extends Object> for types of List<? extends Object> or List
     public final Type NOT_PARAMETERIZED_TYPE = new WildcardType() {
         @Override public Type[] getUpperBounds() { return new Type[]{Object.class}; }
-        @Override public Type[] getLowerBounds() { return new Type[0]; }  
+        @Override public Type[] getLowerBounds() { return new Type[0]; }
     };
 }
