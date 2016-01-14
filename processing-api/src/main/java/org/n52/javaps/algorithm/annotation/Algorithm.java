@@ -21,6 +21,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.n52.javaps.commons.WPSConfig;
+
 /**
  *
  * @author tkunicki
@@ -34,4 +36,6 @@ public @interface Algorithm {
     String version();
     boolean storeSupported() default true;
     boolean statusSupported() default true;
+    String outputTransmissionMode() default WPSConfig.OUTPUT_TRANSMISSION_VALUE;//TODO use WPS200Constants
+    String jobControlOption() default WPSConfig.JOB_CONTROL_OPTION_SYNC_EXECUTE;//TODO use WPS200Constants
 }

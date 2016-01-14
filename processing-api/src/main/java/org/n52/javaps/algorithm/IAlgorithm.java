@@ -29,11 +29,11 @@ import org.n52.javaps.io.data.IData;
  */
 public interface IAlgorithm  {
 		
-	Map<String, IData> run(Map<String, List<IData>> inputData) throws ExceptionReport;
+	Map<String, IData> run(Map<String, List<IData>> inputData) throws Exception;//TODO was ExceptionReport
 	
 	List<String> getErrors();
 	
-	ProcessDescription getDescription();
+	ProcessDescription getDescription();//TODO could be replaced by descriptor..
 	
 	/** Returns some well-known name for the process.
 	 *  

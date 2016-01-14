@@ -38,6 +38,7 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.n52.iceland.lifecycle.Constructable;
+import org.n52.javaps.commons.WPSConfig;
 import org.n52.javaps.io.GeneratorFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,41 +56,13 @@ public class RepositoryManager implements Constructable{
 	private ProcessIDRegistry globalProcessIDs = ProcessIDRegistry.getInstance();
 	private UpdateThread updateThread;
 	
-	@Inject
-	private WPSConfig wpsConfig;
-        @Inject
-	private GeneratorFactory generatorFactory;
-        @Inject
-	private ParserFactory parserFactory;
-	
 	public void init() {
 		
 		// clear registry
-		globalProcessIDs.clearRegistry();
+	globalProcessIDs.clearRegistry();
 		
         // initialize all Repositories
         loadAllRepositories();
-
-        // FvK: added Property Change Listener support
-        // creates listener and register it to the wpsConfig instance.
-        wpsConfig.addPropertyChangeListener(WPSConfig.WPSCONFIG_PROPERTY_EVENT_NAME, new PropertyChangeListener() {
-            public void propertyChange(
-                    final PropertyChangeEvent propertyChangeEvent) {
-                                                                  LOGGER.info("Received Property Change Event: {}",
-                                                                              propertyChangeEvent.getPropertyName());
-                loadAllRepositories();
-            }
-        });
-        
-        Double updateHours = wpsConfig.getServerConfigurationModule().getRepoReloadInterval();
-        
-        if (updateHours != 0){
-            LOGGER.info("Setting repository update period to {} hours.", updateHours);
-        	updateHours = updateHours * 3600 * 1000; // make milliseconds
-            long updateInterval = updateHours.longValue();
-            this.updateThread = new UpdateThread(updateInterval);
-        	updateThread.start();
-        }
 
 	}
 
@@ -97,66 +70,26 @@ public class RepositoryManager implements Constructable{
 		
 		List<String> repositoryNames = new ArrayList<>();
 		
-		Map<String, ConfigurationModule> repositoryMap = wpsConfig.getRegisteredAlgorithmRepositoryConfigModules();
-		
-		for (ConfigurationModule repository : repositoryMap.values()) {
-			
-			if(repository.isActive()==false){
-				continue;
-			}
-			
-			String repositoryClassName = "";
-			
-			if(repository instanceof ClassKnowingModule){
-				repositoryClassName = ((ClassKnowingModule)repository).getClassName();
-				repositoryNames.add(repositoryClassName);
-				if(!repositories.containsKey(repositoryClassName)){
-					loadRepository(repository.getClass().getCanonicalName(), repositoryClassName, repositoryMap);
-				}
-			}
-			
-		}
+		//TODO
 		
 		return repositoryNames;
 	}
 	
     private void loadAllRepositories(){
         repositories = new HashMap<String, IAlgorithmRepository>();
-        LOGGER.debug("Loading all repositories: {} (doing a gc beforehand...)", repositories);//FIXME not sure log statement makes a lot of sense
-
-        System.gc();
-
-		Map<String, ConfigurationModule> repositoryMap = wpsConfig.getRegisteredAlgorithmRepositoryConfigModules();
-			
-		for (String repositoryName : repositoryMap.keySet()) {
-
-			ConfigurationModule repository = repositoryMap.get(repositoryName);
-			
-			String repositoryClassName = "";
-
-			if (repository instanceof ClassKnowingModule) {
-				repositoryClassName = ((ClassKnowingModule) repository)
-						.getClassName();				
-				 loadRepository(repositoryName, repositoryClassName, repositoryMap);
-			}else{
-				LOGGER.warn("Repository {} not instanceof ClassKnowingModule. Will not load it.", repositoryName);
-			}
-		}
+        LOGGER.debug("Loading all repositories: {} (doing a gc beforehand...)", repositories);
+        
+        //TODO
+        
     }
 	
-	private void loadRepository(String repositoryName, String repositoryClassName, Map<String, ConfigurationModule> repositoryMap) {
+	private void loadRepository(String repositoryName, String repositoryClassName) {
 		LOGGER.debug("Loading repository: {}", repositoryName);
 
-		if(repositoryMap == null){
-			repositoryMap = wpsConfig.getRegisteredAlgorithmRepositoryConfigModules();
-		}
-
-		ConfigurationModule repository = repositoryMap.get(repositoryName);
-
-		if (repository.isActive() == false) {
-			LOGGER.warn("Repository {} not active. Will not load it.", repositoryName);
-			return;
-		}
+//		if (repository.isActive() == false) {
+//			LOGGER.warn("Repository {} not active. Will not load it.", repositoryName);
+//			return;
+//		}
 
 		try {
 			IAlgorithmRepository algorithmRepository = null;
@@ -167,32 +100,12 @@ public class RepositoryManager implements Constructable{
 			algorithmRepository = (IAlgorithmRepository) repositoryClass
 					.newInstance();
 			
-			algorithmRepository.setConfigurationModule(repository);			
-			algorithmRepository.setGeneratorFactory(generatorFactory);
-			algorithmRepository.setParserFactory(parserFactory);
 			algorithmRepository.init();
 			
 			LOGGER.info("Algorithm Repository {} initialized",
 					repositoryClassName);
 			repositories.put(repositoryClassName, algorithmRepository);
-		} catch (InstantiationException e) {
-			LOGGER.warn(
-					"An error occured while registering AlgorithmRepository: {}",
-					repositoryClassName);
-		} catch (IllegalAccessException e) {
-			// in case of an singleton
-			LOGGER.warn(
-					"An error occured while registering AlgorithmRepository: {}",
-					repositoryClassName);
-		} catch (ClassNotFoundException e) {
-			LOGGER.warn(
-					"An error occured while registering AlgorithmRepository: {}",
-					repositoryClassName, e.getMessage());
-		} catch (IllegalArgumentException e) {
-			LOGGER.warn(
-					"An error occured while registering AlgorithmRepository: {}",
-					repositoryClassName, e.getMessage());
-		} catch (SecurityException e) {
+		} catch (Exception e) {
 			LOGGER.warn(
 					"An error occured while registering AlgorithmRepository: {}",
 					repositoryClassName, e.getMessage());

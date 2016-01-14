@@ -19,21 +19,12 @@ package org.n52.javaps.algorithm;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import javax.inject.Inject;
-
-import org.apache.commons.lang.NotImplementedException;
-import org.n52.iceland.lifecycle.Constructable;
-import org.n52.wps.algorithm.annotation.Algorithm;
-import org.n52.wps.commons.WPSConfig;
-import org.n52.wps.io.GeneratorFactory;
-import org.n52.wps.io.ParserFactory;
-import org.n52.wps.server.modules.LocalAlgorithmRepositoryCM;
-import org.n52.wps.webapp.api.AlgorithmEntry;
-import org.n52.wps.webapp.api.ConfigurationManager;
-import org.n52.wps.webapp.api.ConfigurationModule;
+import org.n52.javaps.algorithm.annotation.Algorithm;
+import org.n52.javaps.commons.WPSConfig;
+import org.n52.javaps.io.GeneratorFactory;
+import org.n52.javaps.io.ParserFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,13 +35,12 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class LocalAlgorithmRepository implements
-		ITransactionalAlgorithmRepository {
+		IAlgorithmRepository {
 
 	private static Logger LOGGER = LoggerFactory
 			.getLogger(LocalAlgorithmRepository.class);
 	private Map<String, ProcessDescription> processDescriptionMap;
 	private Map<String, IAlgorithm> algorithmMap;
-	private ConfigurationModule localAlgorithmRepoConfigModule;
 	private GeneratorFactory generatorFactory;
 	private ParserFactory parserFactory;
 
@@ -60,23 +50,7 @@ public class LocalAlgorithmRepository implements
 		processDescriptionMap = new HashMap<String, ProcessDescription>();
 		algorithmMap = new HashMap<String, IAlgorithm>();
 		// check if the repository is active
-		if (localAlgorithmRepoConfigModule.isActive()) {
-
-			List<AlgorithmEntry> algorithmEntries = localAlgorithmRepoConfigModule
-					.getAlgorithmEntries();
-
-			for (AlgorithmEntry algorithmEntry : algorithmEntries) {
-				if (algorithmEntry.isActive()) {
-					addAlgorithm(algorithmEntry.getAlgorithm());
-				}
-			}
-		} else {
-			LOGGER.debug("Local Algorithm Repository is inactive.");
-		}		
-	}
-
-	public boolean addAlgorithms(String[] algorithms) {
-		throw new NotImplementedException();
+		//TODO
 	}
 
 	public IAlgorithm getAlgorithm(String className) {
@@ -89,16 +63,9 @@ public class LocalAlgorithmRepository implements
 	public Collection<String> getAlgorithmNames() {
 
 		Collection<String> algorithmNames = new ArrayList<>();
-
-		List<AlgorithmEntry> algorithmEntries = localAlgorithmRepoConfigModule
-				.getAlgorithmEntries();
-
-		for (AlgorithmEntry algorithmEntry : algorithmEntries) {
-			if (algorithmEntry.isActive()) {
-				algorithmNames.add(algorithmEntry.getAlgorithm());
-			}
-		}
-
+		
+                //TODO
+		
 		return algorithmNames;
 	}
 
@@ -171,10 +138,6 @@ public class LocalAlgorithmRepository implements
 
 	}
 
-	public boolean removeAlgorithm(Object processID) {
-		throw new NotImplementedException();
-	}
-
 	@Override
 	public ProcessDescription getProcessDescription(String processID) {
 		if (getAlgorithmNames().contains(processID)) {
@@ -183,22 +146,8 @@ public class LocalAlgorithmRepository implements
 		return null;
 	}
 
-	@Override
-	public void shutdown() {}
-
-	@Override
-	public void setConfigurationModule(ConfigurationModule configModule) {
-		this.localAlgorithmRepoConfigModule = configModule;
-	}
-
-	@Override
-	public void setGeneratorFactory(GeneratorFactory generatorFactory) {
-		this.generatorFactory = generatorFactory;
-	}
-
-	@Override
-	public void setParserFactory(ParserFactory parserFactory) {
-		this.parserFactory = parserFactory;
-	}
+    @Override
+    public void shutdown() {        
+    }
 
 }

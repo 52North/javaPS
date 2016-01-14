@@ -21,4 +21,14 @@ package org.n52.javaps.ogc.wps;
  */
 public interface WPS200Constants {
     String VERSION = "2.0.0";
+    
+    String JOB_CONTROL_OPTION_SYNC_EXECUTE = "sync-execute";
+    String JOB_CONTROL_OPTION_ASYNC_EXECUTE = "async-execute";
+    
+    String JOB_CONTROL_OPTIONS_SEPARATOR = " ";
+    
+    String OUTPUT_TRANSMISSION_VALUE = "value";
+    String OUTPUT_TRANSMISSION_REFERENCE = "reference";
+    
+    String OUTPUT_TRANSMISSIONS_SEPARATOR = " ";
 }

@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.n52.javaps.algorithm.annotation.AnnotatedAlgorithmIntrospector;
+import static org.n52.javaps.algorithm.annotation.AnnotatedAlgorithmIntrospector.getInstrospector;
 import org.n52.javaps.algorithm.annotation.AnnotationBinding;
 import org.n52.javaps.algorithm.descriptor.AlgorithmDescriptor;
 import org.n52.javaps.io.GeneratorFactory;
@@ -28,7 +29,6 @@ import org.n52.javaps.io.ParserFactory;
 import org.n52.javaps.io.data.IData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 /**
  *

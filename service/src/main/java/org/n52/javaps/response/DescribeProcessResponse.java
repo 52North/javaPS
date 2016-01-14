@@ -21,7 +21,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.n52.iceland.response.AbstractServiceResponse;
-import org.n52.javaps.ProcessDescription;
+import org.n52.javaps.algorithm.ProcessDescription;
 import org.n52.javaps.ogc.wps.WPSConstants;
 
 public class DescribeProcessResponse extends AbstractServiceResponse {

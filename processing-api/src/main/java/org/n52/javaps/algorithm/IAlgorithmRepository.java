@@ -18,12 +18,8 @@ package org.n52.javaps.algorithm;
 
 import java.util.Collection;
 
-import org.n52.wps.io.GeneratorFactory;
-import org.n52.wps.io.ParserFactory;
-import org.n52.wps.webapp.api.ConfigurationModule;
-
 /**
- * @author 	Bastian Schaeffer, University of Muenster, Theodor Foerster, ITC
+ * @author Bastian Schaeffer, University of Muenster, Theodor Foerster, ITC
  *
  */
 public interface IAlgorithmRepository {
@@ -39,12 +35,6 @@ public interface IAlgorithmRepository {
 	 * use to free resources
 	 */
 	public void shutdown();
-	
-	void setConfigurationModule(ConfigurationModule configModule);	
-
-	void setGeneratorFactory(GeneratorFactory generatorFactory);
-
-	void setParserFactory(ParserFactory parserFactory);
 	
 	void init();
 

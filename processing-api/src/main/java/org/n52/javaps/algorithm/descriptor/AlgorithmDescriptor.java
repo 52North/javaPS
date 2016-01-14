@@ -17,12 +17,15 @@
 package org.n52.javaps.algorithm.descriptor;
 
 import com.google.common.base.Preconditions;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.n52.javaps.commons.WPSConfig;
 
 /**
  *
@@ -33,6 +36,8 @@ public class AlgorithmDescriptor extends Descriptor {
     private final String version;
     private final boolean storeSupported;
     private final boolean statusSupported;
+    private final String outputTransmissionMode;
+    private final String jobControlOption;
     private final Map<String, InputDescriptor> inputDescriptorMap;
     private final Map<String, OutputDescriptor> outputDescriptorMap;
 
@@ -41,6 +46,8 @@ public class AlgorithmDescriptor extends Descriptor {
         this.version = builder.version;
         this.storeSupported = builder.storeSupported;
         this.statusSupported = builder.statusSupported;
+        this.outputTransmissionMode = builder.outputTransmissionMode;
+        this.jobControlOption = builder.jobControlOption;
 
         Preconditions.checkState(
                 builder.outputDescriptors.size() > 0,
@@ -70,6 +77,14 @@ public class AlgorithmDescriptor extends Descriptor {
 
     public boolean getStatusSupported() {
         return statusSupported;
+    }
+
+    public String getOutputTransmissionMode() {
+        return outputTransmissionMode;
+    }
+
+    public String getJobControlOption() {
+        return jobControlOption;
     }
 
     public List<String> getInputIdentifiers() {
@@ -120,6 +135,8 @@ public class AlgorithmDescriptor extends Descriptor {
         private String version = "1.0.0";
         private boolean storeSupported = true;
         private boolean statusSupported = true;
+        private String outputTransmissionMode = WPSConfig.OUTPUT_TRANSMISSION_VALUE;//TODO use WPS200Constants
+        private String jobControlOption = WPSConfig.JOB_CONTROL_OPTION_SYNC_EXECUTE;//TODO use WPS200Constants
         private List<InputDescriptor> inputDescriptors;
         private List<OutputDescriptor> outputDescriptors;
 
@@ -142,6 +159,16 @@ public class AlgorithmDescriptor extends Descriptor {
 
         public B statusSupported(boolean statusSupported) {
             this.statusSupported = statusSupported;
+            return self();
+        }
+
+        public B outputTransmissionMode(String outputTransmissionMode) {
+            this.outputTransmissionMode = outputTransmissionMode;
+            return self();
+        }
+
+        public B jobControlOption(String jobControlOption) {
+            this.jobControlOption = jobControlOption;
             return self();
         }
 
