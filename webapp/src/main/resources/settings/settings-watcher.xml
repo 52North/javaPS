@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
+
+    <bean id="watcherSettingDefinitionGroup" class="org.n52.iceland.config.SettingDefinitionGroup">
+        <property name="title" value="Configuration File Watcher" />
+        <property name="order" value="3.0" />
+    </bean>
+
+    <bean class="org.n52.iceland.config.settings.BooleanSettingDefinition">
+        <property name="key" value="filewatcher.enabled" />
+        <property name="title" value="Enable configuration file watcher" />
+        <property name="description" value="If enabled, the configuration file will be reloaded when changed on the disk." />
+        <property name="order" value="1.0" />
+        <property name="group" ref="watcherSettingDefinitionGroup" />
+        <property name="defaultValue" value="false" />
+    </bean>
+
+</beans>

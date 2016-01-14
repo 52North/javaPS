@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="info" monitorInterval="10" name="iceland-skeleton-log">
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+
+        <RollingFile name="skeletonrollingfile" fileName="logs/iceland-skeleton.log" immediateFlush="false"
+                     filePattern="logs/$${date:yyyy-MM}/iceland-skeleton-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="25 MB"/>
+            </Policies>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="org.n52" level="trace" additivity="false">
+            <AppenderRef ref="console"/>
+            <AppenderRef ref="skeletonrollingfile"/>
+        </Logger>
+        <Logger name="org.springframework" level="info" additivity="false">
+            <AppenderRef ref="console"/>
+            <AppenderRef ref="skeletonrollingfile"/>
+        </Logger>
+
+        <Root level="warn">
+            <AppenderRef ref="console"/>
+            <AppenderRef ref="skeletonrollingfile"/>
+        </Root>
+    </Loggers>
+</Configuration>

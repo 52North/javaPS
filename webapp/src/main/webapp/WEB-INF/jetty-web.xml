@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure_9_0.dtd">
+<Configure class="org.eclipse.jetty.webapp.WebAppContext">
+    <Call name="setAttribute">
+        <!-- disable jar scanning to speed up deployment -->
+        <!-- http://stackoverflow.com/questions/30505653/how-to-speed-up-deployment-to-jetty -->
+        <!-- https://code.google.com/p/run-jetty-run/issues/detail?id=140 -->
+        <Arg>org.eclipse.jetty.server.webapp.WebInfIncludeJarPattern</Arg>
+        <Arg>nothing.jar</Arg>
+    </Call>
+</Configure>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
+
+    <bean id="miscellaneousSettingDefinitionGroup" class="org.n52.iceland.config.SettingDefinitionGroup">
+        <property name="title" value="Miscellaneous" />
+        <property name="order" value="3.0" />
+    </bean>
+    <bean class="org.n52.iceland.config.settings.StringSettingDefinition">
+        <property name="key" value="misc.characterEncoding" />
+        <property name="title" value="Character Encoding" />
+        <property name="description" value="The character encoding used for responses." />
+        <property name="order" value="6.0" />
+        <property name="group" ref="miscellaneousSettingDefinitionGroup" />
+        <property name="defaultValue" value="UTF-8" />
+    </bean>
+    <bean class="org.n52.iceland.config.settings.BooleanSettingDefinition">
+        <property name="key" value="misc.includeStackTraceInExceptionReport" />
+        <property name="title" value="Detailed Error Messages" />
+        <property name="description" value="Should OWS ExceptionReports include a complete stack trace for the causing exception?" />
+        <property name="order" value="15.0" />
+        <property name="group" ref="miscellaneousSettingDefinitionGroup" />
+        <property name="defaultValue" value="false" />
+    </bean>
+    <bean class="org.n52.iceland.config.settings.BooleanSettingDefinition">
+        <property name="key" value="misc.httpResponseCodeUseInKvpAndPoxBinding" />
+        <property name="title" value="Use HTTP Status Codes in KVP and POX Binding?" />
+        <property name="description" value="Should the response returned by KVP and POX binding use the exception specific HTTP status code or always &lt;tt&gt;HTTP 200 - OK&lt;/tt&gt;." />
+        <property name="order" value="12.0" />
+        <property name="group" ref="miscellaneousSettingDefinitionGroup" />
+        <property name="defaultValue" value="false" />
+    </bean>
+    <bean class="org.n52.iceland.config.settings.BooleanSettingDefinition">
+        <property name="key" value="statistics.counting-outputstream" />
+        <property name="title" value="The response document size is calculated" />
+        <property name="description"
+                value="The size of the response document which is sent back to the client. This could result in a small performance degradation." />
+        <property name="order" value="8.0" />
+        <property name="group" ref="miscellaneousSettingDefinitionGroup" />
+        <property name="defaultValue" value="false" />
+    </bean>
+        <bean class="org.n52.iceland.config.settings.BooleanSettingDefinition">
+        <property name="key" value="misc.includeOriginalRequest" />
+        <property name="title" value="Include original request" />
+        <property name="description" value="Should the full (!) original request be included in the decoded Java classes to be used by handlers and operators?" />
+        <property name="order" value="20.0" />
+        <property name="group" ref="miscellaneousSettingDefinitionGroup" />
+        <property name="defaultValue" value="false" />
+    </bean>
+</beans>
