@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.wps.coding;
+package org.n52.javaps.coding;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -44,7 +44,7 @@ import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.exception.ows.concrete.NoDecoderForKeyException;
 import org.n52.iceland.exception.ows.concrete.UnsupportedDecoderInputException;
 import org.n52.iceland.service.AbstractServiceCommunicationObject;
-import org.n52.wps.request.DemoRequest;
+import org.n52.javaps.request.DemoRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

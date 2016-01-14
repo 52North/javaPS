@@ -1,9 +1,9 @@
-package org.n52.wps.handler;
+package org.n52.javaps.handler;
 
 import org.n52.iceland.ds.OperationHandler;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.wps.request.DemoRequest;
-import org.n52.wps.response.DemoResponse;
+import org.n52.javaps.request.DemoRequest;
+import org.n52.javaps.response.DemoResponse;
 
 /**
  * Handlers are a second level layer under the operations and allow to combine business logic across several operators

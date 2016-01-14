@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.wps.response;
+package org.n52.javaps.response;
 
 import java.util.Collection;
 
 import org.n52.iceland.response.AbstractServiceResponse;
-import org.n52.wps.SkeletonConstants;
+import org.n52.javaps.SkeletonConstants;
 
 /**
  * A POJO for the response.

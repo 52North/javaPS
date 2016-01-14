@@ -13,46 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.wps;
+package org.n52.javaps;
+
+import org.n52.iceland.ogc.ows.OWSConstants;
+import org.n52.iceland.ogc.ows.OwsCapabilities;
 
 /**
  *
  * @author <a href="mailto:d.nuest@52north.org">Daniel Nüst</a>
  */
-public interface SkeletonConstants {
+public class SkeletonCapabilities extends OwsCapabilities {
 
-    String SERVICE = "skeleton";
-
-    String VERSION = "0.0.1";
-
-    String OPERATION_DEMO = "demo";
-
-    interface DemoParam {
-
-        String OUTPUT_FORMAT = "outputFormat";
-
-    }
-
-    interface OperationParameter {
-
-        String service = "service"; // OWSConstants.RequestParams.service.name().toLowerCase();
-
-        String version = "version"; // OWSConstants.RequestParams.version.name().toLowerCase();
-
-        String request = "request";
-    }
-
-    interface GetCapabilitiesParameter {
-
-        String acceptversions = "acceptversions";
-    }
-
-    interface DemoParameter {
-
-        String one = "one";
-
-        String two = "two";
-
+    public SkeletonCapabilities(String version) {
+        super(OWSConstants.GetCapabilitiesParams.service.name(), version);
     }
 
 }

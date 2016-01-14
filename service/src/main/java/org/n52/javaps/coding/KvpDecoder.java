@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.wps.coding;
+package org.n52.javaps.coding;
 
 import java.util.Map;
 import org.n52.iceland.coding.decode.Decoder;

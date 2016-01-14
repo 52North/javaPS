@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.wps.coding;
+package org.n52.javaps.coding;
 
-import org.n52.wps.coding.DemoKvpDecoderImpl;
+import org.n52.javaps.coding.DemoKvpDecoderImpl;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -28,7 +28,7 @@ import org.junit.Test;
 
 import org.n52.iceland.exception.ows.CompositeOwsException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.wps.request.DemoRequest;
+import org.n52.javaps.request.DemoRequest;
 
 /**
  *

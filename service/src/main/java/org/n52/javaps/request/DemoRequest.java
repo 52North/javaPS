@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.wps.request;
-
-import com.google.common.base.MoreObjects;
+package org.n52.javaps.request;
 
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.request.AbstractServiceRequest;
-import org.n52.wps.SkeletonConstants;
-import org.n52.wps.response.DemoResponse;
+import org.n52.javaps.SkeletonConstants;
+import org.n52.javaps.response.DemoResponse;
+
+import com.google.common.base.MoreObjects;
 
 /**
  * A POJO for the request, including a helper constructor to pass input parameters to the response.

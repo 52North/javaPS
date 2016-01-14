@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.wps;
+package org.n52.javaps;
 
 import com.google.common.io.Resources;
 import java.io.IOException;

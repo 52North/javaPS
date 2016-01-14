@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.wps.handler.impl;
+package org.n52.javaps.handler.impl;
 
-import org.n52.wps.impl.DemoHandlerImpl;
+import org.n52.javaps.impl.DemoHandlerImpl;
 
 import org.hamcrest.CoreMatchers;
 
@@ -24,9 +24,9 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-import org.n52.wps.handler.DemoHandler;
-import org.n52.wps.request.DemoRequest;
-import org.n52.wps.response.DemoResponse;
+import org.n52.javaps.handler.DemoHandler;
+import org.n52.javaps.request.DemoRequest;
+import org.n52.javaps.response.DemoResponse;
 
 /**
  *

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.wps.coding;
+package org.n52.javaps.coding;
 
 import com.google.common.collect.Sets;
 
@@ -23,11 +23,11 @@ import java.util.Set;
 import org.n52.iceland.coding.decode.DecoderKey;
 import org.n52.iceland.exception.ows.InvalidParameterValueException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.wps.SkeletonConstants;
+import org.n52.javaps.SkeletonConstants;
 
-import static org.n52.wps.coding.KvpDecoder.createKey;
+import static org.n52.javaps.coding.KvpDecoder.createKey;
 
-import org.n52.wps.request.DemoRequest;
+import org.n52.javaps.request.DemoRequest;
 import org.n52.iceland.util.KvpHelper;
 
 public class DemoKvpDecoderImpl extends KvpDecoder<DemoRequest> {

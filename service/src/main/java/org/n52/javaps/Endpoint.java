@@ -1,4 +1,4 @@
-package org.n52.wps;
+package org.n52.javaps;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;

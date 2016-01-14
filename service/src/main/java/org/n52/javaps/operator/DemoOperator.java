@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.wps.operator;
+package org.n52.javaps.operator;
 
 import java.util.Collections;
 import java.util.Set;
@@ -27,9 +27,9 @@ import org.n52.iceland.request.AbstractServiceRequest;
 import org.n52.iceland.request.operator.RequestOperator;
 import org.n52.iceland.request.operator.RequestOperatorKey;
 import org.n52.iceland.response.AbstractServiceResponse;
-import org.n52.wps.SkeletonConstants;
-import org.n52.wps.handler.DemoHandler;
-import org.n52.wps.request.DemoRequest;
+import org.n52.javaps.SkeletonConstants;
+import org.n52.javaps.handler.DemoHandler;
+import org.n52.javaps.request.DemoRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.wps.impl;
+package org.n52.javaps.impl;
 
 import com.google.common.collect.Lists;
 
@@ -30,10 +30,10 @@ import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.ogc.ows.OwsOperation;
 import org.n52.iceland.ogc.ows.OwsParameterValuePossibleValues;
 import org.n52.iceland.ogc.ows.OwsParameterValueRange;
-import org.n52.wps.SkeletonConstants;
-import org.n52.wps.handler.DemoHandler;
-import org.n52.wps.request.DemoRequest;
-import org.n52.wps.response.DemoResponse;
+import org.n52.javaps.SkeletonConstants;
+import org.n52.javaps.handler.DemoHandler;
+import org.n52.javaps.request.DemoRequest;
+import org.n52.javaps.response.DemoResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,4 +1,4 @@
-package org.n52.wps.handler;
+package org.n52.javaps.handler;
 
 import org.n52.iceland.ds.OperationHandler;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
