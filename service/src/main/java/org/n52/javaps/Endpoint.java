@@ -1,20 +1,14 @@
 package org.n52.javaps;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
-import com.google.common.io.ByteSource;
-import com.google.common.io.Resources;
+import static org.n52.iceland.service.ServiceSettings.SERVICE_URL;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 import java.util.Map;
 import java.util.Properties;
-import org.n52.iceland.config.annotation.Configurable;
-import org.n52.iceland.config.annotation.Setting;
-import org.n52.iceland.exception.ConfigurationError;
-import static org.n52.iceland.service.ServiceSettings.SERVICE_URL;
-import org.n52.iceland.util.Validation;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -23,12 +17,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import org.n52.iceland.config.annotation.Configurable;
+import org.n52.iceland.config.annotation.Setting;
+import org.n52.iceland.exception.ConfigurationError;
+import org.n52.iceland.util.Validation;
+
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
+import com.google.common.io.ByteSource;
+import com.google.common.io.Resources;
+
 /**
  *
  * @author <a href="mailto:d.nuest@52north.org">Daniel Nüst</a>
  */
 @Controller
-@RequestMapping(value = "/endpoint", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/service", produces = MediaType.APPLICATION_JSON_VALUE)
 @Configurable
 public class Endpoint {
 
