@@ -14,16 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.handler;
+package org.n52.javaps.response;
 
-import org.n52.iceland.ds.OperationHandler;
+
 import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.request.AbstractServiceRequest;
 import org.n52.iceland.response.AbstractServiceResponse;
 
-public interface GenericHandler<
-            Q extends AbstractServiceRequest<A>,
-            A extends AbstractServiceResponse>
-        extends OperationHandler {
-    A handler(Q request) throws OwsExceptionReport;
+/**
+ * TODO JavaDoc
+ * @author Christian Autermann
+ */
+public class OwsExceptionReportResponse extends AbstractServiceResponse {
+
+    private final OwsExceptionReport owsExceptionReport;
+
+    public OwsExceptionReportResponse(OwsExceptionReport owsExceptionReport) {
+        this.owsExceptionReport = owsExceptionReport;
+    }
+
+    @Override
+    public String getOperationName() {
+        return null;
+    }
+
+    public OwsExceptionReport getOwsExceptionReport() {
+        return owsExceptionReport;
+    }
+
 }
