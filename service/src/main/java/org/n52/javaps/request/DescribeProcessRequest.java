@@ -28,6 +28,11 @@
  */
 package org.n52.javaps.request;
 
+
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.request.AbstractServiceRequest;
 import org.n52.javaps.ogc.wps.WPSConstants;
@@ -36,7 +41,9 @@ import org.n52.javaps.response.DescribeProcessResponse;
 public class DescribeProcessRequest extends
 		AbstractServiceRequest<DescribeProcessResponse> {
 
-	private String processIdentifier;
+	private List<String> identifiers = new LinkedList<>();
+
+    private boolean all = false;
 
 	@Override
 	public DescribeProcessResponse getResponse() throws OwsExceptionReport {
@@ -48,12 +55,16 @@ public class DescribeProcessRequest extends
 		return WPSConstants.Operations.DescribeProcess.name();
 	}
 
-	public String getProcessIdentifier() {
-		return processIdentifier;
+	public List<String> getProcessIdentifier() {
+		return Collections.unmodifiableList(identifiers);
 	}
 
-	public void setProcessIdentifier(String processIdentifier) {
-		this.processIdentifier = processIdentifier;
+	public void addProcessIdentifier(String identifier) {
+		this.identifiers.add(identifier);
 	}
+
+    public boolean isAll() {
+        return getProcessIdentifier().stream().anyMatch(id -> id.equalsIgnoreCase("ALL"));
+    }
 
 }

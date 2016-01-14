@@ -85,4 +85,7 @@
         </constructor-arg>
     </bean>
 
+    <bean class="org.n52.javaps.coding.decode.kvp.GetCapabilitiesKvpDecoder"/>
+    <bean class="org.n52.javaps.coding.decode.kvp.DescribeProcessKvpDecoder"/>
+    
 </beans>

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.coding;
+package org.n52.javaps.coding.decode.kvp;
 
 import java.util.Map;
 
@@ -28,7 +28,7 @@ import org.n52.iceland.util.http.MediaTypes;
  *
  * @author <a href="mailto:d.nuest@52north.org">Daniel Nüst</a>
  */
-public abstract class KvpDecoder<T> implements Decoder<T, Map<String, String>> {
+public abstract class AbstractKvpDecoder<T> implements Decoder<T, Map<String, String>> {
 
     @Override
     @SuppressWarnings("ThrowableResultIgnored")

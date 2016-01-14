@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.coding;
+package org.n52.javaps.coding.decode.kvp;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -26,15 +26,16 @@ import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.ogc.ows.OWSConstants;
 import org.n52.iceland.request.GetCapabilitiesRequest;
 import org.n52.iceland.util.KvpHelper;
-import org.n52.javaps.WPSConstants;
+import org.n52.javaps.ogc.wps.WPS200Constants;
+import org.n52.javaps.ogc.wps.WPSConstants;
 
 import com.google.common.collect.Sets;
 
-public class GetCapabilitiesKvpDecoderImpl extends KvpDecoder<GetCapabilitiesRequest> {
+public class GetCapabilitiesKvpDecoder extends AbstractKvpDecoder<GetCapabilitiesRequest> {
 
     private static final Set<DecoderKey> KEYS = Sets.newHashSet(
             createKey(WPSConstants.SERVICE, null, OWSConstants.Operations.GetCapabilities.toString()),
-            createKey(WPSConstants.SERVICE, WPSConstants.VERSION, OWSConstants.Operations.GetCapabilities.toString()));
+            createKey(WPSConstants.SERVICE, WPS200Constants.VERSION, OWSConstants.Operations.GetCapabilities.toString()));
 
     @Override
     public Set<DecoderKey> getKeys() {
@@ -47,19 +48,19 @@ public class GetCapabilitiesKvpDecoderImpl extends KvpDecoder<GetCapabilitiesReq
     }
 
     @Override
-    protected void decodeParameter(GetCapabilitiesRequest request, String name, String values) throws OwsExceptionReport {
+    protected void decodeParameter(GetCapabilitiesRequest request, String name, String value) throws OwsExceptionReport {
         switch (name.toLowerCase()) {
-            case OWSConstants.RequestParams.service:
-                request.setService(KvpHelper.checkParameterSingleValue(values, name));
+            case "service":
+                request.setService(KvpHelper.checkParameterSingleValue(value, name));
                 break;
-            case WPSConstants.OperationParameter.request:
-                KvpHelper.checkParameterSingleValue(values, name);
+            case "request":
+                KvpHelper.checkParameterSingleValue(value, name);
                 break;
-            case WPSConstants.GetCapabilitiesParameter.acceptversions:
-                if (values.isEmpty()) {
+            case "acceptversions":
+                if (value.isEmpty()) {
                     throw new MissingParameterValueException(name);
                 }
-                request.setAcceptVersions(Arrays.asList(values.split(",")));
+                request.setAcceptVersions(Arrays.asList(value.split(",")));
                 break;
 //            case ACCEPT_FORMATS:
 //                request.setAcceptFormats(KvpHelper.checkParameterMultipleValues(values, name));
@@ -75,7 +76,8 @@ public class GetCapabilitiesKvpDecoderImpl extends KvpDecoder<GetCapabilitiesReq
 //                request.addExtension(le);
 //                break;
             default:
-                throw new InvalidParameterValueException(name, values).withMessage("The parameter '%s' is not supported.", name); // OptionNotSupportedException (and thereby ParameterNotSupportedException) are OWS 1.1.0
+                throw new InvalidParameterValueException(name, value)
+                        .withMessage("The parameter '%s' is not supported.", name);
         }
     }
 
