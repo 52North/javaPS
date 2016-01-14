@@ -40,8 +40,6 @@ import org.n52.iceland.util.Producer;
 import org.n52.iceland.util.http.MediaType;
 
 /**
- * TODO JavaDoc
- *
  * @author Christian Autermann <c.autermann@52north.org>
  *
  * @since 4.0.0

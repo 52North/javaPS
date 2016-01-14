@@ -27,6 +27,6 @@
     <mvc:resources mapping="/" location="/static/index.html" />
 
     <!-- additional endpoints -->
-    <bean id="extraEndpoint" class="org.n52.iceland.skeleton.Endpoint" />
+    <bean id="extraEndpoint" class="org.n52.javaps.InfoEndpoint" />
 
 </beans>

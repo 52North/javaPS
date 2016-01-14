@@ -33,7 +33,7 @@ import org.n52.iceland.ogc.ows.OwsCapabilities;
 public class WPSCapabilities extends OwsCapabilities {
 
 	public WPSCapabilities(String version) {
-		super(WPSConstants.WPS, version);
+		super(WPSConstants.SERVICE, version);
 	}
 
 }

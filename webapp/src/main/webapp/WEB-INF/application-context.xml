@@ -28,5 +28,6 @@
     </bean>
 
     <import resource="classpath:settings/*.xml" />
+    <import resource="classpath:components/*.xml" />
 
 </beans>

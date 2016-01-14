@@ -31,10 +31,10 @@ import com.google.common.io.Resources;
  * @author <a href="mailto:d.nuest@52north.org">Daniel Nüst</a>
  */
 @Controller
-@RequestMapping(value = "/service", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/info", produces = MediaType.APPLICATION_JSON_VALUE)
 @Configurable
-public class Endpoint {
-    private static final Logger log = LoggerFactory.getLogger(Endpoint.class);
+public class InfoEndpoint {
+    private static final Logger log = LoggerFactory.getLogger(InfoEndpoint.class);
     private static final Properties GIT_PROPS;
     private static final Properties VERSION_PROPS;
 
@@ -62,7 +62,7 @@ public class Endpoint {
 
     private String serviceURL;
 
-    public Endpoint() {
+    public InfoEndpoint() {
         log.info("Created endpoint");
     }
 

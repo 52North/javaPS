@@ -49,7 +49,7 @@ public class GetCapabilitiesKvpDecoderImpl extends KvpDecoder<GetCapabilitiesReq
     @Override
     protected void decodeParameter(GetCapabilitiesRequest request, String name, String values) throws OwsExceptionReport {
         switch (name.toLowerCase()) {
-            case WPSConstants.OperationParameter.service:
+            case OWSConstants.RequestParams.service:
                 request.setService(KvpHelper.checkParameterSingleValue(values, name));
                 break;
             case WPSConstants.OperationParameter.request:

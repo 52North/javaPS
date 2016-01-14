@@ -44,7 +44,7 @@ import org.n52.javaps.ogc.wps.WPSConstants;
 import org.n52.javaps.ogc.wps.WPS100Constants;
 
 public class DescribeProcessKvpDecoder implements Decoder<AbstractServiceRequest<?>, Map<String, String>> {
-    private static final DecoderKey KVP_DECODER_KEY_TYPE = new OperationDecoderKey(WPSConstants.WPS,
+    private static final DecoderKey KVP_DECODER_KEY_TYPE = new OperationDecoderKey(WPSConstants.SERVICE,
             WPS100Constants.SERVICEVERSION, WPSConstants.Operations.DescribeProcess.name(), MediaTypes.APPLICATION_KVP);
 
     @Override

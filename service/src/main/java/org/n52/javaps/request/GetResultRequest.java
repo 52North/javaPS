@@ -7,8 +7,6 @@ import org.n52.javaps.ogc.wps.WPSConstants;
 import org.n52.javaps.response.GetResultResponse;
 
 /**
- * TODO JavaDoc
- *
  * @author Christian Autermann
  */
 public class GetResultRequest extends AbstractServiceRequest<GetResultResponse> {

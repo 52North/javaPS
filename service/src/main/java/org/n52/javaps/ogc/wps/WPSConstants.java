@@ -42,7 +42,7 @@ public interface WPSConstants {
     /**
      * Constant for the service name of the WPS.
      */
-    String WPS = "WPS";
+    String SERVICE = "WPS";
 
     /**
      * Constant 'inline' for response mode, which means that results are

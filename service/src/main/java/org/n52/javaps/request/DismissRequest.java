@@ -7,8 +7,6 @@ import org.n52.javaps.ogc.wps.WPSConstants;
 import org.n52.javaps.response.DismissResponse;
 
 /**
- * TODO JavaDoc
- *
  * @author Christian Autermann
  */
 public class DismissRequest extends AbstractServiceRequest<DismissResponse> {

@@ -79,7 +79,7 @@ public class GetCapabilitiesEncoder<T extends GetCapabilitiesResponse> extends A
 
 	@Override
 	public Set<EncoderKey> getKeys() {
-        OperationKey key = new OperationKey(WPSConstants.WPS,
+        OperationKey key = new OperationKey(WPSConstants.SERVICE,
                 WPS100Constants.SERVICEVERSION, WPSConstants.Operations.GetCapabilities.name());
         Set<EncoderKey> encoderKeys =
                 Sets.newHashSet(new XmlEncoderKey("wps", GetCapabilitiesResponse.class), new OperationEncoderKey(key,

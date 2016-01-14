@@ -46,8 +46,8 @@ import org.n52.javaps.ogc.wps.WPSConstants;
 import org.n52.javaps.ogc.wps.WPS100Constants;
 
 public class GetCapabilitiesKvpDecoder implements Decoder<AbstractServiceRequest<?>, Map<String, String>> {
-    private static final Set<DecoderKey> KVP_DECODER_KEY_TYPE = Sets.<DecoderKey> newHashSet(new OperationDecoderKey(WPSConstants.WPS,
-            WPS100Constants.SERVICEVERSION, WPSConstants.Operations.GetCapabilities.name(), MediaTypes.APPLICATION_KVP), new OperationDecoderKey(WPSConstants.WPS,
+    private static final Set<DecoderKey> KVP_DECODER_KEY_TYPE = Sets.<DecoderKey> newHashSet(new OperationDecoderKey(WPSConstants.SERVICE,
+            WPS100Constants.SERVICEVERSION, WPSConstants.Operations.GetCapabilities.name(), MediaTypes.APPLICATION_KVP), new OperationDecoderKey(WPSConstants.SERVICE,
                     null, WPSConstants.Operations.GetCapabilities.name(), MediaTypes.APPLICATION_KVP));
 
     
@@ -60,7 +60,7 @@ public class GetCapabilitiesKvpDecoder implements Decoder<AbstractServiceRequest
 	public GetCapabilitiesRequest decode(Map<String, String> objectToDecode)
 			throws OwsExceptionReport, UnsupportedDecoderInputException {		
 		
-		GetCapabilitiesRequest gtcr = new GetCapabilitiesRequest(WPSConstants.WPS);
+		GetCapabilitiesRequest gtcr = new GetCapabilitiesRequest(WPSConstants.SERVICE);
 		
 		gtcr.setService(objectToDecode.get("service"));
 		gtcr.setVersion(objectToDecode.get("version"));

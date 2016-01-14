@@ -7,7 +7,6 @@ import org.n52.javaps.ogc.wps.WPSConstants;
 import org.n52.javaps.response.GetStatusResponse;
 
 /**
- * TODO JavaDoc
  * @author Christian Autermann
  */
 public class GetStatusRequest extends AbstractServiceRequest<GetStatusResponse>{
