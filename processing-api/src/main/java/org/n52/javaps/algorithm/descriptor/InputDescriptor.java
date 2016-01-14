@@ -28,13 +28,14 @@ import com.google.common.base.Preconditions;
  */
 public abstract class InputDescriptor<T extends Class<? extends IData>> extends BoundDescriptor<T> {
 
-	private final BigInteger minOccurs;
-	private final BigInteger maxOccurs;
+    private final BigInteger minOccurs;
 
-	protected InputDescriptor(Builder<? extends Builder<?,T>, T> builder) {
+    private final BigInteger maxOccurs;
+
+    protected InputDescriptor(Builder<? extends Builder<?, T>, T> builder) {
         super(builder);
-		this.minOccurs = builder.minOccurs;
-		this.maxOccurs = builder.maxOccurs;
+        this.minOccurs = builder.minOccurs;
+        this.maxOccurs = builder.maxOccurs;
         Preconditions.checkState(maxOccurs.longValue() >= minOccurs.longValue(), "maxOccurs must be >= minOccurs");
     }
 
@@ -46,9 +47,10 @@ public abstract class InputDescriptor<T extends Class<? extends IData>> extends 
         return maxOccurs;
     }
 
-    public static abstract class Builder<B extends Builder<B,T>, T extends Class<? extends IData>> extends BoundDescriptor.Builder<B,T>{
+    public static abstract class Builder<B extends Builder<B, T>, T extends Class<? extends IData>> extends BoundDescriptor.Builder<B, T> {
 
         private BigInteger minOccurs = BigInteger.ONE;
+
         private BigInteger maxOccurs = BigInteger.ONE;
 
         protected Builder(String identifier, T binding) {

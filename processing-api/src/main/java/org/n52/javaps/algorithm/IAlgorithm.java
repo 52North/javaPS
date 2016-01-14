@@ -24,39 +24,45 @@ import org.n52.javaps.io.ParserFactory;
 import org.n52.javaps.io.data.IData;
 
 /**
- * @author Bastian Schaeffer, University of Muenster,	Theodor Foerster, ITC
+ * @author Bastian Schaeffer, University of Muenster, Theodor Foerster, ITC
  *
  */
-public interface IAlgorithm  {
+public interface IAlgorithm {
 
-	Map<String, IData> run(Map<String, List<IData>> inputData) throws Exception;//TODO was ExceptionReport
+    Map<String, IData> run(Map<String, List<IData>> inputData) throws Exception;// TODO
+                                                                                // was
+                                                                                // ExceptionReport
 
-	List<String> getErrors();
+    List<String> getErrors();
 
-	ProcessDescription getDescription();//TODO could be replaced by descriptor..
+    ProcessDescription getDescription();// TODO could be replaced by
+                                        // descriptor..
 
-	/** Returns some well-known name for the process.
-	 *
-	 *  @return Returns some well-known name for the process or algorithm
-	 *  if that exists, else returns an empty String, never null.
-	 *  The fully-qualified class name is gotten via getName();
-	 */
-	String getWellKnownName();
+    /**
+     * Returns some well-known name for the process.
+     *
+     * @return Returns some well-known name for the process or algorithm if that
+     *         exists, else returns an empty String, never null. The
+     *         fully-qualified class name is gotten via getName();
+     */
+    String getWellKnownName();
 
-	/**
-	 * Checks if the processDescription complies to the process itself and fits any schema or other dependencies.
-	 *
-	 * @param version The version of the ProcessDescription to check
-	 * @return true if the ProcessDescription is valid, false otherwise
-	 */
-	boolean processDescriptionIsValid(String version);
+    /**
+     * Checks if the processDescription complies to the process itself and fits
+     * any schema or other dependencies.
+     *
+     * @param version
+     *            The version of the ProcessDescription to check
+     * @return true if the ProcessDescription is valid, false otherwise
+     */
+    boolean processDescriptionIsValid(String version);
 
-	Class< ? > getInputDataType(String id);
+    Class<?> getInputDataType(String id);
 
-	Class< ? > getOutputDataType(String id);
+    Class<?> getOutputDataType(String id);
 
-	void setGeneratorFactory(GeneratorFactory generatorFactory);
+    void setGeneratorFactory(GeneratorFactory generatorFactory);
 
-	void setParserFactory(ParserFactory parserFactory);
+    void setParserFactory(ParserFactory parserFactory);
 
 }

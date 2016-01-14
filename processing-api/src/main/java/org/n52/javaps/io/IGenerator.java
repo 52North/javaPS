@@ -30,34 +30,44 @@ import org.n52.javaps.io.data.IData;
  */
 public interface IGenerator extends IOHandler {
 
-	/**
-	 *
-	 * @param data The data
-	 * @param mimeType The mime type
-	 * @param schema the schema
-	 * @return Inputstream holding the data
-	 *
-	 * generates final output data produced by an IAlgorithm
-	 * and returns an InputStream for subsequent access.
-	 * @throws IOException If the stream cannot be generated
-	 */
-	public InputStream generateStream(IData data, String mimeType, String schema) throws IOException;
+    /**
+     *
+     * @param data
+     *            The data
+     * @param mimeType
+     *            The mime type
+     * @param schema
+     *            the schema
+     * @return Inputstream holding the data
+     *
+     *         generates final output data produced by an IAlgorithm and returns
+     *         an InputStream for subsequent access.
+     * @throws IOException
+     *             If the stream cannot be generated
+     */
+    public InputStream generateStream(IData data,
+            String mimeType,
+            String schema) throws IOException;
 
+    /**
+     *
+     * @param data
+     *            The data
+     * @param mimeType
+     *            The mime type
+     * @param schema
+     *            the schema
+     * @return Inputstream holding the data encoded in base64
+     *
+     *         generates final output data produced by an IAlgorithm, encodes it
+     *         in Base64 and returns an InputStream for subsequent access.
+     * @throws IOException
+     *             If the stream cannot be generated
+     */
+    public InputStream generateBase64Stream(IData data,
+            String mimeType,
+            String schema) throws IOException;
 
-	/**
-	 *
-         * @param data The data
-         * @param mimeType The mime type
-         * @param schema the schema
-	 * @return Inputstream holding the data encoded in base64
-	 *
-	 * generates final output data produced by an IAlgorithm, encodes it in Base64
-	 * and returns an InputStream for subsequent access.
-         * @throws IOException If the stream cannot be generated
-	 */
-	public InputStream generateBase64Stream(IData data, String mimeType, String schema) throws IOException;
-
-
-	public void init(WPSConfig wpsConfig);
+    public void init(WPSConfig wpsConfig);
 
 }

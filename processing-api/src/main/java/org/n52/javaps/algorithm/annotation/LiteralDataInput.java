@@ -28,18 +28,25 @@ import org.n52.javaps.io.data.ILiteralData;
  * @author tkunicki
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD, ElementType.FIELD})
+@Target({ ElementType.METHOD, ElementType.FIELD })
 public @interface LiteralDataInput {
-    String identifier();  // identifier
-    String title() default "";
-    String abstrakt() default "";  // 'abstract' is java reserved keyword
-    int minOccurs() default 1;
-    int maxOccurs() default 1;
-    String defaultValue() default "";
-    String[] allowedValues() default {};
-    Class <? extends ILiteralData> binding() default ILiteralData.class;
+    String identifier(); // identifier
 
-    //// special maxOccurs flags
+    String title() default "";
+
+    String abstrakt() default ""; // 'abstract' is java reserved keyword
+
+    int minOccurs() default 1;
+
+    int maxOccurs() default 1;
+
+    String defaultValue() default "";
+
+    String[] allowedValues() default {};
+
+    Class<? extends ILiteralData> binding() default ILiteralData.class;
+
+    // // special maxOccurs flags
     // set maxOccurs to enum constant count
     public final static int ENUM_COUNT = -1;
 }

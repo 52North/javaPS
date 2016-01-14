@@ -23,19 +23,19 @@ import java.util.Collection;
  *
  */
 public interface IAlgorithmRepository {
-	Collection<String> getAlgorithmNames();
+    Collection<String> getAlgorithmNames();
 
-	IAlgorithm getAlgorithm(String processID);
+    IAlgorithm getAlgorithm(String processID);
 
-	ProcessDescription getProcessDescription(String processID);
+    ProcessDescription getProcessDescription(String processID);
 
-	boolean containsAlgorithm(String processID);
+    boolean containsAlgorithm(String processID);
 
-	/**
-	 * use to free resources
-	 */
-	public void shutdown();
+    /**
+     * use to free resources
+     */
+    public void shutdown();
 
-	void init();
+    void init();
 
 }

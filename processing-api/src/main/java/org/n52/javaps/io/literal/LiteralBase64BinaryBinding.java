@@ -19,37 +19,34 @@ package org.n52.javaps.io.literal;
 import java.io.IOException;
 
 public class LiteralBase64BinaryBinding extends AbstractLiteralDataBinding {
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = -9025105142295309281L;
-	private transient byte[] binary;
 
-	public LiteralBase64BinaryBinding(byte[] binary) {
-		this.binary = binary;
-	}
+    private static final long serialVersionUID = -9025105142295309281L;
 
-	public byte[] getBinary() {
-		return binary;
-	}
+    private transient byte[] binary;
 
-	@Override
-	public byte[] getPayload() {
-		return binary;
-	}
+    public LiteralBase64BinaryBinding(byte[] binary) {
+        this.binary = binary;
+    }
 
-	@Override
-	public Class<byte[]> getSupportedClass() {
-		return byte[].class;
-	}
+    public byte[] getBinary() {
+        return binary;
+    }
 
-	private synchronized void writeObject(java.io.ObjectOutputStream oos) throws IOException
-	{
-		oos.writeObject(new String(binary));
-	}
+    @Override
+    public byte[] getPayload() {
+        return binary;
+    }
 
-	private synchronized void readObject(java.io.ObjectInputStream oos) throws IOException, ClassNotFoundException
-	{
-		binary = ((String) oos.readObject()).getBytes();
-	}
+    @Override
+    public Class<byte[]> getSupportedClass() {
+        return byte[].class;
+    }
+
+    private synchronized void writeObject(java.io.ObjectOutputStream oos) throws IOException {
+        oos.writeObject(new String(binary));
+    }
+
+    private synchronized void readObject(java.io.ObjectInputStream oos) throws IOException, ClassNotFoundException {
+        binary = ((String) oos.readObject()).getBytes();
+    }
 }

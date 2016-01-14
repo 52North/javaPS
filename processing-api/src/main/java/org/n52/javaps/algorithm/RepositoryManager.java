@@ -141,7 +141,8 @@ public class RepositoryManager implements Constructable {
      * Methods looks for Algorithm in all Repositories. The first match is
      * returned. If no match could be found, null is returned
      *
-     * @param className The name of the algorithm class
+     * @param className
+     *            The name of the algorithm class
      * @return IAlgorithm or null an instance of the algorithm class
      */
     public IAlgorithm getAlgorithm(String className) {
@@ -207,15 +208,17 @@ public class RepositoryManager implements Constructable {
             IAlgorithmRepository repository) {
         if (globalProcessIDs.addID(id)) {
             return true;
-        } else
+        } else {
             return false;
+        }
     }
 
     public boolean unregisterAlgorithm(String id) {
         if (globalProcessIDs.removeID(id)) {
             return true;
-        } else
+        } else {
             return false;
+        }
     }
 
     public IAlgorithmRepository getAlgorithmRepository(String name) {

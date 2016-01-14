@@ -43,33 +43,39 @@ public class GeneratorFactory implements Constructable {
 
     private void loadAllGenerators() {
         registeredGenerators = new ArrayList<IGenerator>();
-        //TODO
-//        for (String currentGeneratorName : generatorMap.keySet()) {
-//
-//            ConfigurationModule currentGenerator = generatorMap.get(currentGeneratorName);
-//
-//            String generatorClass = "";
-//
-//            if (currentGenerator instanceof ClassKnowingModule) {
-//                generatorClass = ((ClassKnowingModule) currentGenerator).getClassName();
-//            }
-//
-//            IGenerator generator = null;
-//            try {
-//                generator = (IGenerator) this.getClass().getClassLoader().loadClass(generatorClass).newInstance();
-//                generator.init(wpsConfig);
-//            } catch (ClassNotFoundException e) {
-//                LOGGER.error("One of the generators could not be loaded: " + generatorClass, e);
-//            } catch (IllegalAccessException e) {
-//                LOGGER.error("One of the generators could not be loaded: " + generatorClass, e);
-//            } catch (InstantiationException e) {
-//                LOGGER.error("One of the generators could not be loaded: " + generatorClass, e);
-//            }
-//            if (generator != null) {
-//                LOGGER.info("Generator class registered: " + generatorClass);
-//                registeredGenerators.add(generator);
-//            }
-//        }
+        // TODO
+        // for (String currentGeneratorName : generatorMap.keySet()) {
+        //
+        // ConfigurationModule currentGenerator =
+        // generatorMap.get(currentGeneratorName);
+        //
+        // String generatorClass = "";
+        //
+        // if (currentGenerator instanceof ClassKnowingModule) {
+        // generatorClass = ((ClassKnowingModule)
+        // currentGenerator).getClassName();
+        // }
+        //
+        // IGenerator generator = null;
+        // try {
+        // generator = (IGenerator)
+        // this.getClass().getClassLoader().loadClass(generatorClass).newInstance();
+        // generator.init(wpsConfig);
+        // } catch (ClassNotFoundException e) {
+        // LOGGER.error("One of the generators could not be loaded: " +
+        // generatorClass, e);
+        // } catch (IllegalAccessException e) {
+        // LOGGER.error("One of the generators could not be loaded: " +
+        // generatorClass, e);
+        // } catch (InstantiationException e) {
+        // LOGGER.error("One of the generators could not be loaded: " +
+        // generatorClass, e);
+        // }
+        // if (generator != null) {
+        // LOGGER.info("Generator class registered: " + generatorClass);
+        // registeredGenerators.add(generator);
+        // }
+        // }
     }
 
     public IGenerator getGenerator(String schema,

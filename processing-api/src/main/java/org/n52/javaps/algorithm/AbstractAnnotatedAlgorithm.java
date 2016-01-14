@@ -38,7 +38,7 @@ public abstract class AbstractAnnotatedAlgorithm extends AbstractDescriptorAlgor
 
     private final static Logger LOGGER = LoggerFactory.getLogger(AbstractAnnotatedAlgorithm.class);
 
-	@Override
+    @Override
     protected AlgorithmDescriptor createAlgorithmDescriptor() {
         return getInstrospector(getAlgorithmClass()).getAlgorithmDescriptor();
     }
@@ -73,6 +73,7 @@ public abstract class AbstractAnnotatedAlgorithm extends AbstractDescriptorAlgor
     public static class Proxy extends AbstractAnnotatedAlgorithm {
 
         final private Class<?> proxiedClass;
+
         final private Object proxiedInstance;
 
         public Proxy(Class<?> proxiedClass) {
@@ -96,11 +97,13 @@ public abstract class AbstractAnnotatedAlgorithm extends AbstractDescriptorAlgor
             return proxiedInstance;
         }
 
-		@Override
-		public void setGeneratorFactory(GeneratorFactory generatorFactory) {}
+        @Override
+        public void setGeneratorFactory(GeneratorFactory generatorFactory) {
+        }
 
-		@Override
-		public void setParserFactory(ParserFactory parserFactory) {}
+        @Override
+        public void setParserFactory(ParserFactory parserFactory) {
+        }
     }
 
 }

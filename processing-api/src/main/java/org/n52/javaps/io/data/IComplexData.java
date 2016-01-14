@@ -16,6 +16,6 @@
  */
 package org.n52.javaps.io.data;
 
-public interface IComplexData extends IData{
+public interface IComplexData extends IData {
     void dispose();
 }

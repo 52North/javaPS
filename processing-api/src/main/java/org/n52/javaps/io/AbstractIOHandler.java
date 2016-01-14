@@ -19,129 +19,149 @@ package org.n52.javaps.io;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * Extending subclasses of AbstractGenerator shall provide functionality to
- * generate serviceable output data for the processes offered by the 52N WPS framework.
+ * generate serviceable output data for the processes offered by the 52N WPS
+ * framework.
  *
  * @author Matthias Mueller
  *
  */
 
 public abstract class AbstractIOHandler implements IOHandler {
-	protected List<String> supportedFormats;
-	protected List<String> supportedSchemas;
-	protected List<String> supportedEncodings;
-	protected List<Class<?>> supportedIDataTypes;
-	protected List<Object> properties;
-	protected List<Object> formats;
+    protected List<String> supportedFormats;
 
-	public AbstractIOHandler(){
-		this.supportedFormats = new ArrayList<String>();
-		this.supportedSchemas = new ArrayList<String>();
-		this.supportedEncodings = new ArrayList<String>();
-		this.supportedIDataTypes = new ArrayList<Class<?>>();
-	}
+    protected List<String> supportedSchemas;
 
-	/**
-	 * Returns true if the given format is supported, else false.
-	 */
-	public boolean isSupportedFormat(String format) {
-	    String[] sf = getSupportedFormats();
-		for(String f : sf) {
-			if (f.equalsIgnoreCase(format)) {
-				return true;
-			}
-		}
-		return false;
-	}
+    protected List<String> supportedEncodings;
 
-	/**
-	 * Returns an array having the supported formats (mimeTypes).
-	 */
-	public String[] getSupportedFormats() {
-		String[] resultArray = supportedFormats.toArray(new String[supportedFormats.size()]);
-		return resultArray;
-	}
+    protected List<Class<?>> supportedIDataTypes;
 
+    protected List<Object> properties;
 
-	/**
-	 * Returns an array having the supported schemas.
-	 */
-	public String[] getSupportedSchemas() {
-		String[] resultArray = supportedSchemas.toArray(new String[supportedSchemas.size()]);
-		return resultArray;
-	}
+    protected List<Object> formats;
 
+    public AbstractIOHandler() {
+        this.supportedFormats = new ArrayList<String>();
+        this.supportedSchemas = new ArrayList<String>();
+        this.supportedEncodings = new ArrayList<String>();
+        this.supportedIDataTypes = new ArrayList<Class<?>>();
+    }
 
-	/**
-	 * Returns true if the given schema is supported, else false.
-	 * Binary data has no schema in WPS 1.0.0: If the request does not contain a schema and
-	 * the Generator has no schemas configured it is assumed to be a "binary case".
-	 * The method will return TRUE in this case.
-	 * Might lead to unexpected behaviour in malformed requests.
-	 */
-	public boolean isSupportedSchema(String schema) {
-		//no schema given. assuming no schema required. therefore accept all schemas
-		if(supportedSchemas.size()==0 && (schema == null || schema.isEmpty())){ // test whether schema is empty, because in ArcToolbox process descriptions, there is empty elements for schemas
-			return true;
-		}
-		for(String supportedSchema : supportedSchemas) {
-			if(supportedSchema.equalsIgnoreCase(schema))
-				return true;
-		}
-		return false;
-	}
+    /**
+     * Returns true if the given format is supported, else false.
+     */
+    public boolean isSupportedFormat(String format) {
+        String[] sf = getSupportedFormats();
+        for (String f : sf) {
+            if (f.equalsIgnoreCase(format)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	public Class<?>[] getSupportedDataBindings() {
-		return supportedIDataTypes.toArray(new Class<?>[supportedIDataTypes.size()]);
-	}
+    /**
+     * Returns an array having the supported formats (mimeTypes).
+     */
+    public String[] getSupportedFormats() {
+        String[] resultArray = supportedFormats.toArray(new String[supportedFormats.size()]);
+        return resultArray;
+    }
 
+    /**
+     * Returns an array having the supported schemas.
+     */
+    public String[] getSupportedSchemas() {
+        String[] resultArray = supportedSchemas.toArray(new String[supportedSchemas.size()]);
+        return resultArray;
+    }
 
-	public boolean isSupportedDataBinding(Class<?> binding) {
-		for (Class<?> currentBinding : supportedIDataTypes){
-			if (binding.equals(currentBinding)){
-				return true;
-			}
-		}
-		return false;
-	}
+    /**
+     * Returns true if the given schema is supported, else false. Binary data
+     * has no schema in WPS 1.0.0: If the request does not contain a schema and
+     * the Generator has no schemas configured it is assumed to be a
+     * "binary case". The method will return TRUE in this case. Might lead to
+     * unexpected behaviour in malformed requests.
+     */
+    public boolean isSupportedSchema(String schema) {
+        // no schema given. assuming no schema required. therefore accept all
+        // schemas
+        if (supportedSchemas.size() == 0 && (schema == null || schema.isEmpty())) { // test
+                                                                                    // whether
+                                                                                    // schema
+                                                                                    // is
+                                                                                    // empty,
+                                                                                    // because
+                                                                                    // in
+                                                                                    // ArcToolbox
+                                                                                    // process
+                                                                                    // descriptions,
+                                                                                    // there
+                                                                                    // is
+                                                                                    // empty
+                                                                                    // elements
+                                                                                    // for
+                                                                                    // schemas
+            return true;
+        }
+        for (String supportedSchema : supportedSchemas) {
+            if (supportedSchema.equalsIgnoreCase(schema)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	public String[] getSupportedEncodings(){
-		String[] resultArray = supportedEncodings.toArray(new String[supportedEncodings.size()]);
-		return resultArray;
-		//return IOHandler.SUPPORTED_ENCODINGS;
-	}
+    public Class<?>[] getSupportedDataBindings() {
+        return supportedIDataTypes.toArray(new Class<?>[supportedIDataTypes.size()]);
+    }
 
-	public List<Object> getSupportedFullFormats(){
-		return formats;
-	}
+    public boolean isSupportedDataBinding(Class<?> binding) {
+        for (Class<?> currentBinding : supportedIDataTypes) {
+            if (binding.equals(currentBinding)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	public boolean isSupportedEncoding(String encoding){
-		for (String currentEncoding : this.getSupportedEncodings()){
-			if (currentEncoding.equalsIgnoreCase(encoding)){
-				return true;
-			}
-		}
-		return false;
-	}
+    public String[] getSupportedEncodings() {
+        String[] resultArray = supportedEncodings.toArray(new String[supportedEncodings.size()]);
+        return resultArray;
+        // return IOHandler.SUPPORTED_ENCODINGS;
+    }
 
-	protected boolean isSupportedGenerate (Class<?> binding, String mimeType, String schema){
+    public List<Object> getSupportedFullFormats() {
+        return formats;
+    }
 
-		if (!(this.isSupportedFormat(mimeType))){
-			return false;
-		}
+    public boolean isSupportedEncoding(String encoding) {
+        for (String currentEncoding : this.getSupportedEncodings()) {
+            if (currentEncoding.equalsIgnoreCase(encoding)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-		if (!(this.isSupportedSchema(schema))){
-			return false;
-		}
+    protected boolean isSupportedGenerate(Class<?> binding,
+            String mimeType,
+            String schema) {
 
-		if(!(this.isSupportedDataBinding(binding))){
-			return false;
-		}
+        if (!(this.isSupportedFormat(mimeType))) {
+            return false;
+        }
 
-		return true;
-	}
+        if (!(this.isSupportedSchema(schema))) {
+            return false;
+        }
+
+        if (!(this.isSupportedDataBinding(binding))) {
+            return false;
+        }
+
+        return true;
+    }
 
 }
-

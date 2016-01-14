@@ -59,14 +59,16 @@ public abstract class AnnotationParser<A extends Annotation, M extends Accessibl
         return annotation == null ? null : parse(annotation, member);
     }
 
-    public abstract B parse(A annotation, M member);
+    public abstract B parse(A annotation,
+            M member);
 
     public abstract Class<? extends A> getSupportedAnnotation();
 
     public static class ExecuteAnnotationParser extends AnnotationParser<Execute, Method, ExecuteMethodBinding> {
 
         @Override
-        public ExecuteMethodBinding parse(Execute annotation, Method member) {
+        public ExecuteMethodBinding parse(Execute annotation,
+                Method member) {
             ExecuteMethodBinding annotationBinding = new ExecuteMethodBinding(member);
             return annotationBinding.validate() ? annotationBinding : null;
         }
@@ -78,22 +80,25 @@ public abstract class AnnotationParser<A extends Annotation, M extends Accessibl
 
     }
 
-    public abstract static class DataAnnotationParser<A extends Annotation, M extends AccessibleObject & Member, B extends AnnotationBinding.DataBinding<M, ? extends BoundDescriptor>>
-        extends AnnotationParser<A,M,B> {
+    public abstract static class DataAnnotationParser<A extends Annotation, M extends AccessibleObject & Member, B extends AnnotationBinding.DataBinding<M, ? extends BoundDescriptor>> extends
+            AnnotationParser<A, M, B> {
         protected abstract B createBinding(M member);
     }
 
-    public abstract static class InputAnnotationParser<A extends Annotation, M extends AccessibleObject & Member, B extends AnnotationBinding.InputBinding<M, ? extends InputDescriptor>>
-        extends DataAnnotationParser<A,M,B> {}
+    public abstract static class InputAnnotationParser<A extends Annotation, M extends AccessibleObject & Member, B extends AnnotationBinding.InputBinding<M, ? extends InputDescriptor>> extends
+            DataAnnotationParser<A, M, B> {
+    }
 
-    public abstract static class OutputAnnotationParser<A extends Annotation, M extends AccessibleObject & Member, B extends AnnotationBinding.OutputBinding<M, ? extends OutputDescriptor>>
-        extends DataAnnotationParser<A,M,B> {}
+    public abstract static class OutputAnnotationParser<A extends Annotation, M extends AccessibleObject & Member, B extends AnnotationBinding.OutputBinding<M, ? extends OutputDescriptor>> extends
+            DataAnnotationParser<A, M, B> {
+    }
 
-    public abstract static class LiteralDataInputAnnotationParser<M extends AccessibleObject & Member, B extends AnnotationBinding.InputBinding<M, LiteralDataInputDescriptor>>
-        extends InputAnnotationParser<LiteralDataInput, M, B> {
+    public abstract static class LiteralDataInputAnnotationParser<M extends AccessibleObject & Member, B extends AnnotationBinding.InputBinding<M, LiteralDataInputDescriptor>> extends
+            InputAnnotationParser<LiteralDataInput, M, B> {
 
         @Override
-        public B parse(LiteralDataInput annotation, M member) {
+        public B parse(LiteralDataInput annotation,
+                M member) {
 
             B annotatedBinding = createBinding(member);
             // auto generate binding if it's not explicitly declared
@@ -117,10 +122,10 @@ public abstract class AnnotationParser<A extends Annotation, M extends Accessibl
             String defaultValue = annotation.defaultValue();
             int maxOccurs = annotation.maxOccurs();
             // If InputType is enum
-            //  1) generate allowedValues if not explicitly declared
-            //  2) validate allowedValues if explicitly declared
-            //  3) validate defaultValue if declared
-            //  4) check for special ENUM_COUNT maxOccurs flag
+            // 1) generate allowedValues if not explicitly declared
+            // 2) validate allowedValues if explicitly declared
+            // 3) validate defaultValue if declared
+            // 4) check for special ENUM_COUNT maxOccurs flag
             Type inputType = annotatedBinding.getType();
             if (annotatedBinding.isTypeEnum()) {
                 Class<? extends Enum> inputEnumClass = (Class<? extends Enum>) inputType;
@@ -164,14 +169,8 @@ public abstract class AnnotationParser<A extends Annotation, M extends Accessibl
             }
             if (binding != null) {
                 LiteralDataInputDescriptor descriptor =
-                        LiteralDataInputDescriptor.builder(annotation.identifier(), binding).
-                        title(annotation.title()).
-                        abstrakt(annotation.abstrakt()).
-                        minOccurs(annotation.minOccurs()).
-                        maxOccurs(maxOccurs).
-                        defaultValue(defaultValue).
-                        allowedValues(allowedValues).
-                        build();
+                        LiteralDataInputDescriptor.builder(annotation.identifier(), binding).title(annotation.title()).abstrakt(annotation.abstrakt()).minOccurs(annotation.minOccurs())
+                                .maxOccurs(maxOccurs).defaultValue(defaultValue).allowedValues(allowedValues).build();
                 annotatedBinding.setDescriptor(descriptor);
             } else {
                 LOGGER.error("Unable to generate binding for input identifier \"{}\"", annotation.identifier());
@@ -185,11 +184,12 @@ public abstract class AnnotationParser<A extends Annotation, M extends Accessibl
         }
     }
 
-    public abstract static class LiteralDataOutputAnnotationParser<M extends AccessibleObject & Member, B extends AnnotationBinding.OutputBinding<M, LiteralDataOutputDescriptor>>
-        extends OutputAnnotationParser<LiteralDataOutput, M, B> {
+    public abstract static class LiteralDataOutputAnnotationParser<M extends AccessibleObject & Member, B extends AnnotationBinding.OutputBinding<M, LiteralDataOutputDescriptor>> extends
+            OutputAnnotationParser<LiteralDataOutput, M, B> {
 
         @Override
-        public B parse(LiteralDataOutput annotation, M member) {
+        public B parse(LiteralDataOutput annotation,
+                M member) {
             B annotatedBinding = createBinding(member);
             // auto generate binding if it's not explicitly declared
             Type payloadType = annotatedBinding.getPayloadType();
@@ -205,11 +205,7 @@ public abstract class AnnotationParser<A extends Annotation, M extends Accessibl
                 }
             }
             if (binding != null) {
-                LiteralDataOutputDescriptor descriptor =
-                        LiteralDataOutputDescriptor.builder(annotation.identifier(), binding).
-                        title(annotation.title()).
-                        abstrakt(annotation.abstrakt()).
-                        build();
+                LiteralDataOutputDescriptor descriptor = LiteralDataOutputDescriptor.builder(annotation.identifier(), binding).title(annotation.title()).abstrakt(annotation.abstrakt()).build();
                 annotatedBinding.setDescriptor(descriptor);
             } else {
                 LOGGER.error("Unable to generate binding for output identifier \"{}\"", annotation.identifier());
@@ -223,22 +219,18 @@ public abstract class AnnotationParser<A extends Annotation, M extends Accessibl
         }
     }
 
-    public static class ComplexDataInputAnnotationParser<M extends AccessibleObject & Member, B extends AnnotationBinding.InputBinding<M, ComplexDataInputDescriptor>>
-        extends InputAnnotationParser<ComplexDataInput, M, B> {
+    public static class ComplexDataInputAnnotationParser<M extends AccessibleObject & Member, B extends AnnotationBinding.InputBinding<M, ComplexDataInputDescriptor>> extends
+            InputAnnotationParser<ComplexDataInput, M, B> {
 
         @Override
-        public B parse(ComplexDataInput annotation, M member) {
+        public B parse(ComplexDataInput annotation,
+                M member) {
             B annotatedBinding = createBinding(member);
             ComplexDataInputDescriptor descriptor =
-                    ComplexDataInputDescriptor.builder(annotation.identifier(), annotation.binding()).
-                    title(annotation.title()).
-                    abstrakt(annotation.abstrakt()).
-                    minOccurs(annotation.minOccurs()).
-                    maxOccurs(annotation.maxOccurs()).
-                    maximumMegaBytes(annotation.maximumMegaBytes()).
-                    build();
+                    ComplexDataInputDescriptor.builder(annotation.identifier(), annotation.binding()).title(annotation.title()).abstrakt(annotation.abstrakt()).minOccurs(annotation.minOccurs())
+                            .maxOccurs(annotation.maxOccurs()).maximumMegaBytes(annotation.maximumMegaBytes()).build();
             annotatedBinding.setDescriptor(descriptor);
-            return  annotatedBinding.validate() ? annotatedBinding : null;
+            return annotatedBinding.validate() ? annotatedBinding : null;
         }
 
         @Override
@@ -252,17 +244,15 @@ public abstract class AnnotationParser<A extends Annotation, M extends Accessibl
         }
     }
 
-    public abstract static class ComplexDataOutputAnnotationParser<M extends AccessibleObject & Member, B extends AnnotationBinding.OutputBinding<M, ComplexDataOutputDescriptor>>
-        extends OutputAnnotationParser<ComplexDataOutput, M, B> {
+    public abstract static class ComplexDataOutputAnnotationParser<M extends AccessibleObject & Member, B extends AnnotationBinding.OutputBinding<M, ComplexDataOutputDescriptor>> extends
+            OutputAnnotationParser<ComplexDataOutput, M, B> {
 
         @Override
-        public B parse (ComplexDataOutput annotation, M member) {
+        public B parse(ComplexDataOutput annotation,
+                M member) {
             B annotatedBinding = createBinding(member);
             ComplexDataOutputDescriptor descriptor =
-                    ComplexDataOutputDescriptor.builder(annotation.identifier(), annotation.binding()).
-                    title(annotation.title()).
-                    abstrakt(annotation.abstrakt()).
-                    build();
+                    ComplexDataOutputDescriptor.builder(annotation.identifier(), annotation.binding()).title(annotation.title()).abstrakt(annotation.abstrakt()).build();
             annotatedBinding.setDescriptor(descriptor);
             return annotatedBinding.validate() ? annotatedBinding : null;
         }
@@ -279,18 +269,21 @@ public abstract class AnnotationParser<A extends Annotation, M extends Accessibl
             return new InputFieldBinding<LiteralDataInputDescriptor>(member);
         }
     }
+
     public static class LiteralDataOutputFieldAnnotationParser extends LiteralDataOutputAnnotationParser<Field, AnnotationBinding.OutputBinding<Field, LiteralDataOutputDescriptor>> {
         @Override
         protected OutputBinding<Field, LiteralDataOutputDescriptor> createBinding(Field member) {
             return new OutputFieldBinding<LiteralDataOutputDescriptor>(member);
         }
     }
+
     public static class ComplexDataInputFieldAnnotationParser extends ComplexDataInputAnnotationParser<Field, AnnotationBinding.InputBinding<Field, ComplexDataInputDescriptor>> {
         @Override
         protected InputBinding<Field, ComplexDataInputDescriptor> createBinding(Field member) {
             return new InputFieldBinding<ComplexDataInputDescriptor>(member);
         }
     }
+
     public static class ComplexDataOutputFieldAnnotationParser extends ComplexDataOutputAnnotationParser<Field, AnnotationBinding.OutputBinding<Field, ComplexDataOutputDescriptor>> {
         @Override
         protected OutputBinding<Field, ComplexDataOutputDescriptor> createBinding(Field member) {
@@ -304,18 +297,21 @@ public abstract class AnnotationParser<A extends Annotation, M extends Accessibl
             return new InputMethodBinding<LiteralDataInputDescriptor>(member);
         }
     }
+
     public static class LiteralDataOutputMethodAnnotationParser extends LiteralDataOutputAnnotationParser<Method, AnnotationBinding.OutputBinding<Method, LiteralDataOutputDescriptor>> {
         @Override
         protected OutputBinding<Method, LiteralDataOutputDescriptor> createBinding(Method member) {
             return new OutputMethodBinding<LiteralDataOutputDescriptor>(member);
         }
     }
+
     public static class ComplexDataInputMethodAnnotationParser extends ComplexDataInputAnnotationParser<Method, AnnotationBinding.InputBinding<Method, ComplexDataInputDescriptor>> {
         @Override
         protected InputBinding<Method, ComplexDataInputDescriptor> createBinding(Method member) {
             return new InputMethodBinding<ComplexDataInputDescriptor>(member);
         }
     }
+
     public static class ComplexDataOutputMethodAnnotationParser extends ComplexDataOutputAnnotationParser<Method, AnnotationBinding.OutputBinding<Method, ComplexDataOutputDescriptor>> {
         @Override
         protected OutputBinding<Method, ComplexDataOutputDescriptor> createBinding(Method member) {

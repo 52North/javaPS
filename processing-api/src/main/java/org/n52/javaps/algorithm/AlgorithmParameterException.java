@@ -16,15 +16,14 @@
  */
 package org.n52.javaps.algorithm;
 
-
 public class AlgorithmParameterException extends RuntimeException {
-	private static final long serialVersionUID = -514774594848925943L;
+    private static final long serialVersionUID = -514774594848925943L;
 
-	public AlgorithmParameterException() {
-		super();
-	}
+    public AlgorithmParameterException() {
+        super();
+    }
 
-	public AlgorithmParameterException(String message) {
-		super(message);
-	}
+    public AlgorithmParameterException(String message) {
+        super(message);
+    }
 }

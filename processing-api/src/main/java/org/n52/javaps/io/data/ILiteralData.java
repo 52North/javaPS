@@ -16,6 +16,6 @@
  */
 package org.n52.javaps.io.data;
 
-public interface ILiteralData extends IData{
+public interface ILiteralData extends IData {
 
 }

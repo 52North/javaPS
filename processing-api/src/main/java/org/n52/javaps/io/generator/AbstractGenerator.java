@@ -33,64 +33,66 @@ import org.n52.javaps.io.data.IData;
  * @author Matthias Mueller, TU Dresden
  *
  */
-public abstract class AbstractGenerator extends AbstractIOHandler implements IGenerator{
+public abstract class AbstractGenerator extends AbstractIOHandler implements IGenerator {
 
-	/**
-	 * A list of files that shall be deleted by destructor.
-	 * Convenience mechanism to delete temporary files that had
-	 * to be written during the generation procedure.
-	 */
-	protected List<File> finalizeFiles;
+    /**
+     * A list of files that shall be deleted by destructor. Convenience
+     * mechanism to delete temporary files that had to be written during the
+     * generation procedure.
+     */
+    protected List<File> finalizeFiles;
 
-	public AbstractGenerator(){
-		super();
-	}
+    public AbstractGenerator() {
+        super();
+    }
 
-	public void init(WPSConfig wpsConfig) {
+    public void init(WPSConfig wpsConfig) {
 
-	    //TODO
-		this.properties = new ArrayList<>();
+        // TODO
+        this.properties = new ArrayList<>();
 
-		this.formats = new ArrayList<>();
+        this.formats = new ArrayList<>();
 
-//		for (FormatEntry format : formats) {
-//
-//			if(format.getMimeType()!= null && !format.getMimeType().equals("")){
-//				String mimetype = format.getMimeType();
-//				supportedFormats.add(mimetype);
-//			}
-//			if(format.getSchema()!= null && !format.getSchema().equals("")){
-//				String schema = format.getSchema();
-//				supportedSchemas.add(schema);
-//			}
-//
-//			if(format.getEncoding()!= null && !format.getEncoding().equals("")){
-//				String encoding = format.getEncoding();
-//				supportedEncodings.add(encoding);
-//			}else{
-//				supportedEncodings.add(IOHandler.DEFAULT_ENCODING);
-//			}
-//		}
+        // for (FormatEntry format : formats) {
+        //
+        // if(format.getMimeType()!= null && !format.getMimeType().equals("")){
+        // String mimetype = format.getMimeType();
+        // supportedFormats.add(mimetype);
+        // }
+        // if(format.getSchema()!= null && !format.getSchema().equals("")){
+        // String schema = format.getSchema();
+        // supportedSchemas.add(schema);
+        // }
+        //
+        // if(format.getEncoding()!= null && !format.getEncoding().equals("")){
+        // String encoding = format.getEncoding();
+        // supportedEncodings.add(encoding);
+        // }else{
+        // supportedEncodings.add(IOHandler.DEFAULT_ENCODING);
+        // }
+        // }
 
-		finalizeFiles = new ArrayList<File>();
+        finalizeFiles = new ArrayList<File>();
 
-	}
+    }
 
-	public InputStream generateBase64Stream(IData data, String mimeType, String schema) throws IOException {
-		return new Base64InputStream(generateStream(data, mimeType, schema), true);
-	}
+    public InputStream generateBase64Stream(IData data,
+            String mimeType,
+            String schema) throws IOException {
+        return new Base64InputStream(generateStream(data, mimeType, schema), true);
+    }
 
-	/**
-	 * Destructor deletes generated temporary files.
-	 */
-	@Override
-	protected void finalize() throws Throwable {
+    /**
+     * Destructor deletes generated temporary files.
+     */
+    @Override
+    protected void finalize() throws Throwable {
 
-		for (File currentFile : finalizeFiles){
-			currentFile.delete();
-		}
+        for (File currentFile : finalizeFiles) {
+            currentFile.delete();
+        }
 
-		super.finalize();
-	}
+        super.finalize();
+    }
 
 }

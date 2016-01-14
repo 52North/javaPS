@@ -21,40 +21,38 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 public class LiteralAnyURIBinding extends AbstractLiteralDataBinding {
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = -1148340565647119514L;
-	private transient URI uri;
 
-	public LiteralAnyURIBinding(URI uri) {
-		this.uri = uri;
-	}
+    private static final long serialVersionUID = -1148340565647119514L;
 
-	public URI getURI() {
-		return uri;
-	}
+    private transient URI uri;
 
-	@Override
-	public URI getPayload() {
-		return uri;
-	}
+    public LiteralAnyURIBinding(URI uri) {
+        this.uri = uri;
+    }
 
-	@Override
-	public Class<URI> getSupportedClass() {
-		return URI.class;
-	}
+    public URI getURI() {
+        return uri;
+    }
 
-	private synchronized void writeObject(java.io.ObjectOutputStream oos) throws IOException
-	{
-		oos.writeObject(uri.toString());
-	}
+    @Override
+    public URI getPayload() {
+        return uri;
+    }
 
-	private synchronized void readObject(java.io.ObjectInputStream oos) throws IOException, ClassNotFoundException
-	{
+    @Override
+    public Class<URI> getSupportedClass() {
+        return URI.class;
+    }
+
+    private synchronized void writeObject(java.io.ObjectOutputStream oos) throws IOException {
+        oos.writeObject(uri.toString());
+    }
+
+    private synchronized void readObject(java.io.ObjectInputStream oos) throws IOException, ClassNotFoundException {
         try {
             uri = new URI((String) oos.readObject());
-        } catch (URISyntaxException ex) { }
-	}
+        } catch (URISyntaxException ex) {
+        }
+    }
 
 }

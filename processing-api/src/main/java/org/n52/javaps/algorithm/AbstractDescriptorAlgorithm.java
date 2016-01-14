@@ -34,6 +34,7 @@ public abstract class AbstractDescriptorAlgorithm implements IAlgorithm, ISubjec
     private final static Logger LOGGER = LoggerFactory.getLogger(AbstractDescriptorAlgorithm.class);
 
     private AlgorithmDescriptor descriptor;
+
     private ProcessDescription description;
 
     public AbstractDescriptorAlgorithm() {
@@ -57,16 +58,16 @@ public abstract class AbstractDescriptorAlgorithm implements IAlgorithm, ISubjec
 
         AlgorithmDescriptor algorithmDescriptor = getAlgorithmDescriptor();
 
-	ProcessDescription processDescription = new ProcessDescription();
+        ProcessDescription processDescription = new ProcessDescription();
 
-	processDescription.setAlgorithmDescriptor(algorithmDescriptor);
+        processDescription.setAlgorithmDescriptor(algorithmDescriptor);
 
-	return processDescription;
+        return processDescription;
     }
 
     @Override
     public boolean processDescriptionIsValid(String version) {
-        return true;//TODO
+        return true;// TODO
     }
 
     protected final synchronized AlgorithmDescriptor getAlgorithmDescriptor() {
@@ -99,6 +100,7 @@ public abstract class AbstractDescriptorAlgorithm implements IAlgorithm, ISubjec
     }
 
     private List<IObserver> observers = new ArrayList<>();
+
     private Object state = null;
 
     @Override
@@ -131,6 +133,7 @@ public abstract class AbstractDescriptorAlgorithm implements IAlgorithm, ISubjec
     }
 
     List<String> errorList = new ArrayList<String>();
+
     protected List<String> addError(String error) {
         errorList.add(error);
         return errorList;

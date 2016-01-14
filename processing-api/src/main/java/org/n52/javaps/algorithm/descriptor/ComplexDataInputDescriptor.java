@@ -30,9 +30,9 @@ public class ComplexDataInputDescriptor<T extends Class<? extends IComplexData>>
 
     private final BigInteger maximumMegaBytes;
 
-	private ComplexDataInputDescriptor(Builder builder) {
+    private ComplexDataInputDescriptor(Builder builder) {
         super(builder);
-		this.maximumMegaBytes = builder.maximumMegaBytes;
+        this.maximumMegaBytes = builder.maximumMegaBytes;
     }
 
     public boolean hasMaximumMegaBytes() {
@@ -43,7 +43,8 @@ public class ComplexDataInputDescriptor<T extends Class<? extends IComplexData>>
         return maximumMegaBytes;
     }
 
-    public static <T extends Class<? extends IComplexData>> Builder<?,T> builder(String identifier, T binding) {
+    public static <T extends Class<? extends IComplexData>> Builder<?, T> builder(String identifier,
+            T binding) {
         return new BuilderTyped(identifier, binding);
     }
 
@@ -51,13 +52,14 @@ public class ComplexDataInputDescriptor<T extends Class<? extends IComplexData>>
         public BuilderTyped(String identifier, T binding) {
             super(identifier, binding);
         }
+
         @Override
         protected BuilderTyped self() {
             return this;
         }
     }
 
-    public static abstract class Builder<B extends Builder<B,T>, T extends Class<? extends IComplexData>> extends InputDescriptor.Builder<B,T> {
+    public static abstract class Builder<B extends Builder<B, T>, T extends Class<? extends IComplexData>> extends InputDescriptor.Builder<B, T> {
 
         private BigInteger maximumMegaBytes;
 

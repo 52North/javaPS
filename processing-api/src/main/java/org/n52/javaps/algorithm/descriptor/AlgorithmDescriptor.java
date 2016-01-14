@@ -34,14 +34,20 @@ import org.n52.javaps.commons.WPSConfig;
 public class AlgorithmDescriptor extends Descriptor {
 
     private final String version;
+
     private final boolean storeSupported;
+
     private final boolean statusSupported;
+
     private final String outputTransmissionMode;
+
     private final String jobControlOption;
+
     private final Map<String, InputDescriptor> inputDescriptorMap;
+
     private final Map<String, OutputDescriptor> outputDescriptorMap;
 
-	AlgorithmDescriptor(Builder<? extends Builder<?>> builder) {
+    AlgorithmDescriptor(Builder<? extends Builder<?>> builder) {
         super(builder);
         this.version = builder.version;
         this.storeSupported = builder.storeSupported;
@@ -49,9 +55,7 @@ public class AlgorithmDescriptor extends Descriptor {
         this.outputTransmissionMode = builder.outputTransmissionMode;
         this.jobControlOption = builder.jobControlOption;
 
-        Preconditions.checkState(
-                builder.outputDescriptors.size() > 0,
-                "Need at minimum 1 output for algorithm.");
+        Preconditions.checkState(builder.outputDescriptors.size() > 0, "Need at minimum 1 output for algorithm.");
 
         // LinkedHaskMap to preserve order
         Map<String, InputDescriptor> iMap = new LinkedHashMap<String, InputDescriptor>();
@@ -124,20 +128,31 @@ public class AlgorithmDescriptor extends Descriptor {
         public BuilderTyped(String identifier) {
             super(identifier);
         }
+
         @Override
         protected BuilderTyped self() {
             return this;
         }
     }
 
-    public static abstract class Builder<B extends Builder<B>> extends Descriptor.Builder<B>{
+    public static abstract class Builder<B extends Builder<B>> extends Descriptor.Builder<B> {
 
         private String version = "1.0.0";
+
         private boolean storeSupported = true;
+
         private boolean statusSupported = true;
-        private String outputTransmissionMode = WPSConfig.OUTPUT_TRANSMISSION_VALUE;//TODO use WPS200Constants
-        private String jobControlOption = WPSConfig.JOB_CONTROL_OPTION_SYNC_EXECUTE;//TODO use WPS200Constants
+
+        private String outputTransmissionMode = WPSConfig.OUTPUT_TRANSMISSION_VALUE;// TODO
+                                                                                    // use
+                                                                                    // WPS200Constants
+
+        private String jobControlOption = WPSConfig.JOB_CONTROL_OPTION_SYNC_EXECUTE;// TODO
+                                                                                    // use
+                                                                                    // WPS200Constants
+
         private List<InputDescriptor> inputDescriptors;
+
         private List<OutputDescriptor> outputDescriptors;
 
         protected Builder(String identifier) {
