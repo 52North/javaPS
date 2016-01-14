@@ -134,11 +134,15 @@
     },
     "service.serviceURL" : {
       "type" : "uri",
-      "value" : "http://localhost:8080/skeleton/service"
+      "value" : "http://localhost:8080/wps/service"
     },
     "filewatcher.enabled" : {
       "type" : "boolean",
       "value" : true
+    },
+    "misc.includeOriginalRequest" : {
+      "type" : "boolean",
+      "value" : false
     }
   }
 }

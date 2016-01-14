@@ -40,12 +40,13 @@
     <bean id="settingsDao" class="org.n52.iceland.config.json.JsonSettingsDao" />
     <bean id="adminUserDao" class="org.n52.iceland.config.json.JsonAdminUserDao" />
     <bean id="settingValueFactory" class="org.n52.iceland.config.json.JsonSettingValueFactory" />
-    <bean id="jsonConfiguration" class="org.n52.iceland.config.json.JsonConfiguration">
+
+    <bean id="jsonConfiguration" class="org.n52.iceland.config.json.JsonConfiguration" init-method="init">
         <property name="fileName" value="configuration.json" />
         <property name="writeTimeout" value="1000" />
+        <property name="configLocationProvider" ref="configLocationProvider"/>
     </bean>
 
     <import resource="classpath:settings/*.xml" />
-    <import resource="classpath:components/*.xml" />
 
 </beans>

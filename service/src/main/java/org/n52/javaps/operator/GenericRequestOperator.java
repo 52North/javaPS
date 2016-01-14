@@ -28,7 +28,6 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.n52.iceland.cache.ContentCacheController;
 import org.n52.iceland.convert.RequestResponseModifier;
 import org.n52.iceland.convert.RequestResponseModifierRepository;
 import org.n52.iceland.ds.OperationHandlerRepository;
@@ -55,12 +54,11 @@ public class GenericRequestOperator<
     private static final Logger log = LoggerFactory
             .getLogger(GenericRequestOperator.class);
 
-    private final ParameterValidator<Q> validator;
-    private final RequestOperatorKey requestOperatorKey;
-    private final Class<Q> requestType;
+    private ParameterValidator<Q> validator;
+    private RequestOperatorKey requestOperatorKey;
+    private Class<Q> requestType;
     private OperationHandlerRepository operationHandlerRepository;
     private RequestResponseModifierRepository modifierRepository;
-    private ContentCacheController contentCacheController;
     private ServiceOperatorRepository serviceOperatorRepository;
     private ServiceEventBus serviceEventBus;
 
@@ -71,6 +69,9 @@ public class GenericRequestOperator<
                                  ParameterValidator<Q> validator) {
         this(service, version, operation, true, requestType, validator);
     }
+
+
+
 
     public GenericRequestOperator(String service,
                                    String version,
@@ -84,6 +85,8 @@ public class GenericRequestOperator<
         this.validator = Objects.requireNonNull(validator, "checker");
         log.info("{} initialized successfully!", getClass().getSimpleName());
     }
+
+
 
     @Inject
     public void setOperationHandlerRepository(OperationHandlerRepository repo) {
@@ -102,15 +105,6 @@ public class GenericRequestOperator<
 
     public RequestResponseModifierRepository getRequestResponseModifierRepository() {
         return modifierRepository;
-    }
-
-    @Inject
-    public void setContentCacheController(ContentCacheController ctrl) {
-        this.contentCacheController = ctrl;
-    }
-
-    public ContentCacheController getContentCacheController() {
-        return contentCacheController;
     }
 
     @Inject

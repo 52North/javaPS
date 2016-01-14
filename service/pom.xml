@@ -143,20 +143,6 @@
                 </executions>
             </plugin>
             
-            <!-- disable plugin -->
-            <plugin>
-                <groupId>org.jasig.maven</groupId>
-                <artifactId>maven-notice-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>check-license</id>
-                        <phase>none</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
 

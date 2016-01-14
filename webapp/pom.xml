@@ -91,7 +91,6 @@
         <dependency>
             <groupId>org.xmlmatchers</groupId>
             <artifactId>xml-matchers</artifactId>
-            <version>1.0-RC1</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
@@ -168,24 +167,13 @@
                 <version>9.3.2.v20150730</version>
                 <configuration>
                     <webApp>
-                        <contextPath>/skeleton</contextPath>
+                        <contextPath>/wps</contextPath>
                     </webApp>
                     <dumpOnStart>true</dumpOnStart>
                     <contextXml>${basedir}/src/main/webapp/WEB-INF/jetty-web.xml</contextXml>
                 </configuration>
             </plugin>
             
-            <!-- disable plugin when building the module indepentently -->
-            <plugin>
-                <groupId>org.jasig.maven</groupId>
-                <artifactId>maven-notice-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>check-license</id>
-                        <phase />
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
     
