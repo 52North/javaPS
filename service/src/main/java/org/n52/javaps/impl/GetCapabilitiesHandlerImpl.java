@@ -15,8 +15,6 @@
  */
 package org.n52.javaps.impl;
 
-import com.google.common.collect.Sets;
-
 import java.net.URI;
 import java.util.Collections;
 import java.util.Map;
@@ -27,6 +25,9 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.inject.Inject;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.n52.iceland.binding.Binding;
 import org.n52.iceland.binding.BindingRepository;
@@ -48,21 +49,20 @@ import org.n52.iceland.request.GetCapabilitiesRequest;
 import org.n52.iceland.request.operator.RequestOperatorRepository;
 import org.n52.iceland.response.GetCapabilitiesResponse;
 import org.n52.iceland.service.ServiceSettings;
-import org.n52.javaps.SkeletonCapabilities;
-import org.n52.javaps.SkeletonConstants;
-import org.n52.javaps.handler.GetCapabilitiesHandler;
 import org.n52.iceland.util.collections.MultiMaps;
 import org.n52.iceland.util.collections.SetMultiMap;
 import org.n52.iceland.util.http.HTTPHeaders;
 import org.n52.iceland.util.http.HTTPMethods;
+import org.n52.javaps.WPSCapabilities;
+import org.n52.javaps.WPSConstants;
+import org.n52.javaps.handler.GetCapabilitiesHandler;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.google.common.collect.Sets;
 
 public class GetCapabilitiesHandlerImpl implements GetCapabilitiesHandler {
 
     private static final Set<OperationHandlerKey> OPERATION_HANDLER_KEY
-            = Collections.singleton(new OperationHandlerKey(SkeletonConstants.SERVICE,
+            = Collections.singleton(new OperationHandlerKey(WPSConstants.SERVICE,
                             OWSConstants.Operations.GetCapabilities));
 
     private static final Logger log = LoggerFactory.getLogger(GetCapabilitiesHandlerImpl.class);
@@ -112,7 +112,7 @@ public class GetCapabilitiesHandlerImpl implements GetCapabilitiesHandler {
             log.warn("Unsupported language was requested, parameter is ignored: {}", language);
         }
 
-        SkeletonCapabilities capabilities = new SkeletonCapabilities(version);
+        WPSCapabilities capabilities = new WPSCapabilities(version);
 
         // TODO add section parameter handling
 //        HashSet<ServiceMetadataSections> requestedSections = getRequestedSections(request);
@@ -156,14 +156,13 @@ public class GetCapabilitiesHandlerImpl implements GetCapabilitiesHandler {
                 .forEach(operationsMetadata::addOperation);
 
         // add common query parameters
-        operationsMetadata.addCommonValue(SkeletonConstants.OperationParameter.service,
-                new OwsParameterValuePossibleValues(SkeletonConstants.SERVICE));
-        operationsMetadata.addCommonValue(SkeletonConstants.OperationParameter.version,
-                new OwsParameterValuePossibleValues(SkeletonConstants.VERSION));
-        operationsMetadata.addCommonValue(SkeletonConstants.OperationParameter.request,
-                new OwsParameterValuePossibleValues(Sets.newHashSet(
-                                OWSConstants.Operations.GetCapabilities.name(),
-                                SkeletonConstants.OPERATION_DEMO)));
+        operationsMetadata.addCommonValue(WPSConstants.OperationParameter.service,
+                new OwsParameterValuePossibleValues(WPSConstants.SERVICE));
+        operationsMetadata.addCommonValue(WPSConstants.OperationParameter.version,
+                new OwsParameterValuePossibleValues(WPSConstants.VERSION));
+        operationsMetadata.addCommonValue(WPSConstants.OperationParameter.request,
+                new OwsParameterValuePossibleValues(Sets.newHashSet(OWSConstants.Operations.GetCapabilities.name(),
+                                WPSConstants.OPERATION_DEMO)));
 
         exception.throwIfNotEmpty();
         return operationsMetadata;
@@ -226,7 +225,7 @@ public class GetCapabilitiesHandlerImpl implements GetCapabilitiesHandler {
         OwsOperation op = new OwsOperation();
         op.setOperationName(getOperationName());
 
-        op.addPossibleValuesParameter(SkeletonConstants.GetCapabilitiesParameter.acceptversions, SkeletonConstants.VERSION);
+        op.addPossibleValuesParameter(WPSConstants.GetCapabilitiesParameter.acceptversions, WPSConstants.VERSION);
         // TODO add sections
 
         return op;

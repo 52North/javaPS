@@ -28,33 +28,30 @@
  */
 package org.n52.javaps.response;
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.n52.iceland.response.AbstractServiceResponse;
-import org.n52.javaps.ogc.wps.WpsConstants;
+import org.n52.javaps.ProcessDescription;
+import org.n52.javaps.ogc.wps.WPSConstants;
 
 public class DescribeProcessResponse extends AbstractServiceResponse {
 
-	private String response = "<helloXml>Hello iceland!</helloXml>";
-	private XmlObject xmlDescribeProcessResponse;
-	
+	private final List<ProcessDescription> descriptions = new LinkedList<>();
+
 	@Override
-	public String getOperationName() {		
-		return WpsConstants.Operations.DescribeProcess.name();
+	public String getOperationName() {
+		return WPSConstants.Operations.DescribeProcess.name();
 	}
 
-	public String getResponse() {
-		return response;
+	public List<ProcessDescription> getProcessDescriptions() {
+		return Collections.unmodifiableList(this.descriptions);
 	}
 
-	public void setResponse(String response) {
-		this.response = response;
-	}
- 
-	public XmlObject getXmlDescribeProcessResponse() {		
-		return xmlDescribeProcessResponse;
-	}
 
-	public void setXmlDescribeProcessResponse(XmlObject xmlDescribeProcessResponse) {
-		this.xmlDescribeProcessResponse = xmlDescribeProcessResponse;
-	}
-	
+    public void addProcessDescription(ProcessDescription description) {
+        this.descriptions.add(description);
+    }
+
 }

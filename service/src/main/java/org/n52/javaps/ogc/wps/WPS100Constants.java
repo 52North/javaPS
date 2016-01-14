@@ -24,7 +24,7 @@ import org.n52.iceland.w3c.SchemaLocation;
  *
  * @since 1.0.0
  */
-public interface Wps1Constants extends WpsConstants {
+public interface WPS100Constants extends WPSConstants {
 
     String NS_WPS = "http://www.opengis.net/wps/1.0.0";
 

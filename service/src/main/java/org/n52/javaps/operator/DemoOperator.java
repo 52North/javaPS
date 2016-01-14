@@ -20,6 +20,9 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.n52.iceland.ds.OperationHandlerRepository;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.ogc.ows.OwsOperation;
@@ -27,12 +30,9 @@ import org.n52.iceland.request.AbstractServiceRequest;
 import org.n52.iceland.request.operator.RequestOperator;
 import org.n52.iceland.request.operator.RequestOperatorKey;
 import org.n52.iceland.response.AbstractServiceResponse;
-import org.n52.javaps.SkeletonConstants;
+import org.n52.javaps.WPSConstants;
 import org.n52.javaps.handler.DemoHandler;
 import org.n52.javaps.request.DemoRequest;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * The operator mapps an incoming request to the handler.
@@ -46,9 +46,10 @@ public class DemoOperator implements RequestOperator {
     private static final Logger log = LoggerFactory.getLogger(DemoOperator.class);
 
     private static final RequestOperatorKey KEY
-            = new RequestOperatorKey(SkeletonConstants.SERVICE,
-                    SkeletonConstants.VERSION,
-                    SkeletonConstants.OPERATION_DEMO);
+            = new RequestOperatorKey(
+                    WPSConstants.SERVICE,
+                    WPSConstants.VERSION,
+                    WPSConstants.OPERATION_DEMO);
 
     private OperationHandlerRepository operationHandlerRepository;
 

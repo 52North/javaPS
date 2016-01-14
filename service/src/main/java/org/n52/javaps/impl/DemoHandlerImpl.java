@@ -30,13 +30,14 @@ import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.ogc.ows.OwsOperation;
 import org.n52.iceland.ogc.ows.OwsParameterValuePossibleValues;
 import org.n52.iceland.ogc.ows.OwsParameterValueRange;
-import org.n52.javaps.SkeletonConstants;
 import org.n52.javaps.handler.DemoHandler;
 import org.n52.javaps.request.DemoRequest;
 import org.n52.javaps.response.DemoResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.n52.javaps.WPSConstants;
 
 /**
  *
@@ -45,8 +46,8 @@ import org.slf4j.LoggerFactory;
 public class DemoHandlerImpl implements DemoHandler {
 
     private static final Set<OperationHandlerKey> OPERATION_HANDLER_KEY
-            = Collections.singleton(new OperationHandlerKey(SkeletonConstants.SERVICE,
-                            SkeletonConstants.OPERATION_DEMO));
+            = Collections.singleton(new OperationHandlerKey(WPSConstants.SERVICE,
+                            WPSConstants.OPERATION_DEMO));
 
     private static final Logger log = LoggerFactory.getLogger(DemoHandlerImpl.class);
 
@@ -77,7 +78,7 @@ public class DemoHandlerImpl implements DemoHandler {
 
     @Override
     public String getOperationName() {
-        return SkeletonConstants.OPERATION_DEMO;
+        return WPSConstants.OPERATION_DEMO;
     }
 
     @Override
@@ -95,7 +96,7 @@ public class DemoHandlerImpl implements DemoHandler {
                 .keySet().stream()
                 .map(String::valueOf)
                 .collect(TreeSet::new, Set::add, Set::addAll);
-        op.addParameterValue(SkeletonConstants.DemoParam.OUTPUT_FORMAT,
+        op.addParameterValue(WPSConstants.DemoParam.OUTPUT_FORMAT,
                 new OwsParameterValuePossibleValues(outputMediaTypes));
 
         return op;

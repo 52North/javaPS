@@ -13,33 +13,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.response;
-
-import java.util.Collection;
-
-import org.n52.iceland.response.AbstractServiceResponse;
-import org.n52.javaps.SkeletonConstants;
+package org.n52.javaps;
 
 /**
- * A POJO for the response.
  *
  * @author <a href="mailto:d.nuest@52north.org">Daniel Nüst</a>
  */
-public class DemoResponse extends AbstractServiceResponse {
+public interface WPSConstants {
 
-    private Collection<String> three;
+    String SERVICE = "WPS";
 
-    public void setThree(Collection<String> three) {
-        this.three = three;
+    String VERSION = "2.0.0";
+
+    String OPERATION_DEMO = "demo";
+
+    interface DemoParam {
+
+        String OUTPUT_FORMAT = "outputFormat";
+
     }
 
-    public Collection<String> getThree() {
-        return this.three;
+    interface OperationParameter {
+        String service = "service";
+        String version = "version";
+        String request = "request";
     }
 
-    @Override
-    public String getOperationName() {
-        return SkeletonConstants.OPERATION_DEMO;
+    interface GetCapabilitiesParameter {
+        String acceptversions = "acceptversions";
+    }
+
+    interface DemoParameter {
+        String one = "one";
+        String two = "two";
+
     }
 
 }

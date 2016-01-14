@@ -30,10 +30,10 @@ package org.n52.javaps.ogc.wps;
 
 import org.n52.iceland.ogc.ows.OwsCapabilities;
 
-public class WpsCapabilities extends OwsCapabilities {
+public class WPSCapabilities extends OwsCapabilities {
 
-	public WpsCapabilities(String version) {
-		super(WpsConstants.WPS, version);
+	public WPSCapabilities(String version) {
+		super(WPSConstants.WPS, version);
 	}
 
 }

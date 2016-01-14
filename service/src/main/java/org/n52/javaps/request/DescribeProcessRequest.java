@@ -30,14 +30,14 @@ package org.n52.javaps.request;
 
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.request.AbstractServiceRequest;
-import org.n52.javaps.ogc.wps.WpsConstants;
+import org.n52.javaps.ogc.wps.WPSConstants;
 import org.n52.javaps.response.DescribeProcessResponse;
 
 public class DescribeProcessRequest extends
 		AbstractServiceRequest<DescribeProcessResponse> {
 
 	private String processIdentifier;
-	
+
 	@Override
 	public DescribeProcessResponse getResponse() throws OwsExceptionReport {
 		return (DescribeProcessResponse) new DescribeProcessResponse().set(this);
@@ -45,7 +45,7 @@ public class DescribeProcessRequest extends
 
 	@Override
 	public String getOperationName() {
-		return WpsConstants.Operations.DescribeProcess.name();
+		return WPSConstants.Operations.DescribeProcess.name();
 	}
 
 	public String getProcessIdentifier() {

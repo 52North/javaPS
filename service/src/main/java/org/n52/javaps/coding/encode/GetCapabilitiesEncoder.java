@@ -43,10 +43,11 @@ import org.n52.iceland.ogc.ows.OWSConstants.HelperValues;
 import org.n52.iceland.response.GetCapabilitiesResponse;
 import org.n52.iceland.util.http.MediaType;
 import org.n52.iceland.util.http.MediaTypes;
-import org.n52.javaps.ogc.wps.Wps1Constants;
-import org.n52.javaps.ogc.wps.WpsConstants;
 
 import com.google.common.collect.Sets;
+
+import org.n52.javaps.ogc.wps.WPSConstants;
+import org.n52.javaps.ogc.wps.WPS100Constants;
 
 public class GetCapabilitiesEncoder<T extends GetCapabilitiesResponse> extends AbstractDelegatingEncoder<XmlObject, GetCapabilitiesResponse> {
 
@@ -78,8 +79,8 @@ public class GetCapabilitiesEncoder<T extends GetCapabilitiesResponse> extends A
 
 	@Override
 	public Set<EncoderKey> getKeys() {
-        OperationKey key = new OperationKey(WpsConstants.WPS,
-                Wps1Constants.SERVICEVERSION, WpsConstants.Operations.GetCapabilities.name());
+        OperationKey key = new OperationKey(WPSConstants.WPS,
+                WPS100Constants.SERVICEVERSION, WPSConstants.Operations.GetCapabilities.name());
         Set<EncoderKey> encoderKeys =
                 Sets.newHashSet(new XmlEncoderKey("wps", GetCapabilitiesResponse.class), new OperationEncoderKey(key,
                         MediaTypes.TEXT_XML), new OperationEncoderKey(key, MediaTypes.APPLICATION_XML));

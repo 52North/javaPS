@@ -16,41 +16,38 @@
  */
 package org.n52.javaps.ogc.wps;
 
-import static java.util.Collections.unmodifiableSet;
 
 import java.util.Set;
 
-import org.n52.iceland.ogc.ows.OWSConstants;
 import org.n52.iceland.util.http.MediaTypes;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 
 /**
- * wpsConstants holds all important and often used constants of OGC WPS (e.g.
+ * {@code WPSConstants} holds all important and often used constants of OGC WPS (e.g.
  * name of the getCapabilities operation) that are global between all supported
  * versions
  *
  * @since 1.0.0
  */
-public interface WpsConstants extends OWSConstants {
+public interface WPSConstants {
 
     String NS_WPS_PREFIX = "wps";
 
     /**
      * Constant for the content types of the accept formats
      */
-    Set<String> ACCEPT_FORMATS = unmodifiableSet(Sets.newHashSet(MediaTypes.APPLICATION_XML.toString()));
+    Set<String> ACCEPT_FORMATS = ImmutableSet.of(MediaTypes.APPLICATION_XML.toString());
 
     /**
-     * Constant for the service name of the WPS
+     * Constant for the service name of the WPS.
      */
     String WPS = "WPS";
 
     /**
      * Constant 'inline' for response mode, which means that results are
      * contained inline the ProcessOutputs element of an execute response
-     * document
+     * document.
      */
     String RESPONSE_MODE_INLINE = "inline";
 
@@ -67,8 +64,8 @@ public interface WpsConstants extends OWSConstants {
                                                  RESPONSE_MODE_RAW);
 
     /**
-     * the names of the operations supported by all versions of the WPS
-     * specification
+     * The names of the operations supported by all versions of the WPS
+     * specification.
      */
     enum Operations {
         GetCapabilities,
@@ -80,7 +77,7 @@ public interface WpsConstants extends OWSConstants {
     }
 
     /**
-     * enum with names of Capabilities sections supported by all versions
+     * Enum with names of Capabilities sections supported by all versions.
      */
     enum CapabilitiesSections {
         ServiceIdentification,

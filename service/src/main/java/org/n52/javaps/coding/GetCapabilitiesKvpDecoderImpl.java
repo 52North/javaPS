@@ -15,8 +15,6 @@
  */
 package org.n52.javaps.coding;
 
-import com.google.common.collect.Sets;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Set;
@@ -27,14 +25,16 @@ import org.n52.iceland.exception.ows.MissingParameterValueException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.ogc.ows.OWSConstants;
 import org.n52.iceland.request.GetCapabilitiesRequest;
-import org.n52.javaps.SkeletonConstants;
 import org.n52.iceland.util.KvpHelper;
+import org.n52.javaps.WPSConstants;
+
+import com.google.common.collect.Sets;
 
 public class GetCapabilitiesKvpDecoderImpl extends KvpDecoder<GetCapabilitiesRequest> {
 
     private static final Set<DecoderKey> KEYS = Sets.newHashSet(
-            createKey(SkeletonConstants.SERVICE, null, OWSConstants.Operations.GetCapabilities.toString()),
-            createKey(SkeletonConstants.SERVICE, SkeletonConstants.VERSION, OWSConstants.Operations.GetCapabilities.toString()));
+            createKey(WPSConstants.SERVICE, null, OWSConstants.Operations.GetCapabilities.toString()),
+            createKey(WPSConstants.SERVICE, WPSConstants.VERSION, OWSConstants.Operations.GetCapabilities.toString()));
 
     @Override
     public Set<DecoderKey> getKeys() {
@@ -43,19 +43,19 @@ public class GetCapabilitiesKvpDecoderImpl extends KvpDecoder<GetCapabilitiesReq
 
     @Override
     protected GetCapabilitiesRequest createRequest() {
-        return new GetCapabilitiesRequest(SkeletonConstants.SERVICE);
+        return new GetCapabilitiesRequest(WPSConstants.SERVICE);
     }
 
     @Override
     protected void decodeParameter(GetCapabilitiesRequest request, String name, String values) throws OwsExceptionReport {
         switch (name.toLowerCase()) {
-            case SkeletonConstants.OperationParameter.service:
+            case WPSConstants.OperationParameter.service:
                 request.setService(KvpHelper.checkParameterSingleValue(values, name));
                 break;
-            case SkeletonConstants.OperationParameter.request:
+            case WPSConstants.OperationParameter.request:
                 KvpHelper.checkParameterSingleValue(values, name);
                 break;
-            case SkeletonConstants.GetCapabilitiesParameter.acceptversions:
+            case WPSConstants.GetCapabilitiesParameter.acceptversions:
                 if (values.isEmpty()) {
                     throw new MissingParameterValueException(name);
                 }

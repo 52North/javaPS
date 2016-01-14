@@ -54,9 +54,9 @@ import org.n52.iceland.util.collections.SetMultiMap;
 import org.n52.iceland.util.http.HTTPHeaders;
 import org.n52.iceland.util.http.HTTPMethods;
 import org.n52.iceland.util.http.MediaType;
-import org.n52.javaps.ogc.wps.WpsConstants;
 import org.n52.javaps.request.DescribeProcessRequest;
 import org.n52.javaps.response.DescribeProcessResponse;
+import org.n52.javaps.ogc.wps.WPSConstants;
 
 public class DescribeProcessHandler implements OperationHandler {
 
@@ -74,19 +74,19 @@ public class DescribeProcessHandler implements OperationHandler {
 
 	@Override
 	public Set<OperationHandlerKey> getKeys() {
-		OperationHandlerKey key = new OperationHandlerKey(WpsConstants.WPS, WpsConstants.Operations.DescribeProcess.name());
+		OperationHandlerKey key = new OperationHandlerKey(WPSConstants.WPS, WPSConstants.Operations.DescribeProcess.name());
 		return Collections.singleton(key);
 	}
 
 	@Override
 	public String getOperationName() {		
-		return WpsConstants.Operations.DescribeProcess.name();
+		return WPSConstants.Operations.DescribeProcess.name();
 	}
 
 	@Override
 	public OwsOperation getOperationsMetadata(String service, String version)
 			throws OwsExceptionReport {
-        Map<String, Set<DCP>> dcp = getDCP(new OperationKey(service, version, WpsConstants.Operations.DescribeProcess.name()));
+        Map<String, Set<DCP>> dcp = getDCP(new OperationKey(service, version, WPSConstants.Operations.DescribeProcess.name()));
         if (dcp == null || dcp.isEmpty()) {
 //            LOG.debug("Operation {} for Service {} not available due to empty DCP map.", getOperationName(), "WPS");
             return null;
@@ -152,12 +152,12 @@ public class DescribeProcessHandler implements OperationHandler {
 
 		DescribeProcessResponse describeProcessResponse = new DescribeProcessResponse();
 		
-		describeProcessResponse.setService(WpsConstants.WPS);
+		describeProcessResponse.setService(WPSConstants.WPS);
 		describeProcessResponse.setVersion(version);
 		
 		CaseInsensitiveMap ciMap = new CaseInsensitiveMap();
 		
-		ciMap.put("service", WpsConstants.WPS);
+		ciMap.put("service", WPSConstants.WPS);
 		ciMap.put("version", new String[]{version});
 		ciMap.put("identifier", new String[]{processIdentifier});
 		

@@ -39,15 +39,16 @@ import org.n52.iceland.exception.ows.concrete.UnsupportedDecoderInputException;
 import org.n52.iceland.request.AbstractServiceRequest;
 import org.n52.iceland.request.GetCapabilitiesRequest;
 import org.n52.iceland.util.http.MediaTypes;
-import org.n52.javaps.ogc.wps.Wps1Constants;
-import org.n52.javaps.ogc.wps.WpsConstants;
 
 import com.google.common.collect.Sets;
 
+import org.n52.javaps.ogc.wps.WPSConstants;
+import org.n52.javaps.ogc.wps.WPS100Constants;
+
 public class GetCapabilitiesKvpDecoder implements Decoder<AbstractServiceRequest<?>, Map<String, String>> {
-    private static final Set<DecoderKey> KVP_DECODER_KEY_TYPE = Sets.<DecoderKey> newHashSet(new OperationDecoderKey(WpsConstants.WPS,
-            Wps1Constants.SERVICEVERSION, WpsConstants.Operations.GetCapabilities.name(), MediaTypes.APPLICATION_KVP), new OperationDecoderKey(WpsConstants.WPS,
-                    null, WpsConstants.Operations.GetCapabilities.name(), MediaTypes.APPLICATION_KVP));
+    private static final Set<DecoderKey> KVP_DECODER_KEY_TYPE = Sets.<DecoderKey> newHashSet(new OperationDecoderKey(WPSConstants.WPS,
+            WPS100Constants.SERVICEVERSION, WPSConstants.Operations.GetCapabilities.name(), MediaTypes.APPLICATION_KVP), new OperationDecoderKey(WPSConstants.WPS,
+                    null, WPSConstants.Operations.GetCapabilities.name(), MediaTypes.APPLICATION_KVP));
 
     
     @Override
@@ -59,7 +60,7 @@ public class GetCapabilitiesKvpDecoder implements Decoder<AbstractServiceRequest
 	public GetCapabilitiesRequest decode(Map<String, String> objectToDecode)
 			throws OwsExceptionReport, UnsupportedDecoderInputException {		
 		
-		GetCapabilitiesRequest gtcr = new GetCapabilitiesRequest(WpsConstants.WPS);
+		GetCapabilitiesRequest gtcr = new GetCapabilitiesRequest(WPSConstants.WPS);
 		
 		gtcr.setService(objectToDecode.get("service"));
 		gtcr.setVersion(objectToDecode.get("version"));

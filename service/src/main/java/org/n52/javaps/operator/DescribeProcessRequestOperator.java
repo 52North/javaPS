@@ -40,9 +40,9 @@ import org.n52.iceland.request.operator.RequestOperator;
 import org.n52.iceland.request.operator.RequestOperatorKey;
 import org.n52.iceland.response.AbstractServiceResponse;
 import org.n52.javaps.handler.DescribeProcessHandler;
-import org.n52.javaps.ogc.wps.Wps1Constants;
-import org.n52.javaps.ogc.wps.WpsConstants;
 import org.n52.javaps.request.DescribeProcessRequest;
+import org.n52.javaps.ogc.wps.WPSConstants;
+import org.n52.javaps.ogc.wps.WPS100Constants;
 
 public class DescribeProcessRequestOperator implements RequestOperator {
 
@@ -51,7 +51,7 @@ public class DescribeProcessRequestOperator implements RequestOperator {
 
 	@Override
 	public Set<RequestOperatorKey> getKeys() {
-		RequestOperatorKey requestOperatorKey = new RequestOperatorKey(WpsConstants.WPS, Wps1Constants.SERVICEVERSION, WpsConstants.Operations.DescribeProcess.name(), true);
+		RequestOperatorKey requestOperatorKey = new RequestOperatorKey(WPSConstants.WPS, WPS100Constants.SERVICEVERSION, WPSConstants.Operations.DescribeProcess.name(), true);
 		return Collections.singleton(requestOperatorKey);
 	}
 

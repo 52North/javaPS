@@ -16,6 +16,7 @@
 package org.n52.javaps.coding;
 
 import java.util.Map;
+
 import org.n52.iceland.coding.decode.Decoder;
 import org.n52.iceland.coding.decode.DecoderKey;
 import org.n52.iceland.coding.decode.OperationDecoderKey;

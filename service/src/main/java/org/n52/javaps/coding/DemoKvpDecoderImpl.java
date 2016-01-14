@@ -15,7 +15,7 @@
  */
 package org.n52.javaps.coding;
 
-import com.google.common.collect.Sets;
+import static org.n52.javaps.coding.KvpDecoder.createKey;
 
 import java.util.Collections;
 import java.util.Set;
@@ -23,39 +23,37 @@ import java.util.Set;
 import org.n52.iceland.coding.decode.DecoderKey;
 import org.n52.iceland.exception.ows.InvalidParameterValueException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.javaps.SkeletonConstants;
-
-import static org.n52.javaps.coding.KvpDecoder.createKey;
-
-import org.n52.javaps.request.DemoRequest;
 import org.n52.iceland.util.KvpHelper;
+import org.n52.javaps.WPSConstants;
+import org.n52.javaps.request.DemoRequest;
+
+import com.google.common.collect.Sets;
 
 public class DemoKvpDecoderImpl extends KvpDecoder<DemoRequest> {
 
-    private static final Set<DecoderKey> KEYS = Collections.unmodifiableSet(
-            Sets.newHashSet(createKey(SkeletonConstants.SERVICE, SkeletonConstants.VERSION, SkeletonConstants.OPERATION_DEMO)));
+    private static final Set<DecoderKey> KEYS = Collections.unmodifiableSet(Sets.newHashSet(createKey(WPSConstants.SERVICE, WPSConstants.VERSION, WPSConstants.OPERATION_DEMO)));
 
     @Override
     protected DemoRequest createRequest() {
-        return new DemoRequest(SkeletonConstants.VERSION);
+        return new DemoRequest(WPSConstants.VERSION);
     }
 
     @Override
     protected void decodeParameter(DemoRequest request, String name, String values) throws OwsExceptionReport {
         switch (name.toLowerCase()) {
-            case SkeletonConstants.OperationParameter.service:
+            case WPSConstants.OperationParameter.service:
                 request.setService(KvpHelper.checkParameterSingleValue(values, name));
                 break;
-            case SkeletonConstants.OperationParameter.version:
+            case WPSConstants.OperationParameter.version:
                 request.setVersion(KvpHelper.checkParameterSingleValue(values, name));
                 break;
-            case SkeletonConstants.OperationParameter.request:
+            case WPSConstants.OperationParameter.request:
                 KvpHelper.checkParameterSingleValue(values, name);
                 break;
-            case SkeletonConstants.DemoParameter.one:
+            case WPSConstants.DemoParameter.one:
                 request.setOne(KvpHelper.checkParameterSingleValue(values, name));
                 break;
-            case SkeletonConstants.DemoParameter.two:
+            case WPSConstants.DemoParameter.two:
                 String value = KvpHelper.checkParameterSingleValue(values, name);
                 try {
                     int parsedInteger = Integer.parseInt(value);

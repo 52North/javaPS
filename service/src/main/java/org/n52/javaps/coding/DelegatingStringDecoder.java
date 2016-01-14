@@ -31,6 +31,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.stream.StreamSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -46,9 +48,6 @@ import org.n52.iceland.exception.ows.concrete.UnsupportedDecoderInputException;
 import org.n52.iceland.service.AbstractServiceCommunicationObject;
 import org.n52.javaps.request.DemoRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * TODO JavaDoc
  *
@@ -58,12 +57,9 @@ public class DelegatingStringDecoder
         implements Decoder<AbstractServiceCommunicationObject, String> {
 
     private static final Logger log = LoggerFactory.getLogger(DelegatingStringDecoder.class);
-
     private DecoderRepository decoderRepository;
-
     private final Set<DecoderKey> keys;
-
-    private JAXBContext context;
+    private final JAXBContext context;
 
     public DelegatingStringDecoder(Set<DecoderKey> keys) throws JAXBException {
         this.keys = Objects.requireNonNull(keys);
