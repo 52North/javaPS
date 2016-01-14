@@ -16,29 +16,22 @@
  */
 package org.n52.javaps.response;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.n52.iceland.response.AbstractServiceResponse;
-import org.n52.javaps.ProcessDescription;
 import org.n52.javaps.ogc.wps.WPSConstants;
 
-public class DescribeProcessResponse extends AbstractServiceResponse {
+/**
+ * @author Christian Autermann
+ */
+public class ExecuteResponse extends AbstractServiceResponse {
 
-    private final List<ProcessDescription> descriptions = new LinkedList<>();
+    private static final Logger log = LoggerFactory.getLogger(ExecuteResponse.class);
 
     @Override
     public String getOperationName() {
-        return WPSConstants.Operations.DescribeProcess.name();
-    }
-
-    public List<ProcessDescription> getProcessDescriptions() {
-        return Collections.unmodifiableList(this.descriptions);
-    }
-
-    public void addProcessDescription(ProcessDescription description) {
-        this.descriptions.add(description);
+        return WPSConstants.Operations.Execute.toString();
     }
 
 }

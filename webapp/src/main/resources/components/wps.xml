@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright 2016 52°North Initiative for Geospatial Open Source
+    Software GmbH
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+                           http://www.springframework.org/schema/util
+                           http://www.springframework.org/schema/util/spring-util-4.1.xsd">
+
+
+    <bean class="org.n52.iceland.service.operator.GenericServiceOperator">
+        <constructor-arg name="service" value="WPS" />
+        <constructor-arg name="version" value="2.0.0" />
+    </bean>
+
+    <bean id="getCapabilitiesOperator" class="org.n52.javaps.operator.GenericRequestOperator">
+        <constructor-arg index="0" name="service" value="WPS" />
+        <constructor-arg index="1" name="version" value="2.0.0" />
+        <constructor-arg index="2" name="operation" value="GetCapabilities" />
+        <constructor-arg index="3" name="defaultActive" value="true" />
+        <constructor-arg index="4" name="requestType">
+            <value type="java.lang.Class">org.n52.iceland.request.GetCapabilitiesRequest</value>
+        </constructor-arg>
+        <constructor-arg index="5" name="validator">
+            <bean class="org.n52.javaps.operator.validation.GetCapabiltiesParameterValidator" />
+        </constructor-arg>
+    </bean>
+
+    <bean id="describeProcessOperator" class="org.n52.javaps.operator.GenericRequestOperator">
+        <constructor-arg index="0" name="service" value="WPS" />
+        <constructor-arg name="version" value="2.0.0" />
+        <constructor-arg name="operation" value="DescribeProcess" />
+        <constructor-arg name="defaultActive" value="true" />
+        <constructor-arg name="requestType">
+            <value type="java.lang.Class">org.n52.javaps.request.DescribeProcessRequest</value>
+        </constructor-arg>
+        <constructor-arg name="validator">
+            <bean class="org.n52.javaps.operator.validation.DescribeProcessParameterValidator" />
+        </constructor-arg>
+    </bean>
+
+    <bean id="executeOperator" class="org.n52.javaps.operator.GenericRequestOperator">
+        <constructor-arg name="service" value="WPS" />
+        <constructor-arg name="version" value="2.0.0" />
+        <constructor-arg name="operation" value="Execute" />
+        <constructor-arg name="defaultActive" value="true" />
+        <constructor-arg name="requestType">
+            <value type="java.lang.Class">org.n52.javaps.request.ExecuteRequest</value>
+        </constructor-arg>
+        <constructor-arg name="validator">
+            <bean class="org.n52.javaps.operator.validation.ExecuteParameterValidator" />
+        </constructor-arg>
+    </bean>
+
+    <bean id="getResultOperator" class="org.n52.javaps.operator.GenericRequestOperator">
+        <constructor-arg name="service" value="WPS" />
+        <constructor-arg name="version" value="2.0.0" />
+        <constructor-arg name="operation" value="GetResult" />
+        <constructor-arg name="defaultActive" value="true" />
+        <constructor-arg name="requestType">
+            <value type="java.lang.Class">org.n52.javaps.request.GetResultRequest</value>
+        </constructor-arg>
+        <constructor-arg name="validator">
+            <bean class="org.n52.javaps.operator.validation.GetResultParameterValidator" />
+        </constructor-arg>
+    </bean>
+
+    <bean id="getStatusOperator" class="org.n52.javaps.operator.GenericRequestOperator">
+        <constructor-arg name="service" value="WPS" />
+        <constructor-arg name="version" value="2.0.0" />
+        <constructor-arg name="operation" value="GetStatus" />
+        <constructor-arg name="defaultActive" value="true" />
+        <constructor-arg name="requestType">
+            <value type="java.lang.Class">org.n52.javaps.request.GetStatusRequest</value>
+        </constructor-arg>
+        <constructor-arg name="validator">
+            <bean class="org.n52.javaps.operator.validation.GetStatusParameterValidator" />
+        </constructor-arg>
+    </bean>
+
+    <bean id="dismissOperator" class="org.n52.javaps.operator.GenericRequestOperator">
+        <constructor-arg name="service" value="WPS" />
+        <constructor-arg name="version" value="2.0.0" />
+        <constructor-arg name="operation" value="Dismiss" />
+        <constructor-arg name="defaultActive" value="true" />
+        <constructor-arg name="requestType">
+            <value type="java.lang.Class">org.n52.javaps.request.DismissRequest</value>
+        </constructor-arg>
+        <constructor-arg name="validator">
+            <bean class="org.n52.javaps.operator.validation.DismissParameterValidator" />
+        </constructor-arg>
+    </bean>
+
+    <bean class="org.n52.javaps.coding.decode.kvp.GetCapabilitiesKvpDecoder"/>
+    <bean class="org.n52.javaps.coding.decode.kvp.DescribeProcessKvpDecoder"/>
+
+</beans>

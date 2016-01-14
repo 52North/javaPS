@@ -14,31 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.response;
+package org.n52.javaps.request;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 
-import org.n52.iceland.response.AbstractServiceResponse;
-import org.n52.javaps.ProcessDescription;
+import org.n52.iceland.exception.ows.OwsExceptionReport;
+import org.n52.iceland.request.AbstractServiceRequest;
 import org.n52.javaps.ogc.wps.WPSConstants;
+import org.n52.javaps.response.GetStatusResponse;
 
-public class DescribeProcessResponse extends AbstractServiceResponse {
+/**
+ * @author Christian Autermann
+ */
+public class GetStatusRequest extends AbstractServiceRequest<GetStatusResponse>{
 
-    private final List<ProcessDescription> descriptions = new LinkedList<>();
+    @Override
+    public GetStatusResponse getResponse() throws OwsExceptionReport {
+        return (GetStatusResponse) new GetStatusResponse().set(this);
+    }
 
     @Override
     public String getOperationName() {
-        return WPSConstants.Operations.DescribeProcess.name();
-    }
-
-    public List<ProcessDescription> getProcessDescriptions() {
-        return Collections.unmodifiableList(this.descriptions);
-    }
-
-    public void addProcessDescription(ProcessDescription description) {
-        this.descriptions.add(description);
+        return WPSConstants.Operations.GetStatus.toString();
     }
 
 }

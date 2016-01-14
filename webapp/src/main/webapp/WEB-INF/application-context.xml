@@ -1,3 +1,21 @@
+<!--
+
+    Copyright 2016 52°North Initiative for Geospatial Open Source
+    Software GmbH
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:ctx="http://www.springframework.org/schema/context"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -22,9 +40,11 @@
     <bean id="settingsDao" class="org.n52.iceland.config.json.JsonSettingsDao" />
     <bean id="adminUserDao" class="org.n52.iceland.config.json.JsonAdminUserDao" />
     <bean id="settingValueFactory" class="org.n52.iceland.config.json.JsonSettingValueFactory" />
-    <bean id="jsonConfiguration" class="org.n52.iceland.config.json.JsonConfiguration">
+
+    <bean id="jsonConfiguration" class="org.n52.iceland.config.json.JsonConfiguration" init-method="init">
         <property name="fileName" value="configuration.json" />
         <property name="writeTimeout" value="1000" />
+        <property name="configLocationProvider" ref="configLocationProvider"/>
     </bean>
 
     <import resource="classpath:settings/*.xml" />
