@@ -48,7 +48,7 @@ public class KvpIT extends Base {
         assertThat("document contains root element", the(response),
                 hasXPath("/DemoResponse", usingNamespaces));
         assertThat("parameters three is corret", the(response),
-                hasXPath("count(/*/three[1])", usingNamespaces, XpathReturnType.returningANumber(), equalTo("2.0")));
+                hasXPath("count(/*/three[1])", usingNamespaces, XpathReturnType.returningANumber(), equalTo(2.0)));
         assertThat("parameters three is corret", the(response),
                 hasXPath("/*/three[1]", usingNamespaces, returningAString(), equalTo("htroN25")));
         assertThat("parameter three is corret", the(response),
