@@ -14,16 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.handler;
+package org.n52.javaps.coding.stream.xml;
 
-import org.n52.iceland.ds.OperationHandler;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.request.AbstractServiceRequest;
-import org.n52.iceland.response.AbstractServiceResponse;
+import javax.xml.stream.XMLEventWriter;
+import javax.xml.stream.XMLStreamException;
 
-public interface GenericHandler<
-            Q extends AbstractServiceRequest<A>,
-            A extends AbstractServiceResponse>
-        extends OperationHandler {
-    A handler(Q request) throws OwsExceptionReport;
+import org.n52.javaps.coding.stream.StreamWriter;
+
+/**
+ *
+ * @author Christian Autermann
+ */
+public interface XmlStreamWriter<T> extends StreamWriter<T> {
+
+    void write(T object, XMLEventWriter writer)
+            throws XMLStreamException;
+
 }
