@@ -16,6 +16,8 @@
  */
 package org.n52.javaps.coding.stream;
 
+import java.util.Objects;
+
 import org.n52.iceland.component.ClassBasedComponentKey;
 import org.n52.iceland.util.ClassHelper;
 import org.n52.iceland.util.Similar;
@@ -47,6 +49,21 @@ public class StreamWriterKey extends ClassBasedComponentKey<Object>
 
     public MediaType getMediaType() {
         return this.mediaType;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == null || other.getClass() != getClass()) {
+            return false;
+        }
+        StreamWriterKey that = (StreamWriterKey) other;
+        return Objects.equals(this.getMediaType(), that.getMediaType()) &&
+               Objects.equals(this.getType(), that.getType());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getMediaType(), getType());
     }
 
 }
