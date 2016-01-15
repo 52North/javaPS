@@ -23,14 +23,14 @@ import org.n52.iceland.coding.decode.DecoderKey;
 import org.n52.iceland.exception.ows.InvalidParameterValueException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.util.KvpHelper;
-import org.n52.javaps.ogc.wps.WPS100Constants;
+import org.n52.javaps.ogc.wps.WPS200Constants;
 import org.n52.javaps.ogc.wps.WPSConstants;
 import org.n52.javaps.request.DescribeProcessRequest;
 
 public class DescribeProcessKvpDecoder extends AbstractKvpDecoder<DescribeProcessRequest> {
     private static final DecoderKey KEY
             = createKey(WPSConstants.SERVICE,
-                        WPS100Constants.SERVICEVERSION,
+                        WPS200Constants.SERVICEVERSION,
                         WPSConstants.Operations.DescribeProcess.toString());
 
     @Override
@@ -59,6 +59,9 @@ public class DescribeProcessKvpDecoder extends AbstractKvpDecoder<DescribeProces
             case "identifier":
                 KvpHelper.checkParameterMultipleValues(value, name)
                         .stream().forEach(request::addProcessIdentifier);
+                break;
+            case "request":
+                KvpHelper.checkParameterSingleValue(value, name);
                 break;
             default:
                 throw new InvalidParameterValueException(name, value)

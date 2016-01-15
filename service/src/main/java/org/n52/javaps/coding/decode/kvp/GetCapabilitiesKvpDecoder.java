@@ -36,7 +36,7 @@ public class GetCapabilitiesKvpDecoder extends AbstractKvpDecoder<GetCapabilitie
 
     private static final Set<DecoderKey> KEYS = Sets.newHashSet(
             createKey(WPSConstants.SERVICE, null, OWSConstants.Operations.GetCapabilities.toString()),
-            createKey(WPSConstants.SERVICE, WPS200Constants.VERSION, OWSConstants.Operations.GetCapabilities.toString()));
+            createKey(WPSConstants.SERVICE, WPS200Constants.SERVICEVERSION, OWSConstants.Operations.GetCapabilities.toString()));
 
     @Override
     public Set<DecoderKey> getKeys() {

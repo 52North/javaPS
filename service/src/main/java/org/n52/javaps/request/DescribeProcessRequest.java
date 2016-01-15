@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.request.AbstractServiceRequest;
+import org.n52.javaps.algorithm.ProcessDescription;
 import org.n52.javaps.ogc.wps.WPSConstants;
 import org.n52.javaps.response.DescribeProcessResponse;
 
@@ -35,7 +36,17 @@ public class DescribeProcessRequest extends
     @Override
     public DescribeProcessResponse getResponse()
             throws OwsExceptionReport {
-        return (DescribeProcessResponse) new DescribeProcessResponse().set(this);
+
+        DescribeProcessResponse describeProcessResponse = (DescribeProcessResponse) new DescribeProcessResponse().set(this);
+
+        for (String identifier : identifiers) {
+
+            ProcessDescription processDescription = new ProcessDescription();
+
+            describeProcessResponse.addProcessDescription(processDescription);
+        }
+
+        return describeProcessResponse;
     }
 
     @Override
