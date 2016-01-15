@@ -19,10 +19,7 @@ package org.n52.javaps.io;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import org.n52.iceland.lifecycle.Constructable;
-import org.n52.javaps.commons.WPSConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,9 +30,6 @@ public class GeneratorFactory implements Constructable {
     private static Logger LOGGER = LoggerFactory.getLogger(GeneratorFactory.class);
 
     private List<IGenerator> registeredGenerators;
-
-    @Inject
-    private WPSConfig wpsConfig;
 
     public void init() {
         loadAllGenerators();

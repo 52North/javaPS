@@ -26,7 +26,6 @@ import org.apache.commons.codec.binary.Base64InputStream;
 import org.n52.javaps.commons.WPSConfig;
 import org.n52.javaps.io.AbstractIOHandler;
 import org.n52.javaps.io.IGenerator;
-import org.n52.javaps.io.IOHandler;
 import org.n52.javaps.io.data.IData;
 
 /**

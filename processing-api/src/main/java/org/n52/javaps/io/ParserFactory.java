@@ -18,12 +18,8 @@ package org.n52.javaps.io;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
-import javax.inject.Inject;
 
 import org.n52.iceland.lifecycle.Constructable;
-import org.n52.javaps.commons.WPSConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,9 +39,6 @@ public class ParserFactory implements Constructable {
     private static Logger LOGGER = LoggerFactory.getLogger(ParserFactory.class);
 
     private List<IParser> registeredParsers;
-
-    @Inject
-    private WPSConfig wpsConfig;
 
     public void init() {
         loadAllParsers();
