@@ -46,10 +46,6 @@
 			<groupId>org.n52.iceland</groupId>
 			<artifactId>iceland</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>javax.inject</groupId>
-			<artifactId>javax.inject</artifactId>
-		</dependency>
 
 		<dependency>
 			<groupId>org.hamcrest</groupId>
@@ -63,6 +59,10 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
 		</dependency>
 		<!-- <dependency> -->
 		<!-- <groupId>org.springframework</groupId> -->
@@ -109,6 +109,14 @@
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-configuration2</artifactId>
+        </dependency>
+		<dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+        </dependency>
 	</dependencies>
 
 	<build>
