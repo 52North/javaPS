@@ -16,29 +16,25 @@
  */
 package org.n52.javaps.algorithm;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.inject.Inject;
+import java.util.Set;
 
 import org.n52.iceland.lifecycle.Constructable;
-import org.n52.javaps.commons.WPSConfig;
-import org.n52.javaps.io.GeneratorFactory;
+import org.n52.javaps.annotation.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.helpers.ParserFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author Bastian Schaeffer, University of Muenster
  *
  */
+@Properties(defaultPropertyFileName="repositorymanager-default.json", propertyFileName="repositorymanager-default.json" )
 public class RepositoryManager implements Constructable {
-
-    private static RepositoryManager instance;
 
     private static Logger LOGGER = LoggerFactory.getLogger(RepositoryManager.class);
 
@@ -46,38 +42,26 @@ public class RepositoryManager implements Constructable {
 
     private ProcessIDRegistry globalProcessIDs = ProcessIDRegistry.getInstance();
 
-    private UpdateThread updateThread;
+    @Autowired(required = false)
+    private Collection<IAlgorithmRepository> algorithmRepositories;
 
     public void init() {
-
         // clear registry
         globalProcessIDs.clearRegistry();
 
-        // initialize all Repositories
-        loadAllRepositories();
+        repositories = new HashMap<>();
 
+        for (IAlgorithmRepository iAlgorithmRepository : algorithmRepositories) {
+            loadRepository(iAlgorithmRepository.getClass().getCanonicalName());
+        }
     }
 
-    private List<String> getRepositoryNames() {
-
-        List<String> repositoryNames = new ArrayList<>();
-
-        // TODO
-
-        return repositoryNames;
+    private Set<String> getRepositoryNames() {
+        return repositories.keySet();
     }
 
-    private void loadAllRepositories() {
-        repositories = new HashMap<String, IAlgorithmRepository>();
-        LOGGER.debug("Loading all repositories: {} (doing a gc beforehand...)", repositories);
-
-        // TODO
-
-    }
-
-    private void loadRepository(String repositoryName,
-            String repositoryClassName) {
-        LOGGER.debug("Loading repository: {}", repositoryName);
+    private void loadRepository(String repositoryClassName) {
+        LOGGER.debug("Loading repository: {}", repositoryClassName);
 
         // if (repository.isActive() == false) {
         // LOGGER.warn("Repository {} not active. Will not load it.",
@@ -101,28 +85,12 @@ public class RepositoryManager implements Constructable {
         }
     }
 
-    public static RepositoryManager getInstance() {
-        if (instance == null) {
-            instance = new RepositoryManager();
-        }
-        return instance;
-    }
-
-    /**
-     * Allows to reInitialize the RepositoryManager... This should not be called
-     * to often.
-     *
-     */
-    public static void reInitialize() {
-        instance = new RepositoryManager();
-    }
-
     /**
      * Allows to reInitialize the Repositories
      *
      */
     protected void reloadRepositories() {
-        loadAllRepositories();
+//        loadAllRepositories();
     }
 
     /**
@@ -239,48 +207,8 @@ public class RepositoryManager implements Constructable {
         return new ProcessDescription();
     }
 
-    static class UpdateThread extends Thread {
-
-        private final long interval;
-
-        private boolean firstrun = true;
-
-        public UpdateThread(long interval) {
-            this.interval = interval;
-        }
-
-        @Override
-        public void run() {
-            LOGGER.debug("UpdateThread started");
-
-            try {
-                // never terminate the run method
-                while (true) {
-                    // do not update on first run!
-                    if (!firstrun) {
-                        LOGGER.info("Reloading repositories - this might take a while ...");
-                        long timestamp = System.currentTimeMillis();
-                        RepositoryManager.getInstance().reloadRepositories();
-                        LOGGER.info("Repositories reloaded - going to sleep. Took {} seconds.", (System.currentTimeMillis() - timestamp) / 1000);
-                    } else {
-                        firstrun = false;
-                    }
-
-                    // sleep for a given INTERVAL
-                    sleep(interval);
-                }
-            } catch (InterruptedException e) {
-                LOGGER.debug("Interrupt received - Terminating the UpdateThread.");
-            }
-        }
-
-    }
-
     // shut down the update thread
     public void finalize() {
-        if (updateThread != null) {
-            updateThread.interrupt();
-        }
     }
 
     public void shutdown() {

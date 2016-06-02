@@ -21,7 +21,10 @@ This project includes:
   52°North Iceland WPS Service Implementation under The Apache Software License, Version 2.0
   52°North Iceland WPS Webapp under The Apache Software License, Version 2.0
   AOP alliance under Public Domain
+  Apache Commons BeanUtils under The Apache Software License, Version 2.0
   Apache Commons Codec under Apache License, Version 2.0
+  Apache Commons Configuration under Apache License, Version 2.0
+  Apache Commons Lang under The Apache Software License, Version 2.0
   Apache Commons Logging under The Apache Software License, Version 2.0
   Apache HttpClient under Apache License, Version 2.0
   Apache HttpClient Fluent API under Apache License, Version 2.0
@@ -31,6 +34,7 @@ This project includes:
   Apache Log4j SLF4J Binding under The Apache Software License, Version 2.0
   Apache Log4j Web under The Apache Software License, Version 2.0
   ClassLoader Leak Prevention library under Apache 2
+  Commons Collections under The Apache Software License, Version 2.0
   Commons IO under The Apache Software License, Version 2.0
   Cross-Origin Resource Sharing (CORS) Filter under The Apache Software License, Version 2.0
   Guava: Google Core Libraries for Java under The Apache Software License, Version 2.0

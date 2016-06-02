@@ -48,13 +48,13 @@ public abstract class ConfigurableClass {
         List<FileLocationStrategy> subs = Arrays.asList(
                 new FileSystemLocationStrategy(),
                 new ClasspathLocationStrategy());
-        
+
         FileLocationStrategy strategy = new CombinedLocationStrategy(subs);
-        
+
         Parameters params = new Parameters();
-        
+
         PropertiesBuilderParameters properties = params.properties();
-        
+
         Properties annotation = this.getClass().getAnnotation(Properties.class);
 
         if(annotation == null){
@@ -72,14 +72,14 @@ public abstract class ConfigurableClass {
             LOGGER.warn("Class {} is annotated with {} annotation, but the annotation is empty.", this.getClass().getName(), Properties.class.getName());
             return;
         }
-        
+
         properties.setLocationStrategy(strategy);
-        
+
         properties.setFileName(propertyFileName);
-        
+
         FileBasedConfigurationBuilder<PropertiesConfiguration> builder =
                 new FileBasedConfigurationBuilder<PropertiesConfiguration>(PropertiesConfiguration.class).configure(properties);
-                
+
         try {
             config = builder.getConfiguration();
         } catch (ConfigurationException e) {
@@ -87,20 +87,4 @@ public abstract class ConfigurableClass {
             LOGGER.error(e.getMessage());
         }
     }
-
-//    private void loadProperties(String propertyFileName) throws IOException{
-//
-//        File propertyFile = new File(propertyFileName);
-//
-//        if(!propertyFile.exists()){
-//            LOGGER.warn("Property file {}, specified by class {}, doesn't exist.", propertyFileName, this.getClass().getName());
-//            return;
-//        }
-//
-//        FileReader fileReader = new FileReader(propertyFile);
-//
-//        this.properties = new java.util.Properties();
-//
-//        this.properties.load(fileReader);
-//    }
 }

@@ -25,17 +25,17 @@ import org.junit.Test;
 
 @Properties(defaultPropertyFileName="test.properties")
 public class TestAnnotation extends ConfigurableClass {
-    
+
     public TestAnnotation(){
-        
+
         assertThat(config, not(nullValue()));
-        
+
         Object testValue = config.getProperty("testkey");
-        
+
         assertThat(testValue, not(nullValue()));
         assertThat(testValue.toString(), equalTo("testvalue"));
     }
-    
+
     @Test
     public void testAnnotation() {
         new TestAnnotation();

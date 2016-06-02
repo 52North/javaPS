@@ -24,6 +24,10 @@ import org.n52.iceland.response.AbstractServiceResponse;
 import org.n52.javaps.algorithm.ProcessDescription;
 import org.n52.javaps.ogc.wps.WPSConstants;
 
+/**
+ * @author Benjamin Pross
+ *
+ */
 public class DescribeProcessResponse extends AbstractServiceResponse {
 
     private final List<ProcessDescription> descriptions = new LinkedList<>();
