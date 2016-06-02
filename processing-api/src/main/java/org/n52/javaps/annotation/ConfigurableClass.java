@@ -16,21 +16,24 @@
  */
 package org.n52.javaps.annotation;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.configuration2.Configuration;
-import org.apache.commons.configuration2.PropertiesConfiguration;
-import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
-import org.apache.commons.configuration2.builder.fluent.Parameters;
-import org.apache.commons.configuration2.builder.fluent.PropertiesBuilderParameters;
-import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.configuration2.io.ClasspathLocationStrategy;
 import org.apache.commons.configuration2.io.CombinedLocationStrategy;
+import org.apache.commons.configuration2.io.DefaultFileSystem;
 import org.apache.commons.configuration2.io.FileLocationStrategy;
+import org.apache.commons.configuration2.io.FileLocator;
+import org.apache.commons.configuration2.io.FileLocatorUtils;
+import org.apache.commons.configuration2.io.FileSystem;
 import org.apache.commons.configuration2.io.FileSystemLocationStrategy;
+import org.n52.iceland.util.JSONUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 /**
  * @author Benjamin Pross
@@ -41,7 +44,7 @@ public abstract class ConfigurableClass {
 
     private static Logger LOGGER = LoggerFactory.getLogger(ConfigurableClass.class);
 
-    protected Configuration config;
+    protected JsonNode properties;
 
     public ConfigurableClass() {
 
@@ -50,10 +53,6 @@ public abstract class ConfigurableClass {
                 new ClasspathLocationStrategy());
 
         FileLocationStrategy strategy = new CombinedLocationStrategy(subs);
-
-        Parameters params = new Parameters();
-
-        PropertiesBuilderParameters properties = params.properties();
 
         Properties annotation = this.getClass().getAnnotation(Properties.class);
 
@@ -73,16 +72,18 @@ public abstract class ConfigurableClass {
             return;
         }
 
-        properties.setLocationStrategy(strategy);
+        FileSystem arg0 = new DefaultFileSystem();
 
-        properties.setFileName(propertyFileName);
+        FileLocator locator =
+                FileLocatorUtils.fileLocator().fileName(propertyFileName)
+                .create();
 
-        FileBasedConfigurationBuilder<PropertiesConfiguration> builder =
-                new FileBasedConfigurationBuilder<PropertiesConfiguration>(PropertiesConfiguration.class).configure(properties);
+        URL fileURL = strategy.locate(arg0, locator);
 
         try {
-            config = builder.getConfiguration();
-        } catch (ConfigurationException e) {
+            properties = JSONUtils.loadURL(fileURL);
+
+        } catch (IOException e) {
             LOGGER.error("Could not read property file", this.getClass().getName(), Properties.class.getName());
             LOGGER.error(e.getMessage());
         }

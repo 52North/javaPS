@@ -28,9 +28,9 @@ public class TestAnnotation extends ConfigurableClass {
 
     public TestAnnotation(){
 
-        assertThat(config, not(nullValue()));
+        assertThat(properties, not(nullValue()));
 
-        Object testValue = config.getProperty("testkey");
+        Object testValue = properties.get("testkey").asText();
 
         assertThat(testValue, not(nullValue()));
         assertThat(testValue.toString(), equalTo("testvalue"));
