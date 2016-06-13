@@ -17,7 +17,10 @@
 package org.n52.javaps.coding.stream;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Optional;
+
+import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -30,17 +33,16 @@ import org.n52.iceland.util.http.MediaType;
  * @author Christian Autermann
  */
 public class StreamWriterRepository
-        extends AbstractSimilarityKeyRepository<StreamWriterKey, StreamWriter<?>, StreamWriterFactory>
+        extends AbstractSimilarityKeyRepository<StreamWriterKey, StreamWriter<?>>
         implements Constructable {
 
     @Autowired(required = false)
-    private Collection<StreamWriter<?>> writers;
-    @Autowired(required = false)
-    private Collection<StreamWriterFactory> writerFactories;
+    private Collection<Provider<StreamWriter<?>>> writers;
 
     @Override
     public void init() {
-        setProducers(getProviders(writers, writerFactories));
+        Objects.requireNonNull(this.writers);
+        setProducers(this.writers);
     }
 
     public <T> Optional<StreamWriter<T>> getWriter(MediaType mediaType, Class<? extends T> type) {

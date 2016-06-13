@@ -30,7 +30,7 @@
     <bean class="org.n52.javaps.coding.encode.ServiceResponseWriterFactory"/>
     <bean class="org.n52.javaps.coding.decode.kvp.GetCapabilitiesKvpDecoder"/>
     <bean class="org.n52.javaps.coding.decode.kvp.DescribeProcessKvpDecoder"/>
-    <bean class="org.n52.javaps.coding.stream.xml.impl.Ows20StreamWriterFactory"/>
+    <bean class="org.n52.javaps.coding.stream.xml.impl.Ows20ExceptionReportWriter" scope="prototype" />
     <bean class="org.n52.javaps.coding.stream.xml.impl.OwsExceptionReportEncoder"/>
 
     <bean class="org.n52.javaps.handler.GetCapabilitiesHandler"/>

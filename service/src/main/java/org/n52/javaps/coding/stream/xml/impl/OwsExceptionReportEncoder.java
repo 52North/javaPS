@@ -24,7 +24,6 @@ import org.n52.iceland.coding.encode.Encoder;
 import org.n52.iceland.coding.encode.EncoderKey;
 import org.n52.iceland.coding.encode.ExceptionEncoderKey;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.exception.ows.concrete.UnsupportedEncoderInputException;
 import org.n52.iceland.ogc.ows.OWSConstants.HelperValues;
 import org.n52.iceland.util.http.MediaType;
 import org.n52.iceland.util.http.MediaTypes;
@@ -37,21 +36,24 @@ import org.n52.javaps.response.OwsExceptionReportResponse;
  */
 public class OwsExceptionReportEncoder implements
         Encoder<OwsExceptionReportResponse, OwsExceptionReport> {
+    private static final ExceptionEncoderKey KEY
+            = new ExceptionEncoderKey(MediaTypes.APPLICATION_XML);
+    private static final Set<EncoderKey> KEYS = Collections.singleton(KEY);
     private final MediaType contentType = MediaTypes.APPLICATION_XML;
 
     @Override
-    public OwsExceptionReportResponse encode(OwsExceptionReport objectToEncode)
-            throws OwsExceptionReport, UnsupportedEncoderInputException {
-        OwsExceptionReportResponse response = new OwsExceptionReportResponse(objectToEncode);
+    public OwsExceptionReportResponse encode(OwsExceptionReport report) {
+        OwsExceptionReportResponse response
+                = new OwsExceptionReportResponse(report);
         response.setContentType(this.contentType);
         return response;
     }
 
     @Override
-    public OwsExceptionReportResponse encode(OwsExceptionReport objectToEncode,
-                                             Map<HelperValues, String> additionalValues)
-            throws OwsExceptionReport, UnsupportedEncoderInputException {
-        return encode(objectToEncode);
+    public OwsExceptionReportResponse encode(
+            OwsExceptionReport report,
+            Map<HelperValues, String> additionalValues) {
+        return encode(report);
     }
 
     @Override
@@ -61,9 +63,7 @@ public class OwsExceptionReportEncoder implements
 
     @Override
     public Set<EncoderKey> getKeys() {
-        return Collections
-                .singleton(new ExceptionEncoderKey(MediaTypes.APPLICATION_XML));
+        return KEYS;
     }
-
 
 }

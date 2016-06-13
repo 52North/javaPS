@@ -16,91 +16,57 @@
  */
 package org.n52.javaps.coding.stream;
 
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.mapping;
+import static java.util.stream.Collectors.toSet;
+
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
+import java.util.function.Predicate;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import javax.inject.Provider;
 
-import org.n52.iceland.component.AbstractComponentRepository;
 import org.n52.iceland.component.Component;
-import org.n52.iceland.component.ComponentFactory;
-import org.n52.iceland.util.Producer;
-import org.n52.iceland.util.Producers;
 import org.n52.iceland.util.ProxySimilarityComparator;
 import org.n52.iceland.util.Similar;
 
-import com.google.common.base.Joiner;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.SetMultimap;
-import com.google.common.collect.Sets;
+import com.google.common.collect.Maps;
 
-public class AbstractSimilarityKeyRepository<K extends Similar<K>, C extends Component<K>, F extends ComponentFactory<K, C>>
-        extends AbstractComponentRepository<K, C, F> {
+public abstract class AbstractSimilarityKeyRepository<K extends Similar<K>, C extends Component<K>> {
 
-    private static final Logger LOG = LoggerFactory
-            .getLogger(AbstractSimilarityKeyRepository.class);
+    private Set<Provider<C>> components = Collections.emptySet();
+    private Map<K, Set<Provider<C>>> componentsByKey = new HashMap<>(0);
 
-    private final Set<Producer<C>> components = Sets.newHashSet();
-    private final SetMultimap<K, Producer<C>> componentsByKey = HashMultimap
-            .create();
-
-    protected void setProducers(SetMultimap<K, Producer<C>> implementations) {
-        this.componentsByKey.clear();
-        this.componentsByKey.putAll(implementations);
-        this.components.clear();
-        this.components.addAll(implementations.values());
+    protected void setProducers(Collection<Provider<C>> providers) {
+        this.components = new HashSet<>(providers);
+        this.componentsByKey = providers.stream()
+                .flatMap(p -> p.get().getKeys().stream().map(k -> Maps.immutableEntry(k, p)))
+                .collect(groupingBy(Entry::getKey, HashMap::new, mapping(Entry::getValue, toSet())));
     }
 
-    protected C get(K key) {
-        return choose(findComponentForSingleKey(key), key);
+    protected C get(K k) {
+        return this.componentsByKey.computeIfAbsent(k, this::findProviders)
+                .stream().map(Provider::get).min(comparator(k)).orElse(null);
     }
 
-    protected C choose(Set<C> matches, K key) {
-        if (matches == null || matches.isEmpty()) {
-            LOG.debug("No implementation for {}", key);
-            return null;
-        } else if (matches.size() > 1) {
-            return chooseFrom(matches, key);
-        } else {
-            return Iterables.getFirst(matches, null);
-        }
+    private Set<Provider<C>> findProviders(K k) {
+        return this.components.stream().filter(isSimilarTo(k)).collect(toSet());
     }
 
-    private C chooseFrom(Set<C> matches, K key) {
-        ComponentSimilarityComparator<K, C> comparator
-                = new ComponentSimilarityComparator<>(key);
-        C component = Collections.min(matches, comparator);
-        LOG.debug("Requested ambiguous implementations for {}: Found {}; Choosing {}.",
-                       key, Joiner.on(", ").join(matches), component);
-        return component;
+    private static <K extends Similar<K>, C extends Component<K>> Predicate<Provider<C>> isSimilarTo(K key) {
+        Predicate<K> keyIsSimilarTo = k -> key.getSimilarity(k) >= 0;
+        return p -> p.get().getKeys().stream().anyMatch(keyIsSimilarTo);
     }
 
-    private static class ComponentSimilarityComparator<K extends Similar<K>, C extends Component<K>>
-            extends ProxySimilarityComparator<C, K> {
-        ComponentSimilarityComparator(K key) {
-            super(key);
-        }
-
-        @Override
-        protected Collection<K> getSimilars(C t) {
-            return t.getKeys();
-        }
-
+    private static <K extends Similar<K>, C extends Component<K>> Comparator<C> comparator(K key) {
+        return new ProxySimilarityComparator<C, K>(key) {
+            @Override protected Set<K> getSimilars(C c) { return c.getKeys(); }
+        };
     }
-
-    protected Set<C> findComponentForSingleKey(K key) {
-        if (!this.componentsByKey.containsKey(key)) {
-            this.components.stream().forEach(producer -> {
-                if (producer.get().getKeys().stream().anyMatch(k -> k
-                        .getSimilarity(key) >= 0)) {
-                    this.componentsByKey.put(key, producer);
-                }
-            });
-        }
-        return Producers.produce(componentsByKey.get(key));
-    }
-
 }
