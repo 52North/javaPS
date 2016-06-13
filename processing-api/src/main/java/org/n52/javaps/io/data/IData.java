@@ -1,5 +1,5 @@
-/*
- * Copyright 2016 52°North Initiative for Geospatial Open Source
+/**
+ * ﻿Copyright (C) 2007 - 2014 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,21 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.ogc.wps;
+package org.n52.javaps.io.data;
 
-/**
- * @author Christian Autermann
- */
-public interface WPS200Constants {
-    String VERSION = "2.0.0";
-    
-    String JOB_CONTROL_OPTION_SYNC_EXECUTE = "sync-execute";
-    String JOB_CONTROL_OPTION_ASYNC_EXECUTE = "async-execute";
-    
-    String JOB_CONTROL_OPTIONS_SEPARATOR = " ";
-    
-    String OUTPUT_TRANSMISSION_VALUE = "value";
-    String OUTPUT_TRANSMISSION_REFERENCE = "reference";
-    
-    String OUTPUT_TRANSMISSIONS_SEPARATOR = " ";
+import java.io.Serializable;
+
+public interface IData extends Serializable {
+    public Object getPayload();
+
+    /*
+     * Inheriting classes shall indicate which class they support. For special
+     * cases like Grass, it is recommended to Create your own wrapper class, for
+     * e.g. a File in the filesystem.
+     */
+    public abstract Class<?> getSupportedClass();
 }
