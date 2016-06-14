@@ -16,12 +16,16 @@
  */
 package org.n52.javaps.coding.stream.xml.impl;
 
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import org.n52.javaps.coding.stream.StreamWriter;
 import org.n52.javaps.coding.stream.StreamWriterFactory;
 import org.n52.javaps.coding.stream.StreamWriterKey;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.common.collect.ImmutableSet;
 
@@ -35,6 +39,16 @@ public class WPS20ResponseStreamWriterFactory implements StreamWriterFactory {
 
     private static final ImmutableSet<StreamWriterKey> KEYS = ImmutableSet.<StreamWriterKey> builder().add(DescribeProcessResponseWriter.KEY).build();
 
+    @Autowired
+    private DescribeProcessResponseWriter describeProcessResponseWriter;
+
+    private Map<StreamWriterKey, StreamWriter<?>> streamWriterKeyMap;
+
+    public void init(){
+        streamWriterKeyMap = new HashMap<>();
+        streamWriterKeyMap.put(DescribeProcessResponseWriter.KEY, describeProcessResponseWriter);
+    }
+
     @Override
     public Set<StreamWriterKey> getKeys() {
         return Collections.unmodifiableSet(KEYS);
@@ -42,8 +56,8 @@ public class WPS20ResponseStreamWriterFactory implements StreamWriterFactory {
 
     @Override
     public StreamWriter<?> create(StreamWriterKey key) {
-        if (key.equals(DescribeProcessResponseWriter.KEY)) {
-            return new DescribeProcessResponseWriter();
+        if (streamWriterKeyMap.keySet().contains(key)) {
+            return streamWriterKeyMap.get(key);
         }
         throw new IllegalArgumentException();
     }

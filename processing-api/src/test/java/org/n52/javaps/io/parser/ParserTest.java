@@ -14,26 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.io;
+package org.n52.javaps.io.parser;
 
 import java.util.List;
 
-public interface IOHandler {
+import org.junit.Test;
+import org.n52.javaps.io.Format;
 
-    public static final String DEFAULT_ENCODING = "UTF-8";
+public class ParserTest {
 
-    public static final String ENCODING_BASE64 = "base64";
+    @Test
+    public void testFormats(){
 
-    // public static final String DEFAULT_MIMETYPE = "text/xml";
+        TestParser testParser = new TestParser();
 
-    public static final String MIME_TYPE_ZIPPED_SHP = "application/x-zipped-shp";
+        List<Format> formats = testParser.getSupportedFormats();
 
-    public boolean isSupportedFormat(String format);
+        assert(formats != null);
 
-    public boolean isSupportedDataBinding(Class<?> clazz);
-
-    public List<Format> getSupportedFormats();
-
-    public Class<?>[] getSupportedDataBindings();
+    }
 
 }

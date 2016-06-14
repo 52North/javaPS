@@ -22,11 +22,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.n52.javaps.algorithm.annotation.Algorithm;
+import org.n52.javaps.annotation.ConfigurableClass;
+import org.n52.javaps.annotation.Properties;
 import org.n52.javaps.commons.WPSConfig;
-import org.n52.javaps.io.GeneratorFactory;
-import org.n52.javaps.io.ParserFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * A static repository to retrieve the available algorithms.
@@ -34,7 +35,8 @@ import org.slf4j.LoggerFactory;
  * @author foerster
  *
  */
-public class LocalAlgorithmRepository implements IAlgorithmRepository {
+@Properties(defaultPropertyFileName="localalgorithmrepository.json")
+public class LocalAlgorithmRepository extends ConfigurableClass implements IAlgorithmRepository {
 
     private static Logger LOGGER = LoggerFactory.getLogger(LocalAlgorithmRepository.class);
 
@@ -42,9 +44,10 @@ public class LocalAlgorithmRepository implements IAlgorithmRepository {
 
     private Map<String, IAlgorithm> algorithmMap;
 
-    private GeneratorFactory generatorFactory;
+    private Collection<String> algorithmNames;
 
-    private ParserFactory parserFactory;
+    @Autowired(required = false)
+    private Collection<IAlgorithm> registeredAlgorithms;
 
     public LocalAlgorithmRepository() {
     }
@@ -54,6 +57,15 @@ public class LocalAlgorithmRepository implements IAlgorithmRepository {
         algorithmMap = new HashMap<String, IAlgorithm>();
         // check if the repository is active
         // TODO
+
+        algorithmNames = new ArrayList<>();
+
+        // TODO
+        for (IAlgorithm algorithm : registeredAlgorithms) {
+            algorithmNames.add(algorithm.getWellKnownName());
+            algorithmMap.put(algorithm.getWellKnownName(), algorithm);
+        }
+
     }
 
     public IAlgorithm getAlgorithm(String className) {
@@ -64,11 +76,6 @@ public class LocalAlgorithmRepository implements IAlgorithmRepository {
     }
 
     public Collection<String> getAlgorithmNames() {
-
-        Collection<String> algorithmNames = new ArrayList<>();
-
-        // TODO
-
         return algorithmNames;
     }
 
@@ -88,9 +95,6 @@ public class LocalAlgorithmRepository implements IAlgorithmRepository {
         } else {
             throw new Exception("Could not load algorithm " + algorithmClassName + " does not implement IAlgorithm or have a Algorithm annotation.");
         }
-
-        algorithm.setGeneratorFactory(generatorFactory);
-        algorithm.setParserFactory(parserFactory);
 
         boolean isNoProcessDescriptionValid = false;
 

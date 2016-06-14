@@ -16,7 +16,10 @@
  */
 package org.n52.javaps.coding.stream.xml.impl;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import javax.xml.namespace.QName;
@@ -33,9 +36,16 @@ import org.n52.javaps.algorithm.descriptor.OutputDescriptor;
 import org.n52.javaps.coding.stream.StreamWriterKey;
 import org.n52.javaps.coding.stream.xml.AbstractXmlStreamWriter;
 import org.n52.javaps.coding.stream.xml.XmlStreamWriterKey;
+import org.n52.javaps.io.Format;
+import org.n52.javaps.io.GeneratorFactory;
+import org.n52.javaps.io.IGenerator;
+import org.n52.javaps.io.IOHandler;
+import org.n52.javaps.io.IParser;
+import org.n52.javaps.io.ParserFactory;
 import org.n52.javaps.response.DescribeProcessResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * This class encodes a ProcessDescription object as a DescribeProcessResponse
@@ -170,6 +180,16 @@ public class DescribeProcessResponseWriter extends AbstractXmlStreamWriter<Descr
 
     public static final StreamWriterKey KEY = new XmlStreamWriterKey(DescribeProcessResponse.class);
 
+    @Autowired
+    private ParserFactory parserFactory;
+
+    @Autowired
+    private GeneratorFactory generatorFactory;
+
+    public DescribeProcessResponseWriter() {
+        LOGGER.info("DescribeProcessResponseWriter constructed.");
+    }
+
     @Override
     protected void write(DescribeProcessResponse describeProcessResponse) throws XMLStreamException {
 
@@ -193,10 +213,10 @@ public class DescribeProcessResponseWriter extends AbstractXmlStreamWriter<Descr
             start(QN_PROCESS);
             start(QN_TITLE);
             chars(algorithmDescriptor.getTitle());
-            end(QN_IDENTIFIER);
-            start(QN_TITLE);
-            chars(algorithmDescriptor.getIdentifier());
             end(QN_TITLE);
+            start(QN_IDENTIFIER);
+            chars(algorithmDescriptor.getIdentifier());
+            end(QN_IDENTIFIER);
             start(QN_ABSTRACT);
             chars(algorithmDescriptor.getAbstract());
             end(QN_ABSTRACT);
@@ -272,25 +292,7 @@ public class DescribeProcessResponseWriter extends AbstractXmlStreamWriter<Descr
 
                     start(QN_COMPLEX_DATA);
 
-                    // additional XML format
-                    start(QN_FORMAT);
-                    attr(AN_DEFAULT, "true");
-                    attr(AN_MIME_TYPE, "text/plain");
-                    end(QN_FORMAT);
-
-                    // additional XML format
-                    start(QN_FORMAT);
-                    attr(AN_MIME_TYPE, "text/xml");
-                    end(QN_FORMAT);
-
-                    // TODO this is now defined per format..
-                    // if (complexInputDescriptor.hasMaximumMegaBytes()) {
-                    // dataInput.setMaximumMegabytes(complexInputDescriptor.getMaximumMegaBytes());
-                    // }
-
-                    // TODO need something like this:
-                    // describeComplexDataInputType200(complexDataType,
-                    // inputDescriptor.getBinding());
+                    writeComplexDataInput(complexInputDescriptor.getBinding());
 
                     end(QN_COMPLEX_DATA);
                 }
@@ -345,20 +347,7 @@ public class DescribeProcessResponseWriter extends AbstractXmlStreamWriter<Descr
 
                     start(QN_COMPLEX_DATA);
 
-                    // additional XML format
-                    start(QN_FORMAT);
-                    attr(AN_DEFAULT, "true");
-                    attr(AN_MIME_TYPE, "text/plain");
-                    end(QN_FORMAT);
-
-                    // additional XML format
-                    start(QN_FORMAT);
-                    attr(AN_MIME_TYPE, "text/xml");
-                    end(QN_FORMAT);
-
-                    // TODO need something like this:
-                    // describeComplexDataOutputType200(complexDataType,
-                    // outputDescriptor.getBinding()
+                    writeComplexDataOutput(outputDescriptor.getBinding());
 
                     end(QN_COMPLEX_DATA);
                 }
@@ -373,6 +362,81 @@ public class DescribeProcessResponseWriter extends AbstractXmlStreamWriter<Descr
 
         end(QN_PROCESS_OFFERINGS);
     }
+
+    private void writeComplexDataOutput(Class<?> dataTypeClass) {
+        Collection<IGenerator> generators = generatorFactory.getAllGenerators();
+        List<IGenerator> foundGenerators = new ArrayList<IGenerator>();
+        for (IGenerator generator : generators) {
+            Class<?>[] supportedClasses = generator.getSupportedDataBindings();
+            for (Class<?> clazz : supportedClasses) {
+                if (dataTypeClass.isAssignableFrom(clazz)) {
+                    foundGenerators.add(generator);
+                }
+            }
+        }
+        try {
+            writeComplexDataType(foundGenerators);
+        } catch (XMLStreamException e) {
+            LOGGER.error(e.getMessage());
+        }
+    }
+
+    private void writeComplexDataInput(Class<?> dataTypeClass) {
+        Collection<IParser> parsers = parserFactory.getAllParsers();
+        List<IParser> foundParsers = new ArrayList<IParser>();
+        for (IParser parser : parsers) {
+            Class<?>[] supportedClasses = parser.getSupportedDataBindings();
+            for (Class<?> clazz : supportedClasses) {
+                if (dataTypeClass.isAssignableFrom(clazz)) {
+                    foundParsers.add(parser);
+                }
+            }
+        }
+        try {
+            writeComplexDataType(foundParsers);
+        } catch (XMLStreamException e) {
+            LOGGER.error(e.getMessage());
+        }
+    }
+
+    private void writeComplexDataType(List<? extends IOHandler> handlers) throws XMLStreamException {
+
+        boolean needDefault = true;
+
+        for (IOHandler handler : handlers) {
+
+            List<Format> fullFormats = handler.getSupportedFormats();
+            if (fullFormats != null && fullFormats.size() > 0) {
+                //FIXME this way always the default format of the first parser is used
+                //as this could change due to different loading orders of the parsers
+                //the default format could maybe be an additional property of the algorithm
+                if (needDefault) {
+                    needDefault = false;
+                    writeFormat(fullFormats.get(0), true);
+                }
+                for (int formatIndex = 1, formatCount = fullFormats.size(); formatIndex < formatCount; ++formatIndex) {
+                    writeFormat(fullFormats.get(formatIndex), false);
+                }
+            }
+        }
+    }
+
+    private void writeFormat(Format format, boolean defaultFormat) throws XMLStreamException{
+        // default format
+        start(QN_FORMAT);
+        if(defaultFormat){
+            attr(AN_DEFAULT, ""+defaultFormat);
+        }
+        attr(AN_MIME_TYPE, format.getMimeType());
+        if(format.hasSchema()){
+            attr(AN_SCHEMA, format.getSchema());
+        }
+        if(format.hasEncoding()){
+            attr(AN_ENCODING, format.getEncoding());
+        }
+        end(QN_FORMAT);
+    }
+
 
     @Override
     public Set<StreamWriterKey> getKeys() {

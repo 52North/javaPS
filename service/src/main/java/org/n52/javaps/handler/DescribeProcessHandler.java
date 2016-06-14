@@ -17,14 +17,20 @@
 package org.n52.javaps.handler;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import org.n52.iceland.ds.OperationHandlerKey;
+import org.n52.iceland.exception.ows.InvalidParameterValueException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.ogc.ows.OwsOperation;
+import org.n52.iceland.util.http.HTTPStatus;
+import org.n52.javaps.algorithm.ProcessDescription;
+import org.n52.javaps.algorithm.RepositoryManager;
 import org.n52.javaps.ogc.wps.WPSConstants;
 import org.n52.javaps.request.DescribeProcessRequest;
 import org.n52.javaps.response.DescribeProcessResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * TODO JavaDoc
@@ -34,10 +40,30 @@ import org.n52.javaps.response.DescribeProcessResponse;
 public class DescribeProcessHandler implements
         GenericHandler<DescribeProcessRequest, DescribeProcessResponse> {
 
+    @Autowired
+    private RepositoryManager repositoryManager;
+
     @Override
     public DescribeProcessResponse handler(DescribeProcessRequest request)
             throws OwsExceptionReport {
-        return request.getResponse();
+
+        DescribeProcessResponse describeProcessResponse = (DescribeProcessResponse) new DescribeProcessResponse().set(request);
+
+        List<String> identifiers = request.getProcessIdentifier();
+
+        for (String identifier : identifiers) {
+
+            try {
+                ProcessDescription processDescription = repositoryManager.getAlgorithm(identifier).getDescription();
+
+                describeProcessResponse.addProcessDescription(processDescription);
+
+            } catch (NullPointerException e) {
+                throw new InvalidParameterValueException("identifer", identifier).setStatus(HTTPStatus.BAD_REQUEST);
+            }
+        }
+
+        return describeProcessResponse;
     }
 
      @Override

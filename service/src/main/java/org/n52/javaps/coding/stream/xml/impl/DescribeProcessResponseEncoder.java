@@ -51,7 +51,7 @@ Encoder<DescribeProcessResponse, ProcessDescription>{
 
     @Override
     public Set<EncoderKey> getKeys() {
-        OperationKey key = new OperationKey("WPS", "2.0.0", "DescribeProcess");
+        OperationKey key = new OperationKey(WPSConstants.SERVICE, WPSConstants.VERSION_200, WPSConstants.Operations.DescribeProcess);
         Set<EncoderKey> encoderKeys =
                 Sets.newHashSet(new OperationResponseEncoderKey(key, MediaTypes.APPLICATION_XML), new OperationResponseEncoderKey(key, MediaTypes.TEXT_XML));
         return encoderKeys;

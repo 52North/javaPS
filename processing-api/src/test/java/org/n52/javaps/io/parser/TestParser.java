@@ -14,26 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.io;
+package org.n52.javaps.io.parser;
 
-import java.util.List;
+import java.io.InputStream;
 
-public interface IOHandler {
+import org.n52.javaps.annotation.Properties;
+import org.n52.javaps.io.data.IData;
 
-    public static final String DEFAULT_ENCODING = "UTF-8";
+@Properties(defaultPropertyFileName="testparser.json")
+public class TestParser extends AbstractParser {
 
-    public static final String ENCODING_BASE64 = "base64";
-
-    // public static final String DEFAULT_MIMETYPE = "text/xml";
-
-    public static final String MIME_TYPE_ZIPPED_SHP = "application/x-zipped-shp";
-
-    public boolean isSupportedFormat(String format);
-
-    public boolean isSupportedDataBinding(Class<?> clazz);
-
-    public List<Format> getSupportedFormats();
-
-    public Class<?>[] getSupportedDataBindings();
+    @Override
+    public IData parse(InputStream input,
+            String mimeType,
+            String schema) {
+        return null;
+    }
 
 }

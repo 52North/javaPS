@@ -23,8 +23,6 @@ import java.util.List;
 import org.n52.javaps.algorithm.descriptor.AlgorithmDescriptor;
 import org.n52.javaps.commons.observerpattern.IObserver;
 import org.n52.javaps.commons.observerpattern.ISubject;
-import org.n52.javaps.io.GeneratorFactory;
-import org.n52.javaps.io.ParserFactory;
 import org.n52.javaps.io.data.IData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,11 +54,9 @@ public abstract class AbstractDescriptorAlgorithm implements IAlgorithm, ISubjec
 
     private ProcessDescription createProcessDescription() {
 
-        AlgorithmDescriptor algorithmDescriptor = getAlgorithmDescriptor();
-
         ProcessDescription processDescription = new ProcessDescription();
 
-        processDescription.setAlgorithmDescriptor(algorithmDescriptor);
+        processDescription.setAlgorithmDescriptor(getAlgorithmDescriptor());
 
         return processDescription;
     }

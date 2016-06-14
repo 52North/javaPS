@@ -17,11 +17,13 @@
 package org.n52.javaps.io;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.n52.iceland.lifecycle.Constructable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * XMLParserFactory. Will be initialized within each Framework.
@@ -30,62 +32,12 @@ import org.slf4j.LoggerFactory;
  *
  */
 
-public class ParserFactory implements Constructable {
-
-    public static String PROPERTY_NAME_REGISTERED_PARSERS = "registeredParsers";
-
-    private static ParserFactory factory;
+public class ParserFactory {
 
     private static Logger LOGGER = LoggerFactory.getLogger(ParserFactory.class);
 
-    private List<IParser> registeredParsers;
-
-    public void init() {
-        loadAllParsers();
-    }
-
-    private void loadAllParsers() {
-        registeredParsers = new ArrayList<IParser>();
-        // for(String currentParserName : parserMap.keySet()) {
-        //
-        // ConfigurationModule currentParser = parserMap.get(currentParserName);
-        //
-        // String parserClass = "";
-        //
-        // if(currentParser instanceof ClassKnowingModule){
-        // parserClass = ((ClassKnowingModule)currentParser).getClassName();
-        // }
-        //
-        // IParser parser = null;
-        // try {
-        // parser = (IParser)
-        // this.getClass().getClassLoader().loadClass(parserClass).newInstance();
-        // parser.init(wpsConfig);
-        // }
-        // catch (ClassNotFoundException e) {
-        // LOGGER.error("One of the parsers could not be loaded: " +
-        // parserClass, e);
-        // }
-        // catch(IllegalAccessException e) {
-        // LOGGER.error("One of the parsers could not be loaded: " +
-        // parserClass, e);
-        // }
-        // catch(InstantiationException e) {
-        // LOGGER.error("One of the parsers could not be loaded: " +
-        // parserClass, e);
-        // }
-        //
-        // if(parser != null) {
-        //
-        // LOGGER.info("Parser class registered: " + parserClass);
-        // registeredParsers.add(parser);
-        // }
-        // }
-    }
-
-    public static ParserFactory getInstance() {
-        return factory;
-    }
+    @Autowired(required=false)
+    private Collection<IParser> registeredParsers;
 
     public IParser getParser(String schema,
             String format,
@@ -102,7 +54,7 @@ public class ParserFactory implements Constructable {
             Class<?>[] supportedClasses = parser.getSupportedDataBindings();
             for (Class<?> clazz : supportedClasses) {
                 if (clazz.equals(requiredInputClass)) {
-                    if (parser.isSupportedSchema(schema) && parser.isSupportedEncoding(encoding) && parser.isSupportedFormat(format)) {
+                    if (parser.isSupportedFormat(format)) {
                         LOGGER.info("Matching parser found: " + parser);
                         return parser;
                     }
@@ -117,7 +69,7 @@ public class ParserFactory implements Constructable {
         return null;
     }
 
-    public List<IParser> getAllParsers() {
+    public Collection<IParser> getAllParsers() {
         return registeredParsers;
     }
 }

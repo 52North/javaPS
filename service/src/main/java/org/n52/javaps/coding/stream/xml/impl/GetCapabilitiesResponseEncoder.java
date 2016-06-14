@@ -16,24 +16,41 @@
  */
 package org.n52.javaps.coding.stream.xml.impl;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
 import org.n52.iceland.coding.encode.Encoder;
 import org.n52.iceland.coding.encode.EncoderKey;
+import org.n52.iceland.coding.encode.OperationRequestEncoderKey;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.exception.ows.concrete.UnsupportedEncoderInputException;
 import org.n52.iceland.ogc.ows.OWSConstants.HelperValues;
 import org.n52.iceland.response.GetCapabilitiesResponse;
 import org.n52.iceland.util.http.MediaType;
+import org.n52.iceland.util.http.MediaTypes;
 import org.n52.javaps.ogc.wps.WPSCapabilities;
+import org.n52.javaps.ogc.wps.WPSConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.Sets;
 
 public class GetCapabilitiesResponseEncoder implements Encoder<GetCapabilitiesResponse, WPSCapabilities>{
 
+    private static final Set<EncoderKey> ENCODER_KEYS = Sets.<EncoderKey>newHashSet(
+            new OperationRequestEncoderKey(WPSConstants.SERVICE,
+                    WPSConstants.VERSION_200,
+                    WPSConstants.Operations.GetCapabilities,
+                    MediaTypes.TEXT_XML),
+            new OperationRequestEncoderKey(WPSConstants.SERVICE,
+                    WPSConstants.VERSION_200,
+                    WPSConstants.Operations.GetCapabilities,
+                    MediaTypes.APPLICATION_XML));
+
     @Override
     public Set<EncoderKey> getKeys() {
-        // TODO Auto-generated method stub
-        return null;
+        return Collections.unmodifiableSet(ENCODER_KEYS);
     }
 
     @Override
@@ -51,8 +68,7 @@ public class GetCapabilitiesResponseEncoder implements Encoder<GetCapabilitiesRe
 
     @Override
     public MediaType getContentType() {
-        // TODO Auto-generated method stub
-        return null;
+        return MediaTypes.APPLICATION_XML;
     }
 
 }

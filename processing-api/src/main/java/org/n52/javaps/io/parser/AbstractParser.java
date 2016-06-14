@@ -52,30 +52,6 @@ public abstract class AbstractParser extends AbstractIOHandler implements IParse
     }
 
     public void init(WPSConfig wpsConfig) {
-
-        // load Parser Properties
-        this.properties = new ArrayList<>();
-
-        this.formats = new ArrayList<>();
-
-        // for (FormatEntry format : formats) {
-        //
-        // if(format.getMimeType()!= null && !format.getMimeType().equals("")){
-        // String mimetype = format.getMimeType();
-        // supportedFormats.add(mimetype);
-        // }
-        // if(format.getSchema()!= null && !format.getSchema().equals("")){
-        // String schema = format.getSchema();
-        // supportedSchemas.add(schema);
-        // }
-        //
-        // if(format.getEncoding()!= null && !format.getEncoding().equals("")){
-        // String encoding = format.getEncoding();
-        // supportedEncodings.add(encoding);
-        // }else{
-        // supportedEncodings.add(IOHandler.DEFAULT_ENCODING);
-        // }
-        // }
         finalizeFiles = new ArrayList<File>();
     }
 

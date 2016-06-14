@@ -26,6 +26,7 @@ import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.request.AbstractServiceRequest;
 import org.n52.javaps.algorithm.ProcessDescription;
 import org.n52.javaps.algorithm.RepositoryManager;
+import org.n52.javaps.algorithm.descriptor.AlgorithmDescriptor;
 import org.n52.javaps.ogc.wps.WPSConstants;
 import org.n52.javaps.response.DescribeProcessResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,23 +38,11 @@ public class DescribeProcessRequest extends
 
     private boolean all = false;
 
-    @Autowired
-    private RepositoryManager repositoryManager;
-
     @Override
     public DescribeProcessResponse getResponse()
             throws OwsExceptionReport {
 
         DescribeProcessResponse describeProcessResponse = (DescribeProcessResponse) new DescribeProcessResponse().set(this);
-
-        for (String identifier : identifiers) {
-
-            //repositoryManager.getAlgorithm("").getDescription().getAlgorithmDescriptor();
-
-            ProcessDescription processDescription = new ProcessDescription();
-
-            describeProcessResponse.addProcessDescription(processDescription);
-        }
 
         return describeProcessResponse;
     }

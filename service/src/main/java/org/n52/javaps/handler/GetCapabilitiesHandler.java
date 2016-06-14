@@ -20,11 +20,11 @@ import java.util.Collections;
 import java.util.Set;
 
 import org.n52.iceland.ds.OperationHandlerKey;
-import org.n52.iceland.exception.ows.InvalidParameterValueException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.ogc.ows.OwsOperation;
 import org.n52.iceland.request.GetCapabilitiesRequest;
 import org.n52.iceland.response.GetCapabilitiesResponse;
+import org.n52.javaps.ogc.wps.WPSCapabilities;
 import org.n52.javaps.ogc.wps.WPSConstants;
 
 /**
@@ -35,7 +35,16 @@ public class GetCapabilitiesHandler implements GenericHandler<GetCapabilitiesReq
 
     @Override
     public GetCapabilitiesResponse handler(GetCapabilitiesRequest request) throws OwsExceptionReport {
-        throw new InvalidParameterValueException("param", "the value");
+
+        WPSCapabilities capabilities = new WPSCapabilities(request.getVersion());
+
+        GetCapabilitiesResponse response = request.getResponse();
+
+        response.setCapabilities(capabilities);
+
+        return response;
+
+//        throw new InvalidParameterValueException("param", "the value");
     }
 
     @Override

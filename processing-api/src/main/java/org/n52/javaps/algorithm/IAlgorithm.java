@@ -19,8 +19,6 @@ package org.n52.javaps.algorithm;
 import java.util.List;
 import java.util.Map;
 
-import org.n52.javaps.io.GeneratorFactory;
-import org.n52.javaps.io.ParserFactory;
 import org.n52.javaps.io.data.IData;
 
 /**
@@ -60,9 +58,5 @@ public interface IAlgorithm {
     Class<?> getInputDataType(String id);
 
     Class<?> getOutputDataType(String id);
-
-    void setGeneratorFactory(GeneratorFactory generatorFactory);
-
-    void setParserFactory(ParserFactory parserFactory);
 
 }

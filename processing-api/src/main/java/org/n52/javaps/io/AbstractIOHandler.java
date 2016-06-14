@@ -19,6 +19,15 @@ package org.n52.javaps.io;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.n52.javaps.annotation.ConfigurableClass;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.BooleanNode;
+import com.fasterxml.jackson.databind.node.TextNode;
+
 /**
  * Extending subclasses of AbstractGenerator shall provide functionality to
  * generate serviceable output data for the processes offered by the 52N WPS
@@ -28,33 +37,94 @@ import java.util.List;
  *
  */
 
-public abstract class AbstractIOHandler implements IOHandler {
-    protected List<String> supportedFormats;
+public abstract class AbstractIOHandler extends ConfigurableClass implements IOHandler {
 
-    protected List<String> supportedSchemas;
+    private static Logger LOGGER = LoggerFactory.getLogger(AbstractIOHandler.class);
 
-    protected List<String> supportedEncodings;
+    protected List<Format> supportedFormats;
 
     protected List<Class<?>> supportedIDataTypes;
 
-    protected List<Object> properties;
+//    protected List<Object> properties;
 
     protected List<Object> formats;
 
     public AbstractIOHandler() {
-        this.supportedFormats = new ArrayList<String>();
-        this.supportedSchemas = new ArrayList<String>();
-        this.supportedEncodings = new ArrayList<String>();
+        this.supportedFormats = new ArrayList<Format>();
         this.supportedIDataTypes = new ArrayList<Class<?>>();
+
+        JsonNode formats = properties != null? properties.get("formats") : null;
+
+        if(formats == null){
+            LOGGER.info("Parser class {} has no formats.", this.getClass().getName());
+            return;
+        }
+
+        if(!(formats instanceof ArrayNode)){
+            LOGGER.info("Formats is not an ArrayNode for parser class {}.", this.getClass().getName());
+            LOGGER.info("No formats added.");
+            return;
+        }
+
+        readFormats((ArrayNode)formats);
+
+    }
+
+    private void readFormats(ArrayNode formats) {
+
+        boolean hasDefault = false;
+
+        for (JsonNode format : formats) {
+
+            String mimeType = getStringValue(format, "mimetype");
+            String schema = getStringValue(format, "schema");
+            String encoding = getStringValue(format, "encoding");
+            boolean defaultFormat = getBooleanValue(format, "default");
+
+            if(defaultFormat && hasDefault){
+                LOGGER.info("Multiple default formats found for Class {}.", this.getClass().getName());
+                LOGGER.info("Using first default format.");
+                defaultFormat = false;
+            }else if(defaultFormat){
+                hasDefault = true;
+            }
+
+            supportedFormats.add(new Format(mimeType, schema, encoding, defaultFormat));
+        }
+
+    }
+
+    private String getStringValue(JsonNode node, String fieldName){
+        JsonNode nodeValue = node.get(fieldName);
+
+        if(!(nodeValue instanceof TextNode)){
+            LOGGER.info("Field {} of format is not a TextNode.", fieldName);
+            LOGGER.info("Returning empty String.");
+            return "";
+        }
+
+        return nodeValue.asText();
+    }
+
+    private boolean getBooleanValue(JsonNode node, String fieldName){
+        JsonNode nodeValue = node.get(fieldName);
+
+        if(!(nodeValue instanceof BooleanNode)){
+            LOGGER.info("Field {} of format is not a BooleanNode.", fieldName);
+            LOGGER.info("Returning false.");
+            return false;
+        }
+
+        return nodeValue.asBoolean();
     }
 
     /**
      * Returns true if the given format is supported, else false.
      */
     public boolean isSupportedFormat(String format) {
-        String[] sf = getSupportedFormats();
-        for (String f : sf) {
-            if (f.equalsIgnoreCase(format)) {
+        List<Format> sf = getSupportedFormats();
+        for (Format f : sf) {
+            if (f.equals(format)) {
                 return true;
             }
         }
@@ -64,53 +134,8 @@ public abstract class AbstractIOHandler implements IOHandler {
     /**
      * Returns an array having the supported formats (mimeTypes).
      */
-    public String[] getSupportedFormats() {
-        String[] resultArray = supportedFormats.toArray(new String[supportedFormats.size()]);
-        return resultArray;
-    }
-
-    /**
-     * Returns an array having the supported schemas.
-     */
-    public String[] getSupportedSchemas() {
-        String[] resultArray = supportedSchemas.toArray(new String[supportedSchemas.size()]);
-        return resultArray;
-    }
-
-    /**
-     * Returns true if the given schema is supported, else false. Binary data
-     * has no schema in WPS 1.0.0: If the request does not contain a schema and
-     * the Generator has no schemas configured it is assumed to be a
-     * "binary case". The method will return TRUE in this case. Might lead to
-     * unexpected behaviour in malformed requests.
-     */
-    public boolean isSupportedSchema(String schema) {
-        // no schema given. assuming no schema required. therefore accept all
-        // schemas
-        if (supportedSchemas.size() == 0 && (schema == null || schema.isEmpty())) { // test
-                                                                                    // whether
-                                                                                    // schema
-                                                                                    // is
-                                                                                    // empty,
-                                                                                    // because
-                                                                                    // in
-                                                                                    // ArcToolbox
-                                                                                    // process
-                                                                                    // descriptions,
-                                                                                    // there
-                                                                                    // is
-                                                                                    // empty
-                                                                                    // elements
-                                                                                    // for
-                                                                                    // schemas
-            return true;
-        }
-        for (String supportedSchema : supportedSchemas) {
-            if (supportedSchema.equalsIgnoreCase(schema)) {
-                return true;
-            }
-        }
-        return false;
+    public List<Format> getSupportedFormats() {
+        return supportedFormats;
     }
 
     public Class<?>[] getSupportedDataBindings() {
@@ -124,44 +149,6 @@ public abstract class AbstractIOHandler implements IOHandler {
             }
         }
         return false;
-    }
-
-    public String[] getSupportedEncodings() {
-        String[] resultArray = supportedEncodings.toArray(new String[supportedEncodings.size()]);
-        return resultArray;
-        // return IOHandler.SUPPORTED_ENCODINGS;
-    }
-
-    public List<Object> getSupportedFullFormats() {
-        return formats;
-    }
-
-    public boolean isSupportedEncoding(String encoding) {
-        for (String currentEncoding : this.getSupportedEncodings()) {
-            if (currentEncoding.equalsIgnoreCase(encoding)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    protected boolean isSupportedGenerate(Class<?> binding,
-            String mimeType,
-            String schema) {
-
-        if (!(this.isSupportedFormat(mimeType))) {
-            return false;
-        }
-
-        if (!(this.isSupportedSchema(schema))) {
-            return false;
-        }
-
-        if (!(this.isSupportedDataBinding(binding))) {
-            return false;
-        }
-
-        return true;
     }
 
 }

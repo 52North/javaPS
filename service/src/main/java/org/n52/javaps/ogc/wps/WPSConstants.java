@@ -63,6 +63,8 @@ public interface WPSConstants {
     Set<String> RESPONSE_MODES = ImmutableSet.of(RESPONSE_MODE_INLINE,
                                                  RESPONSE_MODE_RAW);
 
+    String VERSION_200 = "2.0.0";
+
     /**
      * The names of the operations supported by all versions of the WPS
      * specification.

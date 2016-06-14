@@ -16,61 +16,18 @@
  */
 package org.n52.javaps.io;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
-import org.n52.iceland.lifecycle.Constructable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
-public class GeneratorFactory implements Constructable {
-
-    public static String PROPERTY_NAME_REGISTERED_GENERATORS = "registeredGenerators";
+public class GeneratorFactory {
 
     private static Logger LOGGER = LoggerFactory.getLogger(GeneratorFactory.class);
 
-    private List<IGenerator> registeredGenerators;
-
-    public void init() {
-        loadAllGenerators();
-    }
-
-    private void loadAllGenerators() {
-        registeredGenerators = new ArrayList<IGenerator>();
-        // TODO
-        // for (String currentGeneratorName : generatorMap.keySet()) {
-        //
-        // ConfigurationModule currentGenerator =
-        // generatorMap.get(currentGeneratorName);
-        //
-        // String generatorClass = "";
-        //
-        // if (currentGenerator instanceof ClassKnowingModule) {
-        // generatorClass = ((ClassKnowingModule)
-        // currentGenerator).getClassName();
-        // }
-        //
-        // IGenerator generator = null;
-        // try {
-        // generator = (IGenerator)
-        // this.getClass().getClassLoader().loadClass(generatorClass).newInstance();
-        // generator.init(wpsConfig);
-        // } catch (ClassNotFoundException e) {
-        // LOGGER.error("One of the generators could not be loaded: " +
-        // generatorClass, e);
-        // } catch (IllegalAccessException e) {
-        // LOGGER.error("One of the generators could not be loaded: " +
-        // generatorClass, e);
-        // } catch (InstantiationException e) {
-        // LOGGER.error("One of the generators could not be loaded: " +
-        // generatorClass, e);
-        // }
-        // if (generator != null) {
-        // LOGGER.info("Generator class registered: " + generatorClass);
-        // registeredGenerators.add(generator);
-        // }
-        // }
-    }
+    @Autowired(required = false)
+    private Collection<IGenerator> registeredGenerators;
 
     public IGenerator getGenerator(String schema,
             String format,
@@ -86,7 +43,7 @@ public class GeneratorFactory implements Constructable {
             Class<?>[] supportedBindings = generator.getSupportedDataBindings();
             for (Class<?> clazz : supportedBindings) {
                 if (clazz.equals(outputInternalClass)) {
-                    if (generator.isSupportedSchema(schema) && generator.isSupportedEncoding(encoding) && generator.isSupportedFormat(format)) {
+                    if (generator.isSupportedFormat(format)) {
                         return generator;
                     }
                 }
@@ -97,7 +54,7 @@ public class GeneratorFactory implements Constructable {
         return null;
     }
 
-    public List<IGenerator> getAllGenerators() {
+    public Collection<IGenerator> getAllGenerators() {
         return registeredGenerators;
     }
 

@@ -96,14 +96,6 @@ public abstract class AbstractAnnotatedAlgorithm extends AbstractDescriptorAlgor
         public Object getAlgorithmInstance() {
             return proxiedInstance;
         }
-
-        @Override
-        public void setGeneratorFactory(GeneratorFactory generatorFactory) {
-        }
-
-        @Override
-        public void setParserFactory(ParserFactory parserFactory) {
-        }
     }
 
 }

@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.n52.iceland.exception.CodedException;
+import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.lifecycle.Constructable;
 import org.n52.javaps.annotation.Properties;
 import org.slf4j.Logger;
@@ -52,7 +54,9 @@ public class RepositoryManager implements Constructable {
         repositories = new HashMap<>();
 
         for (IAlgorithmRepository iAlgorithmRepository : algorithmRepositories) {
-            loadRepository(iAlgorithmRepository.getClass().getCanonicalName());
+            String repositoryClassName = iAlgorithmRepository.getClass().getCanonicalName();
+            LOGGER.info("Algorithm Repository {} initialized", repositoryClassName);
+            repositories.put(repositoryClassName, iAlgorithmRepository);
         }
     }
 

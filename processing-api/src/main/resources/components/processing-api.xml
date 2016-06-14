@@ -26,7 +26,9 @@
                            http://www.springframework.org/schema/util/spring-util-4.1.xsd">
 
 	<bean id="repositoryManager" class="org.n52.javaps.algorithm.RepositoryManager" />
-	<bean id="localAlgorithmRepository" class="org.n52.javaps.algorithm.LocalAlgorithmRepository" />
+	<bean id="localAlgorithmRepository" class="org.n52.javaps.algorithm.LocalAlgorithmRepository" init-method="init" />
+	<bean id="generatorFactory" class="org.n52.javaps.io.GeneratorFactory" />
+	<bean id="parserFactory" class="org.n52.javaps.io.ParserFactory" />
 <!-- 	<bean id="localAlgorithmRepository" class="org.n52.javaps.algorithm.ServiceLoaderAlgorithmRepository" /> -->
 
 </beans>

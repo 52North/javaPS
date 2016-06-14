@@ -61,9 +61,11 @@ public abstract class ConfigurableClass {
             return;
         }
 
+        //first try non-default property file
         String propertyFileName = annotation.propertyFileName();
 
         if(propertyFileName == null || propertyFileName.equals("")){
+            //fall back to default property file
             propertyFileName = annotation.defaultPropertyFileName();
         }
 
