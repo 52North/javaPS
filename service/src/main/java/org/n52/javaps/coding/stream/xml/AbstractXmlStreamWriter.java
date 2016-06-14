@@ -28,6 +28,8 @@ import javax.xml.stream.XMLEventFactory;
 import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.events.StartElement;
+import javax.xml.stream.events.XMLEvent;
 
 import org.n52.iceland.ogc.gml.time.TimeInstant;
 import org.n52.iceland.ogc.gml.time.TimePosition;
@@ -64,9 +66,6 @@ public abstract class AbstractXmlStreamWriter<S> implements XmlStreamWriter<S> {
         write(object);
     }
 
-    /**
-     * @return the writer
-     */
     private XMLEventWriter writer() {
         return writer;
     }
@@ -74,15 +73,15 @@ public abstract class AbstractXmlStreamWriter<S> implements XmlStreamWriter<S> {
     protected abstract void write(S object) throws XMLStreamException ;
 
     protected void attr(QName name, String value) throws XMLStreamException {
-        writer().add(eventFactory().createAttribute(name, value));
+        dispatch(eventFactory().createAttribute(name, value));
     }
 
     protected void attr(String name, String value) throws XMLStreamException {
-        writer().add(eventFactory().createAttribute(name, value));
+        attr(new QName(name), value);
     }
 
     protected void attr(String namespace, String localName, String value) throws XMLStreamException {
-        writer().add(eventFactory().createAttribute(null, namespace, localName, value));
+        attr(new QName(namespace, localName), value);
     }
 
     protected void namespace(String prefix, String namespace)
@@ -91,12 +90,21 @@ public abstract class AbstractXmlStreamWriter<S> implements XmlStreamWriter<S> {
         if (ns != null && !ns.equals(namespace)) {
             throw new XMLStreamException(String.format("Prefix <%s> is already bound to <%s>", namespace, ns));
         }
-        writer().add(eventFactory().createNamespace(prefix, namespace));
+        dispatch(eventFactory().createNamespace(prefix, namespace));
         prefixes.put(prefix, namespace);
     }
 
+    protected void start(String namespace, String localName) throws XMLStreamException {
+        start(new QName(namespace, localName));
+    }
+
+    protected void start(String namespace, String localName, String prefix) throws XMLStreamException {
+        start(new QName(namespace, localName, prefix));
+    }
+
     protected void start(QName name) throws XMLStreamException {
-        writer().add(eventFactory().createStartElement(name.getPrefix(), name.getNamespaceURI(), name.getLocalPart()));
+        StartElement event = eventFactory().createStartElement(name.getPrefix(), name.getNamespaceURI(), name.getLocalPart());
+        dispatch(event);
     }
 
     protected void empty(QName name) throws XMLStreamException {
@@ -105,19 +113,19 @@ public abstract class AbstractXmlStreamWriter<S> implements XmlStreamWriter<S> {
     }
 
     protected void chars(String chars) throws XMLStreamException {
-        writer().add(eventFactory().createCharacters(chars));
+        dispatch(eventFactory().createCharacters(chars));
     }
 
     protected void chars(String chars, boolean escape) throws XMLStreamException {
-        writer().add(eventFactory().createCharacters(escape ? escaper().escape(chars) : chars));
+        dispatch(eventFactory().createCharacters(escape ? escaper().escape(chars) : chars));
     }
 
     protected void end(QName name) throws XMLStreamException {
-        writer().add(eventFactory().createEndElement(name.getPrefix(), name.getNamespaceURI(), name.getLocalPart()));
+        dispatch(eventFactory().createEndElement(name.getPrefix(), name.getNamespaceURI(), name.getLocalPart()));
     }
 
     protected void endInline(QName name) throws XMLStreamException {
-        writer().add(eventFactory().createEndElement(name.getPrefix(), name.getNamespaceURI(), name.getLocalPart()));
+        dispatch(eventFactory().createEndElement(name.getPrefix(), name.getNamespaceURI(), name.getLocalPart()));
     }
 
     protected void finish() throws XMLStreamException {
@@ -192,6 +200,10 @@ public abstract class AbstractXmlStreamWriter<S> implements XmlStreamWriter<S> {
 
     protected void xlinkTitleAttr(String value) throws XMLStreamException {
         attr(W3CConstants.QN_XLINK_TITLE, value);
+    }
+
+    private void dispatch(XMLEvent event) throws XMLStreamException {
+        writer().add(event);
     }
 
     private static String mergeSchemaLocationsToString(

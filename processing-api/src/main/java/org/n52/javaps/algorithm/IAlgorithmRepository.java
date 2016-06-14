@@ -16,26 +16,41 @@
  */
 package org.n52.javaps.algorithm;
 
-import java.util.Collection;
+import java.util.Set;
+
+import org.n52.iceland.lifecycle.Constructable;
+import org.n52.iceland.lifecycle.Destroyable;
+import org.n52.iceland.ogc.ows.OwsCodeType;
+import org.n52.javaps.algorithm.descriptor.ProcessDescription;
 
 /**
  * @author Bastian Schaeffer, University of Muenster, Theodor Foerster, ITC
  *
  */
-public interface IAlgorithmRepository {
-    Collection<String> getAlgorithmNames();
+public interface IAlgorithmRepository extends Constructable, Destroyable {
+    public Set<OwsCodeType> getAlgorithmNames();
 
-    IAlgorithm getAlgorithm(String processID);
+    IAlgorithm getAlgorithm(OwsCodeType processID);
 
-    ProcessDescription getProcessDescription(String processID);
+    default IAlgorithm getAlgorithm(String processId) {
+        return getAlgorithm(new OwsCodeType(processId));
+    }
 
-    boolean containsAlgorithm(String processID);
+    ProcessDescription getProcessDescription(OwsCodeType processID);
 
-    /**
-     * use to free resources
-     */
-    public void shutdown();
+    default ProcessDescription getProcessDescription(String processID) {
+        return getProcessDescription(new OwsCodeType(processID));
+    }
 
-    void init();
+    boolean containsAlgorithm(OwsCodeType processID);
 
+    default boolean containsAlgorithm(String processId) {
+        return containsAlgorithm(new OwsCodeType(processId));
+    }
+
+    @Override
+    default void init() {}
+
+    @Override
+    default void destroy() {}
 }

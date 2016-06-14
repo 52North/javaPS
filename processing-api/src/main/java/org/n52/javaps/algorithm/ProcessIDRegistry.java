@@ -30,6 +30,8 @@ package org.n52.javaps.algorithm;
 
 import java.util.ArrayList;
 
+import org.n52.iceland.ogc.ows.OwsCodeType;
+
 /**
  * @author Matthias Mueller, TU Dresden
  *
@@ -37,20 +39,15 @@ import java.util.ArrayList;
 public class ProcessIDRegistry {
 
     private static ProcessIDRegistry instance = new ProcessIDRegistry();
-
+    private static ArrayList<OwsCodeType> idList = new ArrayList<>();
     private volatile boolean lock = false;
-
-    private static ArrayList<String> idList = new ArrayList<String>();
 
     private ProcessIDRegistry() {
         // empty private constructor
     }
 
-    public static ProcessIDRegistry getInstance() {
-        return instance;
-    }
 
-    public boolean addID(String id) {
+    public boolean addID(OwsCodeType id) {
         while (lock) {
             // spin
         }
@@ -64,7 +61,7 @@ public class ProcessIDRegistry {
         }
     }
 
-    public synchronized boolean removeID(String id) {
+    public synchronized boolean removeID(OwsCodeType id) {
         while (lock) {
             // spin
         }
@@ -78,12 +75,12 @@ public class ProcessIDRegistry {
         }
     }
 
-    public boolean containsID(String id) {
+    public boolean containsID(OwsCodeType id) {
         return idList.contains(id);
     }
 
-    public String[] getIDs() {
-        return idList.toArray(new String[idList.size()]);
+    public OwsCodeType[] getIDs() {
+        return idList.toArray(new OwsCodeType[idList.size()]);
     }
 
     protected void clearRegistry() {
@@ -97,5 +94,8 @@ public class ProcessIDRegistry {
         } finally {
             lock = false;
         }
+    }
+    public static ProcessIDRegistry getInstance() {
+        return instance;
     }
 }

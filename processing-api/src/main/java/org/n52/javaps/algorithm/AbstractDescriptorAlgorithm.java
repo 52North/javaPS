@@ -16,53 +16,27 @@
  */
 package org.n52.javaps.algorithm;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
-import org.n52.javaps.algorithm.descriptor.AlgorithmDescriptor;
+import org.n52.javaps.algorithm.descriptor.ProcessDescription;
 import org.n52.javaps.commons.observerpattern.IObserver;
 import org.n52.javaps.commons.observerpattern.ISubject;
-import org.n52.javaps.io.GeneratorFactory;
-import org.n52.javaps.io.ParserFactory;
 import org.n52.javaps.io.data.IData;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public abstract class AbstractDescriptorAlgorithm implements IAlgorithm, ISubject {
-
-    private final static Logger LOGGER = LoggerFactory.getLogger(AbstractDescriptorAlgorithm.class);
-
-    private AlgorithmDescriptor descriptor;
-
     private ProcessDescription description;
-
-    public AbstractDescriptorAlgorithm() {
-        super();
-    }
+    private final List<IObserver> observers = new LinkedList<>();
+    private final List<String> errorList = new LinkedList<>();
+    private Object state = null;
 
     @Override
     public synchronized ProcessDescription getDescription() {
         if (description == null) {
-            description = createProcessDescription();
+            description = createAlgorithmDescriptor();
         }
         return description;
-    }
-
-    @Override
-    public String getWellKnownName() {
-        return getAlgorithmDescriptor().getIdentifier();
-    }
-
-    private ProcessDescription createProcessDescription() {
-
-        AlgorithmDescriptor algorithmDescriptor = getAlgorithmDescriptor();
-
-        ProcessDescription processDescription = new ProcessDescription();
-
-        processDescription.setAlgorithmDescriptor(algorithmDescriptor);
-
-        return processDescription;
     }
 
     @Override
@@ -70,20 +44,13 @@ public abstract class AbstractDescriptorAlgorithm implements IAlgorithm, ISubjec
         return true;// TODO
     }
 
-    protected final synchronized AlgorithmDescriptor getAlgorithmDescriptor() {
-        if (descriptor == null) {
-            descriptor = createAlgorithmDescriptor();
-        }
-        return descriptor;
-    }
-
-    protected abstract AlgorithmDescriptor createAlgorithmDescriptor();
+    protected abstract ProcessDescription createAlgorithmDescriptor();
 
     @Override
     public Class<? extends IData> getInputDataType(String identifier) {
-        AlgorithmDescriptor algorithmDescriptor = getAlgorithmDescriptor();
+        ProcessDescription algorithmDescriptor = getDescription();
         if (algorithmDescriptor != null) {
-            return getAlgorithmDescriptor().getInputDescriptor(identifier).getBinding();
+            return getDescription().getInputDescriptor(identifier).getBinding();
         } else {
             throw new IllegalStateException("Instance must have an algorithm descriptor");
         }
@@ -91,17 +58,13 @@ public abstract class AbstractDescriptorAlgorithm implements IAlgorithm, ISubjec
 
     @Override
     public Class<? extends IData> getOutputDataType(String identifier) {
-        AlgorithmDescriptor algorithmDescriptor = getAlgorithmDescriptor();
+        ProcessDescription algorithmDescriptor = getDescription();
         if (algorithmDescriptor != null) {
-            return getAlgorithmDescriptor().getOutputDescriptor(identifier).getBinding();
+            return getDescription().getOutputDescriptor(identifier).getBinding();
         } else {
             throw new IllegalStateException("Instance must have an algorithm descriptor");
         }
     }
-
-    private List<IObserver> observers = new ArrayList<>();
-
-    private Object state = null;
 
     @Override
     public Object getState() {
@@ -125,22 +88,15 @@ public abstract class AbstractDescriptorAlgorithm implements IAlgorithm, ISubjec
     }
 
     public void notifyObservers() {
-        Iterator<IObserver> i = observers.iterator();
-        while (i.hasNext()) {
-            IObserver o = (IObserver) i.next();
-            o.update(this);
-        }
+        this.observers.stream().forEach(o -> o.update(this));
     }
 
-    List<String> errorList = new ArrayList<String>();
-
-    protected List<String> addError(String error) {
-        errorList.add(error);
-        return errorList;
+    protected void addError(String error) {
+        this.errorList.add(error);
     }
 
     @Override
     public List<String> getErrors() {
-        return errorList;
+        return Collections.unmodifiableList(this.errorList);
     }
 }

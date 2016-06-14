@@ -17,11 +17,11 @@
 package org.n52.javaps.algorithm;
 
 import java.util.List;
-import java.util.Map;
 
+import org.n52.iceland.ogc.ows.OwsCodeType;
+import org.n52.javaps.algorithm.descriptor.ProcessDescription;
 import org.n52.javaps.io.GeneratorFactory;
 import org.n52.javaps.io.ParserFactory;
-import org.n52.javaps.io.data.IData;
 
 /**
  * @author Bastian Schaeffer, University of Muenster, Theodor Foerster, ITC
@@ -29,37 +29,35 @@ import org.n52.javaps.io.data.IData;
  */
 public interface IAlgorithm {
 
-    Map<String, IData> run(Map<String, List<IData>> inputData) throws Exception;// TODO
-                                                                                // was
-                                                                                // ExceptionReport
+    ProcessOutputs run(ProcessInputs inputData) throws ExecutionException;
 
     List<String> getErrors();
 
-    ProcessDescription getDescription();// TODO could be replaced by
-                                        // descriptor..
-
-    /**
-     * Returns some well-known name for the process.
-     *
-     * @return Returns some well-known name for the process or algorithm if that
-     *         exists, else returns an empty String, never null. The
-     *         fully-qualified class name is gotten via getName();
-     */
-    String getWellKnownName();
+    ProcessDescription getDescription();
 
     /**
      * Checks if the processDescription complies to the process itself and fits
      * any schema or other dependencies.
      *
      * @param version
-     *            The version of the ProcessDescription to check
+     *                The version of the ProcessDescription to check
+     *
      * @return true if the ProcessDescription is valid, false otherwise
      */
     boolean processDescriptionIsValid(String version);
 
-    Class<?> getInputDataType(String id);
+    Class<?> getInputDataType(OwsCodeType id);
 
-    Class<?> getOutputDataType(String id);
+    default Class<?> getInputDataType(String id) {
+        return getOutputDataType(new OwsCodeType(id));
+    }
+
+    Class<?> getOutputDataType(OwsCodeType id);
+
+    default Class<?> getOutputDataType(String id) {
+        return getOutputDataType(new OwsCodeType(id));
+    }
+
 
     void setGeneratorFactory(GeneratorFactory generatorFactory);
 

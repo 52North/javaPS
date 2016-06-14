@@ -38,6 +38,12 @@ import org.n52.iceland.util.Similar;
 
 import com.google.common.collect.Maps;
 
+/**
+ *
+ * @author Christian Autermann
+ * @param <K> the key type
+ * @param <C> the component type
+ */
 public abstract class AbstractSimilarityKeyRepository<K extends Similar<K>, C extends Component<K>> {
 
     private Set<Provider<C>> components = Collections.emptySet();

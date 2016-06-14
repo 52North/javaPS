@@ -36,23 +36,19 @@ import org.n52.javaps.response.OwsExceptionReportResponse;
  */
 public class OwsExceptionReportEncoder implements
         Encoder<OwsExceptionReportResponse, OwsExceptionReport> {
-    private static final ExceptionEncoderKey KEY
-            = new ExceptionEncoderKey(MediaTypes.APPLICATION_XML);
+    private static final ExceptionEncoderKey KEY = new ExceptionEncoderKey(MediaTypes.APPLICATION_XML);
     private static final Set<EncoderKey> KEYS = Collections.singleton(KEY);
     private final MediaType contentType = MediaTypes.APPLICATION_XML;
 
     @Override
     public OwsExceptionReportResponse encode(OwsExceptionReport report) {
-        OwsExceptionReportResponse response
-                = new OwsExceptionReportResponse(report);
+        OwsExceptionReportResponse response = new OwsExceptionReportResponse(report);
         response.setContentType(this.contentType);
         return response;
     }
 
     @Override
-    public OwsExceptionReportResponse encode(
-            OwsExceptionReport report,
-            Map<HelperValues, String> additionalValues) {
+    public OwsExceptionReportResponse encode(OwsExceptionReport report, Map<HelperValues, String> additionalValues) {
         return encode(report);
     }
 

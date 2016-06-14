@@ -16,7 +16,6 @@
  */
 package org.n52.javaps.request;
 
-
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.request.AbstractServiceRequest;
 import org.n52.javaps.ogc.wps.WPSConstants;
@@ -27,6 +26,16 @@ import org.n52.javaps.response.DismissResponse;
  */
 public class DismissRequest extends AbstractServiceRequest<DismissResponse> {
 
+    private String jobId;
+
+    public DismissRequest() {
+        this(null);
+    }
+
+    public DismissRequest(String jobId) {
+        this.jobId = jobId;
+    }
+
     @Override
     public DismissResponse getResponse()
             throws OwsExceptionReport {
@@ -36,6 +45,14 @@ public class DismissRequest extends AbstractServiceRequest<DismissResponse> {
     @Override
     public String getOperationName() {
         return WPSConstants.Operations.Dismiss.name();
+    }
+
+    public String getJobId() {
+        return jobId;
+    }
+
+    public void setJobId(String jobId) {
+        this.jobId = jobId;
     }
 
 }

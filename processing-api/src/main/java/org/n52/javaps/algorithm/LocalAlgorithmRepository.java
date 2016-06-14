@@ -16,17 +16,21 @@
  */
 package org.n52.javaps.algorithm;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import org.n52.javaps.algorithm.annotation.Algorithm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.n52.iceland.ogc.ows.OwsCodeType;
+import org.n52.javaps.description.annotation.Algorithm;
+import org.n52.javaps.algorithm.descriptor.ProcessDescription;
 import org.n52.javaps.commons.WPSConfig;
 import org.n52.javaps.io.GeneratorFactory;
 import org.n52.javaps.io.ParserFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * A static repository to retrieve the available algorithms.
@@ -36,43 +40,27 @@ import org.slf4j.LoggerFactory;
  */
 public class LocalAlgorithmRepository implements IAlgorithmRepository {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(LocalAlgorithmRepository.class);
-
-    private Map<String, ProcessDescription> processDescriptionMap;
-
-    private Map<String, IAlgorithm> algorithmMap;
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(LocalAlgorithmRepository.class);
+    private final Map<OwsCodeType, ProcessDescription> processDescriptionMap = new HashMap<>();
+    private final Map<OwsCodeType, IAlgorithm> algorithmMap = new HashMap<>();
     private GeneratorFactory generatorFactory;
-
     private ParserFactory parserFactory;
 
-    public LocalAlgorithmRepository() {
-    }
-
-    public void init() {
-        processDescriptionMap = new HashMap<String, ProcessDescription>();
-        algorithmMap = new HashMap<String, IAlgorithm>();
-        // check if the repository is active
-        // TODO
-    }
-
-    public IAlgorithm getAlgorithm(String className) {
+    @Override
+    public IAlgorithm getAlgorithm(OwsCodeType className) {
         if (getAlgorithmNames().contains(className)) {
             return algorithmMap.get(className);
         }
         return null;
     }
 
-    public Collection<String> getAlgorithmNames() {
-
-        Collection<String> algorithmNames = new ArrayList<>();
-
-        // TODO
-
-        return algorithmNames;
+    @Override
+    public Set<OwsCodeType> getAlgorithmNames() {
+        return Stream.concat(processDescriptionMap.keySet().stream(), algorithmMap.keySet().stream()).collect(Collectors.toSet());
     }
 
-    public boolean containsAlgorithm(String className) {
+    @Override
+    public boolean containsAlgorithm(OwsCodeType className) {
         return getAlgorithmNames().contains(className);
     }
 
@@ -119,9 +107,9 @@ public class LocalAlgorithmRepository implements IAlgorithmRepository {
         try {
 
             IAlgorithm algorithm = loadAlgorithm(algorithmClassName);
-
-            processDescriptionMap.put(algorithmClassName, algorithm.getDescription());
-            algorithmMap.put(algorithmClassName, algorithm);
+            OwsCodeType id = new OwsCodeType(algorithmClassName);
+            processDescriptionMap.put(id, algorithm.getDescription());
+            algorithmMap.put(id, algorithm);
             LOGGER.info("Algorithm class registered: " + algorithmClassName);
 
             return true;
@@ -136,15 +124,10 @@ public class LocalAlgorithmRepository implements IAlgorithmRepository {
     }
 
     @Override
-    public ProcessDescription getProcessDescription(String processID) {
+    public ProcessDescription getProcessDescription(OwsCodeType processID) {
         if (getAlgorithmNames().contains(processID)) {
             return processDescriptionMap.get(processID);
         }
         return null;
     }
-
-    @Override
-    public void shutdown() {
-    }
-
 }

@@ -19,18 +19,19 @@ package org.n52.javaps.request;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 import org.n52.iceland.exception.ows.OwsExceptionReport;
+import org.n52.iceland.ogc.ows.OwsCodeType;
 import org.n52.iceland.request.AbstractServiceRequest;
 import org.n52.javaps.ogc.wps.WPSConstants;
 import org.n52.javaps.response.DescribeProcessResponse;
 
 public class DescribeProcessRequest extends
         AbstractServiceRequest<DescribeProcessResponse> {
+    private static final String ALL_KEYWORD = "ALL";
 
-    private List<String> identifiers = new LinkedList<>();
-
-    private boolean all = false;
+    private final List<OwsCodeType> identifiers = new LinkedList<>();
 
     @Override
     public DescribeProcessResponse getResponse()
@@ -43,17 +44,23 @@ public class DescribeProcessRequest extends
         return WPSConstants.Operations.DescribeProcess.name();
     }
 
-    public List<String> getProcessIdentifier() {
+    public List<OwsCodeType> getProcessIdentifier() {
         return Collections.unmodifiableList(identifiers);
     }
 
     public void addProcessIdentifier(String identifier) {
-        this.identifiers.add(identifier);
+        addProcessIdentifier(new OwsCodeType(identifier));
+    }
+
+    public void addProcessIdentifier(OwsCodeType identifier) {
+        this.identifiers.add(Objects.requireNonNull(identifier));
     }
 
     public boolean isAll() {
-        return getProcessIdentifier().stream().anyMatch(id -> id
-                .equalsIgnoreCase("ALL"));
+        return getProcessIdentifier().stream()
+                .filter(id -> !id.isSetCodeSpace())
+                .map(id -> id.getValue())
+                .anyMatch(id -> id.equalsIgnoreCase(ALL_KEYWORD));
     }
 
 }
