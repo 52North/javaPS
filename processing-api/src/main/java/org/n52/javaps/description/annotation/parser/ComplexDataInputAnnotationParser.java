@@ -1,15 +1,28 @@
+/*
+ * Copyright 2016 52°North Initiative for Geospatial Open Source
+ * Software GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.n52.javaps.description.annotation.parser;
 
 import java.lang.reflect.AccessibleObject;
-import java.lang.reflect.Field;
 import java.lang.reflect.Member;
-import java.lang.reflect.Method;
+import java.util.function.Function;
 
 import org.n52.javaps.description.ComplexInputDescription;
-import org.n52.javaps.description.annotation.ComplexDataInput;
+import org.n52.javaps.description.annotation.ComplexInput;
 import org.n52.javaps.description.annotation.binding.InputBinding;
-import org.n52.javaps.description.annotation.binding.InputFieldBinding;
-import org.n52.javaps.description.annotation.binding.InputMethodBinding;
 import org.n52.javaps.description.impl.ComplexInputDescriptionImpl;
 import org.n52.javaps.io.data.IData;
 
@@ -20,11 +33,15 @@ import org.n52.javaps.io.data.IData;
  * @param <M>
  * @param <B>
  */
-public interface ComplexDataInputAnnotationParser<M extends AccessibleObject & Member, B extends InputBinding<M, ComplexInputDescription>>
-        extends InputAnnotationParser<ComplexDataInput, M, ComplexInputDescription, B> {
+public class ComplexDataInputAnnotationParser<M extends AccessibleObject & Member, B extends InputBinding<M, ComplexInputDescription>>
+        extends InputAnnotationParser<ComplexInput, M, ComplexInputDescription, B> {
+
+    public ComplexDataInputAnnotationParser(Function<M, B> bindingFunction) {
+        super(bindingFunction);
+    }
 
     @Override
-    default ComplexInputDescription createDescription(ComplexDataInput annotation, B binding) {
+    protected ComplexInputDescription createDescription(ComplexInput annotation, B binding) {
         return ComplexInputDescriptionImpl.builder()
                 .withIdentifier(annotation.identifier())
                 .withAbstract(annotation.abstrakt())
@@ -32,33 +49,18 @@ public interface ComplexDataInputAnnotationParser<M extends AccessibleObject & M
                 .withMinimalOccurence(annotation.minOccurs())
                 .withMaximalOccurence(annotation.maxOccurs())
                 .withMaximumMegabytes(annotation.maximumMegaBytes())
+                .withBindingClass(annotation.binding())
                 .build();
 
     }
 
     @Override
-    default Class<? extends ComplexDataInput> getSupportedAnnotation() {
-        return ComplexDataInput.class;
+    public Class<? extends ComplexInput> getSupportedAnnotation() {
+        return ComplexInput.class;
     }
 
     @Override
-    public default Class<? extends IData> getBindingType(ComplexDataInput annotation, B binding) {
+    public Class<? extends IData> getBindingType(ComplexInput annotation, B binding) {
         return annotation.binding();
     }
-
-    public static class ComplexDataInputMethodAnnotationParser implements ComplexDataInputAnnotationParser<Method, InputBinding<Method, ComplexInputDescription>> {
-        @Override
-        public InputBinding<Method, ComplexInputDescription> createBinding(Method member) {
-            return new InputMethodBinding<>(member);
-        }
-    }
-
-    public static class ComplexDataInputFieldAnnotationParser implements ComplexDataInputAnnotationParser<Field, InputBinding<Field, ComplexInputDescription>> {
-        @Override
-        public InputBinding<Field, ComplexInputDescription> createBinding(Field member) {
-            return new InputFieldBinding<>(member);
-        }
-
-    }
-
 }

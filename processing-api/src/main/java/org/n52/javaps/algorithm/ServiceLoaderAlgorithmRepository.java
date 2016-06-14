@@ -1,5 +1,5 @@
-/**
- * ﻿Copyright (C) 2007 - 2014 52°North Initiative for Geospatial Open Source
+/*
+ * Copyright 2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,14 +25,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.n52.iceland.ogc.ows.OwsCodeType;
-import org.n52.javaps.algorithm.descriptor.ProcessDescription;
+import org.n52.javaps.description.ProcessDescription;
 
 public class ServiceLoaderAlgorithmRepository implements IAlgorithmRepository {
 
     private static final Logger LOG = LoggerFactory
             .getLogger(ServiceLoaderAlgorithmRepository.class);
-
-    private Map<OwsCodeType, Class<? extends IAlgorithm>> currentAlgorithms;
+    private final Map<OwsCodeType, Class<? extends IAlgorithm>> currentAlgorithms;
 
     public ServiceLoaderAlgorithmRepository() {
         this.currentAlgorithms = loadAlgorithms();
@@ -44,9 +43,9 @@ public class ServiceLoaderAlgorithmRepository implements IAlgorithmRepository {
 
         for (IAlgorithm ia : loader) {
             LOG.debug("Adding algorithm with identifier {} and class {}", ia
-                      .getDescription().getIdentifier(), ia.getClass()
-                      .getCanonicalName());
-            result.put(ia.getDescription().getIdentifier(), ia.getClass());
+                    .getDescription().getId(), ia.getClass()
+                    .getCanonicalName());
+            result.put(ia.getDescription().getId(), ia.getClass());
         }
 
         return result;

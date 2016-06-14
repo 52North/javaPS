@@ -1,44 +1,35 @@
-/**
- * ﻿Copyright (C) 2007 - 2014 52°North Initiative for Geospatial Open Source
+/*
+ * Copyright 2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 as published
- * by the Free Software Foundation.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * If the program is linked with libraries which are licensed under one of
- * the following licenses, the combination of the program with the linked
- * library is not considered a "derivative work" of the program:
+ *    http://www.apache.org/licenses/LICENSE-2.0
  *
- *       • Apache License, version 2.0
- *       • Apache Software License, version 1.0
- *       • GNU Lesser General Public License, version 3
- *       • Mozilla Public License, versions 1.0, 1.1 and 2.0
- *       • Common Development and Distribution License (CDDL), version 1.0
- *
- * Therefore the distribution of the program linked with libraries licensed
- * under the aforementioned licenses, is permitted by the copyright holders
- * if the distribution is compliant with both the GNU General Public
- * License version 2 and the aforementioned licenses.
- *
- * This program is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
- * Public License for more details.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.n52.javaps.algorithm;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.n52.iceland.lifecycle.Constructable;
 import org.n52.iceland.ogc.ows.OwsCodeType;
-import org.n52.javaps.algorithm.descriptor.ProcessDescription;
+import org.n52.javaps.description.ProcessDescription;
 
 /**
  * @author Bastian Schaeffer, University of Muenster
@@ -49,18 +40,15 @@ public class RepositoryManager implements Constructable {
     private static RepositoryManager instance;
 
     private static final Logger LOG = LoggerFactory.getLogger(RepositoryManager.class);
-
+    private final Set<OwsCodeType> globalProcessIDs = Collections.synchronizedSet(new HashSet<>());
     private Map<String, IAlgorithmRepository> repositories;
-
-    private ProcessIDRegistry globalProcessIDs = ProcessIDRegistry.getInstance();
-
     private UpdateThread updateThread;
 
     @Override
     public void init() {
 
         // clear registry
-        globalProcessIDs.clearRegistry();
+        globalProcessIDs.clear();
 
         // initialize all Repositories
         loadAllRepositories();
@@ -84,8 +72,7 @@ public class RepositoryManager implements Constructable {
 
     }
 
-    private void loadRepository(String repositoryName,
-            String repositoryClassName) {
+    private void loadRepository(String repositoryName, String repositoryClassName) {
         LOG.debug("Loading repository: {}", repositoryName);
 
         // if (repository.isActive() == false) {
@@ -167,14 +154,10 @@ public class RepositoryManager implements Constructable {
 
     }
 
-    public boolean containsAlgorithm(OwsCodeType algorithmName) {
-        for (String repositoryClassName : getRepositoryNames()) {
-            IAlgorithmRepository repository = repositories.get(repositoryClassName);
-            if (repository.containsAlgorithm(algorithmName)) {
-                return true;
-            }
-        }
-        return false;
+    public boolean containsAlgorithm(OwsCodeType id) {
+        return getRepositoryNames().stream()
+                .map((repoId) -> repositories.get(repoId))
+                .anyMatch((repo) -> (repo.containsAlgorithm(id)));
     }
 
     public IAlgorithmRepository getRepositoryForAlgorithm(OwsCodeType algorithmName) {
@@ -198,22 +181,14 @@ public class RepositoryManager implements Constructable {
     }
 
     public boolean registerAlgorithm(OwsCodeType id, IAlgorithmRepository repository) {
-        if (globalProcessIDs.addID(id)) {
-            return true;
-        } else {
-            return false;
-        }
+        return globalProcessIDs.add(id);
     }
 
     public boolean unregisterAlgorithm(OwsCodeType id) {
-        if (globalProcessIDs.removeID(id)) {
-            return true;
-        } else {
-            return false;
-        }
+        return globalProcessIDs.remove(id);
     }
 
-    public IAlgorithmRepository getAlgorithmRepository(OwsCodeType name) {
+    public IAlgorithmRepository getAlgorithmRepository(String name) {
         for (String repositoryClassName : getRepositoryNames()) {
             IAlgorithmRepository repository = repositories.get(repositoryClassName);
             if (repository.getClass().getName().equals(name)) {
@@ -243,13 +218,13 @@ public class RepositoryManager implements Constructable {
         return null;
     }
 
-    static class UpdateThread extends Thread {
+    private static class UpdateThread extends Thread {
 
         private final long interval;
 
         private boolean firstrun = true;
 
-        public UpdateThread(long interval) {
+        UpdateThread(long interval) {
             this.interval = interval;
         }
 
@@ -271,7 +246,7 @@ public class RepositoryManager implements Constructable {
                     }
 
                     // sleep for a given INTERVAL
-                    sleep(interval);
+                    Thread.sleep(interval);
                 }
             } catch (InterruptedException e) {
                 LOG.debug("Interrupt received - Terminating the UpdateThread.");
@@ -281,9 +256,14 @@ public class RepositoryManager implements Constructable {
     }
 
     // shut down the update thread
-    public void finalize() {
-        if (updateThread != null) {
-            updateThread.interrupt();
+    @Override
+    protected void finalize() throws Throwable {
+        try {
+            if (updateThread != null) {
+                updateThread.interrupt();
+            }
+        } finally {
+            super.finalize();
         }
     }
 

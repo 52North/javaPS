@@ -1,5 +1,5 @@
-/**
- * ﻿Copyright (C) 2007 - 2014 52°North Initiative for Geospatial Open Source
+/*
+ * Copyright 2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +21,7 @@ import java.util.Set;
 import org.n52.iceland.lifecycle.Constructable;
 import org.n52.iceland.lifecycle.Destroyable;
 import org.n52.iceland.ogc.ows.OwsCodeType;
-import org.n52.javaps.algorithm.descriptor.ProcessDescription;
+import org.n52.javaps.description.ProcessDescription;
 
 /**
  * @author Bastian Schaeffer, University of Muenster, Theodor Foerster, ITC

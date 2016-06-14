@@ -1,5 +1,5 @@
-/**
- * ﻿Copyright (C) 2007 - 2014 52°North Initiative for Geospatial Open Source
+/*
+ * Copyright 2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,21 +18,19 @@ package org.n52.javaps.algorithm;
 
 import static org.n52.javaps.description.annotation.parser.AnnotatedAlgorithmIntrospector.getInstrospector;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.n52.iceland.ogc.ows.OwsCodeType;
-import org.n52.javaps.algorithm.descriptor.ProcessDescription;
+import org.n52.javaps.description.ProcessDescription;
+import org.n52.javaps.description.annotation.binding.ExecuteMethodBinding;
 import org.n52.javaps.description.annotation.binding.InputBinding;
 import org.n52.javaps.description.annotation.binding.OutputBinding;
 import org.n52.javaps.description.annotation.parser.AnnotatedAlgorithmIntrospector;
 import org.n52.javaps.io.GeneratorFactory;
 import org.n52.javaps.io.ParserFactory;
-import org.n52.javaps.io.data.IData;
 
 /**
  *
@@ -43,27 +41,25 @@ public abstract class AbstractAnnotatedAlgorithm extends AbstractDescriptorAlgor
     private final static Logger LOGGER = LoggerFactory.getLogger(AbstractAnnotatedAlgorithm.class);
 
     @Override
-    protected ProcessDescription createAlgorithmDescriptor() {
-        return getInstrospector(getAlgorithmClass()).getAlgorithmDescriptor();
+    protected ProcessDescription createDescription() {
+        return getInstrospector(getAlgorithmClass()).getProcessDescription();
     }
 
     @Override
-    public Map<OwsCodeType, IData> run(Map<String, List<IData>> inputMap) {
-        Object annotatedInstance = getAlgorithmInstance();
+    public ProcessOutputs run(ProcessInputs inputs) {
+        ProcessOutputs outputs = new ProcessOutputs();
 
-        AnnotatedAlgorithmIntrospector introspector = getInstrospector(annotatedInstance.getClass());
+        Object algorithm = getAlgorithmInstance();
+        AnnotatedAlgorithmIntrospector introspector = getInstrospector(algorithm.getClass());
+        Map<OwsCodeType, InputBinding<?, ?>> inputBindings = introspector.getInputBindingMap();
+        Map<OwsCodeType, OutputBinding<?, ?>> outputBindings = introspector.getOutputBindingMap();
+        ExecuteMethodBinding executeBinding = introspector.getExecuteMethodBinding();
 
-        for (Map.Entry<OwsCodeType, InputBinding<?, ?>> iEntry : introspector.getInputBindingMap().entrySet()) {
-            iEntry.getValue().set(annotatedInstance, inputMap.get(iEntry.getKey()));
-        }
+        inputBindings.forEach((id, binding) -> binding.set(algorithm, inputs.get(id)));
+        executeBinding.execute(algorithm);
+        outputBindings.forEach((id, binding) -> outputs.put(id, binding.get(algorithm)));
 
-        getInstrospector(annotatedInstance.getClass()).getExecuteMethodBinding().execute(annotatedInstance);
-
-        Map<OwsCodeType, IData> oMap = new HashMap<OwsCodeType, IData>();
-        for (Map.Entry<OwsCodeType, OutputBinding<?, ?>> oEntry : introspector.getOutputBindingMap().entrySet()) {
-            oMap.put(oEntry.getKey(), oEntry.getValue().get(annotatedInstance));
-        }
-        return oMap;
+        return outputs;
     }
 
     public Object getAlgorithmInstance() {
@@ -76,9 +72,8 @@ public abstract class AbstractAnnotatedAlgorithm extends AbstractDescriptorAlgor
 
     public static class Proxy extends AbstractAnnotatedAlgorithm {
 
-        final private Class<?> proxiedClass;
-
-        final private Object proxiedInstance;
+        private final Class<?> proxiedClass;
+        private final Object proxiedInstance;
 
         public Proxy(Class<?> proxiedClass) {
             this.proxiedClass = proxiedClass;

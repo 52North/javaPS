@@ -1,5 +1,5 @@
-/**
- * ﻿Copyright (C) 2007 - 2014 52°North Initiative for Geospatial Open Source
+/*
+ * Copyright 2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +16,7 @@
  */
 package org.n52.javaps.description.annotation.parser;
 
+import java.awt.im.spi.InputMethodDescriptor;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -28,17 +29,22 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import org.n52.iceland.ogc.ows.OwsCodeType;
-import org.n52.javaps.algorithm.descriptor.ProcessDescription;
-import org.n52.javaps.description.annotation.Algorithm;
+import org.n52.javaps.description.ComplexInputDescription;
+import org.n52.javaps.description.ComplexOutputDescription;
+import org.n52.javaps.description.LiteralInputDescription;
+import org.n52.javaps.description.LiteralOutputDescription;
+import org.n52.javaps.description.ProcessDescription;
+import org.n52.javaps.description.ProcessDescriptionBuilder;
+import org.n52.javaps.description.ProcessInputDescription;
+import org.n52.javaps.description.ProcessOutputDescription;
+import org.n52.javaps.description.annotation.Process;
 import org.n52.javaps.description.annotation.binding.ExecuteMethodBinding;
 import org.n52.javaps.description.annotation.binding.InputBinding;
 import org.n52.javaps.description.annotation.binding.OutputBinding;
-import org.n52.javaps.description.annotation.parser.ComplexDataInputAnnotationParser.ComplexDataInputFieldAnnotationParser;
-import org.n52.javaps.description.annotation.parser.ComplexDataInputAnnotationParser.ComplexDataInputMethodAnnotationParser;
-import org.n52.javaps.description.annotation.parser.ComplexDataOutputAnnotationParser.ComplexDataOutputFieldAnnotationParser;
-import org.n52.javaps.description.annotation.parser.ComplexDataOutputAnnotationParser.ComplexDataOutputMethodAnnotationParser;
+import org.n52.javaps.description.impl.ProcessDescriptionImpl;
 
 /**
  *
@@ -46,35 +52,47 @@ import org.n52.javaps.description.annotation.parser.ComplexDataOutputAnnotationP
  */
 public class AnnotatedAlgorithmIntrospector {
 
-    private final static List<InputAnnotationParser<?, Field, ?, ?>> INPUT_FIELD_PARSERS;
-    private final static List<InputAnnotationParser<?, Method, ?, ?>> INPUT_METHOD_PARSERS;
-    private final static List<OutputAnnotationParser<?, Field, ?, ?>> OUTPUT_FIELD_PARSERS;
-    private final static List<OutputAnnotationParser<?, Method, ?, ?>> OUTPUT_METHOD_PARSERS;
+    private final static List<InputAnnotationParser<?, Field, ? extends ProcessInputDescription, ?>> INPUT_FIELD_PARSERS;
+    private final static List<InputAnnotationParser<?, Method, ? extends ProcessInputDescription, ?>> INPUT_METHOD_PARSERS;
+    private final static List<OutputAnnotationParser<?, Field, ? extends ProcessOutputDescription, ?>> OUTPUT_FIELD_PARSERS;
+    private final static List<OutputAnnotationParser<?, Method, ? extends ProcessOutputDescription, ?>> OUTPUT_METHOD_PARSERS;
 
     private final static ExecuteAnnotationParser PROCESS_PARSER;
 
     static {
-        List<InputAnnotationParser<?, Field,?,  ?>> inputFieldParsers = new LinkedList<>();
-        inputFieldParsers.add(new LiteralDataInputFieldAnnotationParser());
-        inputFieldParsers.add(new ComplexDataInputFieldAnnotationParser());
-        INPUT_FIELD_PARSERS = Collections.unmodifiableList(inputFieldParsers);
 
         List<InputAnnotationParser<?, Method, ?, ?>> inputMethodParsers = new LinkedList<>();
-        inputMethodParsers.add(new LiteralDataInputMethodAnnotationParser());
-        inputMethodParsers.add(new ComplexDataInputMethodAnnotationParser());
-        INPUT_METHOD_PARSERS = Collections.unmodifiableList(inputMethodParsers);
-
+        List<InputAnnotationParser<?, Field, ?, ?>> inputFieldParsers = new LinkedList<>();
         List<OutputAnnotationParser<?, Field, ?, ?>> outputFieldParsers = new LinkedList<>();
-        outputFieldParsers.add(new LiteralDataOutputFieldAnnotationParser());
-        outputFieldParsers.add(new ComplexDataOutputFieldAnnotationParser());
-        OUTPUT_FIELD_PARSERS = Collections.unmodifiableList(outputFieldParsers);
-
         List<OutputAnnotationParser<?, Method, ?, ?>> outputMethodParsers = new LinkedList<>();
-        outputMethodParsers.add(new LiteralDataOutputMethodAnnotationParser());
-        outputMethodParsers.add(new ComplexDataOutputMethodAnnotationParser());
-        OUTPUT_METHOD_PARSERS = Collections.unmodifiableList(outputMethodParsers);
 
+        InputAnnotationParser<?, Method, LiteralInputDescription, ?> literalInputMethod = new LiteralDataInputAnnotationParser<>(asdf());
+        InputAnnotationParser<?, Field, LiteralInputDescription, ?> literalInputField = new LiteralDataInputAnnotationParser<>(InputBinding::field);
+        OutputAnnotationParser<?, Method, LiteralOutputDescription, ?> literalOutputMethod = new LiteralDataOutputAnnotationParser<>(OutputBinding::method);
+        OutputAnnotationParser<?, Field, LiteralOutputDescription, ?> literalOutputField = new LiteralDataOutputAnnotationParser<>(OutputBinding::field);
+        InputAnnotationParser<?, Method, ComplexInputDescription, ?> complexInputMethod = new ComplexDataInputAnnotationParser<>(asdf());
+        InputAnnotationParser<?, Field, ComplexInputDescription, ?> complexInputField = new ComplexDataInputAnnotationParser<>(InputBinding::field);
+        OutputAnnotationParser<?, Method, ComplexOutputDescription, ?> complexOutputMethod = new ComplexDataOutputAnnotationParser<>(OutputBinding::method);
+        OutputAnnotationParser<?, Field, ComplexOutputDescription, ?> complexOutputField = new ComplexDataOutputAnnotationParser<>(OutputBinding::field);
+
+        inputFieldParsers.add(literalInputField);
+        inputFieldParsers.add(complexInputField);
+        inputMethodParsers.add(literalInputMethod);
+        inputMethodParsers.add(complexInputMethod);
+        outputFieldParsers.add(literalOutputField);
+        outputFieldParsers.add(complexOutputField);
+        outputMethodParsers.add(literalOutputMethod);
+        outputMethodParsers.add(complexOutputMethod);
+
+        INPUT_FIELD_PARSERS = Collections.unmodifiableList(inputFieldParsers);
+        INPUT_METHOD_PARSERS = Collections.unmodifiableList(inputMethodParsers);
+        OUTPUT_FIELD_PARSERS = Collections.unmodifiableList(outputFieldParsers);
+        OUTPUT_METHOD_PARSERS = Collections.unmodifiableList(outputMethodParsers);
         PROCESS_PARSER = new ExecuteAnnotationParser();
+    }
+
+    private static <D extends ProcessInputDescription> Function<Method, InputBinding<Method, D>> asdf() {
+        return InputBinding::method;
     }
 
     private final static Map<Class<?>, AnnotatedAlgorithmIntrospector> INTROSPECTOR_MAP = new HashMap<>();
@@ -109,7 +127,7 @@ public class AnnotatedAlgorithmIntrospector {
 
     private void parseClass() {
 
-        if (!algorithmClass.isAnnotationPresent(Algorithm.class)) {
+        if (!algorithmClass.isAnnotationPresent(Process.class)) {
             throw new RuntimeException("Class isn't annotated with an Algorithm annotation");
         }
 
@@ -126,13 +144,17 @@ public class AnnotatedAlgorithmIntrospector {
             throw new RuntimeException("Classes with Algorithm annotation require public no-arg constructor, error introspecting " + algorithmClass.getName());
         }
 
-        ProcessDescription.Builder<?> algorithmBuilder = null;
 
-        Algorithm algorithm = algorithmClass.getAnnotation(Algorithm.class);
+        Process algorithm = algorithmClass.getAnnotation(Process.class);
 
-        algorithmBuilder = ProcessDescription.builder(algorithm.identifier().length() > 0 ? algorithm.identifier() : algorithmClass.getCanonicalName());
+        final ProcessDescriptionBuilder<?, ?> algorithmBuilder = ProcessDescriptionImpl.builder();
+        algorithmBuilder.withIdentifier(algorithm.identifier().length() > 0 ? algorithm.identifier() : algorithmClass.getCanonicalName());
 
-        algorithmBuilder.title(algorithm.title()).abstrakt(algorithm.abstrakt()).version(algorithm.version()).storeSupported(algorithm.storeSupported()).statusSupported(algorithm.statusSupported());
+        algorithmBuilder.withTitle(algorithm.title())
+                .withAbstract(algorithm.abstrakt())
+                .withVersion(algorithm.version())
+                .storeSupported(algorithm.storeSupported())
+                .statusSupported(algorithm.statusSupported());
 
         parseElements(algorithmClass.getDeclaredMethods(), INPUT_METHOD_PARSERS, OUTPUT_METHOD_PARSERS);
         parseElements(algorithmClass.getDeclaredFields(), INPUT_FIELD_PARSERS, OUTPUT_FIELD_PARSERS);
@@ -156,16 +178,12 @@ public class AnnotatedAlgorithmIntrospector {
             }
         }
 
-        for (InputBinding<?, ?> inputBinding : inputBindingMap.values()) {
-            algorithmBuilder.addInputDescriptor(inputBinding.getDescription());
-        }
-        for (OutputBinding<?, ?> outputBinding : outputBindingMap.values()) {
-            algorithmBuilder.addOutputDescriptor(outputBinding.getDescription());
-        }
+        algorithmBuilder.withInput(inputBindingMap.values().stream().map(x -> x.getDescription()));
+        algorithmBuilder.withOutput(outputBindingMap.values().stream().map(x -> x.getDescription()));
         algorithmDescriptor = algorithmBuilder.build();
     }
 
-    public ProcessDescription getAlgorithmDescriptor() {
+    public ProcessDescription getProcessDescription() {
         return algorithmDescriptor;
     }
 
@@ -182,22 +200,22 @@ public class AnnotatedAlgorithmIntrospector {
     }
 
     public <M extends AccessibleObject & Member> void parseElements(M members[],
-            List<InputAnnotationParser<?, M, ?>> inputParser,
-            List<OutputAnnotationParser<?, M, ?>> outputParser) {
+            List<InputAnnotationParser<?, M, ?, ?>> inputParser,
+            List<OutputAnnotationParser<?, M, ?, ?>> outputParser) {
         for (M member : members) {
-            for (OutputAnnotationParser<?, M, ?> parser : outputParser) {
+            for (OutputAnnotationParser<?, M, ?, ?> parser : outputParser) {
                 if (member.isAnnotationPresent(parser.getSupportedAnnotation())) {
                     OutputBinding<?, ?> binding = parser.parse(member);
                     if (binding != null) {
-                        outputBindingMap.put(binding.getDescriptor().getIdentifier(), binding);
+                        outputBindingMap.put(binding.getDescription().getId(), binding);
                     }
                 }
             }
-            for (InputAnnotationParser<?, M, ?> parser : inputParser) {
+            for (InputAnnotationParser<?, M, ?, ?> parser : inputParser) {
                 if (member.isAnnotationPresent(parser.getSupportedAnnotation())) {
                     InputBinding<?, ?> binding = parser.parse(member);
                     if (binding != null) {
-                        inputBindingMap.put(binding.getDescriptor().getIdentifier(), binding);
+                        inputBindingMap.put(binding.getDescription().getId(), binding);
                     }
                 }
             }
