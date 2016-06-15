@@ -1,5 +1,5 @@
-/**
- * ﻿Copyright (C) 2007 - 2014 52°North Initiative for Geospatial Open Source
+/*
+ * Copyright 2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,9 +26,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.n52.iceland.ogc.ows.OwsCodeType;
-import org.n52.javaps.description.annotation.Algorithm;
-import org.n52.javaps.algorithm.descriptor.ProcessDescription;
 import org.n52.javaps.commons.WPSConfig;
+import org.n52.javaps.description.ProcessDescription;
+import org.n52.javaps.description.annotation.Process;
 import org.n52.javaps.io.GeneratorFactory;
 import org.n52.javaps.io.ParserFactory;
 
@@ -69,7 +69,7 @@ public class LocalAlgorithmRepository implements IAlgorithmRepository {
         IAlgorithm algorithm = null;
         if (IAlgorithm.class.isAssignableFrom(algorithmClass)) {
             algorithm = IAlgorithm.class.cast(algorithmClass.newInstance());
-        } else if (algorithmClass.isAnnotationPresent(Algorithm.class)) {
+        } else if (algorithmClass.isAnnotationPresent(Process.class)) {
             // we have an annotated algorithm that doesn't implement IAlgorithm
             // wrap it in a proxy class
             algorithm = new AbstractAnnotatedAlgorithm.Proxy(algorithmClass);

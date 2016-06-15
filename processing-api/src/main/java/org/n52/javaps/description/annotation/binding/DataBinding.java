@@ -1,3 +1,19 @@
+/*
+ * Copyright 2016 52°North Initiative for Geospatial Open Source
+ * Software GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.n52.javaps.description.annotation.binding;
 
 import java.lang.reflect.AccessibleObject;
@@ -5,18 +21,19 @@ import java.lang.reflect.Member;
 import java.lang.reflect.Type;
 import java.util.Objects;
 
-import org.n52.javaps.algorithm.util.ClassUtil;
 import org.n52.javaps.description.DataDescription;
-import org.n52.javaps.io.data.IData;
+
+import com.google.common.base.Enums;
+import com.google.common.primitives.Primitives;
 
 /**
  * TODO JavaDoc
+ *
  * @author Christian Autermann
  */
 public abstract class DataBinding<M extends AccessibleObject & Member, D extends DataDescription> extends AnnotationBinding<M> {
 
     private D description;
-    private Class<? extends IData> bindingType;
 
     public DataBinding(M member) {
         super(member);
@@ -30,30 +47,36 @@ public abstract class DataBinding<M extends AccessibleObject & Member, D extends
 
     public Type getPayloadType() {
         Type type = getType();
-        if (isTypeEnum()) {
+        if (isEnum(type)) {
             return String.class;
         }
         if (type instanceof Class<?>) {
-            Class<?> inputClass = (Class<?>) type;
-            if (inputClass.isPrimitive()) {
-                return ClassUtil.wrap(inputClass);
-            }
+            return Primitives.wrap((Class<?>) type);
         }
         return type;
     }
 
-    public boolean isTypeEnum() {
-        Type inputType = getType();
-        return (inputType instanceof Class<?>) &&
-               ((Class<?>) inputType).isEnum();
+    protected Object outputToPayload(Object outputValue) {
+        Type type = getType();
+        if (isEnum(type)) {
+            return ((Enum<?>) outputValue).name();
+        } else {
+            return outputValue;
+        }
     }
 
-    public Class<? extends IData> getBindingType() {
-        return bindingType;
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    protected Object payloadToInput(Object payload) {
+        Type type = getType();
+        if (isEnum(type)) {
+            Class<? extends Enum> enumClass = (Class<? extends Enum>) type;
+            return Enum.valueOf(enumClass, (String) payload);
+        }
+        return payload;
     }
 
-    public void setBindingType(Class<? extends IData> bindingType) {
-        this.bindingType = Objects.requireNonNull(bindingType);
+    public boolean isEnum() {
+        return isEnum(getType());
     }
 
     public void setDescription(D description) {
@@ -62,6 +85,10 @@ public abstract class DataBinding<M extends AccessibleObject & Member, D extends
 
     public D getDescription() {
         return description;
+    }
+
+    public static boolean isEnum(Type type) {
+        return (type instanceof Class<?>) && ((Class<?>) type).isEnum();
     }
 
 }

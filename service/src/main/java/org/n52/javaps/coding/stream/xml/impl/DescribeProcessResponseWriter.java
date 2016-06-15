@@ -1,3 +1,19 @@
+/*
+ * Copyright 2016 52°North Initiative for Geospatial Open Source
+ * Software GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.n52.javaps.coding.stream.xml.impl;
 
 import static java.util.stream.Collectors.joining;
@@ -7,7 +23,6 @@ import java.util.Set;
 
 import javax.xml.stream.XMLStreamException;
 
-import org.n52.javaps.algorithm.ProcessDescription2;
 import org.n52.javaps.coding.stream.StreamWriterKey;
 import org.n52.javaps.coding.stream.xml.AbstractXmlStreamWriter;
 import org.n52.javaps.coding.stream.xml.XmlStreamWriterKey;
@@ -17,7 +32,6 @@ import org.n52.javaps.coding.stream.xml.impl.XMLConstants.QNames;
 import org.n52.javaps.ogc.wps.ProcessOffering;
 import org.n52.javaps.response.DescribeProcessResponse;
 
-import static java.util.stream.Collectors.joining;
 
 /**
  * TODO JavaDoc
@@ -26,8 +40,7 @@ import static java.util.stream.Collectors.joining;
  */
 public class DescribeProcessResponseWriter extends AbstractXmlStreamWriter<DescribeProcessResponse> {
 
-    private static final XmlStreamWriterKey KEY
-            = new XmlStreamWriterKey(DescribeProcessResponse.class);
+    private static final XmlStreamWriterKey KEY = new XmlStreamWriterKey(DescribeProcessResponse.class);
 
     @Override
     public Set<StreamWriterKey> getKeys() {
@@ -68,13 +81,8 @@ public class DescribeProcessResponseWriter extends AbstractXmlStreamWriter<Descr
             attr(Attributes.WPS_PROCESS_MODEL, offering.getProcessModel().get());
         }
 
-        writeProcess(offering.getProcessDescription());
+        delegate(offering.getProcessDescription());
+
         end(QNames.WPS_PROCESS_OFFERING);
     }
-
-    private void writeProcess(ProcessDescription2 description) {
-        /* TODO implement org.n52.javaps.coding.stream.xml.impl.DescribeProcessResponseWriter.write() */
-        throw new UnsupportedOperationException("org.n52.javaps.coding.stream.xml.impl.DescribeProcessResponseWriter.write() not yet implemented");
-    }
-
 }

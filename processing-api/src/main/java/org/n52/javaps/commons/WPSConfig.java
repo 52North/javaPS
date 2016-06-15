@@ -1,5 +1,5 @@
-/**
- * ﻿Copyright (C) 2006 - 2014 52°North Initiative for Geospatial Open Source
+/*
+ * Copyright 2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -60,19 +60,7 @@ public class WPSConfig implements Serializable {
 
     public static final String VERSION_200 = "2.0.0";
 
-    public static final List<String> SUPPORTED_VERSIONS = Arrays.asList(new String[] { VERSION_100, VERSION_200 });
-
-    public static final String JOB_CONTROL_OPTION_SYNC_EXECUTE = "sync-execute";
-
-    public static final String JOB_CONTROL_OPTION_ASYNC_EXECUTE = "async-execute";
-
-    public static final String JOB_CONTROL_OPTIONS_SEPARATOR = " ";
-
-    public static final String OUTPUT_TRANSMISSION_VALUE = "value";
-
-    public static final String OUTPUT_TRANSMISSION_REFERENCE = "reference";
-
-    public static final String OUTPUT_TRANSMISSIONS_SEPARATOR = " ";
+    public static final List<String> SUPPORTED_VERSIONS = Arrays.asList(new String[] { VERSION_200 });
 
     /**
      * returns an instance of the WPSConfig class. WPSConfig is a single. If

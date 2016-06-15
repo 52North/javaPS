@@ -1,5 +1,5 @@
-/**
- * ﻿Copyright (C) 2007 - 2014 52°North Initiative for Geospatial Open Source
+/*
+ * Copyright 2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,87 +16,26 @@
  */
 package org.n52.javaps.algorithm;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import org.n52.javaps.description.ProcessDescription;
 
-import org.n52.javaps.algorithm.descriptor.ProcessDescription;
-import org.n52.javaps.commons.observerpattern.IObserver;
-import org.n52.javaps.commons.observerpattern.ISubject;
-import org.n52.javaps.io.data.IData;
+public abstract class AbstractDescriptorAlgorithm
+        extends AbstractObservableAlgorithm {
 
-public abstract class AbstractDescriptorAlgorithm implements IAlgorithm, ISubject {
     private ProcessDescription description;
-    private final List<IObserver> observers = new LinkedList<>();
-    private final List<String> errorList = new LinkedList<>();
-    private Object state = null;
 
     @Override
     public synchronized ProcessDescription getDescription() {
         if (description == null) {
-            description = createAlgorithmDescriptor();
+            description = createDescription();
         }
         return description;
     }
 
     @Override
     public boolean processDescriptionIsValid(String version) {
-        return true;// TODO
+        // TODO process description validation
+        return true;
     }
 
-    protected abstract ProcessDescription createAlgorithmDescriptor();
-
-    @Override
-    public Class<? extends IData> getInputDataType(String identifier) {
-        ProcessDescription algorithmDescriptor = getDescription();
-        if (algorithmDescriptor != null) {
-            return getDescription().getInputDescriptor(identifier).getBinding();
-        } else {
-            throw new IllegalStateException("Instance must have an algorithm descriptor");
-        }
-    }
-
-    @Override
-    public Class<? extends IData> getOutputDataType(String identifier) {
-        ProcessDescription algorithmDescriptor = getDescription();
-        if (algorithmDescriptor != null) {
-            return getDescription().getOutputDescriptor(identifier).getBinding();
-        } else {
-            throw new IllegalStateException("Instance must have an algorithm descriptor");
-        }
-    }
-
-    @Override
-    public Object getState() {
-        return state;
-    }
-
-    @Override
-    public void update(Object state) {
-        this.state = state;
-        notifyObservers();
-    }
-
-    @Override
-    public void addObserver(IObserver o) {
-        observers.add(o);
-    }
-
-    @Override
-    public void removeObserver(IObserver o) {
-        observers.remove(o);
-    }
-
-    public void notifyObservers() {
-        this.observers.stream().forEach(o -> o.update(this));
-    }
-
-    protected void addError(String error) {
-        this.errorList.add(error);
-    }
-
-    @Override
-    public List<String> getErrors() {
-        return Collections.unmodifiableList(this.errorList);
-    }
+    protected abstract ProcessDescription createDescription();
 }

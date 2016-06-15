@@ -1,8 +1,26 @@
+/*
+ * Copyright 2016 52°North Initiative for Geospatial Open Source
+ * Software GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.n52.javaps.description;
 
 
 import org.n52.iceland.ogc.ows.OwsAllowedValues;
 import org.n52.iceland.ogc.ows.OwsDomainMetadata;
+
+import com.google.common.base.Strings;
 
 /**
  * TODO JavaDoc
@@ -14,21 +32,21 @@ public interface LiteralDataDomainBuilder<T extends LiteralDataDomain, B extends
     B withDataType(OwsDomainMetadata dataType);
 
     default B withDataType(String reference, String value) {
-        return withDataType(new OwsDomainMetadata(reference, value));
+        return withDataType(Strings.emptyToNull(value) == null ? null : new OwsDomainMetadata(reference, value));
     }
 
     default B withDataType(String value) {
-        return withDataType(new OwsDomainMetadata(value));
+        return withDataType(Strings.emptyToNull(value) == null ? null : new OwsDomainMetadata(value));
     }
 
     B withUOM(OwsDomainMetadata uom);
 
     default B withUOM(String reference, String value) {
-        return withUOM(new OwsDomainMetadata(reference, value));
+        return withUOM(Strings.emptyToNull(value) == null ? null : new OwsDomainMetadata(reference, value));
     }
 
     default B withUOM(String value) {
-        return withUOM(new OwsDomainMetadata(value));
+        return withUOM(Strings.emptyToNull(value) == null ? null : new OwsDomainMetadata(value));
     }
 
     B withAllowedValues(OwsAllowedValues allowedValues);

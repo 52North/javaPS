@@ -1,3 +1,19 @@
+/*
+ * Copyright 2016 52°North Initiative for Geospatial Open Source
+ * Software GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.n52.javaps.description.annotation.parser;
 
 import static java.util.stream.Collectors.toList;
@@ -9,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +34,7 @@ import org.n52.iceland.ogc.ows.OwsAllowedValue;
 import org.n52.iceland.ogc.ows.OwsAllowedValues;
 import org.n52.javaps.description.LiteralInputDescription;
 import org.n52.javaps.description.LiteralInputDescriptionBuilder;
-import org.n52.javaps.description.annotation.LiteralDataInput;
+import org.n52.javaps.description.annotation.LiteralInput;
 import org.n52.javaps.description.annotation.binding.InputBinding;
 import org.n52.javaps.description.impl.LiteralDataDomainImpl;
 import org.n52.javaps.description.impl.LiteralInputDescriptionImpl;
@@ -31,23 +48,26 @@ import org.n52.javaps.io.data.ILiteralData;
  * @param <M>
  * @param <B>
  */
-public abstract class LiteralDataInputAnnotationParser<M extends AccessibleObject & Member, B extends InputBinding<M, LiteralInputDescription>>
-        implements InputAnnotationParser<LiteralDataInput, M, LiteralInputDescription, B> {
+public class LiteralDataInputAnnotationParser<M extends AccessibleObject & Member, B extends InputBinding<M, LiteralInputDescription>>
+       extends InputAnnotationParser<LiteralInput, M, LiteralInputDescription, B> {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(AnnotationParser.class);
 
+    public LiteralDataInputAnnotationParser(Function<M, B> bindingFunction) {
+        super(bindingFunction);
+    }
+
     @SuppressWarnings({ "rawtypes", "unchecked" })
     private List<String> getEnumValues(B binding) {
-        if (!binding.isTypeEnum()) {
+        if (!binding.isEnum()) {
             return Collections.emptyList();
         }
-
-        Class<? extends Enum<?>> type = (Class<? extends Enum<?>>) binding.getType();
-        return Arrays.stream(type.getEnumConstants()).map(Enum::name).collect(toList());
+        Class<? extends Enum<?>> enumType = (Class<? extends Enum<?>>) binding.getType();
+        return Arrays.stream(enumType.getEnumConstants()).map(Enum::name).collect(toList());
     }
 
     @Override
-    public LiteralInputDescription createDescription(LiteralDataInput annotation, B binding) {
+    public LiteralInputDescription createDescription(LiteralInput annotation, B binding) {
         // auto generate binding if it's not explicitly declared
         Class<? extends ILiteralData> bindingType = getBindingType(annotation, binding);
 
@@ -77,11 +97,11 @@ public abstract class LiteralDataInputAnnotationParser<M extends AccessibleObjec
                 allowedValues = enumValues;
             }
 
-            if (annotation.maxOccurs() == LiteralDataInput.ENUM_COUNT) {
+            if (annotation.maxOccurs() == LiteralInput.ENUM_COUNT) {
                 builder.withMaximalOccurence(annotation.maxOccurs());
             }
 
-        } else if (annotation.maxOccurs() == LiteralDataInput.ENUM_COUNT) {
+        } else if (annotation.maxOccurs() == LiteralInput.ENUM_COUNT) {
             builder.withMaximalOccurence(annotation.minOccurs());
             LOGGER.warn("Invalid maxOccurs \"ENUM_COUNT\" specified for for input {}, setting maxOccurs to {}", annotation.identifier(), annotation.minOccurs());
         }
@@ -96,18 +116,19 @@ public abstract class LiteralDataInputAnnotationParser<M extends AccessibleObjec
         builder.withDefaultLiteralDataDomain(LiteralDataDomainImpl.builder()
                 .withAllowedValues(new OwsAllowedValues(allowedValues.stream().map(OwsAllowedValue::new)))
                 .withDataType(BasicXMLTypeFactory.getXMLDataTypeforBinding(bindingType))
-                .withDefaultValue(defaultValue));
+                .withDefaultValue(defaultValue)
+                .withUOM(annotation.uom()));
 
         return builder.build();
     }
 
     @Override
-    public Class<? extends LiteralDataInput> getSupportedAnnotation() {
-        return LiteralDataInput.class;
+    public Class<? extends LiteralInput> getSupportedAnnotation() {
+        return LiteralInput.class;
     }
 
     @Override
-    public Class<? extends ILiteralData> getBindingType(LiteralDataInput annotation, B binding) {
+    public Class<? extends ILiteralData> getBindingType(LiteralInput annotation, B binding) {
         Type payloadType = binding.getPayloadType();
         Class<? extends ILiteralData> bindingType = annotation.binding();
         if (bindingType == null || ILiteralData.class.equals(bindingType)) {

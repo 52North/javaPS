@@ -21,8 +21,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import javax.inject.Inject;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventFactory;
 import javax.xml.stream.XMLEventWriter;
@@ -31,12 +35,17 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
+import org.n52.iceland.exception.ows.NoApplicableCodeException;
+import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.ogc.gml.time.TimeInstant;
 import org.n52.iceland.ogc.gml.time.TimePosition;
 import org.n52.iceland.util.DateTimeHelper;
 import org.n52.iceland.util.StringHelper;
 import org.n52.iceland.w3c.SchemaLocation;
 import org.n52.iceland.w3c.W3CConstants;
+import org.n52.javaps.coding.stream.MissingStreamWriterException;
+import org.n52.javaps.coding.stream.StreamWriter;
+import org.n52.javaps.coding.stream.StreamWriterRepository;
 
 import com.google.common.escape.Escaper;
 import com.google.common.xml.XmlEscapers;
@@ -50,13 +59,24 @@ public abstract class AbstractXmlStreamWriter<S> implements XmlStreamWriter<S> {
     private final Map<String, String> prefixes = new HashMap<>();
     private XMLEventWriter writer;
 
+    private StreamWriterRepository streamWriterRepository;
+
+    @Inject
+    public void setStreamWriterRepository(StreamWriterRepository streamWriterRepository) {
+        this.streamWriterRepository = streamWriterRepository;
+    }
+
     @Override
-    public void write(S object, OutputStream stream) throws XMLStreamException {
-        prefixes.clear();
-        XMLEventWriter w = outputFactory().createXMLEventWriter(stream, ENCODING);
-        w.add(eventFactory().createStartDocument(ENCODING, VERSION));
-        write(object, w);
-        w.add(eventFactory().createEndDocument());
+    public void write(S object, OutputStream stream) throws OwsExceptionReport {
+        try {
+            prefixes.clear();
+            XMLEventWriter w = outputFactory().createXMLEventWriter(stream, ENCODING);
+            w.add(eventFactory().createStartDocument(ENCODING, VERSION));
+            write(object, w);
+            w.add(eventFactory().createEndDocument());
+        } catch (XMLStreamException ex) {
+            throw new NoApplicableCodeException().causedBy(ex);
+        }
     }
 
     @Override
@@ -66,7 +86,7 @@ public abstract class AbstractXmlStreamWriter<S> implements XmlStreamWriter<S> {
         write(object);
     }
 
-    private XMLEventWriter writer() {
+    protected XMLEventWriter writer() {
         return writer;
     }
 
@@ -220,6 +240,18 @@ public abstract class AbstractXmlStreamWriter<S> implements XmlStreamWriter<S> {
             }
         }
         return builder.toString();
+    }
+
+    @SuppressWarnings("unchecked")
+    protected <T> void delegate(T object) throws XMLStreamException {
+        if (object != null) {
+            XmlStreamWriterKey key = new XmlStreamWriterKey(object.getClass());
+            Optional<StreamWriter<Object>> writer = this.streamWriterRepository.getWriter(key);
+            if (!writer.isPresent() || !(writer.get() instanceof XmlStreamWriter)) {
+                throw new MissingStreamWriterException(key);
+            }
+            ((XmlStreamWriter<T>)writer.get()).write(object, writer());
+        }
     }
 
     /**

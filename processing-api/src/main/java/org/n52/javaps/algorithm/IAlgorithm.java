@@ -1,5 +1,5 @@
-/**
- * ﻿Copyright (C) 2007 - 2014 52°North Initiative for Geospatial Open Source
+/*
+ * Copyright 2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,12 +16,14 @@
  */
 package org.n52.javaps.algorithm;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.n52.iceland.ogc.ows.OwsCodeType;
-import org.n52.javaps.algorithm.descriptor.ProcessDescription;
+import org.n52.javaps.description.ProcessDescription;
 import org.n52.javaps.io.GeneratorFactory;
 import org.n52.javaps.io.ParserFactory;
+import org.n52.javaps.io.data.IData;
 
 /**
  * @author Bastian Schaeffer, University of Muenster, Theodor Foerster, ITC
@@ -31,7 +33,9 @@ public interface IAlgorithm {
 
     ProcessOutputs run(ProcessInputs inputData) throws ExecutionException;
 
-    List<String> getErrors();
+    default List<String> getErrors() {
+        return Collections.emptyList();
+    }
 
     ProcessDescription getDescription();
 
@@ -46,18 +50,28 @@ public interface IAlgorithm {
      */
     boolean processDescriptionIsValid(String version);
 
-    Class<?> getInputDataType(OwsCodeType id);
-
     default Class<?> getInputDataType(String id) {
         return getOutputDataType(new OwsCodeType(id));
     }
 
-    Class<?> getOutputDataType(OwsCodeType id);
-
     default Class<?> getOutputDataType(String id) {
         return getOutputDataType(new OwsCodeType(id));
     }
+    default Class<? extends IData> getInputDataType(OwsCodeType identifier) {
+        if (getDescription() != null) {
+            return getDescription().getInput(identifier).getBindingClass();
+        } else {
+            throw new IllegalStateException("Instance must have an process description");
+        }
+    }
 
+    default Class<? extends IData> getOutputDataType(OwsCodeType identifier) {
+        if (getDescription() != null) {
+            return getDescription().getOutput(identifier).getBindingClass();
+        } else {
+            throw new IllegalStateException("Instance must have an process description");
+        }
+    }
 
     void setGeneratorFactory(GeneratorFactory generatorFactory);
 

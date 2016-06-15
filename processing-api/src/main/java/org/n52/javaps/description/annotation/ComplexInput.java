@@ -1,5 +1,5 @@
-/**
- * ﻿Copyright (C) 2007 - 2014 52°North Initiative for Geospatial Open Source
+/*
+ * Copyright 2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,12 +16,14 @@
  */
 package org.n52.javaps.description.annotation;
 
+import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.n52.javaps.io.data.ILiteralData;
+import org.n52.javaps.io.data.IComplexData;
 
 /**
  *
@@ -29,24 +31,14 @@ import org.n52.javaps.io.data.ILiteralData;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.METHOD, ElementType.FIELD })
-public @interface LiteralDataInput {
+@Inherited
+@Documented
+public @interface ComplexInput {
     String identifier(); // identifier
-
     String title() default "";
-
     String abstrakt() default ""; // 'abstract' is java reserved keyword
-
     int minOccurs() default 1;
-
     int maxOccurs() default 1;
-
-    String defaultValue() default "";
-
-    String[] allowedValues() default {};
-
-    Class<? extends ILiteralData> binding() default ILiteralData.class;
-
-    // // special maxOccurs flags
-    // set maxOccurs to enum constant count
-    public final static int ENUM_COUNT = -1;
+    int maximumMegaBytes() default 0;
+    Class<? extends IComplexData> binding();
 }
