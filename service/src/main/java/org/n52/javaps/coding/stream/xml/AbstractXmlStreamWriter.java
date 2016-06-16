@@ -23,8 +23,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.inject.Inject;
 import javax.xml.namespace.QName;
@@ -220,6 +218,12 @@ public abstract class AbstractXmlStreamWriter<S> implements XmlStreamWriter<S> {
 
     protected void xlinkTitleAttr(String value) throws XMLStreamException {
         attr(W3CConstants.QN_XLINK_TITLE, value);
+    }
+
+    protected void element(QName name, String value) throws XMLStreamException {
+        start(name);
+        chars(value);
+        end(name);
     }
 
     private void dispatch(XMLEvent event) throws XMLStreamException {

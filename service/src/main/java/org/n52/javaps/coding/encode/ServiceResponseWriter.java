@@ -21,8 +21,6 @@ import java.io.OutputStream;
 import java.util.Collections;
 import java.util.Set;
 
-import javax.xml.stream.XMLStreamException;
-
 import org.n52.iceland.coding.encode.ResponseProxy;
 import org.n52.iceland.coding.encode.ResponseWriter;
 import org.n52.iceland.coding.encode.ResponseWriterKey;
@@ -62,16 +60,11 @@ public class ServiceResponseWriter implements ResponseWriter<AbstractServiceResp
     @Override
     public void write(AbstractServiceResponse t, OutputStream out, ResponseProxy responseProxy)
             throws IOException, OwsExceptionReport {
-        try {
-            streamWriterRepository.getWriter(new StreamWriterKey(t.getClass(), t.getContentType()))
-                    .orElseThrow(() -> new NoApplicableCodeException()
-                            .withMessage("No response encoder forund for %s",
-                                         t.getClass()))
-                    .write(t, out);
-        } catch (XMLStreamException ex) {
-            throw new NoApplicableCodeException().causedBy(ex)
-                    .withMessage("Could not write response");
-        }
+        streamWriterRepository.getWriter(new StreamWriterKey(t.getClass(), t.getContentType()))
+                .orElseThrow(() -> new NoApplicableCodeException()
+                        .withMessage("No response encoder forund for %s",
+                                     t.getClass()))
+                .write(t, out);
     }
 
     @Override

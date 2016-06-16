@@ -21,6 +21,7 @@ package org.n52.javaps.coding.stream;
  * @author Christian Autermann
  */
 public class MissingStreamWriterException extends RuntimeException {
+    private static final long serialVersionUID = 620396283277257653L;
     public MissingStreamWriterException(StreamWriterKey key) {
         super(String.format("No stream writer for key {}", key));
     }
