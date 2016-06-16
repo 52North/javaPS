@@ -17,6 +17,8 @@
 package org.n52.javaps.description;
 
 
+import java.net.URI;
+
 import org.n52.javaps.ogc.ows.OwsDomainMetadata;
 import org.n52.javaps.ogc.ows.OwsValueDescription;
 
@@ -31,7 +33,7 @@ public interface LiteralDataDomainBuilder<T extends LiteralDataDomain, B extends
 
     B withDataType(OwsDomainMetadata dataType);
 
-    default B withDataType(String reference, String value) {
+    default B withDataType(URI reference, String value) {
         return withDataType(Strings.emptyToNull(value) == null ? null : new OwsDomainMetadata(reference, value));
     }
 
@@ -41,7 +43,7 @@ public interface LiteralDataDomainBuilder<T extends LiteralDataDomain, B extends
 
     B withUOM(OwsDomainMetadata uom);
 
-    default B withUOM(String reference, String value) {
+    default B withUOM(URI reference, String value) {
         return withUOM(Strings.emptyToNull(value) == null ? null : new OwsDomainMetadata(reference, value));
     }
 

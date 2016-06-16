@@ -29,9 +29,9 @@ import org.n52.javaps.ogc.ows.OwsValueDescription;
 public interface LiteralDataDomain {
     OwsValueDescription getValueDescription();
 
-    OwsDomainMetadata getDataType();
+    Optional<OwsDomainMetadata> getDataType();
 
-    OwsDomainMetadata getUOM();
+    Optional<OwsDomainMetadata> getUOM();
 
     Optional<String> getDefaultValue();
 }

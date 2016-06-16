@@ -18,6 +18,7 @@ package org.n52.javaps.ogc.ows;
 
 import static com.google.common.base.Strings.emptyToNull;
 
+import java.net.URI;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -30,11 +31,11 @@ import com.google.common.base.MoreObjects;
  */
 public class OwsDomainMetadata {
 
-    private final String reference;
+    private final URI reference;
     private final String value;
 
-    public OwsDomainMetadata(String reference, String value) {
-        this.reference = emptyToNull(reference);
+    public OwsDomainMetadata(URI reference, String value) {
+        this.reference = reference;
         this.value = Objects.requireNonNull(emptyToNull(value));
     }
 
@@ -42,7 +43,7 @@ public class OwsDomainMetadata {
         this(null, value);
     }
 
-    public Optional<String> getReference() {
+    public Optional<URI> getReference() {
         return Optional.ofNullable(this.reference);
     }
 

@@ -16,26 +16,25 @@
  */
 package org.n52.javaps.description.impl;
 
-import java.util.Objects;
 import java.util.Optional;
 
-import org.n52.javaps.ogc.ows.OwsDomainMetadata;
-import org.n52.javaps.ogc.ows.OwsValueDescription;
 import org.n52.javaps.description.LiteralDataDomain;
 import org.n52.javaps.description.LiteralDataDomainBuilder;
+import org.n52.javaps.ogc.ows.OwsDomainMetadata;
+import org.n52.javaps.ogc.ows.OwsValueDescription;
 
 
 public class LiteralDataDomainImpl implements LiteralDataDomain {
 
     private final OwsValueDescription valueDescription;
-    private final OwsDomainMetadata dataType;
-    private final OwsDomainMetadata uom;
+    private final Optional<OwsDomainMetadata> dataType;
+    private final Optional<OwsDomainMetadata> uom;
     private final Optional<String> defaultValue;
 
     public LiteralDataDomainImpl(AbstractLiteralDataDomainBuilder<?, ?> builder) {
         this.valueDescription = builder.getValueDescription();
-        this.dataType = Objects.requireNonNull(builder.getDataType());
-        this.uom = builder.getUom();
+        this.dataType = Optional.ofNullable(builder.getDataType());
+        this.uom = Optional.ofNullable(builder.getUom());
         this.defaultValue = Optional.ofNullable(builder.getDefaultValue());
     }
 
@@ -45,12 +44,12 @@ public class LiteralDataDomainImpl implements LiteralDataDomain {
     }
 
     @Override
-    public OwsDomainMetadata getDataType() {
+    public Optional<OwsDomainMetadata> getDataType() {
         return this.dataType;
     }
 
     @Override
-    public OwsDomainMetadata getUOM() {
+    public Optional<OwsDomainMetadata> getUOM() {
         return this.uom;
     }
 
