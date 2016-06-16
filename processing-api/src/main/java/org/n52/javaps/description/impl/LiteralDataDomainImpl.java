@@ -16,6 +16,7 @@
  */
 package org.n52.javaps.description.impl;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import org.n52.iceland.ogc.ows.OwsAllowedValues;
@@ -33,7 +34,7 @@ public class LiteralDataDomainImpl implements LiteralDataDomain {
 
     public LiteralDataDomainImpl(AbstractLiteralDataDomainBuilder<?, ?> builder) {
         this.allowedValues = builder.getAllowedValues();
-        this.dataType = builder.getDataType();
+        this.dataType = Objects.requireNonNull(builder.getDataType());
         this.uom = builder.getUom();
         this.defaultValue = Optional.ofNullable(builder.getDefaultValue());
     }
