@@ -41,13 +41,11 @@ public class ComplexInputDescriptionImpl
     private final Format defaultFormat;
     private final Optional<BigInteger> maximumMegabytes;
 
-    protected ComplexInputDescriptionImpl(
-            AbstractComplexInputDescriptionBuilder<?, ?> builder) {
+    protected ComplexInputDescriptionImpl(AbstractComplexInputDescriptionBuilder<?, ?> builder) {
         super(builder);
         this.defaultFormat = Objects.requireNonNull(builder.getDefaultFormat());
         this.supportedFormats = builder.getSupportedFormats();
-        this.maximumMegabytes = Optional.ofNullable(builder
-                .getMaximumMegabytes());
+        this.maximumMegabytes = Optional.ofNullable(builder.getMaximumMegabytes());
     }
 
     @Override

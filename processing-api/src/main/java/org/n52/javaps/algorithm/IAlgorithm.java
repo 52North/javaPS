@@ -21,8 +21,6 @@ import java.util.List;
 
 import org.n52.iceland.ogc.ows.OwsCodeType;
 import org.n52.javaps.description.ProcessDescription;
-import org.n52.javaps.io.GeneratorFactory;
-import org.n52.javaps.io.ParserFactory;
 import org.n52.javaps.io.data.IData;
 
 /**
@@ -38,17 +36,6 @@ public interface IAlgorithm {
     }
 
     ProcessDescription getDescription();
-
-    /**
-     * Checks if the processDescription complies to the process itself and fits
-     * any schema or other dependencies.
-     *
-     * @param version
-     *                The version of the ProcessDescription to check
-     *
-     * @return true if the ProcessDescription is valid, false otherwise
-     */
-    boolean processDescriptionIsValid(String version);
 
     default Class<?> getInputDataType(String id) {
         return getOutputDataType(new OwsCodeType(id));
@@ -72,9 +59,4 @@ public interface IAlgorithm {
             throw new IllegalStateException("Instance must have an process description");
         }
     }
-
-    void setGeneratorFactory(GeneratorFactory generatorFactory);
-
-    void setParserFactory(ParserFactory parserFactory);
-
 }

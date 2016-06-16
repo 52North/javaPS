@@ -16,6 +16,8 @@
  */
 package org.n52.javaps.description;
 
+import java.util.Objects;
+
 /**
  * TODO JavaDoc
  *
@@ -35,11 +37,16 @@ public interface ProcessInputDescription extends DataDescription {
         throw new UnsupportedOperationException();
     }
 
+    default GroupInputDescription asGroup() {
+        throw new UnsupportedOperationException();
+    }
+
     InputOccurence getOccurence();
 
     <T> T visit(ReturningProcessInputVisitor<T> visitor);
 
     default void visit(ProcessInputVisitor visitor) {
+        Objects.requireNonNull(visitor);
         visit(new ReturningProcessInputVisitor<Void>() {
             @Override
             public Void visit(BoundingBoxInputDescription input) {
@@ -55,6 +62,12 @@ public interface ProcessInputDescription extends DataDescription {
 
             @Override
             public Void visit(LiteralInputDescription input) {
+                visitor.visit(input);
+                return null;
+            }
+
+            @Override
+            public Void visit(GroupInputDescription input) {
                 visitor.visit(input);
                 return null;
             }

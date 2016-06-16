@@ -16,68 +16,14 @@
  */
 package org.n52.javaps.description;
 
-import java.util.Arrays;
-import java.util.stream.Stream;
-
-/**
- * TODO JavaDoc
- *
- * @author Christian Autermann
- */
 public interface ProcessDescriptionBuilder<T extends ProcessDescription, B extends ProcessDescriptionBuilder<T, B>>
-        extends DescriptionBuilder<T, B> {
+        extends DescriptionBuilder<T, B>,
+                ProcessInputDescriptionContainerBuilder<T, B>,
+                ProcessOutputDescriptionContainerBuilder<T, B>{
 
     B statusSupported(boolean statusSupported);
 
     B storeSupported(boolean storeSupported);
-
-    B withInput(ProcessInputDescription input);
-
-    default B withInput(ProcessInputDescriptionBuilder<?, ?> input) {
-        return withInput(input.build());
-    }
-
-    @SuppressWarnings("unchecked")
-    default B withInput(Stream<? extends ProcessInputDescription> input) {
-        input.forEach(this::withInput);
-        return (B) this;
-    }
-
-    @SuppressWarnings("unchecked")
-    default B withInput(Iterable<ProcessInputDescription> inputs) {
-        for (ProcessInputDescription input : inputs) {
-            withInput(input);
-        }
-        return (B) this;
-    }
-
-    default B withInput(ProcessInputDescription... inputs) {
-        return withInput(Arrays.asList(inputs));
-    }
-
-    B withOutput(ProcessOutputDescription output);
-
-    default B withOutput(ProcessOutputDescriptionBuilder<?, ?> output) {
-        return withOutput(output.build());
-    }
-
-    @SuppressWarnings("unchecked")
-     default B withOutput(Stream<ProcessOutputDescription> outputs) {
-        outputs.forEach(this::withOutput);
-        return (B) this;
-    }
-
-    @SuppressWarnings("unchecked")
-    default B withOutput(Iterable<ProcessOutputDescription> outputs) {
-        for (ProcessOutputDescription output : outputs) {
-            withOutput(output);
-        }
-        return (B) this;
-    }
-
-    default B withOutput(ProcessOutputDescription... outputs) {
-        return withOutput(Arrays.asList(outputs));
-    }
 
     B withVersion(String version);
 

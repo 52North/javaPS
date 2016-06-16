@@ -16,32 +16,21 @@
  */
 package org.n52.javaps.io.literal;
 
-import java.io.IOException;
-
 public class LiteralBooleanBinding extends AbstractLiteralDataBinding {
-
     private static final long serialVersionUID = -8476435383089241416L;
-
-    private transient boolean payload;
+    private final boolean payload;
 
     public LiteralBooleanBinding(Boolean payload) {
         this.payload = payload;
     }
 
+    @Override
     public Boolean getPayload() {
         return payload;
     }
 
+    @Override
     public Class<Boolean> getSupportedClass() {
         return Boolean.class;
     }
-
-    private synchronized void writeObject(java.io.ObjectOutputStream oos) throws IOException {
-        oos.writeObject(Boolean.toString(payload));
-    }
-
-    private synchronized void readObject(java.io.ObjectInputStream oos) throws IOException, ClassNotFoundException {
-        payload = Boolean.parseBoolean((String) oos.readObject());
-    }
-
 }

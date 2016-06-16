@@ -16,29 +16,14 @@
  */
 package org.n52.javaps.description;
 
-import java.util.Collection;
-import java.util.Set;
-
-import org.n52.iceland.ogc.ows.OwsCodeType;
-
 /**
  * TODO JavaDoc
  *
  * @author Christian Autermann
  */
-public interface ProcessDescription extends Description {
-
-    ProcessInputDescription getInput(OwsCodeType id);
-
-    Collection<? extends ProcessInputDescription> getInputDescriptions();
-
-    Set<OwsCodeType> getInputs();
-
-    ProcessOutputDescription getOutput(OwsCodeType id);
-
-    Collection<? extends ProcessOutputDescription> getOutputDescriptions();
-
-    Set<OwsCodeType> getOutputs();
+public interface ProcessDescription extends Description,
+                                            ProcessInputDescriptionContainer,
+                                            ProcessOutputDescriptionContainer {
 
     String getVersion();
 

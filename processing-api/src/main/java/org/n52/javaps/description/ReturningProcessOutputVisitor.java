@@ -28,4 +28,6 @@ public interface ReturningProcessOutputVisitor<T> {
 
     T visit(LiteralOutputDescription output);
 
+    T visit(GroupOutputDescription output);
+
 }

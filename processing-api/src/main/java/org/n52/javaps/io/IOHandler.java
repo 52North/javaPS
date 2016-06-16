@@ -16,34 +16,28 @@
  */
 package org.n52.javaps.io;
 
-import java.util.List;
+import java.util.Set;
+
+import org.n52.javaps.description.Format;
+import org.n52.javaps.io.data.IComplexData;
 
 public interface IOHandler {
 
-    public static final String DEFAULT_ENCODING = "UTF-8";
+    String DEFAULT_ENCODING = "UTF-8";
 
-    public static final String ENCODING_BASE64 = "base64";
+    String ENCODING_BASE64 = "base64";
 
-    // public static final String DEFAULT_MIMETYPE = "text/xml";
+    // String DEFAULT_MIMETYPE = "text/xml";
 
-    public static final String MIME_TYPE_ZIPPED_SHP = "application/x-zipped-shp";
+    String MIME_TYPE_ZIPPED_SHP = "application/x-zipped-shp";
 
-    public boolean isSupportedSchema(String schema);
 
-    public boolean isSupportedFormat(String format);
+    boolean isSupportedFormat(Format format);
 
-    public boolean isSupportedEncoding(String encoding);
+    boolean isSupportedBinding(Class<? extends IComplexData> binding);
 
-    public boolean isSupportedDataBinding(Class<?> clazz);
+    Set<Format> getSupportedFormats();
 
-    public String[] getSupportedSchemas();
-
-    public String[] getSupportedFormats();
-
-    public String[] getSupportedEncodings();
-
-    public List<Object> getSupportedFullFormats();
-
-    public Class<?>[] getSupportedDataBindings();
+    Set<Class<? extends IComplexData>> getSupportedBindings();
 
 }

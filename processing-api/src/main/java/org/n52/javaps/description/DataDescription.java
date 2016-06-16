@@ -37,4 +37,8 @@ public interface DataDescription extends Description {
     default boolean isLiteral() {
         return false;
     }
+
+    default boolean isGroup() {
+        return false;
+    }
 }

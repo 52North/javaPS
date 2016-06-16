@@ -16,6 +16,9 @@
  */
 package org.n52.javaps.io.data;
 
-public interface IComplexData extends IData {
-    void dispose();
+import org.n52.iceland.lifecycle.Destroyable;
+
+public interface IComplexData extends IData, Destroyable {
+    @Override
+    default void destroy() { }
 }

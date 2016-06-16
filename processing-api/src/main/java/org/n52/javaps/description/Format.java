@@ -19,9 +19,11 @@ package org.n52.javaps.description;
 import static com.google.common.base.Strings.emptyToNull;
 import static com.google.common.base.Strings.nullToEmpty;
 
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import com.google.common.base.MoreObjects;
@@ -31,7 +33,24 @@ import com.google.common.base.MoreObjects;
  *
  * @author Christian Autermann
  */
-public class Format {
+public class Format implements Comparable<Format> {
+    private static final Comparator<Format> COMPARATOR;
+
+
+
+    static {
+        Function<Optional<String>, String> elseNull = o -> o.orElse(null);
+
+        Function<Format, String> mimeType = ((Function<Format, Optional<String>>) Format::getMimeType).andThen(elseNull);
+        Function<Format, String> schema = ((Function<Format, Optional<String>>) Format::getSchema).andThen(elseNull);
+        Function<Format, String> encoding = ((Function<Format, Optional<String>>) Format::getEncoding).andThen(elseNull);
+
+
+        COMPARATOR = Comparator.nullsLast(
+                Comparator.comparing(mimeType, Comparator.nullsFirst(Comparator.naturalOrder())))
+                .thenComparing(Comparator.comparing(schema, Comparator.nullsFirst(Comparator.naturalOrder())))
+                .thenComparing(Comparator.comparing(encoding, Comparator.nullsFirst(Comparator.naturalOrder())));
+    }
 
     private final Optional<String> mimeType;
     private final Optional<String> encoding;
@@ -211,11 +230,22 @@ public class Format {
         return this::hasMimeType;
     }
 
+    public boolean isCompatible(Format other) {
+        return (!this.hasEncoding() || this.hasEncoding(other)) &&
+               (!this.hasSchema() || this.hasSchema(other)) &&
+               (!this.hasMimeType() || this.hasMimeType(other));
+    }
+
     public void setTo(Consumer<String> encoding,
                       Consumer<String> mimeType,
                       Consumer<String> schema) {
         getEncoding().ifPresent(encoding);
         getMimeType().ifPresent(mimeType);
         getSchema().ifPresent(schema);
+    }
+
+    @Override
+    public int compareTo(Format that) {
+        return COMPARATOR.compare(this, that);
     }
 }

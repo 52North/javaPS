@@ -19,8 +19,10 @@ package org.n52.javaps.io;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.n52.javaps.commons.WPSConfig;
-import org.n52.javaps.io.data.IData;
+import org.apache.commons.codec.binary.Base64InputStream;
+
+import org.n52.javaps.description.Format;
+import org.n52.javaps.io.data.IComplexData;
 
 /**
  * Basic interface for all Generators.
@@ -29,45 +31,10 @@ import org.n52.javaps.io.data.IData;
  *
  */
 public interface IGenerator extends IOHandler {
+    InputStream generateStream(IComplexData data, Format format) throws IOException;
 
-    /**
-     *
-     * @param data
-     *            The data
-     * @param mimeType
-     *            The mime type
-     * @param schema
-     *            the schema
-     * @return Inputstream holding the data
-     *
-     *         generates final output data produced by an IAlgorithm and returns
-     *         an InputStream for subsequent access.
-     * @throws IOException
-     *             If the stream cannot be generated
-     */
-    public InputStream generateStream(IData data,
-            String mimeType,
-            String schema) throws IOException;
-
-    /**
-     *
-     * @param data
-     *            The data
-     * @param mimeType
-     *            The mime type
-     * @param schema
-     *            the schema
-     * @return Inputstream holding the data encoded in base64
-     *
-     *         generates final output data produced by an IAlgorithm, encodes it
-     *         in Base64 and returns an InputStream for subsequent access.
-     * @throws IOException
-     *             If the stream cannot be generated
-     */
-    public InputStream generateBase64Stream(IData data,
-            String mimeType,
-            String schema) throws IOException;
-
-    public void init(WPSConfig wpsConfig);
-
+    default InputStream generateBase64Stream(IComplexData data, Format format) throws IOException {
+        InputStream stream = generateStream(data, format);
+        return new Base64InputStream(stream, true);
+    }
 }

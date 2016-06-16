@@ -47,8 +47,8 @@ public class ProcessDescriptionImpl extends AbstractDescription implements
             AbstractProcessDescriptionBuilder<?, ?> builder) {
         super(builder);
         this.version = Objects.requireNonNull(builder.getVersion());
-        this.inputs = builder.getInputs().build();
-        this.outputs = builder.getOutputs().build();
+        this.inputs = builder.getInputs();
+        this.outputs = builder.getOutputs();
         this.storeSupported = builder.isStoreSupported();
         this.statusSupported = builder.isStatusSupported();
     }
@@ -99,11 +99,10 @@ public class ProcessDescriptionImpl extends AbstractDescription implements
     }
 
     public static ProcessDescriptionBuilder<?, ?> builder() {
-        return new AbstractProcessDescriptionBuilderImpl();
+        return new Builder();
     }
 
-    private static class AbstractProcessDescriptionBuilderImpl
-            extends AbstractProcessDescriptionBuilder<ProcessDescriptionImpl, AbstractProcessDescriptionBuilderImpl> {
+    private static class Builder extends AbstractProcessDescriptionBuilder<ProcessDescriptionImpl, Builder> {
         @Override
         public ProcessDescriptionImpl build() {
             return new ProcessDescriptionImpl(this);

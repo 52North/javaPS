@@ -17,20 +17,27 @@
 package org.n52.javaps.algorithm;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.context.ApplicationContext;
 
 import org.n52.iceland.ogc.ows.OwsCodeType;
-import org.n52.javaps.commons.WPSConfig;
+import org.n52.iceland.utils.Optionals;
+import org.n52.javaps.algorithm.annotation.Algorithm;
+import org.n52.javaps.algorithm.annotation.AnnotatedAlgorithm;
 import org.n52.javaps.description.ProcessDescription;
-import org.n52.javaps.description.annotation.Process;
-import org.n52.javaps.io.GeneratorFactory;
-import org.n52.javaps.io.ParserFactory;
+import org.n52.javaps.io.GeneratorRepository;
+import org.n52.javaps.io.ParserRepository;
+
 
 /**
  * A static repository to retrieve the available algorithms.
@@ -38,96 +45,115 @@ import org.n52.javaps.io.ParserFactory;
  * @author foerster
  *
  */
-public class LocalAlgorithmRepository implements IAlgorithmRepository {
+public class LocalAlgorithmRepository implements AlgorithmRepository {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LocalAlgorithmRepository.class);
-    private final Map<OwsCodeType, ProcessDescription> processDescriptionMap = new HashMap<>();
-    private final Map<OwsCodeType, IAlgorithm> algorithmMap = new HashMap<>();
-    private GeneratorFactory generatorFactory;
-    private ParserFactory parserFactory;
+    private static final Logger LOG = LoggerFactory.getLogger(LocalAlgorithmRepository.class);
+
+    private final Map<OwsCodeType, ProcessDescription> descriptions = new HashMap<>();
+    private final Map<OwsCodeType, Class<?>> algorithmClasses = new HashMap<>();
+    private final Map<OwsCodeType, IAlgorithm> algorithmInstances = new HashMap<>();
+    private final ParserRepository parserRepository;
+    private final GeneratorRepository generatorRepository;
+    private final AutowireCapableBeanFactory beanFactory;
+
+    @Inject
+    public LocalAlgorithmRepository(ParserRepository parserRepository,
+                                    GeneratorRepository generatorRepository,
+                                    ApplicationContext applicationContext) {
+        this.parserRepository = Objects.requireNonNull(parserRepository);
+        this.generatorRepository = Objects.requireNonNull(generatorRepository);
+        this.beanFactory = applicationContext.getAutowireCapableBeanFactory();
+    }
+
 
     @Override
-    public IAlgorithm getAlgorithm(OwsCodeType className) {
-        if (getAlgorithmNames().contains(className)) {
-            return algorithmMap.get(className);
-        }
-        return null;
+    public Optional<IAlgorithm> getAlgorithm(OwsCodeType id) {
+        return Optionals.or(Optional.ofNullable(this.algorithmInstances.get(id)),
+                            Optional.ofNullable(this.algorithmClasses.get(id))
+                                    .map(this::mayInstantiate));
+    }
+
+    @Override
+    public Optional<ProcessDescription> getProcessDescription(OwsCodeType id) {
+        return Optional.ofNullable(this.descriptions.get(id));
     }
 
     @Override
     public Set<OwsCodeType> getAlgorithmNames() {
-        return Stream.concat(processDescriptionMap.keySet().stream(), algorithmMap.keySet().stream()).collect(Collectors.toSet());
+        return new HashSet<>(this.descriptions.keySet());
     }
 
     @Override
-    public boolean containsAlgorithm(OwsCodeType className) {
-        return getAlgorithmNames().contains(className);
+    public boolean containsAlgorithm(OwsCodeType id) {
+        return this.descriptions.containsKey(id);
     }
 
-    private IAlgorithm loadAlgorithm(String algorithmClassName) throws Exception {
-        Class<?> algorithmClass = LocalAlgorithmRepository.class.getClassLoader().loadClass(algorithmClassName);
-        IAlgorithm algorithm = null;
-        if (IAlgorithm.class.isAssignableFrom(algorithmClass)) {
-            algorithm = IAlgorithm.class.cast(algorithmClass.newInstance());
-        } else if (algorithmClass.isAnnotationPresent(Process.class)) {
-            // we have an annotated algorithm that doesn't implement IAlgorithm
-            // wrap it in a proxy class
-            algorithm = new AbstractAnnotatedAlgorithm.Proxy(algorithmClass);
-        } else {
-            throw new Exception("Could not load algorithm " + algorithmClassName + " does not implement IAlgorithm or have a Algorithm annotation.");
-        }
 
-        algorithm.setGeneratorFactory(generatorFactory);
-        algorithm.setParserFactory(parserFactory);
-
-        boolean isNoProcessDescriptionValid = false;
-
-        for (String supportedVersion : WPSConfig.SUPPORTED_VERSIONS) {
-            isNoProcessDescriptionValid = isNoProcessDescriptionValid && !algorithm.processDescriptionIsValid(supportedVersion);
-        }
-
-        if (isNoProcessDescriptionValid) {
-            LOGGER.warn("Algorithm description is not valid: " + algorithmClassName);// TODO
-                                                                                     // add
-                                                                                     // version
-                                                                                     // to
-                                                                                     // exception/log
-            throw new Exception("Could not load algorithm " + algorithmClassName + ". ProcessDescription Not Valid.");
-        }
-
-        return algorithm;
-    }
-
-    public boolean addAlgorithm(Object processID) {
-        if (!(processID instanceof String)) {
+    public boolean addAlgorithm(String className) {
+        Objects.requireNonNull(className);
+        try {
+            Class<?> algorithmClass = getClass().getClassLoader().loadClass(className);
+            return addAlgorithm(algorithmClass);
+        } catch (ClassNotFoundException ex) {
+            LOG.error("Could not load algorithm class " + className, ex);
             return false;
         }
-        String algorithmClassName = (String) processID;
+    }
 
+    public boolean addAlgorithm(Class<?> clazz) {
+        Objects.requireNonNull(clazz);
+
+        IAlgorithm instance;
         try {
+            instance = instantiate(clazz);
+        } catch (InstantiationException | IllegalAccessException | ClassCastException ex) {
+            LOG.info("Could not instantiate class {}", clazz);
+            return false;
+        }
+        ProcessDescription description = instance.getDescription();
+        OwsCodeType id = description.getId();
 
-            IAlgorithm algorithm = loadAlgorithm(algorithmClassName);
-            OwsCodeType id = new OwsCodeType(algorithmClassName);
-            processDescriptionMap.put(id, algorithm.getDescription());
-            algorithmMap.put(id, algorithm);
-            LOGGER.info("Algorithm class registered: " + algorithmClassName);
-
-            return true;
-        } catch (Exception e) {
-            LOGGER.error("Exception while trying to add algorithm {}", algorithmClassName);
-            LOGGER.error(e.getMessage());
-
+        if (this.descriptions.put(id, description) != null) {
+            LOG.warn("Duplicate algorithm identifier: {}", id);
         }
 
-        return false;
-
+        this.algorithmClasses.put(id, clazz);
+        LOG.info("Algorithm class {} with id {} registered", clazz, id);
+        return true;
     }
 
-    @Override
-    public ProcessDescription getProcessDescription(OwsCodeType processID) {
-        if (getAlgorithmNames().contains(processID)) {
-            return processDescriptionMap.get(processID);
+     public boolean addAlgorithm(IAlgorithm instance) {
+         Objects.requireNonNull(instance);
+
+        ProcessDescription description = instance.getDescription();
+        OwsCodeType id = description.getId();
+
+        if (this.descriptions.put(id, description) != null) {
+            LOG.warn("Duplicate algorithm identifier: {}", id);
         }
-        return null;
+
+        this.algorithmInstances.put(id, instance);
+        LOG.info("Algorithm {} with id {} registered", instance, id);
+        return true;
     }
+
+    private IAlgorithm mayInstantiate(Class<?> clazz) {
+        try {
+            return instantiate(clazz);
+        } catch (InstantiationException | IllegalAccessException ex) {
+            return null;
+        }
+    }
+
+    private IAlgorithm instantiate(Class<?> clazz)
+            throws InstantiationException, IllegalAccessException,
+                   ClassCastException {
+        IAlgorithm instance = (IAlgorithm) beanFactory.createBean(clazz);
+        if (clazz.isAnnotationPresent(Algorithm.class) && !(instance instanceof AnnotatedAlgorithm)) {
+            return new AnnotatedAlgorithm(parserRepository, generatorRepository, instance);
+        } else {
+            return instance;
+        }
+    }
+
 }

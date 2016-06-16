@@ -22,9 +22,6 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  *
  * @author Benjamin Pross, Daniel Nüst
@@ -35,8 +32,6 @@ public class WPSConfig implements Serializable {
     private static final long serialVersionUID = 3198223084611936675L;
 
     private static transient WPSConfig wpsConfig;
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(WPSConfig.class);
 
     // constants for the Property change event names
     public static final String WPSCONFIG_PROPERTY_EVENT_NAME = "WPSConfigUpdate";

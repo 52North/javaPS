@@ -19,11 +19,10 @@ package org.n52.javaps.io.literal;
 import org.n52.javaps.io.data.ILiteralData;
 
 public abstract class AbstractLiteralDataBinding implements ILiteralData {
-
+    private static final long serialVersionUID = -7088293056427203440L;
     private String unitOfMeasurement;
 
-    private static final long serialVersionUID = -7088293056427203440L;
-
+    @Override
     public String getUnitOfMeasurement() {
         return unitOfMeasurement;
     }

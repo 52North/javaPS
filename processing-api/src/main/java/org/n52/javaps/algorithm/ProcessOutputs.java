@@ -19,9 +19,6 @@ package org.n52.javaps.algorithm;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.n52.iceland.ogc.ows.OwsCodeType;
 import org.n52.javaps.io.data.IData;
 
@@ -30,8 +27,7 @@ import org.n52.javaps.io.data.IData;
  * @author Christian Autermann
  */
 public class ProcessOutputs extends HashMap<OwsCodeType, IData> {
-
-    private static final Logger log = LoggerFactory.getLogger(ProcessOutputs.class);
+    private static final long serialVersionUID = -3966745236341552277L;
 
     public ProcessOutputs() {
     }

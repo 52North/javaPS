@@ -17,11 +17,11 @@
 package org.n52.javaps.io.data;
 
 public interface IBBOXData extends IData {
-    public String getCRS();
+    String getCRS();
 
-    public int getDimension();
+    int getDimension();
 
-    public double[] getLowerCorner();
+    double[] getLowerCorner();
 
-    public double[] getUpperCorner();
+    double[] getUpperCorner();
 }

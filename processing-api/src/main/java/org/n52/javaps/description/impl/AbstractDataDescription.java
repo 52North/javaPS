@@ -19,7 +19,6 @@ package org.n52.javaps.description.impl;
 import java.util.Objects;
 
 import org.n52.javaps.description.DataDescription;
-import org.n52.javaps.description.DescriptionBuilder;
 import org.n52.javaps.io.data.IData;
 
 /**

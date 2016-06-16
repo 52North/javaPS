@@ -18,6 +18,7 @@ package org.n52.javaps.description.impl;
 
 import static com.google.common.base.Strings.emptyToNull;
 
+import java.util.Map;
 import java.util.Objects;
 
 import org.n52.iceland.ogc.ows.OwsCodeType;
@@ -34,7 +35,8 @@ import com.google.common.collect.ImmutableMap;
  * @author Christian Autermann
  */
 public abstract class AbstractProcessDescriptionBuilder<T extends ProcessDescription, B extends ProcessDescriptionBuilder<T, B>>
-        extends AbstractDescriptionBuilder<T, B> implements ProcessDescriptionBuilder<T, B> {
+        extends AbstractDescriptionBuilder<T, B>
+        implements ProcessDescriptionBuilder<T, B> {
 
     private final ImmutableMap.Builder<OwsCodeType, ProcessInputDescription> inputs = ImmutableMap.builder();
     private final ImmutableMap.Builder<OwsCodeType, ProcessOutputDescription> outputs = ImmutableMap.builder();
@@ -81,12 +83,12 @@ public abstract class AbstractProcessDescriptionBuilder<T extends ProcessDescrip
         return (B) this;
     }
 
-    ImmutableMap.Builder<OwsCodeType, ProcessInputDescription> getInputs() {
-        return this.inputs;
+    Map<OwsCodeType, ProcessInputDescription> getInputs() {
+        return this.inputs.build();
     }
 
-    ImmutableMap.Builder<OwsCodeType, ProcessOutputDescription> getOutputs() {
-        return this.outputs;
+    Map<OwsCodeType, ProcessOutputDescription> getOutputs() {
+        return this.outputs.build();
     }
 
     boolean isStoreSupported() {

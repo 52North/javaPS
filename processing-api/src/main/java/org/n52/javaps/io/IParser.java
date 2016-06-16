@@ -18,8 +18,10 @@ package org.n52.javaps.io;
 
 import java.io.InputStream;
 
-import org.n52.javaps.commons.WPSConfig;
-import org.n52.javaps.io.data.IData;
+import org.apache.commons.codec.binary.Base64InputStream;
+
+import org.n52.javaps.description.Format;
+import org.n52.javaps.io.data.IComplexData;
 
 /**
  * @author Matthias Mueller, TU Dresden
@@ -27,13 +29,10 @@ import org.n52.javaps.io.data.IData;
  */
 public interface IParser extends IOHandler {
 
-    IData parse(InputStream input,
-            String mimeType,
-            String schema);
+    IComplexData parse(InputStream input, Format format);
 
-    IData parseBase64(InputStream input,
-            String mimeType,
-            String schema);
+    default IComplexData parseBase64(InputStream input, Format format) {
+        return parse(new Base64InputStream(input), format);
+    }
 
-    void init(WPSConfig wpsConfig);
 }

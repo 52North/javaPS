@@ -28,4 +28,6 @@ public interface ReturningProcessInputVisitor<T> {
 
     T visit(LiteralInputDescription input);
 
+    T visit(GroupInputDescription input);
+
 }

@@ -35,25 +35,35 @@ public interface ProcessOutputDescription extends DataDescription {
         throw new UnsupportedOperationException();
     }
 
+    default GroupOutputDescription asGroup() {
+        throw new UnsupportedOperationException();
+    }
+
     <T> T visit(ReturningProcessOutputVisitor<T> visitor);
 
     default void visit(ProcessOutputVisitor visitor) {
         visit(new ReturningProcessOutputVisitor<Void>() {
             @Override
-            public Void visit(BoundingBoxOutputDescription input) {
-                visitor.visit(input);
+            public Void visit(BoundingBoxOutputDescription output) {
+                visitor.visit(output);
                 return null;
             }
 
             @Override
-            public Void visit(ComplexOutputDescription input) {
-                visitor.visit(input);
+            public Void visit(ComplexOutputDescription output) {
+                visitor.visit(output);
                 return null;
             }
 
             @Override
-            public Void visit(LiteralOutputDescription input) {
-                visitor.visit(input);
+            public Void visit(LiteralOutputDescription output) {
+                visitor.visit(output);
+                return null;
+            }
+
+            @Override
+            public Void visit(GroupOutputDescription output) {
+                visitor.visit(output);
                 return null;
             }
         });

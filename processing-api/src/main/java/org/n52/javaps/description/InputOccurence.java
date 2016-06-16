@@ -59,4 +59,10 @@ public class InputOccurence {
                this.max.compareTo(occurence) <= 0;
     }
 
+    @Override
+    public String toString() {
+        return String.format("[%d, %d]", this.min, this.max);
+    }
+
+
 }

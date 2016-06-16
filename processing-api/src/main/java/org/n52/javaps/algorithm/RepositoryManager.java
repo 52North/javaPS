@@ -16,18 +16,25 @@
  */
 package org.n52.javaps.algorithm;
 
+import static java.util.stream.Collectors.toList;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.n52.iceland.lifecycle.Constructable;
+import org.n52.iceland.lifecycle.Destroyable;
 import org.n52.iceland.ogc.ows.OwsCodeType;
 import org.n52.javaps.description.ProcessDescription;
 
@@ -35,24 +42,37 @@ import org.n52.javaps.description.ProcessDescription;
  * @author Bastian Schaeffer, University of Muenster
  *
  */
-public class RepositoryManager implements Constructable {
-
-    private static RepositoryManager instance;
+public class RepositoryManager implements Constructable, Destroyable {
 
     private static final Logger LOG = LoggerFactory.getLogger(RepositoryManager.class);
     private final Set<OwsCodeType> globalProcessIDs = Collections.synchronizedSet(new HashSet<>());
-    private Map<String, IAlgorithmRepository> repositories;
-    private UpdateThread updateThread;
+    private final Timer timer = new Timer("repository-manager", true);
+    private final long updateInterval;
+    private Map<String, AlgorithmRepository> repositories;
+
+    public RepositoryManager(long updateInterval) {
+        this.updateInterval = updateInterval;
+    }
+
 
     @Override
     public void init() {
-
         // clear registry
-        globalProcessIDs.clear();
+        this.globalProcessIDs.clear();
 
         // initialize all Repositories
         loadAllRepositories();
 
+        this.timer.scheduleAtFixedRate(new ReloadTask(), this.updateInterval, this.updateInterval);
+
+
+    }
+
+    @Override
+    public void destroy() {
+        this.timer.cancel();
+        LOG.debug("Shutting down all repositories..");
+        getRepositories().forEach(AlgorithmRepository::destroy);
     }
 
     private List<String> getRepositoryNames() {
@@ -64,7 +84,7 @@ public class RepositoryManager implements Constructable {
         return repositoryNames;
     }
 
-    private void loadAllRepositories() {
+    private synchronized void loadAllRepositories() {
         repositories = new HashMap<>();
         LOG.debug("Loading all repositories: {} (doing a gc beforehand...)", repositories);
 
@@ -82,11 +102,11 @@ public class RepositoryManager implements Constructable {
         // }
 
         try {
-            IAlgorithmRepository algorithmRepository = null;
+            AlgorithmRepository algorithmRepository = null;
 
             Class<?> repositoryClass = RepositoryManager.class.getClassLoader().loadClass(repositoryClassName);
 
-            algorithmRepository = (IAlgorithmRepository) repositoryClass.newInstance();
+            algorithmRepository = (AlgorithmRepository) repositoryClass.newInstance();
 
             algorithmRepository.init();
 
@@ -97,20 +117,8 @@ public class RepositoryManager implements Constructable {
         }
     }
 
-    public static RepositoryManager getInstance() {
-        if (instance == null) {
-            instance = new RepositoryManager();
-        }
-        return instance;
-    }
-
-    /**
-     * Allows to reInitialize the RepositoryManager... This should not be called
-     * to often.
-     *
-     */
-    public static void reInitialize() {
-        instance = new RepositoryManager();
+    private Stream<AlgorithmRepository> getRepositories() {
+        return getRepositoryNames().stream().map(repositories::get);
     }
 
     /**
@@ -125,19 +133,12 @@ public class RepositoryManager implements Constructable {
      * Methods looks for Algorithm in all Repositories. The first match is
      * returned. If no match could be found, null is returned
      *
-     * @param identifier
+     * @param id
      *            The name of the algorithm class
      * @return IAlgorithm or null an instance of the algorithm class
      */
-    public IAlgorithm getAlgorithm(OwsCodeType identifier) {
-
-        for (String repositoryClassName : getRepositoryNames()) {
-            IAlgorithmRepository repository = repositories.get(repositoryClassName);
-            if (repository.containsAlgorithm(identifier)) {
-                return repository.getAlgorithm(identifier);
-            }
-        }
-        return null;
+    public IAlgorithm getAlgorithm(OwsCodeType id) {
+        return getRepositoryForAlgorithm(id).flatMap(r -> r.getAlgorithm(id)).orElse(null);
     }
 
     /**
@@ -145,29 +146,15 @@ public class RepositoryManager implements Constructable {
      * @return allAlgorithms
      */
     public List<OwsCodeType> getAlgorithms() {
-        List<OwsCodeType> allAlgorithmNamesCollection = new ArrayList<>();
-        for (String repositoryClassName : getRepositoryNames()) {
-            IAlgorithmRepository repository = repositories.get(repositoryClassName);
-            allAlgorithmNamesCollection.addAll(repository.getAlgorithmNames());
-        }
-        return allAlgorithmNamesCollection;
-
+        return getRepositories().flatMap(r -> r.getAlgorithmNames().stream()).collect(toList());
     }
 
     public boolean containsAlgorithm(OwsCodeType id) {
-        return getRepositoryNames().stream()
-                .map((repoId) -> repositories.get(repoId))
-                .anyMatch((repo) -> (repo.containsAlgorithm(id)));
+        return getRepositoryForAlgorithm(id).isPresent();
     }
 
-    public IAlgorithmRepository getRepositoryForAlgorithm(OwsCodeType algorithmName) {
-        for (String repositoryClassName : getRepositoryNames()) {
-            IAlgorithmRepository repository = repositories.get(repositoryClassName);
-            if (repository.containsAlgorithm(algorithmName)) {
-                return repository;
-            }
-        }
-        return null;
+    public Optional<AlgorithmRepository> getRepositoryForAlgorithm(OwsCodeType id) {
+        return getRepositories().filter(repo -> repo.containsAlgorithm(id)).findFirst();
     }
 
     public Class<?> getInputDataTypeForAlgorithm(OwsCodeType process, OwsCodeType input) {
@@ -180,7 +167,7 @@ public class RepositoryManager implements Constructable {
 
     }
 
-    public boolean registerAlgorithm(OwsCodeType id, IAlgorithmRepository repository) {
+    public boolean registerAlgorithm(OwsCodeType id, AlgorithmRepository repository) {
         return globalProcessIDs.add(id);
     }
 
@@ -188,9 +175,9 @@ public class RepositoryManager implements Constructable {
         return globalProcessIDs.remove(id);
     }
 
-    public IAlgorithmRepository getAlgorithmRepository(String name) {
+    public AlgorithmRepository getAlgorithmRepository(String name) {
         for (String repositoryClassName : getRepositoryNames()) {
-            IAlgorithmRepository repository = repositories.get(repositoryClassName);
+            AlgorithmRepository repository = repositories.get(repositoryClassName);
             if (repository.getClass().getName().equals(name)) {
                 return repository;
             }
@@ -198,9 +185,9 @@ public class RepositoryManager implements Constructable {
         return null;
     }
 
-    public IAlgorithmRepository getRepositoryForClassName(String className) {
+    public AlgorithmRepository getRepositoryForClassName(String className) {
         for (String repositoryClassName : getRepositoryNames()) {
-            IAlgorithmRepository repository = repositories.get(repositoryClassName);
+            AlgorithmRepository repository = repositories.get(repositoryClassName);
             if (repository.getClass().getName().equals(className)) {
                 return repository;
             }
@@ -208,70 +195,20 @@ public class RepositoryManager implements Constructable {
         return null;
     }
 
-    public ProcessDescription getProcessDescription(String processClassName) {
-        for (String repositoryClassName : getRepositoryNames()) {
-            IAlgorithmRepository repository = repositories.get(repositoryClassName);
-            if (repository.containsAlgorithm(processClassName)) {
-                return repository.getProcessDescription(processClassName);
-            }
-        }
-        return null;
+    public Optional<ProcessDescription> getProcessDescription(String id) {
+        return getProcessDescription(new OwsCodeType(id));
     }
 
-    private static class UpdateThread extends Thread {
+    public Optional<ProcessDescription> getProcessDescription(OwsCodeType id) {
+        return getRepositoryForAlgorithm(id).flatMap(r -> r.getProcessDescription(id));
+    }
 
-        private final long interval;
-
-        private boolean firstrun = true;
-
-        UpdateThread(long interval) {
-            this.interval = interval;
-        }
-
+    private class ReloadTask extends TimerTask {
         @Override
         public void run() {
-            LOG.debug("UpdateThread started");
-
-            try {
-                // never terminate the run method
-                while (true) {
-                    // do not update on first run!
-                    if (!firstrun) {
-                        LOG.info("Reloading repositories - this might take a while ...");
-                        long timestamp = System.currentTimeMillis();
-                        RepositoryManager.getInstance().reloadRepositories();
-                        LOG.info("Repositories reloaded - going to sleep. Took {} seconds.", (System.currentTimeMillis() - timestamp) / 1000);
-                    } else {
-                        firstrun = false;
-                    }
-
-                    // sleep for a given INTERVAL
-                    Thread.sleep(interval);
-                }
-            } catch (InterruptedException e) {
-                LOG.debug("Interrupt received - Terminating the UpdateThread.");
-            }
+            LOG.info("Reloading repositories - this might take a while ...");
+            reloadRepositories();
         }
 
     }
-
-    // shut down the update thread
-    @Override
-    protected void finalize() throws Throwable {
-        try {
-            if (updateThread != null) {
-                updateThread.interrupt();
-            }
-        } finally {
-            super.finalize();
-        }
-    }
-
-    public void destroy() {
-        LOG.debug("Shutting down all repositories..");
-        getRepositoryNames().stream()
-                .map(name -> repositories.get(name))
-                .forEach(repo -> repo.destroy());
-    }
-
 }

@@ -18,6 +18,7 @@ package org.n52.javaps.algorithm;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.Set;
 
@@ -27,10 +28,9 @@ import org.slf4j.LoggerFactory;
 import org.n52.iceland.ogc.ows.OwsCodeType;
 import org.n52.javaps.description.ProcessDescription;
 
-public class ServiceLoaderAlgorithmRepository implements IAlgorithmRepository {
+public class ServiceLoaderAlgorithmRepository implements AlgorithmRepository {
 
-    private static final Logger LOG = LoggerFactory
-            .getLogger(ServiceLoaderAlgorithmRepository.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ServiceLoaderAlgorithmRepository.class);
     private final Map<OwsCodeType, Class<? extends IAlgorithm>> currentAlgorithms;
 
     public ServiceLoaderAlgorithmRepository() {
@@ -43,8 +43,7 @@ public class ServiceLoaderAlgorithmRepository implements IAlgorithmRepository {
 
         for (IAlgorithm ia : loader) {
             LOG.debug("Adding algorithm with identifier {} and class {}", ia
-                    .getDescription().getId(), ia.getClass()
-                    .getCanonicalName());
+                    .getDescription().getId(), ia.getClass().getCanonicalName());
             result.put(ia.getDescription().getId(), ia.getClass());
         }
 
@@ -57,26 +56,22 @@ public class ServiceLoaderAlgorithmRepository implements IAlgorithmRepository {
     }
 
     @Override
-    public IAlgorithm getAlgorithm(OwsCodeType processID) {
+    public Optional<IAlgorithm> getAlgorithm(OwsCodeType processID) {
         Class<? extends IAlgorithm> clazz = this.currentAlgorithms
                 .get(processID);
         if (clazz != null) {
             try {
-                return clazz.newInstance();
+                return Optional.of(clazz.newInstance());
             } catch (InstantiationException | IllegalAccessException e) {
                 LOG.warn(e.getMessage(), e);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override
-    public ProcessDescription getProcessDescription(OwsCodeType processID) {
-        IAlgorithm algo = getAlgorithm(processID);
-        if (algo != null) {
-            return algo.getDescription();
-        }
-        return null;
+    public Optional<ProcessDescription> getProcessDescription(OwsCodeType processID) {
+        return getAlgorithm(processID).map(IAlgorithm::getDescription);
     }
 
     @Override

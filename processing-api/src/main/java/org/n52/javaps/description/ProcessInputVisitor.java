@@ -28,4 +28,6 @@ public interface ProcessInputVisitor {
 
     void visit(LiteralInputDescription input);
 
+    void visit(GroupInputDescription input);
+
 }
