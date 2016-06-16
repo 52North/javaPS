@@ -34,23 +34,10 @@ import com.google.common.base.MoreObjects;
  * @author Christian Autermann
  */
 public class Format implements Comparable<Format> {
-    private static final Comparator<Format> COMPARATOR;
-
-
-
-    static {
-        Function<Optional<String>, String> elseNull = o -> o.orElse(null);
-
-        Function<Format, String> mimeType = ((Function<Format, Optional<String>>) Format::getMimeType).andThen(elseNull);
-        Function<Format, String> schema = ((Function<Format, Optional<String>>) Format::getSchema).andThen(elseNull);
-        Function<Format, String> encoding = ((Function<Format, Optional<String>>) Format::getEncoding).andThen(elseNull);
-
-
-        COMPARATOR = Comparator.nullsLast(
-                Comparator.comparing(mimeType, Comparator.nullsFirst(Comparator.naturalOrder())))
-                .thenComparing(Comparator.comparing(schema, Comparator.nullsFirst(Comparator.naturalOrder())))
-                .thenComparing(Comparator.comparing(encoding, Comparator.nullsFirst(Comparator.naturalOrder())));
-    }
+    private static final Comparator<Format> COMPARATOR = Comparator.nullsLast(
+                Comparator.comparing(((Function<Format, Optional<String>>) Format::getMimeType).andThen(o -> o.orElse(null)), Comparator.nullsFirst(Comparator.naturalOrder())))
+                .thenComparing(Comparator.comparing(((Function<Format, Optional<String>>) Format::getSchema).andThen(o -> o.orElse(null)), Comparator.nullsFirst(Comparator.naturalOrder())))
+                .thenComparing(Comparator.comparing(((Function<Format, Optional<String>>) Format::getEncoding).andThen(o -> o.orElse(null)), Comparator.nullsFirst(Comparator.naturalOrder())));
 
     private final Optional<String> mimeType;
     private final Optional<String> encoding;
