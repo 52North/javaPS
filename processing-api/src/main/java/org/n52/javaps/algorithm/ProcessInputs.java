@@ -20,9 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.n52.iceland.ogc.ows.OwsCodeType;
 import org.n52.javaps.io.data.IData;
 
@@ -32,7 +29,7 @@ import org.n52.javaps.io.data.IData;
  */
 public class ProcessInputs extends HashMap<OwsCodeType, List<IData>>{
 
-    private static final Logger log = LoggerFactory.getLogger(ProcessInputs.class);
+    private static final long serialVersionUID = 921032882074907318L;
 
     public ProcessInputs() {
     }

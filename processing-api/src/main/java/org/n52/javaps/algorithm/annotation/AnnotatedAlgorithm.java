@@ -15,8 +15,6 @@
  * limitations under the License.
  */
 package org.n52.javaps.algorithm.annotation;
-
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -29,13 +27,8 @@ import org.n52.javaps.description.ProcessDescription;
 import org.n52.javaps.io.GeneratorRepository;
 import org.n52.javaps.io.ParserRepository;
 
-/**
- *
- * @author tkunicki
- */
 public class AnnotatedAlgorithm extends AbstractAlgorithm {
     private static final Map<Class<?>, AnnotatedAlgorithmMetadata> CACHE = new ConcurrentHashMap<>();;
-
     private final AnnotatedAlgorithmMetadata metadata;
     private final Object algorithmInstance;
 
@@ -46,8 +39,7 @@ public class AnnotatedAlgorithm extends AbstractAlgorithm {
 
     public AnnotatedAlgorithm(ParserRepository parserRepository, GeneratorRepository generatorRepository, Object algorithmInstance) {
         this.algorithmInstance = algorithmInstance == null ? this : algorithmInstance;
-        this.metadata = CACHE.computeIfAbsent(this.algorithmInstance.getClass(),
-            c -> new AnnotatedAlgorithmMetadata(c, parserRepository, generatorRepository));
+        this.metadata = CACHE.computeIfAbsent(this.algorithmInstance.getClass(), c -> new AnnotatedAlgorithmMetadata(c, parserRepository, generatorRepository));
     }
 
     @Override
