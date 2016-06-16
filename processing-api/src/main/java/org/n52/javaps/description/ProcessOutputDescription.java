@@ -68,4 +68,38 @@ public interface ProcessOutputDescription extends DataDescription {
             }
         });
     }
+
+    <T, X extends Exception> T visit(ThrowingReturningProcessOutputVisitor<T, X> visitor) throws X;
+
+    default <X extends Exception> void visit(ThrowingProcessOutputVisitor<X> visitor) throws X {
+        visit(new ThrowingReturningProcessOutputVisitor<Void, X>() {
+            @Override
+            public Void visit(BoundingBoxOutputDescription output)
+                    throws X {
+                visitor.visit(output);
+                return null;
+            }
+
+            @Override
+            public Void visit(ComplexOutputDescription output)
+                    throws X {
+                visitor.visit(output);
+                return null;
+            }
+
+            @Override
+            public Void visit(LiteralOutputDescription output)
+                    throws X {
+                visitor.visit(output);
+                return null;
+            }
+
+            @Override
+            public Void visit(GroupOutputDescription output)
+                    throws X {
+                visitor.visit(output);
+                return null;
+            }
+        });
+    }
 }

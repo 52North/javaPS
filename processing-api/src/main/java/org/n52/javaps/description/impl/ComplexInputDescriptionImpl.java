@@ -27,6 +27,7 @@ import org.n52.javaps.description.ComplexInputDescription;
 import org.n52.javaps.description.ComplexInputDescriptionBuilder;
 import org.n52.javaps.description.Format;
 import org.n52.javaps.description.ReturningProcessInputVisitor;
+import org.n52.javaps.description.ThrowingReturningProcessInputVisitor;
 
 /**
  * TODO JavaDoc
@@ -75,6 +76,12 @@ public class ComplexInputDescriptionImpl
 
     @Override
     public <T> T visit(ReturningProcessInputVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
+
+    @Override
+    public <T, X extends Exception> T visit(ThrowingReturningProcessInputVisitor<T, X> visitor)
+            throws X {
         return visitor.visit(this);
     }
 

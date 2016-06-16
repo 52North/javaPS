@@ -22,12 +22,12 @@ package org.n52.javaps.description;
  */
 public interface ProcessOutputVisitor {
 
-    void visit(BoundingBoxOutputDescription input);
+    void visit(BoundingBoxOutputDescription output);
 
-    void visit(ComplexOutputDescription input);
+    void visit(ComplexOutputDescription output);
 
-    void visit(LiteralOutputDescription input);
+    void visit(LiteralOutputDescription output);
 
-    void visit(GroupOutputDescription input);
+    void visit(GroupOutputDescription output);
 
 }

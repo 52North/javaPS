@@ -24,6 +24,7 @@ import org.n52.javaps.description.LiteralDataDomain;
 import org.n52.javaps.description.LiteralOutputDescription;
 import org.n52.javaps.description.LiteralOutputDescriptionBuilder;
 import org.n52.javaps.description.ReturningProcessOutputVisitor;
+import org.n52.javaps.description.ThrowingReturningProcessOutputVisitor;
 
 /**
  * TODO JavaDoc
@@ -56,6 +57,12 @@ private final LiteralDataDomain defaultLiteralDataDomain;
 
     @Override
     public <T> T visit(ReturningProcessOutputVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
+
+    @Override
+    public <T, X extends Exception> T visit(ThrowingReturningProcessOutputVisitor<T, X> visitor)
+            throws X {
         return visitor.visit(this);
     }
 

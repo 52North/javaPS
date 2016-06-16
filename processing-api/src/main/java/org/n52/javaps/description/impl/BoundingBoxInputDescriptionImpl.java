@@ -24,6 +24,7 @@ import org.n52.iceland.ogc.ows.OwsCRS;
 import org.n52.javaps.description.BoundingBoxInputDescription;
 import org.n52.javaps.description.BoundingBoxInputDescriptionBuilder;
 import org.n52.javaps.description.ReturningProcessInputVisitor;
+import org.n52.javaps.description.ThrowingReturningProcessInputVisitor;
 
 /**
  * TODO JavaDoc
@@ -65,6 +66,12 @@ public class BoundingBoxInputDescriptionImpl extends AbstractProcessInputDescrip
 
     @Override
     public <T> T visit(ReturningProcessInputVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
+
+    @Override
+    public <T, X extends Exception> T visit(ThrowingReturningProcessInputVisitor<T, X> visitor)
+            throws X {
         return visitor.visit(this);
     }
 

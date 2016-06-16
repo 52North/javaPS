@@ -25,6 +25,7 @@ import org.n52.javaps.description.ComplexOutputDescription;
 import org.n52.javaps.description.ComplexOutputDescriptionBuilder;
 import org.n52.javaps.description.Format;
 import org.n52.javaps.description.ReturningProcessOutputVisitor;
+import org.n52.javaps.description.ThrowingReturningProcessOutputVisitor;
 
 /**
  * TODO JavaDoc
@@ -68,6 +69,13 @@ public class ComplexOutputDescriptionImpl
     public <T> T visit(ReturningProcessOutputVisitor<T> visitor) {
         return visitor.visit(this);
     }
+
+    @Override
+    public <T, X extends Exception> T visit(ThrowingReturningProcessOutputVisitor<T, X> visitor)
+            throws X {
+        return visitor.visit(this);
+    }
+
 
     public static ComplexOutputDescriptionBuilder<?, ?> builder() {
         return new BuilderImpl();

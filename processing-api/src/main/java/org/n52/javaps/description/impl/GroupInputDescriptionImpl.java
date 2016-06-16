@@ -10,6 +10,7 @@ import org.n52.javaps.description.GroupInputDescription;
 import org.n52.javaps.description.GroupInputDescriptionBuilder;
 import org.n52.javaps.description.ProcessInputDescription;
 import org.n52.javaps.description.ReturningProcessInputVisitor;
+import org.n52.javaps.description.ThrowingReturningProcessInputVisitor;
 
 public class GroupInputDescriptionImpl extends AbstractProcessInputDescription
         implements GroupInputDescription {
@@ -24,6 +25,12 @@ public class GroupInputDescriptionImpl extends AbstractProcessInputDescription
 
     @Override
     public <T> T visit(ReturningProcessInputVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
+
+    @Override
+    public <T, X extends Exception> T visit(ThrowingReturningProcessInputVisitor<T, X> visitor)
+            throws X {
         return visitor.visit(this);
     }
 

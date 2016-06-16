@@ -24,6 +24,7 @@ import org.n52.javaps.description.LiteralDataDomain;
 import org.n52.javaps.description.LiteralInputDescription;
 import org.n52.javaps.description.LiteralInputDescriptionBuilder;
 import org.n52.javaps.description.ReturningProcessInputVisitor;
+import org.n52.javaps.description.ThrowingReturningProcessInputVisitor;
 
 /**
  * TODO JavaDoc
@@ -56,6 +57,12 @@ public class LiteralInputDescriptionImpl
 
     @Override
     public <T> T visit(ReturningProcessInputVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
+
+    @Override
+    public <T, X extends Exception> T visit(ThrowingReturningProcessInputVisitor<T, X> visitor)
+            throws X {
         return visitor.visit(this);
     }
 
