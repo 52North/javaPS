@@ -31,7 +31,7 @@ import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
 
 import org.n52.iceland.ogc.ows.OwsCodeType;
-import org.n52.iceland.utils.Optionals;
+import org.n52.javaps.utils.Optionals;
 import org.n52.javaps.algorithm.annotation.Algorithm;
 import org.n52.javaps.algorithm.annotation.AnnotatedAlgorithm;
 import org.n52.javaps.description.ProcessDescription;

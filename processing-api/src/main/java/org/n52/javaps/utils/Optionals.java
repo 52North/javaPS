@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.iceland.utils;
+package org.n52.javaps.utils;
 
 import java.util.Objects;
 import java.util.Optional;

@@ -16,6 +16,7 @@
  */
 package org.n52.javaps.description.impl;
 
+import java.math.BigInteger;
 import java.util.Objects;
 import java.util.Set;
 
@@ -23,6 +24,7 @@ import org.n52.javaps.description.ComplexOutputDescription;
 import org.n52.javaps.description.ComplexOutputDescriptionBuilder;
 import org.n52.javaps.description.Format;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 
 /**
@@ -36,6 +38,17 @@ public abstract class AbstractComplexOutputDescriptionBuilder<T extends ComplexO
     private final ImmutableSet.Builder<Format> supportedFormats = ImmutableSet
             .builder();
     private Format defaultFormat;
+    private BigInteger maximumMegabytes;
+
+    @SuppressWarnings(value = "unchecked")
+    @Override
+    public B withMaximumMegabytes(BigInteger maximumMegabytes) {
+        Preconditions.checkArgument(maximumMegabytes == null ||
+                                    maximumMegabytes.compareTo(BigInteger.ZERO) >
+                                    0);
+        this.maximumMegabytes = maximumMegabytes;
+        return (B) this;
+    }
 
     @SuppressWarnings(value = "unchecked")
     @Override
@@ -61,5 +74,11 @@ public abstract class AbstractComplexOutputDescriptionBuilder<T extends ComplexO
     Format getDefaultFormat() {
         return defaultFormat;
     }
+
+    BigInteger getMaximumMegabytes() {
+        return maximumMegabytes;
+    }
+
+
 
 }

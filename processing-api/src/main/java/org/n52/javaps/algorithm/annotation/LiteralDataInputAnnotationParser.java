@@ -30,8 +30,8 @@ import java.util.function.Function;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.n52.iceland.ogc.ows.OwsAllowedValue;
-import org.n52.iceland.ogc.ows.OwsAllowedValues;
+import org.n52.javaps.ogc.ows.OwsAllowedValue;
+import org.n52.javaps.ogc.ows.OwsAllowedValues;
 import org.n52.javaps.description.LiteralInputDescription;
 import org.n52.javaps.description.LiteralInputDescriptionBuilder;
 import org.n52.javaps.description.impl.LiteralDataDomainImpl;
@@ -113,7 +113,7 @@ class LiteralDataInputAnnotationParser<M extends AccessibleObject & Member, B ex
         }
 
         builder.withDefaultLiteralDataDomain(LiteralDataDomainImpl.builder()
-                .withAllowedValues(new OwsAllowedValues(allowedValues.stream().map(OwsAllowedValue::new)))
+                .withValueDescription(new OwsAllowedValues(allowedValues.stream().map(OwsAllowedValue::new)))
                 .withDataType(BasicXMLTypeFactory.getXMLDataTypeforBinding(bindingType))
                 .withDefaultValue(defaultValue)
                 .withUOM(annotation.uom()));

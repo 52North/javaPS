@@ -19,6 +19,7 @@ package org.n52.javaps.description;
 import static com.google.common.base.Preconditions.checkArgument;
 
 import java.math.BigInteger;
+import java.util.Optional;
 
 /**
  * TODO JavaDoc
@@ -28,21 +29,21 @@ import java.math.BigInteger;
 public class InputOccurence {
 
     private final BigInteger min;
-    private final BigInteger max;
+    private final Optional<BigInteger> max;
 
     public InputOccurence(BigInteger min, BigInteger max) {
         this.min = min == null ? BigInteger.ONE : min;
-        this.max = max == null ? BigInteger.ONE : max;
+        this.max = Optional.ofNullable(max == null ? BigInteger.ONE : (max.compareTo(BigInteger.ZERO) < 0 ? null : min));
         checkArgument(this.min.compareTo(BigInteger.ZERO) >= 0, "minimum < 0");
-        checkArgument(this.max.compareTo(BigInteger.ZERO) > 0, "maximum <= 0");
-        checkArgument(this.min.compareTo(this.max) <= 0, "minimum > maximum");
+        checkArgument(!this.max.isPresent() || this.max.get().compareTo(BigInteger.ZERO) > 0, "maximum <= 0");
+        checkArgument(!this.max.isPresent() || this.min.compareTo(this.max.get()) <= 0, "minimum > maximum");
     }
 
     public BigInteger getMin() {
         return this.min;
     }
 
-    public BigInteger getMax() {
+    public Optional<BigInteger> getMax() {
         return this.max;
     }
 
@@ -51,18 +52,16 @@ public class InputOccurence {
     }
 
     public boolean isMultiple() {
-        return this.max.compareTo(BigInteger.ONE) > 0;
+        return !this.max.isPresent() || this.max.get().compareTo(BigInteger.ONE) > 0;
     }
 
     public boolean isInBounds(BigInteger occurence) {
         return this.min.compareTo(occurence) >= 0 &&
-               this.max.compareTo(occurence) <= 0;
+               (!this.max.isPresent() || this.max.get().compareTo(occurence) <= 0);
     }
 
     @Override
     public String toString() {
         return String.format("[%d, %d]", this.min, this.max);
     }
-
-
 }

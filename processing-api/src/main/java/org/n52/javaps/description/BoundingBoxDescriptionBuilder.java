@@ -16,9 +16,10 @@
  */
 package org.n52.javaps.description;
 
+import java.net.URI;
 import java.util.Arrays;
 
-import org.n52.iceland.ogc.ows.OwsCRS;
+import org.n52.javaps.ogc.ows.OwsCRS;
 
 /**
  * TODO JavaDoc
@@ -29,8 +30,8 @@ public interface BoundingBoxDescriptionBuilder<T extends BoundingBoxDescription,
 
     B withDefaultCRS(OwsCRS defaultCRS);
 
-    default B withDefaultCRS(String defaultCRS) {
-        return withDefaultCRS(defaultCRS == null ? null : new OwsCRS(defaultCRS));
+    default B withDefaultCRS(URI defaultCRS) {
+        return withDefaultCRS(defaultCRS == null ? (OwsCRS)null : new OwsCRS(defaultCRS));
     }
 
     @SuppressWarnings("unchecked")
@@ -45,8 +46,8 @@ public interface BoundingBoxDescriptionBuilder<T extends BoundingBoxDescription,
         return withSupportedCRS(Arrays.asList(crss));
     }
 
-    default B withSupportedCRS(String uom) {
-        return withSupportedCRS(uom == null ? null : new OwsCRS(uom));
+    default B withSupportedCRS(URI crs) {
+        return withSupportedCRS(crs == null ? null : new OwsCRS(crs));
     }
 
     B withSupportedCRS(OwsCRS uom);

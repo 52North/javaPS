@@ -16,10 +16,6 @@
  */
 package org.n52.javaps.description;
 
-
-import org.n52.javaps.description.ComplexOutputDescription;
-import org.n52.javaps.description.ProcessOutputDescriptionBuilder;
-
 /**
  * TODO JavaDoc
  *

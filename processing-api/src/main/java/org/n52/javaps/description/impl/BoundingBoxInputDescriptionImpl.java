@@ -17,10 +17,10 @@
 package org.n52.javaps.description.impl;
 
 import java.util.Collections;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.Set;
 
-import org.n52.iceland.ogc.ows.OwsCRS;
+import org.n52.javaps.ogc.ows.OwsCRS;
 import org.n52.javaps.description.BoundingBoxInputDescription;
 import org.n52.javaps.description.BoundingBoxInputDescriptionBuilder;
 import org.n52.javaps.description.ReturningProcessInputVisitor;
@@ -35,13 +35,13 @@ public class BoundingBoxInputDescriptionImpl extends AbstractProcessInputDescrip
         implements BoundingBoxInputDescription {
 
     private final Set<OwsCRS> supportedCRS;
-    private final Optional<OwsCRS> defaultCRS;
+    private final OwsCRS defaultCRS;
 
     protected BoundingBoxInputDescriptionImpl(
             AbstractBoundingBoxInputDescriptionBuilder<?, ?> builder) {
         super(builder);
         this.supportedCRS = builder.getSupportedCRS();
-        this.defaultCRS = Optional.ofNullable(builder.getDefaultCRS());
+        this.defaultCRS = Objects.requireNonNull(builder.getDefaultCRS());
     }
 
     @Override
@@ -50,7 +50,7 @@ public class BoundingBoxInputDescriptionImpl extends AbstractProcessInputDescrip
     }
 
     @Override
-    public Optional<OwsCRS> getDefaultCRS() {
+    public OwsCRS getDefaultCRS() {
         return this.defaultCRS;
     }
 

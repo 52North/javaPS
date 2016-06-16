@@ -17,8 +17,8 @@
 package org.n52.javaps.description;
 
 
-import org.n52.iceland.ogc.ows.OwsAllowedValues;
-import org.n52.iceland.ogc.ows.OwsDomainMetadata;
+import org.n52.javaps.ogc.ows.OwsDomainMetadata;
+import org.n52.javaps.ogc.ows.OwsValueDescription;
 
 import com.google.common.base.Strings;
 
@@ -49,6 +49,6 @@ public interface LiteralDataDomainBuilder<T extends LiteralDataDomain, B extends
         return withUOM(Strings.emptyToNull(value) == null ? null : new OwsDomainMetadata(value));
     }
 
-    B withAllowedValues(OwsAllowedValues allowedValues);
+    B withValueDescription(OwsValueDescription allowedValues);
 
 }

@@ -17,10 +17,10 @@
 package org.n52.javaps.description.impl;
 
 import java.util.Collections;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.Set;
 
-import org.n52.iceland.ogc.ows.OwsCRS;
+import org.n52.javaps.ogc.ows.OwsCRS;
 import org.n52.javaps.description.BoundingBoxOutputDescription;
 import org.n52.javaps.description.BoundingBoxOutputDescriptionBuilder;
 import org.n52.javaps.description.ReturningProcessOutputVisitor;
@@ -36,13 +36,13 @@ public class BoundingBoxOutputDescriptionImpl
         implements BoundingBoxOutputDescription {
 
     private final Set<OwsCRS> supportedCRS;
-    private final Optional<OwsCRS> defaultCRS;
+    private final OwsCRS defaultCRS;
 
     protected BoundingBoxOutputDescriptionImpl(
             AbstractBoundingBoxOutputDescriptionBuilder<?, ?> builder) {
         super(builder);
         this.supportedCRS = builder.getSupportedCRS();
-        this.defaultCRS = Optional.ofNullable(builder.getDefaultCRS());
+        this.defaultCRS = Objects.requireNonNull(builder.getDefaultCRS());
     }
 
     @Override
@@ -51,7 +51,7 @@ public class BoundingBoxOutputDescriptionImpl
     }
 
     @Override
-    public Optional<OwsCRS> getDefaultCRS() {
+    public OwsCRS getDefaultCRS() {
         return this.defaultCRS;
     }
 

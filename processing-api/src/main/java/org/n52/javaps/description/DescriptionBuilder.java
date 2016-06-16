@@ -20,8 +20,8 @@ import java.net.URI;
 import java.util.Arrays;
 
 import org.n52.iceland.ogc.ows.OwsCodeType;
-import org.n52.iceland.ogc.ows.OwsKeyword;
-import org.n52.iceland.ogc.ows.OwsLanguageString;
+import org.n52.javaps.ogc.ows.OwsKeyword;
+import org.n52.javaps.ogc.ows.OwsLanguageString;
 
 /**
  * TODO JavaDoc

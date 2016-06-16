@@ -16,10 +16,9 @@
  */
 package org.n52.javaps.description;
 
-import java.util.Optional;
 import java.util.Set;
 
-import org.n52.iceland.ogc.ows.OwsCRS;
+import org.n52.javaps.ogc.ows.OwsCRS;
 
 /**
  * TODO JavaDoc
@@ -28,7 +27,7 @@ import org.n52.iceland.ogc.ows.OwsCRS;
  */
 public interface BoundingBoxDescription {
 
-    Optional<OwsCRS> getDefaultCRS();
+    OwsCRS getDefaultCRS();
 
     Set<OwsCRS> getSupportedCRS();
 

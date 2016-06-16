@@ -18,8 +18,9 @@ package org.n52.javaps.description.impl;
 
 import java.util.Objects;
 
-import org.n52.iceland.ogc.ows.OwsAllowedValues;
-import org.n52.iceland.ogc.ows.OwsDomainMetadata;
+import org.n52.javaps.ogc.ows.OwsAny;
+import org.n52.javaps.ogc.ows.OwsDomainMetadata;
+import org.n52.javaps.ogc.ows.OwsValueDescription;
 import org.n52.javaps.description.LiteralDataDomain;
 import org.n52.javaps.description.LiteralDataDomainBuilder;
 
@@ -34,13 +35,13 @@ import com.google.common.base.Strings;
 public abstract class AbstractLiteralDataDomainBuilder<T extends LiteralDataDomain, B extends AbstractLiteralDataDomainBuilder<T, B>>
         implements LiteralDataDomainBuilder<T, B> {
 
-    private OwsAllowedValues allowedValues = OwsAllowedValues.any();
+    private OwsValueDescription valueDescription = OwsAny.instance();
     private OwsDomainMetadata dataType;
     private OwsDomainMetadata uom;
     private String defaultValue;
 
-    OwsAllowedValues getAllowedValues() {
-        return allowedValues;
+    OwsValueDescription getValueDescription() {
+        return valueDescription;
     }
 
     OwsDomainMetadata getDataType() {
@@ -78,11 +79,11 @@ public abstract class AbstractLiteralDataDomainBuilder<T extends LiteralDataDoma
 
     @Override
     @SuppressWarnings(value = "unchecked")
-    public B withAllowedValues(OwsAllowedValues allowedValues) {
-        if (allowedValues == null) {
-            this.allowedValues = OwsAllowedValues.any();
+    public B withValueDescription(OwsValueDescription description) {
+        if (this.valueDescription == null) {
+            this.valueDescription = OwsAny.instance();
         } else {
-            this.allowedValues = allowedValues;
+            this.valueDescription = description;
         }
         return (B) this;
     }

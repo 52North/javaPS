@@ -17,8 +17,10 @@
 package org.n52.javaps.description.impl;
 
 
+import java.math.BigInteger;
 import java.util.Collections;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 import org.n52.javaps.description.ComplexOutputDescription;
@@ -38,11 +40,13 @@ public class ComplexOutputDescriptionImpl
 
     private final Set<Format> supportedFormats;
     private final Format defaultFormat;
+    private final Optional<BigInteger> maximumMegabytes;
 
     protected ComplexOutputDescriptionImpl(AbstractComplexOutputDescriptionBuilder<?, ?> builder) {
         super(builder);
         this.defaultFormat = Objects.requireNonNull(builder.getDefaultFormat());
         this.supportedFormats = builder.getSupportedFormats();
+        this.maximumMegabytes = Optional.ofNullable(builder.getMaximumMegabytes());
     }
 
     @Override
@@ -53,6 +57,11 @@ public class ComplexOutputDescriptionImpl
     @Override
     public Format getDefaultFormat() {
         return this.defaultFormat;
+    }
+
+    @Override
+    public Optional<BigInteger> getMaximumMegabytes() {
+        return this.maximumMegabytes;
     }
 
     @Override

@@ -30,7 +30,7 @@ import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 
 import org.n52.iceland.ogc.ows.OwsCodeType;
-import org.n52.iceland.ogc.ows.OwsLanguageString;
+import org.n52.javaps.ogc.ows.OwsLanguageString;
 import org.n52.javaps.description.Format;
 import org.n52.javaps.description.ProcessDescription;
 import org.n52.javaps.io.GeneratorRepository;

@@ -14,29 +14,45 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.description;
+package org.n52.javaps.ogc.ows;
 
 import java.util.Optional;
-import java.util.Set;
 
 import org.n52.iceland.ogc.ows.OwsCodeType;
-import org.n52.javaps.ogc.ows.OwsKeyword;
-import org.n52.javaps.ogc.ows.OwsLanguageString;
-
 
 /**
  * TODO JavaDoc
  *
  * @author Christian Autermann
  */
-public interface Description {
+public class OwsKeyword {
 
-    OwsCodeType getId();
+    private final OwsLanguageString keyword;
+    private final Optional<OwsCodeType> type;
 
-    Optional<OwsLanguageString> getAbstract();
+    public OwsKeyword(OwsLanguageString keyword, OwsCodeType type) {
+        this.keyword = keyword;
+        this.type = Optional.ofNullable(type);
+    }
 
-    OwsLanguageString getTitle();
+    public OwsKeyword(OwsLanguageString keyword) {
+        this(keyword, null);
+    }
 
-    Set<OwsKeyword> getKeywords();
+    public OwsKeyword(String keyword) {
+        this(keyword, null);
+    }
+
+    public OwsKeyword(String keyword, OwsCodeType type) {
+        this(new OwsLanguageString(keyword), type);
+    }
+
+    public OwsLanguageString getKeyword() {
+        return keyword;
+    }
+
+    public Optional<OwsCodeType> getType() {
+        return type;
+    }
 
 }

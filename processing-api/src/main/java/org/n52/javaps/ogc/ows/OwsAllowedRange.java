@@ -14,31 +14,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.iceland.ogc.ows;
+package org.n52.javaps.ogc.ows;
 
 import java.util.Objects;
 import java.util.Optional;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Strings;
 
 /**
  * TODO JavaDoc
  *
  * @author Christian Autermann
  */
-public class OwsAllowedRange extends OwsValueRestriction {
+public class OwsAllowedRange implements OwsValueRestriction {
     public static final String CLOSED = "closed";
     public static final String CLOSED_OPEN = "closed-open";
     public static final String OPEN_CLOSED = "open-closed";
     public static final String OPEN = "open";
     private final Bound lowerBound;
     private final Bound upperBound;
+    private final Optional<String> spacing;
 
     public OwsAllowedRange(String lowerBound, BoundType lowerBoundType,
                            String upperBound, BoundType upperBoundType) {
+        this(lowerBound, lowerBoundType, upperBound, upperBoundType, null);
+    }
+
+    public OwsAllowedRange(String lowerBound, BoundType lowerBoundType,
+                           String upperBound, BoundType upperBoundType, String spacing) {
         this.lowerBound = new Bound(lowerBoundType, lowerBound);
         this.upperBound = new Bound(upperBoundType, upperBound);
+        this.spacing = Optional.ofNullable(Strings.emptyToNull(spacing));
     }
+
 
     public Optional<String> getLowerBound() {
         return this.lowerBound.getValue();
@@ -54,6 +63,10 @@ public class OwsAllowedRange extends OwsValueRestriction {
 
     public BoundType getUpperBoundType() {
         return this.upperBound.getType();
+    }
+
+    public Optional<String> getSpacing() {
+        return spacing;
     }
 
     public String getType() {
@@ -84,7 +97,7 @@ public class OwsAllowedRange extends OwsValueRestriction {
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.lowerBound, this.upperBound);
+        return Objects.hash(this.lowerBound, this.upperBound, this.spacing);
     }
 
     @Override
@@ -92,7 +105,8 @@ public class OwsAllowedRange extends OwsValueRestriction {
         if (obj != null && obj.getClass() == getClass()) {
             OwsAllowedRange that = (OwsAllowedRange) obj;
             return Objects.equals(this.lowerBound, that.lowerBound) &&
-                   Objects.equals(this.upperBound, that.upperBound);
+                   Objects.equals(this.upperBound, that.upperBound) &&
+                   Objects.equals(this.spacing, that.spacing);
         }
         return false;
     }

@@ -16,6 +16,7 @@
  */
 package org.n52.javaps.description;
 
+import java.math.BigInteger;
 import java.util.Arrays;
 
 /**
@@ -44,5 +45,12 @@ public interface ComplexDescriptionBuilder<T extends ComplexDescription, B exten
     default B withSupportedFormat(Format... formats){
         return withSupportedFormat(Arrays.asList(formats));
     }
+
+    B withMaximumMegabytes(BigInteger maximumMegabytes);
+
+    default B withMaximumMegabytes(long maximumMegabytes) {
+        return withMaximumMegabytes(BigInteger.valueOf(maximumMegabytes));
+    }
+
 
 }

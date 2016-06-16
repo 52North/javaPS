@@ -16,6 +16,8 @@
  */
 package org.n52.javaps.description;
 
+import java.math.BigInteger;
+import java.util.Optional;
 import java.util.Set;
 
 
@@ -29,5 +31,7 @@ public interface ComplexDescription {
     Format getDefaultFormat();
 
     Set<Format> getSupportedFormats();
+
+    Optional<BigInteger> getMaximumMegabytes();
 
 }

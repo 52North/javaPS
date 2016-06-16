@@ -22,8 +22,8 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.n52.iceland.ogc.ows.OwsCodeType;
-import org.n52.iceland.ogc.ows.OwsKeyword;
-import org.n52.iceland.ogc.ows.OwsLanguageString;
+import org.n52.javaps.ogc.ows.OwsKeyword;
+import org.n52.javaps.ogc.ows.OwsLanguageString;
 import org.n52.javaps.description.Description;
 
 /**

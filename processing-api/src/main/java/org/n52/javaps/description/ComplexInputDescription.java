@@ -16,17 +16,9 @@
  */
 package org.n52.javaps.description;
 
-import java.math.BigInteger;
-import java.util.Optional;
-
 /**
  * TODO JavaDoc
  *
  * @author Christian Autermann
  */
-public interface ComplexInputDescription extends ComplexDescription,
-                                                 ProcessInputDescription {
-
-    Optional<BigInteger> getMaximumMegabytes();
-
-}
+public interface ComplexInputDescription extends ComplexDescription, ProcessInputDescription {}

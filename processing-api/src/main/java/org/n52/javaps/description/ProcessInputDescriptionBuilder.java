@@ -41,7 +41,7 @@ public interface ProcessInputDescriptionBuilder<T extends ProcessInputDescriptio
 
     default B withOccurence(InputOccurence occurence) {
         Objects.requireNonNull(occurence);
-        return withMaximalOccurence(occurence.getMax())
+        return withMaximalOccurence(occurence.getMax().orElse(null))
                 .withMinimalOccurence(occurence.getMin());
     }
 

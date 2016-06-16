@@ -16,8 +16,6 @@
  */
 package org.n52.javaps.description;
 
-import org.n52.javaps.description.ComplexDescription;
-
 /**
  * TODO JavaDoc
  *

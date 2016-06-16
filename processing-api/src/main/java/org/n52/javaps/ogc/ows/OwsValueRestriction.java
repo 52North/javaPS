@@ -14,24 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.description;
-
-import java.util.Optional;
-
-import org.n52.javaps.ogc.ows.OwsDomainMetadata;
-import org.n52.javaps.ogc.ows.OwsValueDescription;
+package org.n52.javaps.ogc.ows;
 
 /**
  * TODO JavaDoc
  *
  * @author Christian Autermann
  */
-public interface LiteralDataDomain {
-    OwsValueDescription getValueDescription();
+public interface OwsValueRestriction {
+    default boolean isRange() {
+        return false;
+    }
 
-    OwsDomainMetadata getDataType();
+    default boolean isValue() {
+        return false;
+    }
 
-    OwsDomainMetadata getUOM();
+    default OwsAllowedRange asRange() {
+        throw new UnsupportedOperationException();
+    }
 
-    Optional<String> getDefaultValue();
+    default OwsAllowedValue asValue() {
+        throw new UnsupportedOperationException();
+    }
+
 }

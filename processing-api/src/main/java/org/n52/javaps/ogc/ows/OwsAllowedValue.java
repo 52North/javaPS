@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.iceland.ogc.ows;
+package org.n52.javaps.ogc.ows;
 
 import java.util.Objects;
 
@@ -25,7 +25,7 @@ import com.google.common.base.MoreObjects;
  *
  * @author Christian Autermann
  */
-public class OwsAllowedValue extends OwsValueRestriction {
+public class OwsAllowedValue implements OwsValueRestriction {
 
     private final String value;
 

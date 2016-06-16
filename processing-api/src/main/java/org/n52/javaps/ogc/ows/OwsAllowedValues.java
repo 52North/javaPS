@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.iceland.ogc.ows;
+package org.n52.javaps.ogc.ows;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -27,8 +27,7 @@ import java.util.stream.Stream;
  *
  * @author Christian Autermann
  */
-public class OwsAllowedValues implements Iterable<OwsValueRestriction> {
-    private static final OwsAllowedValues ANY = new OwsAllowedValues();
+public class OwsAllowedValues implements OwsValueDescription, Iterable<OwsValueRestriction> {
     private final Set<OwsValueRestriction> restrictions = new HashSet<>();
 
     public OwsAllowedValues(Iterable<OwsValueRestriction> restrictions) {
@@ -61,11 +60,28 @@ public class OwsAllowedValues implements Iterable<OwsValueRestriction> {
         return this.restrictions.stream();
     }
 
+    @Override
     public boolean isAny() {
         return this.restrictions.isEmpty();
     }
 
-    public static OwsAllowedValues any() {
-        return ANY;
+
+    @Override
+    public boolean isAllowedValues() {
+        return true;
+    }
+
+    @Override
+    public OwsAllowedValues asAllowedValues() {
+        return this;
+    }
+
+    @Override
+    public OwsAny asAny() {
+        if (isAny()) {
+            return OwsAny.instance();
+        } else {
+            throw new UnsupportedOperationException();
+        }
     }
 }

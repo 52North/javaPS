@@ -19,29 +19,29 @@ package org.n52.javaps.description.impl;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.n52.iceland.ogc.ows.OwsAllowedValues;
-import org.n52.iceland.ogc.ows.OwsDomainMetadata;
+import org.n52.javaps.ogc.ows.OwsDomainMetadata;
+import org.n52.javaps.ogc.ows.OwsValueDescription;
 import org.n52.javaps.description.LiteralDataDomain;
 import org.n52.javaps.description.LiteralDataDomainBuilder;
 
 
 public class LiteralDataDomainImpl implements LiteralDataDomain {
 
-    private final OwsAllowedValues allowedValues;
+    private final OwsValueDescription valueDescription;
     private final OwsDomainMetadata dataType;
     private final OwsDomainMetadata uom;
     private final Optional<String> defaultValue;
 
     public LiteralDataDomainImpl(AbstractLiteralDataDomainBuilder<?, ?> builder) {
-        this.allowedValues = builder.getAllowedValues();
+        this.valueDescription = builder.getValueDescription();
         this.dataType = Objects.requireNonNull(builder.getDataType());
         this.uom = builder.getUom();
         this.defaultValue = Optional.ofNullable(builder.getDefaultValue());
     }
 
     @Override
-    public OwsAllowedValues getAllowedValues() {
-        return this.allowedValues;
+    public OwsValueDescription getValueDescription() {
+        return this.valueDescription;
     }
 
     @Override

@@ -14,27 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.iceland.ogc.ows;
+package org.n52.javaps.ogc.ows;
 
 /**
  * TODO JavaDoc
  *
  * @author Christian Autermann
  */
-public abstract class OwsValueRestriction {
-    public boolean isRange() {
-        return false;
+public class OwsAny implements OwsValueDescription {
+    private static final OwsAny INSTANCE = new OwsAny();
+
+    private OwsAny() {
     }
 
-    public boolean isValue() {
-        return false;
+    @Override
+    public boolean isAny() {
+        return true;
     }
 
-    public OwsAllowedValue asValue() {
-        throw new UnsupportedOperationException();
+    @Override
+    public OwsAny asAny() {
+        return this;
     }
 
-    public OwsAllowedRange asRange() {
-        throw new UnsupportedOperationException();
+    public static OwsAny instance() {
+        return INSTANCE;
     }
 }

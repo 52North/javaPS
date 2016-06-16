@@ -19,8 +19,8 @@ package org.n52.javaps.algorithm.annotation;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
-import static org.n52.iceland.utils.Streams.throwingMerger;
-import static org.n52.iceland.utils.Streams.toSingleResult;
+import static org.n52.javaps.utils.Streams.throwingMerger;
+import static org.n52.javaps.utils.Streams.toSingleResult;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;

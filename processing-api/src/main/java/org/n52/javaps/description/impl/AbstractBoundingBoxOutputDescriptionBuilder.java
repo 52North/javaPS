@@ -18,7 +18,7 @@ package org.n52.javaps.description.impl;
 
 import java.util.Set;
 
-import org.n52.iceland.ogc.ows.OwsCRS;
+import org.n52.javaps.ogc.ows.OwsCRS;
 import org.n52.javaps.description.BoundingBoxOutputDescription;
 import org.n52.javaps.description.BoundingBoxOutputDescriptionBuilder;
 

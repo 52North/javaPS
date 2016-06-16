@@ -16,8 +16,6 @@
  */
 package org.n52.javaps.description;
 
-import java.math.BigInteger;
-
 /**
  * TODO JavaDoc
  *
@@ -25,11 +23,5 @@ import java.math.BigInteger;
  */
 public interface ComplexInputDescriptionBuilder<T extends ComplexInputDescription, B extends ComplexInputDescriptionBuilder<T, B>>
         extends ProcessInputDescriptionBuilder<T, B>, ComplexDescriptionBuilder<T, B> {
-
-    B withMaximumMegabytes(BigInteger maximumMegabytes);
-
-    default B withMaximumMegabytes(long maximumMegabytes) {
-        return withMaximumMegabytes(BigInteger.valueOf(maximumMegabytes));
-    }
 
 }

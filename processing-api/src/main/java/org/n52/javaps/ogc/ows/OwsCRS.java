@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.iceland.ogc.ows;
+package org.n52.javaps.ogc.ows;
 
+import static java.util.stream.Collectors.toSet;
+
+import java.net.URI;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-
-import com.google.common.base.Strings;
 
 /**
  * TODO JavaDoc
@@ -30,29 +30,25 @@ import com.google.common.base.Strings;
  * @author Christian Autermann
  */
 public class OwsCRS {
-    private final String value;
+    private final URI value;
 
-    public OwsCRS(String value) {
-        this.value = Objects.requireNonNull(Strings.emptyToNull(value));
+    public OwsCRS(URI value) {
+        this.value = Objects.requireNonNull(value);
     }
 
-    public String getValue() {
+    public URI getValue() {
         return value;
     }
 
-    public static OwsCRS of(String value) {
+    public static OwsCRS of(URI value) {
         return new OwsCRS(value);
     }
 
-    public static Set<OwsCRS> of(Collection<String> values) {
+    public static Set<OwsCRS> of(Collection<URI> values) {
         if (values == null || values.isEmpty()) {
             return Collections.emptySet();
         } else {
-            final Set<OwsCRS> supportedCRS = new HashSet<>(values.size());
-            for (String value : values) {
-                supportedCRS.add(of(value));
-            }
-            return supportedCRS;
+            return values.stream().map(OwsCRS::new).collect(toSet());
         }
     }
 

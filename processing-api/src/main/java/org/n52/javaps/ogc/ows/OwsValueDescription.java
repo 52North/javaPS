@@ -14,43 +14,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.iceland.ogc.ows;
-
-import java.util.Optional;
+package org.n52.javaps.ogc.ows;
 
 /**
  * TODO JavaDoc
  *
  * @author Christian Autermann
  */
-public class OwsKeyword {
+public interface OwsValueDescription {
 
-    private final OwsLanguageString keyword;
-    private final Optional<OwsCodeType> type;
-
-    public OwsKeyword(OwsLanguageString keyword, OwsCodeType type) {
-        this.keyword = keyword;
-        this.type = Optional.ofNullable(type);
+    default boolean isAllowedValues() {
+        return false;
     }
 
-    public OwsKeyword(OwsLanguageString keyword) {
-        this(keyword, null);
+    default boolean isAny() {
+        return false;
     }
 
-    public OwsKeyword(String keyword) {
-        this(keyword, null);
+    default boolean isReference() {
+        return false;
     }
 
-    public OwsKeyword(String keyword, OwsCodeType type) {
-        this(new OwsLanguageString(keyword), type);
+    default OwsAllowedValues asAllowedValues() {
+        throw new UnsupportedOperationException();
     }
 
-    public OwsLanguageString getKeyword() {
-        return keyword;
+    default OwsAny asAny() {
+        throw new UnsupportedOperationException();
     }
 
-    public Optional<OwsCodeType> getType() {
-        return type;
+    default OwsValueReference asReference() {
+        throw new UnsupportedOperationException();
     }
-
 }
