@@ -17,8 +17,10 @@
 package org.n52.javaps.description;
 
 import java.net.URI;
+import java.util.Arrays;
 
 import org.n52.iceland.ogc.ows.OwsCodeType;
+import org.n52.iceland.ogc.ows.OwsKeyword;
 import org.n52.iceland.ogc.ows.OwsLanguageString;
 
 /**
@@ -65,6 +67,23 @@ public interface DescriptionBuilder<T extends Description, B extends Description
     default B withTitle(String lang, String title) {
         return withTitle(title == null ? null
                          : new OwsLanguageString(lang, title));
+    }
+
+    B withKeyword(OwsKeyword keyword);
+
+    @SuppressWarnings("unchecked")
+    default B withKeywords(Iterable<OwsKeyword> keywords) {
+        keywords.forEach(this::withKeyword);
+        return (B ) this;
+    }
+
+    @SuppressWarnings("unchecked")
+    default B withKeywords(OwsKeyword... keywords) {
+        return withKeywords(Arrays.asList(keywords));
+    }
+
+    default B withKeyword(String keyword) {
+        return withKeyword(new OwsKeyword(keyword));
     }
 
 }
