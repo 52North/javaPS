@@ -18,6 +18,7 @@ package org.n52.javaps.algorithm.annotation;
 
 import static org.hamcrest.Matchers.*;
 
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -30,7 +31,6 @@ import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 
 import org.n52.iceland.ogc.ows.OwsCodeType;
-import org.n52.javaps.ogc.ows.OwsLanguageString;
 import org.n52.javaps.description.Format;
 import org.n52.javaps.description.ProcessDescription;
 import org.n52.javaps.io.GeneratorRepository;
@@ -38,6 +38,7 @@ import org.n52.javaps.io.IGenerator;
 import org.n52.javaps.io.IParser;
 import org.n52.javaps.io.ParserRepository;
 import org.n52.javaps.io.data.IComplexData;
+import org.n52.javaps.ogc.ows.OwsLanguageString;
 
 /**
  * TODO JavaDoc
@@ -68,6 +69,8 @@ public class AnnotatedAlgorithmMetadataTest {
         errors.checkThat(processDescription.getId(), is(new OwsCodeType(TestProcess.class.getCanonicalName())));
         errors.checkThat(processDescription.getInputDescriptions().size(), is(8));
         errors.checkThat(processDescription.getOutputDescriptions().size(), is(7));
+
+        errors.checkThat(processDescription.getInput("input8").getOccurence().getMax().get(),is(BigInteger.TEN));
     }
 
     public static enum TestEnum {
