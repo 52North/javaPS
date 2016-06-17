@@ -16,7 +16,7 @@
  */
 package com.example;
 
-import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

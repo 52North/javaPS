@@ -21,6 +21,7 @@ import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.request.AbstractServiceRequest;
 import org.n52.iceland.response.AbstractServiceResponse;
 
+//TOOD move to iceland
 public interface GenericHandler<
             Q extends AbstractServiceRequest<A>,
             A extends AbstractServiceResponse>

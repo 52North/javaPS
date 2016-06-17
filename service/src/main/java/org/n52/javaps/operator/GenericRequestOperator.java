@@ -46,12 +46,13 @@ import org.n52.javaps.handler.GenericHandler;
 
 import com.google.common.base.MoreObjects;
 
+//TODO move to iceland
 public class GenericRequestOperator<
             Q extends AbstractServiceRequest<A>,
             A extends AbstractServiceResponse>
         implements RequestOperator {
 
-    private static final Logger log = LoggerFactory
+    private static final Logger LOG = LoggerFactory
             .getLogger(GenericRequestOperator.class);
 
     private ParameterValidator<Q> validator;
@@ -70,9 +71,6 @@ public class GenericRequestOperator<
         this(service, version, operation, true, requestType, validator);
     }
 
-
-
-
     public GenericRequestOperator(String service,
                                    String version,
                                    String operation,
@@ -83,10 +81,8 @@ public class GenericRequestOperator<
                 = new RequestOperatorKey(service, version, operation, defaultActive);
         this.requestType = Objects.requireNonNull(requestType, "requestType");
         this.validator = Objects.requireNonNull(validator, "checker");
-        log.info("{} initialized successfully!", getClass().getSimpleName());
+        LOG.info("{} initialized successfully for {}!", getClass().getSimpleName(), this.requestOperatorKey);
     }
-
-
 
     @Inject
     public void setOperationHandlerRepository(OperationHandlerRepository repo) {
@@ -134,7 +130,7 @@ public class GenericRequestOperator<
             List<RequestResponseModifier> defaultModifier = new LinkedList<>();
             this.modifierRepository
                     .getRequestResponseModifier(request).stream()
-                    .forEach((modifier) -> {
+                    .forEach(modifier -> {
                         if (modifier.getFacilitator().isSplitter()) {
                             splitter.add(modifier);
                         } else if (modifier.getFacilitator().isAdderRemover()) {

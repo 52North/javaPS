@@ -32,9 +32,10 @@ import javax.xml.stream.XMLStreamException;
 
 import org.n52.iceland.ogc.ows.OwsCodeType;
 import org.n52.javaps.coding.stream.StreamWriterKey;
-import org.n52.javaps.coding.stream.xml.AbstractXmlStreamWriter;
+import org.n52.javaps.coding.stream.xml.AbstractXmlElementStreamWriter;
 import org.n52.javaps.coding.stream.xml.XmlStreamWriterKey;
 import org.n52.javaps.coding.stream.xml.impl.XMLConstants.Attributes;
+import org.n52.javaps.coding.stream.xml.impl.XMLConstants.Namespaces;
 import org.n52.javaps.coding.stream.xml.impl.XMLConstants.QNames;
 import org.n52.javaps.description.BoundingBoxDescription;
 import org.n52.javaps.description.BoundingBoxInputDescription;
@@ -73,15 +74,19 @@ import org.n52.javaps.ogc.ows.OwsValueRestriction;
  *
  * @author Christian Autermann
  */
-public class ProcessDescriptionWriter extends AbstractXmlStreamWriter<ProcessDescription> {
-    private static final XmlStreamWriterKey KEY
-            = new XmlStreamWriterKey(ProcessDescription.class);
+public class WpsProcessDescriptionWriter extends AbstractXmlElementStreamWriter<ProcessDescription> {
+    private static final XmlStreamWriterKey KEY = new XmlStreamWriterKey(ProcessDescription.class);
     private static final String UNBOUNDED = "unbounded";
+    private final ConcreteOutputWriter concreteOutputWriter = new ConcreteOutputWriter();
+    private final ConcreteInputWriter concreteInputWriter = new ConcreteInputWriter();
 
     @Override
-    protected void write(ProcessDescription object)
+    public void write(ProcessDescription object)
             throws XMLStreamException {
         start(QNames.WPS_PROCESS);
+        namespace(Namespaces.WPS_PREFIX, Namespaces.WPS_20);
+        namespace(Namespaces.OWS_PREFIX, Namespaces.OWS_20);
+
         writeDescriptionElements(object);
         write((ProcessInputDescriptionContainer) object);
         write((ProcessOutputDescriptionContainer) object);
@@ -95,31 +100,7 @@ public class ProcessDescriptionWriter extends AbstractXmlStreamWriter<ProcessDes
         attr(Attributes.XS_MIN_OCCURS, occurence.getMin().toString());
         attr(Attributes.XS_MAX_OCCURS, occurence.getMax().map(Object::toString).orElse(UNBOUNDED));
         writeDescriptionElements(input);
-        input.visit(new ThrowingProcessInputVisitor<XMLStreamException>() {
-            @Override
-            public void visit(BoundingBoxInputDescription input)
-                    throws XMLStreamException {
-                write((BoundingBoxDescription)input);
-            }
-
-            @Override
-            public void visit(ComplexInputDescription input)
-                    throws XMLStreamException {
-                write((ComplexDescription)input);
-            }
-
-            @Override
-            public void visit(LiteralInputDescription input)
-                    throws XMLStreamException {
-                write((LiteralDescription)input);
-            }
-
-            @Override
-            public void visit(GroupInputDescription input)
-                    throws XMLStreamException {
-                write((ProcessInputDescriptionContainer)input);
-            }
-        });
+        input.visit(this.concreteInputWriter);
         end(QNames.WPS_INPUT);
     }
 
@@ -127,37 +108,8 @@ public class ProcessDescriptionWriter extends AbstractXmlStreamWriter<ProcessDes
             throws XMLStreamException {
         start(QNames.WPS_OUTPUT);
         writeDescriptionElements(output);
-        output.visit(new ThrowingProcessOutputVisitor<XMLStreamException>() {
-            @Override
-            public void visit(BoundingBoxOutputDescription output)
-                    throws XMLStreamException {
-                write((BoundingBoxDescription)output);
-            }
-
-            @Override
-            public void visit(ComplexOutputDescription output)
-                    throws XMLStreamException {
-                write((ComplexDescription)output);
-            }
-
-            @Override
-            public void visit(LiteralOutputDescription output)
-                    throws XMLStreamException {
-                write((LiteralDescription)output);
-            }
-
-            @Override
-            public void visit(GroupOutputDescription output)
-                    throws XMLStreamException {
-                write((ProcessOutputDescriptionContainer)output);
-            }
-        });
+        output.visit(this.concreteOutputWriter);
         end(QNames.WPS_OUTPUT);
-    }
-
-    @Override
-    public Set<StreamWriterKey> getKeys() {
-        return Collections.singleton(KEY);
     }
 
     private void write(QName name, OwsLanguageString value)
@@ -266,8 +218,9 @@ public class ProcessDescriptionWriter extends AbstractXmlStreamWriter<ProcessDes
 
         write(QNames.OWS_DATA_TYPE, ldd.getDataType().orElse(null));
         write(QNames.OWS_UOM, ldd.getUOM().orElse(null));
-        if (ldd.getDefaultValue().isPresent())
-        element(QNames.OWS_DEFAULT_VALUE, ldd.getDefaultValue().get());
+        if (ldd.getDefaultValue().isPresent()) {
+            element(QNames.OWS_DEFAULT_VALUE, ldd.getDefaultValue().get());
+        }
 
         end(QNames.WPS_LITERAL_DATA_DOMAIN);
     }
@@ -388,6 +341,55 @@ public class ProcessDescriptionWriter extends AbstractXmlStreamWriter<ProcessDes
             }
             chars(dmd.getValue());
             end(name);
+        }
+    }
+
+    @Override
+    public Set<StreamWriterKey> getKeys() {
+        return Collections.singleton(KEY);
+    }
+
+    private class ConcreteInputWriter implements ThrowingProcessInputVisitor<XMLStreamException> {
+        @Override
+        public void visit(BoundingBoxInputDescription input) throws XMLStreamException {
+            write((BoundingBoxDescription)input);
+        }
+
+        @Override
+        public void visit(ComplexInputDescription input) throws XMLStreamException {
+            write((ComplexDescription)input);
+        }
+
+        @Override
+        public void visit(LiteralInputDescription input) throws XMLStreamException {
+            write((LiteralDescription)input);
+        }
+
+        @Override
+        public void visit(GroupInputDescription input) throws XMLStreamException {
+            write((ProcessInputDescriptionContainer)input);
+        }
+    }
+
+    private class ConcreteOutputWriter implements ThrowingProcessOutputVisitor<XMLStreamException> {
+        @Override
+        public void visit(BoundingBoxOutputDescription output) throws XMLStreamException {
+            write((BoundingBoxDescription)output);
+        }
+
+        @Override
+        public void visit(ComplexOutputDescription output) throws XMLStreamException {
+            write((ComplexDescription)output);
+        }
+
+        @Override
+        public void visit(LiteralOutputDescription output) throws XMLStreamException {
+            write((LiteralDescription)output);
+        }
+
+        @Override
+        public void visit(GroupOutputDescription output) throws XMLStreamException {
+            write((ProcessOutputDescriptionContainer)output);
         }
     }
 }

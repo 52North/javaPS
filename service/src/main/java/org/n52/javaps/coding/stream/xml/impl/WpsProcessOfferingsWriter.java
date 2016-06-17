@@ -16,6 +16,8 @@
  */
 package org.n52.javaps.coding.stream.xml.impl;
 
+
+
 import static java.util.stream.Collectors.joining;
 
 import java.util.Collections;
@@ -24,7 +26,7 @@ import java.util.Set;
 import javax.xml.stream.XMLStreamException;
 
 import org.n52.javaps.coding.stream.StreamWriterKey;
-import org.n52.javaps.coding.stream.xml.AbstractXmlStreamWriter;
+import org.n52.javaps.coding.stream.xml.AbstractXmlElementStreamWriter;
 import org.n52.javaps.coding.stream.xml.XmlStreamWriterKey;
 import org.n52.javaps.coding.stream.xml.impl.XMLConstants.Attributes;
 import org.n52.javaps.coding.stream.xml.impl.XMLConstants.Namespaces;
@@ -38,20 +40,15 @@ import org.n52.javaps.response.DescribeProcessResponse;
  *
  * @author Christian Autermann
  */
-public class DescribeProcessResponseWriter extends AbstractXmlStreamWriter<DescribeProcessResponse> {
+public class WpsProcessOfferingsWriter extends AbstractXmlElementStreamWriter<DescribeProcessResponse> {
 
     private static final XmlStreamWriterKey KEY = new XmlStreamWriterKey(DescribeProcessResponse.class);
 
     @Override
-    public Set<StreamWriterKey> getKeys() {
-        return Collections.singleton(KEY);
-    }
-
-    @Override
-    protected void write(DescribeProcessResponse object) throws XMLStreamException {
+    public void write(DescribeProcessResponse object) throws XMLStreamException {
         start(QNames.WPS_PROCESS_OFFERINGS);
-        namespace(Namespaces.WPS_20, Namespaces.WPS_PREFIX);
-        namespace(Namespaces.OWS_20, Namespaces.OWS_PREFIX);
+        namespace(Namespaces.WPS_PREFIX, Namespaces.WPS_20);
+        namespace(Namespaces.OWS_PREFIX, Namespaces.OWS_20);
 
         for (ProcessOffering description : object.getProcessDescriptions()) {
             writeProcessOffering(description);
@@ -84,5 +81,10 @@ public class DescribeProcessResponseWriter extends AbstractXmlStreamWriter<Descr
         delegate(offering.getProcessDescription());
 
         end(QNames.WPS_PROCESS_OFFERING);
+    }
+
+    @Override
+    public Set<StreamWriterKey> getKeys() {
+        return Collections.singleton(KEY);
     }
 }

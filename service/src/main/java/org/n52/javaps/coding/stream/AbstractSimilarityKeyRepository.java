@@ -27,23 +27,25 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Set;
-import java.util.function.Predicate;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 import javax.inject.Provider;
 
 import org.n52.iceland.component.Component;
-import org.n52.iceland.util.ProxySimilarityComparator;
 import org.n52.iceland.util.Similar;
+import org.n52.iceland.util.SimilarityComparator;
 
 import com.google.common.collect.Maps;
 
 /**
- *
  * @author Christian Autermann
  * @param <K> the key type
  * @param <C> the component type
  */
+// TODO move to iceland
 public abstract class AbstractSimilarityKeyRepository<K extends Similar<K>, C extends Component<K>> {
 
     private Set<Provider<C>> components = Collections.emptySet();
@@ -52,27 +54,56 @@ public abstract class AbstractSimilarityKeyRepository<K extends Similar<K>, C ex
     protected void setProducers(Collection<Provider<C>> providers) {
         this.components = new HashSet<>(providers);
         this.componentsByKey = providers.stream()
-                .flatMap(p -> p.get().getKeys().stream().map(k -> Maps.immutableEntry(k, p)))
+                .flatMap(p -> keys(p).map(k -> Maps.immutableEntry(k, p)))
                 .collect(groupingBy(Entry::getKey, HashMap::new, mapping(Entry::getValue, toSet())));
     }
 
-    protected C get(K k) {
-        return this.componentsByKey.computeIfAbsent(k, this::findProviders)
-                .stream().map(Provider::get).min(comparator(k)).orElse(null);
+    protected Set<K> keys() {
+        return Collections.unmodifiableSet(componentsByKey.keySet());
     }
 
-    private Set<Provider<C>> findProviders(K k) {
-        return this.components.stream().filter(isSimilarTo(k)).collect(toSet());
+    protected Optional<C> get(K k) {
+        return this.componentsByKey.computeIfAbsent(k, this::findProviders).stream()
+                .map(Provider::get)
+                .min(new ComponentSimilarityComparator<>(k));
     }
 
-    private static <K extends Similar<K>, C extends Component<K>> Predicate<Provider<C>> isSimilarTo(K key) {
-        Predicate<K> keyIsSimilarTo = k -> key.getSimilarity(k) >= 0;
-        return p -> p.get().getKeys().stream().anyMatch(keyIsSimilarTo);
+    private Set<Provider<C>> findProviders(K key) {
+        return this.components.stream()
+                .filter(p -> keys(p).anyMatch(k -> k.getSimilarity(key) >= 0))
+                .collect(toSet());
     }
 
-    private static <K extends Similar<K>, C extends Component<K>> Comparator<C> comparator(K key) {
-        return new ProxySimilarityComparator<C, K>(key) {
-            @Override protected Set<K> getSimilars(C c) { return c.getKeys(); }
-        };
+    private static <K extends Similar<K>, C extends Component<K>> Stream<K> keys(Provider<C> p) {
+        return p.get().getKeys().stream();
+    }
+
+    // TODO move to iceland
+    public static class ComponentSimilarityComparator<K extends Similar<K>, C extends Component<K>> extends ProxySimilarityComparator<C, K> {
+        public ComponentSimilarityComparator(K ref) {
+            super(ref, Component<K>::getKeys);
+        }
+    }
+
+    // TODO replace the iceland version
+    public static class ProxySimilarityComparator<T, K extends Similar<K>> implements Comparator<T> {
+        private final Comparator<T> comparator;
+
+        public ProxySimilarityComparator(K ref, Function<T, Collection<K>> similars) {
+            this.comparator = createComparator(ref, similars);
+        }
+
+        @Override
+        public int compare(T o1, T o2) {
+            return this.comparator.compare(o1, o2);
+        }
+
+        private Comparator<T> createComparator(K ref, Function<T, Collection<K>> similars) {
+            Comparator<K> keyComparator = new SimilarityComparator<>(ref);
+            Comparator<Class<?>> classComparator = (a, b) -> a.isAssignableFrom(b) ? 1 : b.isAssignableFrom(a) ? -1 : 0;
+            Comparator<T> componentComparator = Comparator.comparing((T x) -> Collections.min(similars.apply(x), keyComparator), keyComparator);
+            return componentComparator.thenComparing(Comparator.comparing(Object::getClass, classComparator));
+        }
+
     }
 }

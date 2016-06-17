@@ -25,6 +25,9 @@ import javax.xml.namespace.QName;
  */
 public interface XMLConstants {
 
+    String XML_VERSION = "1.0";
+    String XML_ENCODING = "UTF-8";
+
     public interface QNames {
         QName OWS_ABSTRACT = ows(Entities.OWS_ABSTRACT);
         QName OWS_ALLOWED_VALUES = ows(Entities.OWS_ALLOWED_VALUES);
@@ -48,7 +51,6 @@ public interface XMLConstants {
         QName OWS_UOM = ows(Entities.OWS_UOM);
         QName OWS_VALUE = ows(Entities.OWS_VALUE);
         QName OWS_VALUES_REFERENCE = ows(Entities.OWS_VALUES_REFERENCE);
-        QName OWS_VERSION = ows(Entities.OWS_VERSION);
         QName WPS_BOUNDING_BOX_DATA = wps(Entities.WPS_BOUNDING_BOX_DATA);
         QName WPS_COMPLEX_DATA = wps(Entities.WPS_COMPLEX_DATA);
         QName WPS_DATA_DESCRIPTION = wps(Entities.WPS_DATA_DESCRIPTION);
@@ -88,6 +90,7 @@ public interface XMLConstants {
         String OWS_RANGE_CLOSURE = "rangeClosure";
         String OWS_REFERENCE = "reference";
         String OWS_UOM = "UOM";
+        String OWS_VERSION = "version";
         String WPS_DEFAULT = "default";
         String WPS_ENCODING = "encoding";
         String WPS_JOB_CONTROL_OPTIONS = "jobControlOptions";
@@ -123,7 +126,6 @@ public interface XMLConstants {
         String OWS_UOM = "UOM";
         String OWS_VALUE = "Value";
         String OWS_VALUES_REFERENCE = "ValuesReference";
-        String OWS_VERSION = "version";
         String WPS_BOUNDING_BOX_DATA = "BoundingBoxData";
         String WPS_COMPLEX_DATA = "ComplexData";
         String WPS_DATA_DESCRIPTION = "DataDescription";

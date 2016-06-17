@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collections;
 import java.util.Set;
+import java.util.function.Supplier;
 
 import org.n52.iceland.coding.encode.ResponseProxy;
 import org.n52.iceland.coding.encode.ResponseWriter;
@@ -28,6 +29,7 @@ import org.n52.iceland.exception.ows.NoApplicableCodeException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.response.AbstractServiceResponse;
 import org.n52.iceland.util.http.MediaType;
+import org.n52.javaps.coding.stream.StreamWriter;
 import org.n52.javaps.coding.stream.StreamWriterKey;
 import org.n52.javaps.coding.stream.StreamWriterRepository;
 
@@ -36,15 +38,14 @@ import org.n52.javaps.coding.stream.StreamWriterRepository;
  *
  * @author Christian Autermann
  */
-public class ServiceResponseWriter implements ResponseWriter<AbstractServiceResponse> {
-    static final ResponseWriterKey KEY = new ResponseWriterKey(AbstractServiceResponse.class);
+public class StreamingServiceResponseWriter implements ResponseWriter<AbstractServiceResponse> {
+    public static final ResponseWriterKey KEY = new ResponseWriterKey(AbstractServiceResponse.class);
 
     private MediaType contentType;
-    private final StreamWriterRepository streamWriterRepository;
+    private final StreamWriterRepository repository;
 
-    public ServiceResponseWriter(
-            StreamWriterRepository streamWriterRepository) {
-        this.streamWriterRepository = streamWriterRepository;
+    public StreamingServiceResponseWriter(StreamWriterRepository streamWriterRepository) {
+        this.repository = streamWriterRepository;
     }
 
     @Override
@@ -60,11 +61,9 @@ public class ServiceResponseWriter implements ResponseWriter<AbstractServiceResp
     @Override
     public void write(AbstractServiceResponse t, OutputStream out, ResponseProxy responseProxy)
             throws IOException, OwsExceptionReport {
-        streamWriterRepository.getWriter(new StreamWriterKey(t.getClass(), t.getContentType()))
-                .orElseThrow(() -> new NoApplicableCodeException()
-                        .withMessage("No response encoder forund for %s",
-                                     t.getClass()))
-                .write(t, out);
+        StreamWriterKey key = new StreamWriterKey(t.getClass(), t.getContentType());
+        StreamWriter<Object> writer = repository.getWriter(key).orElseThrow(missingEncoder(t));
+        writer.write(t, out);
     }
 
     @Override
@@ -76,5 +75,10 @@ public class ServiceResponseWriter implements ResponseWriter<AbstractServiceResp
     public Set<ResponseWriterKey> getKeys() {
         return Collections.singleton(KEY);
 
+    }
+
+    private static Supplier<OwsExceptionReport> missingEncoder(AbstractServiceResponse t) {
+        return () -> new NoApplicableCodeException()
+                .withMessage("No response encoder forund for %s", t.getClass());
     }
 }

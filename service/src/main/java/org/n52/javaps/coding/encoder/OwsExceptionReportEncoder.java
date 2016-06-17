@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.coding.stream.xml.impl;
+package org.n52.javaps.coding.encoder;
 
 import java.util.Collections;
 import java.util.Map;
@@ -34,8 +34,7 @@ import org.n52.javaps.response.OwsExceptionReportResponse;
  *
  * @author Christian Autermann
  */
-public class OwsExceptionReportEncoder implements
-        Encoder<OwsExceptionReportResponse, OwsExceptionReport> {
+public class OwsExceptionReportEncoder implements Encoder<OwsExceptionReportResponse, OwsExceptionReport> {
     private static final ExceptionEncoderKey KEY = new ExceptionEncoderKey(MediaTypes.APPLICATION_XML);
     private static final Set<EncoderKey> KEYS = Collections.singleton(KEY);
     private final MediaType contentType = MediaTypes.APPLICATION_XML;

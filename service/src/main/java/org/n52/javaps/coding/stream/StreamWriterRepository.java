@@ -36,7 +36,6 @@ public class StreamWriterRepository
         extends AbstractSimilarityKeyRepository<StreamWriterKey, StreamWriter<?>>
         implements Constructable {
 
-    @Autowired(required = false)
     private Collection<Provider<StreamWriter<?>>> writers;
 
     @Override
@@ -49,10 +48,13 @@ public class StreamWriterRepository
         return getWriter(new StreamWriterKey(type, mediaType));
     }
 
+    @SuppressWarnings("unchecked")
     public <T> Optional<StreamWriter<T>> getWriter(StreamWriterKey key) {
-        @SuppressWarnings("unchecked")
-        StreamWriter<T> writer = (StreamWriter<T>) get(key);
-        return Optional.ofNullable(writer);
+        return get(key).map(x -> (StreamWriter<T>)x);
     }
 
+    @Autowired(required = false)
+    public void set(Collection<Provider<StreamWriter<?>>> writers) {
+        this.writers = writers;
+    }
 }

@@ -27,10 +27,9 @@ import org.n52.iceland.exception.CodedException;
 import org.n52.iceland.exception.ows.OwsExceptionCode;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.javaps.coding.stream.StreamWriterKey;
-import org.n52.javaps.coding.stream.xml.AbstractXmlStreamWriter;
+import org.n52.javaps.coding.stream.xml.AbstractXmlElementStreamWriter;
 import org.n52.javaps.coding.stream.xml.XmlStreamWriterKey;
 import org.n52.javaps.coding.stream.xml.impl.XMLConstants.Attributes;
-import org.n52.javaps.coding.stream.xml.impl.XMLConstants.Entities;
 import org.n52.javaps.coding.stream.xml.impl.XMLConstants.Namespaces;
 import org.n52.javaps.coding.stream.xml.impl.XMLConstants.QNames;
 import org.n52.javaps.response.OwsExceptionReportResponse;
@@ -40,17 +39,17 @@ import org.n52.javaps.response.OwsExceptionReportResponse;
  *
  * @author Christian Autermann
  */
-public class Ows20ExceptionReportWriter extends AbstractXmlStreamWriter<OwsExceptionReportResponse> {
-    public static final StreamWriterKey KEY = new XmlStreamWriterKey(OwsExceptionReportResponse.class);
+public class OwsExceptionReportWriter extends AbstractXmlElementStreamWriter<OwsExceptionReportResponse> {
+    private static final XmlStreamWriterKey KEY = new XmlStreamWriterKey(OwsExceptionReportResponse.class);
     private final boolean includeStackTraceInExceptionReport = true;
 
     @Override
-    protected void write(OwsExceptionReportResponse response)
+    public void write(OwsExceptionReportResponse response)
             throws XMLStreamException {
         OwsExceptionReport report = response.getOwsExceptionReport();
         start(QNames.OWS_EXCEPTION_REPORT);
         namespace(Namespaces.OWS_PREFIX, Namespaces.OWS_20);
-        attr(Entities.OWS_VERSION, report.getVersion());
+        attr(Attributes.OWS_VERSION, report.getVersion());
         for (CodedException exception : report.getExceptions()) {
             writeCodedException(exception);
         }

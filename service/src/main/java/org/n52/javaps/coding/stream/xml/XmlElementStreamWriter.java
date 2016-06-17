@@ -16,18 +16,18 @@
  */
 package org.n52.javaps.coding.stream.xml;
 
-import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLStreamException;
 
-import org.n52.javaps.coding.stream.StreamWriter;
+import org.n52.iceland.component.Component;
+import org.n52.javaps.coding.stream.StreamWriterKey;
 
 /**
  *
  * @author Christian Autermann
  */
-public interface XmlStreamWriter<T> extends StreamWriter<T> {
+public interface XmlElementStreamWriter extends Component<StreamWriterKey> {
 
-    void write(T object, XMLEventWriter writer)
-            throws XMLStreamException;
+    void setContext(XmlStreamWritingContext context);
+    void writeElement(Object object) throws XMLStreamException;
 
 }

@@ -19,7 +19,6 @@ package org.n52.javaps.coding.stream;
 import java.util.Objects;
 
 import org.n52.iceland.component.ClassBasedComponentKey;
-import org.n52.iceland.util.ClassHelper;
 import org.n52.iceland.util.Similar;
 import org.n52.iceland.util.http.MediaType;
 
@@ -42,10 +41,49 @@ public class StreamWriterKey extends ClassBasedComponentKey<Object>
         if (!this.mediaType.isCompatible(that.getMediaType())) {
             return -1;
         }
-        return ClassHelper.getSimiliarity(
+        return getSimiliarity(
                     this.getType() != null ? this.getType() : Object.class,
                     that.getType() != null ? that.getType() : Object.class);
     }
+
+
+    public static int getSimiliarity(Class<?> superClass, Class<?> clazz) {
+        if (clazz.isArray()) {
+            if (!superClass.isArray()) {
+                return -1;
+            } else {
+                return getSimiliarity(superClass.getComponentType(), clazz.getComponentType());
+            }
+        }
+        if (superClass == clazz) {
+            return 0;
+        } else {
+
+            int difference = -1;
+            if (clazz.getSuperclass() != null) {
+                difference = getSimiliarity1(superClass, clazz.getSuperclass(), -1);
+            }
+            if (difference != 0 && superClass.isInterface()) {
+                for (Class<?> i : clazz.getInterfaces()) {
+                    difference = getSimiliarity1(superClass, i, difference);
+                    if (difference == 0) {
+                        break;
+                    }
+                }
+            }
+            return difference < 0 ? -1 : 1 + difference;
+        }
+    }
+
+    private static int getSimiliarity1(Class<?> superClass, Class<?> clazz, int difference) {
+        if (superClass.isAssignableFrom(clazz)) {
+            int cd = getSimiliarity(superClass, clazz);
+            return (cd >= 0) ? ((difference < 0) ? cd : Math.min(difference, cd)) : difference;
+        } else {
+            return difference;
+        }
+    }
+
 
     public MediaType getMediaType() {
         return this.mediaType;
