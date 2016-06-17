@@ -41,7 +41,8 @@ public class XmlStreamWritingContext {
     public XmlStreamWritingContext(OutputStream stream,
                                    BiFunction<XmlStreamWriterKey, XmlStreamWritingContext, Optional<XmlElementStreamWriter>> writerProvider)
             throws XMLStreamException {
-        this.writer = new IndentingXMLEventWriter(outputFactory().createXMLEventWriter(stream, XMLConstants.XML_ENCODING));
+        this.writer = new IndentingXMLEventWriter(outputFactory()
+                .createXMLEventWriter(stream, XMLConstants.XML_ENCODING));
         this.writerProvider = Objects.requireNonNull(writerProvider);
     }
 

@@ -44,12 +44,12 @@ public class StreamWriterRepository
         setProducers(this.writers);
     }
 
-    public <T> Optional<StreamWriter<T>> getWriter(MediaType mediaType, Class<? extends T> type) {
+    public <T> Optional<StreamWriter<? super T>> getWriter(MediaType mediaType, Class<? extends T> type) {
         return getWriter(new StreamWriterKey(type, mediaType));
     }
 
     @SuppressWarnings("unchecked")
-    public <T> Optional<StreamWriter<T>> getWriter(StreamWriterKey key) {
+    public <T> Optional<StreamWriter<? super T>> getWriter(StreamWriterKey key) {
         return get(key).map(x -> (StreamWriter<T>)x);
     }
 

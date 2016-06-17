@@ -39,6 +39,7 @@
     <bean class="org.n52.javaps.coding.stream.xml.impl.OwsExceptionReportWriter" scope="prototype" />
     <bean class="org.n52.javaps.coding.stream.xml.impl.WpsProcessDescriptionWriter" scope="prototype" />
     <bean class="org.n52.javaps.coding.stream.xml.impl.WpsProcessOfferingsWriter" scope="prototype" />
+    <bean class="org.n52.javaps.coding.stream.xml.impl.WpsProcessOfferingWriter" scope="prototype" />
     
     <bean class="org.n52.javaps.handler.GetCapabilitiesHandler"/>
     <bean class="org.n52.javaps.handler.DescribeProcessHandler"/>

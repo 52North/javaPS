@@ -1,5 +1,6 @@
 package org.n52.javaps.coding.stream.xml.impl;
 
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -34,6 +35,9 @@ import org.n52.javaps.io.IGenerator;
 import org.n52.javaps.io.IParser;
 import org.n52.javaps.io.ParserRepository;
 import org.n52.javaps.io.data.IComplexData;
+import org.n52.javaps.ogc.wps.JobControlOption;
+import org.n52.javaps.ogc.wps.ProcessOffering;
+import org.n52.javaps.response.DescribeProcessResponse;
 
 /**
  * TODO JavaDoc
@@ -45,11 +49,24 @@ public class WpsProcessDescriptionWriterTest {
     public void test() throws OwsExceptionReport {
         StreamWriterRepository repo = createRepository();
 
-        Optional<StreamWriter<ProcessDescription>> writer
-                = repo.getWriter(MediaTypes.APPLICATION_XML, ProcessDescription.class);
-        if (writer.isPresent()) {
-            writer.get().write(getProcessDescription(), System.out);
-        }
+        ProcessOffering processOffering = new ProcessOffering();
+        processOffering.setProcessDescription(getProcessDescription());
+        processOffering.setProcessVersion("1.0.0");
+        processOffering.addJobControlOptions(JobControlOption.async());
+        processOffering.addJobControlOptions(JobControlOption.sync());
+        processOffering.addJobControlOptions(JobControlOption.dismiss());
+
+        DescribeProcessResponse response = new DescribeProcessResponse();
+
+        response.setService("WPS");
+        response.setVersion("2.0.0");
+        response.setContentType(MediaTypes.APPLICATION_XML);
+
+        response.addProcessOffering(processOffering);
+
+
+        write(repo, response, System.out);
+
     }
 
     private static final Set<Format> FORMATS = new HashSet<>(Arrays.asList(
@@ -75,8 +92,21 @@ public class WpsProcessDescriptionWriterTest {
         return repository;
     }
 
+    private <T> void write(StreamWriterRepository repo, T object, OutputStream out)
+            throws OwsExceptionReport {
+        @SuppressWarnings("unchecked")
+        Class<? extends T> aClass = (Class<? extends T>) object.getClass();
+        Optional<StreamWriter<? super T>> writer = repo.getWriter(MediaTypes.APPLICATION_XML, aClass);
+
+        if (writer.isPresent()) {
+            writer.get().write(object, out);
+        }
+    }
+
     private static List<Provider<XmlElementStreamWriter>> getElementWriters() {
-        return Arrays.asList(WpsProcessDescriptionWriter::new, WpsProcessOfferingsWriter::new);
+        return Arrays.asList(WpsProcessDescriptionWriter::new,
+                             WpsProcessOfferingsWriter::new,
+                             WpsProcessOfferingWriter::new);
     }
 
     public static enum TestEnum {

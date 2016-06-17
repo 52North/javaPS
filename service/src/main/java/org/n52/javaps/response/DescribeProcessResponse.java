@@ -27,19 +27,19 @@ import org.n52.javaps.ogc.wps.WPSConstants;
 
 public class DescribeProcessResponse extends AbstractServiceResponse {
 
-    private final List<ProcessOffering> descriptions = new LinkedList<>();
+    private final List<ProcessOffering> offerings = new LinkedList<>();
 
     @Override
     public String getOperationName() {
         return WPSConstants.Operations.DescribeProcess.name();
     }
 
-    public List<ProcessOffering> getProcessDescriptions() {
-        return Collections.unmodifiableList(this.descriptions);
+    public List<ProcessOffering> getProcessOffering() {
+        return Collections.unmodifiableList(this.offerings);
     }
 
-    public void addProcessDescription(ProcessOffering description) {
-        this.descriptions.add(Objects.requireNonNull(description));
+    public void addProcessOffering(ProcessOffering description) {
+        this.offerings.add(Objects.requireNonNull(description));
     }
 
 }
