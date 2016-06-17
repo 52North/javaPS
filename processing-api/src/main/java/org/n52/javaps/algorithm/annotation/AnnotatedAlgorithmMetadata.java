@@ -50,17 +50,17 @@ import com.google.common.base.Strings;
 
 /**
  *
- * @author tkunicki
+ * @author Tom Kunicki, Christian Autermann
  */
-class AnnotatedAlgorithmMetadata {
+public class AnnotatedAlgorithmMetadata {
     private final Class<?> algorithmClass;
 
-    private final Map<OwsCodeType, OutputBinding<?, ?>> outputBindings;
-    private final Map<OwsCodeType, InputBinding<?, ?>> inputBindings;
+    private final Map<OwsCodeType, AbstractOutputBinding<?, ?>> outputBindings;
+    private final Map<OwsCodeType, AbstractInputBinding<?, ?>> inputBindings;
     private final ExecuteBinding executeBinding;
     private final ProcessDescription description;
 
-    AnnotatedAlgorithmMetadata(Class<?> algorithmClass, ParserRepository parserRepository, GeneratorRepository generatorRepository) {
+    public AnnotatedAlgorithmMetadata(Class<?> algorithmClass, ParserRepository parserRepository, GeneratorRepository generatorRepository) {
 
         //this.formatRepository = Objects.requireNonNull(formatRepository);
         this.algorithmClass = Objects.requireNonNull(algorithmClass);
@@ -77,15 +77,15 @@ class AnnotatedAlgorithmMetadata {
         return this.algorithmClass;
     }
 
-    public Map<OwsCodeType, OutputBinding<?, ?>> getOutputBindings() {
+    Map<OwsCodeType, AbstractOutputBinding<?, ?>> getOutputBindings() {
         return Collections.unmodifiableMap(this.outputBindings);
     }
 
-    public Map<OwsCodeType, InputBinding<?, ?>> getInputBindings() {
+    Map<OwsCodeType, AbstractInputBinding<?, ?>> getInputBindings() {
         return Collections.unmodifiableMap(this.inputBindings);
     }
 
-    public ExecuteBinding getExecuteBinding() {
+    ExecuteBinding getExecuteBinding() {
         return this.executeBinding;
     }
 
@@ -93,7 +93,7 @@ class AnnotatedAlgorithmMetadata {
         return this.description;
     }
 
-    public <M extends AccessibleObject & Member, B extends DataBinding<? super M, ?>> Stream<? extends B> parseElements(
+    public <M extends AccessibleObject & Member, B extends AbstractDataBinding<? super M, ?>> Stream<? extends B> parseElements(
             Stream<M> members, List<? extends AnnotationParser<?, M, ? extends B>> outputParser) {
         return members.flatMap(member -> outputParser.stream()
                 .filter(parser -> member.isAnnotationPresent(parser.getSupportedAnnotation()))
@@ -116,34 +116,34 @@ class AnnotatedAlgorithmMetadata {
         }
     }
 
-    private Map<OwsCodeType, InputBinding<?, ?>> getInputBindings(Class<?> algorithmClass, ParserRepository parserRepository) {
-        Stream<InputBinding<?, ?>> s1 = parseElements(getFields(algorithmClass), Arrays
-                .asList(new LiteralDataInputAnnotationParser<>(InputBinding::field),
-                        new ComplexDataInputAnnotationParser<>(InputBinding::field, parserRepository)))
-                .map(x -> (InputBinding<?,?>)x);
-        Stream<InputBinding<?, ?>> s2 = parseElements(getMethods(algorithmClass), Arrays
-                .asList(new LiteralDataInputAnnotationParser<>(InputBinding::method),
-                        new ComplexDataInputAnnotationParser<>(InputBinding::method, parserRepository)))
-                .map(x -> (InputBinding<?,?>)x);
-        BinaryOperator<InputBinding<?, ?>> merger = throwingMerger((a, b) ->
+    private Map<OwsCodeType, AbstractInputBinding<?, ?>> getInputBindings(Class<?> algorithmClass, ParserRepository parserRepository) {
+        Stream<AbstractInputBinding<?, ?>> s1 = parseElements(getFields(algorithmClass), Arrays
+                .asList(new LiteralInputAnnotationParser<>(AbstractInputBinding::field),
+                        new ComplexInputAnnotationParser<>(AbstractInputBinding::field, parserRepository)))
+                .map(x -> (AbstractInputBinding<?,?>)x);
+        Stream<AbstractInputBinding<?, ?>> s2 = parseElements(getMethods(algorithmClass), Arrays
+                .asList(new LiteralInputAnnotationParser<>(AbstractInputBinding::method),
+                        new ComplexInputAnnotationParser<>(AbstractInputBinding::method, parserRepository)))
+                .map(x -> (AbstractInputBinding<?,?>)x);
+        BinaryOperator<AbstractInputBinding<?, ?>> merger = throwingMerger((a, b) ->
                 new RuntimeException("duplicated identifier: " + a.getDescription().getId()));
-        Collector<InputBinding<?, ?>, ?, LinkedHashMap<OwsCodeType, InputBinding<?, ?>>> collector
+        Collector<AbstractInputBinding<?, ?>, ?, LinkedHashMap<OwsCodeType, AbstractInputBinding<?, ?>>> collector
                 = toMap(b -> b.getDescription().getId(), identity(), merger, LinkedHashMap::new);
         return Collections.unmodifiableMap(Stream.concat(s1, s2).collect(collector));
     }
 
-    private Map<OwsCodeType, OutputBinding<?, ?>> getOutputBindings(Class<?> algorithmClass, GeneratorRepository generatorRepository) {
-        Stream<OutputBinding<?, ?>> s1 = parseElements(getFields(algorithmClass), Arrays
-                    .asList(new LiteralDataOutputAnnotationParser<>(OutputBinding::field),
-                            new ComplexDataOutputAnnotationParser<>(OutputBinding::field, generatorRepository)))
-                .map(x -> (OutputBinding<?,?>)x);
-        Stream<OutputBinding<?, ?>> s2 = parseElements(getMethods(algorithmClass), Arrays
-                    .asList(new LiteralDataOutputAnnotationParser<>(OutputBinding::method),
-                            new ComplexDataOutputAnnotationParser<>(OutputBinding::method, generatorRepository)))
-                .map(x -> (OutputBinding<?,?>)x);
-        BinaryOperator<OutputBinding<?, ?>> merger = throwingMerger((a, b) ->
+    private Map<OwsCodeType, AbstractOutputBinding<?, ?>> getOutputBindings(Class<?> algorithmClass, GeneratorRepository generatorRepository) {
+        Stream<AbstractOutputBinding<?, ?>> s1 = parseElements(getFields(algorithmClass), Arrays
+                    .asList(new LiteralOutputAnnotationParser<>(AbstractOutputBinding::field),
+                            new ComplexOutputAnnotationParser<>(AbstractOutputBinding::field, generatorRepository)))
+                .map(x -> (AbstractOutputBinding<?,?>)x);
+        Stream<AbstractOutputBinding<?, ?>> s2 = parseElements(getMethods(algorithmClass), Arrays
+                    .asList(new LiteralOutputAnnotationParser<>(AbstractOutputBinding::method),
+                            new ComplexOutputAnnotationParser<>(AbstractOutputBinding::method, generatorRepository)))
+                .map(x -> (AbstractOutputBinding<?,?>)x);
+        BinaryOperator<AbstractOutputBinding<?, ?>> merger = throwingMerger((a, b) ->
                 new RuntimeException("duplicated identifier: " + a.getDescription().getId()));
-        Collector<OutputBinding<?, ?>, ?, Map<OwsCodeType, OutputBinding<?, ?>>> collector
+        Collector<AbstractOutputBinding<?, ?>, ?, Map<OwsCodeType, AbstractOutputBinding<?, ?>>> collector
                 = toMap(b -> b.getDescription().getId(), identity(), merger, LinkedHashMap::new);
         return Collections.unmodifiableMap(Stream.concat(s1, s2).collect(collector));
     }
@@ -159,9 +159,9 @@ class AnnotatedAlgorithmMetadata {
                                              + algorithmClass.getCanonicalName())));
     }
 
-    private ProcessDescription getDescription(Class<?> algorithmClass, Map<OwsCodeType, InputBinding<?, ?>> inputBindings, Map<OwsCodeType, OutputBinding<?, ?>> outputBindings) {
-        List<ProcessInputDescription> inputs = inputBindings.values().stream().map(InputBinding::getDescription).collect(toList());
-        List<ProcessOutputDescription> outputs = outputBindings.values().stream().map(OutputBinding::getDescription).collect(toList());
+    private ProcessDescription getDescription(Class<?> algorithmClass, Map<OwsCodeType, AbstractInputBinding<?, ?>> inputBindings, Map<OwsCodeType, AbstractOutputBinding<?, ?>> outputBindings) {
+        List<ProcessInputDescription> inputs = inputBindings.values().stream().map(AbstractInputBinding::getDescription).collect(toList());
+        List<ProcessOutputDescription> outputs = outputBindings.values().stream().map(AbstractOutputBinding::getDescription).collect(toList());
         return getDescription(algorithmClass, inputs, outputs);
     }
 

@@ -28,13 +28,13 @@ import com.google.common.primitives.Primitives;
 /**
  * TODO JavaDoc
  *
- * @author Christian Autermann
+ * @author Tom Kunicki, Christian Autermann
  */
-abstract class DataBinding<M extends AccessibleObject & Member, D extends DataDescription> extends AnnotationBinding<M> {
+abstract class AbstractDataBinding<M extends AccessibleObject & Member, D extends DataDescription> extends AnnotationBinding<M> {
 
     private D description;
 
-    public DataBinding(M member) {
+    AbstractDataBinding(M member) {
         super(member);
     }
 

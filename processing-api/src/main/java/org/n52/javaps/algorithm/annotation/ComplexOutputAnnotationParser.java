@@ -36,12 +36,12 @@ import org.n52.javaps.io.data.IData;
  * @param <M>
  * @param <B>
  */
-class ComplexDataOutputAnnotationParser<M extends AccessibleObject & Member, B extends OutputBinding<M, ComplexOutputDescription>>
-        extends OutputAnnotationParser<ComplexOutput, M, ComplexOutputDescription, B> {
+class ComplexOutputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractOutputBinding<M, ComplexOutputDescription>>
+        extends AbstractOutputAnnotationParser<ComplexOutput, M, ComplexOutputDescription, B> {
 
     private final GeneratorRepository generatorRepository;
 
-    ComplexDataOutputAnnotationParser(Function<M, B> bindingFunction, GeneratorRepository generatorRepository) {
+    ComplexOutputAnnotationParser(Function<M, B> bindingFunction, GeneratorRepository generatorRepository) {
         super(bindingFunction);
         this.generatorRepository = Objects.requireNonNull(generatorRepository);
     }

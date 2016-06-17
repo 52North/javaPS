@@ -30,14 +30,14 @@ import java.util.function.Function;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.n52.javaps.ogc.ows.OwsAllowedValue;
-import org.n52.javaps.ogc.ows.OwsAllowedValues;
 import org.n52.javaps.description.LiteralInputDescription;
 import org.n52.javaps.description.LiteralInputDescriptionBuilder;
 import org.n52.javaps.description.impl.LiteralDataDomainImpl;
 import org.n52.javaps.description.impl.LiteralInputDescriptionImpl;
 import org.n52.javaps.io.BasicXMLTypeFactory;
 import org.n52.javaps.io.data.ILiteralData;
+import org.n52.javaps.ogc.ows.OwsAllowedValue;
+import org.n52.javaps.ogc.ows.OwsAllowedValues;
 
 /**
  * TODO JavaDoc
@@ -46,12 +46,12 @@ import org.n52.javaps.io.data.ILiteralData;
  * @param <M>
  * @param <B>
  */
-class LiteralDataInputAnnotationParser<M extends AccessibleObject & Member, B extends InputBinding<M, LiteralInputDescription>>
-       extends InputAnnotationParser<LiteralInput, M, LiteralInputDescription, B> {
+class LiteralInputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractInputBinding<M, LiteralInputDescription>>
+       extends AbstractInputAnnotationParser<LiteralInput, M, LiteralInputDescription, B> {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(AnnotationParser.class);
 
-    LiteralDataInputAnnotationParser(Function<M, B> bindingFunction) {
+    LiteralInputAnnotationParser(Function<M, B> bindingFunction) {
         super(bindingFunction);
     }
 
@@ -95,14 +95,17 @@ class LiteralDataInputAnnotationParser<M extends AccessibleObject & Member, B ex
             } else {
                 allowedValues = enumValues;
             }
+        }
 
-            if (annotation.maxOccurs() == LiteralInput.ENUM_COUNT) {
-                builder.withMaximalOccurence(annotation.maxOccurs());
+         if (annotation.maxOccurs() == LiteralInput.ENUM_COUNT) {
+            if (allowedValues.isEmpty()) {
+                LOGGER.warn("Invalid maxOccurs \"ENUM_COUNT\" specified for for input {}, setting maxOccurs to {}", annotation.identifier(), annotation.minOccurs());
+                builder.withMaximalOccurence(annotation.minOccurs() > 0 ? annotation.minOccurs() : 1);
+            } else {
+                builder.withMaximalOccurence(allowedValues.size());
             }
-
-        } else if (annotation.maxOccurs() == LiteralInput.ENUM_COUNT) {
-            builder.withMaximalOccurence(annotation.minOccurs());
-            LOGGER.warn("Invalid maxOccurs \"ENUM_COUNT\" specified for for input {}, setting maxOccurs to {}", annotation.identifier(), annotation.minOccurs());
+        } else {
+            builder.withMaximalOccurence(annotation.maxOccurs());
         }
 
         if (!allowedValues.isEmpty() && !annotation.defaultValue().isEmpty()) {

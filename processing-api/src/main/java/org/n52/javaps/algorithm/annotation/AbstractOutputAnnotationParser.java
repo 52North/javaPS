@@ -22,11 +22,18 @@ import java.lang.reflect.Member;
 import java.util.function.Function;
 
 import org.n52.javaps.description.ProcessOutputDescription;
+/**
+ *
+ * @author Tom Kunicki, Christian Autermann
+ * @param <A>
+ * @param <M>
+ * @param <D>
+ * @param <B>
+ */
+abstract class AbstractOutputAnnotationParser<A extends Annotation, M extends AccessibleObject & Member, D extends ProcessOutputDescription, B extends AbstractOutputBinding<M, D>>
+        extends AbstractDataAnnotationParser<A, M, D, B> {
 
-abstract class OutputAnnotationParser<A extends Annotation, M extends AccessibleObject & Member, D extends ProcessOutputDescription, B extends OutputBinding<M, D>>
-        extends DataAnnotationParser<A, M, D, B> {
-
-    OutputAnnotationParser(Function<M, B> bindingFunction) {
+    AbstractOutputAnnotationParser(Function<M, B> bindingFunction) {
         super(bindingFunction);
     }
 }

@@ -36,12 +36,12 @@ import org.n52.javaps.io.data.IData;
  * @param <M>
  * @param <B>
  */
-class ComplexDataInputAnnotationParser<M extends AccessibleObject & Member, B extends InputBinding<M, ComplexInputDescription>>
-        extends InputAnnotationParser<ComplexInput, M, ComplexInputDescription, B> {
+class ComplexInputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractInputBinding<M, ComplexInputDescription>>
+        extends AbstractInputAnnotationParser<ComplexInput, M, ComplexInputDescription, B> {
 
     private final ParserRepository parserRepository;
 
-    ComplexDataInputAnnotationParser(Function<M, B> bindingFunction, ParserRepository parserRepository) {
+    ComplexInputAnnotationParser(Function<M, B> bindingFunction, ParserRepository parserRepository) {
         super(bindingFunction);
         this.parserRepository = Objects.requireNonNull(parserRepository);
     }

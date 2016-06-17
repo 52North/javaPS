@@ -37,15 +37,15 @@ import org.n52.javaps.io.data.IData;
 /**
  * TODO JavaDoc
  *
- * @author Christian Autermann
+ * @author Tom Kunicki, Christian Autermann
  * @param <M>
  * @param <D>
  */
-abstract class InputBinding<M extends AccessibleObject & Member, D extends ProcessInputDescription> extends DataBinding<M, D> {
+abstract class AbstractInputBinding<M extends AccessibleObject & Member, D extends ProcessInputDescription> extends AbstractDataBinding<M, D> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(InputBinding.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractInputBinding.class);
 
-    InputBinding(M member) {
+    AbstractInputBinding(M member) {
         super(member);
     }
 
@@ -167,15 +167,15 @@ abstract class InputBinding<M extends AccessibleObject & Member, D extends Proce
 
     public abstract void set(Object annotatedObject, List<IData> boundInputList);
 
-    public static <D extends ProcessInputDescription> InputBinding<Field, D> field(Field field) {
+    public static <D extends ProcessInputDescription> AbstractInputBinding<Field, D> field(Field field) {
         return new InputFieldBinding<>(field);
     }
 
-    public static <D extends ProcessInputDescription> InputBinding<Method, D> method(Method method) {
+    public static <D extends ProcessInputDescription> AbstractInputBinding<Method, D> method(Method method) {
         return new InputMethodBinding<>(method);
     }
 
-    private static class InputFieldBinding<D extends ProcessInputDescription> extends InputBinding<Field, D> {
+    private static class InputFieldBinding<D extends ProcessInputDescription> extends AbstractInputBinding<Field, D> {
 
         InputFieldBinding(Field field) {
             super(field);
@@ -197,7 +197,7 @@ abstract class InputBinding<M extends AccessibleObject & Member, D extends Proce
 
     }
 
-    private static class InputMethodBinding<D extends ProcessInputDescription> extends InputBinding<Method, D> {
+    private static class InputMethodBinding<D extends ProcessInputDescription> extends AbstractInputBinding<Method, D> {
 
         InputMethodBinding(Method method) {
             super(method);

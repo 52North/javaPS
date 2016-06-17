@@ -35,11 +35,11 @@ import org.n52.javaps.io.data.ILiteralData;
  *
  * @author Christian Autermann
  */
-class LiteralDataOutputAnnotationParser<M extends AccessibleObject & Member, B extends OutputBinding<M, LiteralOutputDescription>>
-        extends OutputAnnotationParser<LiteralOutput, M, LiteralOutputDescription, B> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(LiteralDataOutputAnnotationParser.class);
+class LiteralOutputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractOutputBinding<M, LiteralOutputDescription>>
+        extends AbstractOutputAnnotationParser<LiteralOutput, M, LiteralOutputDescription, B> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(LiteralOutputAnnotationParser.class);
 
-    LiteralDataOutputAnnotationParser(Function<M, B> bindingFunction) {
+    LiteralOutputAnnotationParser(Function<M, B> bindingFunction) {
         super(bindingFunction);
     }
 

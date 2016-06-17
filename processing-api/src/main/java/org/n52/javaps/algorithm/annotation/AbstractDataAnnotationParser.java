@@ -21,24 +21,23 @@ import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Member;
 import java.util.function.Function;
 
-import org.n52.javaps.algorithm.annotation.DataBinding;
 import org.n52.javaps.description.DataDescription;
 import org.n52.javaps.io.data.IData;
 
 /**
  * TODO JavaDoc
  *
- * @author Christian Autermann
+ * @author Tom Kunicki, Christian Autermann
  * @param <A>
  * @param <M>
  * @param <D>
  * @param <B>
  */
-abstract class DataAnnotationParser<A extends Annotation, M extends AccessibleObject & Member, D extends DataDescription, B extends DataBinding<M, D>>
+abstract class AbstractDataAnnotationParser<A extends Annotation, M extends AccessibleObject & Member, D extends DataDescription, B extends AbstractDataBinding<M, D>>
         implements AnnotationParser<A, M, B> {
     private final Function<M, B> bindingFunction;
 
-    DataAnnotationParser(Function<M, B> bindingFunction) {
+    AbstractDataAnnotationParser(Function<M, B> bindingFunction) {
         this.bindingFunction = bindingFunction;
     }
 

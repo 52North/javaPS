@@ -21,21 +21,20 @@ import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Member;
 import java.util.function.Function;
 
-import org.n52.javaps.algorithm.annotation.InputBinding;
 import org.n52.javaps.description.ProcessInputDescription;
 
 /**
  * TODO JavaDoc
  *
- * @author Christian Autermann
+ * @author Tom Kunicki, Christian Autermann
  * @param <A>
  * @param <M>
  * @param <D>
  */
-abstract class InputAnnotationParser<A extends Annotation, M extends AccessibleObject & Member, D extends ProcessInputDescription, B extends InputBinding<M, D>>
-        extends DataAnnotationParser<A, M, D, B> {
+abstract class AbstractInputAnnotationParser<A extends Annotation, M extends AccessibleObject & Member, D extends ProcessInputDescription, B extends AbstractInputBinding<M, D>>
+        extends AbstractDataAnnotationParser<A, M, D, B> {
 
-    InputAnnotationParser(Function<M, B> bindingFunction) {
+    AbstractInputAnnotationParser(Function<M, B> bindingFunction) {
         super(bindingFunction);
     }
 }

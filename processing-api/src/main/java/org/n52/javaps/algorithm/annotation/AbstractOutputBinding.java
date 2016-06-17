@@ -30,11 +30,11 @@ import org.slf4j.LoggerFactory;
 import org.n52.javaps.description.ProcessOutputDescription;
 import org.n52.javaps.io.data.IData;
 
-abstract class OutputBinding<M extends AccessibleObject & Member, D extends ProcessOutputDescription> extends DataBinding<M, D> {
+abstract class AbstractOutputBinding<M extends AccessibleObject & Member, D extends ProcessOutputDescription> extends AbstractDataBinding<M, D> {
 
     private Constructor<? extends IData> bindingConstructor;
 
-    public OutputBinding(M member) {
+    public AbstractOutputBinding(M member) {
         super(member);
     }
 
@@ -79,15 +79,15 @@ abstract class OutputBinding<M extends AccessibleObject & Member, D extends Proc
         return null;
     }
 
-    public static <D extends ProcessOutputDescription> OutputBinding<Field, D> field(Field field) {
+    public static <D extends ProcessOutputDescription> AbstractOutputBinding<Field, D> field(Field field) {
         return new OutputFieldBinding<>(field);
     }
 
-    public static <D extends ProcessOutputDescription> OutputBinding<Method, D> method(Method method) {
+    public static <D extends ProcessOutputDescription> AbstractOutputBinding<Method, D> method(Method method) {
         return new OutputMethodBinding<>(method);
     }
 
-    private static class OutputMethodBinding<D extends ProcessOutputDescription> extends OutputBinding<Method, D> {
+    private static class OutputMethodBinding<D extends ProcessOutputDescription> extends AbstractOutputBinding<Method, D> {
         private static final Logger LOGGER = LoggerFactory.getLogger(OutputMethodBinding.class);
 
         OutputMethodBinding(Method method) {
@@ -133,7 +133,7 @@ abstract class OutputBinding<M extends AccessibleObject & Member, D extends Proc
 
     }
 
-    private static class OutputFieldBinding<D extends ProcessOutputDescription> extends OutputBinding<Field, D> {
+    private static class OutputFieldBinding<D extends ProcessOutputDescription> extends AbstractOutputBinding<Field, D> {
 
         private static final Logger LOGGER = LoggerFactory.getLogger(OutputFieldBinding.class);
 
