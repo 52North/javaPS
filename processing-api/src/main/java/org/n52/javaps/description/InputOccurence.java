@@ -33,7 +33,15 @@ public class InputOccurence {
 
     public InputOccurence(BigInteger min, BigInteger max) {
         this.min = min == null ? BigInteger.ONE : min;
-        this.max = Optional.ofNullable(max == null ? BigInteger.ONE : (max.compareTo(BigInteger.ZERO) < 0 ? null : min));
+
+        if (max == null) {
+            this.max = Optional.of(BigInteger.ONE);
+        } else if (max.compareTo(BigInteger.ZERO) < 0) {
+            this.max = Optional.empty();
+        } else {
+            this.max = Optional.of(max);
+        }
+
         checkArgument(this.min.compareTo(BigInteger.ZERO) >= 0, "minimum < 0");
         checkArgument(!this.max.isPresent() || this.max.get().compareTo(BigInteger.ZERO) > 0, "maximum <= 0");
         checkArgument(!this.max.isPresent() || this.min.compareTo(this.max.get()) <= 0, "minimum > maximum");
@@ -62,6 +70,6 @@ public class InputOccurence {
 
     @Override
     public String toString() {
-        return String.format("[%d, %d]", this.min, this.max);
+        return String.format("[%s, %s]", this.min, this.max.map(Object::toString).orElse(""));
     }
 }
