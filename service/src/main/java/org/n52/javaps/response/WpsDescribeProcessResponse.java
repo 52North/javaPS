@@ -25,7 +25,7 @@ import org.n52.iceland.response.AbstractServiceResponse;
 import org.n52.javaps.ogc.wps.ProcessOffering;
 import org.n52.javaps.ogc.wps.WPSConstants;
 
-public class DescribeProcessResponse extends AbstractServiceResponse {
+public class WpsDescribeProcessResponse extends AbstractServiceResponse {
 
     private final List<ProcessOffering> offerings = new LinkedList<>();
 

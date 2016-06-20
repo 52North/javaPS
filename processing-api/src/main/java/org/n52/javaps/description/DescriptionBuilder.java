@@ -22,6 +22,7 @@ import java.util.Arrays;
 import org.n52.iceland.ogc.ows.OwsCodeType;
 import org.n52.javaps.ogc.ows.OwsKeyword;
 import org.n52.javaps.ogc.ows.OwsLanguageString;
+import org.n52.javaps.ogc.ows.OwsMetadata;
 
 /**
  * TODO JavaDoc
@@ -85,5 +86,7 @@ public interface DescriptionBuilder<T extends Description, B extends Description
     default B withKeyword(String keyword) {
         return withKeyword(new OwsKeyword(keyword));
     }
+
+    B withMetadata(OwsMetadata metadata);
 
 }

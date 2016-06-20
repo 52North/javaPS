@@ -21,6 +21,7 @@ import static java.util.stream.Collectors.mapping;
 import static java.util.stream.Collectors.toSet;
 
 import java.math.BigInteger;
+import java.net.URI;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -66,9 +67,12 @@ import org.n52.javaps.ogc.ows.OwsCRS;
 import org.n52.javaps.ogc.ows.OwsDomainMetadata;
 import org.n52.javaps.ogc.ows.OwsKeyword;
 import org.n52.javaps.ogc.ows.OwsLanguageString;
+import org.n52.javaps.ogc.ows.OwsMetadata;
 import org.n52.javaps.ogc.ows.OwsValueDescription;
 import org.n52.javaps.ogc.ows.OwsValueReference;
 import org.n52.javaps.ogc.ows.OwsValueRestriction;
+import org.n52.javaps.ogc.w3c.xlink.XLink.Actuate;
+import org.n52.javaps.ogc.w3c.xlink.XLink.Show;
 
 /**
  *
@@ -86,6 +90,7 @@ public class WpsProcessDescriptionWriter extends AbstractXmlElementStreamWriter<
         start(QNames.WPS_PROCESS);
         namespace(Namespaces.WPS_PREFIX, Namespaces.WPS_20);
         namespace(Namespaces.OWS_PREFIX, Namespaces.OWS_20);
+        namespace(Namespaces.XLINK_PREFIX, Namespaces.XLINK);
 
         writeDescriptionElements(object);
         write((ProcessInputDescriptionContainer) object);
@@ -165,9 +170,18 @@ public class WpsProcessDescriptionWriter extends AbstractXmlElementStreamWriter<
         writeKeywords(description.getKeywords());
         write(QNames.OWS_IDENTIFIER, description.getId());
 
-        // TODO OWS metadata for descriptions
-        //start(QNames.OWS_METADATA);
-        //end(QNames.OWS_METADATA);
+
+        for (OwsMetadata metadata : description.getMetadata()) {
+            start(QNames.OWS_METADATA);
+            attr(QNames.XLINK_HREF, metadata.getHref().map(URI::toString));
+            attr(QNames.XLINK_ROLE, metadata.getRole().map(URI::toString));
+            attr(QNames.XLINK_SHOW, metadata.getShow().map(Show::toString));
+            attr(QNames.XLINK_TITLE, metadata.getTitle());
+            attr(QNames.XLINK_ARCROLE, metadata.getArcrole().map(URI::toString));
+            attr(QNames.XLINK_ACTUATE, metadata.getActuate().map(Actuate::toString));
+            attr(Attributes.OWS_ABOUT, metadata.getAbout().map(URI::toString));
+            end(QNames.OWS_METADATA);
+        }
     }
 
     private void write(Format defaultFormat,

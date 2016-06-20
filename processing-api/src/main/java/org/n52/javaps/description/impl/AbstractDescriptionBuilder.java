@@ -20,10 +20,11 @@ import java.util.Objects;
 import java.util.Set;
 
 import org.n52.iceland.ogc.ows.OwsCodeType;
-import org.n52.javaps.ogc.ows.OwsKeyword;
-import org.n52.javaps.ogc.ows.OwsLanguageString;
 import org.n52.javaps.description.Description;
 import org.n52.javaps.description.DescriptionBuilder;
+import org.n52.javaps.ogc.ows.OwsKeyword;
+import org.n52.javaps.ogc.ows.OwsLanguageString;
+import org.n52.javaps.ogc.ows.OwsMetadata;
 
 import com.google.common.collect.ImmutableSet;
 
@@ -41,6 +42,7 @@ public abstract class AbstractDescriptionBuilder<T extends Description, B extend
     private OwsLanguageString title;
     private OwsLanguageString abstrakt;
     private final ImmutableSet.Builder<OwsKeyword> keywords = ImmutableSet.builder();
+    private final ImmutableSet.Builder<OwsMetadata> metadata = ImmutableSet.builder();
 
     @SuppressWarnings(value = "unchecked")
     @Override
@@ -70,19 +72,32 @@ public abstract class AbstractDescriptionBuilder<T extends Description, B extend
         return (B) this;
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
+    public B withMetadata(OwsMetadata metadata) {
+        this.metadata.add(Objects.requireNonNull(metadata));
+        return (B) this;
+    }
+
     OwsCodeType getId() {
-        return id;
+        return this.id;
     }
 
     OwsLanguageString getTitle() {
-        return title;
+        return this.title;
     }
 
     OwsLanguageString getAbstract() {
-        return abstrakt;
+        return this.abstrakt;
     }
 
     Set<OwsKeyword> getKeywords() {
-        return keywords.build();
+        return this.keywords.build();
     }
+
+    Set<OwsMetadata> getMetadata() {
+        return this.metadata.build();
+    }
+
+
 }

@@ -30,6 +30,7 @@ public class WpsProcessOfferingWriter extends AbstractXmlElementStreamWriter<Pro
         start(QNames.WPS_PROCESS_OFFERING);
         namespace(Namespaces.WPS_PREFIX, Namespaces.WPS_20);
         namespace(Namespaces.OWS_PREFIX, Namespaces.OWS_20);
+        namespace(Namespaces.XLINK_PREFIX, Namespaces.XLINK);
 
         if (!offering.getJobControlOptions().isEmpty()) {
             attr(Attributes.WPS_JOB_CONTROL_OPTIONS, offering

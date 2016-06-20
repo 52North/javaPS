@@ -64,6 +64,19 @@ public interface XMLConstants {
         QName WPS_PROCESS_OFFERING = wps(Entities.WPS_PROCESS_OFFERING);
         QName WPS_PROCESS_OFFERINGS = wps(Entities.WPS_PROCESS_OFFERINGS);
         QName WPS_SUPPORTED_CRS = wps(Entities.WPS_SUPPORTED_CRS);
+        QName WPS_JOB_ID = wps(Entities.WPS_JOB_ID);
+        QName WPS_STATUS = wps(Entities.WPS_STATUS);
+        QName WPS_EXPIRATION_DATE = wps(Entities.WPS_EXPIRATION_DATE);
+        QName WPS_ESTIMATED_COMPLETION = wps(Entities.WPS_ESTIMATED_COMPLETION);
+        QName WPS_NEXT_POLL = wps(Entities.WPS_NEXT_POLL);
+        QName WPS_PERCENT_COMPLETED = wps(Entities.WPS_PERCENT_COMPLETED);
+        QName WPS_STATUS_INFO = wps(Entities.WPS_STATUS_INFO);
+        QName XLINK_HREF = xlink(Attributes.XLINK_HREF);
+        QName XLINK_ROLE = xlink(Attributes.XLINK_ROLE);
+        QName XLINK_ARCROLE = xlink(Attributes.XLINK_ARCROLE);
+        QName XLINK_TITLE = xlink(Attributes.XLINK_TITLE);
+        QName XLINK_SHOW = xlink(Attributes.XLINK_SHOW);
+        QName XLINK_ACTUATE = xlink(Attributes.XLINK_ACTUATE);
 
         static QName wps(String element) {
             return new QName(Namespaces.WPS_20, element, Namespaces.WPS_PREFIX);
@@ -72,6 +85,10 @@ public interface XMLConstants {
         static QName ows(String element) {
             return new QName(Namespaces.OWS_20, element, Namespaces.OWS_PREFIX);
         }
+
+        static QName xlink(String element) {
+            return new QName(Namespaces.XLINK, element, Namespaces.XLINK_PREFIX);
+        }
     }
 
     public interface Namespaces {
@@ -79,6 +96,8 @@ public interface XMLConstants {
         String OWS_PREFIX = "ows";//TODO setting
         String WPS_20 = "http://www.opengis.net/wps/2.0";
         String WPS_PREFIX = "wps";
+        String XLINK = "http://www.w3.org/1999/xlink";
+        String XLINK_PREFIX = "xlink";
 
     }
 
@@ -102,6 +121,13 @@ public interface XMLConstants {
         String WPS_SCHEMA = "schema";
         String XS_MAX_OCCURS = "maxOccurs";
         String XS_MIN_OCCURS = "minOccurs";
+        String XLINK_HREF = "href";
+        String XLINK_ROLE = "role";
+        String XLINK_ARCROLE = "arcrole";
+        String XLINK_TITLE = "title";
+        String XLINK_SHOW = "show";
+        String XLINK_ACTUATE = "actuate";
+        String OWS_ABOUT = "about";
     }
 
     public interface Entities {
@@ -139,5 +165,12 @@ public interface XMLConstants {
         String WPS_PROCESS_OFFERING = "ProcessOffering";
         String WPS_PROCESS_OFFERINGS = "ProcessOfferings";
         String WPS_SUPPORTED_CRS = "SupportedCRS";
+        String WPS_JOB_ID = "JobId";
+        String WPS_STATUS = "Status";
+        String WPS_EXPIRATION_DATE = "ExpirationDate";
+        String WPS_ESTIMATED_COMPLETION = "EstimatedCompletion";
+        String WPS_NEXT_POLL = "NextPoll";
+        String WPS_PERCENT_COMPLETED = "PercentCompleted";
+        String WPS_STATUS_INFO = "StatusInfo";
     }
 }

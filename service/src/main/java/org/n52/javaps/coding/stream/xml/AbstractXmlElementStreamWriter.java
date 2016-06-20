@@ -17,8 +17,11 @@
 package org.n52.javaps.coding.stream.xml;
 
 import java.io.OutputStream;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.xml.namespace.QName;
@@ -70,6 +73,19 @@ public abstract class AbstractXmlElementStreamWriter<S>
         this.context.dispatch(this.eventFactory.createAttribute(name, value));
     }
 
+    protected void attr(QName name, Optional<String> value)
+            throws XMLStreamException {
+        if (value.isPresent()) {
+            attr(name, value.get());
+
+        }
+    }
+
+    protected void attr(String name, Optional<String> value)
+            throws XMLStreamException {
+        attr(new QName(name), value);
+    }
+
     protected void attr(String name, String value)
             throws XMLStreamException {
         attr(new QName(name), value);
@@ -83,7 +99,8 @@ public abstract class AbstractXmlElementStreamWriter<S>
     protected void namespace(String prefix, String namespace)
             throws XMLStreamException {
         if (this.context.declareNamespace(prefix, namespace)) {
-            this.context.dispatch(this.eventFactory.createNamespace(prefix, namespace));
+            this.context.dispatch(this.eventFactory
+                    .createNamespace(prefix, namespace));
         }
     }
 
@@ -116,7 +133,8 @@ public abstract class AbstractXmlElementStreamWriter<S>
 
     protected void chars(String chars, boolean escape)
             throws XMLStreamException {
-        this.context.dispatch(this.eventFactory.createCharacters(escape ? escaper()
+        this.context.dispatch(this.eventFactory.createCharacters(escape
+                                                                         ? escaper()
                 .escape(chars) : chars));
     }
 
@@ -200,6 +218,11 @@ public abstract class AbstractXmlElementStreamWriter<S>
         start(name);
         chars(value);
         end(name);
+    }
+
+    protected void element(QName name, OffsetDateTime time)
+            throws XMLStreamException {
+        element(name, DateTimeFormatter.ISO_DATE_TIME.format(time));
     }
 
     protected <T> void delegate(T object)

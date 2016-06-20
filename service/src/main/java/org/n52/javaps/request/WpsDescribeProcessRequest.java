@@ -25,18 +25,18 @@ import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.ogc.ows.OwsCodeType;
 import org.n52.iceland.request.AbstractServiceRequest;
 import org.n52.javaps.ogc.wps.WPSConstants;
-import org.n52.javaps.response.DescribeProcessResponse;
+import org.n52.javaps.response.WpsDescribeProcessResponse;
 
-public class DescribeProcessRequest extends
-        AbstractServiceRequest<DescribeProcessResponse> {
+public class WpsDescribeProcessRequest extends
+        AbstractServiceRequest<WpsDescribeProcessResponse> {
     private static final String ALL_KEYWORD = "ALL";
 
     private final List<OwsCodeType> identifiers = new LinkedList<>();
 
     @Override
-    public DescribeProcessResponse getResponse()
+    public WpsDescribeProcessResponse getResponse()
             throws OwsExceptionReport {
-        return (DescribeProcessResponse) new DescribeProcessResponse().set(this);
+        return (WpsDescribeProcessResponse) new WpsDescribeProcessResponse().set(this);
     }
 
     @Override
@@ -59,8 +59,7 @@ public class DescribeProcessRequest extends
     public boolean isAll() {
         return getProcessIdentifier().stream()
                 .filter(id -> !id.isSetCodeSpace())
-                .map(id -> id.getValue())
-                .anyMatch(id -> id.equalsIgnoreCase(ALL_KEYWORD));
+                .anyMatch(id -> id.getValue().equalsIgnoreCase(ALL_KEYWORD));
     }
 
 }

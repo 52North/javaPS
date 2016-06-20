@@ -18,16 +18,16 @@ package org.n52.javaps.operator.validation;
 
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.javaps.operator.ParameterValidator;
-import org.n52.javaps.request.DescribeProcessRequest;
+import org.n52.javaps.request.WpsDescribeProcessRequest;
 
 /**
  * @author Christian Autermann
  */
 public class DescribeProcessParameterValidator
-        implements ParameterValidator<DescribeProcessRequest> {
+        implements ParameterValidator<WpsDescribeProcessRequest> {
 
     @Override
-    public void validate(DescribeProcessRequest request)
+    public void validate(WpsDescribeProcessRequest request)
             throws OwsExceptionReport {
         /* TODO implement org.n52.javaps.operator.validation.DescribeProcessParameterValidator.validate() */
     }

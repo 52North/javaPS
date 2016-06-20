@@ -29,7 +29,7 @@ import org.n52.javaps.coding.stream.xml.XmlStreamWriterKey;
 import org.n52.javaps.coding.stream.xml.impl.XMLConstants.Namespaces;
 import org.n52.javaps.coding.stream.xml.impl.XMLConstants.QNames;
 import org.n52.javaps.ogc.wps.ProcessOffering;
-import org.n52.javaps.response.DescribeProcessResponse;
+import org.n52.javaps.response.WpsDescribeProcessResponse;
 
 
 /**
@@ -37,16 +37,17 @@ import org.n52.javaps.response.DescribeProcessResponse;
  *
  * @author Christian Autermann
  */
-public class WpsProcessOfferingsWriter extends AbstractXmlElementStreamWriter<DescribeProcessResponse> {
+public class WpsDescribeProcessResponseWriter extends AbstractXmlElementStreamWriter<WpsDescribeProcessResponse> {
 
-    private static final XmlStreamWriterKey KEY = new XmlStreamWriterKey(DescribeProcessResponse.class);
+    private static final XmlStreamWriterKey KEY = new XmlStreamWriterKey(WpsDescribeProcessResponse.class);
 
     @Override
-    public void write(DescribeProcessResponse object) throws XMLStreamException {
+    public void write(WpsDescribeProcessResponse object) throws XMLStreamException {
         start(QNames.WPS_PROCESS_OFFERINGS);
         namespace(Namespaces.WPS_PREFIX, Namespaces.WPS_20);
         namespace(Namespaces.OWS_PREFIX, Namespaces.OWS_20);
-
+        namespace(Namespaces.XLINK_PREFIX, Namespaces.XLINK);
+        
         for (ProcessOffering description : object.getProcessOffering()) {
             delegate(description);
         }

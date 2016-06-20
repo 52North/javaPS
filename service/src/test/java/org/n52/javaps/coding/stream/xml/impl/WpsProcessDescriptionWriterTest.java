@@ -37,7 +37,7 @@ import org.n52.javaps.io.ParserRepository;
 import org.n52.javaps.io.data.IComplexData;
 import org.n52.javaps.ogc.wps.JobControlOption;
 import org.n52.javaps.ogc.wps.ProcessOffering;
-import org.n52.javaps.response.DescribeProcessResponse;
+import org.n52.javaps.response.WpsDescribeProcessResponse;
 
 /**
  * TODO JavaDoc
@@ -56,7 +56,7 @@ public class WpsProcessDescriptionWriterTest {
         processOffering.addJobControlOptions(JobControlOption.sync());
         processOffering.addJobControlOptions(JobControlOption.dismiss());
 
-        DescribeProcessResponse response = new DescribeProcessResponse();
+        WpsDescribeProcessResponse response = new WpsDescribeProcessResponse();
 
         response.setService("WPS");
         response.setVersion("2.0.0");
@@ -105,7 +105,7 @@ public class WpsProcessDescriptionWriterTest {
 
     private static List<Provider<XmlElementStreamWriter>> getElementWriters() {
         return Arrays.asList(WpsProcessDescriptionWriter::new,
-                             WpsProcessOfferingsWriter::new,
+                             WpsDescribeProcessResponseWriter::new,
                              WpsProcessOfferingWriter::new);
     }
 

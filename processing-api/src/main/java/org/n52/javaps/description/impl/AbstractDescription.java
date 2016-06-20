@@ -22,9 +22,10 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.n52.iceland.ogc.ows.OwsCodeType;
+import org.n52.javaps.description.Description;
 import org.n52.javaps.ogc.ows.OwsKeyword;
 import org.n52.javaps.ogc.ows.OwsLanguageString;
-import org.n52.javaps.description.Description;
+import org.n52.javaps.ogc.ows.OwsMetadata;
 
 /**
  * TODO JavaDoc
@@ -37,6 +38,7 @@ public abstract class AbstractDescription implements Description {
     private final OwsLanguageString title;
     private final OwsLanguageString abstrakt;
     private final Set<OwsKeyword> keywords;
+    private final Set<OwsMetadata> metadata;
 
     public AbstractDescription(AbstractDescriptionBuilder<?, ?> builder) {
         this.id = Objects.requireNonNull(builder.getId(), "id");
@@ -44,6 +46,7 @@ public abstract class AbstractDescription implements Description {
                      : new OwsLanguageString(builder.getId().getValue());
         this.abstrakt = builder.getAbstract();
         this.keywords = builder.getKeywords();
+        this.metadata = builder.getMetadata();
     }
 
     @Override
@@ -53,7 +56,7 @@ public abstract class AbstractDescription implements Description {
 
     @Override
     public OwsLanguageString getTitle() {
-        return title;
+        return this.title;
     }
 
     @Override
@@ -65,4 +68,11 @@ public abstract class AbstractDescription implements Description {
     public Set<OwsKeyword> getKeywords() {
         return Collections.unmodifiableSet(this.keywords);
     }
+
+    @Override
+    public Set<OwsMetadata> getMetadata() {
+        return Collections.unmodifiableSet(this.metadata);
+    }
+
+
 }
