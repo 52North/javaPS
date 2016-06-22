@@ -123,9 +123,9 @@ public class OwsRange implements OwsValueRestriction {
     public boolean equals(Object obj) {
         if (obj != null && obj.getClass() == getClass()) {
             OwsRange that = (OwsRange) obj;
-            return Objects.equals(this.lowerBound, that.lowerBound) &&
-                   Objects.equals(this.upperBound, that.upperBound) &&
-                   Objects.equals(this.spacing, that.spacing);
+            return Objects.equals(this.lowerBound, that.getLowerBound()) &&
+                   Objects.equals(this.upperBound, that.getUpperBound()) &&
+                   Objects.equals(this.spacing, that.getSpacing());
         }
         return false;
     }
@@ -198,8 +198,8 @@ public class OwsRange implements OwsValueRestriction {
         public boolean equals(Object obj) {
             if (obj != null && obj.getClass() == getClass()) {
                 Bound that = (Bound) obj;
-                return Objects.equals(this.type, that.type) &&
-                       Objects.equals(this.value, that.value);
+                return Objects.equals(this.type, that.getType()) &&
+                       Objects.equals(this.value, that.getValue());
             }
             return false;
         }

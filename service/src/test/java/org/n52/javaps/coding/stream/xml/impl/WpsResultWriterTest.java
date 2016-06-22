@@ -36,7 +36,6 @@ import org.n52.javaps.coding.stream.StreamWriterRepository;
 import org.n52.javaps.coding.stream.xml.XmlDocumentStreamWriter;
 import org.n52.javaps.coding.stream.xml.XmlElementStreamWriter;
 import org.n52.javaps.coding.stream.xml.XmlElementStreamWriterRepository;
-import org.n52.javaps.coding.stream.xml.impl.response.DescribeProcessResponseWriter;
 import org.n52.javaps.description.Format;
 import org.n52.javaps.ogc.ows.OwsCode;
 import org.n52.javaps.ogc.wps.JobId;
@@ -56,12 +55,7 @@ import com.google.common.io.BaseEncoding;
 public class WpsResultWriterTest {
 
     private static final List<Provider<XmlElementStreamWriter>> ELEMENT_WRITERS
-            = Arrays.asList(ProcessDescriptionWriter::new,
-                            DescribeProcessResponseWriter::new,
-                            ProcessOfferingWriter::new,
-                            ResultWriter::new,
-                            ReferenceDataWriter::new,
-                            ValueDataWriter::new);
+            = Arrays.asList(WPSResponseWriter::new, WPSWriter::new);
 
 
     @Test

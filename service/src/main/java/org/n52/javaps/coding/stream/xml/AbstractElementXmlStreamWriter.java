@@ -30,7 +30,6 @@ import java.nio.charset.Charset;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Optional;
@@ -48,7 +47,6 @@ import org.n52.iceland.ogc.gml.time.TimePosition;
 import org.n52.iceland.util.DateTimeHelper;
 import org.n52.iceland.w3c.SchemaLocation;
 import org.n52.iceland.w3c.W3CConstants;
-import org.n52.javaps.coding.stream.StreamWriterKey;
 import org.n52.javaps.coding.stream.xml.impl.XMLConstants;
 import org.n52.javaps.w3c.xlink.Link;
 import org.n52.javaps.w3c.xlink.Link.Actuate;
@@ -60,20 +58,13 @@ import com.google.common.io.BaseEncoding;
 import com.google.common.io.ByteStreams;
 import com.google.common.xml.XmlEscapers;
 
-public abstract class AbstractXmlElementStreamWriter<S>
+import static java.util.stream.Collectors.joining;
+
+public abstract class AbstractElementXmlStreamWriter
         implements XmlElementStreamWriter {
 
     private static final Escaper ESCAPER = XmlEscapers.xmlContentEscaper();
-    private final StreamWriterKey key;
     private XmlStreamWritingContext context;
-
-    public AbstractXmlElementStreamWriter(Class<? extends S> keyClass) {
-        this(new XmlStreamWriterKey(keyClass));
-    }
-
-    public AbstractXmlElementStreamWriter(StreamWriterKey key) {
-        this.key = key;
-    }
 
     @Override
     public void setContext(XmlStreamWritingContext context) {
@@ -88,22 +79,9 @@ public abstract class AbstractXmlElementStreamWriter<S>
         return context().outputFactory();
     }
 
-    public XMLEventFactory eventFactory() {
+    protected XMLEventFactory eventFactory() {
         return context().eventFactory();
     }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public void writeElement(Object object)
-            throws XMLStreamException {
-        if (context() == null) {
-            throw new IllegalStateException();
-        }
-        write((S) object);
-    }
-
-    protected abstract void write(S object)
-            throws XMLStreamException;
 
     public Charset getDocumentEncoding() {
         return context().getDocumentEncoding();
@@ -281,10 +259,7 @@ public abstract class AbstractXmlElementStreamWriter<S>
         return DateTimeFormatter.ISO_DATE_TIME.format(time);
     }
 
-    @Override
-    public Set<StreamWriterKey> getKeys() {
-        return Collections.singleton(this.key);
-    }
+
 
     protected <T> void element(QName name, Optional<? extends T> elem, ElementWriter<? super T> writer) throws XMLStreamException {
         if (elem.isPresent()) {
@@ -366,7 +341,7 @@ public abstract class AbstractXmlElementStreamWriter<S>
         public void flush() throws IOException {
             checkNotClosed();
             try {
-                AbstractXmlElementStreamWriter.this.flush();
+                AbstractElementXmlStreamWriter.this.flush();
             } catch (XMLStreamException ex) {
                 throw new IOException(ex);
             }
@@ -381,7 +356,7 @@ public abstract class AbstractXmlElementStreamWriter<S>
         public void write(String str) throws IOException {
             checkNotClosed();
             try {
-                AbstractXmlElementStreamWriter.this.chars(str);
+                AbstractElementXmlStreamWriter.this.chars(str);
             } catch (XMLStreamException ex) {
                 throw new IOException(ex);
             }

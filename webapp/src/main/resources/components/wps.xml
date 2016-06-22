@@ -38,7 +38,7 @@
     <bean class="org.n52.javaps.coding.stream.xml.XmlElementStreamWriterRepository"/>
 
     <!-- element writers -->
-    <bean class="org.n52.javaps.coding.stream.xml.impl.OwsExceptionReportWriter" scope="prototype" />
+    <bean class="org.n52.javaps.coding.stream.xml.impl.WPSResponseWriter" scope="prototype" />
     <bean class="org.n52.javaps.coding.stream.xml.impl.ProcessDescriptionWriter" scope="prototype" />
     <bean class="org.n52.javaps.coding.stream.xml.impl.ProcessOfferingWriter" scope="prototype" />
     <bean class="org.n52.javaps.coding.stream.xml.impl.ReferenceDataWriter" scope="prototype" />
@@ -46,14 +46,6 @@
     <bean class="org.n52.javaps.coding.stream.xml.impl.StatusInfoWriter" scope="prototype" />
     <bean class="org.n52.javaps.coding.stream.xml.impl.ValueDataWriter" scope="prototype" />
     <bean class="org.n52.javaps.coding.stream.xml.impl.WpsCapabilitiesWriter" scope="prototype" />
-
-    <!-- response writers -->
-    <bean class="org.n52.javaps.coding.stream.xml.impl.response.DescribeProcessResponseWriter" scope="prototype" />
-    <bean class="org.n52.javaps.coding.stream.xml.impl.response.DismissResponseWriter" scope="prototype" />
-    <bean class="org.n52.javaps.coding.stream.xml.impl.response.ExecuteResponseWriter" scope="prototype" />
-    <bean class="org.n52.javaps.coding.stream.xml.impl.response.GetCapabilitiesResponseWriter" scope="prototype" />
-    <bean class="org.n52.javaps.coding.stream.xml.impl.response.GetResultResponseWriter" scope="prototype" />
-    <bean class="org.n52.javaps.coding.stream.xml.impl.response.GetStatusResponseWriter" scope="prototype" />
 
     <!-- handlers -->
     <bean class="org.n52.javaps.handler.GetCapabilitiesHandler"/>

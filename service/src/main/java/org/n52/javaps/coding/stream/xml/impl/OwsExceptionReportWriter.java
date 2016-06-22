@@ -24,7 +24,7 @@ import javax.xml.stream.XMLStreamException;
 
 import org.n52.iceland.exception.CodedException;
 import org.n52.iceland.exception.ows.OwsExceptionCode;
-import org.n52.javaps.coding.stream.xml.AbstractXmlElementStreamWriter;
+import org.n52.javaps.coding.stream.xml.AbstracSingleElementXmlStreamWriter;
 import org.n52.javaps.coding.stream.xml.impl.XMLConstants.OWS;
 import org.n52.javaps.response.OwsExceptionReportResponse;
 
@@ -33,7 +33,7 @@ import org.n52.javaps.response.OwsExceptionReportResponse;
  *
  * @author Christian Autermann
  */
-public class OwsExceptionReportWriter extends AbstractXmlElementStreamWriter<OwsExceptionReportResponse> {
+public class OwsExceptionReportWriter extends AbstracSingleElementXmlStreamWriter<OwsExceptionReportResponse> {
     private final boolean includeStackTraceInExceptionReport = true;
 
     public OwsExceptionReportWriter() {

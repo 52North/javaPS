@@ -44,7 +44,6 @@ import org.n52.javaps.coding.stream.StreamWriterRepository;
 import org.n52.javaps.coding.stream.xml.XmlDocumentStreamWriter;
 import org.n52.javaps.coding.stream.xml.XmlElementStreamWriter;
 import org.n52.javaps.coding.stream.xml.XmlElementStreamWriterRepository;
-import org.n52.javaps.coding.stream.xml.impl.response.DescribeProcessResponseWriter;
 import org.n52.javaps.description.Format;
 import org.n52.javaps.description.ProcessDescription;
 import org.n52.javaps.io.GeneratorRepository;
@@ -63,9 +62,7 @@ import org.n52.javaps.response.DescribeProcessResponse;
 public class WpsProcessDescriptionWriterTest {
 
     private static final List<Provider<XmlElementStreamWriter>> ELEMENT_WRITERS
-            = Arrays.asList(ProcessDescriptionWriter::new,
-                            DescribeProcessResponseWriter::new,
-                            ProcessOfferingWriter::new);
+            = Arrays.asList(WPSResponseWriter::new, WPSWriter::new);
 
 
     @Test
@@ -123,12 +120,6 @@ public class WpsProcessDescriptionWriterTest {
         if (writer.isPresent()) {
             writer.get().write(object, out);
         }
-    }
-
-    private static List<Provider<XmlElementStreamWriter>> getElementWriters() {
-        return Arrays.asList(ProcessDescriptionWriter::new,
-                             DescribeProcessResponseWriter::new,
-                             ProcessOfferingWriter::new);
     }
 
     public static enum TestEnum {

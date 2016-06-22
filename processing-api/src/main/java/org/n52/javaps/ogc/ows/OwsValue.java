@@ -47,15 +47,14 @@ public class OwsValue implements OwsValueRestriction, Comparable<OwsValue> {
     public boolean equals(Object obj) {
         if (obj != null && obj.getClass() == getClass()) {
             OwsValue that = (OwsValue) obj;
-            return Objects.equals(this.value, that.value);
+            return Objects.equals(this.value, that.getValue());
         }
         return false;
     }
 
     @Override
     public String toString() {
-        return MoreObjects
-                .toStringHelper(this).addValue(this.value).toString();
+        return MoreObjects.toStringHelper(this).addValue(this.value).toString();
     }
 
     @Override
