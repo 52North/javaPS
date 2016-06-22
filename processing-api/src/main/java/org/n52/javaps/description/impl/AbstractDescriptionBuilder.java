@@ -19,9 +19,9 @@ package org.n52.javaps.description.impl;
 import java.util.Objects;
 import java.util.Set;
 
-import org.n52.iceland.ogc.ows.OwsCodeType;
 import org.n52.javaps.description.Description;
 import org.n52.javaps.description.DescriptionBuilder;
+import org.n52.javaps.ogc.ows.OwsCode;
 import org.n52.javaps.ogc.ows.OwsKeyword;
 import org.n52.javaps.ogc.ows.OwsLanguageString;
 import org.n52.javaps.ogc.ows.OwsMetadata;
@@ -38,7 +38,7 @@ import com.google.common.collect.ImmutableSet;
 public abstract class AbstractDescriptionBuilder<T extends Description, B extends DescriptionBuilder<T, B>>
         implements DescriptionBuilder<T, B> {
 
-    private OwsCodeType id;
+    private OwsCode id;
     private OwsLanguageString title;
     private OwsLanguageString abstrakt;
     private final ImmutableSet.Builder<OwsKeyword> keywords = ImmutableSet.builder();
@@ -46,7 +46,7 @@ public abstract class AbstractDescriptionBuilder<T extends Description, B extend
 
     @SuppressWarnings(value = "unchecked")
     @Override
-    public B withIdentifier(OwsCodeType id) {
+    public B withIdentifier(OwsCode id) {
         this.id = Objects.requireNonNull(id);
         return (B) this;
     }
@@ -79,7 +79,7 @@ public abstract class AbstractDescriptionBuilder<T extends Description, B extend
         return (B) this;
     }
 
-    OwsCodeType getId() {
+    OwsCode getId() {
         return this.id;
     }
 

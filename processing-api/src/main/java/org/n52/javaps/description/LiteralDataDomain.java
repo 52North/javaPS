@@ -19,7 +19,7 @@ package org.n52.javaps.description;
 import java.util.Optional;
 
 import org.n52.javaps.ogc.ows.OwsDomainMetadata;
-import org.n52.javaps.ogc.ows.OwsValueDescription;
+import org.n52.javaps.ogc.ows.OwsPossibleValues;
 
 /**
  * TODO JavaDoc
@@ -27,7 +27,7 @@ import org.n52.javaps.ogc.ows.OwsValueDescription;
  * @author Christian Autermann
  */
 public interface LiteralDataDomain {
-    OwsValueDescription getValueDescription();
+    OwsPossibleValues getValueDescription();
 
     Optional<OwsDomainMetadata> getDataType();
 

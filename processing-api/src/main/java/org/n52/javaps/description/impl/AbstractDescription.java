@@ -21,8 +21,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
-import org.n52.iceland.ogc.ows.OwsCodeType;
 import org.n52.javaps.description.Description;
+import org.n52.javaps.ogc.ows.OwsCode;
 import org.n52.javaps.ogc.ows.OwsKeyword;
 import org.n52.javaps.ogc.ows.OwsLanguageString;
 import org.n52.javaps.ogc.ows.OwsMetadata;
@@ -34,7 +34,7 @@ import org.n52.javaps.ogc.ows.OwsMetadata;
  */
 public abstract class AbstractDescription implements Description {
 
-    private final OwsCodeType id;
+    private final OwsCode id;
     private final OwsLanguageString title;
     private final OwsLanguageString abstrakt;
     private final Set<OwsKeyword> keywords;
@@ -50,7 +50,7 @@ public abstract class AbstractDescription implements Description {
     }
 
     @Override
-    public OwsCodeType getId() {
+    public OwsCode getId() {
         return this.id;
     }
 

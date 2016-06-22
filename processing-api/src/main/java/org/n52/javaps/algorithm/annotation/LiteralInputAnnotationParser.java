@@ -36,7 +36,7 @@ import org.n52.javaps.description.impl.LiteralDataDomainImpl;
 import org.n52.javaps.description.impl.LiteralInputDescriptionImpl;
 import org.n52.javaps.io.BasicXMLTypeFactory;
 import org.n52.javaps.io.data.ILiteralData;
-import org.n52.javaps.ogc.ows.OwsAllowedValue;
+import org.n52.javaps.ogc.ows.OwsValue;
 import org.n52.javaps.ogc.ows.OwsAllowedValues;
 
 /**
@@ -116,7 +116,7 @@ class LiteralInputAnnotationParser<M extends AccessibleObject & Member, B extend
         }
 
         builder.withDefaultLiteralDataDomain(LiteralDataDomainImpl.builder()
-                .withValueDescription(new OwsAllowedValues(allowedValues.stream().map(OwsAllowedValue::new)))
+                .withValueDescription(new OwsAllowedValues(allowedValues.stream().map(OwsValue::new)))
                 .withDataType(BasicXMLTypeFactory.getXMLDataTypeforBinding(bindingType))
                 .withDefaultValue(defaultValue)
                 .withUOM(annotation.uom()));

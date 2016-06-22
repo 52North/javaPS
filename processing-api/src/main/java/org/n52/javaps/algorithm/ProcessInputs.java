@@ -20,21 +20,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.n52.iceland.ogc.ows.OwsCodeType;
 import org.n52.javaps.io.data.IData;
+import org.n52.javaps.ogc.ows.OwsCode;
 
 /**
  * TODO JavaDoc
  * @author Christian Autermann
  */
-public class ProcessInputs extends HashMap<OwsCodeType, List<IData>>{
+public class ProcessInputs extends HashMap<OwsCode, List<IData>>{
 
     private static final long serialVersionUID = 921032882074907318L;
 
     public ProcessInputs() {
     }
 
-    public ProcessInputs(Map<? extends OwsCodeType, ? extends List<IData>> m) {
+    public ProcessInputs(Map<? extends OwsCode, ? extends List<IData>> m) {
         super(m);
     }
 

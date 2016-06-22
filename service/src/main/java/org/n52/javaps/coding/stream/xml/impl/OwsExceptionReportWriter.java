@@ -18,20 +18,14 @@ package org.n52.javaps.coding.stream.xml.impl;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.util.Collections;
-import java.util.Set;
+import java.util.Optional;
 
 import javax.xml.stream.XMLStreamException;
 
 import org.n52.iceland.exception.CodedException;
 import org.n52.iceland.exception.ows.OwsExceptionCode;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.javaps.coding.stream.StreamWriterKey;
 import org.n52.javaps.coding.stream.xml.AbstractXmlElementStreamWriter;
-import org.n52.javaps.coding.stream.xml.XmlStreamWriterKey;
-import org.n52.javaps.coding.stream.xml.impl.XMLConstants.Attributes;
-import org.n52.javaps.coding.stream.xml.impl.XMLConstants.Namespaces;
-import org.n52.javaps.coding.stream.xml.impl.XMLConstants.QNames;
+import org.n52.javaps.coding.stream.xml.impl.XMLConstants.OWS;
 import org.n52.javaps.response.OwsExceptionReportResponse;
 
 /**
@@ -40,52 +34,33 @@ import org.n52.javaps.response.OwsExceptionReportResponse;
  * @author Christian Autermann
  */
 public class OwsExceptionReportWriter extends AbstractXmlElementStreamWriter<OwsExceptionReportResponse> {
-    private static final XmlStreamWriterKey KEY = new XmlStreamWriterKey(OwsExceptionReportResponse.class);
     private final boolean includeStackTraceInExceptionReport = true;
 
-    @Override
-    public void write(OwsExceptionReportResponse response)
-            throws XMLStreamException {
-        OwsExceptionReport report = response.getOwsExceptionReport();
-        start(QNames.OWS_EXCEPTION_REPORT);
-        namespace(Namespaces.OWS_PREFIX, Namespaces.OWS_20);
-        attr(Attributes.OWS_VERSION, report.getVersion());
-        for (CodedException exception : report.getExceptions()) {
-            writeCodedException(exception);
-        }
-        end(QNames.OWS_EXCEPTION_REPORT);
-    }
-
-    private void writeCodedException(CodedException exception)
-            throws XMLStreamException {
-        start(QNames.OWS_EXCEPTION);
-        if (exception.getLocator() != null) {
-            attr(Attributes.OWS_LOCATOR, exception.getLocator());
-        }
-        if (exception.getCode() != null) {
-            attr(Attributes.OWS_EXCEPTION_CODE, exception.getCode().toString());
-        } else {
-            attr(Attributes.OWS_EXCEPTION_CODE, OwsExceptionCode.NoApplicableCode.toString());
-        }
-        if (exception.getMessage() != null) {
-            start(QNames.OWS_EXCEPTION_TEXT);
-            chars(exception.getMessage());
-            end(QNames.OWS_EXCEPTION_TEXT);
-        }
-        if (includeStackTraceInExceptionReport) {
-            start(QNames.OWS_EXCEPTION_TEXT);
-            chars("[EXEPTION]: \n");
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
-            exception.printStackTrace(new PrintStream(os));
-            chars(os.toString());
-            end(QNames.OWS_EXCEPTION_TEXT);
-        }
-        end(QNames.OWS_EXCEPTION);
+    public OwsExceptionReportWriter() {
+        super(OwsExceptionReportResponse.class);
     }
 
     @Override
-    public Set<StreamWriterKey> getKeys() {
-        return Collections.singleton(KEY);
+    public void write(OwsExceptionReportResponse response) throws XMLStreamException {
+        element(OWS.Elem.QN_EXCEPTION_REPORT, response.getOwsExceptionReport(), report -> {
+            namespace(OWS.NS_OWS_PREFIX, OWS.NS_OWS);
+            attr(OWS.Attr.AN_VERSION, report.getVersion());
+            for (CodedException exception : report.getExceptions()) {
+                element(OWS.Elem.QN_EXCEPTION, exception, x -> {
+                    attr(OWS.Attr.AN_LOCATOR, Optional.ofNullable(x.getLocator()));
+                    attr(OWS.Attr.AN_EXCEPTION_CODE, Optional.ofNullable(x.getCode())
+                         .orElse(OwsExceptionCode.NoApplicableCode).toString());
+                    element(OWS.Elem.QN_EXCEPTION_TEXT, Optional.ofNullable(x.getMessage()));
+                    if (includeStackTraceInExceptionReport) {
+                        element(OWS.Elem.QN_EXCEPTION_TEXT, x, ex -> {
+                            chars("[EXEPTION]: \n");
+                            ByteArrayOutputStream os = new ByteArrayOutputStream();
+                            ex.printStackTrace(new PrintStream(os));
+                            chars(os.toString());
+                        });
+                    }
+                });
+            }
+        });
     }
-
 }

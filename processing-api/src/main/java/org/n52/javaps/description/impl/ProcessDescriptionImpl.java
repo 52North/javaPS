@@ -22,11 +22,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import org.n52.iceland.ogc.ows.OwsCodeType;
 import org.n52.javaps.description.ProcessDescription;
 import org.n52.javaps.description.ProcessDescriptionBuilder;
 import org.n52.javaps.description.ProcessInputDescription;
 import org.n52.javaps.description.ProcessOutputDescription;
+import org.n52.javaps.ogc.ows.OwsCode;
 
 
 /**
@@ -37,8 +37,8 @@ import org.n52.javaps.description.ProcessOutputDescription;
 public class ProcessDescriptionImpl extends AbstractDescription implements
         ProcessDescription {
 
-    private final Map<OwsCodeType, ProcessInputDescription> inputs;
-    private final Map<OwsCodeType, ProcessOutputDescription> outputs;
+    private final Map<OwsCode, ProcessInputDescription> inputs;
+    private final Map<OwsCode, ProcessOutputDescription> outputs;
     private final boolean storeSupported;
     private final boolean statusSupported;
     private final String version;
@@ -54,17 +54,17 @@ public class ProcessDescriptionImpl extends AbstractDescription implements
     }
 
     @Override
-    public ProcessInputDescription getInput(OwsCodeType id) {
+    public ProcessInputDescription getInput(OwsCode id) {
         return this.inputs.get(id);
     }
 
     @Override
-    public ProcessOutputDescription getOutput(OwsCodeType id) {
+    public ProcessOutputDescription getOutput(OwsCode id) {
         return this.outputs.get(id);
     }
 
     @Override
-    public Set<OwsCodeType> getInputs() {
+    public Set<OwsCode> getInputs() {
         return Collections.unmodifiableSet(inputs.keySet());
     }
 
@@ -74,7 +74,7 @@ public class ProcessDescriptionImpl extends AbstractDescription implements
     }
 
     @Override
-    public Set<OwsCodeType> getOutputs() {
+    public Set<OwsCode> getOutputs() {
         return Collections.unmodifiableSet(outputs.keySet());
     }
 

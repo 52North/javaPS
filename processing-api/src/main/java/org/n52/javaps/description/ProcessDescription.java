@@ -16,6 +16,14 @@
  */
 package org.n52.javaps.description;
 
+import static java.util.Comparator.comparing;
+import static java.util.Comparator.naturalOrder;
+import static java.util.Comparator.nullsLast;
+
+import java.util.Comparator;
+
+import org.n52.javaps.ogc.ows.OwsCode;
+
 /**
  * TODO JavaDoc
  *
@@ -23,7 +31,13 @@ package org.n52.javaps.description;
  */
 public interface ProcessDescription extends Description,
                                             ProcessInputDescriptionContainer,
-                                            ProcessOutputDescriptionContainer {
+                                            ProcessOutputDescriptionContainer,
+                                            Comparable<ProcessDescription> {
+
+    static Comparator<ProcessDescription> COMPARATOR
+            = nullsLast(comparing(ProcessDescription::getId, comparing(OwsCode::getCodeSpace, comparing(x -> x.orElse(null), nullsLast(naturalOrder())))
+                                  .thenComparing(comparing(OwsCode::getValue)))
+                    .thenComparing(comparing(ProcessDescription::getVersion, nullsLast(naturalOrder()))));
 
     String getVersion();
 
@@ -31,4 +45,8 @@ public interface ProcessDescription extends Description,
 
     boolean isStoreSupported();
 
+    @Override
+    default int compareTo(ProcessDescription o) {
+        return COMPARATOR.compare(this, o);
+    }
 }

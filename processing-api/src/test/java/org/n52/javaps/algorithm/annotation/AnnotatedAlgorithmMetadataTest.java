@@ -30,7 +30,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 
-import org.n52.iceland.ogc.ows.OwsCodeType;
 import org.n52.javaps.description.Format;
 import org.n52.javaps.description.ProcessDescription;
 import org.n52.javaps.io.GeneratorRepository;
@@ -38,6 +37,7 @@ import org.n52.javaps.io.IGenerator;
 import org.n52.javaps.io.IParser;
 import org.n52.javaps.io.ParserRepository;
 import org.n52.javaps.io.data.IComplexData;
+import org.n52.javaps.ogc.ows.OwsCode;
 import org.n52.javaps.ogc.ows.OwsLanguageString;
 
 /**
@@ -66,7 +66,7 @@ public class AnnotatedAlgorithmMetadataTest {
         errors.checkThat(processDescription.getVersion(), is("1.0.0"));
         errors.checkThat(processDescription.getTitle().getValue(), is("Test Process"));
         errors.checkThat(processDescription.getAbstract().map(OwsLanguageString::getValue).orElse(null), is("Test Abstract"));
-        errors.checkThat(processDescription.getId(), is(new OwsCodeType(TestProcess.class.getCanonicalName())));
+        errors.checkThat(processDescription.getId(), is(new OwsCode(TestProcess.class.getCanonicalName())));
         errors.checkThat(processDescription.getInputDescriptions().size(), is(8));
         errors.checkThat(processDescription.getOutputDescriptions().size(), is(7));
 

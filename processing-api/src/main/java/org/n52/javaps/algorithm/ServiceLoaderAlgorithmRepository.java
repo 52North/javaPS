@@ -25,20 +25,20 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.n52.iceland.ogc.ows.OwsCodeType;
 import org.n52.javaps.description.ProcessDescription;
+import org.n52.javaps.ogc.ows.OwsCode;
 
 public class ServiceLoaderAlgorithmRepository implements AlgorithmRepository {
 
     private static final Logger LOG = LoggerFactory.getLogger(ServiceLoaderAlgorithmRepository.class);
-    private final Map<OwsCodeType, Class<? extends IAlgorithm>> currentAlgorithms;
+    private final Map<OwsCode, Class<? extends IAlgorithm>> currentAlgorithms;
 
     public ServiceLoaderAlgorithmRepository() {
         this.currentAlgorithms = loadAlgorithms();
     }
 
-    private Map<OwsCodeType, Class<? extends IAlgorithm>> loadAlgorithms() {
-        Map<OwsCodeType, Class<? extends IAlgorithm>> result = new HashMap<>();
+    private Map<OwsCode, Class<? extends IAlgorithm>> loadAlgorithms() {
+        Map<OwsCode, Class<? extends IAlgorithm>> result = new HashMap<>();
         ServiceLoader<IAlgorithm> loader = ServiceLoader.load(IAlgorithm.class);
 
         for (IAlgorithm ia : loader) {
@@ -51,12 +51,12 @@ public class ServiceLoaderAlgorithmRepository implements AlgorithmRepository {
     }
 
     @Override
-    public Set<OwsCodeType> getAlgorithmNames() {
+    public Set<OwsCode> getAlgorithmNames() {
         return this.currentAlgorithms.keySet();
     }
 
     @Override
-    public Optional<IAlgorithm> getAlgorithm(OwsCodeType processID) {
+    public Optional<IAlgorithm> getAlgorithm(OwsCode processID) {
         Class<? extends IAlgorithm> clazz = this.currentAlgorithms
                 .get(processID);
         if (clazz != null) {
@@ -70,12 +70,12 @@ public class ServiceLoaderAlgorithmRepository implements AlgorithmRepository {
     }
 
     @Override
-    public Optional<ProcessDescription> getProcessDescription(OwsCodeType processID) {
+    public Optional<ProcessDescription> getProcessDescription(OwsCode processID) {
         return getAlgorithm(processID).map(IAlgorithm::getDescription);
     }
 
     @Override
-    public boolean containsAlgorithm(OwsCodeType processID) {
+    public boolean containsAlgorithm(OwsCode processID) {
         return this.currentAlgorithms.containsKey(processID);
     }
 

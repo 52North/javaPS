@@ -30,13 +30,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
 
-import org.n52.iceland.ogc.ows.OwsCodeType;
-import org.n52.javaps.utils.Optionals;
 import org.n52.javaps.algorithm.annotation.Algorithm;
 import org.n52.javaps.algorithm.annotation.AnnotatedAlgorithm;
 import org.n52.javaps.description.ProcessDescription;
 import org.n52.javaps.io.GeneratorRepository;
 import org.n52.javaps.io.ParserRepository;
+import org.n52.javaps.ogc.ows.OwsCode;
+import org.n52.javaps.utils.Optionals;
 
 
 /**
@@ -49,9 +49,9 @@ public class LocalAlgorithmRepository implements AlgorithmRepository {
 
     private static final Logger LOG = LoggerFactory.getLogger(LocalAlgorithmRepository.class);
 
-    private final Map<OwsCodeType, ProcessDescription> descriptions = new HashMap<>();
-    private final Map<OwsCodeType, Class<?>> algorithmClasses = new HashMap<>();
-    private final Map<OwsCodeType, IAlgorithm> algorithmInstances = new HashMap<>();
+    private final Map<OwsCode, ProcessDescription> descriptions = new HashMap<>();
+    private final Map<OwsCode, Class<?>> algorithmClasses = new HashMap<>();
+    private final Map<OwsCode, IAlgorithm> algorithmInstances = new HashMap<>();
     private final ParserRepository parserRepository;
     private final GeneratorRepository generatorRepository;
     private final AutowireCapableBeanFactory beanFactory;
@@ -67,24 +67,24 @@ public class LocalAlgorithmRepository implements AlgorithmRepository {
 
 
     @Override
-    public Optional<IAlgorithm> getAlgorithm(OwsCodeType id) {
+    public Optional<IAlgorithm> getAlgorithm(OwsCode id) {
         return Optionals.or(Optional.ofNullable(this.algorithmInstances.get(id)),
                             Optional.ofNullable(this.algorithmClasses.get(id))
                                     .map(this::mayInstantiate));
     }
 
     @Override
-    public Optional<ProcessDescription> getProcessDescription(OwsCodeType id) {
+    public Optional<ProcessDescription> getProcessDescription(OwsCode id) {
         return Optional.ofNullable(this.descriptions.get(id));
     }
 
     @Override
-    public Set<OwsCodeType> getAlgorithmNames() {
+    public Set<OwsCode> getAlgorithmNames() {
         return new HashSet<>(this.descriptions.keySet());
     }
 
     @Override
-    public boolean containsAlgorithm(OwsCodeType id) {
+    public boolean containsAlgorithm(OwsCode id) {
         return this.descriptions.containsKey(id);
     }
 
@@ -111,7 +111,7 @@ public class LocalAlgorithmRepository implements AlgorithmRepository {
             return false;
         }
         ProcessDescription description = instance.getDescription();
-        OwsCodeType id = description.getId();
+        OwsCode id = description.getId();
 
         if (this.descriptions.put(id, description) != null) {
             LOG.warn("Duplicate algorithm identifier: {}", id);
@@ -126,7 +126,7 @@ public class LocalAlgorithmRepository implements AlgorithmRepository {
          Objects.requireNonNull(instance);
 
         ProcessDescription description = instance.getDescription();
-        OwsCodeType id = description.getId();
+        OwsCode id = description.getId();
 
         if (this.descriptions.put(id, description) != null) {
             LOG.warn("Duplicate algorithm identifier: {}", id);

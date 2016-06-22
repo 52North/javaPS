@@ -35,8 +35,8 @@ import org.slf4j.LoggerFactory;
 
 import org.n52.iceland.lifecycle.Constructable;
 import org.n52.iceland.lifecycle.Destroyable;
-import org.n52.iceland.ogc.ows.OwsCodeType;
 import org.n52.javaps.description.ProcessDescription;
+import org.n52.javaps.ogc.ows.OwsCode;
 
 /**
  * @author Bastian Schaeffer, University of Muenster
@@ -45,7 +45,7 @@ import org.n52.javaps.description.ProcessDescription;
 public class RepositoryManager implements Constructable, Destroyable {
 
     private static final Logger LOG = LoggerFactory.getLogger(RepositoryManager.class);
-    private final Set<OwsCodeType> globalProcessIDs = Collections.synchronizedSet(new HashSet<>());
+    private final Set<OwsCode> globalProcessIDs = Collections.synchronizedSet(new HashSet<>());
     private final Timer timer = new Timer("repository-manager", true);
     private final long updateInterval;
     private Map<String, AlgorithmRepository> repositories;
@@ -137,7 +137,7 @@ public class RepositoryManager implements Constructable, Destroyable {
      *            The name of the algorithm class
      * @return IAlgorithm or null an instance of the algorithm class
      */
-    public IAlgorithm getAlgorithm(OwsCodeType id) {
+    public IAlgorithm getAlgorithm(OwsCode id) {
         return getRepositoryForAlgorithm(id).flatMap(r -> r.getAlgorithm(id)).orElse(null);
     }
 
@@ -145,33 +145,33 @@ public class RepositoryManager implements Constructable, Destroyable {
      *
      * @return allAlgorithms
      */
-    public List<OwsCodeType> getAlgorithms() {
+    public List<OwsCode> getAlgorithms() {
         return getRepositories().flatMap(r -> r.getAlgorithmNames().stream()).collect(toList());
     }
 
-    public boolean containsAlgorithm(OwsCodeType id) {
+    public boolean containsAlgorithm(OwsCode id) {
         return getRepositoryForAlgorithm(id).isPresent();
     }
 
-    public Optional<AlgorithmRepository> getRepositoryForAlgorithm(OwsCodeType id) {
+    public Optional<AlgorithmRepository> getRepositoryForAlgorithm(OwsCode id) {
         return getRepositories().filter(repo -> repo.containsAlgorithm(id)).findFirst();
     }
 
-    public Class<?> getInputDataTypeForAlgorithm(OwsCodeType process, OwsCodeType input) {
+    public Class<?> getInputDataTypeForAlgorithm(OwsCode process, OwsCode input) {
         return getAlgorithm(process).getInputDataType(input);
 
     }
 
-    public Class<?> getOutputDataTypeForAlgorithm(OwsCodeType process, OwsCodeType output) {
+    public Class<?> getOutputDataTypeForAlgorithm(OwsCode process, OwsCode output) {
         return getAlgorithm(process).getOutputDataType(output);
 
     }
 
-    public boolean registerAlgorithm(OwsCodeType id, AlgorithmRepository repository) {
+    public boolean registerAlgorithm(OwsCode id, AlgorithmRepository repository) {
         return globalProcessIDs.add(id);
     }
 
-    public boolean unregisterAlgorithm(OwsCodeType id) {
+    public boolean unregisterAlgorithm(OwsCode id) {
         return globalProcessIDs.remove(id);
     }
 
@@ -196,10 +196,10 @@ public class RepositoryManager implements Constructable, Destroyable {
     }
 
     public Optional<ProcessDescription> getProcessDescription(String id) {
-        return getProcessDescription(new OwsCodeType(id));
+        return getProcessDescription(new OwsCode(id));
     }
 
-    public Optional<ProcessDescription> getProcessDescription(OwsCodeType id) {
+    public Optional<ProcessDescription> getProcessDescription(OwsCode id) {
         return getRepositoryForAlgorithm(id).flatMap(r -> r.getProcessDescription(id));
     }
 

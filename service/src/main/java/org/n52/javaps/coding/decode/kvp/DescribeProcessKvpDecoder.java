@@ -25,9 +25,9 @@ import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.util.KvpHelper;
 import org.n52.javaps.ogc.wps.WPS100Constants;
 import org.n52.javaps.ogc.wps.WPSConstants;
-import org.n52.javaps.request.WpsDescribeProcessRequest;
+import org.n52.javaps.request.DescribeProcessRequest;
 
-public class DescribeProcessKvpDecoder extends AbstractKvpDecoder<WpsDescribeProcessRequest> {
+public class DescribeProcessKvpDecoder extends AbstractKvpDecoder<DescribeProcessRequest> {
     private static final DecoderKey KEY
             = createKey(WPSConstants.SERVICE,
                         WPS100Constants.SERVICEVERSION,
@@ -39,12 +39,12 @@ public class DescribeProcessKvpDecoder extends AbstractKvpDecoder<WpsDescribePro
     }
 
     @Override
-    protected WpsDescribeProcessRequest createRequest() {
-        return new WpsDescribeProcessRequest();
+    protected DescribeProcessRequest createRequest() {
+        return new DescribeProcessRequest();
     }
 
     @Override
-    protected void decodeParameter(WpsDescribeProcessRequest request, String name,
+    protected void decodeParameter(DescribeProcessRequest request, String name,
                                    String value)
             throws OwsExceptionReport {
         switch (name.toLowerCase()) {

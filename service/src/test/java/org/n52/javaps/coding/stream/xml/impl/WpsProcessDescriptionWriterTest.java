@@ -1,3 +1,19 @@
+/*
+ * Copyright 2016 52°North Initiative for Geospatial Open Source
+ * Software GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.n52.javaps.coding.stream.xml.impl;
 
 import java.io.OutputStream;
@@ -28,6 +44,7 @@ import org.n52.javaps.coding.stream.StreamWriterRepository;
 import org.n52.javaps.coding.stream.xml.XmlDocumentStreamWriter;
 import org.n52.javaps.coding.stream.xml.XmlElementStreamWriter;
 import org.n52.javaps.coding.stream.xml.XmlElementStreamWriterRepository;
+import org.n52.javaps.coding.stream.xml.impl.response.DescribeProcessResponseWriter;
 import org.n52.javaps.description.Format;
 import org.n52.javaps.description.ProcessDescription;
 import org.n52.javaps.io.GeneratorRepository;
@@ -37,7 +54,7 @@ import org.n52.javaps.io.ParserRepository;
 import org.n52.javaps.io.data.IComplexData;
 import org.n52.javaps.ogc.wps.JobControlOption;
 import org.n52.javaps.ogc.wps.ProcessOffering;
-import org.n52.javaps.response.WpsDescribeProcessResponse;
+import org.n52.javaps.response.DescribeProcessResponse;
 
 /**
  * TODO JavaDoc
@@ -45,18 +62,23 @@ import org.n52.javaps.response.WpsDescribeProcessResponse;
  */
 public class WpsProcessDescriptionWriterTest {
 
+    private static final List<Provider<XmlElementStreamWriter>> ELEMENT_WRITERS
+            = Arrays.asList(ProcessDescriptionWriter::new,
+                            DescribeProcessResponseWriter::new,
+                            ProcessOfferingWriter::new);
+
+
     @Test
     public void test() throws OwsExceptionReport {
         StreamWriterRepository repo = createRepository();
 
         ProcessOffering processOffering = new ProcessOffering();
         processOffering.setProcessDescription(getProcessDescription());
-        processOffering.setProcessVersion("1.0.0");
         processOffering.addJobControlOptions(JobControlOption.async());
         processOffering.addJobControlOptions(JobControlOption.sync());
         processOffering.addJobControlOptions(JobControlOption.dismiss());
 
-        WpsDescribeProcessResponse response = new WpsDescribeProcessResponse();
+        DescribeProcessResponse response = new DescribeProcessResponse();
 
         response.setService("WPS");
         response.setVersion("2.0.0");
@@ -85,7 +107,7 @@ public class WpsProcessDescriptionWriterTest {
     }
 
     private StreamWriterRepository createRepository() {
-        XmlDocumentStreamWriter writer = new XmlDocumentStreamWriter(new XmlElementStreamWriterRepository(getElementWriters()));
+        XmlDocumentStreamWriter writer = new XmlDocumentStreamWriter(new XmlElementStreamWriterRepository(ELEMENT_WRITERS));
         StreamWriterRepository repository = new StreamWriterRepository();
         repository.set(Arrays.asList(() -> writer));
         repository.init();
@@ -104,9 +126,9 @@ public class WpsProcessDescriptionWriterTest {
     }
 
     private static List<Provider<XmlElementStreamWriter>> getElementWriters() {
-        return Arrays.asList(WpsProcessDescriptionWriter::new,
-                             WpsDescribeProcessResponseWriter::new,
-                             WpsProcessOfferingWriter::new);
+        return Arrays.asList(ProcessDescriptionWriter::new,
+                             DescribeProcessResponseWriter::new,
+                             ProcessOfferingWriter::new);
     }
 
     public static enum TestEnum {

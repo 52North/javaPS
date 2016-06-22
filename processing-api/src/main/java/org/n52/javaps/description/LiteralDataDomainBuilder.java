@@ -20,9 +20,10 @@ package org.n52.javaps.description;
 import java.net.URI;
 
 import org.n52.javaps.ogc.ows.OwsDomainMetadata;
-import org.n52.javaps.ogc.ows.OwsValueDescription;
 
 import com.google.common.base.Strings;
+
+import org.n52.javaps.ogc.ows.OwsPossibleValues;
 
 /**
  * TODO JavaDoc
@@ -51,6 +52,6 @@ public interface LiteralDataDomainBuilder<T extends LiteralDataDomain, B extends
         return withUOM(Strings.emptyToNull(value) == null ? null : new OwsDomainMetadata(value));
     }
 
-    B withValueDescription(OwsValueDescription allowedValues);
+    B withValueDescription(OwsPossibleValues allowedValues);
 
 }

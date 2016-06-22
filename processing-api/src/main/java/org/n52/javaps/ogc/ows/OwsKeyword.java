@@ -18,8 +18,6 @@ package org.n52.javaps.ogc.ows;
 
 import java.util.Optional;
 
-import org.n52.iceland.ogc.ows.OwsCodeType;
-
 /**
  * TODO JavaDoc
  *
@@ -28,9 +26,9 @@ import org.n52.iceland.ogc.ows.OwsCodeType;
 public class OwsKeyword {
 
     private final OwsLanguageString keyword;
-    private final Optional<OwsCodeType> type;
+    private final Optional<OwsCode> type;
 
-    public OwsKeyword(OwsLanguageString keyword, OwsCodeType type) {
+    public OwsKeyword(OwsLanguageString keyword, OwsCode type) {
         this.keyword = keyword;
         this.type = Optional.ofNullable(type);
     }
@@ -43,7 +41,7 @@ public class OwsKeyword {
         this(keyword, null);
     }
 
-    public OwsKeyword(String keyword, OwsCodeType type) {
+    public OwsKeyword(String keyword, OwsCode type) {
         this(new OwsLanguageString(keyword), type);
     }
 
@@ -51,8 +49,7 @@ public class OwsKeyword {
         return keyword;
     }
 
-    public Optional<OwsCodeType> getType() {
+    public Optional<OwsCode> getType() {
         return type;
     }
-
 }

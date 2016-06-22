@@ -21,11 +21,11 @@ import static com.google.common.base.Strings.emptyToNull;
 import java.util.Map;
 import java.util.Objects;
 
-import org.n52.iceland.ogc.ows.OwsCodeType;
 import org.n52.javaps.description.ProcessDescription;
 import org.n52.javaps.description.ProcessDescriptionBuilder;
 import org.n52.javaps.description.ProcessInputDescription;
 import org.n52.javaps.description.ProcessOutputDescription;
+import org.n52.javaps.ogc.ows.OwsCode;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -38,8 +38,8 @@ public abstract class AbstractProcessDescriptionBuilder<T extends ProcessDescrip
         extends AbstractDescriptionBuilder<T, B>
         implements ProcessDescriptionBuilder<T, B> {
 
-    private final ImmutableMap.Builder<OwsCodeType, ProcessInputDescription> inputs = ImmutableMap.builder();
-    private final ImmutableMap.Builder<OwsCodeType, ProcessOutputDescription> outputs = ImmutableMap.builder();
+    private final ImmutableMap.Builder<OwsCode, ProcessInputDescription> inputs = ImmutableMap.builder();
+    private final ImmutableMap.Builder<OwsCode, ProcessOutputDescription> outputs = ImmutableMap.builder();
     private boolean storeSupported = false;
     private boolean statusSupported = false;
     private String version;
@@ -83,11 +83,11 @@ public abstract class AbstractProcessDescriptionBuilder<T extends ProcessDescrip
         return (B) this;
     }
 
-    Map<OwsCodeType, ProcessInputDescription> getInputs() {
+    Map<OwsCode, ProcessInputDescription> getInputs() {
         return this.inputs.build();
     }
 
-    Map<OwsCodeType, ProcessOutputDescription> getOutputs() {
+    Map<OwsCode, ProcessOutputDescription> getOutputs() {
         return this.outputs.build();
     }
 

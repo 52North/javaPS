@@ -38,13 +38,13 @@ import java.util.function.BinaryOperator;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
 
-import org.n52.iceland.ogc.ows.OwsCodeType;
 import org.n52.javaps.description.ProcessDescription;
 import org.n52.javaps.description.ProcessInputDescription;
 import org.n52.javaps.description.ProcessOutputDescription;
 import org.n52.javaps.description.impl.ProcessDescriptionImpl;
 import org.n52.javaps.io.GeneratorRepository;
 import org.n52.javaps.io.ParserRepository;
+import org.n52.javaps.ogc.ows.OwsCode;
 
 import com.google.common.base.Strings;
 
@@ -55,8 +55,8 @@ import com.google.common.base.Strings;
 public class AnnotatedAlgorithmMetadata {
     private final Class<?> algorithmClass;
 
-    private final Map<OwsCodeType, AbstractOutputBinding<?, ?>> outputBindings;
-    private final Map<OwsCodeType, AbstractInputBinding<?, ?>> inputBindings;
+    private final Map<OwsCode, AbstractOutputBinding<?, ?>> outputBindings;
+    private final Map<OwsCode, AbstractInputBinding<?, ?>> inputBindings;
     private final ExecuteBinding executeBinding;
     private final ProcessDescription description;
 
@@ -77,11 +77,11 @@ public class AnnotatedAlgorithmMetadata {
         return this.algorithmClass;
     }
 
-    Map<OwsCodeType, AbstractOutputBinding<?, ?>> getOutputBindings() {
+    Map<OwsCode, AbstractOutputBinding<?, ?>> getOutputBindings() {
         return Collections.unmodifiableMap(this.outputBindings);
     }
 
-    Map<OwsCodeType, AbstractInputBinding<?, ?>> getInputBindings() {
+    Map<OwsCode, AbstractInputBinding<?, ?>> getInputBindings() {
         return Collections.unmodifiableMap(this.inputBindings);
     }
 
@@ -116,7 +116,7 @@ public class AnnotatedAlgorithmMetadata {
         }
     }
 
-    private Map<OwsCodeType, AbstractInputBinding<?, ?>> getInputBindings(Class<?> algorithmClass, ParserRepository parserRepository) {
+    private Map<OwsCode, AbstractInputBinding<?, ?>> getInputBindings(Class<?> algorithmClass, ParserRepository parserRepository) {
         Stream<AbstractInputBinding<?, ?>> s1 = parseElements(getFields(algorithmClass), Arrays
                 .asList(new LiteralInputAnnotationParser<>(AbstractInputBinding::field),
                         new ComplexInputAnnotationParser<>(AbstractInputBinding::field, parserRepository)))
@@ -127,12 +127,12 @@ public class AnnotatedAlgorithmMetadata {
                 .map(x -> (AbstractInputBinding<?,?>)x);
         BinaryOperator<AbstractInputBinding<?, ?>> merger = throwingMerger((a, b) ->
                 new RuntimeException("duplicated identifier: " + a.getDescription().getId()));
-        Collector<AbstractInputBinding<?, ?>, ?, LinkedHashMap<OwsCodeType, AbstractInputBinding<?, ?>>> collector
+        Collector<AbstractInputBinding<?, ?>, ?, LinkedHashMap<OwsCode, AbstractInputBinding<?, ?>>> collector
                 = toMap(b -> b.getDescription().getId(), identity(), merger, LinkedHashMap::new);
         return Collections.unmodifiableMap(Stream.concat(s1, s2).collect(collector));
     }
 
-    private Map<OwsCodeType, AbstractOutputBinding<?, ?>> getOutputBindings(Class<?> algorithmClass, GeneratorRepository generatorRepository) {
+    private Map<OwsCode, AbstractOutputBinding<?, ?>> getOutputBindings(Class<?> algorithmClass, GeneratorRepository generatorRepository) {
         Stream<AbstractOutputBinding<?, ?>> s1 = parseElements(getFields(algorithmClass), Arrays
                     .asList(new LiteralOutputAnnotationParser<>(AbstractOutputBinding::field),
                             new ComplexOutputAnnotationParser<>(AbstractOutputBinding::field, generatorRepository)))
@@ -143,7 +143,7 @@ public class AnnotatedAlgorithmMetadata {
                 .map(x -> (AbstractOutputBinding<?,?>)x);
         BinaryOperator<AbstractOutputBinding<?, ?>> merger = throwingMerger((a, b) ->
                 new RuntimeException("duplicated identifier: " + a.getDescription().getId()));
-        Collector<AbstractOutputBinding<?, ?>, ?, Map<OwsCodeType, AbstractOutputBinding<?, ?>>> collector
+        Collector<AbstractOutputBinding<?, ?>, ?, Map<OwsCode, AbstractOutputBinding<?, ?>>> collector
                 = toMap(b -> b.getDescription().getId(), identity(), merger, LinkedHashMap::new);
         return Collections.unmodifiableMap(Stream.concat(s1, s2).collect(collector));
     }
@@ -159,7 +159,7 @@ public class AnnotatedAlgorithmMetadata {
                                              + algorithmClass.getCanonicalName())));
     }
 
-    private ProcessDescription getDescription(Class<?> algorithmClass, Map<OwsCodeType, AbstractInputBinding<?, ?>> inputBindings, Map<OwsCodeType, AbstractOutputBinding<?, ?>> outputBindings) {
+    private ProcessDescription getDescription(Class<?> algorithmClass, Map<OwsCode, AbstractInputBinding<?, ?>> inputBindings, Map<OwsCode, AbstractOutputBinding<?, ?>> outputBindings) {
         List<ProcessInputDescription> inputs = inputBindings.values().stream().map(AbstractInputBinding::getDescription).collect(toList());
         List<ProcessOutputDescription> outputs = outputBindings.values().stream().map(AbstractOutputBinding::getDescription).collect(toList());
         return getDescription(algorithmClass, inputs, outputs);

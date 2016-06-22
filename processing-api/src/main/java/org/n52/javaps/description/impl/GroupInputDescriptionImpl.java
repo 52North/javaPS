@@ -21,17 +21,17 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
-import org.n52.iceland.ogc.ows.OwsCodeType;
 import org.n52.javaps.description.GroupInputDescription;
 import org.n52.javaps.description.GroupInputDescriptionBuilder;
 import org.n52.javaps.description.ProcessInputDescription;
 import org.n52.javaps.description.ReturningProcessInputVisitor;
 import org.n52.javaps.description.ThrowingReturningProcessInputVisitor;
+import org.n52.javaps.ogc.ows.OwsCode;
 
 public class GroupInputDescriptionImpl extends AbstractProcessInputDescription
         implements GroupInputDescription {
 
-    private final Map<OwsCodeType, ProcessInputDescription> inputs;
+    private final Map<OwsCode, ProcessInputDescription> inputs;
 
     protected GroupInputDescriptionImpl(
             AbstractGroupInputDescriptionBuilder<?, ?> builder) {
@@ -51,7 +51,7 @@ public class GroupInputDescriptionImpl extends AbstractProcessInputDescription
     }
 
     @Override
-    public ProcessInputDescription getInput(OwsCodeType id) {
+    public ProcessInputDescription getInput(OwsCode id) {
         return this.inputs.get(id);
     }
 
@@ -61,7 +61,7 @@ public class GroupInputDescriptionImpl extends AbstractProcessInputDescription
     }
 
     @Override
-    public Set<OwsCodeType> getInputs() {
+    public Set<OwsCode> getInputs() {
         return Collections.unmodifiableSet(inputs.keySet());
     }
 

@@ -19,9 +19,9 @@ package org.n52.javaps.algorithm;
 import java.util.Collections;
 import java.util.List;
 
-import org.n52.iceland.ogc.ows.OwsCodeType;
 import org.n52.javaps.description.ProcessDescription;
 import org.n52.javaps.io.data.IData;
+import org.n52.javaps.ogc.ows.OwsCode;
 
 /**
  * @author Bastian Schaeffer, University of Muenster, Theodor Foerster, ITC
@@ -38,13 +38,13 @@ public interface IAlgorithm {
     ProcessDescription getDescription();
 
     default Class<?> getInputDataType(String id) {
-        return getOutputDataType(new OwsCodeType(id));
+        return getOutputDataType(new OwsCode(id));
     }
 
     default Class<?> getOutputDataType(String id) {
-        return getOutputDataType(new OwsCodeType(id));
+        return getOutputDataType(new OwsCode(id));
     }
-    default Class<? extends IData> getInputDataType(OwsCodeType identifier) {
+    default Class<? extends IData> getInputDataType(OwsCode identifier) {
         if (getDescription() != null) {
             return getDescription().getInput(identifier).getBindingClass();
         } else {
@@ -52,7 +52,7 @@ public interface IAlgorithm {
         }
     }
 
-    default Class<? extends IData> getOutputDataType(OwsCodeType identifier) {
+    default Class<? extends IData> getOutputDataType(OwsCode identifier) {
         if (getDescription() != null) {
             return getDescription().getOutput(identifier).getBindingClass();
         } else {

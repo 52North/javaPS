@@ -23,8 +23,8 @@ import org.n52.iceland.ds.OperationHandlerKey;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.ogc.ows.OwsOperation;
 import org.n52.javaps.ogc.wps.WPSConstants;
-import org.n52.javaps.request.WpsDescribeProcessRequest;
-import org.n52.javaps.response.WpsDescribeProcessResponse;
+import org.n52.javaps.request.DescribeProcessRequest;
+import org.n52.javaps.response.DescribeProcessResponse;
 
 /**
  * TODO JavaDoc
@@ -32,10 +32,10 @@ import org.n52.javaps.response.WpsDescribeProcessResponse;
  * @author Christian Autermann
  */
 public class DescribeProcessHandler implements
-        GenericHandler<WpsDescribeProcessRequest, WpsDescribeProcessResponse> {
+        GenericHandler<DescribeProcessRequest, DescribeProcessResponse> {
 
     @Override
-    public WpsDescribeProcessResponse handler(WpsDescribeProcessRequest request)
+    public DescribeProcessResponse handler(DescribeProcessRequest request)
             throws OwsExceptionReport {
         return request.getResponse();
     }

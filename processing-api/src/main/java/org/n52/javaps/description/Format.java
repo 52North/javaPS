@@ -19,14 +19,18 @@ package org.n52.javaps.description;
 import static com.google.common.base.Strings.emptyToNull;
 import static com.google.common.base.Strings.nullToEmpty;
 
+import java.nio.charset.Charset;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.collect.ImmutableSet;
 
 /**
  * TODO JavaDoc
@@ -35,6 +39,9 @@ import com.google.common.base.MoreObjects;
  */
 public class Format implements Comparable<Format> {
     private static final Comparator<Format> COMPARATOR;
+    private static final Set<String> CHARSETS;
+    public static final String BASE64_ENCODING = "base64";
+    public static final String DEFAULT_ENCODING = "UTF-8";
 
 
     static {
@@ -45,6 +52,10 @@ public class Format implements Comparable<Format> {
         COMPARATOR = Comparator.nullsLast(Comparator.comparing(mimeType, Comparator.nullsFirst(Comparator.naturalOrder())))
                 .thenComparing(Comparator.comparing(schema, Comparator.nullsFirst(Comparator.naturalOrder())))
                 .thenComparing(Comparator.comparing(encoding, Comparator.nullsFirst(Comparator.naturalOrder())));
+    }
+
+    static {
+        CHARSETS = ImmutableSet.copyOf(Charset.availableCharsets().keySet());
     }
 
     private final Optional<String> mimeType;
@@ -145,6 +156,10 @@ public class Format implements Comparable<Format> {
         return !hasSchema() || hasSchema(other);
     }
 
+    public Format withEncoding(Charset encoding) {
+        return withEncoding(encoding.name());
+    }
+
     public Format withEncoding(String encoding) {
         return new Format(getMimeType().orElse(null),
                           encoding,
@@ -152,11 +167,11 @@ public class Format implements Comparable<Format> {
     }
 
     public Format withBase64Encoding() {
-        return withEncoding("Base64");
+        return withEncoding(BASE64_ENCODING);
     }
 
     public Format withUTF8Encoding() {
-        return withEncoding("UTF-8");
+        return withEncoding(DEFAULT_ENCODING);
     }
 
     public Format withSchema(String schema) {
@@ -241,6 +256,28 @@ public class Format implements Comparable<Format> {
 
     @Override
     public int compareTo(Format that) {
-        return COMPARATOR.compare(this, that);
+        return comparator().compare(this, that);
+    }
+
+
+    public boolean isXML() {
+        return getMimeType().map(String::toLowerCase).filter(x -> x.endsWith("xml")).isPresent();
+    }
+
+    public boolean isCharacterEncoding() {
+        Set<String> charsets = getAvailableCharsets();
+        return getEncoding().filter(charsets::contains).isPresent();
+    }
+
+    public boolean isBase64() {
+        return getEncoding().filter(BASE64_ENCODING::equalsIgnoreCase).isPresent();
+    }
+
+    public static Set<String> getAvailableCharsets() {
+        return Collections.unmodifiableSet(CHARSETS);
+    }
+
+    public static Comparator<Format> comparator() {
+        return COMPARATOR;
     }
 }

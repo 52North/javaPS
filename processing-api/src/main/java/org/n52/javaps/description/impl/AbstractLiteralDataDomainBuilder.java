@@ -18,13 +18,14 @@ package org.n52.javaps.description.impl;
 
 import java.util.Objects;
 
-import org.n52.javaps.ogc.ows.OwsAny;
+import org.n52.javaps.ogc.ows.OwsAnyValue;
 import org.n52.javaps.ogc.ows.OwsDomainMetadata;
-import org.n52.javaps.ogc.ows.OwsValueDescription;
 import org.n52.javaps.description.LiteralDataDomain;
 import org.n52.javaps.description.LiteralDataDomainBuilder;
 
 import com.google.common.base.Strings;
+
+import org.n52.javaps.ogc.ows.OwsPossibleValues;
 
 /**
  * TODO JavaDoc
@@ -35,12 +36,12 @@ import com.google.common.base.Strings;
 public abstract class AbstractLiteralDataDomainBuilder<T extends LiteralDataDomain, B extends AbstractLiteralDataDomainBuilder<T, B>>
         implements LiteralDataDomainBuilder<T, B> {
 
-    private OwsValueDescription valueDescription = OwsAny.instance();
+    private OwsPossibleValues valueDescription = OwsAnyValue.instance();
     private OwsDomainMetadata dataType;
     private OwsDomainMetadata uom;
     private String defaultValue;
 
-    OwsValueDescription getValueDescription() {
+    OwsPossibleValues getValueDescription() {
         return valueDescription;
     }
 
@@ -79,9 +80,9 @@ public abstract class AbstractLiteralDataDomainBuilder<T extends LiteralDataDoma
 
     @Override
     @SuppressWarnings(value = "unchecked")
-    public B withValueDescription(OwsValueDescription description) {
+    public B withValueDescription(OwsPossibleValues description) {
         if (this.valueDescription == null) {
-            this.valueDescription = OwsAny.instance();
+            this.valueDescription = OwsAnyValue.instance();
         } else {
             this.valueDescription = description;
         }

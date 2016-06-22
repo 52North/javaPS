@@ -19,7 +19,7 @@ package org.n52.javaps.description;
 import java.util.Collection;
 import java.util.Set;
 
-import org.n52.iceland.ogc.ows.OwsCodeType;
+import org.n52.javaps.ogc.ows.OwsCode;
 
 /**
  *
@@ -27,14 +27,14 @@ import org.n52.iceland.ogc.ows.OwsCodeType;
  */
 public interface ProcessOutputDescriptionContainer {
 
-    ProcessOutputDescription getOutput(OwsCodeType id);
+    ProcessOutputDescription getOutput(OwsCode id);
 
     default ProcessOutputDescription getOutput(String id) {
-        return getOutput(new OwsCodeType(id));
+        return getOutput(new OwsCode(id));
     }
 
     Collection<? extends ProcessOutputDescription> getOutputDescriptions();
 
-    Set<OwsCodeType> getOutputs();
+    Set<OwsCode> getOutputs();
 
 }

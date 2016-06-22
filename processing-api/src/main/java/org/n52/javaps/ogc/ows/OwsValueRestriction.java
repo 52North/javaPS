@@ -30,11 +30,11 @@ public interface OwsValueRestriction {
         return false;
     }
 
-    default OwsAllowedRange asRange() {
+    default OwsRange asRange() {
         throw new UnsupportedOperationException();
     }
 
-    default OwsAllowedValue asValue() {
+    default OwsValue asValue() {
         throw new UnsupportedOperationException();
     }
 

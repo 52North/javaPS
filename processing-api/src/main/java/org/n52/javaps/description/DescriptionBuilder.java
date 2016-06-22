@@ -19,7 +19,7 @@ package org.n52.javaps.description;
 import java.net.URI;
 import java.util.Arrays;
 
-import org.n52.iceland.ogc.ows.OwsCodeType;
+import org.n52.javaps.ogc.ows.OwsCode;
 import org.n52.javaps.ogc.ows.OwsKeyword;
 import org.n52.javaps.ogc.ows.OwsLanguageString;
 import org.n52.javaps.ogc.ows.OwsMetadata;
@@ -45,10 +45,10 @@ public interface DescriptionBuilder<T extends Description, B extends Description
                             : new OwsLanguageString(lang, abstrakt));
     }
 
-    B withIdentifier(OwsCodeType id);
+    B withIdentifier(OwsCode id);
 
     default B withIdentifier(String id) {
-        return withIdentifier(new OwsCodeType(id));
+        return withIdentifier(new OwsCode(id));
     }
 
     default B withIdentifier(String codespace, String id) {
@@ -56,7 +56,7 @@ public interface DescriptionBuilder<T extends Description, B extends Description
     }
 
     default B withIdentifier(URI codespace, String id) {
-        return withIdentifier(new OwsCodeType(id, codespace));
+        return withIdentifier(new OwsCode(id, codespace));
     }
 
     B withTitle(OwsLanguageString title);

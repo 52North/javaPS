@@ -18,10 +18,10 @@ package org.n52.javaps.description.impl;
 
 import java.util.Map;
 
-import org.n52.iceland.ogc.ows.OwsCodeType;
 import org.n52.javaps.description.GroupInputDescription;
 import org.n52.javaps.description.GroupInputDescriptionBuilder;
 import org.n52.javaps.description.ProcessInputDescription;
+import org.n52.javaps.ogc.ows.OwsCode;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -29,7 +29,7 @@ public abstract class AbstractGroupInputDescriptionBuilder<T extends GroupInputD
         extends AbstractProcessInputDescriptionBuilder<T, B>
         implements GroupInputDescriptionBuilder<T, B> {
 
-    private final ImmutableMap.Builder<OwsCodeType, ProcessInputDescription> inputs
+    private final ImmutableMap.Builder<OwsCode, ProcessInputDescription> inputs
             = ImmutableMap.builder();
 
     @SuppressWarnings(value = "unchecked")
@@ -41,7 +41,7 @@ public abstract class AbstractGroupInputDescriptionBuilder<T extends GroupInputD
         return (B) this;
     }
 
-    Map<OwsCodeType, ProcessInputDescription> getInputs() {
+    Map<OwsCode, ProcessInputDescription> getInputs() {
         return this.inputs.build();
     }
 

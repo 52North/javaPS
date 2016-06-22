@@ -16,6 +16,7 @@
  */
 package org.n52.javaps.ogc.ows;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Objects;
@@ -27,7 +28,7 @@ import java.util.stream.Stream;
  *
  * @author Christian Autermann
  */
-public class OwsAllowedValues implements OwsValueDescription, Iterable<OwsValueRestriction> {
+public class OwsAllowedValues implements OwsPossibleValues, Iterable<OwsValueRestriction> {
     private final Set<OwsValueRestriction> restrictions = new HashSet<>();
 
     public OwsAllowedValues(Iterable<OwsValueRestriction> restrictions) {
@@ -61,12 +62,6 @@ public class OwsAllowedValues implements OwsValueDescription, Iterable<OwsValueR
     }
 
     @Override
-    public boolean isAny() {
-        return this.restrictions.isEmpty();
-    }
-
-
-    @Override
     public boolean isAllowedValues() {
         return true;
     }
@@ -76,12 +71,7 @@ public class OwsAllowedValues implements OwsValueDescription, Iterable<OwsValueR
         return this;
     }
 
-    @Override
-    public OwsAny asAny() {
-        if (isAny()) {
-            return OwsAny.instance();
-        } else {
-            throw new UnsupportedOperationException();
-        }
+    public Set<OwsValueRestriction> getRestrictions() {
+        return Collections.unmodifiableSet(restrictions);
     }
 }

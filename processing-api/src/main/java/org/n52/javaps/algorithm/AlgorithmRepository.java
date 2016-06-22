@@ -21,8 +21,8 @@ import java.util.Set;
 
 import org.n52.iceland.lifecycle.Constructable;
 import org.n52.iceland.lifecycle.Destroyable;
-import org.n52.iceland.ogc.ows.OwsCodeType;
 import org.n52.javaps.description.ProcessDescription;
+import org.n52.javaps.ogc.ows.OwsCode;
 
 /**
  * @author Bastian Schaeffer, University of Muenster, Theodor Foerster, ITC
@@ -30,24 +30,24 @@ import org.n52.javaps.description.ProcessDescription;
  */
 public interface AlgorithmRepository extends Constructable, Destroyable {
 
-    public Set<OwsCodeType> getAlgorithmNames();
+    public Set<OwsCode> getAlgorithmNames();
 
-    Optional<IAlgorithm> getAlgorithm(OwsCodeType id);
+    Optional<IAlgorithm> getAlgorithm(OwsCode id);
 
     default Optional<IAlgorithm> getAlgorithm(String id) {
-        return getAlgorithm(new OwsCodeType(id));
+        return getAlgorithm(new OwsCode(id));
     }
 
-    Optional<ProcessDescription> getProcessDescription(OwsCodeType id);
+    Optional<ProcessDescription> getProcessDescription(OwsCode id);
 
     default Optional<ProcessDescription> getProcessDescription(String id) {
-        return getProcessDescription(new OwsCodeType(id));
+        return getProcessDescription(new OwsCode(id));
     }
 
-    boolean containsAlgorithm(OwsCodeType id);
+    boolean containsAlgorithm(OwsCode id);
 
     default boolean containsAlgorithm(String id) {
-        return containsAlgorithm(new OwsCodeType(id));
+        return containsAlgorithm(new OwsCode(id));
     }
 
     @Override

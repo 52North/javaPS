@@ -21,12 +21,12 @@ import java.util.Optional;
 import org.n52.javaps.description.LiteralDataDomain;
 import org.n52.javaps.description.LiteralDataDomainBuilder;
 import org.n52.javaps.ogc.ows.OwsDomainMetadata;
-import org.n52.javaps.ogc.ows.OwsValueDescription;
+import org.n52.javaps.ogc.ows.OwsPossibleValues;
 
 
 public class LiteralDataDomainImpl implements LiteralDataDomain {
 
-    private final OwsValueDescription valueDescription;
+    private final OwsPossibleValues valueDescription;
     private final Optional<OwsDomainMetadata> dataType;
     private final Optional<OwsDomainMetadata> uom;
     private final Optional<String> defaultValue;
@@ -39,7 +39,7 @@ public class LiteralDataDomainImpl implements LiteralDataDomain {
     }
 
     @Override
-    public OwsValueDescription getValueDescription() {
+    public OwsPossibleValues getValueDescription() {
         return this.valueDescription;
     }
 

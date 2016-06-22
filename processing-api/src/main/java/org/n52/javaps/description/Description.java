@@ -19,7 +19,7 @@ package org.n52.javaps.description;
 import java.util.Optional;
 import java.util.Set;
 
-import org.n52.iceland.ogc.ows.OwsCodeType;
+import org.n52.javaps.ogc.ows.OwsCode;
 import org.n52.javaps.ogc.ows.OwsKeyword;
 import org.n52.javaps.ogc.ows.OwsLanguageString;
 import org.n52.javaps.ogc.ows.OwsMetadata;
@@ -32,7 +32,7 @@ import org.n52.javaps.ogc.ows.OwsMetadata;
  */
 public interface Description {
 
-    OwsCodeType getId();
+    OwsCode getId();
 
     Optional<OwsLanguageString> getAbstract();
 
