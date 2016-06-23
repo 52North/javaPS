@@ -55,7 +55,7 @@ public class DescribeProcessHandler implements
 
     @Override
     public Set<OperationHandlerKey> getKeys() {
-        return Collections.singleton(new OperationHandlerKey(WPSConstants.SERVICE, WPSConstants.Operations.DescribeProcess.toString()));
+        return Collections.singleton(new OperationHandlerKey(WPSConstants.SERVICE, WPSConstants.Operations.DescribeProcess));
     }
 
 }
