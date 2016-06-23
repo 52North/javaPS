@@ -16,14 +16,15 @@
  */
 package org.n52.javaps.handler;
 
-
 import java.util.Collections;
 import java.util.Set;
 
 import org.n52.iceland.ds.GenericOperationHandler;
 import org.n52.iceland.ds.OperationHandlerKey;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.ows.OwsOperation;
+import org.n52.javaps.Engine;
+import org.n52.javaps.ogc.wps.JobId;
+import org.n52.javaps.ogc.wps.StatusInfo;
 import org.n52.javaps.ogc.wps.WPSConstants;
 import org.n52.javaps.request.GetStatusRequest;
 import org.n52.javaps.response.GetStatusResponse;
@@ -33,16 +34,24 @@ import org.n52.javaps.response.GetStatusResponse;
  *
  * @author Christian Autermann
  */
-public class GetStatusHandler extends AbstractHandler
+public class GetStatusHandler extends AbstractJobHandler
         implements GenericOperationHandler<GetStatusRequest, GetStatusResponse> {
     private static final OperationHandlerKey KEY
             = new OperationHandlerKey(WPSConstants.SERVICE,
-                    WPSConstants.Operations.GetStatus);
+                                      WPSConstants.Operations.GetStatus);
+
+    public GetStatusHandler(Engine engine, boolean discloseJobIds) {
+        super(engine, discloseJobIds);
+    }
 
     @Override
     public GetStatusResponse handler(GetStatusRequest request)
             throws OwsExceptionReport {
-        return request.getResponse();
+        String service = request.getService();
+        String version = request.getVersion();
+        JobId jobId = request.getJobId();
+        StatusInfo status = getEngine().getStatus(jobId);
+        return new GetStatusResponse(service, version, status);
     }
 
     @Override
@@ -50,17 +59,8 @@ public class GetStatusHandler extends AbstractHandler
         return WPSConstants.Operations.GetStatus.toString();
     }
 
-
     @Override
     public Set<OperationHandlerKey> getKeys() {
         return Collections.singleton(KEY);
     }
-
-    @Override
-    public OwsOperation getOperationsMetadata(String service, String version)
-            throws OwsExceptionReport {
-        /* TODO implement org.n52.javaps.handler.GetStatusHandler.getOperationsMetadata() */
-        throw new UnsupportedOperationException("org.n52.javaps.handler.GetStatusHandler.getOperationsMetadata() not yet implemented");
-    }
-
 }

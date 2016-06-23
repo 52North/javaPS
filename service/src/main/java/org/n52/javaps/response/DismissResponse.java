@@ -28,6 +28,14 @@ import org.n52.javaps.ogc.wps.WPSConstants;
 public class DismissResponse extends AbstractServiceResponse {
     private StatusInfo status;
 
+    public DismissResponse(String service, String version, StatusInfo status) {
+        super(service, version);
+        this.status = status;
+    }
+
+    public DismissResponse() {
+    }
+
     @Override
     public String getOperationName() {
         return WPSConstants.Operations.Dismiss.toString();

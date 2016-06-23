@@ -20,20 +20,22 @@ import static java.util.stream.Collectors.toSet;
 
 import java.util.Collections;
 import java.util.Set;
-
-import javax.inject.Inject;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import org.n52.iceland.ds.GenericOperationHandler;
 import org.n52.iceland.ds.OperationHandlerKey;
+import org.n52.iceland.exception.ows.NoApplicableCodeException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.ogc.ows.OwsAllowedValues;
 import org.n52.iceland.ogc.ows.OwsCode;
-import org.n52.iceland.ogc.ows.OwsDCP;
 import org.n52.iceland.ogc.ows.OwsDomain;
-import org.n52.iceland.ogc.ows.OwsMetadata;
-import org.n52.iceland.ogc.ows.OwsOperation;
 import org.n52.iceland.ogc.ows.OwsValue;
-import org.n52.javaps.algorithm.RepositoryManager;
+import org.n52.javaps.Engine;
+import org.n52.javaps.ogc.wps.ExecutionMode;
+import org.n52.javaps.ogc.wps.JobId;
+import org.n52.javaps.ogc.wps.Result;
+import org.n52.javaps.ogc.wps.StatusInfo;
 import org.n52.javaps.ogc.wps.WPSConstants;
 import org.n52.javaps.request.ExecuteRequest;
 import org.n52.javaps.response.ExecuteResponse;
@@ -43,22 +45,42 @@ import org.n52.javaps.response.ExecuteResponse;
  *
  * @author Christian Autermann
  */
-public class ExecuteHandler extends AbstractHandler
+public class ExecuteHandler extends AbstractEngineHandler
         implements GenericOperationHandler<ExecuteRequest, ExecuteResponse> {
+    private static final String IDENTIFIER = "Identifier";
     private static final OperationHandlerKey KEY
             = new OperationHandlerKey(WPSConstants.SERVICE, WPSConstants.Operations.Execute);
 
-    private final RepositoryManager repositoryManager;
-
-    @Inject
-    public ExecuteHandler(RepositoryManager repositoryManager) {
-        this.repositoryManager = repositoryManager;
+    public ExecuteHandler(Engine engine) {
+        super(engine);
     }
 
     @Override
     public ExecuteResponse handler(ExecuteRequest request)
             throws OwsExceptionReport {
-        return request.getResponse();
+        // TODO response mode
+
+        String service = request.getService();
+        String version = request.getVersion();
+
+        JobId jobId = getEngine().execute(
+                request.getId(),
+                request.getInputs(),
+                request.getOutputs());
+
+        if (request.getExecutionMode() == ExecutionMode.SYNC) {
+            try {
+                Future<Result> result = getEngine().getResult(jobId);
+                return new ExecuteResponse(service, version, result.get());
+            } catch (InterruptedException ex) {
+                throw new NoApplicableCodeException().causedBy(ex);
+            } catch (ExecutionException ex) {
+                throw new NoApplicableCodeException().causedBy(ex.getCause());
+            }
+        } else {
+            StatusInfo status = getEngine().getStatus(jobId);
+            return new ExecuteResponse(service, version, status);
+        }
     }
 
     @Override
@@ -67,22 +89,15 @@ public class ExecuteHandler extends AbstractHandler
     }
 
     @Override
-    public OwsOperation getOperationsMetadata(String service, String version)
-            throws OwsExceptionReport {
-        Set<OwsDomain> constraints = null;
-        Set<OwsMetadata> metadata = null;
-        Set<OwsValue> identifiers = repositoryManager
-                .getAlgorithms().stream().map(OwsCode::getValue)
-                .map(OwsValue::new).collect(toSet());
-        Set<OwsDomain> parameters = Collections
-                .singleton(new OwsDomain("identifier", new OwsAllowedValues(identifiers)));
-        Set<OwsDCP> dcp = Collections.singleton(getDCP(service, version));
-        return new OwsOperation(getOperationName(), parameters, constraints, metadata, dcp);
+    public Set<OperationHandlerKey> getKeys() {
+        return Collections.singleton(KEY);
     }
 
     @Override
-    public Set<OperationHandlerKey> getKeys() {
-        return Collections.singleton(KEY);
+    protected Set<OwsDomain> getOperationParameters() {
+        Set<OwsValue> algorithmIdentifiers = getEngine().getProcessIdentifiers().stream().map(OwsCode::getValue).map(OwsValue::new).collect(toSet());
+        OwsDomain identifierDomain = new OwsDomain(IDENTIFIER, new OwsAllowedValues(algorithmIdentifiers));
+        return Collections.singleton(identifierDomain);
     }
 
 }

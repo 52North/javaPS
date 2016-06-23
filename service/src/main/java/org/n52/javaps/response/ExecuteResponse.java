@@ -28,8 +28,27 @@ import org.n52.javaps.ogc.wps.WPSConstants;
  */
 public class ExecuteResponse extends AbstractServiceResponse {
 
-    private Optional<Result> result = Optional.empty();
-    private Optional<StatusInfo> status = Optional.empty();
+    private Optional<Result> result;
+    private Optional<StatusInfo> status;
+
+    public ExecuteResponse() {
+        this(null, null, null, null);
+    }
+
+    public ExecuteResponse(String service, String version, Result result) {
+        this(service, version, result, null);
+    }
+
+    public ExecuteResponse(String service, String version, StatusInfo status) {
+        this(service, version, null, status);
+    }
+
+    private ExecuteResponse(String service, String version, Result result,
+                            StatusInfo status) {
+        super(service, version);
+        this.result = Optional.ofNullable(result);
+        this.status = Optional.ofNullable(status);
+    }
 
     @Override
     public String getOperationName() {

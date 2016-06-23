@@ -23,7 +23,9 @@ import java.util.Set;
 import org.n52.iceland.ds.GenericOperationHandler;
 import org.n52.iceland.ds.OperationHandlerKey;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.ows.OwsOperation;
+import org.n52.javaps.Engine;
+import org.n52.javaps.ogc.wps.JobId;
+import org.n52.javaps.ogc.wps.StatusInfo;
 import org.n52.javaps.ogc.wps.WPSConstants;
 import org.n52.javaps.request.DismissRequest;
 import org.n52.javaps.response.DismissResponse;
@@ -33,26 +35,28 @@ import org.n52.javaps.response.DismissResponse;
  *
  * @author Christian Autermann
  */
-public class DismissHandler extends AbstractHandler
+public class DismissHandler extends AbstractJobHandler
         implements GenericOperationHandler<DismissRequest, DismissResponse> {
     private static final OperationHandlerKey KEY
             = new OperationHandlerKey(WPSConstants.SERVICE, WPSConstants.Operations.Dismiss);
 
+    public DismissHandler(Engine engine, boolean discloseJobIds) {
+        super(engine, discloseJobIds);
+    }
+
     @Override
     public DismissResponse handler(DismissRequest request)
             throws OwsExceptionReport {
-        return request.getResponse();
+        JobId jobId = request.getJobId();
+        StatusInfo status = getEngine().dismiss(jobId);
+        String service = request.getService();
+        String version = request.getVersion();
+        return new DismissResponse(service, version,status);
     }
 
     @Override
     public String getOperationName() {
         return WPSConstants.Operations.Dismiss.toString();
-    }
-
-    @Override
-    public OwsOperation getOperationsMetadata(String service, String version)
-            throws OwsExceptionReport {
-        return null;
     }
 
     @Override

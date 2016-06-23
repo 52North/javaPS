@@ -28,6 +28,14 @@ import org.n52.javaps.ogc.wps.WPSConstants;
 public class GetStatusResponse extends AbstractServiceResponse {
     private StatusInfo status;
 
+    public GetStatusResponse() {
+    }
+
+    public GetStatusResponse(String service, String version, StatusInfo status) {
+        super(service, version);
+        this.status = status;
+    }
+
     @Override
     public String getOperationName() {
         return WPSConstants.Operations.GetStatus.toString();

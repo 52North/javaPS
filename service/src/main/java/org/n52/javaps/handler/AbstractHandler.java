@@ -26,6 +26,8 @@ import org.n52.iceland.ogc.ows.OwsAllowedValues;
 import org.n52.iceland.ogc.ows.OwsDCP;
 import org.n52.iceland.ogc.ows.OwsDomain;
 import org.n52.iceland.ogc.ows.OwsHttp;
+import org.n52.iceland.ogc.ows.OwsMetadata;
+import org.n52.iceland.ogc.ows.OwsOperation;
 import org.n52.iceland.ogc.ows.OwsRequestMethod;
 import org.n52.iceland.ogc.ows.OwsValue;
 import org.n52.iceland.service.ServiceSettings;
@@ -55,9 +57,9 @@ public abstract class AbstractHandler implements OperationHandler {
         this.serviceURL = Validation.notNull("Service URL", serviceURL);
     }
 
-    protected OwsDCP getDCP (String service, String version)
+    private Set<OwsDCP> getDCP (String service, String version)
             throws OwsExceptionReport {
-        return getDCP(new OperationKey(service, version, getOperationName()));
+        return Collections.singleton(getDCP(new OperationKey(service, version, getOperationName())));
     }
 
     private OwsDCP getDCP(OperationKey decoderKey)
@@ -122,6 +124,29 @@ public abstract class AbstractHandler implements OperationHandler {
                 .map(Collections::singleton)
                 .orElse(null);
         return constraints;
+    }
+
+    @Override
+    public OwsOperation getOperationsMetadata(String service, String version)
+            throws OwsExceptionReport {
+         return new OwsOperation(
+                 getOperationName(),
+                 getOperationParameters(),
+                 getOperationConstraints(),
+                 getOperationMetadata(),
+                 getDCP(service, version));
+    }
+
+    protected  Set<OwsDomain> getOperationParameters() {
+        return null;
+    }
+
+    protected Set<OwsDomain> getOperationConstraints() {
+        return null;
+    }
+
+    protected Set<OwsMetadata> getOperationMetadata() {
+        return null;
     }
 
 }

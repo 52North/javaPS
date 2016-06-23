@@ -16,7 +16,6 @@
  */
 package org.n52.javaps.response;
 
-
 import java.util.Objects;
 
 import org.n52.iceland.response.AbstractServiceResponse;
@@ -29,6 +28,15 @@ import org.n52.javaps.ogc.wps.WPSConstants;
 public class GetResultResponse extends AbstractServiceResponse {
 
     private Result result;
+
+    public GetResultResponse() {
+        this(null, null, null);
+    }
+
+    public GetResultResponse(String service, String version, Result result) {
+        super(service, version);
+        this.result = result;
+    }
 
     @Override
     public String getOperationName() {
