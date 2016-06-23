@@ -24,7 +24,6 @@ import org.n52.javaps.ogc.ows.OwsCode;
 import org.n52.javaps.ogc.ows.OwsKeyword;
 import org.n52.javaps.ogc.ows.OwsLanguageString;
 import org.n52.javaps.ogc.ows.OwsMetadata;
-import org.n52.javaps.ogc.wps.description.DataDescription;
 
 /**
  *
@@ -59,7 +58,7 @@ public abstract class AbstractDataDescription extends AbstractDescription
         return this.bindingClass;
     }
 
-    public abstract class AbstractBuilder<T extends DataDescription, B extends DataDescription.Builder<T, B>>
+    public static abstract class AbstractBuilder<T extends DataDescription, B extends DataDescription.Builder<T, B>>
             extends AbstractDescription.AbstractBuilder<T, B>
             implements DataDescription.Builder<T, B> {
         private Class<? extends IData> bindingClass;
