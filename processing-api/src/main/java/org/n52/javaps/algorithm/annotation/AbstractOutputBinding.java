@@ -27,7 +27,7 @@ import java.lang.reflect.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.n52.javaps.description.ProcessOutputDescription;
+import org.n52.javaps.ogc.wps.description.ProcessOutputDescription;
 import org.n52.javaps.io.data.IData;
 
 abstract class AbstractOutputBinding<M extends AccessibleObject & Member, D extends ProcessOutputDescription> extends AbstractDataBinding<M, D> {

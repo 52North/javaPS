@@ -24,9 +24,9 @@ import java.util.function.Function;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.n52.javaps.description.LiteralOutputDescription;
-import org.n52.javaps.description.impl.LiteralDataDomainImpl;
-import org.n52.javaps.description.impl.LiteralOutputDescriptionImpl;
+import org.n52.javaps.ogc.wps.description.LiteralOutputDescription;
+import org.n52.javaps.ogc.wps.description.LiteralDataDomainImpl;
+import org.n52.javaps.ogc.wps.description.LiteralOutputDescriptionImpl;
 import org.n52.javaps.io.BasicXMLTypeFactory;
 import org.n52.javaps.io.data.ILiteralData;
 

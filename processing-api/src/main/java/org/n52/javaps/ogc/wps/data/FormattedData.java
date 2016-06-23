@@ -18,7 +18,7 @@ package org.n52.javaps.ogc.wps.data;
 
 import java.util.Objects;
 
-import org.n52.javaps.description.Format;
+import org.n52.javaps.ogc.wps.Format;
 import org.n52.javaps.ogc.ows.OwsCode;
 
 /**

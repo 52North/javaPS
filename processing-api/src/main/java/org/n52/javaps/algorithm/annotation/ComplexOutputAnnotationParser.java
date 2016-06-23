@@ -22,9 +22,9 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 
-import org.n52.javaps.description.ComplexOutputDescription;
-import org.n52.javaps.description.Format;
-import org.n52.javaps.description.impl.ComplexOutputDescriptionImpl;
+import org.n52.javaps.ogc.wps.description.ComplexOutputDescription;
+import org.n52.javaps.ogc.wps.Format;
+import org.n52.javaps.ogc.wps.description.ComplexOutputDescriptionImpl;
 import org.n52.javaps.io.GeneratorRepository;
 import org.n52.javaps.io.data.IComplexData;
 import org.n52.javaps.io.data.IData;

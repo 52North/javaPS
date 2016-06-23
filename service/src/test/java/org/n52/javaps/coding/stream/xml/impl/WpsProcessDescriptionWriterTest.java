@@ -44,8 +44,6 @@ import org.n52.javaps.coding.stream.StreamWriterRepository;
 import org.n52.javaps.coding.stream.xml.XmlDocumentStreamWriter;
 import org.n52.javaps.coding.stream.xml.XmlElementStreamWriter;
 import org.n52.javaps.coding.stream.xml.XmlElementStreamWriterRepository;
-import org.n52.javaps.description.Format;
-import org.n52.javaps.description.ProcessDescription;
 import org.n52.javaps.io.GeneratorRepository;
 import org.n52.javaps.io.IGenerator;
 import org.n52.javaps.io.IParser;
@@ -53,6 +51,9 @@ import org.n52.javaps.io.ParserRepository;
 import org.n52.javaps.io.data.IComplexData;
 import org.n52.javaps.ogc.wps.JobControlOption;
 import org.n52.javaps.ogc.wps.ProcessOffering;
+import org.n52.javaps.ogc.wps.ProcessOfferings;
+import org.n52.javaps.ogc.wps.Format;
+import org.n52.javaps.ogc.wps.description.ProcessDescription;
 import org.n52.javaps.response.DescribeProcessResponse;
 
 /**
@@ -81,7 +82,7 @@ public class WpsProcessDescriptionWriterTest {
         response.setVersion("2.0.0");
         response.setContentType(MediaTypes.APPLICATION_XML);
 
-        response.addProcessOffering(processOffering);
+        response.setOfferings(new ProcessOfferings(Collections.singleton(processOffering)));
 
 
         write(repo, response, System.out);

@@ -22,7 +22,7 @@ import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.n52.javaps.description.ProcessDescription;
+import org.n52.javaps.ogc.wps.description.ProcessDescription;
 
 import com.google.common.base.Strings;
 

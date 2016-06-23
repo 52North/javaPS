@@ -20,7 +20,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.n52.javaps.description.ProcessDescription;
+import org.n52.javaps.ogc.wps.description.ProcessDescription;
 
 public abstract class AbstractAlgorithm
         extends AbstractObservable implements IAlgorithm {

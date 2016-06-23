@@ -21,7 +21,7 @@ import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Member;
 import java.util.function.Function;
 
-import org.n52.javaps.description.ProcessOutputDescription;
+import org.n52.javaps.ogc.wps.description.ProcessOutputDescription;
 /**
  *
  * @author Tom Kunicki, Christian Autermann

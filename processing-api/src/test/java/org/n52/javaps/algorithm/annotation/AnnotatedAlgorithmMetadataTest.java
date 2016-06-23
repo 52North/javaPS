@@ -30,8 +30,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 
-import org.n52.javaps.description.Format;
-import org.n52.javaps.description.ProcessDescription;
+import org.n52.javaps.ogc.wps.Format;
+import org.n52.javaps.ogc.wps.description.ProcessDescription;
 import org.n52.javaps.io.GeneratorRepository;
 import org.n52.javaps.io.IGenerator;
 import org.n52.javaps.io.IParser;

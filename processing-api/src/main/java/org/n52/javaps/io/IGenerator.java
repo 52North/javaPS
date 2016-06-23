@@ -21,7 +21,7 @@ import java.io.InputStream;
 
 import org.apache.commons.codec.binary.Base64InputStream;
 
-import org.n52.javaps.description.Format;
+import org.n52.javaps.ogc.wps.Format;
 import org.n52.javaps.io.data.IComplexData;
 
 /**

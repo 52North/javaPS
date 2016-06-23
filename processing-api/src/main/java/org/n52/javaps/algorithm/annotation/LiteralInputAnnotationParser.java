@@ -30,14 +30,14 @@ import java.util.function.Function;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.n52.javaps.description.LiteralInputDescription;
-import org.n52.javaps.description.LiteralInputDescriptionBuilder;
-import org.n52.javaps.description.impl.LiteralDataDomainImpl;
-import org.n52.javaps.description.impl.LiteralInputDescriptionImpl;
 import org.n52.javaps.io.BasicXMLTypeFactory;
 import org.n52.javaps.io.data.ILiteralData;
-import org.n52.javaps.ogc.ows.OwsValue;
 import org.n52.javaps.ogc.ows.OwsAllowedValues;
+import org.n52.javaps.ogc.ows.OwsValue;
+import org.n52.javaps.ogc.wps.description.LiteralInputDescription;
+import org.n52.javaps.ogc.wps.description.LiteralDataDomainImpl;
+import org.n52.javaps.ogc.wps.description.LiteralInputDescriptionImpl;
+import org.n52.javaps.ogc.wps.description.LiteralInputDescription.Builder;
 
 /**
  * TODO JavaDoc
@@ -75,7 +75,7 @@ class LiteralInputAnnotationParser<M extends AccessibleObject & Member, B extend
         // 2) validate allowedValues if explicitly declared
         // 3) validate defaultValue if declared
         // 4) check for special ENUM_COUNT maxOccurs flag
-        LiteralInputDescriptionBuilder<?, ?> builder = LiteralInputDescriptionImpl.builder();
+        Builder<?, ?> builder = LiteralInputDescriptionImpl.builder();
         builder.withIdentifier(annotation.identifier())
                 .withTitle(annotation.title())
                 .withAbstract(annotation.abstrakt())

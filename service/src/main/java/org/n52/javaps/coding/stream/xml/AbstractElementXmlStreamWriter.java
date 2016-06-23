@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.io.StringReader;
 import java.io.Writer;
 import java.net.URI;
 import java.nio.charset.Charset;
@@ -57,8 +58,6 @@ import com.google.common.escape.Escaper;
 import com.google.common.io.BaseEncoding;
 import com.google.common.io.ByteStreams;
 import com.google.common.xml.XmlEscapers;
-
-import static java.util.stream.Collectors.joining;
 
 public abstract class AbstractElementXmlStreamWriter
         implements XmlElementStreamWriter {
@@ -221,7 +220,7 @@ public abstract class AbstractElementXmlStreamWriter
         attr(XMLConstants.XLink.Attr.QN_ACTUATE, link.getActuate().map(Actuate::toString));
     }
 
-    protected void write(QName name, Link link) throws XMLStreamException {
+    protected void writeLink(QName name, Link link) throws XMLStreamException {
         element(name, link, this::writeXLinkAttrs);
     }
 
@@ -291,6 +290,13 @@ public abstract class AbstractElementXmlStreamWriter
         start(name);
         writer.write();
         end(name);
+    }
+
+    protected void writeXML(String xml)
+            throws XMLStreamException {
+        try (StringReader reader = new StringReader(xml)) {
+            write(reader);
+        }
     }
 
     protected static BaseEncoding base64() {

@@ -25,7 +25,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.n52.javaps.description.ProcessDescription;
+import org.n52.javaps.ogc.wps.description.ProcessDescription;
 import org.n52.javaps.ogc.ows.OwsCode;
 
 public class ServiceLoaderAlgorithmRepository implements AlgorithmRepository {

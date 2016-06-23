@@ -16,30 +16,27 @@
  */
 package org.n52.javaps.response;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Objects;
 
 import org.n52.iceland.response.AbstractServiceResponse;
-import org.n52.javaps.ogc.wps.ProcessOffering;
+import org.n52.javaps.ogc.wps.ProcessOfferings;
 import org.n52.javaps.ogc.wps.WPSConstants;
 
 public class DescribeProcessResponse extends AbstractServiceResponse {
 
-    private final List<ProcessOffering> offerings = new LinkedList<>();
+    private ProcessOfferings offerings;
 
     @Override
     public String getOperationName() {
         return WPSConstants.Operations.DescribeProcess.name();
     }
 
-    public List<ProcessOffering> getProcessOffering() {
-        return Collections.unmodifiableList(this.offerings);
+    public ProcessOfferings getProcessOfferings() {
+        return offerings;
     }
 
-    public void addProcessOffering(ProcessOffering description) {
-        this.offerings.add(Objects.requireNonNull(description));
+    public void setOfferings(ProcessOfferings offerings) {
+        this.offerings = Objects.requireNonNull(offerings);
     }
 
 }

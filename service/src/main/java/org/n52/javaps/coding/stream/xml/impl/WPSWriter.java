@@ -32,30 +32,11 @@ import org.n52.javaps.coding.stream.xml.impl.XMLConstants.OWS;
 import org.n52.javaps.coding.stream.xml.impl.XMLConstants.WPS;
 import org.n52.javaps.coding.stream.xml.impl.XMLConstants.XLink;
 import org.n52.javaps.coding.stream.xml.impl.XMLConstants.XMLSchema;
-import org.n52.javaps.description.BoundingBoxDescription;
-import org.n52.javaps.description.BoundingBoxInputDescription;
-import org.n52.javaps.description.BoundingBoxOutputDescription;
-import org.n52.javaps.description.ComplexDescription;
-import org.n52.javaps.description.ComplexInputDescription;
-import org.n52.javaps.description.ComplexOutputDescription;
-import org.n52.javaps.description.Description;
-import org.n52.javaps.description.Format;
-import org.n52.javaps.description.GroupInputDescription;
-import org.n52.javaps.description.GroupOutputDescription;
-import org.n52.javaps.description.LiteralDataDomain;
-import org.n52.javaps.description.LiteralDescription;
-import org.n52.javaps.description.LiteralInputDescription;
-import org.n52.javaps.description.LiteralOutputDescription;
-import org.n52.javaps.description.ProcessDescription;
-import org.n52.javaps.description.ProcessInputDescription;
-import org.n52.javaps.description.ProcessInputDescriptionContainer;
-import org.n52.javaps.description.ProcessOutputDescription;
-import org.n52.javaps.description.ProcessOutputDescriptionContainer;
-import org.n52.javaps.description.ThrowingProcessInputVisitor;
-import org.n52.javaps.description.ThrowingProcessOutputVisitor;
 import org.n52.javaps.ogc.ows.OwsCRS;
 import org.n52.javaps.ogc.ows.OwsPossibleValues;
+import org.n52.javaps.ogc.ows.OwsValue;
 import org.n52.javaps.ogc.wps.DataTransmissionMode;
+import org.n52.javaps.ogc.wps.Format;
 import org.n52.javaps.ogc.wps.JobControlOption;
 import org.n52.javaps.ogc.wps.JobId;
 import org.n52.javaps.ogc.wps.ProcessOffering;
@@ -68,6 +49,24 @@ import org.n52.javaps.ogc.wps.data.Data;
 import org.n52.javaps.ogc.wps.data.GroupData;
 import org.n52.javaps.ogc.wps.data.ReferenceData;
 import org.n52.javaps.ogc.wps.data.ValueData;
+import org.n52.javaps.ogc.wps.description.BoundingBoxDescription;
+import org.n52.javaps.ogc.wps.description.BoundingBoxInputDescription;
+import org.n52.javaps.ogc.wps.description.BoundingBoxOutputDescription;
+import org.n52.javaps.ogc.wps.description.ComplexDescription;
+import org.n52.javaps.ogc.wps.description.ComplexInputDescription;
+import org.n52.javaps.ogc.wps.description.ComplexOutputDescription;
+import org.n52.javaps.ogc.wps.description.Description;
+import org.n52.javaps.ogc.wps.description.GroupInputDescription;
+import org.n52.javaps.ogc.wps.description.GroupOutputDescription;
+import org.n52.javaps.ogc.wps.description.LiteralDataDomain;
+import org.n52.javaps.ogc.wps.description.LiteralDescription;
+import org.n52.javaps.ogc.wps.description.LiteralInputDescription;
+import org.n52.javaps.ogc.wps.description.LiteralOutputDescription;
+import org.n52.javaps.ogc.wps.description.ProcessDescription;
+import org.n52.javaps.ogc.wps.description.ProcessInputDescription;
+import org.n52.javaps.ogc.wps.description.ProcessInputDescriptionContainer;
+import org.n52.javaps.ogc.wps.description.ProcessOutputDescription;
+import org.n52.javaps.ogc.wps.description.ProcessOutputDescriptionContainer;
 
 import com.google.common.io.BaseEncoding;
 import com.google.common.io.CharStreams;
@@ -77,7 +76,7 @@ import com.google.common.io.CharStreams;
  *
  * @author Christian Autermann
  */
-public class WPSWriter extends OWSWriter {
+public class WPSWriter extends AbstractOWSWriter {
 
     private static final String UNBOUNDED = "unbounded";
     private final ConcreteOutputWriter concreteOutputWriter
@@ -86,11 +85,9 @@ public class WPSWriter extends OWSWriter {
             = new ConcreteInputWriter();
 
     public WPSWriter() {
-        super(ProcessOffering.class,
+        super(ProcessOfferings.class,
               Result.class,
-              ValueData.class,
               StatusInfo.class,
-              ReferenceData.class,
               ProcessDescription.class,
               WPSCapabilities.class);
     }
@@ -112,6 +109,8 @@ public class WPSWriter extends OWSWriter {
             writeProcessDescription((ProcessDescription) object);
         } else if (object instanceof WPSCapabilities) {
             writeWPSCapabilities((WPSCapabilities) object);
+        } else if (object instanceof ProcessOfferings) {
+            writeProcessOfferings((ProcessOfferings) object);
         } else {
             throw unsupported(object);
         }
@@ -200,7 +199,7 @@ public class WPSWriter extends OWSWriter {
                 attr(WPS.Attr.AN_DEFAULT, "true");
             }
 
-            OwsPossibleValues vd = ldd.getValueDescription();
+            OwsPossibleValues vd = ldd.getPossibleValues();
 
             if (vd.isAnyValue()) {
                 writeAnyValue(vd.asAnyValues());
@@ -212,7 +211,7 @@ public class WPSWriter extends OWSWriter {
 
             writeDomainMetadata(OWS.Elem.QN_DATA_TYPE, ldd.getDataType());
             writeDomainMetadata(OWS.Elem.QN_UOM, ldd.getUOM());
-            element(OWS.Elem.QN_DEFAULT_VALUE, ldd.getDefaultValue());
+            element(OWS.Elem.QN_DEFAULT_VALUE, ldd.getDefaultValue().map(OwsValue::getValue));
         });
     }
 
@@ -407,15 +406,11 @@ public class WPSWriter extends OWSWriter {
     private void writeProcessOffering(ProcessOffering offering)
             throws XMLStreamException {
         element(WPS.Elem.QN_PROCESS_OFFERING, offering, x -> {
-            writeNamespaces();
-
             attr(WPS.Attr.AN_JOB_CONTROL_OPTIONS, x.getJobControlOptions(), JobControlOption::getValue);
             attr(WPS.Attr.AN_OUTPUT_TRANSMISSION, x.getOutputTransmissionModes(), DataTransmissionMode::getValue);
             attr(WPS.Attr.AN_PROCESS_VERSION, x.getProcessVersion());
             attr(WPS.Attr.AN_PROCESS_MODEL, x.getProcessModel());
-
-            delegate(offering.getProcessDescription());
-
+            writeProcessDescription(offering.getProcessDescription());
         });
     }
 
@@ -433,8 +428,18 @@ public class WPSWriter extends OWSWriter {
         }
     }
 
+    private void writeProcessOfferings(ProcessOfferings offerings)
+            throws XMLStreamException {
+        element(WPS.Elem.QN_PROCESS_OFFERINGS, () -> {
+            writeNamespaces();
+            for (ProcessOffering processOffering : offerings) {
+                writeProcessOffering(processOffering);
+            }
+        });
+    }
+
     private class ConcreteInputWriter implements
-            ThrowingProcessInputVisitor<XMLStreamException> {
+            ProcessInputDescription.ThrowingVisitor<XMLStreamException> {
         @Override
         public void visit(BoundingBoxInputDescription input)
                 throws XMLStreamException {
@@ -460,8 +465,8 @@ public class WPSWriter extends OWSWriter {
         }
     }
 
-    private class ConcreteOutputWriter implements
-            ThrowingProcessOutputVisitor<XMLStreamException> {
+    private class ConcreteOutputWriter
+            implements ProcessOutputDescription.ThrowingVisitor<XMLStreamException> {
         @Override
         public void visit(BoundingBoxOutputDescription output)
                 throws XMLStreamException {

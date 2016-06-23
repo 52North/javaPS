@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import javax.xml.stream.EventFilter;
 import javax.xml.stream.XMLEventFactory;
@@ -81,6 +82,9 @@ public class XmlStreamWritingContext implements AutoCloseable {
                     .apply(key, this).orElseThrow(() -> new MissingStreamWriterException(key));
             delegate.writeElement(object);
         }
+    }
+    public <X,Y> Function<X,Y> identity(Function<X,Y> t){
+        return t;
     }
 
     public boolean declareNamespace(String prefix, String namespace)

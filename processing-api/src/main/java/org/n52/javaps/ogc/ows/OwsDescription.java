@@ -33,7 +33,8 @@ public abstract class OwsDescription {
     private final Optional<MultilingualString> abstrakt;
     private final Set<OwsKeyword> keywords;
 
-    public OwsDescription(MultilingualString title, MultilingualString abstrakt,
+    public OwsDescription(MultilingualString title,
+                          MultilingualString abstrakt,
                           Set<OwsKeyword> keywords) {
         this.title = Optional.ofNullable(title);
         this.abstrakt = Optional.ofNullable(abstrakt);

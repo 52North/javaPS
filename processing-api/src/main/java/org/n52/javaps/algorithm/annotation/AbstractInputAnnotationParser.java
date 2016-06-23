@@ -21,7 +21,7 @@ import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Member;
 import java.util.function.Function;
 
-import org.n52.javaps.description.ProcessInputDescription;
+import org.n52.javaps.ogc.wps.description.ProcessInputDescription;
 
 /**
  * TODO JavaDoc

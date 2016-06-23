@@ -21,7 +21,7 @@ import java.lang.reflect.Member;
 import java.lang.reflect.Type;
 import java.util.Objects;
 
-import org.n52.javaps.description.DataDescription;
+import org.n52.javaps.ogc.wps.description.DataDescription;
 
 import com.google.common.primitives.Primitives;
 

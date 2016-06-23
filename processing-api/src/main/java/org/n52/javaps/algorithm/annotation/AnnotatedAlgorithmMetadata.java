@@ -38,15 +38,19 @@ import java.util.function.BinaryOperator;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
 
-import org.n52.javaps.description.ProcessDescription;
-import org.n52.javaps.description.ProcessInputDescription;
-import org.n52.javaps.description.ProcessOutputDescription;
-import org.n52.javaps.description.impl.ProcessDescriptionImpl;
+import org.n52.javaps.ogc.wps.description.ProcessDescription;
+import org.n52.javaps.ogc.wps.description.ProcessInputDescription;
+import org.n52.javaps.ogc.wps.description.ProcessOutputDescription;
+import org.n52.javaps.ogc.wps.description.ProcessDescriptionImpl;
 import org.n52.javaps.io.GeneratorRepository;
 import org.n52.javaps.io.ParserRepository;
 import org.n52.javaps.ogc.ows.OwsCode;
 
 import com.google.common.base.Strings;
+
+import static java.util.stream.Collectors.toMap;
+import static org.n52.javaps.utils.Streams.throwingMerger;
+import static org.n52.javaps.utils.Streams.toSingleResult;
 
 /**
  *

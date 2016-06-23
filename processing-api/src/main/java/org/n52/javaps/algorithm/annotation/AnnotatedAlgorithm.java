@@ -23,7 +23,7 @@ import javax.inject.Inject;
 import org.n52.javaps.algorithm.AbstractAlgorithm;
 import org.n52.javaps.algorithm.ProcessInputs;
 import org.n52.javaps.algorithm.ProcessOutputs;
-import org.n52.javaps.description.ProcessDescription;
+import org.n52.javaps.ogc.wps.description.ProcessDescription;
 import org.n52.javaps.io.GeneratorRepository;
 import org.n52.javaps.io.ParserRepository;
 
