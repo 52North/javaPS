@@ -25,7 +25,6 @@ import org.n52.javaps.ogc.ows.OwsCode;
 import org.n52.javaps.ogc.ows.OwsKeyword;
 import org.n52.javaps.ogc.ows.OwsLanguageString;
 import org.n52.javaps.ogc.ows.OwsMetadata;
-import org.n52.javaps.ogc.wps.description.Description;
 
 import com.google.common.collect.ImmutableSet;
 

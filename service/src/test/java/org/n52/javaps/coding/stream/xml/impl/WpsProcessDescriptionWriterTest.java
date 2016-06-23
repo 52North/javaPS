@@ -49,10 +49,10 @@ import org.n52.javaps.io.IGenerator;
 import org.n52.javaps.io.IParser;
 import org.n52.javaps.io.ParserRepository;
 import org.n52.javaps.io.data.IComplexData;
+import org.n52.javaps.ogc.wps.Format;
 import org.n52.javaps.ogc.wps.JobControlOption;
 import org.n52.javaps.ogc.wps.ProcessOffering;
 import org.n52.javaps.ogc.wps.ProcessOfferings;
-import org.n52.javaps.ogc.wps.Format;
 import org.n52.javaps.ogc.wps.description.ProcessDescription;
 import org.n52.javaps.response.DescribeProcessResponse;
 

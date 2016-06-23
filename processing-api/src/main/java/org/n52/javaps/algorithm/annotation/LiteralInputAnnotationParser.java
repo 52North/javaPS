@@ -34,10 +34,10 @@ import org.n52.javaps.io.BasicXMLTypeFactory;
 import org.n52.javaps.io.data.ILiteralData;
 import org.n52.javaps.ogc.ows.OwsAllowedValues;
 import org.n52.javaps.ogc.ows.OwsValue;
-import org.n52.javaps.ogc.wps.description.LiteralInputDescription;
 import org.n52.javaps.ogc.wps.description.LiteralDataDomainImpl;
-import org.n52.javaps.ogc.wps.description.LiteralInputDescriptionImpl;
+import org.n52.javaps.ogc.wps.description.LiteralInputDescription;
 import org.n52.javaps.ogc.wps.description.LiteralInputDescription.Builder;
+import org.n52.javaps.ogc.wps.description.LiteralInputDescriptionImpl;
 
 /**
  * TODO JavaDoc

@@ -27,7 +27,6 @@ import org.n52.javaps.ogc.ows.OwsKeyword;
 import org.n52.javaps.ogc.ows.OwsLanguageString;
 import org.n52.javaps.ogc.ows.OwsMetadata;
 import org.n52.javaps.ogc.wps.InputOccurence;
-import org.n52.javaps.ogc.wps.description.BoundingBoxInputDescription;
 
 import com.google.common.collect.ImmutableSet;
 

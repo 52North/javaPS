@@ -30,8 +30,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 
-import org.n52.javaps.ogc.wps.Format;
-import org.n52.javaps.ogc.wps.description.ProcessDescription;
 import org.n52.javaps.io.GeneratorRepository;
 import org.n52.javaps.io.IGenerator;
 import org.n52.javaps.io.IParser;
@@ -39,6 +37,8 @@ import org.n52.javaps.io.ParserRepository;
 import org.n52.javaps.io.data.IComplexData;
 import org.n52.javaps.ogc.ows.OwsCode;
 import org.n52.javaps.ogc.ows.OwsLanguageString;
+import org.n52.javaps.ogc.wps.Format;
+import org.n52.javaps.ogc.wps.description.ProcessDescription;
 
 /**
  * TODO JavaDoc

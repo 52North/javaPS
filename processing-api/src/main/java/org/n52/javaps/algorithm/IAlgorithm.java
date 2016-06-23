@@ -19,9 +19,9 @@ package org.n52.javaps.algorithm;
 import java.util.Collections;
 import java.util.List;
 
-import org.n52.javaps.ogc.wps.description.ProcessDescription;
 import org.n52.javaps.io.data.IData;
 import org.n52.javaps.ogc.ows.OwsCode;
+import org.n52.javaps.ogc.wps.description.ProcessDescription;
 
 /**
  * @author Bastian Schaeffer, University of Muenster, Theodor Foerster, ITC

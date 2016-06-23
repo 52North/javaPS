@@ -21,8 +21,8 @@ import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Member;
 import java.util.function.Function;
 
-import org.n52.javaps.ogc.wps.description.DataDescription;
 import org.n52.javaps.io.data.IData;
+import org.n52.javaps.ogc.wps.description.DataDescription;
 
 /**
  * TODO JavaDoc

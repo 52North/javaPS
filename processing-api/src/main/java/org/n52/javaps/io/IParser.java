@@ -20,8 +20,8 @@ import java.io.InputStream;
 
 import org.apache.commons.codec.binary.Base64InputStream;
 
-import org.n52.javaps.ogc.wps.Format;
 import org.n52.javaps.io.data.IComplexData;
+import org.n52.javaps.ogc.wps.Format;
 
 /**
  * @author Matthias Mueller, TU Dresden

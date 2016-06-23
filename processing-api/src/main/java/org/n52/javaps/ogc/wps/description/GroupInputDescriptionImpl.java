@@ -31,18 +31,8 @@ import org.n52.javaps.ogc.ows.OwsKeyword;
 import org.n52.javaps.ogc.ows.OwsLanguageString;
 import org.n52.javaps.ogc.ows.OwsMetadata;
 import org.n52.javaps.ogc.wps.InputOccurence;
-import org.n52.javaps.ogc.wps.description.Description;
-import org.n52.javaps.ogc.wps.description.GroupInputDescription;
-import org.n52.javaps.ogc.wps.description.ProcessInputDescription;
 
 import com.google.common.collect.ImmutableSet;
-
-import static java.util.stream.Collectors.groupingBy;
-import static org.n52.javaps.utils.Streams.toSingleResult;
-import static java.util.stream.Collectors.groupingBy;
-import static org.n52.javaps.utils.Streams.toSingleResult;
-import static java.util.stream.Collectors.groupingBy;
-import static org.n52.javaps.utils.Streams.toSingleResult;
 
 public class GroupInputDescriptionImpl extends AbstractProcessInputDescription
         implements GroupInputDescription {

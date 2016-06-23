@@ -16,14 +16,16 @@
  */
 package org.n52.javaps;
 
-import java.io.IOException;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import org.junit.Test;
 import static org.xmlmatchers.XmlMatchers.hasXPath;
 import static org.xmlmatchers.transform.XmlConverters.the;
-import org.xmlmatchers.xpath.XpathReturnType;
 import static org.xmlmatchers.xpath.XpathReturnType.returningAString;
+
+import java.io.IOException;
+
+import org.junit.Test;
+import org.xmlmatchers.xpath.XpathReturnType;
 
 /**
  *

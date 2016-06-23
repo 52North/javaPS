@@ -18,8 +18,6 @@ package org.n52.javaps.algorithm.annotation;
 
 import java.lang.reflect.Method;
 
-import org.n52.javaps.algorithm.annotation.ExecuteBinding;
-
 /**
  * TODO JavaDoc
  *

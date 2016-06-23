@@ -16,13 +16,15 @@
  */
 package org.n52.javaps;
 
-import com.google.common.io.Resources;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+
 import org.apache.http.client.fluent.Request;
 import org.apache.http.entity.ContentType;
 import org.xmlmatchers.namespace.SimpleNamespaceContext;
+
+import com.google.common.io.Resources;
 
 /**
  *

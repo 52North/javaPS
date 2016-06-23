@@ -67,8 +67,6 @@ import org.n52.javaps.ogc.wps.WPSCapabilities;
 
 import com.google.common.base.Strings;
 
-import static java.util.stream.Collectors.groupingBy;
-
 /**
  * TODO JavaDoc
  *

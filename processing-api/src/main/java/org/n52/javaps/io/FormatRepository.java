@@ -21,8 +21,8 @@ import java.util.Comparator;
 import java.util.Optional;
 import java.util.Set;
 
-import org.n52.javaps.ogc.wps.Format;
 import org.n52.javaps.io.data.IComplexData;
+import org.n52.javaps.ogc.wps.Format;
 
 /**
  * TODO JavaDoc

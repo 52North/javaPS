@@ -22,8 +22,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.n52.javaps.ogc.wps.Format;
 import org.n52.javaps.ogc.ows.OwsCode;
+import org.n52.javaps.ogc.wps.Format;
 import org.n52.javaps.utils.HTTP;
 
 /**

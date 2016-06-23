@@ -23,7 +23,6 @@ import org.n52.javaps.ogc.ows.OwsAnyValue;
 import org.n52.javaps.ogc.ows.OwsDomainMetadata;
 import org.n52.javaps.ogc.ows.OwsPossibleValues;
 import org.n52.javaps.ogc.ows.OwsValue;
-import org.n52.javaps.ogc.wps.description.LiteralDataDomain;
 
 
 public class LiteralDataDomainImpl implements LiteralDataDomain {

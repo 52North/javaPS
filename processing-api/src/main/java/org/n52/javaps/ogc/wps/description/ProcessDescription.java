@@ -24,10 +24,6 @@ import java.util.Comparator;
 
 import org.n52.javaps.ogc.ows.OwsCode;
 
-import static java.util.Comparator.comparing;
-import static java.util.Comparator.comparing;
-import static java.util.Comparator.comparing;
-
 /**
  * TODO JavaDoc
  *
