@@ -19,10 +19,10 @@ package org.n52.javaps.ogc.wps;
 import java.util.Optional;
 import java.util.Set;
 
-import org.n52.javaps.ogc.ows.OwsCapabilities;
-import org.n52.javaps.ogc.ows.OwsOperationsMetadata;
-import org.n52.javaps.ogc.ows.OwsServiceIdentification;
-import org.n52.javaps.ogc.ows.OwsServiceProvider;
+import org.n52.iceland.ogc.ows.OwsCapabilities;
+import org.n52.iceland.ogc.ows.OwsOperationsMetadata;
+import org.n52.iceland.ogc.ows.OwsServiceIdentification;
+import org.n52.iceland.ogc.ows.OwsServiceProvider;
 
 public class WPSCapabilities extends OwsCapabilities {
 
@@ -34,7 +34,7 @@ public class WPSCapabilities extends OwsCapabilities {
                            OwsOperationsMetadata operationsMetadata,
                            Set<String> languages,
                            ProcessOfferings processOfferings) {
-        super(version, updateSequence, serviceIdentification, serviceProvider, operationsMetadata, languages);
+        super(WPSConstants.SERVICE, version, updateSequence, serviceIdentification, serviceProvider, operationsMetadata, languages);
         this.processOfferings = Optional.ofNullable(processOfferings);
     }
 

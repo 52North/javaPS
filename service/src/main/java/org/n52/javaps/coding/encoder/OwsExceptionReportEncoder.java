@@ -20,11 +20,12 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
+import org.n52.iceland.coding.HelperValues;
 import org.n52.iceland.coding.encode.Encoder;
 import org.n52.iceland.coding.encode.EncoderKey;
+import org.n52.iceland.coding.encode.EncodingException;
 import org.n52.iceland.coding.encode.ExceptionEncoderKey;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.ows.OWSConstants.HelperValues;
 import org.n52.iceland.util.http.MediaType;
 import org.n52.iceland.util.http.MediaTypes;
 import org.n52.javaps.response.OwsExceptionReportResponse;
@@ -47,8 +48,9 @@ public class OwsExceptionReportEncoder implements Encoder<OwsExceptionReportResp
     }
 
     @Override
-    public OwsExceptionReportResponse encode(OwsExceptionReport report, Map<HelperValues, String> additionalValues) {
-        return encode(report);
+    public OwsExceptionReportResponse encode(OwsExceptionReport objectToEncode, Map<HelperValues, String> additionalValues)
+            throws EncodingException {
+        return encode(objectToEncode);
     }
 
     @Override
@@ -60,5 +62,7 @@ public class OwsExceptionReportEncoder implements Encoder<OwsExceptionReportResp
     public Set<EncoderKey> getKeys() {
         return KEYS;
     }
+
+
 
 }

@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Objects;
 
 import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.ows.OwsCodeType;
+import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.iceland.request.AbstractServiceRequest;
 import org.n52.javaps.ogc.wps.ExecutionMode;
 import org.n52.javaps.ogc.wps.OutputDefinition;
@@ -38,7 +38,7 @@ import org.n52.javaps.response.ExecuteResponse;
  */
 public class ExecuteRequest extends AbstractServiceRequest<ExecuteResponse> {
 
-    private OwsCodeType id;
+    private OwsCode id;
     private ExecutionMode executionMode = ExecutionMode.AUTO;
     private ResponseMode responseMode = ResponseMode.DOCUMENT;
     private final List<Data> inputs = new LinkedList<>();
@@ -88,11 +88,11 @@ public class ExecuteRequest extends AbstractServiceRequest<ExecuteResponse> {
         this.responseMode = responseMode;
     }
 
-    public OwsCodeType getId() {
+    public OwsCode getId() {
         return id;
     }
 
-    public void setId(OwsCodeType id) {
+    public void setId(OwsCode id) {
         this.id = id;
     }
 }

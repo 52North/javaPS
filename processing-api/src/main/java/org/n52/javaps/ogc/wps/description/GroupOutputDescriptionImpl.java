@@ -17,7 +17,7 @@
 package org.n52.javaps.ogc.wps.description;
 
 import static java.util.stream.Collectors.groupingBy;
-import static org.n52.javaps.utils.Streams.toSingleResult;
+import static org.n52.iceland.util.Streams.toSingleResult;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -25,10 +25,10 @@ import java.util.Map;
 import java.util.Set;
 
 import org.n52.javaps.io.data.IData;
-import org.n52.javaps.ogc.ows.OwsCode;
-import org.n52.javaps.ogc.ows.OwsKeyword;
-import org.n52.javaps.ogc.ows.OwsLanguageString;
-import org.n52.javaps.ogc.ows.OwsMetadata;
+import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.iceland.ogc.ows.OwsKeyword;
+import org.n52.iceland.ogc.ows.OwsLanguageString;
+import org.n52.iceland.ogc.ows.OwsMetadata;
 
 import com.google.common.collect.ImmutableSet;
 

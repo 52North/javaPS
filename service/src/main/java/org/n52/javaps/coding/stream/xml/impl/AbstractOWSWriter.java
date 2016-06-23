@@ -21,7 +21,6 @@ import static java.util.stream.Collectors.mapping;
 import static java.util.stream.Collectors.toCollection;
 
 import java.net.URI;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -35,35 +34,34 @@ import javax.xml.stream.XMLStreamException;
 
 import org.n52.iceland.i18n.LocaleHelper;
 import org.n52.iceland.i18n.MultilingualString;
+import org.n52.iceland.ogc.ows.OwsAddress;
+import org.n52.iceland.ogc.ows.OwsAllowedValues;
+import org.n52.iceland.ogc.ows.OwsAnyValue;
+import org.n52.iceland.ogc.ows.OwsCapabilities;
+import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.iceland.ogc.ows.OwsContact;
+import org.n52.iceland.ogc.ows.OwsDCP;
+import org.n52.iceland.ogc.ows.OwsDomain;
+import org.n52.iceland.ogc.ows.OwsDomainMetadata;
+import org.n52.iceland.ogc.ows.OwsKeyword;
+import org.n52.iceland.ogc.ows.OwsLanguageString;
+import org.n52.iceland.ogc.ows.OwsMetadata;
+import org.n52.iceland.ogc.ows.OwsNoValues;
+import org.n52.iceland.ogc.ows.OwsOperation;
+import org.n52.iceland.ogc.ows.OwsOperationsMetadata;
+import org.n52.iceland.ogc.ows.OwsPhone;
+import org.n52.iceland.ogc.ows.OwsPossibleValues;
+import org.n52.iceland.ogc.ows.OwsRequestMethod;
+import org.n52.iceland.ogc.ows.OwsResponsibleParty;
+import org.n52.iceland.ogc.ows.OwsServiceIdentification;
+import org.n52.iceland.ogc.ows.OwsServiceProvider;
+import org.n52.iceland.ogc.ows.OwsValue;
+import org.n52.iceland.ogc.ows.OwsValueRestriction;
+import org.n52.iceland.ogc.ows.OwsValuesReference;
+import org.n52.iceland.ogc.ows.OwsValuesUnit;
 import org.n52.iceland.util.http.HTTPMethods;
 import org.n52.javaps.coding.stream.xml.AbstractMultiElementXmlStreamWriter;
 import org.n52.javaps.coding.stream.xml.impl.XMLConstants.OWS;
-import org.n52.javaps.ogc.ows.OwsAddress;
-import org.n52.javaps.ogc.ows.OwsAllowedValues;
-import org.n52.javaps.ogc.ows.OwsAnyValue;
-import org.n52.javaps.ogc.ows.OwsCapabilities;
-import org.n52.javaps.ogc.ows.OwsCode;
-import org.n52.javaps.ogc.ows.OwsContact;
-import org.n52.javaps.ogc.ows.OwsDCP;
-import org.n52.javaps.ogc.ows.OwsDomain;
-import org.n52.javaps.ogc.ows.OwsDomainMetadata;
-import org.n52.javaps.ogc.ows.OwsKeyword;
-import org.n52.javaps.ogc.ows.OwsLanguageString;
-import org.n52.javaps.ogc.ows.OwsMetadata;
-import org.n52.javaps.ogc.ows.OwsNoValues;
-import org.n52.javaps.ogc.ows.OwsOperation;
-import org.n52.javaps.ogc.ows.OwsOperationsMetadata;
-import org.n52.javaps.ogc.ows.OwsPhone;
-import org.n52.javaps.ogc.ows.OwsPossibleValues;
-import org.n52.javaps.ogc.ows.OwsRequestMethod;
-import org.n52.javaps.ogc.ows.OwsResponsibleParty;
-import org.n52.javaps.ogc.ows.OwsServiceIdentification;
-import org.n52.javaps.ogc.ows.OwsServiceProvider;
-import org.n52.javaps.ogc.ows.OwsValue;
-import org.n52.javaps.ogc.ows.OwsValueRestriction;
-import org.n52.javaps.ogc.ows.OwsValuesReference;
-import org.n52.javaps.ogc.ows.OwsValuesUnit;
-import org.n52.javaps.ogc.wps.WPSCapabilities;
 
 import com.google.common.base.Strings;
 
@@ -78,7 +76,7 @@ public abstract class AbstractOWSWriter extends AbstractMultiElementXmlStreamWri
         super(supportedClasses);
     }
 
-    protected void writeOperationsMetadata(WPSCapabilities capabilities)
+    protected void writeOperationsMetadata(OwsCapabilities capabilities)
             throws XMLStreamException {
         element(OWS.Elem.QN_OPERATIONS_METADATA, capabilities
                 .getOperationsMetadata(), (OwsOperationsMetadata operationsMetadata) -> {
@@ -177,14 +175,14 @@ public abstract class AbstractOWSWriter extends AbstractMultiElementXmlStreamWri
         });
     }
 
-    protected void writeParameters(List<OwsDomain> parameters)
+    protected void writeParameters(Iterable<OwsDomain> parameters)
             throws XMLStreamException {
         writeDomains(OWS.Elem.QN_PARAMETER, parameters);
     }
 
     protected void writeLanguages(OwsCapabilities capabilities)
             throws XMLStreamException {
-        element(OWS.Elem.QN_LANGUAGES, capabilities.getLanguages(), (Set<String> languages) -> {
+        element(OWS.Elem.QN_LANGUAGES, capabilities.getLanguages(), (Iterable<String> languages) -> {
             forEach(OWS.Elem.QN_LANGUAGE, languages, this::chars);
         });
     }

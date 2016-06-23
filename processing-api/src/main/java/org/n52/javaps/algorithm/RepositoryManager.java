@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 
 import org.n52.iceland.lifecycle.Constructable;
 import org.n52.iceland.lifecycle.Destroyable;
-import org.n52.javaps.ogc.ows.OwsCode;
+import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.javaps.ogc.wps.description.ProcessDescription;
 
 /**

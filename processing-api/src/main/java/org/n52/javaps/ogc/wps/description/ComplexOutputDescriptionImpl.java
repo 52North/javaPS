@@ -23,10 +23,10 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.n52.javaps.io.data.IData;
-import org.n52.javaps.ogc.ows.OwsCode;
-import org.n52.javaps.ogc.ows.OwsKeyword;
-import org.n52.javaps.ogc.ows.OwsLanguageString;
-import org.n52.javaps.ogc.ows.OwsMetadata;
+import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.iceland.ogc.ows.OwsKeyword;
+import org.n52.iceland.ogc.ows.OwsLanguageString;
+import org.n52.iceland.ogc.ows.OwsMetadata;
 import org.n52.javaps.ogc.wps.Format;
 
 import com.google.common.base.Preconditions;

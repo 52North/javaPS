@@ -16,6 +16,7 @@
  */
 package org.n52.javaps.handler;
 
+
 import java.util.Collections;
 import java.util.Set;
 
@@ -25,6 +26,7 @@ import org.n52.iceland.ogc.ows.OwsOperation;
 import org.n52.javaps.ogc.wps.WPSConstants;
 import org.n52.javaps.request.ExecuteRequest;
 import org.n52.javaps.response.ExecuteResponse;
+import org.n52.iceland.ds.GenericOperationHandler;
 
 /**
  * TODO JavaDoc
@@ -32,7 +34,7 @@ import org.n52.javaps.response.ExecuteResponse;
  * @author Christian Autermann
  */
 public class ExecuteHandler implements
-        GenericHandler<ExecuteRequest, ExecuteResponse> {
+        GenericOperationHandler<ExecuteRequest, ExecuteResponse> {
 
     @Override
     public ExecuteResponse handler(ExecuteRequest request)
@@ -48,7 +50,7 @@ public class ExecuteHandler implements
     @Override
     public OwsOperation getOperationsMetadata(String service, String version)
             throws OwsExceptionReport {
-        return new OwsOperation();
+        return null;
     }
 
     @Override

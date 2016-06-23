@@ -16,6 +16,7 @@
  */
 package org.n52.javaps.handler;
 
+
 import java.util.Collections;
 import java.util.Set;
 
@@ -25,6 +26,7 @@ import org.n52.iceland.ogc.ows.OwsOperation;
 import org.n52.javaps.ogc.wps.WPSConstants;
 import org.n52.javaps.request.GetStatusRequest;
 import org.n52.javaps.response.GetStatusResponse;
+import org.n52.iceland.ds.GenericOperationHandler;
 
 /**
  * TODO JavaDoc
@@ -32,7 +34,7 @@ import org.n52.javaps.response.GetStatusResponse;
  * @author Christian Autermann
  */
 public class GetStatusHandler implements
-        GenericHandler<GetStatusRequest, GetStatusResponse> {
+        GenericOperationHandler<GetStatusRequest, GetStatusResponse> {
 
     @Override
     public GetStatusResponse handler(GetStatusRequest request)
@@ -45,17 +47,19 @@ public class GetStatusHandler implements
         return WPSConstants.Operations.GetStatus.toString();
     }
 
-    @Override
-    public OwsOperation getOperationsMetadata(String service, String version)
-            throws OwsExceptionReport {
-        return new OwsOperation();
-    }
 
     @Override
     public Set<OperationHandlerKey> getKeys() {
         return Collections
                 .singleton(new OperationHandlerKey(WPSConstants.SERVICE, WPSConstants.Operations.GetStatus
                                                    .toString()));
+    }
+
+    @Override
+    public OwsOperation getOperationsMetadata(String service, String version)
+            throws OwsExceptionReport {
+        /* TODO implement org.n52.javaps.handler.GetStatusHandler.getOperationsMetadata() */
+        throw new UnsupportedOperationException("org.n52.javaps.handler.GetStatusHandler.getOperationsMetadata() not yet implemented");
     }
 
 }

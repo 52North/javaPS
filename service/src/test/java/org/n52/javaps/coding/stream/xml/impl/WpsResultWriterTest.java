@@ -36,7 +36,7 @@ import org.n52.javaps.coding.stream.StreamWriterRepository;
 import org.n52.javaps.coding.stream.xml.XmlDocumentStreamWriter;
 import org.n52.javaps.coding.stream.xml.XmlElementStreamWriter;
 import org.n52.javaps.coding.stream.xml.XmlElementStreamWriterRepository;
-import org.n52.javaps.ogc.ows.OwsCode;
+import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.javaps.ogc.wps.Format;
 import org.n52.javaps.ogc.wps.JobId;
 import org.n52.javaps.ogc.wps.Result;

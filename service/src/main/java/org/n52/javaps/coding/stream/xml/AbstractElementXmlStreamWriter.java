@@ -49,9 +49,9 @@ import org.n52.iceland.util.DateTimeHelper;
 import org.n52.iceland.w3c.SchemaLocation;
 import org.n52.iceland.w3c.W3CConstants;
 import org.n52.javaps.coding.stream.xml.impl.XMLConstants;
-import org.n52.javaps.w3c.xlink.Link;
-import org.n52.javaps.w3c.xlink.Link.Actuate;
-import org.n52.javaps.w3c.xlink.Link.Show;
+import org.n52.iceland.w3c.xlink.Link;
+import org.n52.iceland.w3c.xlink.Link.Actuate;
+import org.n52.iceland.w3c.xlink.Link.Show;
 
 import com.google.common.base.Strings;
 import com.google.common.escape.Escaper;

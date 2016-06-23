@@ -20,7 +20,7 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.Set;
 
-import org.n52.javaps.ogc.ows.OwsCRS;
+import org.n52.iceland.ogc.ows.OwsCRS;
 
 /**
  * TODO JavaDoc

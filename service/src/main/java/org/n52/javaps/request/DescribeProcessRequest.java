@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Objects;
 
 import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.ows.OwsCodeType;
+import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.iceland.request.AbstractServiceRequest;
 import org.n52.javaps.ogc.wps.WPSConstants;
 import org.n52.javaps.response.DescribeProcessResponse;
@@ -31,7 +31,7 @@ public class DescribeProcessRequest extends
         AbstractServiceRequest<DescribeProcessResponse> {
     private static final String ALL_KEYWORD = "ALL";
 
-    private final List<OwsCodeType> identifiers = new LinkedList<>();
+    private final List<OwsCode> identifiers = new LinkedList<>();
 
     @Override
     public DescribeProcessResponse getResponse()
@@ -44,21 +44,21 @@ public class DescribeProcessRequest extends
         return WPSConstants.Operations.DescribeProcess.name();
     }
 
-    public List<OwsCodeType> getProcessIdentifier() {
+    public List<OwsCode> getProcessIdentifier() {
         return Collections.unmodifiableList(identifiers);
     }
 
     public void addProcessIdentifier(String identifier) {
-        addProcessIdentifier(new OwsCodeType(identifier));
+        addProcessIdentifier(new OwsCode(identifier));
     }
 
-    public void addProcessIdentifier(OwsCodeType identifier) {
+    public void addProcessIdentifier(OwsCode identifier) {
         this.identifiers.add(Objects.requireNonNull(identifier));
     }
 
     public boolean isAll() {
         return getProcessIdentifier().stream()
-                .filter(id -> !id.isSetCodeSpace())
+                .filter(id -> !id.getCodeSpace().isPresent())
                 .anyMatch(id -> id.getValue().equalsIgnoreCase(ALL_KEYWORD));
     }
 

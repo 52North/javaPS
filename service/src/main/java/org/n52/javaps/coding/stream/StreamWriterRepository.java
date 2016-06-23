@@ -16,6 +16,8 @@
  */
 package org.n52.javaps.coding.stream;
 
+import org.n52.iceland.component.AbstractSimilarityKeyRepository;
+
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;

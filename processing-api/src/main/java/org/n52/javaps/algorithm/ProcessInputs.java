@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.n52.javaps.io.data.IData;
-import org.n52.javaps.ogc.ows.OwsCode;
+import org.n52.iceland.ogc.ows.OwsCode;
 
 /**
  * TODO JavaDoc

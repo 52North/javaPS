@@ -26,7 +26,7 @@ import javax.inject.Provider;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.n52.iceland.lifecycle.Constructable;
-import org.n52.javaps.coding.stream.AbstractSimilarityKeyRepository;
+import org.n52.iceland.component.AbstractSimilarityKeyRepository;
 import org.n52.javaps.coding.stream.StreamWriterKey;
 
 /**

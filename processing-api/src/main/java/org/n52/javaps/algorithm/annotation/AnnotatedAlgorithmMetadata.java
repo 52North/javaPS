@@ -19,8 +19,8 @@ package org.n52.javaps.algorithm.annotation;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
-import static org.n52.javaps.utils.Streams.throwingMerger;
-import static org.n52.javaps.utils.Streams.toSingleResult;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
@@ -40,7 +40,7 @@ import java.util.stream.Stream;
 
 import org.n52.javaps.io.GeneratorRepository;
 import org.n52.javaps.io.ParserRepository;
-import org.n52.javaps.ogc.ows.OwsCode;
+import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.javaps.ogc.wps.description.ProcessDescription;
 import org.n52.javaps.ogc.wps.description.ProcessDescriptionImpl;
 import org.n52.javaps.ogc.wps.description.ProcessInputDescription;

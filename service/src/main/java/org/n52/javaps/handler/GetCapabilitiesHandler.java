@@ -16,25 +16,30 @@
  */
 package org.n52.javaps.handler;
 
+
 import java.util.Collections;
 import java.util.Set;
 
 import org.n52.iceland.ds.OperationHandlerKey;
 import org.n52.iceland.exception.ows.InvalidParameterValueException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.ows.OwsOperation;
 import org.n52.iceland.request.GetCapabilitiesRequest;
 import org.n52.iceland.response.GetCapabilitiesResponse;
+import org.n52.iceland.ogc.ows.OwsOperation;
 import org.n52.javaps.ogc.wps.WPSConstants;
+import org.n52.iceland.ds.GenericOperationHandler;
 
 /**
  * TODO JavaDoc
+ *
  * @author Christian Autermann
  */
-public class GetCapabilitiesHandler implements GenericHandler<GetCapabilitiesRequest, GetCapabilitiesResponse>{
+public class GetCapabilitiesHandler implements
+        GenericOperationHandler<GetCapabilitiesRequest, GetCapabilitiesResponse> {
 
     @Override
-    public GetCapabilitiesResponse handler(GetCapabilitiesRequest request) throws OwsExceptionReport {
+    public GetCapabilitiesResponse handler(GetCapabilitiesRequest request)
+            throws OwsExceptionReport {
         throw new InvalidParameterValueException("param", "the value");
     }
 
@@ -46,12 +51,14 @@ public class GetCapabilitiesHandler implements GenericHandler<GetCapabilitiesReq
     @Override
     public OwsOperation getOperationsMetadata(String service, String version)
             throws OwsExceptionReport {
-        return new OwsOperation();
+        return null;
     }
 
     @Override
     public Set<OperationHandlerKey> getKeys() {
-        return Collections.singleton(new OperationHandlerKey(WPSConstants.SERVICE, WPSConstants.Operations.GetCapabilities.toString()));
+        return Collections
+                .singleton(new OperationHandlerKey(WPSConstants.SERVICE, WPSConstants.Operations.GetCapabilities
+                                                   .toString()));
     }
 
 }

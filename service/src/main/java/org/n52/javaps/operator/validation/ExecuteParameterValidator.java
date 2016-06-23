@@ -17,7 +17,7 @@
 package org.n52.javaps.operator.validation;
 
 import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.javaps.operator.ParameterValidator;
+import org.n52.iceland.request.operator.ParameterValidator;
 import org.n52.javaps.request.ExecuteRequest;
 
 /**

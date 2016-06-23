@@ -16,9 +16,11 @@
  */
 package org.n52.javaps.handler;
 
+
 import java.util.Collections;
 import java.util.Set;
 
+import org.n52.iceland.ds.GenericOperationHandler;
 import org.n52.iceland.ds.OperationHandlerKey;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.ogc.ows.OwsOperation;
@@ -32,7 +34,7 @@ import org.n52.javaps.response.DescribeProcessResponse;
  * @author Christian Autermann
  */
 public class DescribeProcessHandler implements
-        GenericHandler<DescribeProcessRequest, DescribeProcessResponse> {
+        GenericOperationHandler<DescribeProcessRequest, DescribeProcessResponse> {
 
     @Override
     public DescribeProcessResponse handler(DescribeProcessRequest request)
@@ -48,7 +50,7 @@ public class DescribeProcessHandler implements
     @Override
     public OwsOperation getOperationsMetadata(String service, String version)
             throws OwsExceptionReport {
-        return new OwsOperation();
+        return null;
     }
 
     @Override

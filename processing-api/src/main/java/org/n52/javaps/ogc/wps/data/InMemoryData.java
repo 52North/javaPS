@@ -20,7 +20,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.Objects;
 
-import org.n52.javaps.ogc.ows.OwsCode;
+import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.javaps.ogc.wps.Format;
 
 /**

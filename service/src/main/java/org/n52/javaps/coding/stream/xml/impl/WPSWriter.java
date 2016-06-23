@@ -28,13 +28,13 @@ import java.util.Optional;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.n52.iceland.ogc.ows.OwsCRS;
+import org.n52.iceland.ogc.ows.OwsPossibleValues;
+import org.n52.iceland.ogc.ows.OwsValue;
 import org.n52.javaps.coding.stream.xml.impl.XMLConstants.OWS;
 import org.n52.javaps.coding.stream.xml.impl.XMLConstants.WPS;
 import org.n52.javaps.coding.stream.xml.impl.XMLConstants.XLink;
 import org.n52.javaps.coding.stream.xml.impl.XMLConstants.XMLSchema;
-import org.n52.javaps.ogc.ows.OwsCRS;
-import org.n52.javaps.ogc.ows.OwsPossibleValues;
-import org.n52.javaps.ogc.ows.OwsValue;
 import org.n52.javaps.ogc.wps.DataTransmissionMode;
 import org.n52.javaps.ogc.wps.Format;
 import org.n52.javaps.ogc.wps.JobControlOption;
