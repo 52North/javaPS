@@ -50,7 +50,6 @@ import org.n52.javaps.io.IParser;
 import org.n52.javaps.io.ParserRepository;
 import org.n52.javaps.io.data.IComplexData;
 import org.n52.javaps.ogc.wps.Format;
-import org.n52.javaps.ogc.wps.JobControlOption;
 import org.n52.javaps.ogc.wps.ProcessOffering;
 import org.n52.javaps.ogc.wps.ProcessOfferings;
 import org.n52.javaps.ogc.wps.description.ProcessDescription;
@@ -70,11 +69,7 @@ public class WpsProcessDescriptionWriterTest {
     public void test() throws OwsExceptionReport {
         StreamWriterRepository repo = createRepository();
 
-        ProcessOffering processOffering = new ProcessOffering();
-        processOffering.setProcessDescription(getProcessDescription());
-        processOffering.addJobControlOptions(JobControlOption.async());
-        processOffering.addJobControlOptions(JobControlOption.sync());
-        processOffering.addJobControlOptions(JobControlOption.dismiss());
+        ProcessOffering processOffering = new ProcessOffering(getProcessDescription());
 
         DescribeProcessResponse response = new DescribeProcessResponse();
 

@@ -26,6 +26,20 @@ public class DescribeProcessResponse extends AbstractServiceResponse {
 
     private ProcessOfferings offerings;
 
+    public DescribeProcessResponse(String service, String version) {
+        this(service, version, null);
+    }
+
+    public DescribeProcessResponse(String service, String version,
+                                   ProcessOfferings offerings) {
+        super(service, version);
+        this.offerings = offerings;
+    }
+
+    public DescribeProcessResponse() {
+        this(null, null, null);
+    }
+
     @Override
     public String getOperationName() {
         return WPSConstants.Operations.DescribeProcess.name();

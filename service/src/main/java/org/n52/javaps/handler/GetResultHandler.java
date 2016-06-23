@@ -20,21 +20,24 @@ package org.n52.javaps.handler;
 import java.util.Collections;
 import java.util.Set;
 
+import org.n52.iceland.ds.GenericOperationHandler;
 import org.n52.iceland.ds.OperationHandlerKey;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.ogc.ows.OwsOperation;
 import org.n52.javaps.ogc.wps.WPSConstants;
 import org.n52.javaps.request.GetResultRequest;
 import org.n52.javaps.response.GetResultResponse;
-import org.n52.iceland.ds.GenericOperationHandler;
 
 /**
  * TODO JavaDoc
  *
  * @author Christian Autermann
  */
-public class GetResultHandler implements
-        GenericOperationHandler<GetResultRequest, GetResultResponse> {
+public class GetResultHandler
+        extends AbstractHandler
+        implements GenericOperationHandler<GetResultRequest, GetResultResponse> {
+    private static final OperationHandlerKey KEY
+            = new OperationHandlerKey(WPSConstants.SERVICE, WPSConstants.Operations.GetResult);
 
     @Override
     public GetResultResponse handler(GetResultRequest request)
@@ -55,7 +58,7 @@ public class GetResultHandler implements
 
     @Override
     public Set<OperationHandlerKey> getKeys() {
-        return Collections.singleton(new OperationHandlerKey(WPSConstants.SERVICE, WPSConstants.Operations.GetResult.toString()));
+        return Collections.singleton(KEY);
     }
 
 }

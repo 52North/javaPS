@@ -18,13 +18,13 @@ package org.n52.javaps.ogc.wps;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.LinkedHashSet;
+import java.util.EnumSet;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
+import org.n52.iceland.util.CollectionHelper;
 import org.n52.javaps.ogc.wps.description.ProcessDescription;
-
-import com.google.common.base.Strings;
 
 /**
  * TODO JavaDoc
@@ -33,50 +33,59 @@ import com.google.common.base.Strings;
  */
 public class ProcessOffering implements Comparable<ProcessOffering> {
     private static final String DEFAULT_PROCESS_MODEL = "native";
-    private final Collection<JobControlOption> jobControlOptions = new LinkedHashSet<>(2);
-    private final Collection<DataTransmissionMode> outputTransmissionModes = new LinkedHashSet<>(2);
-    private Optional<String> processModel = Optional.of(DEFAULT_PROCESS_MODEL);
+    private final ProcessDescription processDescription;
+    private final Set<JobControlOption> jobControlOptions;
+    private final Set<DataTransmissionMode> outputTransmissionModes;
+    private final String processModel;
 
-    private ProcessDescription processDescription;
+    public ProcessOffering(ProcessDescription processDescription) {
+        this(processDescription, JobControlOption.defaultOptions(), EnumSet
+             .allOf(DataTransmissionMode.class), DEFAULT_PROCESS_MODEL);
+    }
+
+    public ProcessOffering(ProcessDescription processDescription,
+                           Collection<JobControlOption> jobControlOptions) {
+        this(processDescription, jobControlOptions, EnumSet
+             .allOf(DataTransmissionMode.class), DEFAULT_PROCESS_MODEL);
+    }
+
+    public ProcessOffering(ProcessDescription processDescription,
+                           Collection<JobControlOption> jobControlOptions,
+                           Collection<DataTransmissionMode> outputTransmissionModes) {
+        this(processDescription, jobControlOptions, outputTransmissionModes, DEFAULT_PROCESS_MODEL);
+    }
+
+    public ProcessOffering(ProcessDescription processDescription,
+                           Collection<JobControlOption> jobControlOptions,
+                           Collection<DataTransmissionMode> outputTransmissionModes,
+                           String processModel) {
+        this.processDescription = Objects.requireNonNull(processDescription);
+        this.jobControlOptions = CollectionHelper
+                .newSortedSet(jobControlOptions);
+        this.outputTransmissionModes = CollectionHelper
+                .newSortedSet(outputTransmissionModes);
+        this.processModel = Optional.ofNullable(processModel)
+                .orElse(DEFAULT_PROCESS_MODEL);
+    }
 
     public Optional<String> getProcessVersion() {
         return Optional.ofNullable(this.processDescription.getVersion());
     }
 
-    public Optional<String> getProcessModel() {
+    public String getProcessModel() {
         return processModel;
-    }
-
-    public void setProcessModel(String processModel) {
-        this.processModel = Optional.ofNullable(Strings.emptyToNull(processModel));
     }
 
     public ProcessDescription getProcessDescription() {
         return processDescription;
     }
 
-    public void setProcessDescription(ProcessDescription processDescription) {
-        this.processDescription = Objects.requireNonNull(processDescription);
-    }
-
     public Collection<JobControlOption> getJobControlOptions() {
         return Collections.unmodifiableCollection(jobControlOptions);
     }
 
-    public void addJobControlOptions(JobControlOption option) {
-        this.jobControlOptions.add(Objects.requireNonNull(option));
-    }
-
-    public void addJobControlOptions(String option) {
-        addJobControlOptions(new JobControlOption(option));
-    }
-
     public Collection<DataTransmissionMode> getOutputTransmissionModes() {
         return Collections.unmodifiableCollection(outputTransmissionModes);
-    }
-
-    public void addOutputTransmissionMode(DataTransmissionMode mode) {
-        this.outputTransmissionModes.add(Objects.requireNonNull(mode));
     }
 
     @Override

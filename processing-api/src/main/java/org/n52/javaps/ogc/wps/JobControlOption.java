@@ -16,7 +16,11 @@
  */
 package org.n52.javaps.ogc.wps;
 
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import com.google.common.base.Strings;
 
@@ -28,7 +32,7 @@ import com.google.common.base.Strings;
  *
  * @author Christian Autermann
  */
-public class JobControlOption {
+public class JobControlOption implements Comparable<JobControlOption> {
 
     private static final JobControlOption SYNC_EXECUTE
             = new JobControlOption("sync-execute");
@@ -36,6 +40,8 @@ public class JobControlOption {
             = new JobControlOption("async-execute");
     private static final JobControlOption DISMISS
             = new JobControlOption("dismiss");
+    private static final Comparator<JobControlOption> COMPARATOR
+            = Comparator.nullsLast(Comparator.comparing(JobControlOption::getValue));
 
     private final String value;
 
@@ -72,6 +78,11 @@ public class JobControlOption {
         return getValue();
     }
 
+    @Override
+    public int compareTo(JobControlOption o) {
+        return COMPARATOR.compare(this, o);
+    }
+
     public static JobControlOption sync() {
         return SYNC_EXECUTE;
     }
@@ -82,5 +93,9 @@ public class JobControlOption {
 
     public static JobControlOption dismiss() {
         return DISMISS;
+    }
+
+    public static Set<JobControlOption> defaultOptions() {
+        return new HashSet<>(Arrays.asList(sync(), async(), dismiss()));
     }
 }

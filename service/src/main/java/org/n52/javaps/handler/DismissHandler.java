@@ -20,21 +20,23 @@ package org.n52.javaps.handler;
 import java.util.Collections;
 import java.util.Set;
 
+import org.n52.iceland.ds.GenericOperationHandler;
 import org.n52.iceland.ds.OperationHandlerKey;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.ogc.ows.OwsOperation;
 import org.n52.javaps.ogc.wps.WPSConstants;
 import org.n52.javaps.request.DismissRequest;
 import org.n52.javaps.response.DismissResponse;
-import org.n52.iceland.ds.GenericOperationHandler;
 
 /**
  * TODO JavaDoc
  *
  * @author Christian Autermann
  */
-public class DismissHandler implements
-        GenericOperationHandler<DismissRequest, DismissResponse> {
+public class DismissHandler extends AbstractHandler
+        implements GenericOperationHandler<DismissRequest, DismissResponse> {
+    private static final OperationHandlerKey KEY
+            = new OperationHandlerKey(WPSConstants.SERVICE, WPSConstants.Operations.Dismiss);
 
     @Override
     public DismissResponse handler(DismissRequest request)
@@ -55,9 +57,7 @@ public class DismissHandler implements
 
     @Override
     public Set<OperationHandlerKey> getKeys() {
-        return Collections
-                .singleton(new OperationHandlerKey(WPSConstants.SERVICE, WPSConstants.Operations.Dismiss
-                                                   .toString()));
+        return Collections.singleton(KEY);
     }
 
 }

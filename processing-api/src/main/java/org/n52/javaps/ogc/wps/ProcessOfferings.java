@@ -19,6 +19,9 @@ package org.n52.javaps.ogc.wps;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.SortedSet;
+
+import org.n52.iceland.util.CollectionHelper;
 
 
 /**
@@ -27,10 +30,10 @@ import java.util.Set;
  */
 public class ProcessOfferings implements Iterable<ProcessOffering> {
 
-    private final Set<ProcessOffering> offerings;
+    private final SortedSet<ProcessOffering> offerings;
 
     public ProcessOfferings(Set<ProcessOffering> offerings) {
-        this.offerings = offerings == null ? Collections.emptySet() : offerings;
+        this.offerings = CollectionHelper.newSortedSet(offerings);
     }
 
     @Override
@@ -38,8 +41,8 @@ public class ProcessOfferings implements Iterable<ProcessOffering> {
         return this.offerings.iterator();
     }
 
-    public Set<ProcessOffering> getOfferings() {
-        return Collections.unmodifiableSet(offerings);
+    public SortedSet<ProcessOffering> getOfferings() {
+        return Collections.unmodifiableSortedSet(offerings);
     }
 
 }

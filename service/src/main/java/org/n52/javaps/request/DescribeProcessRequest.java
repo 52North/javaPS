@@ -29,7 +29,7 @@ import org.n52.javaps.response.DescribeProcessResponse;
 
 public class DescribeProcessRequest extends
         AbstractServiceRequest<DescribeProcessResponse> {
-    private static final String ALL_KEYWORD = "ALL";
+    public static final String ALL_KEYWORD = "ALL";
 
     private final List<OwsCode> identifiers = new LinkedList<>();
 
