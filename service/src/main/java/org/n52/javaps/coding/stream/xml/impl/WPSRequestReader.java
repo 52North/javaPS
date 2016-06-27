@@ -442,13 +442,6 @@ public class WPSRequestReader extends XMLFactories implements XmlElementStreamRe
         throw eof();
     }
 
-    private ValueData readData(StartElement start, XMLEventReader reader,
-                               OwsCode id) throws XMLStreamException {
-        Format format = readFormat(start);
-        String string = asString(start, reader);
-        return new StringValueData(id, format, string);
-    }
-
     private ReferenceData readReference(StartElement elem, XMLEventReader reader,
                                OwsCode id) throws XMLStreamException {
         ReferenceData data = new ReferenceData(id);
@@ -496,6 +489,15 @@ public class WPSRequestReader extends XMLFactories implements XmlElementStreamRe
     private byte[] asBytes(StartElement start, XMLEventReader reader) throws XMLStreamException {
         return asString(start, reader).getBytes(StandardCharsets.UTF_8);
     }
+
+     private ValueData readData(StartElement start, XMLEventReader reader,
+                               OwsCode id) throws XMLStreamException {
+        Format format = readFormat(start);
+        // TODO persist the inputs to disk?
+        String string = asString(start, reader);
+        return new StringValueData(id, format, string);
+    }
+
 
     private String asString(StartElement start, XMLEventReader reader) throws XMLStreamException {
         StringWriter stringWriter = new StringWriter();

@@ -73,6 +73,11 @@
         </wps:Data>
     </wps:Input>
 
+
+    <wps:Input id="complexInput2">
+        <wps:Data mimeType="text/xml" encoding="base64">PHPDtm1la2V5PnNvbWV2YWzDvGU8L3PDtm1la2V5Pg==</wps:Data>
+    </wps:Input>
+
     <wps:Input id="outerNested">
         <wps:Input id="innerNested1">
             <wps:Data>10.0</wps:Data>

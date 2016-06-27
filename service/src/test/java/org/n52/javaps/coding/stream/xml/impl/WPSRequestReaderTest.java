@@ -27,6 +27,7 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.core.IsNull.notNullValue;
 
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import javax.xml.stream.XMLEventReader;
@@ -57,6 +58,8 @@ import org.n52.javaps.request.DismissRequest;
 import org.n52.javaps.request.ExecuteRequest;
 import org.n52.javaps.request.GetResultRequest;
 import org.n52.javaps.request.GetStatusRequest;
+
+import com.google.common.io.BaseEncoding;
 
 
 /**
@@ -152,8 +155,6 @@ public class WPSRequestReaderTest {
 
         errors.checkThat(request.getOutputs().size(), is(1));
         errors.checkThat(request.getOutputs(), contains(new OutputDefinition(new OwsCode("output1"), Format.empty(), DataTransmissionMode.REFERENCE)));
-
-        errors.checkThat(request.getInputs().size(), is(8));
         errors.checkThat(request.getInputs(), contains(
                 is(new ReferenceData(new OwsCode("referenceInput1"), new Format("application/xml", "UTF-8"), URI.create("http://some.data.server/mygmldata.xml"))),
                 is(new ReferenceData(new OwsCode("referenceInput2"), new Format("text/xml"), URI.create("http://some.data.server/mygmldata.xml"), Body.inline("\n                <my-great-request-bayload>hello world</my-great-request-bayload>\n            "))),
@@ -165,6 +166,7 @@ public class WPSRequestReaderTest {
                         "            <great-xml-snippet xmlns:wps=\"http://www.opengis.net/wps/2.0\" xmlns=\"urn::schema:test\">\n" +
 "                <ows:Identifier xmlns:ows=\"http://www.opengis.net/ows/2.0\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xlink:href=\"asdf\">asdf</ows:Identifier>\n" +
 "            </great-xml-snippet>\n        ")),
+                is(new StringValueData(new OwsCode("complexInput2"), new Format("text/xml", "base64"), BaseEncoding.base64().encode("<sömekey>somevalüe</sömekey>".getBytes(StandardCharsets.UTF_8)))),
                 is(new GroupData(new OwsCode("outerNested"), Arrays.asList(new StringValueData(new OwsCode("innerNested1"), "10.0"), new StringValueData(new OwsCode("innerNested2"), "10.0"))))));
     }
 
