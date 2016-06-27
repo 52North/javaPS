@@ -16,66 +16,41 @@
  */
 package org.n52.javaps.ogc.wps.data;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Objects;
 
 import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.javaps.ogc.wps.Format;
 
 import com.google.common.base.MoreObjects;
 
-/**
- * TODO JavaDoc
- *
- * @author Christian Autermann
- */
-public class GroupData extends Data {
+public class ByteArrayValueData extends ValueData {
 
-    private final List<Data> elements;
+    private final byte[] bytes;
 
-    public GroupData() {
-        this(null, null);
+    public ByteArrayValueData(OwsCode id, byte[] bytes) {
+        this(id, null, bytes);
     }
 
-    public GroupData(OwsCode id) {
-        this(id, null);
+    public ByteArrayValueData(OwsCode id, Format format, byte[] bytes) {
+        super(id, format);
+        this.bytes = Objects.requireNonNull(bytes);
     }
 
-    public GroupData(OwsCode id, List<Data> elements) {
-        super(id);
-        this.elements = elements == null ? new LinkedList<>() : elements;
-    }
-
-    public List<Data> getElements() {
-        return Collections.unmodifiableList(this.elements);
-    }
-
-    public void setElements(Collection<Data> elements) {
-        this.elements.clear();
-        if (elements != null) {
-            this.elements.addAll(elements);
-        }
-    }
-
-    public void addElement(Data input) {
-        this.elements.add(Objects.requireNonNull(input));
+    public ByteArrayValueData(byte[] bytes) {
+        this(null, null, bytes);
     }
 
     @Override
-    public boolean isGroup() {
-        return true;
-    }
-
-    @Override
-    public GroupData asGroup() {
-        return this;
+    public InputStream getData() {
+        return new ByteArrayInputStream(this.bytes);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getElements());
+        return Objects.hash(getId(), getFormat(), this.bytes);
     }
 
     @Override
@@ -89,19 +64,19 @@ public class GroupData extends Data {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final GroupData other = (GroupData) obj;
+        final ByteArrayValueData other = (ByteArrayValueData) obj;
         return Objects.equals(getId(), other.getId()) &&
-                Objects.equals(getElements(), other.getElements());
+               Objects.equals(getFormat(), other.getFormat()) &&
+               Arrays.equals(this.bytes, other.bytes);
     }
 
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this).omitNullValues()
                 .add("id", getId())
-                .add("elements", getElements())
+                .add("format", getFormat())
+                .add("bytes", this.bytes)
                 .toString();
     }
-
-
 
 }

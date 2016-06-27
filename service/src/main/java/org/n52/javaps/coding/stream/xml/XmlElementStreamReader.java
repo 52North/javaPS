@@ -14,42 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.ogc.wps.data;
+package org.n52.javaps.coding.stream.xml;
 
-import java.io.InputStream;
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLStreamException;
 
-import org.n52.iceland.ogc.ows.OwsCode;
-import org.n52.javaps.ogc.wps.Format;
 
 /**
  * TODO JavaDoc
  *
  * @author Christian Autermann
  */
-public abstract class ValueData extends FormattedData {
+public interface XmlElementStreamReader {
 
-    public ValueData(OwsCode id) {
-        this(id, null);
-    }
+    Object read(XMLEventReader reader) throws XMLStreamException;
 
-    public ValueData(OwsCode id, Format format) {
-        super(id, format);
-    }
-
-    public ValueData() {
-        this(null, null);
-    }
-
-    public abstract InputStream getData();
-
-    @Override
-    public boolean isValue() {
-        return true;
-    }
-
-    @Override
-    public ValueData asValue() {
-        return this;
-    }
 
 }

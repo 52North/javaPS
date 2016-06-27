@@ -41,9 +41,8 @@ import org.n52.javaps.algorithm.annotation.LiteralInput;
 import org.n52.javaps.algorithm.annotation.LiteralOutput;
 import org.n52.javaps.coding.stream.StreamWriter;
 import org.n52.javaps.coding.stream.StreamWriterRepository;
-import org.n52.javaps.coding.stream.xml.XmlDocumentStreamWriter;
-import org.n52.javaps.coding.stream.xml.XmlElementStreamWriter;
-import org.n52.javaps.coding.stream.xml.XmlElementStreamWriterRepository;
+import org.n52.javaps.coding.stream.xml.DocumentXmlStreamWriter;
+import org.n52.javaps.coding.stream.xml.ElementXmlStreamWriterRepository;
 import org.n52.javaps.io.GeneratorRepository;
 import org.n52.javaps.io.IGenerator;
 import org.n52.javaps.io.IParser;
@@ -54,6 +53,7 @@ import org.n52.javaps.ogc.wps.ProcessOffering;
 import org.n52.javaps.ogc.wps.ProcessOfferings;
 import org.n52.javaps.ogc.wps.description.ProcessDescription;
 import org.n52.javaps.response.DescribeProcessResponse;
+import org.n52.javaps.coding.stream.xml.ElementXmlStreamWriter;
 
 /**
  * TODO JavaDoc
@@ -61,7 +61,7 @@ import org.n52.javaps.response.DescribeProcessResponse;
  */
 public class WpsProcessDescriptionWriterTest {
 
-    private static final List<Provider<XmlElementStreamWriter>> ELEMENT_WRITERS
+    private static final List<Provider<ElementXmlStreamWriter>> ELEMENT_WRITERS
             = Arrays.asList(WPSResponseWriter::new, WPSWriter::new);
 
 
@@ -100,7 +100,7 @@ public class WpsProcessDescriptionWriterTest {
     }
 
     private StreamWriterRepository createRepository() {
-        XmlDocumentStreamWriter writer = new XmlDocumentStreamWriter(new XmlElementStreamWriterRepository(ELEMENT_WRITERS));
+        DocumentXmlStreamWriter writer = new DocumentXmlStreamWriter(new ElementXmlStreamWriterRepository(ELEMENT_WRITERS));
         StreamWriterRepository repository = new StreamWriterRepository();
         repository.set(Arrays.asList(() -> writer));
         repository.init();

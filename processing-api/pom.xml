@@ -47,6 +47,10 @@
             <artifactId>iceland</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.n52.iceland</groupId>
+            <artifactId>util</artifactId>
+        </dependency>
+        <dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
         </dependency>
@@ -95,16 +99,13 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
         </dependency>
-        
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.5.1</version>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpcore</artifactId>
-            <version>4.4.3</version>
         </dependency>
     </dependencies>
 

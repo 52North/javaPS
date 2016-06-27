@@ -14,42 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.ogc.wps.data;
+package org.n52.javaps.coding.stream.xml;
 
-import java.io.InputStream;
+import javax.xml.stream.XMLStreamException;
 
-import org.n52.iceland.ogc.ows.OwsCode;
-import org.n52.javaps.ogc.wps.Format;
+import org.n52.iceland.component.Component;
+import org.n52.javaps.coding.stream.StreamWriterKey;
 
 /**
- * TODO JavaDoc
  *
  * @author Christian Autermann
  */
-public abstract class ValueData extends FormattedData {
+public interface ElementXmlStreamWriter extends Component<StreamWriterKey> {
 
-    public ValueData(OwsCode id) {
-        this(id, null);
-    }
-
-    public ValueData(OwsCode id, Format format) {
-        super(id, format);
-    }
-
-    public ValueData() {
-        this(null, null);
-    }
-
-    public abstract InputStream getData();
-
-    @Override
-    public boolean isValue() {
-        return true;
-    }
-
-    @Override
-    public ValueData asValue() {
-        return this;
-    }
+    void setContext(XmlStreamWritingContext context);
+    void writeElement(Object object) throws XMLStreamException;
 
 }

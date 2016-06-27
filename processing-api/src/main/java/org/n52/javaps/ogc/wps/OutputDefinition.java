@@ -16,9 +16,15 @@
  */
 package org.n52.javaps.ogc.wps;
 
+
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
 import org.n52.iceland.ogc.ows.OwsCode;
+
+import com.google.common.base.MoreObjects;
 
 /**
  * TODO JavaDoc
@@ -27,10 +33,41 @@ import org.n52.iceland.ogc.ows.OwsCode;
  */
 public class OutputDefinition {
 
-    private DataTransmissionMode dataTransmissionMode
-            = DataTransmissionMode.VALUE;
+    private DataTransmissionMode dataTransmissionMode;
     private OwsCode id;
-    private Format format = new Format();
+    private Format format;
+    private List<OutputDefinition> outputs;
+
+    public OutputDefinition(OwsCode id, Format format,
+                            List<OutputDefinition> outputs) {
+        this(id, format, null, outputs);
+    }
+
+    public OutputDefinition(OwsCode id, Format format) {
+        this(id, format, null, null);
+    }
+
+    public OutputDefinition(OwsCode id) {
+        this(id, null, null, null);
+    }
+
+    public OutputDefinition() {
+        this(null, null, null, null);
+    }
+
+    public OutputDefinition(OwsCode id, Format format,
+                            DataTransmissionMode dataTransmissionMode) {
+        this(id, format, dataTransmissionMode, null);
+    }
+
+    public OutputDefinition(OwsCode id, Format format,
+                            DataTransmissionMode dataTransmissionMode,
+                            List<OutputDefinition> outputs) {
+        this.dataTransmissionMode = dataTransmissionMode == null ? DataTransmissionMode.VALUE : dataTransmissionMode;
+        this.id = id;
+        this.format = format == null ? Format.empty() : format;
+        this.outputs = outputs == null ? new LinkedList<>() : outputs;
+    }
 
     public DataTransmissionMode getDataTransmissionMode() {
         return dataTransmissionMode;
@@ -57,9 +94,18 @@ public class OutputDefinition {
         this.format = format;
     }
 
+    public List<OutputDefinition> getOutputs() {
+        return Collections.unmodifiableList(outputs);
+    }
+
+    public void setOutputs(List<OutputDefinition> outputs) {
+        this.outputs = outputs == null ? Collections.emptyList() : outputs;
+    }
+
     @Override
     public int hashCode() {
-        return Objects.hash(this.id, this.format, this.dataTransmissionMode);
+        return Objects
+                .hash(this.dataTransmissionMode, this.id, this.format, this.outputs);
     }
 
     @Override
@@ -74,9 +120,20 @@ public class OutputDefinition {
             return false;
         }
         final OutputDefinition other = (OutputDefinition) obj;
-        return Objects.equals(this.id, other.getId()) &&
-               Objects.equals(this.format, other.getFormat()) &&
-               this.dataTransmissionMode == other.getDataTransmissionMode();
+        return this.getDataTransmissionMode() == other.getDataTransmissionMode() &&
+               Objects.equals(this.getId(), other.getId()) &&
+               Objects.equals(this.getFormat(), other.getFormat()) &&
+               Objects.equals(this.getOutputs(), other.getOutputs());
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this).omitNullValues()
+                .add("id", this.id)
+                .add("format", this.format)
+                .add("dataTransmissionMode", this.dataTransmissionMode)
+                .add("outputs", this.outputs)
+                .toString();
     }
 
 }

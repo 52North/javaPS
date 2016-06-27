@@ -30,13 +30,13 @@ import org.apache.commons.io.Charsets;
 import org.junit.Test;
 
 import org.n52.iceland.exception.ows.OwsExceptionReport;
+import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.iceland.util.http.MediaTypes;
 import org.n52.javaps.coding.stream.StreamWriter;
 import org.n52.javaps.coding.stream.StreamWriterRepository;
-import org.n52.javaps.coding.stream.xml.XmlDocumentStreamWriter;
-import org.n52.javaps.coding.stream.xml.XmlElementStreamWriter;
-import org.n52.javaps.coding.stream.xml.XmlElementStreamWriterRepository;
-import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.javaps.coding.stream.xml.DocumentXmlStreamWriter;
+import org.n52.javaps.coding.stream.xml.ElementXmlStreamWriter;
+import org.n52.javaps.coding.stream.xml.ElementXmlStreamWriterRepository;
 import org.n52.javaps.ogc.wps.Format;
 import org.n52.javaps.ogc.wps.JobId;
 import org.n52.javaps.ogc.wps.Result;
@@ -52,9 +52,9 @@ import com.google.common.io.BaseEncoding;
  *
  * @author Christian Autermann
  */
-public class WpsResultWriterTest {
+public class WPSWriterTest {
 
-    private static final List<Provider<XmlElementStreamWriter>> ELEMENT_WRITERS
+    private static final List<Provider<ElementXmlStreamWriter>> ELEMENT_WRITERS
             = Arrays.asList(WPSResponseWriter::new, WPSWriter::new);
 
 
@@ -86,8 +86,8 @@ public class WpsResultWriterTest {
     }
 
     private StreamWriterRepository createRepository() {
-        XmlDocumentStreamWriter writer
-                = new XmlDocumentStreamWriter(new XmlElementStreamWriterRepository(ELEMENT_WRITERS));
+        DocumentXmlStreamWriter writer
+                = new DocumentXmlStreamWriter(new ElementXmlStreamWriterRepository(ELEMENT_WRITERS));
         StreamWriterRepository repository = new StreamWriterRepository();
         repository.set(Arrays.asList(() -> writer));
         repository.init();

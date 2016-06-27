@@ -59,8 +59,10 @@ import com.google.common.io.BaseEncoding;
 import com.google.common.io.ByteStreams;
 import com.google.common.xml.XmlEscapers;
 
+import static java.util.stream.Collectors.joining;
+
 public abstract class AbstractElementXmlStreamWriter
-        implements XmlElementStreamWriter {
+        implements ElementXmlStreamWriter {
 
     private static final Escaper ESCAPER = XmlEscapers.xmlContentEscaper();
     private XmlStreamWritingContext context;

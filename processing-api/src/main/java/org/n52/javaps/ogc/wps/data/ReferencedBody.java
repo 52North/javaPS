@@ -22,6 +22,8 @@ import java.util.Objects;
 
 import org.n52.javaps.utils.HTTP;
 
+import com.google.common.base.MoreObjects;
+
 /**
  * TODO JavaDoc
  *
@@ -59,4 +61,28 @@ public class ReferencedBody extends Body {
         return this;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
+        ReferencedBody other = (ReferencedBody) obj;
+
+        return Objects.equals(getHref(), other.getHref());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getHref());
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("href", getHref())
+                .toString();
+    }
 }

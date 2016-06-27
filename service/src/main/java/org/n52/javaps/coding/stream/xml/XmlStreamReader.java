@@ -16,18 +16,15 @@
  */
 package org.n52.javaps.coding.stream.xml;
 
-import javax.xml.stream.XMLStreamException;
-
-import org.n52.iceland.component.Component;
-import org.n52.javaps.coding.stream.StreamWriterKey;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- *
+ * TODO JavaDoc
  * @author Christian Autermann
  */
-public interface XmlElementStreamWriter extends Component<StreamWriterKey> {
+public class XmlStreamReader {
 
-    void setContext(XmlStreamWritingContext context);
-    void writeElement(Object object) throws XMLStreamException;
+    private static final Logger log = LoggerFactory.getLogger(XmlStreamReader.class);
 
 }

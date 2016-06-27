@@ -29,8 +29,12 @@ public abstract class Data {
 
     private OwsCode id;
 
+    public Data() {
+        this(null);
+    }
+
     public Data(OwsCode id) {
-        this.id = Objects.requireNonNull(id);
+        this.id = id;
     }
 
     public OwsCode getId() {

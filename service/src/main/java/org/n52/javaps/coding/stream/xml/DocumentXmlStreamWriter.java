@@ -50,14 +50,14 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
  *
  * @author Christian Autermann
  */
-public class XmlDocumentStreamWriter implements StreamWriter<Object> {
+public class DocumentXmlStreamWriter implements StreamWriter<Object> {
     private static final TransformerFactory TRANSFORMER_FACTORY = createTransformerFactory();
     private static final String INDENT_AMOUNT = "{http://xml.apache.org/xslt}indent-amount";
-    private final XmlElementStreamWriterRepository repository;
+    private final ElementXmlStreamWriterRepository repository;
     private final ExecutorService executor;
 
     @Inject
-    public XmlDocumentStreamWriter(XmlElementStreamWriterRepository repository) {
+    public DocumentXmlStreamWriter(ElementXmlStreamWriterRepository repository) {
         ThreadFactory threadFactory = new ThreadFactoryBuilder()
                 .setNameFormat("xml-transformer-%d").build();
         this.executor = Executors.newCachedThreadPool(threadFactory);

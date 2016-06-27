@@ -64,10 +64,10 @@ public class XmlStreamWritingContext implements AutoCloseable {
     private final Deque<Map<String, String>> prefixes = new ArrayDeque<>();
     private final XMLEventWriter writer;
     private final Charset documentEncoding = StandardCharsets.UTF_8;
-    private final BiFunction<XmlStreamWriterKey, XmlStreamWritingContext, Optional<XmlElementStreamWriter>> writerProvider;
+    private final BiFunction<XmlStreamWriterKey, XmlStreamWritingContext, Optional<ElementXmlStreamWriter>> writerProvider;
     private final OutputStream stream;
 
-    public XmlStreamWritingContext(OutputStream stream, BiFunction<XmlStreamWriterKey, XmlStreamWritingContext, Optional<XmlElementStreamWriter>> writerProvider)
+    public XmlStreamWritingContext(OutputStream stream, BiFunction<XmlStreamWriterKey, XmlStreamWritingContext, Optional<ElementXmlStreamWriter>> writerProvider)
             throws XMLStreamException {
         this.stream = Objects.requireNonNull(stream);
         this.writer = outputFactory().createXMLEventWriter(stream, this.documentEncoding.name());
@@ -78,7 +78,7 @@ public class XmlStreamWritingContext implements AutoCloseable {
             throws XMLStreamException {
         if (object != null) {
             XmlStreamWriterKey key = new XmlStreamWriterKey(object.getClass());
-            XmlElementStreamWriter delegate = this.writerProvider
+            ElementXmlStreamWriter delegate = this.writerProvider
                     .apply(key, this).orElseThrow(() -> new MissingStreamWriterException(key));
             delegate.writeElement(object);
         }

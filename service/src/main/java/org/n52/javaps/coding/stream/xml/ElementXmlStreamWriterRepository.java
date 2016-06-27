@@ -34,24 +34,24 @@ import org.n52.javaps.coding.stream.StreamWriterKey;
  *
  * @author Christian Autermann
  */
-public class XmlElementStreamWriterRepository extends AbstractSimilarityKeyRepository<StreamWriterKey, XmlElementStreamWriter>
+public class ElementXmlStreamWriterRepository extends AbstractSimilarityKeyRepository<StreamWriterKey, ElementXmlStreamWriter>
         implements Constructable {
 
-    private Collection<Provider<XmlElementStreamWriter>> writers;
+    private Collection<Provider<ElementXmlStreamWriter>> writers;
 
-    public XmlElementStreamWriterRepository(Collection<Provider<XmlElementStreamWriter>> writers) {
+    public ElementXmlStreamWriterRepository(Collection<Provider<ElementXmlStreamWriter>> writers) {
         this.writers = writers;
         if (writers != null) {
             init();
         }
     }
 
-    public XmlElementStreamWriterRepository() {
+    public ElementXmlStreamWriterRepository() {
         this(null);
     }
 
     @Autowired(required = false)
-    public void set(Collection<Provider<XmlElementStreamWriter>> writers) {
+    public void set(Collection<Provider<ElementXmlStreamWriter>> writers) {
         this.writers = writers;
     }
 
@@ -61,8 +61,8 @@ public class XmlElementStreamWriterRepository extends AbstractSimilarityKeyRepos
         setProducers(this.writers);
     }
 
-    public Optional<XmlElementStreamWriter> get(StreamWriterKey key, XmlStreamWritingContext ctx) {
-        Optional<XmlElementStreamWriter> writer = get(key);
+    public Optional<ElementXmlStreamWriter> get(StreamWriterKey key, XmlStreamWritingContext ctx) {
+        Optional<ElementXmlStreamWriter> writer = get(key);
         writer.ifPresent(x -> x.setContext(ctx));
         return writer;
     }

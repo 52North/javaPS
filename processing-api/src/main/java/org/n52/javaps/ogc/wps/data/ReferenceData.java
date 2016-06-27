@@ -26,6 +26,8 @@ import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.javaps.ogc.wps.Format;
 import org.n52.javaps.utils.HTTP;
 
+import com.google.common.base.MoreObjects;
+
 /**
  * TODO JavaDoc
  *
@@ -50,8 +52,12 @@ public class ReferenceData extends FormattedData {
 
     public ReferenceData(OwsCode id, Format format, URI uri, Body body) {
         super(id, format);
-        this.uri = Objects.requireNonNull(uri);
+        this.uri = uri;
         this.body = Optional.ofNullable(body);
+    }
+
+    public ReferenceData() {
+        this(null, null, null, null);
     }
 
     public URI getURI() {
@@ -91,5 +97,38 @@ public class ReferenceData extends FormattedData {
     @Override
     public ReferenceData asReference() {
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this).omitNullValues()
+                .add("id", getId())
+                .add("format", getFormat())
+                .add("uri", getURI())
+                .add("body", getBody().orElse(null))
+                .toString();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getFormat(), getURI(), getBody());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ReferenceData other = (ReferenceData) obj;
+        return Objects.equals(getId(), other.getId()) &&
+               Objects.equals(getFormat(), other.getFormat()) &&
+               Objects.equals(getURI(), other.getURI()) &&
+               Objects.equals(getBody(), other.getBody());
     }
 }

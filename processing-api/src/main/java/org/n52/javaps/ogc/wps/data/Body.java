@@ -52,4 +52,8 @@ public abstract class Body {
         return new ReferencedBody(uri);
     }
 
+    public static Body reference(String uri) {
+        return reference(URI.create(uri));
+    }
+
 }

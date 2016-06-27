@@ -18,6 +18,8 @@ package org.n52.javaps.ogc.wps.data;
 
 import java.util.Objects;
 
+import com.google.common.base.MoreObjects;
+
 /**
  * TODO JavaDoc
  *
@@ -45,5 +47,33 @@ public class InlineBody extends Body {
     public InlineBody asInline() {
         return this;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 97 * hash + Objects.hashCode(this.body);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final InlineBody other = (InlineBody) obj;
+        return Objects.equals(this.body, other.getBody());
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this).add("body", getBody()).toString();
+    }
+
 
 }

@@ -273,6 +273,10 @@ public class Format implements Comparable<Format> {
         return getEncoding().filter(BASE64_ENCODING::equalsIgnoreCase).isPresent();
     }
 
+    public static Format empty() {
+        return new Format();
+    }
+
     public static Set<String> getAvailableCharsets() {
         return Collections.unmodifiableSet(CHARSETS);
     }

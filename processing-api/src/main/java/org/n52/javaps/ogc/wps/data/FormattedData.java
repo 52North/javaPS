@@ -39,6 +39,10 @@ public abstract class FormattedData extends Data {
         this.format = format == null ? new Format() : format;
     }
 
+    public FormattedData() {
+        this(null, null);
+    }
+
     public Format getFormat() {
         return format;
     }
