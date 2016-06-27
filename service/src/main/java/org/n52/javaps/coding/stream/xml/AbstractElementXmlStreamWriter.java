@@ -60,6 +60,12 @@ import com.google.common.io.ByteStreams;
 import com.google.common.xml.XmlEscapers;
 
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.joining;
 
 public abstract class AbstractElementXmlStreamWriter
         implements ElementXmlStreamWriter {
@@ -85,7 +91,7 @@ public abstract class AbstractElementXmlStreamWriter
     }
 
     public Charset getDocumentEncoding() {
-        return context().getDocumentEncoding();
+        return context().documentEncoding();
     }
 
     protected void attr(QName name, String value) throws XMLStreamException {

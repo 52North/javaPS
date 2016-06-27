@@ -75,7 +75,7 @@ public class ByteArrayValueData extends ValueData {
         return MoreObjects.toStringHelper(this).omitNullValues()
                 .add("id", getId())
                 .add("format", getFormat())
-                .add("bytes", this.bytes)
+                .add("value", this.bytes)
                 .toString();
     }
 

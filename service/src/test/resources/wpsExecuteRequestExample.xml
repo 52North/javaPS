@@ -66,8 +66,10 @@
     </wps:Input>
 
     <wps:Input id="complexInput1">
-        <wps:Data schema="complexInput1" encoding="UTF-8" mimeType="text/xml">
-            <great-xml-snippet>asdf</great-xml-snippet>
+        <wps:Data schema="urn::schema:test" encoding="UTF-8" mimeType="text/xml">
+            <great-xml-snippet xmlns:wps="http://www.opengis.net/wps/2.0" xmlns="urn::schema:test">
+                <ows:Identifier xlink:href="asdf">asdf</ows:Identifier>
+            </great-xml-snippet>
         </wps:Data>
     </wps:Input>
 

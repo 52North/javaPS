@@ -19,6 +19,7 @@ package org.n52.javaps.coding.stream.xml.impl;
 
 
 
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.contains;
@@ -26,7 +27,6 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.core.IsNull.notNullValue;
 
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import javax.xml.stream.XMLEventReader;
@@ -49,21 +49,22 @@ import org.n52.javaps.ogc.wps.JobId;
 import org.n52.javaps.ogc.wps.OutputDefinition;
 import org.n52.javaps.ogc.wps.ResponseMode;
 import org.n52.javaps.ogc.wps.data.Body;
-import org.n52.javaps.ogc.wps.data.ByteArrayValueData;
 import org.n52.javaps.ogc.wps.data.GroupData;
 import org.n52.javaps.ogc.wps.data.ReferenceData;
+import org.n52.javaps.ogc.wps.data.StringValueData;
 import org.n52.javaps.request.DescribeProcessRequest;
 import org.n52.javaps.request.DismissRequest;
 import org.n52.javaps.request.ExecuteRequest;
 import org.n52.javaps.request.GetResultRequest;
 import org.n52.javaps.request.GetStatusRequest;
 
+
 /**
  * TODO JavaDoc
  *
  * @author Christian Autermann
  */
-public class WPSReaderTest {
+public class WPSRequestReaderTest {
     private static final XMLInputFactory INPUT_FACTORY;
     private static final SchemaFactory SCHEMA_FACTORY;
     private static final Schema SCHEMA;
@@ -71,7 +72,7 @@ public class WPSReaderTest {
     static {
         try {
             SCHEMA_FACTORY = SchemaFactory.newInstance(javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            SCHEMA = SCHEMA_FACTORY.newSchema(WPSReaderTest.class.getResource("/xsd/wps/2.0.0/wps.xsd"));
+            SCHEMA = SCHEMA_FACTORY.newSchema(WPSRequestReaderTest.class.getResource("/xsd/wps/2.0.0/wps.xsd"));
         } catch (SAXException ex) {
             throw new Error(ex);
         }
@@ -158,20 +159,19 @@ public class WPSReaderTest {
                 is(new ReferenceData(new OwsCode("referenceInput2"), new Format("text/xml"), URI.create("http://some.data.server/mygmldata.xml"), Body.inline("\n                <my-great-request-bayload>hello world</my-great-request-bayload>\n            "))),
                 is(new ReferenceData(new OwsCode("referenceInput3"), new Format(null, null, "urn::schema:test"), URI.create("http://some.data.server/mygmldata.xml"), Body.inline("\n                <my-great-request-bayload>hello world</my-great-request-bayload>\n            "))),
                 is(new ReferenceData(new OwsCode("referenceInput4"), new Format(null, null, "urn::schema:test"), URI.create("http://some.data.server/mygmldata.xml"), Body.reference("http://some.data.server/mygmldata.xml"))),
-                is(new ByteArrayValueData(new OwsCode("literalInput1"), new Format(), "10.0".getBytes(StandardCharsets.UTF_8))),
-                is(new ByteArrayValueData(new OwsCode("literalInput2"), new Format(), "hello world".getBytes(StandardCharsets.UTF_8))),
-                is(new ByteArrayValueData(new OwsCode("complexInput1"), new Format("text/xml", "UTF-8", "complexInput1"), "\n            <great-xml-snippet>asdf</great-xml-snippet>\n        ".getBytes(StandardCharsets.UTF_8))),
-                is(new GroupData(new OwsCode("outerNested"), Arrays.asList(new ByteArrayValueData(new OwsCode("innerNested1"), "10.0".getBytes()), new ByteArrayValueData(new OwsCode("innerNested2"), "10.0".getBytes()))))));
-
-
-
-
+                is(new StringValueData(new OwsCode("literalInput1"), new Format(), "10.0")),
+                is(new StringValueData(new OwsCode("literalInput2"), new Format(), "hello world")),
+                is(new StringValueData(new OwsCode("complexInput1"), new Format("text/xml", "UTF-8", "urn::schema:test"), "\n" +
+                        "            <great-xml-snippet xmlns:wps=\"http://www.opengis.net/wps/2.0\" xmlns=\"urn::schema:test\">\n" +
+"                <ows:Identifier xmlns:ows=\"http://www.opengis.net/ows/2.0\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xlink:href=\"asdf\">asdf</ows:Identifier>\n" +
+"            </great-xml-snippet>\n        ")),
+                is(new GroupData(new OwsCode("outerNested"), Arrays.asList(new StringValueData(new OwsCode("innerNested1"), "10.0"), new StringValueData(new OwsCode("innerNested2"), "10.0"))))));
     }
 
 
     @SuppressWarnings("unchecked")
     private <T> T read(String file) throws XMLStreamException {
-        XMLEventReader reader = INPUT_FACTORY.createXMLEventReader(WPSReaderTest.class.getResourceAsStream("/" + file));
+        XMLEventReader reader = INPUT_FACTORY.createXMLEventReader(WPSRequestReaderTest.class.getResourceAsStream("/" + file));
         return (T) new WPSRequestReader().read(reader);
     }
 

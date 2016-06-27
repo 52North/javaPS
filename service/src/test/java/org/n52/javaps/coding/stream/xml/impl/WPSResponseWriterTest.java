@@ -52,7 +52,7 @@ import com.google.common.io.BaseEncoding;
  *
  * @author Christian Autermann
  */
-public class WPSWriterTest {
+public class WPSResponseWriterTest {
 
     private static final List<Provider<ElementXmlStreamWriter>> ELEMENT_WRITERS
             = Arrays.asList(WPSResponseWriter::new, WPSWriter::new);
