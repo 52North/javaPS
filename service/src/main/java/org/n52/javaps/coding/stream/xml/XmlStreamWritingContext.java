@@ -45,7 +45,7 @@ import org.n52.javaps.coding.stream.MissingStreamWriterException;
  *
  * @author Christian Autermann
  */
-public class XmlStreamWritingContext extends XMLFactories implements AutoCloseable {
+public class XmlStreamWritingContext extends XmlFactories implements AutoCloseable {
 
     private final Deque<Map<String, String>> prefixes = new ArrayDeque<>();
     private final XMLEventWriter writer;

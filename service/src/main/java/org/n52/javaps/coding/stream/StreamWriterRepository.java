@@ -16,8 +16,6 @@
  */
 package org.n52.javaps.coding.stream;
 
-import org.n52.iceland.component.AbstractSimilarityKeyRepository;
-
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
@@ -26,6 +24,7 @@ import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.n52.iceland.component.AbstractSimilarityKeyRepository;
 import org.n52.iceland.lifecycle.Constructable;
 import org.n52.iceland.util.http.MediaType;
 
@@ -52,7 +51,7 @@ public class StreamWriterRepository
 
     @SuppressWarnings("unchecked")
     public <T> Optional<StreamWriter<? super T>> getWriter(StreamWriterKey key) {
-        return get(key).map(x -> (StreamWriter<T>)x);
+        return get(key).map(x -> (StreamWriter<T>) x);
     }
 
     @Autowired(required = false)

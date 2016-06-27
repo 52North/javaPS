@@ -27,31 +27,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.n52.iceland.component.AbstractSimilarityKeyRepository;
 import org.n52.iceland.lifecycle.Constructable;
-import org.n52.javaps.coding.stream.StreamWriterKey;
+import org.n52.javaps.coding.stream.StreamReaderKey;
 
 /**
  * TODO JavaDoc
  *
  * @author Christian Autermann
  */
-public class ElementXmlStreamWriterRepository extends AbstractSimilarityKeyRepository<StreamWriterKey, ElementXmlStreamWriter>
+public class ElementXmlStreamReaderRepository extends AbstractSimilarityKeyRepository<StreamReaderKey, ElementXmlStreamReader>
         implements Constructable {
 
-    private Collection<Provider<ElementXmlStreamWriter>> writers;
+    private Collection<Provider<ElementXmlStreamReader>> writers;
 
-    public ElementXmlStreamWriterRepository(Collection<Provider<ElementXmlStreamWriter>> writers) {
+    public ElementXmlStreamReaderRepository(Collection<Provider<ElementXmlStreamReader>> writers) {
         this.writers = writers;
         if (writers != null) {
             init();
         }
     }
 
-    public ElementXmlStreamWriterRepository() {
+    public ElementXmlStreamReaderRepository() {
         this(null);
     }
 
     @Autowired(required = false)
-    public void set(Collection<Provider<ElementXmlStreamWriter>> writers) {
+    public void set(Collection<Provider<ElementXmlStreamReader>> writers) {
         this.writers = writers;
     }
 
@@ -61,14 +61,14 @@ public class ElementXmlStreamWriterRepository extends AbstractSimilarityKeyRepos
         setProducers(this.writers);
     }
 
-    public Optional<ElementXmlStreamWriter> get(StreamWriterKey key, XmlStreamWritingContext ctx) {
-        Optional<ElementXmlStreamWriter> writer = get(key);
-        writer.ifPresent(x -> x.setContext(ctx));
-        return writer;
+    public Optional<ElementXmlStreamReader> get(XmlStreamReaderKey key) {
+        Optional<ElementXmlStreamReader> reader = get(key);
+        //writer.ifPresent(x -> x.setContext(ctx));
+        return reader;
     }
 
     @Override
-    public Set<StreamWriterKey> keys() {
+    public Set<StreamReaderKey> keys() {
         return super.keys();
     }
 

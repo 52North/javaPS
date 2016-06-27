@@ -174,7 +174,7 @@ public class WPSRequestReaderTest {
     @SuppressWarnings("unchecked")
     private <T> T read(String file) throws XMLStreamException {
         XMLEventReader reader = INPUT_FACTORY.createXMLEventReader(WPSRequestReaderTest.class.getResourceAsStream("/" + file));
-        return (T) new WPSRequestReader().read(reader);
+        return (T) new WPSRequestReader().readElement(reader);
     }
 
 }

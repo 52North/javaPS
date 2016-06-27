@@ -26,29 +26,36 @@ import org.n52.iceland.coding.encode.EncoderKey;
 import org.n52.iceland.coding.encode.EncodingException;
 import org.n52.iceland.coding.encode.ExceptionEncoderKey;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
+import org.n52.iceland.response.AbstractServiceResponse;
 import org.n52.iceland.util.http.MediaType;
 import org.n52.iceland.util.http.MediaTypes;
 import org.n52.javaps.response.OwsExceptionReportResponse;
 
 /**
- * TODO JavaDoc
+ * Helper class to wrap a thrown {@link OwsExceptionReport} into a
+ * {@link AbstractServiceResponse}.
  *
  * @author Christian Autermann
  */
-public class OwsExceptionReportEncoder implements Encoder<OwsExceptionReportResponse, OwsExceptionReport> {
-    private static final ExceptionEncoderKey KEY = new ExceptionEncoderKey(MediaTypes.APPLICATION_XML);
+public class OwsExceptionReportEncoder implements
+        Encoder<OwsExceptionReportResponse, OwsExceptionReport> {
+    private static final ExceptionEncoderKey KEY
+            = new ExceptionEncoderKey(MediaTypes.APPLICATION_XML);
     private static final Set<EncoderKey> KEYS = Collections.singleton(KEY);
     private final MediaType contentType = MediaTypes.APPLICATION_XML;
 
     @Override
     public OwsExceptionReportResponse encode(OwsExceptionReport report) {
-        OwsExceptionReportResponse response = new OwsExceptionReportResponse(report);
+        OwsExceptionReportResponse response
+                = new OwsExceptionReportResponse(report);
         response.setContentType(this.contentType);
         return response;
     }
 
     @Override
-    public OwsExceptionReportResponse encode(OwsExceptionReport objectToEncode, Map<HelperValues, String> additionalValues)
+    public OwsExceptionReportResponse encode(
+            OwsExceptionReport objectToEncode,
+            Map<HelperValues, String> additionalValues)
             throws EncodingException {
         return encode(objectToEncode);
     }
@@ -62,7 +69,5 @@ public class OwsExceptionReportEncoder implements Encoder<OwsExceptionReportResp
     public Set<EncoderKey> getKeys() {
         return KEYS;
     }
-
-
 
 }

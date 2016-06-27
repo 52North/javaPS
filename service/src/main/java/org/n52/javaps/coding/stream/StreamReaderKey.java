@@ -14,20 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.coding.stream.xml;
+package org.n52.javaps.coding.stream;
 
-import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLStreamException;
+import java.util.Objects;
 
+import org.n52.iceland.util.Similar;
+import org.n52.iceland.util.http.MediaType;
 
 /**
  * TODO JavaDoc
  *
  * @author Christian Autermann
  */
-public interface XmlElementStreamReader {
+public abstract class StreamReaderKey implements Similar<StreamReaderKey> {
+    private final MediaType mediaType;
 
-    Object read(XMLEventReader reader) throws XMLStreamException;
+    public StreamReaderKey(MediaType mediaType) {
+        this.mediaType = Objects.requireNonNull(mediaType);
+    }
 
+    public MediaType getMediaType() {
+        return mediaType;
+    }
+
+    @Override
+    public int getSimilarity(StreamReaderKey other) {
+        return equals(other) ? 0 : -1;
+    }
 
 }

@@ -26,57 +26,72 @@
                            http://www.springframework.org/schema/util/spring-util-4.1.xsd">
 
 
-    <bean class="org.n52.javaps.coding.stream.StreamWriterRepository"/>
-    <bean class="org.n52.javaps.coding.stream.xml.XmlDocumentStreamWriter"/>
+
+    <bean id="streamReaderRepository" class="org.n52.javaps.coding.stream.StreamReaderRepository"/>
+    <bean id="streamWriterRepository" class="org.n52.javaps.coding.stream.StreamWriterRepository"/>
+
+    <bean class="org.n52.javaps.coding.stream.xml.ElementXmlStreamWriterRepository"/>
+    <bean class="org.n52.javaps.coding.stream.xml.ElementXmlStreamReaderRepository"/>
+
+    <bean class="org.n52.javaps.coding.stream.xml.DocumentXmlStreamReader"/>
+    <bean class="org.n52.javaps.coding.stream.xml.DocumentXmlStreamWriter"/>
 
     <bean class="org.n52.javaps.coding.encode.ServiceResponseWriterFactory"/>
+
+    <!-- KVP decoders -->
     <bean class="org.n52.javaps.coding.decode.kvp.GetCapabilitiesKvpDecoder"/>
     <bean class="org.n52.javaps.coding.decode.kvp.DescribeProcessKvpDecoder"/>
     <bean class="org.n52.javaps.coding.stream.xml.impl.OwsExceptionReportEncoder"/>
 
-
-    <bean class="org.n52.javaps.coding.stream.xml.XmlElementStreamWriterRepository"/>
+    <bean class="org.n52.javaps.coding.stream.xml.ElementXmlStreamReaderRepository"/>
 
     <!-- element writers -->
-    <bean class="org.n52.javaps.coding.stream.xml.impl.WPSResponseWriter" scope="prototype" />
-    <bean class="org.n52.javaps.coding.stream.xml.impl.ProcessDescriptionWriter" scope="prototype" />
-    <bean class="org.n52.javaps.coding.stream.xml.impl.ProcessOfferingWriter" scope="prototype" />
-    <bean class="org.n52.javaps.coding.stream.xml.impl.ReferenceDataWriter" scope="prototype" />
-    <bean class="org.n52.javaps.coding.stream.xml.impl.ResultWriter" scope="prototype" />
-    <bean class="org.n52.javaps.coding.stream.xml.impl.StatusInfoWriter" scope="prototype" />
-    <bean class="org.n52.javaps.coding.stream.xml.impl.ValueDataWriter" scope="prototype" />
-    <bean class="org.n52.javaps.coding.stream.xml.impl.WpsCapabilitiesWriter" scope="prototype" />
+    <bean class="org.n52.javaps.coding.stream.xml.impl.WPSWriter" scope="prototype" />
+    <bean class="org.n52.javaps.coding.stream.xml.impl.WPSRequestReader" scope="prototype"/>
+    <bean class="org.n52.javaps.coding.stream.xml.impl.WPSResponseWriter" scope="prototype"/>
 
     <!-- handlers -->
-    <bean class="org.n52.javaps.handler.GetCapabilitiesHandler"/>
-    <bean class="org.n52.javaps.handler.DescribeProcessHandler"/>
-    <bean class="org.n52.javaps.handler.DismissHandler"/>
-    <bean class="org.n52.javaps.handler.ExecuteHandler"/>
-    <bean class="org.n52.javaps.handler.GetResultHandler"/>
-    <bean class="org.n52.javaps.handler.GetStatusHandler"/>
-
     <bean class="org.n52.iceland.service.operator.GenericServiceOperator">
         <constructor-arg name="service" value="WPS" />
         <constructor-arg name="version" value="2.0.0" />
     </bean>
 
-    <bean id="getCapabilitiesOperator" class="org.n52.javaps.operator.GenericRequestOperator">
-        <constructor-arg index="0" name="service" value="WPS" />
-        <constructor-arg index="1" name="version" value="2.0.0" />
-        <constructor-arg index="2" name="operation" value="GetCapabilities" />
-        <constructor-arg index="3" name="defaultActive" value="true" />
-        <constructor-arg index="4" name="requestType">
+    <bean id="getCapabilitiesOperation" class="org.n52.iceland.coding.OperationKey">
+        <constructor-arg name="service" value="WPS" />
+        <constructor-arg name="version"><null/></constructor-arg>
+        <constructor-arg name="operation" value="GetCapabilities" />
+    </bean>
+    <bean id="getCapabilitiesOperator" class="org.n52.iceland.request.operator.GenericRequestOperator">
+        <constructor-arg name="operation" ref="getCapabilitiesOperation" />
+        <constructor-arg name="defaultActive" value="true" />
+        <constructor-arg name="requestType">
             <value type="java.lang.Class">org.n52.iceland.request.GetCapabilitiesRequest</value>
         </constructor-arg>
-        <constructor-arg index="5" name="validator">
+        <constructor-arg index="3" name="validator">
             <bean class="org.n52.javaps.operator.validation.GetCapabiltiesParameterValidator" />
         </constructor-arg>
     </bean>
+    <bean class="org.n52.javaps.handler.GetCapabilitiesHandler"/>
+    <bean class="org.n52.javaps.coding.decode.xml.XmlStreamingOperationDecoder">
+        <constructor-arg name="operation" ref="getCapabilitiesOperation"/>
+        <constructor-arg name="name">
+            <bean class="javax.xml.namespace.QName">
+                <constructor-arg name="namespaceURI" value="http://www.opengis.net/wps/2.0"/>
+                <constructor-arg name="localPart" value="GetCapabilities"/>
+            </bean>
+        </constructor-arg>
+        <constructor-arg name="streamReaderRepository" ref="streamReaderRepository"/>
+    </bean>
 
-    <bean id="describeProcessOperator" class="org.n52.javaps.operator.GenericRequestOperator">
+
+
+    <bean id="describeProcessOperation" class="org.n52.iceland.coding.OperationKey">
         <constructor-arg index="0" name="service" value="WPS" />
-        <constructor-arg name="version" value="2.0.0" />
-        <constructor-arg name="operation" value="DescribeProcess" />
+        <constructor-arg index="1" name="version" value="2.0.0" />
+        <constructor-arg index="2" name="operation" value="DescribeProcess" />
+    </bean>
+    <bean id="describeProcessOperator" class="org.n52.iceland.request.operator.GenericRequestOperator">
+        <constructor-arg name="operation" ref="describeProcessOperation"/>
         <constructor-arg name="defaultActive" value="true" />
         <constructor-arg name="requestType">
             <value type="java.lang.Class">org.n52.javaps.request.DescribeProcessRequest</value>
@@ -85,11 +100,27 @@
             <bean class="org.n52.javaps.operator.validation.DescribeProcessParameterValidator" />
         </constructor-arg>
     </bean>
+    <bean class="org.n52.javaps.handler.DescribeProcessHandler"/>
+    <bean class="org.n52.javaps.coding.decode.xml.XmlStreamingOperationDecoder">
+        <constructor-arg name="operation" ref="describeProcessOperation"/>
+        <constructor-arg name="name">
+            <bean class="javax.xml.namespace.QName">
+                <constructor-arg name="namespaceURI" value="http://www.opengis.net/wps/2.0"/>
+                <constructor-arg name="localPart" value="DescribeProcess"/>
+            </bean>
+        </constructor-arg>
+        <constructor-arg name="streamReaderRepository" ref="streamReaderRepository"/>
+    </bean>
 
-    <bean id="executeOperator" class="org.n52.javaps.operator.GenericRequestOperator">
-        <constructor-arg name="service" value="WPS" />
-        <constructor-arg name="version" value="2.0.0" />
-        <constructor-arg name="operation" value="Execute" />
+
+
+    <bean id="executeOperation" class="org.n52.iceland.coding.OperationKey">
+        <constructor-arg index="0" name="service" value="WPS" />
+        <constructor-arg index="1" name="version" value="2.0.0" />
+        <constructor-arg index="2" name="operation" value="Execute" />
+    </bean>
+    <bean id="executeOperator" class="org.n52.iceland.request.operator.GenericRequestOperator">
+        <constructor-arg name="operation" ref="executeOperation" />
         <constructor-arg name="defaultActive" value="true" />
         <constructor-arg name="requestType">
             <value type="java.lang.Class">org.n52.javaps.request.ExecuteRequest</value>
@@ -98,11 +129,27 @@
             <bean class="org.n52.javaps.operator.validation.ExecuteParameterValidator" />
         </constructor-arg>
     </bean>
+    <bean class="org.n52.javaps.handler.ExecuteHandler"/>
+    <bean class="org.n52.javaps.coding.decode.xml.XmlStreamingOperationDecoder">
+        <constructor-arg name="operation" ref="executeOperation"/>
+        <constructor-arg name="name">
+            <bean class="javax.xml.namespace.QName">
+                <constructor-arg name="namespaceURI" value="http://www.opengis.net/wps/2.0"/>
+                <constructor-arg name="localPart" value="Execute"/>
+            </bean>
+        </constructor-arg>
+        <constructor-arg name="streamReaderRepository" ref="streamReaderRepository"/>
+    </bean>
 
-    <bean id="getResultOperator" class="org.n52.javaps.operator.GenericRequestOperator">
-        <constructor-arg name="service" value="WPS" />
-        <constructor-arg name="version" value="2.0.0" />
-        <constructor-arg name="operation" value="GetResult" />
+
+
+    <bean id="getResultOperation" class="org.n52.iceland.coding.OperationKey">
+        <constructor-arg index="0" name="service" value="WPS" />
+        <constructor-arg index="1" name="version" value="2.0.0" />
+        <constructor-arg index="2" name="operation" value="GetResult" />
+    </bean>
+    <bean id="getResultOperator" class="org.n52.iceland.request.operator.GenericRequestOperator">
+        <constructor-arg name="operation" ref="getResultOperation" />
         <constructor-arg name="defaultActive" value="true" />
         <constructor-arg name="requestType">
             <value type="java.lang.Class">org.n52.javaps.request.GetResultRequest</value>
@@ -111,11 +158,27 @@
             <bean class="org.n52.javaps.operator.validation.GetResultParameterValidator" />
         </constructor-arg>
     </bean>
+    <bean class="org.n52.javaps.handler.GetResultHandler"/>
+    <bean class="org.n52.javaps.coding.decode.xml.XmlStreamingOperationDecoder">
+        <constructor-arg name="operation" ref="getResultOperation"/>
+        <constructor-arg name="name">
+            <bean class="javax.xml.namespace.QName">
+                <constructor-arg name="namespaceURI" value="http://www.opengis.net/wps/2.0"/>
+                <constructor-arg name="localPart" value="GetResult"/>
+            </bean>
+        </constructor-arg>
+        <constructor-arg name="streamReaderRepository" ref="streamReaderRepository"/>
+    </bean>
 
-    <bean id="getStatusOperator" class="org.n52.javaps.operator.GenericRequestOperator">
-        <constructor-arg name="service" value="WPS" />
-        <constructor-arg name="version" value="2.0.0" />
-        <constructor-arg name="operation" value="GetStatus" />
+
+
+    <bean id="getStatusOperation" class="org.n52.iceland.coding.OperationKey">
+        <constructor-arg index="0" name="service" value="WPS" />
+        <constructor-arg index="1" name="version" value="2.0.0" />
+        <constructor-arg index="2" name="operation" value="GetStatus" />
+    </bean>
+    <bean id="getStatusOperator" class="org.n52.iceland.request.operator.GenericRequestOperator">
+        <constructor-arg name="operation" ref="getStatusOperation" />
         <constructor-arg name="defaultActive" value="true" />
         <constructor-arg name="requestType">
             <value type="java.lang.Class">org.n52.javaps.request.GetStatusRequest</value>
@@ -124,11 +187,27 @@
             <bean class="org.n52.javaps.operator.validation.GetStatusParameterValidator" />
         </constructor-arg>
     </bean>
+    <bean class="org.n52.javaps.handler.GetStatusHandler"/>
+    <bean class="org.n52.javaps.coding.decode.xml.XmlStreamingOperationDecoder">
+        <constructor-arg name="operation" ref="getStatusOperation"/>
+        <constructor-arg name="name">
+            <bean class="javax.xml.namespace.QName">
+                <constructor-arg name="namespaceURI" value="http://www.opengis.net/wps/2.0"/>
+                <constructor-arg name="localPart" value="GetStatus"/>
+            </bean>
+        </constructor-arg>
+        <constructor-arg name="streamReaderRepository" ref="streamReaderRepository"/>
+    </bean>
 
-    <bean id="dismissOperator" class="org.n52.javaps.operator.GenericRequestOperator">
-        <constructor-arg name="service" value="WPS" />
-        <constructor-arg name="version" value="2.0.0" />
-        <constructor-arg name="operation" value="Dismiss" />
+
+
+    <bean id="dismissOperation" class="org.n52.iceland.coding.OperationKey">
+        <constructor-arg index="0" name="service" value="WPS" />
+        <constructor-arg index="1" name="version" value="2.0.0" />
+        <constructor-arg index="2" name="operation" value="Dismiss" />
+    </bean>
+    <bean id="dismissOperator" class="org.n52.iceland.request.operator.GenericRequestOperator">
+        <constructor-arg name="operation" ref="dismissOperation" />
         <constructor-arg name="defaultActive" value="true" />
         <constructor-arg name="requestType">
             <value type="java.lang.Class">org.n52.javaps.request.DismissRequest</value>
@@ -137,5 +216,17 @@
             <bean class="org.n52.javaps.operator.validation.DismissParameterValidator" />
         </constructor-arg>
     </bean>
+    <bean class="org.n52.javaps.handler.DismissHandler"/>
+    <bean class="org.n52.javaps.coding.decode.xml.XmlStreamingOperationDecoder">
+        <constructor-arg name="operation" ref="dismissOperation"/>
+        <constructor-arg name="name">
+            <bean class="javax.xml.namespace.QName">
+                <constructor-arg name="namespaceURI" value="http://www.opengis.net/wps/2.0"/>
+                <constructor-arg name="localPart" value="Dismiss"/>
+            </bean>
+        </constructor-arg>
+        <constructor-arg name="streamReaderRepository" ref="streamReaderRepository"/>
+    </bean>
+
 
 </beans>

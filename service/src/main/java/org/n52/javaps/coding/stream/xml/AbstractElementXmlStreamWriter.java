@@ -18,6 +18,7 @@ package org.n52.javaps.coding.stream.xml;
 
 
 
+
 import static java.util.stream.Collectors.joining;
 
 import java.io.IOException;
@@ -27,7 +28,6 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.Writer;
 import java.net.URI;
-import java.nio.charset.Charset;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
@@ -38,9 +38,7 @@ import java.util.Set;
 import java.util.function.Function;
 
 import javax.xml.namespace.QName;
-import javax.xml.stream.XMLEventFactory;
 import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 
 import org.n52.iceland.ogc.gml.time.TimeInstant;
@@ -48,10 +46,10 @@ import org.n52.iceland.ogc.gml.time.TimePosition;
 import org.n52.iceland.util.DateTimeHelper;
 import org.n52.iceland.w3c.SchemaLocation;
 import org.n52.iceland.w3c.W3CConstants;
-import org.n52.javaps.coding.stream.xml.impl.XMLConstants;
 import org.n52.iceland.w3c.xlink.Link;
 import org.n52.iceland.w3c.xlink.Link.Actuate;
 import org.n52.iceland.w3c.xlink.Link.Show;
+import org.n52.javaps.coding.stream.xml.impl.XMLConstants;
 
 import com.google.common.base.Strings;
 import com.google.common.escape.Escaper;
@@ -59,15 +57,7 @@ import com.google.common.io.BaseEncoding;
 import com.google.common.io.ByteStreams;
 import com.google.common.xml.XmlEscapers;
 
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.joining;
-
-public abstract class AbstractElementXmlStreamWriter
+public abstract class AbstractElementXmlStreamWriter extends XmlFactories
         implements ElementXmlStreamWriter {
 
     private static final Escaper ESCAPER = XmlEscapers.xmlContentEscaper();
@@ -80,18 +70,6 @@ public abstract class AbstractElementXmlStreamWriter
 
     protected XmlStreamWritingContext context() {
         return this.context;
-    }
-
-    protected XMLOutputFactory outputFactory() {
-        return context().outputFactory();
-    }
-
-    protected XMLEventFactory eventFactory() {
-        return context().eventFactory();
-    }
-
-    public Charset getDocumentEncoding() {
-        return context().documentEncoding();
     }
 
     protected void attr(QName name, String value) throws XMLStreamException {

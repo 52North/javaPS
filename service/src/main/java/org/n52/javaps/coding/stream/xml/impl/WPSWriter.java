@@ -333,7 +333,7 @@ public class WPSWriter extends AbstractOWSWriter {
                     .isCharacterEncoding()) {
 
                     writeDataEncodingAttributes(format
-                            .withEncoding(getDocumentEncoding()));
+                            .withEncoding(documentEncoding()));
 
                     String encoding = format.getEncoding()
                             .orElse(Format.DEFAULT_ENCODING);

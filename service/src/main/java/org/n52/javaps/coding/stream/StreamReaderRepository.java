@@ -14,12 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.coding.stream.xml;
+package org.n52.javaps.coding.stream;
 
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 
 import javax.inject.Provider;
 
@@ -27,33 +26,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.n52.iceland.component.AbstractSimilarityKeyRepository;
 import org.n52.iceland.lifecycle.Constructable;
-import org.n52.javaps.coding.stream.StreamWriterKey;
 
 /**
  * TODO JavaDoc
  *
  * @author Christian Autermann
  */
-public class ElementXmlStreamWriterRepository extends AbstractSimilarityKeyRepository<StreamWriterKey, ElementXmlStreamWriter>
+public class StreamReaderRepository
+        extends AbstractSimilarityKeyRepository<StreamReaderKey, StreamReader<?>>
         implements Constructable {
 
-    private Collection<Provider<ElementXmlStreamWriter>> writers;
-
-    public ElementXmlStreamWriterRepository(Collection<Provider<ElementXmlStreamWriter>> writers) {
-        this.writers = writers;
-        if (writers != null) {
-            init();
-        }
-    }
-
-    public ElementXmlStreamWriterRepository() {
-        this(null);
-    }
-
-    @Autowired(required = false)
-    public void set(Collection<Provider<ElementXmlStreamWriter>> writers) {
-        this.writers = writers;
-    }
+    private Collection<Provider<StreamReader<?>>> writers;
 
     @Override
     public void init() {
@@ -61,15 +44,14 @@ public class ElementXmlStreamWriterRepository extends AbstractSimilarityKeyRepos
         setProducers(this.writers);
     }
 
-    public Optional<ElementXmlStreamWriter> get(StreamWriterKey key, XmlStreamWritingContext ctx) {
-        Optional<ElementXmlStreamWriter> writer = get(key);
-        writer.ifPresent(x -> x.setContext(ctx));
-        return writer;
+    @SuppressWarnings("unchecked")
+    public <T> Optional<StreamReader<T>> getReader(StreamReaderKey key) {
+        return get(key).map(x -> (StreamReader<T>) x);
     }
 
-    @Override
-    public Set<StreamWriterKey> keys() {
-        return super.keys();
+    @Autowired(required = false)
+    public void set(Collection<Provider<StreamReader<?>>> writers) {
+        this.writers = writers;
     }
 
 }

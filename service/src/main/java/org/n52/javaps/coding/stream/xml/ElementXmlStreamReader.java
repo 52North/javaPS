@@ -16,15 +16,19 @@
  */
 package org.n52.javaps.coding.stream.xml;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLStreamException;
+
+import org.n52.iceland.component.Component;
+import org.n52.javaps.coding.stream.StreamReaderKey;
 
 /**
  * TODO JavaDoc
+ *
  * @author Christian Autermann
  */
-public class XmlStreamReader {
+public interface ElementXmlStreamReader extends Component<StreamReaderKey> {
 
-    private static final Logger log = LoggerFactory.getLogger(XmlStreamReader.class);
-
+    Object readElement(XMLEventReader reader)
+            throws XMLStreamException;
 }
