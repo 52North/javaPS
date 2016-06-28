@@ -20,6 +20,7 @@ package org.n52.javaps.coding.stream.xml;
 import java.io.InputStream;
 import java.util.Set;
 
+import javax.inject.Inject;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.StartElement;
@@ -40,10 +41,11 @@ import org.n52.javaps.coding.stream.StreamReaderKey;
  */
 public class DocumentXmlStreamReader extends XmlFactories implements StreamReader<Object>, Component<StreamReaderKey> {
 
-    private final ElementXmlStreamReaderRepository delegate;
+    private final ElementXmlStreamReaderRepository repository;
 
+    @Inject
     public DocumentXmlStreamReader(ElementXmlStreamReaderRepository delegate) {
-        this.delegate = delegate;
+        this.repository = delegate;
     }
 
     private Object read(XMLEventReader reader)
@@ -67,7 +69,7 @@ public class DocumentXmlStreamReader extends XmlFactories implements StreamReade
             if (reader.peek().isStartElement()) {
                 StartElement elem = reader.peek().asStartElement();
                 XmlStreamReaderKey key = new XmlStreamReaderKey(elem.getName());
-                return this.delegate.get(key).orElseThrow(() -> new MissingStreamReaderException(key))
+                return this.repository.get(key).orElseThrow(() -> new MissingStreamReaderException(key))
                         .readElement(reader);
             } else {
                 reader.next();
@@ -78,7 +80,7 @@ public class DocumentXmlStreamReader extends XmlFactories implements StreamReade
 
     @Override
     public Set<StreamReaderKey> getKeys() {
-        return delegate.keys();
+        return repository.keys();
     }
 
     @Override

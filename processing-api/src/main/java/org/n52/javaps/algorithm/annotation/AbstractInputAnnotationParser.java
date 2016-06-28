@@ -27,9 +27,9 @@ import org.n52.javaps.ogc.wps.description.ProcessInputDescription;
  * TODO JavaDoc
  *
  * @author Tom Kunicki, Christian Autermann
- * @param <A>
- * @param <M>
- * @param <D>
+ * @param <A> the annotation type
+ * @param <M> the accessible member type
+ * @param <D> the description type
  */
 abstract class AbstractInputAnnotationParser<A extends Annotation, M extends AccessibleObject & Member, D extends ProcessInputDescription, B extends AbstractInputBinding<M, D>>
         extends AbstractDataAnnotationParser<A, M, D, B> {

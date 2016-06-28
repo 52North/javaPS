@@ -30,10 +30,10 @@ import java.util.function.Function;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.n52.javaps.io.BasicXMLTypeFactory;
-import org.n52.javaps.io.data.ILiteralData;
 import org.n52.iceland.ogc.ows.OwsAllowedValues;
 import org.n52.iceland.ogc.ows.OwsValue;
+import org.n52.javaps.io.BasicXMLTypeFactory;
+import org.n52.javaps.io.data.ILiteralData;
 import org.n52.javaps.ogc.wps.description.LiteralDataDomainImpl;
 import org.n52.javaps.ogc.wps.description.LiteralInputDescription;
 import org.n52.javaps.ogc.wps.description.LiteralInputDescription.Builder;
@@ -43,8 +43,8 @@ import org.n52.javaps.ogc.wps.description.LiteralInputDescriptionImpl;
  * TODO JavaDoc
  *
  * @author Christian Autermann
- * @param <M>
- * @param <B>
+ * @param <M> the accessible member type
+ * @param <B> the binding type
  */
 class LiteralInputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractInputBinding<M, LiteralInputDescription>>
        extends AbstractInputAnnotationParser<LiteralInput, M, LiteralInputDescription, B> {

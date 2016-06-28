@@ -38,8 +38,8 @@ import org.n52.javaps.ogc.wps.description.ProcessInputDescription;
  * TODO JavaDoc
  *
  * @author Tom Kunicki, Christian Autermann
- * @param <M>
- * @param <D>
+ * @param <M> the accessible member type
+ * @param <D> the description type
  */
 abstract class AbstractInputBinding<M extends AccessibleObject & Member, D extends ProcessInputDescription> extends AbstractDataBinding<M, D> {
 

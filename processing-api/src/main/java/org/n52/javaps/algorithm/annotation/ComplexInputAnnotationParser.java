@@ -33,8 +33,8 @@ import org.n52.javaps.ogc.wps.description.ComplexInputDescriptionImpl;
  * TODO JavaDoc
  *
  * @author Christian Autermann
- * @param <M>
- * @param <B>
+ * @param <M> the accessible member type
+ * @param <B> the binding type
  */
 class ComplexInputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractInputBinding<M, ComplexInputDescription>>
         extends AbstractInputAnnotationParser<ComplexInput, M, ComplexInputDescription, B> {

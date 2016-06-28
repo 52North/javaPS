@@ -23,9 +23,9 @@ import java.lang.reflect.Member;
 /**
  *
  * @author tkunicki
- * @param <A>
- * @param <M>
- * @param <B>
+ * @param <A> the annotation type
+ * @param <M> the accessible member
+ * @param <B> the binding type
  */
 interface AnnotationParser<A extends Annotation, M extends AccessibleObject & Member, B extends AnnotationBinding<M>> {
 

@@ -25,10 +25,10 @@ import org.n52.javaps.ogc.wps.description.ProcessOutputDescription;
 /**
  *
  * @author Tom Kunicki, Christian Autermann
- * @param <A>
- * @param <M>
- * @param <D>
- * @param <B>
+ * @param <A> the annotation type
+ * @param <M> the accessible member type
+ * @param <D> the description type
+ * @param <B> the binding type
  */
 abstract class AbstractOutputAnnotationParser<A extends Annotation, M extends AccessibleObject & Member, D extends ProcessOutputDescription, B extends AbstractOutputBinding<M, D>>
         extends AbstractDataAnnotationParser<A, M, D, B> {

@@ -69,7 +69,7 @@ public abstract class AbstractElementXmlStreamReader extends XmlFactories
      * @param reader the reader
      * @param writer the writer
      *
-     * @throws XMLStreamException
+     * @throws XMLStreamException if the copy operation fails
      */
     protected void copy(XMLEventReader reader, XMLEventWriter writer)
             throws XMLStreamException {

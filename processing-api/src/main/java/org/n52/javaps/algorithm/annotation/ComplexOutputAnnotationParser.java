@@ -33,8 +33,8 @@ import org.n52.javaps.ogc.wps.description.ComplexOutputDescriptionImpl;
  * TODO JavaDoc
  *
  * @author Christian Autermann
- * @param <M>
- * @param <B>
+ * @param <M> the accessible member type
+ * @param <B> the binding type
  */
 class ComplexOutputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractOutputBinding<M, ComplexOutputDescription>>
         extends AbstractOutputAnnotationParser<ComplexOutput, M, ComplexOutputDescription, B> {

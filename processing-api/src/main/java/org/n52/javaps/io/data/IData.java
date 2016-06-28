@@ -24,7 +24,8 @@ public interface IData extends Serializable {
     /**
      * Inheriting classes shall indicate which class they support. For special
      * cases like Grass, it is recommended to Create your own wrapper class, for
-     * e.g. a File in the filesystem.
+     * e.g. a File in the file system.
+     * @return the supported class
      */
     Class<?> getSupportedClass();
 }

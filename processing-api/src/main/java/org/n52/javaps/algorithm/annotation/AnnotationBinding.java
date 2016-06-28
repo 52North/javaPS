@@ -26,7 +26,7 @@ import java.util.Objects;
 /**
  *
  * @author tkunicki
- * @param <M>
+ * @param <M> the accessible member type
  */
 abstract class AnnotationBinding<M extends AccessibleObject & Member> {
 

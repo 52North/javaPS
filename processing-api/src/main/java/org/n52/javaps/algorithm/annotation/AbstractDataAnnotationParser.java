@@ -28,10 +28,10 @@ import org.n52.javaps.ogc.wps.description.DataDescription;
  * TODO JavaDoc
  *
  * @author Tom Kunicki, Christian Autermann
- * @param <A>
- * @param <M>
- * @param <D>
- * @param <B>
+ * @param <A> the annotation type
+ * @param <M> the accessible member type
+ * @param <D> the description type
+ * @param <B> the binding type
  */
 abstract class AbstractDataAnnotationParser<A extends Annotation, M extends AccessibleObject & Member, D extends DataDescription, B extends AbstractDataBinding<M, D>>
         implements AnnotationParser<A, M, B> {
