@@ -24,17 +24,20 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
+
+import javax.inject.Inject;
 
 import org.n52.iceland.ds.GenericOperationHandler;
 import org.n52.iceland.ds.OperationHandlerKey;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
+import org.n52.iceland.i18n.LocaleHelper;
 import org.n52.iceland.ogc.ows.OWSConstants;
 import org.n52.iceland.ogc.ows.OWSConstants.CapabilitiesSection;
 import org.n52.iceland.ogc.ows.OWSConstants.GetCapabilitiesParams;
 import org.n52.iceland.ogc.ows.OwsAllowedValues;
-import org.n52.iceland.ogc.ows.OwsAnyValue;
 import org.n52.iceland.ogc.ows.OwsCapabilities;
 import org.n52.iceland.ogc.ows.OwsDomain;
 import org.n52.iceland.ogc.ows.OwsNoValues;
@@ -44,6 +47,7 @@ import org.n52.iceland.ogc.ows.OwsPossibleValues;
 import org.n52.iceland.ogc.ows.OwsServiceIdentification;
 import org.n52.iceland.ogc.ows.OwsServiceProvider;
 import org.n52.iceland.ogc.ows.OwsValue;
+import org.n52.iceland.ogc.ows.ServiceMetadataRepository;
 import org.n52.iceland.request.GetCapabilitiesRequest;
 import org.n52.iceland.request.operator.RequestOperatorKey;
 import org.n52.iceland.request.operator.RequestOperatorRepository;
@@ -51,7 +55,6 @@ import org.n52.iceland.response.GetCapabilitiesResponse;
 import org.n52.iceland.service.operator.ServiceOperatorKey;
 import org.n52.iceland.service.operator.ServiceOperatorRepository;
 import org.n52.iceland.util.Comparables;
-import org.n52.iceland.util.LocalizedProducer;
 import org.n52.iceland.util.http.MediaTypes;
 import org.n52.javaps.Engine;
 import org.n52.javaps.ogc.wps.ProcessOffering;
@@ -71,12 +74,31 @@ public class GetCapabilitiesHandler extends AbstractHandler
         implements GenericOperationHandler<GetCapabilitiesRequest, GetCapabilitiesResponse> {
     private static final OperationHandlerKey KEY
             = new OperationHandlerKey(WPSConstants.SERVICE, WPSConstants.Operations.GetCapabilities);
-
-    private LocalizedProducer<OwsServiceIdentification> serviceIdentificationFactory;
-    private LocalizedProducer<OwsServiceProvider> serviceProviderFactory;
+    private ServiceMetadataRepository serviceMetadataRepository;
     private RequestOperatorRepository operatorRepository;
     private ServiceOperatorRepository serviceOperatorRepository;
     private Engine engine;
+
+
+    @Inject
+    public void setServiceMetadataRepository(ServiceMetadataRepository serviceMetadataRepository) {
+        this.serviceMetadataRepository = serviceMetadataRepository;
+    }
+
+    @Inject
+    public void setOperatorRepository(RequestOperatorRepository operatorRepository) {
+        this.operatorRepository = operatorRepository;
+    }
+
+    @Inject
+    public void setServiceOperatorRepository(ServiceOperatorRepository serviceOperatorRepository) {
+        this.serviceOperatorRepository = serviceOperatorRepository;
+    }
+
+    @Inject
+    public void setEngine(Engine engine) {
+        this.engine = engine;
+    }
 
     @Override
     public String getOperationName() {
@@ -104,17 +126,18 @@ public class GetCapabilitiesHandler extends AbstractHandler
             throws OwsExceptionReport {
 
         Set<CapabilitiesSection> sections = getRequestedSections(request);
+        Locale requestedLocale = request.getRequestedLocale();
 
         String updateSequence = null;
 
         OwsServiceIdentification serviceIdentification = null;
         if (sections.contains(CapabilitiesSection.ServiceIdentification)) {
-            serviceIdentification = getServiceIdentification();
+            serviceIdentification = getServiceIdentification(service, requestedLocale);
         }
 
         OwsServiceProvider serviceProvider = null;
         if (sections.contains(CapabilitiesSection.ServiceProvider)) {
-            serviceProvider = getServiceProvider();
+            serviceProvider = getServiceProvider(service, requestedLocale);
         }
 
         OwsOperationsMetadata operationsMetadata = null;
@@ -124,8 +147,7 @@ public class GetCapabilitiesHandler extends AbstractHandler
 
         Set<String> languages = null;
         if (sections.contains(CapabilitiesSection.Languages)) {
-            // FIXME how to handle languages?
-            languages = Collections.emptySet();
+            languages = getLanguages();
         }
 
         ProcessOfferings processOfferings = null;
@@ -171,12 +193,12 @@ public class GetCapabilitiesHandler extends AbstractHandler
         return new OwsAllowedValues(supportedVersions.stream().map(OwsValue::new));
     }
 
-    private OwsServiceProvider getServiceProvider() {
-        return serviceProviderFactory.get();
+    private OwsServiceProvider getServiceProvider(String service, Locale locale) {
+        return this.serviceMetadataRepository.getServiceProviderFactory(service).get(locale);
     }
 
-    private OwsServiceIdentification getServiceIdentification() {
-        return serviceIdentificationFactory.get();
+    private OwsServiceIdentification getServiceIdentification(String service, Locale locale) {
+        return this.serviceMetadataRepository.getServiceIdentificationFactory(service).get(locale);
     }
 
     private Set<CapabilitiesSection> getRequestedSections(GetCapabilitiesRequest request) {
@@ -221,8 +243,13 @@ public class GetCapabilitiesHandler extends AbstractHandler
     }
 
     private OwsDomain getAcceptLanguagesDomain() {
-        OwsPossibleValues possibleValues = OwsAnyValue.instance();
+        Set<Locale> availableLocales = serviceMetadataRepository.getAvailableLocales();
+        OwsPossibleValues possibleValues = new OwsAllowedValues(availableLocales.stream().map(LocaleHelper::toString).map(OwsValue::new));
         return new OwsDomain(GetCapabilitiesParams.AcceptLanguages, possibleValues);
     }
 
+    private Set<String> getLanguages() {
+        Set<Locale> availableLocales = serviceMetadataRepository.getAvailableLocales();
+        return availableLocales.stream().map(LocaleHelper::toString).collect(toSet());
+    }
 }
