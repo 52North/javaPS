@@ -45,7 +45,7 @@ public class GetStatusHandler extends AbstractJobHandler
     }
 
     @Override
-    public GetStatusResponse handler(GetStatusRequest request)
+    public GetStatusResponse handle(GetStatusRequest request)
             throws OwsExceptionReport {
         String service = request.getService();
         String version = request.getVersion();

@@ -45,7 +45,7 @@ public class DismissHandler extends AbstractJobHandler
     }
 
     @Override
-    public DismissResponse handler(DismissRequest request)
+    public DismissResponse handle(DismissRequest request)
             throws OwsExceptionReport {
         JobId jobId = request.getJobId();
         StatusInfo status = getEngine().dismiss(jobId);

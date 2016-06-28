@@ -16,6 +16,8 @@
  */
 package org.n52.javaps;
 
+import static java.util.stream.Collectors.toSet;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -40,6 +42,13 @@ public interface Engine {
     Set<OwsCode> getProcessIdentifiers();
 
     Optional<ProcessDescription> getProcessDescription(OwsCode identifier);
+
+    default Set<ProcessDescription> getProcessDescriptions() {
+        return getProcessIdentifiers().stream()
+                .map(this::getProcessDescription)
+                .map(Optional::get)
+                .collect(toSet());
+    }
 
     StatusInfo dismiss(JobId identifier);
 

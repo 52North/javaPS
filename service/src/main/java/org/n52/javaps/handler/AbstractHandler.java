@@ -145,23 +145,23 @@ public abstract class AbstractHandler implements OperationHandler {
     @Override
     public OwsOperation getOperationsMetadata(String service, String version)
             throws OwsExceptionReport {
-         return new OwsOperation(
-                 getOperationName(),
-                 getOperationParameters(),
-                 getOperationConstraints(),
-                 getOperationMetadata(),
-                 getDCP(service, version));
+        String name = getOperationName();
+        Set<OwsDomain> parameters = getOperationParameters(service, version);
+        Set<OwsDomain> constraints = getOperationConstraints(service, version);
+        Set<OwsMetadata> metadata = getOperationMetadata(service, version);
+        Set<OwsDCP> dcp = getDCP(service, version);
+         return new OwsOperation(name, parameters, constraints, metadata, dcp);
     }
 
-    protected  Set<OwsDomain> getOperationParameters() {
+    protected  Set<OwsDomain> getOperationParameters(String service, String version) {
         return null;
     }
 
-    protected Set<OwsDomain> getOperationConstraints() {
+    protected Set<OwsDomain> getOperationConstraints(String service, String version) {
         return null;
     }
 
-    protected Set<OwsMetadata> getOperationMetadata() {
+    protected Set<OwsMetadata> getOperationMetadata(String service, String version) {
         return null;
     }
 

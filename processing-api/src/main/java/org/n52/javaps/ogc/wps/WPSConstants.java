@@ -32,6 +32,7 @@ import com.google.common.collect.ImmutableSet;
  */
 public interface WPSConstants {
 
+    @Deprecated
     String NS_WPS_PREFIX = "wps";
 
     /**
@@ -48,18 +49,24 @@ public interface WPSConstants {
      * Constant 'inline' for response mode, which means that results are
      * contained inline the ProcessOutputs element of an execute response
      * document.
+     * @deprecated see {@link ResponseMode}
      */
+    @Deprecated
     String RESPONSE_MODE_INLINE = "inline";
 
     /**
      * Constant 'raw' for response mode, which means that result values of
      * an execute response are returned directly, i.e. not wrapped in an xml response
+     * @deprecated see {@link ResponseMode}
      */
+    @Deprecated
     String RESPONSE_MODE_RAW = "raw";
 
     /**
      * Array of constants for response mode.
+     * @deprecated see {@link ResponseMode}
      */
+    @Deprecated
     Set<String> RESPONSE_MODES = ImmutableSet.of(RESPONSE_MODE_INLINE,
                                                  RESPONSE_MODE_RAW);
 
@@ -74,16 +81,5 @@ public interface WPSConstants {
         GetResult,
         GetStatus,
         Dismiss;
-    }
-
-    /**
-     * Enum with names of Capabilities sections supported by all versions.
-     */
-    enum CapabilitiesSections {
-        ServiceIdentification,
-        ServiceProvider,
-        OperationsMetadata,
-        Contents,
-        All;
     }
 }

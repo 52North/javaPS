@@ -43,7 +43,7 @@ public abstract class AbstractJobHandler extends AbstractEngineHandler {
     }
 
     @Override
-    protected Set<OwsDomain> getOperationParameters() {
+    protected Set<OwsDomain> getOperationParameters(String service, String version) {
         OwsPossibleValues allowedValues;
         if (discloseJobIds) {
             allowedValues = new OwsAllowedValues(getEngine().getJobIdentifiers().stream().map(JobId::getValue).map(OwsValue::new));

@@ -56,7 +56,7 @@ public class ExecuteHandler extends AbstractEngineHandler
     }
 
     @Override
-    public ExecuteResponse handler(ExecuteRequest request)
+    public ExecuteResponse handle(ExecuteRequest request)
             throws OwsExceptionReport {
         // TODO response mode
 
@@ -94,7 +94,7 @@ public class ExecuteHandler extends AbstractEngineHandler
     }
 
     @Override
-    protected Set<OwsDomain> getOperationParameters() {
+    protected Set<OwsDomain> getOperationParameters(String service, String version) {
         Set<OwsValue> algorithmIdentifiers = getEngine().getProcessIdentifiers().stream().map(OwsCode::getValue).map(OwsValue::new).collect(toSet());
         OwsDomain identifierDomain = new OwsDomain(IDENTIFIER, new OwsAllowedValues(algorithmIdentifiers));
         return Collections.singleton(identifierDomain);

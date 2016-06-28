@@ -47,7 +47,7 @@ public class GetResultHandler extends AbstractJobHandler
     }
 
     @Override
-    public GetResultResponse handler(GetResultRequest request)
+    public GetResultResponse handle(GetResultRequest request)
             throws OwsExceptionReport {
 
         String service = request.getService();

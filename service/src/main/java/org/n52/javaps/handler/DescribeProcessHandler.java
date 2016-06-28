@@ -55,7 +55,7 @@ public class DescribeProcessHandler extends AbstractEngineHandler
 
 
     @Override
-    public DescribeProcessResponse handler(DescribeProcessRequest request)
+    public DescribeProcessResponse handle(DescribeProcessRequest request)
             throws OwsExceptionReport {
 
         Set<ProcessOffering> offerings = request.getProcessIdentifier().stream()
@@ -80,7 +80,7 @@ public class DescribeProcessHandler extends AbstractEngineHandler
     }
 
     @Override
-    protected Set<OwsDomain> getOperationParameters() {
+    protected Set<OwsDomain> getOperationParameters(String service, String version) {
         Stream<OwsValue> specialIdentifiers = Stream.of(new OwsValue(DescribeProcessRequest.ALL_KEYWORD));
         Stream<OwsValue> algorithmIdentifiers = getEngine().getProcessIdentifiers().stream().map(OwsCode::getValue).map(OwsValue::new);
         OwsDomain identifierDomain = new OwsDomain(IDENTIFIER, new OwsAllowedValues(Stream.concat(specialIdentifiers, algorithmIdentifiers).collect(toSet())));
