@@ -73,7 +73,13 @@
     </bean>
     <bean class="org.n52.javaps.handler.GetCapabilitiesHandler"/>
     <bean class="org.n52.javaps.coding.decode.xml.XmlStreamingOperationDecoder">
-        <constructor-arg name="operation" ref="getCapabilitiesOperation"/>
+        <constructor-arg name="operation">
+            <bean class="org.n52.iceland.coding.OperationKey">
+                <constructor-arg name="service" value="WPS" />
+                <constructor-arg name="version"><null/></constructor-arg>
+                <constructor-arg name="operation" value="GetCapabilities" />
+            </bean>
+        </constructor-arg>
         <constructor-arg name="name">
             <bean class="javax.xml.namespace.QName">
                 <constructor-arg name="namespaceURI" value="http://www.opengis.net/wps/2.0"/>
