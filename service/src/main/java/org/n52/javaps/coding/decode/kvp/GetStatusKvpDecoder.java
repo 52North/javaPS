@@ -14,25 +14,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.request;
+package org.n52.javaps.coding.decode.kvp;
 
-import org.n52.iceland.exception.ows.OwsExceptionReport;
+import java.util.Collections;
+import java.util.Set;
+
+import org.n52.iceland.coding.decode.DecoderKey;
+import org.n52.javaps.ogc.wps.WPS200Constants;
 import org.n52.javaps.ogc.wps.WPSConstants;
-import org.n52.javaps.response.DismissResponse;
+import org.n52.javaps.request.GetStatusRequest;
+
 
 /**
+ * TODO JavaDoc
+ *
  * @author Christian Autermann
  */
-public class DismissRequest extends AbstractJobIdRequest<DismissResponse> {
+public class GetStatusKvpDecoder extends AbstractJobIdKvpDecoder<GetStatusRequest> {
+    private static final DecoderKey KEY
+            = createKey(WPSConstants.SERVICE, WPS200Constants.VERSION, WPSConstants.Operations.GetStatus);
 
     @Override
-    public DismissResponse getResponse()
-            throws OwsExceptionReport {
-        return (DismissResponse) new DismissResponse().set(this);
+    protected GetStatusRequest createRequest() {
+        return new GetStatusRequest();
     }
 
     @Override
-    public String getOperationName() {
-        return WPSConstants.Operations.Dismiss.name();
+    public Set<DecoderKey> getKeys() {
+        return Collections.singleton(KEY);
     }
+
 }

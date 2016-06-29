@@ -16,23 +16,30 @@
  */
 package org.n52.javaps.request;
 
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.javaps.ogc.wps.WPSConstants;
-import org.n52.javaps.response.DismissResponse;
+import org.n52.iceland.request.AbstractServiceRequest;
+import org.n52.iceland.response.AbstractServiceResponse;
+import org.n52.javaps.ogc.wps.JobId;
 
 /**
+ * TODO JavaDoc
+ *
  * @author Christian Autermann
  */
-public class DismissRequest extends AbstractJobIdRequest<DismissResponse> {
+public abstract class AbstractJobIdRequest<T extends AbstractServiceResponse> extends AbstractServiceRequest<T> {
 
-    @Override
-    public DismissResponse getResponse()
-            throws OwsExceptionReport {
-        return (DismissResponse) new DismissResponse().set(this);
+    private JobId jobId;
+
+    public JobId getJobId() {
+        return jobId;
     }
 
-    @Override
-    public String getOperationName() {
-        return WPSConstants.Operations.Dismiss.name();
+    public void setJobId(JobId jobId) {
+        this.jobId = jobId;
+    }
+
+    public void setJobId(String jobId) {
+        if (jobId != null) {
+            setJobId(new JobId(jobId));
+        }
     }
 }

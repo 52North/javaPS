@@ -18,17 +18,13 @@ package org.n52.javaps.request;
 
 
 import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.request.AbstractServiceRequest;
-import org.n52.javaps.ogc.wps.JobId;
 import org.n52.javaps.ogc.wps.WPSConstants;
 import org.n52.javaps.response.GetResultResponse;
 
 /**
  * @author Christian Autermann
  */
-public class GetResultRequest extends AbstractServiceRequest<GetResultResponse> {
-
-    private JobId jobId;
+public class GetResultRequest extends AbstractJobIdRequest<GetResultResponse> {
 
     @Override
     public GetResultResponse getResponse()
@@ -39,14 +35,6 @@ public class GetResultRequest extends AbstractServiceRequest<GetResultResponse> 
     @Override
     public String getOperationName() {
         return WPSConstants.Operations.GetResult.toString();
-    }
-
-    public JobId getJobId() {
-        return jobId;
-    }
-
-    public void setJobId(JobId jobId) {
-        this.jobId = jobId;
     }
 
 }

@@ -19,8 +19,8 @@ package org.n52.javaps.coding.decode.kvp;
 import java.util.Collections;
 import java.util.Set;
 
+import org.n52.iceland.binding.kvp.AbstractKvpDecoder;
 import org.n52.iceland.coding.decode.DecoderKey;
-import org.n52.iceland.exception.ows.InvalidParameterValueException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.ogc.ows.OWSConstants;
 import org.n52.iceland.request.GetCapabilitiesRequest;
@@ -33,8 +33,8 @@ import com.google.common.collect.Sets;
 public class GetCapabilitiesKvpDecoder extends AbstractKvpDecoder<GetCapabilitiesRequest> {
 
     private static final Set<DecoderKey> KEYS = Sets.newHashSet(
-            createKey(WPSConstants.SERVICE, null, OWSConstants.Operations.GetCapabilities.toString()),
-            createKey(WPSConstants.SERVICE, WPS200Constants.VERSION, OWSConstants.Operations.GetCapabilities.toString()));
+            createKey(WPSConstants.SERVICE, null, OWSConstants.Operations.GetCapabilities),
+            createKey(WPSConstants.SERVICE, WPS200Constants.VERSION, OWSConstants.Operations.GetCapabilities));
 
     @Override
     public Set<DecoderKey> getKeys() {
@@ -71,8 +71,7 @@ public class GetCapabilitiesKvpDecoder extends AbstractKvpDecoder<GetCapabilitie
                 request.setAcceptLanguages(KvpHelper.checkParameterMultipleValues(value, name));
                 break;
             default:
-                throw new InvalidParameterValueException(name, value)
-                        .withMessage("The parameter '%s' is not supported.", name);
+                throw unsupportedParameter(name, value);
         }
     }
 

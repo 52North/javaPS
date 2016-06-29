@@ -16,35 +16,21 @@
  */
 package org.n52.javaps.coding.decode.kvp;
 
-import java.util.Collections;
-import java.util.Set;
-
 import org.n52.iceland.binding.kvp.AbstractKvpDecoder;
-import org.n52.iceland.coding.decode.DecoderKey;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.util.KvpHelper;
-import org.n52.javaps.ogc.wps.WPS200Constants;
-import org.n52.javaps.ogc.wps.WPSConstants;
-import org.n52.javaps.request.DescribeProcessRequest;
+import org.n52.javaps.ogc.wps.JobId;
+import org.n52.javaps.request.AbstractJobIdRequest;
 
-public class DescribeProcessKvpDecoder extends AbstractKvpDecoder<DescribeProcessRequest> {
-    private static final DecoderKey KEY
-            = createKey(WPSConstants.SERVICE, WPS200Constants.VERSION, WPSConstants.Operations.DescribeProcess);
-
-    @Override
-    public Set<DecoderKey> getKeys() {
-        return Collections.singleton(KEY);
-    }
+/**
+ * TODO JavaDoc
+ *
+ * @author Christian Autermann
+ */
+public abstract class AbstractJobIdKvpDecoder<T extends AbstractJobIdRequest<?>> extends AbstractKvpDecoder<T> {
 
     @Override
-    protected DescribeProcessRequest createRequest() {
-        return new DescribeProcessRequest();
-    }
-
-    @Override
-    protected void decodeParameter(DescribeProcessRequest request, String name,
-                                   String value)
-            throws OwsExceptionReport {
+    protected void decodeParameter(T request, String name, String value) throws OwsExceptionReport {
         switch (name.toLowerCase()) {
             case "service":
                 request.setService(KvpHelper.checkParameterSingleValue(value, name));
@@ -55,12 +41,11 @@ public class DescribeProcessKvpDecoder extends AbstractKvpDecoder<DescribeProces
             case "request":
                 KvpHelper.checkParameterSingleValue(value, name);
                 break;
-            case "identifier":
-                KvpHelper.checkParameterMultipleValues(value, name).stream().forEach(request::addProcessIdentifier);
+            case "jobid":
+                request.setJobId(new JobId(KvpHelper.checkParameterSingleValue(value, name)));
                 break;
             default:
                 throw unsupportedParameter(name, value);
         }
     }
-
 }
