@@ -30,13 +30,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
 
+import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.iceland.util.Optionals;
 import org.n52.javaps.algorithm.annotation.Algorithm;
 import org.n52.javaps.algorithm.annotation.AnnotatedAlgorithm;
 import org.n52.javaps.io.GeneratorRepository;
 import org.n52.javaps.io.ParserRepository;
-import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.javaps.ogc.wps.description.ProcessDescription;
-import org.n52.iceland.util.Optionals;
 
 
 /**

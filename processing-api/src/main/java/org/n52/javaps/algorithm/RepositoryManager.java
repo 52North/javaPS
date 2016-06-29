@@ -18,7 +18,6 @@ package org.n52.javaps.algorithm;
 
 import static java.util.stream.Collectors.toList;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,13 +29,15 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.stream.Stream;
 
+import javax.security.auth.Destroyable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.n52.iceland.lifecycle.Constructable;
-import org.n52.iceland.lifecycle.Destroyable;
 import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.javaps.ogc.wps.description.ProcessDescription;
+
 
 /**
  * @author Bastian Schaeffer, University of Muenster
@@ -75,13 +76,8 @@ public class RepositoryManager implements Constructable, Destroyable {
         getRepositories().forEach(AlgorithmRepository::destroy);
     }
 
-    private List<String> getRepositoryNames() {
-
-        List<String> repositoryNames = new ArrayList<>();
-
-        // TODO
-
-        return repositoryNames;
+    private Set<String> getRepositoryNames() {
+        return this.repositories.keySet();
     }
 
     private synchronized void loadAllRepositories() {
@@ -94,7 +90,6 @@ public class RepositoryManager implements Constructable, Destroyable {
 
     private void loadRepository(String repositoryName, String repositoryClassName) {
         LOG.debug("Loading repository: {}", repositoryName);
-
         // if (repository.isActive() == false) {
         // LOGGER.warn("Repository {} not active. Will not load it.",
         // repositoryName);
@@ -120,13 +115,12 @@ public class RepositoryManager implements Constructable, Destroyable {
     private Stream<AlgorithmRepository> getRepositories() {
         return getRepositoryNames().stream().map(repositories::get);
     }
-
     /**
      * Allows to reInitialize the Repositories
      *
      */
     protected void reloadRepositories() {
-        loadAllRepositories();
+//        loadAllRepositories();
     }
 
     /**

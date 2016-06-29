@@ -14,27 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.ogc.wps;
+package org.n52.javaps.annotation;
 
-import java.util.Optional;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * TODO JavaDoc
+ * Interface
  *
- * @author Christian Autermann
+ * @author Benjamin Pross
+ *
  */
-public enum ExecutionMode {
-    SYNC,
-    ASYNC,
-    AUTO;
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ ElementType.TYPE })
+public @interface Properties {
 
-    public static Optional<ExecutionMode> fromString(String string) {
-        for (ExecutionMode t : values()) {
-            if (t.name().equalsIgnoreCase(string)) {
-                return Optional.of(t);
-            }
-        }
-        return Optional.empty();
-    }
+    String defaultPropertyFileName() default "";
+
+    String propertyFileName() default "";
 
 }

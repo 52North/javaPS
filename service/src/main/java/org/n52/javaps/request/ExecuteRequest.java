@@ -22,7 +22,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.iceland.request.AbstractServiceRequest;
 import org.n52.javaps.ogc.wps.ExecutionMode;
@@ -54,8 +53,7 @@ public class ExecuteRequest extends AbstractServiceRequest<ExecuteResponse> {
     }
 
     @Override
-    public ExecuteResponse getResponse()
-            throws OwsExceptionReport {
+    public ExecuteResponse getResponse() {
         return (ExecuteResponse) new ExecuteResponse().set(this);
     }
 

@@ -14,27 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.ogc.wps;
+package org.n52.javaps.io.parser;
 
-import java.util.Optional;
+import java.util.Set;
 
-/**
- * TODO JavaDoc
- *
- * @author Christian Autermann
- */
-public enum ExecutionMode {
-    SYNC,
-    ASYNC,
-    AUTO;
+import org.junit.Test;
 
-    public static Optional<ExecutionMode> fromString(String string) {
-        for (ExecutionMode t : values()) {
-            if (t.name().equalsIgnoreCase(string)) {
-                return Optional.of(t);
-            }
-        }
-        return Optional.empty();
+import org.n52.javaps.ogc.wps.Format;
+
+public class ParserTest {
+
+    @Test
+    public void testFormats(){
+
+        TestParser testParser = new TestParser();
+
+        Set<Format> formats = testParser.getSupportedFormats();
+
+        assert(formats != null);
+
     }
 
 }

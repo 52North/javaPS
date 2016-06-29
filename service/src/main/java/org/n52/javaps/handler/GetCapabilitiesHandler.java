@@ -79,7 +79,6 @@ public class GetCapabilitiesHandler extends AbstractHandler
     private ServiceOperatorRepository serviceOperatorRepository;
     private Engine engine;
 
-
     @Inject
     public void setServiceMetadataRepository(ServiceMetadataRepository serviceMetadataRepository) {
         this.serviceMetadataRepository = serviceMetadataRepository;

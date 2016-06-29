@@ -17,12 +17,14 @@
 package org.n52.javaps.io;
 
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import org.n52.javaps.annotation.ConfigurableClass;
 import org.n52.javaps.io.data.IComplexData;
 import org.n52.javaps.ogc.wps.Format;
+
 
 /**
  * Extending subclasses of AbstractGenerator shall provide functionality to
@@ -32,9 +34,9 @@ import org.n52.javaps.ogc.wps.Format;
  * @author Matthias Mueller
  *
  */
-public abstract class AbstractIOHandler implements IOHandler {
-    private Set<Class<? extends IComplexData>> supportedBindings = new HashSet<>();
-    private Set<Format> supportedFormats = new HashSet<>();
+public abstract class AbstractIOHandler extends ConfigurableClass implements IOHandler {
+    private Set<Class<? extends IComplexData>> supportedBindings = new LinkedHashSet<>();
+    private Set<Format> supportedFormats = new LinkedHashSet<>();
 
     @Override
     public Set<Format> getSupportedFormats() {
@@ -46,11 +48,6 @@ public abstract class AbstractIOHandler implements IOHandler {
     }
 
     @Override
-    public boolean isSupportedFormat(Format format) {
-        return getSupportedFormats().stream().anyMatch(f -> f.isCompatible(format));
-    }
-
-    @Override
     public Set<Class<? extends IComplexData>> getSupportedBindings() {
         return Collections.unmodifiableSet(this.supportedBindings);
     }
@@ -59,9 +56,12 @@ public abstract class AbstractIOHandler implements IOHandler {
         this.supportedBindings = Objects.requireNonNull(supportedBindings);
     }
 
-    @Override
-    public boolean isSupportedBinding(Class<? extends IComplexData> binding) {
-        return getSupportedBindings().stream()
-                .anyMatch(binding::isAssignableFrom);
+    public AbstractIOHandler() {
+        getProperties().path("formats").forEach(format -> {
+            String mimeType = format.path("mimeType").textValue();
+            String schema = format.path("schema").textValue();
+            String encoding = format.path("encoding").textValue();
+            supportedFormats.add(new Format(mimeType, encoding, schema));
+        });
     }
 }

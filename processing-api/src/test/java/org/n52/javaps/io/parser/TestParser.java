@@ -14,36 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.io;
+package org.n52.javaps.io.parser;
 
-import java.util.Set;
+import java.io.InputStream;
 
+import org.n52.javaps.annotation.Properties;
 import org.n52.javaps.io.data.IComplexData;
 import org.n52.javaps.ogc.wps.Format;
 
-public interface IOHandler {
+@Properties(defaultPropertyFileName="testparser.json")
+public class TestParser extends AbstractParser {
 
-    String DEFAULT_ENCODING = "UTF-8";
-
-    String ENCODING_BASE64 = "base64";
-
-    // String DEFAULT_MIMETYPE = "text/xml";
-
-    String MIME_TYPE_ZIPPED_SHP = "application/x-zipped-shp";
-
-
-    default boolean isSupportedFormat(Format format) {
-        return getSupportedFormats().stream()
-                .anyMatch(f -> f.isCompatible(format));
+    @Override
+    public IComplexData parse(InputStream input, Format format) {
+        return null;
     }
-
-    default boolean isSupportedBinding(Class<? extends IComplexData> binding) {
-        return getSupportedBindings().stream()
-                .anyMatch(binding::isAssignableFrom);
-    }
-
-    Set<Format> getSupportedFormats();
-
-    Set<Class<? extends IComplexData>> getSupportedBindings();
 
 }

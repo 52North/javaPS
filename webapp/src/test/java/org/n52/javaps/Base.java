@@ -38,7 +38,7 @@ public class Base {
             withBinding("xlink", "http://www.w3.org/1999/xlink").
             withBinding("xsi", "http://www.w3.org/2001/XMLSchema-instance").
             withBinding("xs", "http://www.w3.org/2001/XMLSchema").
-            withBinding("ows", "http://www.opengis.net/ows");
+            withBinding("ows", "http://www.opengis.net/ows/2.0");
 
     public int getPort() {
         return Integer.parseInt(System.getProperty("test.port", "8080"));

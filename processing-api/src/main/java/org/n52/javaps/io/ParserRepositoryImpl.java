@@ -27,6 +27,7 @@ import org.n52.iceland.lifecycle.Constructable;
 import org.n52.javaps.io.data.IComplexData;
 import org.n52.javaps.ogc.wps.Format;
 
+
 /**
  * XMLParserFactory. Will be initialized within each Framework.
  *
@@ -83,8 +84,7 @@ public class ParserRepositoryImpl implements ParserRepository, Constructable {
     }
 
     @Override
-    public Optional<IParser> getParser(Format format,
-                                       Class<? extends IComplexData> binding) {
+    public Optional<IParser> getParser(Format format, Class<? extends IComplexData> binding) {
         // TODO: try a chaining approach, by calculation all permutations and look for matches.
         return registeredParsers.stream()
                 .filter(g -> g.isSupportedBinding(binding))

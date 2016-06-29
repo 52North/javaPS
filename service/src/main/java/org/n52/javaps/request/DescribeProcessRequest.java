@@ -21,7 +21,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.iceland.request.AbstractServiceRequest;
 import org.n52.javaps.ogc.wps.WPSConstants;
@@ -34,8 +33,7 @@ public class DescribeProcessRequest extends
     private final List<OwsCode> identifiers = new LinkedList<>();
 
     @Override
-    public DescribeProcessResponse getResponse()
-            throws OwsExceptionReport {
+    public DescribeProcessResponse getResponse() {
         return (DescribeProcessResponse) new DescribeProcessResponse().set(this);
     }
 

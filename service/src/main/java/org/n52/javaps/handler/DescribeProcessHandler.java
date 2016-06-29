@@ -56,7 +56,6 @@ public class DescribeProcessHandler extends AbstractEngineHandler
         super(engine);
     }
 
-
     @Override
     public DescribeProcessResponse handle(DescribeProcessRequest request)
             throws OwsExceptionReport {

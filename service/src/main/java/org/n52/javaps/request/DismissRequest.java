@@ -16,7 +16,6 @@
  */
 package org.n52.javaps.request;
 
-import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.javaps.ogc.wps.WPSConstants;
 import org.n52.javaps.response.DismissResponse;
 
@@ -26,8 +25,7 @@ import org.n52.javaps.response.DismissResponse;
 public class DismissRequest extends AbstractJobIdRequest<DismissResponse> {
 
     @Override
-    public DismissResponse getResponse()
-            throws OwsExceptionReport {
+    public DismissResponse getResponse() {
         return (DismissResponse) new DismissResponse().set(this);
     }
 
