@@ -20,9 +20,11 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
 
+import javax.inject.Inject;
 import javax.inject.Provider;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.n52.iceland.component.AbstractSimilarityKeyRepository;
 import org.n52.iceland.lifecycle.Constructable;
@@ -36,12 +38,19 @@ public class StreamReaderRepository
         extends AbstractSimilarityKeyRepository<StreamReaderKey, StreamReader<?>>
         implements Constructable {
 
-    private Collection<Provider<StreamReader<?>>> writers;
+    private static final Logger LOG = LoggerFactory.getLogger(StreamReaderRepository.class);
+
+    private Collection<Provider<StreamReader<?>>> readers;
+
+    @Inject
+    public StreamReaderRepository(Collection<Provider<StreamReader<?>>> readers) {
+        this.readers = readers;
+    }
 
     @Override
     public void init() {
-        Objects.requireNonNull(this.writers);
-        setProducers(this.writers);
+        Objects.requireNonNull(this.readers);
+        setProducers(this.readers);
     }
 
     @SuppressWarnings("unchecked")
@@ -49,9 +58,11 @@ public class StreamReaderRepository
         return get(key).map(x -> (StreamReader<T>) x);
     }
 
-    @Autowired(required = false)
-    public void set(Collection<Provider<StreamReader<?>>> writers) {
-        this.writers = writers;
-    }
+    //@Autowired(required = false)
+//    @Inject
+//    public void setReaders(Collection<Provider<StreamReader<?>>> readers) {
+//        LOG.info("setReaders() called");
+//        this.readers = readers;
+//    }
 
 }

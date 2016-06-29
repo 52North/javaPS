@@ -34,11 +34,7 @@ import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.n52.javaps.coding.stream.MissingStreamWriterException;
-
 
 /**
  * TODO JavaDoc
@@ -52,7 +48,8 @@ public class XmlStreamWritingContext extends XmlFactories implements AutoCloseab
     private final BiFunction<XmlStreamWriterKey, XmlStreamWritingContext, Optional<ElementXmlStreamWriter>> writerProvider;
     private final OutputStream stream;
 
-    public XmlStreamWritingContext(OutputStream stream, BiFunction<XmlStreamWriterKey, XmlStreamWritingContext, Optional<ElementXmlStreamWriter>> writerProvider)
+    public XmlStreamWritingContext(OutputStream stream,
+                                   BiFunction<XmlStreamWriterKey, XmlStreamWritingContext, Optional<ElementXmlStreamWriter>> writerProvider)
             throws XMLStreamException {
         this.stream = Objects.requireNonNull(stream);
         this.writer = outputFactory().createXMLEventWriter(stream, documentEncoding().name());
@@ -68,7 +65,8 @@ public class XmlStreamWritingContext extends XmlFactories implements AutoCloseab
             delegate.writeElement(object);
         }
     }
-    public <X,Y> Function<X,Y> identity(Function<X,Y> t){
+
+    public <X, Y> Function<X, Y> identity(Function<X, Y> t) {
         return t;
     }
 
@@ -105,8 +103,6 @@ public class XmlStreamWritingContext extends XmlFactories implements AutoCloseab
         dispatch(eventFactory().createEndDocument());
     }
 
-
-    private static final Logger LOG = LoggerFactory.getLogger(XmlStreamWritingContext.class);
     public void dispatch(XMLEvent event)
             throws XMLStreamException {
         if (event.isStartElement()) {
@@ -126,25 +122,21 @@ public class XmlStreamWritingContext extends XmlFactories implements AutoCloseab
         }
     }
 
-    public void write(XMLEventReader reader)
-            throws XMLStreamException {
-        EventFilter filter = (event) ->
-                !event.isStartDocument() &&
-                !event.isEndDocument() &&
+    public void write(XMLEventReader reader) throws XMLStreamException {
+        EventFilter filter = (event)
+                -> !event.isStartDocument() &&
+                   !event.isEndDocument() &&
                    !(event.isCharacters() && event.asCharacters().isIgnorableWhiteSpace());
         this.writer.add(inputFactory().createFilteredReader(reader, filter));
     }
 
     @Override
-    public void close()
-            throws IOException{
-        try {
+    public void close() throws XMLStreamException {
+        try (OutputStream s = this.stream) {
             this.writer.flush();
             this.writer.close();
-        } catch (XMLStreamException ex) {
-            throw new IOException(ex);
-        } finally {
-            this.stream.close();
+        } catch (IOException ex) {
+            throw new XMLStreamException(ex);
         }
     }
 

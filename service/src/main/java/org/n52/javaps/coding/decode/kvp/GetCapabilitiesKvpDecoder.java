@@ -16,13 +16,11 @@
  */
 package org.n52.javaps.coding.decode.kvp;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Set;
 
 import org.n52.iceland.coding.decode.DecoderKey;
 import org.n52.iceland.exception.ows.InvalidParameterValueException;
-import org.n52.iceland.exception.ows.MissingParameterValueException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.ogc.ows.OWSConstants;
 import org.n52.iceland.request.GetCapabilitiesRequest;
@@ -58,24 +56,20 @@ public class GetCapabilitiesKvpDecoder extends AbstractKvpDecoder<GetCapabilitie
                 KvpHelper.checkParameterSingleValue(value, name);
                 break;
             case "acceptversions":
-                if (value.isEmpty()) {
-                    throw new MissingParameterValueException(name);
-                }
-                request.setAcceptVersions(Arrays.asList(value.split(",")));
+                request.setAcceptVersions(KvpHelper.checkParameterMultipleValues(value, name));
                 break;
-//            case ACCEPT_FORMATS:
-//                request.setAcceptFormats(KvpHelper.checkParameterMultipleValues(values, name));
-//                break;
-//            case UPDATE_SEQUENCE:
-//                request.setUpdateSequence(KvpHelper.checkParameterSingleValue(values, name));
-//                break;
-//            case SECTIONS:
-//                request.setSections(KvpHelper.checkParameterMultipleValues(values, name));
-//                break;
-//            case LANGUAGE:
-//                Extension<String> le = new LanguageExtension(KvpHelper.checkParameterSingleValue(values, name));
-//                request.addExtension(le);
-//                break;
+            case "acceptformats":
+                request.setAcceptFormats(KvpHelper.checkParameterMultipleValues(value, name));
+                break;
+            case "updatesequence":
+                request.setUpdateSequence(KvpHelper.checkParameterSingleValue(value, name));
+                break;
+            case "sections":
+                request.setSections(KvpHelper.checkParameterMultipleValues(value, name));
+                break;
+            case "acceptlanguages":
+                request.setAcceptLanguages(KvpHelper.checkParameterMultipleValues(value, name));
+                break;
             default:
                 throw new InvalidParameterValueException(name, value)
                         .withMessage("The parameter '%s' is not supported.", name);

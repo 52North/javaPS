@@ -206,7 +206,7 @@ public class GetCapabilitiesHandler extends AbstractHandler
                 .map(OWSConstants.CapabilitiesSection::fromString)
                 .filter(Optional::isPresent).map(Optional::get)
                 .collect(toSet());
-        if (sections.contains(CapabilitiesSection.All)) {
+        if (sections.contains(CapabilitiesSection.All) || sections.isEmpty()) {
             sections.addAll(Arrays.asList(CapabilitiesSection.values()));
         }
         return sections;

@@ -22,6 +22,8 @@ import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
+import javax.inject.Inject;
+
 import org.n52.iceland.ds.GenericOperationHandler;
 import org.n52.iceland.ds.OperationHandlerKey;
 import org.n52.iceland.exception.ows.NoApplicableCodeException;
@@ -42,8 +44,9 @@ public class GetResultHandler extends AbstractJobHandler
     private static final OperationHandlerKey KEY
             = new OperationHandlerKey(WPSConstants.SERVICE, WPSConstants.Operations.GetResult);
 
-    public GetResultHandler(Engine engine, boolean discloseJobIds) {
-        super(engine, discloseJobIds);
+    @Inject
+    public GetResultHandler(Engine engine) {
+        super(engine, true);
     }
 
     @Override

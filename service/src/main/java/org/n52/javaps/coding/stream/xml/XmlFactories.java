@@ -24,9 +24,12 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.StartElement;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
 
 import org.n52.javaps.coding.stream.xml.impl.XMLConstants;
-
 
 /**
  * TODO JavaDoc
@@ -35,44 +38,99 @@ import org.n52.javaps.coding.stream.xml.impl.XMLConstants;
  */
 public abstract class XmlFactories {
 
-    private static final XMLEventFactory EVENT_FACTORY = XMLEventFactory.newFactory();
-    private static final XMLOutputFactory OUTPUT_FACTORY = XMLOutputFactory.newFactory();
-    private static final XMLInputFactory INPUT_FACTORY = XMLInputFactory.newFactory();
+    private static final TransformerFactory TRANSFORMER_FACTORY = createTransformerFactory();
+    private static final XMLEventFactory EVENT_FACTORY = createEventFactory();
+    private static final XMLOutputFactory OUTPUT_FACTORY = createOutputFactory();
+    private static final XMLInputFactory INPUT_FACTORY = createInputFactory();
+
     private static final Charset DOCUMENT_ENCODING = StandardCharsets.UTF_8;
     private static final String XML_VERSION = XMLConstants.XML_VERSION;
-
-    static {
-        OUTPUT_FACTORY.setProperty("escapeCharacters", false);
-    }
+    private static final String INDENT_AMOUNT = "{http://xml.apache.org/xslt}indent-amount";
 
     /**
      * @return the event factory
      */
-    protected static XMLEventFactory eventFactory() {
+    public static XMLEventFactory eventFactory() {
         return EVENT_FACTORY;
     }
 
     /**
      * @return the output factory
      */
-    protected static XMLOutputFactory outputFactory() {
+    public static XMLOutputFactory outputFactory() {
         return OUTPUT_FACTORY;
     }
 
     /**
      * @return the input factory
      */
-    protected static XMLInputFactory inputFactory() {
+    public static XMLInputFactory inputFactory() {
         return INPUT_FACTORY;
     }
 
-
-    protected static Charset documentEncoding() {
+    /**
+     * @return the document encoding
+     */
+    public static Charset documentEncoding() {
         return DOCUMENT_ENCODING;
     }
 
-    protected static String documentVersion() {
+    /**
+     * @return the document version
+     */
+    public static String documentVersion() {
         return XML_VERSION;
+    }
+
+    /**
+     * @return the transformer factory
+     */
+    public static TransformerFactory transformerFactory() {
+        return TRANSFORMER_FACTORY;
+    }
+
+    private static TransformerFactory createTransformerFactory() {
+        TransformerFactory factory = TransformerFactory.newInstance();
+        //factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "false");
+        //factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "false");
+        return factory;
+    }
+
+
+    private static XMLInputFactory createInputFactory() {
+        XMLInputFactory factory = XMLInputFactory.newFactory();
+        return factory;
+    }
+
+    private static XMLOutputFactory createOutputFactory() {
+        XMLOutputFactory factory = XMLOutputFactory.newFactory();
+
+        factory.setProperty("escapeCharacters", false);
+
+        return factory;
+    }
+
+    private static XMLEventFactory createEventFactory() {
+        XMLEventFactory factory = XMLEventFactory.newFactory();
+        return factory;
+    }
+
+    protected static Transformer createIndentingTransformer()
+            throws TransformerException {
+        Transformer transformer = transformerFactory().newTransformer();
+        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+        transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.setOutputProperty(OutputKeys.VERSION, "1.0");
+        transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+
+        try {
+            transformer.setOutputProperty(INDENT_AMOUNT, "2");
+        } catch (IllegalArgumentException e) {
+            // ignore
+        }
+
+        return transformer;
     }
 
     protected static XMLStreamException unexpectedTag(StartElement element) {

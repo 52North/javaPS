@@ -37,11 +37,11 @@ import org.n52.javaps.coding.stream.StreamReaderKey;
 public class ElementXmlStreamReaderRepository extends AbstractSimilarityKeyRepository<StreamReaderKey, ElementXmlStreamReader>
         implements Constructable {
 
-    private Collection<Provider<ElementXmlStreamReader>> writers;
+    private Collection<Provider<ElementXmlStreamReader>> readers;
 
-    public ElementXmlStreamReaderRepository(Collection<Provider<ElementXmlStreamReader>> writers) {
-        this.writers = writers;
-        if (writers != null) {
+    public ElementXmlStreamReaderRepository(Collection<Provider<ElementXmlStreamReader>> readers) {
+        this.readers = readers;
+        if (readers != null) {
             init();
         }
     }
@@ -51,18 +51,18 @@ public class ElementXmlStreamReaderRepository extends AbstractSimilarityKeyRepos
     }
 
     @Autowired(required = false)
-    public void set(Collection<Provider<ElementXmlStreamReader>> writers) {
-        this.writers = writers;
+    public void set(Collection<Provider<ElementXmlStreamReader>> readers) {
+        this.readers = readers;
     }
 
     @Override
     public void init() {
-        Objects.requireNonNull(this.writers);
-        setProducers(this.writers);
+        Objects.requireNonNull(this.readers);
+        setProducers(this.readers);
     }
 
     public Optional<ElementXmlStreamReader> get(XmlStreamReaderKey key) {
-        Optional<ElementXmlStreamReader> reader = get(key);
+        Optional<ElementXmlStreamReader> reader = super.get(key);
         //writer.ifPresent(x -> x.setContext(ctx));
         return reader;
     }

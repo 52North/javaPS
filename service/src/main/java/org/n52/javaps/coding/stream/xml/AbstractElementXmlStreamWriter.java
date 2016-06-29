@@ -57,6 +57,8 @@ import com.google.common.io.BaseEncoding;
 import com.google.common.io.ByteStreams;
 import com.google.common.xml.XmlEscapers;
 
+import static java.util.stream.Collectors.joining;
+
 public abstract class AbstractElementXmlStreamWriter extends XmlFactories
         implements ElementXmlStreamWriter {
 

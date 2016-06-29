@@ -27,6 +27,10 @@ This project includes:
   Apache HttpClient under Apache License, Version 2.0
   Apache HttpClient Fluent API under Apache License, Version 2.0
   Apache HttpCore under Apache License, Version 2.0
+  Apache Log4j API under The Apache Software License, Version 2.0
+  Apache Log4j Core under The Apache Software License, Version 2.0
+  Apache Log4j SLF4J Binding under The Apache Software License, Version 2.0
+  Apache Log4j Web under The Apache Software License, Version 2.0
   ClassLoader Leak Prevention library under Apache 2
   Commons IO under The Apache Software License, Version 2.0
   Cross-Origin Resource Sharing (CORS) Filter under The Apache Software License, Version 2.0

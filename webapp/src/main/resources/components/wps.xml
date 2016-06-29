@@ -26,29 +26,29 @@
                            http://www.springframework.org/schema/util/spring-util-4.1.xsd">
 
 
-
     <bean id="streamReaderRepository" class="org.n52.javaps.coding.stream.StreamReaderRepository"/>
     <bean id="streamWriterRepository" class="org.n52.javaps.coding.stream.StreamWriterRepository"/>
 
-    <bean class="org.n52.javaps.coding.stream.xml.ElementXmlStreamWriterRepository"/>
-    <bean class="org.n52.javaps.coding.stream.xml.ElementXmlStreamReaderRepository"/>
+    <bean id="elementXmlStreamWriterRepository" class="org.n52.javaps.coding.stream.xml.ElementXmlStreamWriterRepository"/>
+    <bean id="elementXmlStreamReaderRepository" class="org.n52.javaps.coding.stream.xml.ElementXmlStreamReaderRepository"/>
 
-    <bean class="org.n52.javaps.coding.stream.xml.DocumentXmlStreamReader"/>
-    <bean class="org.n52.javaps.coding.stream.xml.DocumentXmlStreamWriter"/>
+    <bean id="documentXmlStreamReader" class="org.n52.javaps.coding.stream.xml.DocumentXmlStreamReader"/>
+    <bean id="documentXmlStreamWriter" class="org.n52.javaps.coding.stream.xml.DocumentXmlStreamWriter"/>
 
-    <bean class="org.n52.javaps.coding.encode.ServiceResponseWriterFactory"/>
+    <bean id="serviceResponseWriterFactory" class="org.n52.javaps.coding.encode.ServiceResponseWriterFactory"/>
 
     <!-- KVP decoders -->
     <bean class="org.n52.javaps.coding.decode.kvp.GetCapabilitiesKvpDecoder"/>
     <bean class="org.n52.javaps.coding.decode.kvp.DescribeProcessKvpDecoder"/>
-    <bean class="org.n52.javaps.coding.stream.xml.impl.OwsExceptionReportEncoder"/>
-
-    <bean class="org.n52.javaps.coding.stream.xml.ElementXmlStreamReaderRepository"/>
+    <bean class="org.n52.javaps.coding.stream.xml.impl.OwsExceptionReportWriter"/>
+    <bean class="org.n52.javaps.coding.encode.OwsExceptionReportEncoder"/>
 
     <!-- element writers -->
     <bean class="org.n52.javaps.coding.stream.xml.impl.WPSWriter" scope="prototype" />
     <bean class="org.n52.javaps.coding.stream.xml.impl.WPSRequestReader" scope="prototype"/>
     <bean class="org.n52.javaps.coding.stream.xml.impl.WPSResponseWriter" scope="prototype"/>
+
+    <bean id="engine" class="org.n52.javaps.DummyEngine"/>
 
     <!-- handlers -->
     <bean class="org.n52.iceland.service.operator.GenericServiceOperator">
@@ -58,7 +58,7 @@
 
     <bean id="getCapabilitiesOperation" class="org.n52.iceland.coding.OperationKey">
         <constructor-arg name="service" value="WPS" />
-        <constructor-arg name="version"><null/></constructor-arg>
+        <constructor-arg name="version" value="2.0.0" />
         <constructor-arg name="operation" value="GetCapabilities" />
     </bean>
     <bean id="getCapabilitiesOperator" class="org.n52.iceland.request.operator.GenericRequestOperator">

@@ -23,6 +23,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import javax.inject.Inject;
+
 import org.n52.iceland.ds.GenericOperationHandler;
 import org.n52.iceland.ds.OperationHandlerKey;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
@@ -49,6 +51,7 @@ public class DescribeProcessHandler extends AbstractEngineHandler
             = new OperationHandlerKey(WPSConstants.SERVICE,
                                       WPSConstants.Operations.DescribeProcess);
 
+    @Inject
     public DescribeProcessHandler(Engine engine) {
         super(engine);
     }

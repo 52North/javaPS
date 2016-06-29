@@ -19,6 +19,8 @@ package org.n52.javaps.handler;
 import java.util.Collections;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import org.n52.iceland.ds.GenericOperationHandler;
 import org.n52.iceland.ds.OperationHandlerKey;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
@@ -40,8 +42,9 @@ public class GetStatusHandler extends AbstractJobHandler
             = new OperationHandlerKey(WPSConstants.SERVICE,
                                       WPSConstants.Operations.GetStatus);
 
-    public GetStatusHandler(Engine engine, boolean discloseJobIds) {
-        super(engine, discloseJobIds);
+    @Inject
+    public GetStatusHandler(Engine engine) {
+        super(engine, true);
     }
 
     @Override

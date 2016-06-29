@@ -16,14 +16,18 @@
  */
 package org.n52.javaps.handler;
 
+import static java.util.stream.Collectors.toSet;
+
 import java.net.URI;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
@@ -78,13 +82,13 @@ public abstract class AbstractHandler implements OperationHandler {
         return Collections.singleton(getDCP(new OperationKey(service, version, getOperationName())));
     }
 
-    private OwsDCP getDCP(OperationKey decoderKey)
+    private OwsDCP getDCP(OperationKey operation)
             throws OwsExceptionReport {
         try {
-            Set<OwsRequestMethod> methods
-                    = bindingRepository.getBindings().values().stream()
-                            .flatMap(binding -> getRequestMethods(binding, decoderKey))
-                            .collect(Collectors.toSet());
+            Set<OwsRequestMethod> methods = Stream
+                    .concat(getRequestMethodsForServiceURL(operation),
+                            getRequestMethodsForBindingURL(operation))
+                    .collect(toSet());
 
             return new OwsHttp(methods);
         } catch (Exception e) {
@@ -93,53 +97,66 @@ public abstract class AbstractHandler implements OperationHandler {
         }
     }
 
-    private Stream<OwsRequestMethod> getRequestMethods(Binding binding, OperationKey decoderKey) {
-        URI uri = URI.create(this.serviceURL + binding.getUrlPattern());
+    private Stream<OwsRequestMethod> getRequestMethodsForServiceURL(OperationKey operation) {
+        Collection<Binding> bindings = bindingRepository.getBindings().values();
+        Map<String, Set<OwsValue>> mediaTypesByMethod = new HashMap<>();
+        bindings.stream().forEach(binding ->
+            HTTPMethods.METHODS.stream()
+                    .filter(method -> isMethodSupported(binding, method, operation))
+                    .forEach(method -> mediaTypesByMethod.computeIfAbsent(method, (m) -> new HashSet<>())
+                                .addAll(Optional.ofNullable(binding.getSupportedEncodings())
+                                        .filter(x -> !x.isEmpty()).map(Collection::stream)
+                                        .map(x -> x.map(MediaType::toString).map(OwsValue::new).collect(toSet()))
+                                        .orElseGet(Collections::emptySet))
+                    )
+        );
+
+        return mediaTypesByMethod.entrySet().stream()
+                .map(e -> new OwsRequestMethod(serviceURL, e.getKey(),
+                        Collections.singleton(new OwsDomain(HTTPHeaders.CONTENT_TYPE, new OwsAllowedValues(e.getValue())))));
+    }
+
+    private Stream<OwsRequestMethod> getRequestMethods(Binding binding, OperationKey operation) {
+        URI patternURI = URI.create(this.serviceURL + binding.getUrlPattern());
         Set<OwsDomain> constraints = getConstraints(binding);
-
-        return Stream.of(HTTPMethods.GET,
-                         HTTPMethods.POST,
-                         HTTPMethods.PUT,
-                         HTTPMethods.DELETE,
-                         HTTPMethods.TRACE,
-                         HTTPMethods.HEAD,
-                         HTTPMethods.OPTIONS)
-                .filter(isMethodSupported(binding, decoderKey))
-                .map(method -> new OwsRequestMethod(uri, method, constraints));
+        return HTTPMethods.METHODS.stream()
+                .filter(isMethodSupported(binding, operation))
+                .map(method -> new OwsRequestMethod(patternURI, method, constraints));
     }
 
-    private Predicate<String> isMethodSupported(Binding binding, OperationKey decoderKey) {
-        return method -> {
-            try {
-                switch(method) {
-                    case HTTPMethods.GET:
-                        return binding.checkOperationHttpGetSupported(decoderKey);
-                    case HTTPMethods.POST:
-                        return binding.checkOperationHttpPostSupported(decoderKey);
-                    case HTTPMethods.PUT:
-                        return binding.checkOperationHttpPutSupported(decoderKey);
-                    case HTTPMethods.DELETE:
-                        return binding.checkOperationHttpDeleteSupported(decoderKey);
-                    default:
-                        return false;
-                }
-            } catch (HTTPException ex) {
-                return false;
+    private Predicate<String> isMethodSupported(Binding binding, OperationKey operation) {
+        return method -> isMethodSupported(binding, method, operation);
+    }
+
+    private boolean isMethodSupported(Binding binding, String method, OperationKey decoderKey) {
+        try {
+            switch(method) {
+                case HTTPMethods.GET:
+                    return binding.checkOperationHttpGetSupported(decoderKey);
+                case HTTPMethods.POST:
+                    return binding.checkOperationHttpPostSupported(decoderKey);
+                case HTTPMethods.PUT:
+                    return binding.checkOperationHttpPutSupported(decoderKey);
+                case HTTPMethods.DELETE:
+                    return binding.checkOperationHttpDeleteSupported(decoderKey);
+                default:
+                    return false;
             }
-        };
+        } catch (HTTPException ex) {
+            return false;
+        }
     }
+
 
     private Set<OwsDomain> getConstraints(Binding binding) {
-        Set<OwsDomain> constraints = Optional
+        return Optional
                 .ofNullable(binding.getSupportedEncodings())
                 .filter(x -> !x.isEmpty())
                 .map(Collection::stream)
                 .map(x -> x.map(MediaType::toString).map(OwsValue::new))
                 .map(OwsAllowedValues::new)
                 .map(x -> new OwsDomain(HTTPHeaders.CONTENT_TYPE, x))
-                .map(Collections::singleton)
-                .orElse(null);
-        return constraints;
+                .map(Collections::singleton).orElseGet(Collections::emptySet);
     }
 
     @Override
@@ -163,6 +180,11 @@ public abstract class AbstractHandler implements OperationHandler {
 
     protected Set<OwsMetadata> getOperationMetadata(String service, String version) {
         return null;
+    }
+
+    private Stream<OwsRequestMethod> getRequestMethodsForBindingURL(OperationKey operation) {
+        return bindingRepository.getBindings().values().stream()
+                .flatMap(binding -> getRequestMethods(binding, operation));
     }
 
 }

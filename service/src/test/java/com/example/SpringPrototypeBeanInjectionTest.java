@@ -16,11 +16,18 @@
  */
 package com.example;
 
+import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Provider;
+
+import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
@@ -29,57 +36,108 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-/**
- * TODO JavaDoc
- * @author Christian Autermann
- */
+import org.n52.iceland.config.spring.ProviderAwareListableBeanFactory;
+
 public class SpringPrototypeBeanInjectionTest {
+    @Component
+    @Scope("prototype")
+    public static class Prototype {
+    }
 
+    public static interface PrototypeInterface {
+    }
 
-	@Scope(BeanDefinition.SCOPE_PROTOTYPE)
-	@Component
-	public static class SomeRequest {}
+    public static interface ListSingleton {
+        List<PrototypeInterface> get();
+    }
 
-	@Service
-	public static class SomeService {
+    @Component
+    @Scope("prototype")
+    public static class PrototypeImplementation1 implements PrototypeInterface {
+    }
 
-		@Autowired
-		javax.inject.Provider<SomeRequest> someRequestProvider;
+    @Component
+    @Scope("prototype")
+    public static class PrototypeImplementation2 implements PrototypeInterface {
+    }
 
-		SomeRequest doSomething() {
-			return someRequestProvider.get();
-		}
-	}
+    @Service
+    @Scope("singleton")
+    public static class ListSingleton1 implements ListSingleton {
+        @Inject
+        Provider<Collection<PrototypeInterface>> provider;
 
-	@ComponentScan("com.example")
-	@Configuration
-	public static class MyModuleConfig {}
+        public List<PrototypeInterface> get() {
+            return new LinkedList<>(provider.get());
+        }
+    }
 
-	@Test
-	public void shouldReturnANewPrototypeInstance() throws Exception {
-		//given
-		final ApplicationContext ctx = new AnnotationConfigApplicationContext(MyModuleConfig.class);
+    @Service
+    @Scope("singleton")
+    public static class ListSingleton2 implements ListSingleton {
+        @Inject
+        Collection<Provider<PrototypeInterface>> provider;
 
-		//when
-		final SomeRequest req1 = ctx.getBean(SomeRequest.class);
-		final SomeRequest req2 = ctx.getBean(SomeRequest.class);
+        public List<PrototypeInterface> get() {
+            return provider.stream().map(Provider::get).collect(toList());
+        }
+    }
 
-		//then
-		assertTrue("New instance expected", req1 != req2);
-	}
+    @Service
+    @Scope("singleton")
+    public static class Singleton {
+        @Inject
+        Provider<Prototype> provider;
 
-	@Test
-	public void shouldReturnANewPrototypeInstanceFromAnInjectedProvider() throws Exception {
-		//given
-		final ApplicationContext ctx = new AnnotationConfigApplicationContext(MyModuleConfig.class);
+        Prototype get() {
+            return provider.get();
+        }
+    }
 
-		//when
-		final SomeService someService = ctx.getBean(SomeService.class);
+    @Configuration
+    @ComponentScan
+    public static class Config {
+    }
 
-		final SomeRequest req1 = someService.doSomething();
-		final SomeRequest req2 = someService.doSomething();
+    private ApplicationContext ctx;
 
-		//then
-		assertTrue("New instance expected", req1 != req2);
-	}
+    @Before
+    public void setup() {
+        ProviderAwareListableBeanFactory beanFactory = new ProviderAwareListableBeanFactory();
+        AnnotationConfigApplicationContext annotationConfigCtx
+                = new AnnotationConfigApplicationContext(beanFactory);
+        annotationConfigCtx.register(Config.class);
+        annotationConfigCtx.refresh();
+        this.ctx = annotationConfigCtx;
+    }
+
+    @Test
+    public void shouldReturnANewPrototypeInstance()
+            throws Exception {
+        Prototype req1 = ctx.getBean(Prototype.class);
+        Prototype req2 = ctx.getBean(Prototype.class);
+        assertTrue("New instance expected", req1 != req2);
+    }
+
+    @Test
+    public void shouldReturnANewPrototypeInstanceFromAnInjectedProvider()
+            throws Exception {
+        Singleton singleton = ctx.getBean(Singleton.class);
+        Prototype req1 = singleton.get();
+        Prototype req2 = singleton.get();
+        assertTrue("New instance expected", req1 != req2);
+    }
+
+    @Test
+    public void shouldReturnANewPrototypeInstanceFromAnInjectedListProvider()
+            throws Exception {
+        ListSingleton bean = ctx.getBean(ListSingleton1.class);
+
+        List<PrototypeInterface> get1 = bean.get();
+        List<PrototypeInterface> get2 = bean.get();
+
+        assertTrue("New instance expected", get1.get(0) != get2.get(0));
+        assertTrue("New instance expected", get1.get(1) != get2.get(1));
+    }
+
 }

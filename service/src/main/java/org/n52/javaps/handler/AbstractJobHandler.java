@@ -16,12 +16,15 @@
  */
 package org.n52.javaps.handler;
 
+import static java.util.stream.Collectors.toSet;
+
 import java.util.Collections;
 import java.util.Set;
 
 import org.n52.iceland.ogc.ows.OwsAllowedValues;
 import org.n52.iceland.ogc.ows.OwsAnyValue;
 import org.n52.iceland.ogc.ows.OwsDomain;
+import org.n52.iceland.ogc.ows.OwsNoValues;
 import org.n52.iceland.ogc.ows.OwsPossibleValues;
 import org.n52.iceland.ogc.ows.OwsValue;
 import org.n52.javaps.Engine;
@@ -46,7 +49,12 @@ public abstract class AbstractJobHandler extends AbstractEngineHandler {
     protected Set<OwsDomain> getOperationParameters(String service, String version) {
         OwsPossibleValues allowedValues;
         if (discloseJobIds) {
-            allowedValues = new OwsAllowedValues(getEngine().getJobIdentifiers().stream().map(JobId::getValue).map(OwsValue::new));
+            Set<OwsValue> values = getEngine().getJobIdentifiers().stream().map(JobId::getValue).map(OwsValue::new).collect(toSet());
+            if (values.isEmpty()) {
+                allowedValues = OwsNoValues.instance();
+            } else {
+                allowedValues = new OwsAllowedValues(values);
+            }
         } else {
             allowedValues = OwsAnyValue.instance();
         }

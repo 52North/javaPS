@@ -20,6 +20,8 @@ package org.n52.javaps.handler;
 import java.util.Collections;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import org.n52.iceland.ds.GenericOperationHandler;
 import org.n52.iceland.ds.OperationHandlerKey;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
@@ -40,8 +42,9 @@ public class DismissHandler extends AbstractJobHandler
     private static final OperationHandlerKey KEY
             = new OperationHandlerKey(WPSConstants.SERVICE, WPSConstants.Operations.Dismiss);
 
-    public DismissHandler(Engine engine, boolean discloseJobIds) {
-        super(engine, discloseJobIds);
+    @Inject
+    public DismissHandler(Engine engine) {
+        super(engine, true);
     }
 
     @Override

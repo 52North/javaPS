@@ -29,20 +29,19 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ThreadFactory;
 
 import javax.inject.Inject;
-import javax.xml.XMLConstants;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.n52.iceland.exception.ows.NoApplicableCodeException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
+import org.n52.iceland.util.function.ThrowingConsumer;
 import org.n52.javaps.coding.stream.StreamWriter;
 import org.n52.javaps.coding.stream.StreamWriterKey;
 
+import com.google.common.base.Throwables;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 /**
@@ -50,9 +49,9 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
  *
  * @author Christian Autermann
  */
-public class DocumentXmlStreamWriter implements StreamWriter<Object> {
-    private static final TransformerFactory TRANSFORMER_FACTORY = createTransformerFactory();
-    private static final String INDENT_AMOUNT = "{http://xml.apache.org/xslt}indent-amount";
+public class DocumentXmlStreamWriter extends XmlFactories implements StreamWriter<Object> {
+
+
     private final ElementXmlStreamWriterRepository repository;
     private final ExecutorService executor;
 
@@ -67,50 +66,53 @@ public class DocumentXmlStreamWriter implements StreamWriter<Object> {
     @Override
     public void write(Object object, OutputStream stream)
             throws OwsExceptionReport {
+        try {
+            writeIndenting(stream, (out) -> {
+                        try (XmlStreamWritingContext context = createContext(out)) {
+                            context.startDocument();
+                            context.write(object);
+                            context.endDocument();
+                        }
+                    });
+        } catch (XMLStreamException | TransformerException | IOException | InterruptedException ex) {
+            throw new NoApplicableCodeException().causedBy(ex);
+        }
+    }
 
+    private <X extends Throwable> void writeIndenting(OutputStream stream, ThrowingConsumer<OutputStream, X> writer)
+            throws X, TransformerException, IOException, InterruptedException {
         try {
             PipedOutputStream pos = new PipedOutputStream();
-            Transformer transformer = createTransformer();
+            PipedInputStream pis = new PipedInputStream(pos);
+            Transformer transformer = createIndentingTransformer();
 
             Future<Void> t = executor.submit(() -> {
-                try (PipedInputStream pis = new PipedInputStream(pos)) {
+                try {
                     StreamResult result = new StreamResult(stream);
                     StreamSource source = new StreamSource(pis);
-
                     transformer.transform(source, result);
+                } finally {
+                    pis.close();
                 }
                 return null; // use a callable to allow exception throwing
             });
 
-            try (XmlStreamWritingContext context = createContext(pos)) {
-                context.startDocument();
-                context.write(object);
-                context.endDocument();
-            }
+            writer.accept(pos);
 
             t.get(); // wait for the transformer to finish
 
-        } catch (TransformerException | XMLStreamException | IOException | InterruptedException ex) {
-            throw new NoApplicableCodeException().causedBy(ex);
         } catch (ExecutionException ex) {
-            throw new NoApplicableCodeException().causedBy(ex.getCause());
+            Throwables.propagateIfInstanceOf(ex.getCause(), TransformerException.class);
+            Throwables.propagateIfInstanceOf(ex.getCause(), IOException.class);
+            throw Throwables.propagate(ex.getCause());
         }
     }
+
+
 
     @Override
     public Set<StreamWriterKey> getKeys() {
         return this.repository.keys();
-    }
-
-    private Transformer createTransformer() throws TransformerException {
-        Transformer transformer = TRANSFORMER_FACTORY.newTransformer();
-        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
-        transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-        transformer.setOutputProperty(OutputKeys.VERSION, "1.0");
-        transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-        transformer.setOutputProperty(INDENT_AMOUNT, "2");
-        return transformer;
     }
 
     private XmlStreamWritingContext createContext(OutputStream pos)
@@ -118,10 +120,5 @@ public class DocumentXmlStreamWriter implements StreamWriter<Object> {
         return new XmlStreamWritingContext(pos, this.repository::get);
     }
 
-    private static TransformerFactory createTransformerFactory() {
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "false");
-        transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "false");
-        return transformerFactory;
-    }
+
 }

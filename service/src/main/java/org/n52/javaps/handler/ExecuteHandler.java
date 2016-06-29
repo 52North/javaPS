@@ -23,6 +23,8 @@ import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
+import javax.inject.Inject;
+
 import org.n52.iceland.ds.GenericOperationHandler;
 import org.n52.iceland.ds.OperationHandlerKey;
 import org.n52.iceland.exception.ows.NoApplicableCodeException;
@@ -30,6 +32,8 @@ import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.ogc.ows.OwsAllowedValues;
 import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.iceland.ogc.ows.OwsDomain;
+import org.n52.iceland.ogc.ows.OwsNoValues;
+import org.n52.iceland.ogc.ows.OwsPossibleValues;
 import org.n52.iceland.ogc.ows.OwsValue;
 import org.n52.javaps.Engine;
 import org.n52.javaps.ogc.wps.ExecutionMode;
@@ -51,6 +55,7 @@ public class ExecuteHandler extends AbstractEngineHandler
     private static final OperationHandlerKey KEY
             = new OperationHandlerKey(WPSConstants.SERVICE, WPSConstants.Operations.Execute);
 
+    @Inject
     public ExecuteHandler(Engine engine) {
         super(engine);
     }
@@ -96,8 +101,13 @@ public class ExecuteHandler extends AbstractEngineHandler
     @Override
     protected Set<OwsDomain> getOperationParameters(String service, String version) {
         Set<OwsValue> algorithmIdentifiers = getEngine().getProcessIdentifiers().stream().map(OwsCode::getValue).map(OwsValue::new).collect(toSet());
-        OwsDomain identifierDomain = new OwsDomain(IDENTIFIER, new OwsAllowedValues(algorithmIdentifiers));
-        return Collections.singleton(identifierDomain);
+        OwsPossibleValues possibleValues;
+        if (algorithmIdentifiers.isEmpty()) {
+            possibleValues = OwsNoValues.instance();
+        } else {
+            possibleValues = new OwsAllowedValues(algorithmIdentifiers);
+        }
+        return Collections.singleton(new OwsDomain(IDENTIFIER, possibleValues));
     }
 
 }

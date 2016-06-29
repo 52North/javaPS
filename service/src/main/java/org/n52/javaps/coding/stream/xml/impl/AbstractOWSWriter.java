@@ -59,11 +59,14 @@ import org.n52.iceland.ogc.ows.OwsValue;
 import org.n52.iceland.ogc.ows.OwsValueRestriction;
 import org.n52.iceland.ogc.ows.OwsValuesReference;
 import org.n52.iceland.ogc.ows.OwsValuesUnit;
+import org.n52.iceland.util.Optionals;
 import org.n52.iceland.util.http.HTTPMethods;
 import org.n52.javaps.coding.stream.xml.AbstractMultiElementXmlStreamWriter;
 import org.n52.javaps.coding.stream.xml.impl.XMLConstants.OWS;
 
 import com.google.common.base.Strings;
+
+import static java.util.stream.Collectors.groupingBy;
 
 /**
  * TODO JavaDoc
@@ -91,7 +94,7 @@ public abstract class AbstractOWSWriter extends AbstractMultiElementXmlStreamWri
         if (!set.isEmpty()) {
             element(OWS.Elem.QN_KEYWORDS, set, x -> {
                 Map<Optional<OwsCode>, Set<OwsLanguageString>> keywords = x.stream()
-                        .collect(groupingBy(OwsKeyword::getType, TreeMap::new, mapping(OwsKeyword::getKeyword, toCollection(TreeSet::new))));
+                        .collect(groupingBy(OwsKeyword::getType, () -> new TreeMap<Optional<OwsCode>, Set<OwsLanguageString>>(Optionals.nullsLast()), mapping(OwsKeyword::getKeyword, toCollection(TreeSet::new))));
                 for (Entry<Optional<OwsCode>, Set<OwsLanguageString>> entry : keywords.entrySet()) {
                     Optional<OwsCode> type = entry.getKey();
                     for (OwsLanguageString keyword : entry.getValue()) {
@@ -345,13 +348,17 @@ public abstract class AbstractOWSWriter extends AbstractMultiElementXmlStreamWri
 
     protected void writeRequestMethod(OwsRequestMethod method)
             throws XMLStreamException {
+        QName name = null;
         if (method.getHttpMethod().equals(HTTPMethods.GET)) {
-            element(OWS.Elem.QN_GET, () -> {
+            name = OWS.Elem.QN_GET;
+        } else if (method.getHttpMethod().equals(HTTPMethods.POST)) {
+            name = OWS.Elem.QN_POST;
+        }
+        if (name != null) {
+            element(name, () -> {
                 writeXLinkAttrs(method);
                 writeConstraints(method.getConstraints());
             });
-        } else if (method.getHttpMethod().equals(HTTPMethods.POST)) {
-            element(OWS.Elem.QN_POST, method, this::writeXLinkAttrs);
         }
     }
 

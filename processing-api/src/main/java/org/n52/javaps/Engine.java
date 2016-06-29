@@ -23,6 +23,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.Future;
 
+import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.javaps.ogc.wps.JobId;
 import org.n52.javaps.ogc.wps.OutputDefinition;
@@ -50,12 +51,12 @@ public interface Engine {
                 .collect(toSet());
     }
 
-    StatusInfo dismiss(JobId identifier);
+    StatusInfo dismiss(JobId identifier) throws OwsExceptionReport;
 
-    JobId execute(OwsCode identifier, List<Data> inputs, List<OutputDefinition> outputs);
+    JobId execute(OwsCode identifier, List<Data> inputs, List<OutputDefinition> outputs) throws OwsExceptionReport;
 
-    StatusInfo getStatus(JobId jobId);
+    StatusInfo getStatus(JobId jobId) throws OwsExceptionReport;
 
-    Future<Result> getResult(JobId jobId);
+    Future<Result> getResult(JobId jobId) throws OwsExceptionReport;
 
 }
