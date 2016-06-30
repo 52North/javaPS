@@ -30,6 +30,7 @@
     </bean>
 
     <bean id="localAlgorithmRepository" class="org.n52.javaps.algorithm.LocalAlgorithmRepository" />
+    <bean id="contextAlgorithmRegistrator" class="org.n52.javaps.algorithm.ContextAlgorithmRegistrator"/>
 
     <bean id="serviceLoaderAlgorithmRepository" class="org.n52.javaps.algorithm.ServiceLoaderAlgorithmRepository"/>
 
