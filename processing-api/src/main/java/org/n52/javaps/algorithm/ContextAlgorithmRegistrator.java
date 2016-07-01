@@ -16,42 +16,52 @@
  */
 package org.n52.javaps.algorithm;
 
-import java.util.Collection;
 import java.util.Objects;
-import java.util.Optional;
+import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
 import org.n52.iceland.lifecycle.Constructable;
+import org.n52.javaps.algorithm.annotation.Algorithm;
 
 /**
  * @author Christian Autermann
  */
-public class ContextAlgorithmRegistrator implements Constructable {
+public class ContextAlgorithmRegistrator implements Constructable, ApplicationContextAware {
     private static final Logger LOG = LoggerFactory.getLogger(ContextAlgorithmRegistrator.class);
 
     private LocalAlgorithmRepository localAlgorithmRepository;
-    private Optional<Collection<IAlgorithm>> algorithms;
+    private ApplicationContext applicationContext;
 
     @Override
     public void init() {
-        this.algorithms.ifPresent(collection -> collection.stream().forEach(algorithm -> {
-            LOG.info("Registering {}", algorithm);
-            this.localAlgorithmRepository.addAlgorithm(algorithm);
-        }));
+        Stream.concat(intefaceImplementations(), annotatedInstances())
+                .peek(algorithm -> LOG.info("Registering {}", algorithm))
+                .forEach(this.localAlgorithmRepository::addAlgorithm);
     }
 
     @Inject
     public void setLocalAlgorithmRepository(LocalAlgorithmRepository localAlgorithmRepository) {
-        this.localAlgorithmRepository = localAlgorithmRepository;
+        this.localAlgorithmRepository = Objects.requireNonNull(localAlgorithmRepository);
     }
 
-    @Inject
-    public void setAlgorithms(Optional<Collection<IAlgorithm>> algorithms) {
-        this.algorithms = Objects.requireNonNull(algorithms);
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = Objects.requireNonNull(applicationContext);
+    }
+
+    private Stream<IAlgorithm> intefaceImplementations() throws BeansException {
+        return this.applicationContext.getBeansOfType(IAlgorithm.class).values().stream();
+    }
+
+    private Stream<Object> annotatedInstances() throws BeansException {
+        return this.applicationContext.getBeansWithAnnotation(Algorithm.class).values().stream();
     }
 
 }
