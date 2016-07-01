@@ -22,17 +22,20 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
+import java.util.function.Function;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.n52.javaps.io.data.IData;
-import org.n52.javaps.ogc.wps.description.ProcessOutputDescription;
+import org.n52.iceland.ogc.wps.description.typed.TypedProcessOutputDescription;
+import org.n52.javaps.io.Data;
+import org.n52.javaps.io.literal.LiteralData;
 
-abstract class AbstractOutputBinding<M extends AccessibleObject & Member, D extends ProcessOutputDescription> extends AbstractDataBinding<M, D> {
+abstract class AbstractOutputBinding<M extends AccessibleObject & Member, D extends TypedProcessOutputDescription<?>> extends AbstractDataBinding<M, D> {
 
-    private Constructor<? extends IData> bindingConstructor;
+    private Function<Object, ? extends Data<?>> bindingConstructor;
 
     public AbstractOutputBinding(M member) {
         super(member);
@@ -42,52 +45,68 @@ abstract class AbstractOutputBinding<M extends AccessibleObject & Member, D exte
         return getConstructor() != null;
     }
 
-    protected IData bindOutputValue(Object outputValue) {
-        try {
-            return getConstructor().newInstance(outputToPayload(outputValue));
-        } catch (InstantiationException | SecurityException | IllegalAccessException ex) {
-            throw new RuntimeException("Internal error processing outputs", ex);
-        } catch (InvocationTargetException ex) {
-            Throwable cause = ex.getCause() == null ? ex : ex.getCause();
-            throw new RuntimeException(cause.getMessage(), cause);
-        }
+    protected Data<?> bindOutputValue(Object outputValue) {
+        return getConstructor().apply(outputToPayload(outputValue));
     }
 
-    public abstract IData get(Object annotatedInstance);
+    public abstract Data<?> get(Object annotatedInstance);
 
-    private synchronized Constructor<? extends IData> getConstructor() {
+    private synchronized Function<Object, ? extends Data<?>> getConstructor() {
         if (bindingConstructor == null) {
             bindingConstructor = findConstructor();
         }
         return bindingConstructor;
     }
 
-    private Constructor<? extends IData> findConstructor() {
-        try {
-            Class<? extends IData> bindingClass = getDescription().getBindingClass();
-            Class<?> outputPayloadClass = bindingClass.getMethod("getPayload", (Class<?>[]) null).getReturnType();
-            Type bindingPayloadType = getPayloadType();
-            if (bindingPayloadType instanceof Class<?>) {
-                Class<?> bindingPayloadClass = (Class<?>) bindingPayloadType;
-                if (bindingPayloadClass.isAssignableFrom(outputPayloadClass)) {
-                    return bindingClass.getConstructor(bindingPayloadClass);
-                }
-            }
-        } catch (NoSuchMethodException e) {
-            // error handling on fall-through
+    private Function<Object, ? extends Data<?>> findConstructor() {
+
+        if (getDescription().isLiteral()) {
+            return LiteralData::new;
         }
-        return null;
+
+        Class<? extends Data<?>> bindingClass = getDescription().getBindingType();
+        Class<?> outputPayloadClass = getDescription().getPayloadType();
+        Type bindingPayloadType = getPayloadType();
+        if (!(bindingPayloadType instanceof Class<?>)) {
+            return null;
+        }
+        Class<?> bindingPayloadClass = (Class<?>) bindingPayloadType;
+        if (!bindingPayloadClass.isAssignableFrom(outputPayloadClass)
+            || bindingPayloadClass.isInterface()
+            || Modifier.isAbstract(bindingClass.getModifiers())) {
+            return null;
+        }
+        try {
+            Constructor<? extends Data<?>> constructor = bindingClass.getConstructor(bindingPayloadClass);
+
+            if (constructor == null || !Modifier.isPublic(constructor.getModifiers())) {
+                return null;
+            }
+
+            return arg -> {
+                try {
+                    return (Data<?>) constructor.newInstance(arg);
+                } catch (InstantiationException | SecurityException | IllegalAccessException ex) {
+                    throw new RuntimeException("Internal error processing outputs", ex);
+                } catch (InvocationTargetException ex) {
+                    Throwable cause = ex.getCause() == null ? ex : ex.getCause();
+                    throw new RuntimeException(cause.getMessage(), cause);
+                }
+            };
+        } catch (NoSuchMethodException ex) {
+            return null;
+        }
     }
 
-    public static <D extends ProcessOutputDescription> AbstractOutputBinding<Field, D> field(Field field) {
+    public static <D extends TypedProcessOutputDescription<?>> AbstractOutputBinding<Field, D> field(Field field) {
         return new OutputFieldBinding<>(field);
     }
 
-    public static <D extends ProcessOutputDescription> AbstractOutputBinding<Method, D> method(Method method) {
+    public static <D extends TypedProcessOutputDescription<?>> AbstractOutputBinding<Method, D> method(Method method) {
         return new OutputMethodBinding<>(method);
     }
 
-    private static class OutputMethodBinding<D extends ProcessOutputDescription> extends AbstractOutputBinding<Method, D> {
+    private static class OutputMethodBinding<D extends TypedProcessOutputDescription<?>> extends AbstractOutputBinding<Method, D> {
         private static final Logger LOGGER = LoggerFactory.getLogger(OutputMethodBinding.class);
 
         OutputMethodBinding(Method method) {
@@ -118,7 +137,7 @@ abstract class AbstractOutputBinding<M extends AccessibleObject & Member, D exte
         }
 
         @Override
-        public IData get(Object instance) {
+        public Data<?> get(Object instance) {
             Object value;
             try {
                 value = getMember().invoke(instance);
@@ -133,7 +152,7 @@ abstract class AbstractOutputBinding<M extends AccessibleObject & Member, D exte
 
     }
 
-    private static class OutputFieldBinding<D extends ProcessOutputDescription> extends AbstractOutputBinding<Field, D> {
+    private static class OutputFieldBinding<D extends TypedProcessOutputDescription<?>> extends AbstractOutputBinding<Field, D> {
 
         private static final Logger LOGGER = LoggerFactory.getLogger(OutputFieldBinding.class);
 
@@ -160,7 +179,7 @@ abstract class AbstractOutputBinding<M extends AccessibleObject & Member, D exte
         }
 
         @Override
-        public IData get(Object instance) {
+        public Data<?> get(Object instance) {
             Object value;
             try {
                 value = getMember().get(instance);

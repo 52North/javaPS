@@ -23,8 +23,8 @@ import org.n52.iceland.binding.kvp.AbstractKvpDecoder;
 import org.n52.iceland.coding.decode.DecoderKey;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.util.KvpHelper;
-import org.n52.javaps.ogc.wps.WPS200Constants;
-import org.n52.javaps.ogc.wps.WPSConstants;
+import org.n52.iceland.ogc.wps.WPS200Constants;
+import org.n52.iceland.ogc.wps.WPSConstants;
 import org.n52.javaps.request.DescribeProcessRequest;
 
 public class DescribeProcessKvpDecoder extends AbstractKvpDecoder<DescribeProcessRequest> {

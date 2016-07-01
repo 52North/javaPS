@@ -19,20 +19,20 @@ package org.n52.javaps.algorithm;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.n52.javaps.io.data.IData;
 import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.javaps.io.Data;
 
 /**
  * TODO JavaDoc
  * @author Christian Autermann
  */
-public class ProcessOutputs extends HashMap<OwsCode, IData> {
+public class ProcessOutputs extends HashMap<OwsCode, Data<?>> {
     private static final long serialVersionUID = -3966745236341552277L;
 
     public ProcessOutputs() {
     }
 
-    public ProcessOutputs(Map<? extends OwsCode, ? extends IData> m) {
+    public ProcessOutputs(Map<? extends OwsCode, ? extends Data<?>> m) {
         super(m);
     }
 

@@ -20,7 +20,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import org.n52.javaps.ogc.wps.Format;
+import org.n52.iceland.ogc.wps.Format;
 
 public class ParserTest {
 

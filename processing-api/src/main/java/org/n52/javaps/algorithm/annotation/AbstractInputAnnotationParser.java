@@ -21,7 +21,7 @@ import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Member;
 import java.util.function.Function;
 
-import org.n52.javaps.ogc.wps.description.ProcessInputDescription;
+import org.n52.iceland.ogc.wps.description.typed.TypedProcessInputDescription;
 
 /**
  * TODO JavaDoc
@@ -30,8 +30,9 @@ import org.n52.javaps.ogc.wps.description.ProcessInputDescription;
  * @param <A> the annotation type
  * @param <M> the accessible member type
  * @param <D> the description type
+ * @param <B> the binding type
  */
-abstract class AbstractInputAnnotationParser<A extends Annotation, M extends AccessibleObject & Member, D extends ProcessInputDescription, B extends AbstractInputBinding<M, D>>
+abstract class AbstractInputAnnotationParser<A extends Annotation, M extends AccessibleObject & Member, D extends TypedProcessInputDescription<?>, B extends AbstractInputBinding<M, D>>
         extends AbstractDataAnnotationParser<A, M, D, B> {
 
     AbstractInputAnnotationParser(Function<M, B> bindingFunction) {

@@ -23,7 +23,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.n52.javaps.io.data.IComplexData;
+import org.n52.javaps.io.complex.ComplexData;
 
 /**
  *
@@ -33,6 +33,7 @@ import org.n52.javaps.io.data.IComplexData;
 @Target({ ElementType.METHOD, ElementType.FIELD })
 @Inherited
 @Documented
+@SuppressWarnings("rawtypes")
 public @interface ComplexInput {
     String identifier(); // identifier
     String title() default "";
@@ -40,5 +41,5 @@ public @interface ComplexInput {
     int minOccurs() default 1;
     int maxOccurs() default 1;
     int maximumMegaBytes() default 0;
-    Class<? extends IComplexData> binding();
+    Class<? extends ComplexData> binding();
 }

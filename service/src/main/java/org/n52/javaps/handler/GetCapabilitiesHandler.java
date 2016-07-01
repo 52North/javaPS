@@ -57,11 +57,11 @@ import org.n52.iceland.service.operator.ServiceOperatorRepository;
 import org.n52.iceland.util.Comparables;
 import org.n52.iceland.util.http.MediaTypes;
 import org.n52.javaps.Engine;
-import org.n52.javaps.ogc.wps.ProcessOffering;
-import org.n52.javaps.ogc.wps.ProcessOfferings;
-import org.n52.javaps.ogc.wps.WPSCapabilities;
-import org.n52.javaps.ogc.wps.WPSConstants;
-import org.n52.javaps.ogc.wps.description.ProcessDescription;
+import org.n52.iceland.ogc.wps.ProcessOffering;
+import org.n52.iceland.ogc.wps.ProcessOfferings;
+import org.n52.iceland.ogc.wps.WPSCapabilities;
+import org.n52.iceland.ogc.wps.WPSConstants;
+import org.n52.iceland.ogc.wps.description.ProcessDescription;
 
 import com.google.common.collect.ImmutableSet;
 

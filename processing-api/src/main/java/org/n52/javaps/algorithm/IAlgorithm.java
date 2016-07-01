@@ -19,9 +19,7 @@ package org.n52.javaps.algorithm;
 import java.util.Collections;
 import java.util.List;
 
-import org.n52.iceland.ogc.ows.OwsCode;
-import org.n52.javaps.io.data.IData;
-import org.n52.javaps.ogc.wps.description.ProcessDescription;
+import org.n52.iceland.ogc.wps.description.ProcessDescription;
 
 /**
  * @author Bastian Schaeffer, University of Muenster, Theodor Foerster, ITC
@@ -31,32 +29,10 @@ public interface IAlgorithm {
 
     ProcessOutputs run(ProcessInputs inputData) throws ExecutionException;
 
+    @Deprecated
     default List<String> getErrors() {
         return Collections.emptyList();
     }
 
     ProcessDescription getDescription();
-
-    default Class<?> getInputDataType(String id) {
-        return getOutputDataType(new OwsCode(id));
-    }
-
-    default Class<?> getOutputDataType(String id) {
-        return getOutputDataType(new OwsCode(id));
-    }
-    default Class<? extends IData> getInputDataType(OwsCode identifier) {
-        if (getDescription() != null) {
-            return getDescription().getInput(identifier).getBindingClass();
-        } else {
-            throw new IllegalStateException("Instance must have an process description");
-        }
-    }
-
-    default Class<? extends IData> getOutputDataType(OwsCode identifier) {
-        if (getDescription() != null) {
-            return getDescription().getOutput(identifier).getBindingClass();
-        } else {
-            throw new IllegalStateException("Instance must have an process description");
-        }
-    }
 }

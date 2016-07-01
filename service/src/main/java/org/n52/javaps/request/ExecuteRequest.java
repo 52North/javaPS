@@ -24,11 +24,11 @@ import java.util.Objects;
 
 import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.iceland.request.AbstractServiceRequest;
-import org.n52.javaps.ogc.wps.ExecutionMode;
-import org.n52.javaps.ogc.wps.OutputDefinition;
-import org.n52.javaps.ogc.wps.ResponseMode;
-import org.n52.javaps.ogc.wps.WPSConstants;
-import org.n52.javaps.ogc.wps.data.Data;
+import org.n52.iceland.ogc.wps.ExecutionMode;
+import org.n52.iceland.ogc.wps.OutputDefinition;
+import org.n52.iceland.ogc.wps.ResponseMode;
+import org.n52.iceland.ogc.wps.WPSConstants;
+import org.n52.iceland.ogc.wps.data.Data;
 import org.n52.javaps.response.ExecuteResponse;
 
 

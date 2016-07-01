@@ -30,15 +30,19 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 
-import org.n52.javaps.io.GeneratorRepository;
-import org.n52.javaps.io.IGenerator;
-import org.n52.javaps.io.IParser;
-import org.n52.javaps.io.ParserRepository;
-import org.n52.javaps.io.data.IComplexData;
 import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.iceland.ogc.ows.OwsLanguageString;
-import org.n52.javaps.ogc.wps.Format;
-import org.n52.javaps.ogc.wps.description.ProcessDescription;
+import org.n52.iceland.ogc.wps.Format;
+import org.n52.iceland.ogc.wps.description.ProcessDescription;
+import org.n52.javaps.io.complex.ComplexData;
+import org.n52.javaps.io.complex.GeneratorRepository;
+import org.n52.javaps.io.complex.IGenerator;
+import org.n52.javaps.io.complex.IParser;
+import org.n52.javaps.io.complex.ParserRepository;
+import org.n52.javaps.io.literal.LiteralType;
+import org.n52.javaps.io.literal.LiteralTypeRepository;
+import org.n52.javaps.io.literal.xsd.LiteralIntType;
+import org.n52.javaps.io.literal.xsd.LiteralStringType;
 
 /**
  * TODO JavaDoc
@@ -60,7 +64,8 @@ public class AnnotatedAlgorithmMetadataTest {
 
     @Test
     public void test() {
-        AnnotatedAlgorithmMetadata metadata = new AnnotatedAlgorithmMetadata(TestProcess.class, new ParserRepositoryImpl(), new GeneratorRepositoryImpl());
+        IORepo repo = new IORepo();
+        AnnotatedAlgorithmMetadata metadata = new AnnotatedAlgorithmMetadata(TestProcess.class, repo, repo, new LiteralDataManagerImpl());
         ProcessDescription processDescription = metadata.getDescription();
 
         errors.checkThat(processDescription.getVersion(), is("1.0.0"));
@@ -79,7 +84,7 @@ public class AnnotatedAlgorithmMetadataTest {
         C
     }
 
-    public static class TestIData implements IComplexData {
+    public static class TestIData implements ComplexData<Object> {
         private static final long serialVersionUID = 8586931812896959156L;
         private final Object object;
 
@@ -165,8 +170,7 @@ public class AnnotatedAlgorithmMetadataTest {
 
         @LiteralInput(identifier = "input2",
                       abstrakt = "input2 abstract",
-                      title
-                      = "input2 title",
+                      title = "input2 title",
                       minOccurs = 1,
                       maxOccurs = 1,
                       defaultValue = "asdf",
@@ -231,7 +235,7 @@ public class AnnotatedAlgorithmMetadataTest {
         }
     }
 
-    private static class GeneratorRepositoryImpl implements GeneratorRepository {
+    private static class IORepo implements GeneratorRepository, ParserRepository {
 
         @Override
         public Set<IGenerator> getGenerators() {
@@ -240,23 +244,9 @@ public class AnnotatedAlgorithmMetadataTest {
 
         @Override
         public Optional<IGenerator> getGenerator(
-                Format format, Class<? extends IComplexData> binding) {
+                Format format, Class<? extends ComplexData<?>> binding) {
             return Optional.empty();
         }
-
-        @Override
-        public Set<Format> getSupportedFormats() {
-            return Collections.unmodifiableSet(FORMATS);
-        }
-
-        @Override
-        public Set<Format> getSupportedFormats(
-                Class<? extends IComplexData> binding) {
-            return getSupportedFormats();
-        }
-    }
-
-    private static class ParserRepositoryImpl implements ParserRepository {
 
         @Override
         public Set<IParser> getParsers() {
@@ -265,7 +255,7 @@ public class AnnotatedAlgorithmMetadataTest {
 
         @Override
         public Optional<IParser> getParser(
-                Format format, Class<? extends IComplexData> binding) {
+                Format format, Class<? extends ComplexData<?>> binding) {
             return Optional.empty();
         }
 
@@ -276,8 +266,39 @@ public class AnnotatedAlgorithmMetadataTest {
 
         @Override
         public Set<Format> getSupportedFormats(
-                Class<? extends IComplexData> binding) {
+                Class<? extends ComplexData<?>> binding) {
             return getSupportedFormats();
+        }
+    }
+
+    static class LiteralDataManagerImpl implements LiteralTypeRepository {
+        public LiteralDataManagerImpl() {
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T> LiteralType<T> getLiteralType(
+                Class<? extends LiteralType<?>> literalType, Class<?> payloadType) {
+
+            if (literalType == null || literalType.equals(LiteralType.class)) {
+                if (payloadType != null) {
+                    if (payloadType.equals(String.class)) {
+                        return (LiteralType<T>) new LiteralStringType();
+                    } else if (payloadType.equals(Integer.class)) {
+                        return (LiteralType<T>) new LiteralIntType();
+                    } else {
+                        throw new Error("Unsupported payload type");
+                    }
+                } else {
+                    throw new Error("Neither payload type nro literal type given");
+                }
+            } else {
+                try {
+                    return (LiteralType<T>) literalType.newInstance();
+                } catch (InstantiationException | IllegalAccessException ex) {
+                    throw new Error(ex);
+                }
+            }
         }
     }
 }

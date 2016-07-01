@@ -22,7 +22,7 @@ import java.util.Set;
 import org.n52.iceland.lifecycle.Constructable;
 import org.n52.iceland.lifecycle.Destroyable;
 import org.n52.iceland.ogc.ows.OwsCode;
-import org.n52.javaps.ogc.wps.description.ProcessDescription;
+import org.n52.iceland.ogc.wps.description.ProcessDescription;
 
 /**
  * @author Bastian Schaeffer, University of Muenster, Theodor Foerster, ITC

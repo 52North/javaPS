@@ -18,7 +18,7 @@ package org.n52.javaps.request;
 
 
 import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.javaps.ogc.wps.WPSConstants;
+import org.n52.iceland.ogc.wps.WPSConstants;
 import org.n52.javaps.response.GetStatusResponse;
 
 /**

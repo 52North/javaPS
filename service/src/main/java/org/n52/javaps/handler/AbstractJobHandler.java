@@ -28,7 +28,7 @@ import org.n52.iceland.ogc.ows.OwsNoValues;
 import org.n52.iceland.ogc.ows.OwsPossibleValues;
 import org.n52.iceland.ogc.ows.OwsValue;
 import org.n52.javaps.Engine;
-import org.n52.javaps.ogc.wps.JobId;
+import org.n52.iceland.ogc.wps.JobId;
 
 /**
  * TODO JavaDoc

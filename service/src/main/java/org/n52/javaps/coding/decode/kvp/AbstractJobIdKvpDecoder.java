@@ -19,7 +19,7 @@ package org.n52.javaps.coding.decode.kvp;
 import org.n52.iceland.binding.kvp.AbstractKvpDecoder;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.util.KvpHelper;
-import org.n52.javaps.ogc.wps.JobId;
+import org.n52.iceland.ogc.wps.JobId;
 import org.n52.javaps.request.AbstractJobIdRequest;
 
 /**

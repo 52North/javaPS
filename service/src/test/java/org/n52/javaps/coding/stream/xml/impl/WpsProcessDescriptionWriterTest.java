@@ -31,6 +31,10 @@ import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 
 import org.n52.iceland.exception.ows.OwsExceptionReport;
+import org.n52.iceland.ogc.wps.Format;
+import org.n52.iceland.ogc.wps.ProcessOffering;
+import org.n52.iceland.ogc.wps.ProcessOfferings;
+import org.n52.iceland.ogc.wps.description.ProcessDescription;
 import org.n52.iceland.util.http.MediaTypes;
 import org.n52.javaps.algorithm.annotation.Algorithm;
 import org.n52.javaps.algorithm.annotation.AnnotatedAlgorithmMetadata;
@@ -42,28 +46,24 @@ import org.n52.javaps.algorithm.annotation.LiteralOutput;
 import org.n52.javaps.coding.stream.StreamWriter;
 import org.n52.javaps.coding.stream.StreamWriterRepository;
 import org.n52.javaps.coding.stream.xml.DocumentXmlStreamWriter;
-import org.n52.javaps.coding.stream.xml.ElementXmlStreamWriterRepository;
-import org.n52.javaps.io.GeneratorRepository;
-import org.n52.javaps.io.IGenerator;
-import org.n52.javaps.io.IParser;
-import org.n52.javaps.io.ParserRepository;
-import org.n52.javaps.io.data.IComplexData;
-import org.n52.javaps.ogc.wps.Format;
-import org.n52.javaps.ogc.wps.ProcessOffering;
-import org.n52.javaps.ogc.wps.ProcessOfferings;
-import org.n52.javaps.ogc.wps.description.ProcessDescription;
-import org.n52.javaps.response.DescribeProcessResponse;
 import org.n52.javaps.coding.stream.xml.ElementXmlStreamWriter;
+import org.n52.javaps.coding.stream.xml.ElementXmlStreamWriterRepository;
+import org.n52.javaps.io.complex.ComplexData;
+import org.n52.javaps.io.complex.GeneratorRepository;
+import org.n52.javaps.io.complex.IGenerator;
+import org.n52.javaps.io.complex.IParser;
+import org.n52.javaps.io.complex.ParserRepository;
+import org.n52.javaps.response.DescribeProcessResponse;
 
 /**
  * TODO JavaDoc
+ *
  * @author Christian Autermann
  */
 public class WpsProcessDescriptionWriterTest {
 
     private static final List<Provider<ElementXmlStreamWriter>> ELEMENT_WRITERS
             = Arrays.asList(WPSResponseWriter::new, WPSWriter::new);
-
 
     @Test
     public void test() throws OwsExceptionReport {
@@ -78,7 +78,6 @@ public class WpsProcessDescriptionWriterTest {
         response.setContentType(MediaTypes.APPLICATION_XML);
 
         response.setOfferings(new ProcessOfferings(Collections.singleton(processOffering)));
-
 
         write(repo, response, System.out);
 
@@ -96,11 +95,13 @@ public class WpsProcessDescriptionWriterTest {
     public final ErrorCollector errors = new ErrorCollector();
 
     public ProcessDescription getProcessDescription() {
-        return new AnnotatedAlgorithmMetadata(TestProcess.class, new ParserRepositoryImpl(), new GeneratorRepositoryImpl()).getDescription();
+        IORepo ioRepo = new IORepo();
+        return new AnnotatedAlgorithmMetadata(TestProcess.class, ioRepo, ioRepo).getDescription();
     }
 
     private StreamWriterRepository createRepository() {
-        DocumentXmlStreamWriter writer = new DocumentXmlStreamWriter(new ElementXmlStreamWriterRepository(ELEMENT_WRITERS));
+        DocumentXmlStreamWriter writer
+                = new DocumentXmlStreamWriter(new ElementXmlStreamWriterRepository(ELEMENT_WRITERS));
         StreamWriterRepository repository = new StreamWriterRepository();
         repository.set(Arrays.asList(() -> writer));
         repository.init();
@@ -124,7 +125,7 @@ public class WpsProcessDescriptionWriterTest {
         C
     }
 
-    public static class TestIData implements IComplexData {
+    public static class TestIData implements ComplexData<Object> {
         private static final long serialVersionUID = 8586931812896959156L;
         private final Object object;
 
@@ -276,7 +277,7 @@ public class WpsProcessDescriptionWriterTest {
         }
     }
 
-    private static class GeneratorRepositoryImpl implements GeneratorRepository {
+    private static class IORepo implements GeneratorRepository,ParserRepository {
 
         @Override
         public Set<IGenerator> getGenerators() {
@@ -284,8 +285,7 @@ public class WpsProcessDescriptionWriterTest {
         }
 
         @Override
-        public Optional<IGenerator> getGenerator(
-                Format format, Class<? extends IComplexData> binding) {
+        public Optional<IGenerator> getGenerator(Format format, Class<? extends ComplexData<?>> binding) {
             return Optional.empty();
         }
 
@@ -295,34 +295,17 @@ public class WpsProcessDescriptionWriterTest {
         }
 
         @Override
-        public Set<Format> getSupportedFormats(
-                Class<? extends IComplexData> binding) {
+        public Set<Format> getSupportedFormats(Class<? extends ComplexData<?>> binding) {
             return getSupportedFormats();
         }
-    }
-
-    private static class ParserRepositoryImpl implements ParserRepository {
-
         @Override
         public Set<IParser> getParsers() {
             return Collections.emptySet();
         }
 
         @Override
-        public Optional<IParser> getParser(
-                Format format, Class<? extends IComplexData> binding) {
+        public Optional<IParser> getParser(Format format, Class<? extends ComplexData<?>> binding) {
             return Optional.empty();
-        }
-
-        @Override
-        public Set<Format> getSupportedFormats() {
-            return Collections.unmodifiableSet(FORMATS);
-        }
-
-        @Override
-        public Set<Format> getSupportedFormats(
-                Class<? extends IComplexData> binding) {
-            return getSupportedFormats();
         }
     }
 }

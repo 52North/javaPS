@@ -31,11 +31,47 @@
 
     <bean id="localAlgorithmRepository" class="org.n52.javaps.algorithm.LocalAlgorithmRepository" />
     <bean id="contextAlgorithmRegistrator" class="org.n52.javaps.algorithm.ContextAlgorithmRegistrator"/>
-
     <bean id="serviceLoaderAlgorithmRepository" class="org.n52.javaps.algorithm.ServiceLoaderAlgorithmRepository"/>
-
+    
+    <bean id="context" class="org.n52.javaps.utils.Context"/>
+    
     <bean id="generatorRepository" class="org.n52.javaps.io.GeneratorRepositoryImpl" />
-
     <bean id="parserRepository" class="org.n52.javaps.io.ParserRepositoryImpl" />
+    
+    <bean id="literalTypeRepository" class="org.n52.javaps.io.literal.LiteralTypeRepositoryImpl"/>
+
+    <bean class="org.n52.javaps.io.literal.xsd.LiteralAnySimpleType"/>
+    <bean class="org.n52.javaps.io.literal.xsd.LiteralAnyURIType"/>
+    <bean class="org.n52.javaps.io.literal.xsd.LiteralBase64BinaryType"/>
+    <bean class="org.n52.javaps.io.literal.xsd.LiteralBooleanType"/>
+    <bean class="org.n52.javaps.io.literal.xsd.LiteralByteType"/>
+    <bean class="org.n52.javaps.io.literal.xsd.LiteralDateTimeType"/>
+    <bean class="org.n52.javaps.io.literal.xsd.LiteralDateType"/>
+    <bean class="org.n52.javaps.io.literal.xsd.LiteralDayType"/>
+    <bean class="org.n52.javaps.io.literal.xsd.LiteralDecimalType"/>
+    <bean class="org.n52.javaps.io.literal.xsd.LiteralDoubleType"/>
+    <bean class="org.n52.javaps.io.literal.xsd.LiteralDurationType"/>
+    <bean class="org.n52.javaps.io.literal.xsd.LiteralFloatType"/>
+    <bean class="org.n52.javaps.io.literal.xsd.LiteralHexBinaryType"/>
+    <bean class="org.n52.javaps.io.literal.xsd.LiteralIntegerType"/>
+    <bean class="org.n52.javaps.io.literal.xsd.LiteralIntType"/>
+    <bean class="org.n52.javaps.io.literal.xsd.LiteralLanguageType"/>
+    <bean class="org.n52.javaps.io.literal.xsd.LiteralLongType"/>
+    <bean class="org.n52.javaps.io.literal.xsd.LiteralMonthDayType"/>
+    <bean class="org.n52.javaps.io.literal.xsd.LiteralMonthType"/>
+    <bean class="org.n52.javaps.io.literal.xsd.LiteralNegativeIntegerType"/>
+    <bean class="org.n52.javaps.io.literal.xsd.LiteralNonNegativeIntegerType"/>
+    <bean class="org.n52.javaps.io.literal.xsd.LiteralNonPositiveIntegerType"/>
+    <bean class="org.n52.javaps.io.literal.xsd.LiteralNormalizedStringType"/>
+    <bean class="org.n52.javaps.io.literal.xsd.LiteralPositiveIntegerType"/>
+    <bean class="org.n52.javaps.io.literal.xsd.LiteralShortType"/>
+    <bean class="org.n52.javaps.io.literal.xsd.LiteralStringType"/>
+    <bean class="org.n52.javaps.io.literal.xsd.LiteralTimeType"/>
+    <bean class="org.n52.javaps.io.literal.xsd.LiteralUnsignedByteType"/>
+    <bean class="org.n52.javaps.io.literal.xsd.LiteralUnsignedIntType"/>
+    <bean class="org.n52.javaps.io.literal.xsd.LiteralUnsignedLongType"/>
+    <bean class="org.n52.javaps.io.literal.xsd.LiteralUnsignedShortType"/>
+    <bean class="org.n52.javaps.io.literal.xsd.LiteralYearMonthType"/>
+    <bean class="org.n52.javaps.io.literal.xsd.LiteralYearType"/>
 
 </beans>

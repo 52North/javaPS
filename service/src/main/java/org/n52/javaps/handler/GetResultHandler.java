@@ -29,8 +29,8 @@ import org.n52.iceland.ds.OperationHandlerKey;
 import org.n52.iceland.exception.ows.NoApplicableCodeException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.javaps.Engine;
-import org.n52.javaps.ogc.wps.Result;
-import org.n52.javaps.ogc.wps.WPSConstants;
+import org.n52.iceland.ogc.wps.Result;
+import org.n52.iceland.ogc.wps.WPSConstants;
 import org.n52.javaps.request.GetResultRequest;
 import org.n52.javaps.response.GetResultResponse;
 

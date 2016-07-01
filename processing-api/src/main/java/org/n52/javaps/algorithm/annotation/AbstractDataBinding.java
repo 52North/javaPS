@@ -21,7 +21,7 @@ import java.lang.reflect.Member;
 import java.lang.reflect.Type;
 import java.util.Objects;
 
-import org.n52.javaps.ogc.wps.description.DataDescription;
+import org.n52.iceland.ogc.wps.description.typed.TypedDataDescription;
 
 import com.google.common.primitives.Primitives;
 
@@ -30,7 +30,7 @@ import com.google.common.primitives.Primitives;
  *
  * @author Tom Kunicki, Christian Autermann
  */
-abstract class AbstractDataBinding<M extends AccessibleObject & Member, D extends DataDescription> extends AnnotationBinding<M> {
+abstract class AbstractDataBinding<M extends AccessibleObject & Member, D extends TypedDataDescription<?>> extends AnnotationBinding<M> {
 
     private D description;
 

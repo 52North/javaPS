@@ -25,12 +25,12 @@ import java.util.concurrent.Future;
 
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.ogc.ows.OwsCode;
-import org.n52.javaps.ogc.wps.JobId;
-import org.n52.javaps.ogc.wps.OutputDefinition;
-import org.n52.javaps.ogc.wps.Result;
-import org.n52.javaps.ogc.wps.StatusInfo;
-import org.n52.javaps.ogc.wps.data.Data;
-import org.n52.javaps.ogc.wps.description.ProcessDescription;
+import org.n52.iceland.ogc.wps.JobId;
+import org.n52.iceland.ogc.wps.OutputDefinition;
+import org.n52.iceland.ogc.wps.Result;
+import org.n52.iceland.ogc.wps.StatusInfo;
+import org.n52.iceland.ogc.wps.data.Data;
+import org.n52.iceland.ogc.wps.description.ProcessDescription;
 
 /**
  * TODO JavaDoc

@@ -23,7 +23,7 @@ import java.util.Objects;
 
 import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.iceland.request.AbstractServiceRequest;
-import org.n52.javaps.ogc.wps.WPSConstants;
+import org.n52.iceland.ogc.wps.WPSConstants;
 import org.n52.javaps.response.DescribeProcessResponse;
 
 public class DescribeProcessRequest extends

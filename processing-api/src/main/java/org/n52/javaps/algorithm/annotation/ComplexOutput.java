@@ -23,7 +23,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.n52.javaps.io.data.IComplexData;
+import org.n52.javaps.io.complex.ComplexData;
 
 /**
  *
@@ -37,5 +37,5 @@ public @interface ComplexOutput {
     String identifier(); // identifier
     String title() default "";
     String abstrakt() default ""; // 'abstract' is java reserved keyword
-    Class<? extends IComplexData> binding();
+    Class<? extends ComplexData<?>> binding();
 }

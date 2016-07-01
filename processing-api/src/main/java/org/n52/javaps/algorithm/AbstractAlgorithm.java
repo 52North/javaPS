@@ -20,7 +20,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.n52.javaps.ogc.wps.description.ProcessDescription;
+import org.n52.iceland.ogc.wps.description.ProcessDescription;
 
 public abstract class AbstractAlgorithm
         extends AbstractObservable implements IAlgorithm {
@@ -30,10 +30,12 @@ public abstract class AbstractAlgorithm
     private ProcessDescription description;
 
     @Override
+    @Deprecated
     public List<String> getErrors() {
         return Collections.unmodifiableList(this.errorList);
     }
 
+    @Deprecated
     protected void addError(String error) {
         this.errorList.add(error);
     }

@@ -25,8 +25,8 @@ import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.ogc.ows.OWSConstants;
 import org.n52.iceland.request.GetCapabilitiesRequest;
 import org.n52.iceland.util.KvpHelper;
-import org.n52.javaps.ogc.wps.WPS200Constants;
-import org.n52.javaps.ogc.wps.WPSConstants;
+import org.n52.iceland.ogc.wps.WPS200Constants;
+import org.n52.iceland.ogc.wps.WPSConstants;
 
 import com.google.common.collect.Sets;
 

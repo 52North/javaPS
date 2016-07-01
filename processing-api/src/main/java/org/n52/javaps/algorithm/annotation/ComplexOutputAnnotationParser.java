@@ -22,12 +22,11 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 
-import org.n52.javaps.io.GeneratorRepository;
-import org.n52.javaps.io.data.IComplexData;
-import org.n52.javaps.io.data.IData;
-import org.n52.javaps.ogc.wps.Format;
-import org.n52.javaps.ogc.wps.description.ComplexOutputDescription;
-import org.n52.javaps.ogc.wps.description.ComplexOutputDescriptionImpl;
+import org.n52.iceland.ogc.wps.Format;
+import org.n52.iceland.ogc.wps.description.typed.TypedComplexOutputDescription;
+import org.n52.iceland.ogc.wps.description.typed.impl.TypedProcessDescriptionFactory;
+import org.n52.javaps.io.complex.ComplexData;
+import org.n52.javaps.io.complex.GeneratorRepository;
 
 /**
  * TODO JavaDoc
@@ -36,8 +35,8 @@ import org.n52.javaps.ogc.wps.description.ComplexOutputDescriptionImpl;
  * @param <M> the accessible member type
  * @param <B> the binding type
  */
-class ComplexOutputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractOutputBinding<M, ComplexOutputDescription>>
-        extends AbstractOutputAnnotationParser<ComplexOutput, M, ComplexOutputDescription, B> {
+class ComplexOutputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractOutputBinding<M, TypedComplexOutputDescription>>
+        extends AbstractOutputAnnotationParser<ComplexOutput, M, TypedComplexOutputDescription, B> {
 
     private final GeneratorRepository generatorRepository;
 
@@ -47,12 +46,12 @@ class ComplexOutputAnnotationParser<M extends AccessibleObject & Member, B exten
     }
 
     @Override
-    protected ComplexOutputDescription createDescription(ComplexOutput annotation, B binding) {
-        Class<? extends IComplexData> bindingClass = annotation.binding();
+    protected TypedComplexOutputDescription createDescription(ComplexOutput annotation, B binding) {
+        Class<? extends ComplexData<?>> bindingClass = annotation.binding();
         Set<Format> supportedFormats = this.generatorRepository.getSupportedFormats(bindingClass);
         Format defaultFormat = this.generatorRepository.getDefaultFormat(bindingClass).orElse(null);
-        return ComplexOutputDescriptionImpl.builder()
-                .withBindingClass(bindingClass)
+        return new TypedProcessDescriptionFactory().complexOutput()
+                .withType(bindingClass)
                 .withDefaultFormat(defaultFormat)
                 .withSupportedFormat(supportedFormats)
                 .withIdentifier(annotation.identifier())
@@ -64,10 +63,5 @@ class ComplexOutputAnnotationParser<M extends AccessibleObject & Member, B exten
     @Override
     public Class<? extends ComplexOutput> getSupportedAnnotation() {
         return ComplexOutput.class;
-    }
-
-    @Override
-    protected Class<? extends IData> getBindingType(ComplexOutput annotation, B binding) {
-        return annotation.binding();
     }
 }

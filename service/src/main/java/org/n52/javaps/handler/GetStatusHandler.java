@@ -25,9 +25,9 @@ import org.n52.iceland.ds.GenericOperationHandler;
 import org.n52.iceland.ds.OperationHandlerKey;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.javaps.Engine;
-import org.n52.javaps.ogc.wps.JobId;
-import org.n52.javaps.ogc.wps.StatusInfo;
-import org.n52.javaps.ogc.wps.WPSConstants;
+import org.n52.iceland.ogc.wps.JobId;
+import org.n52.iceland.ogc.wps.StatusInfo;
+import org.n52.iceland.ogc.wps.WPSConstants;
 import org.n52.javaps.request.GetStatusRequest;
 import org.n52.javaps.response.GetStatusResponse;
 

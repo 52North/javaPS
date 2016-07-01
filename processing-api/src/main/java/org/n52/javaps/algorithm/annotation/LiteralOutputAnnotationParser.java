@@ -19,28 +19,22 @@ package org.n52.javaps.algorithm.annotation;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Member;
 import java.lang.reflect.Type;
+import java.util.Objects;
 import java.util.function.Function;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.n52.iceland.ogc.wps.description.typed.TypedLiteralOutputDescription;
+import org.n52.iceland.ogc.wps.description.typed.impl.TypedProcessDescriptionFactory;
+import org.n52.javaps.io.literal.LiteralType;
+import org.n52.javaps.io.literal.LiteralTypeRepository;
 
-import org.n52.javaps.io.BasicXMLTypeFactory;
-import org.n52.javaps.io.data.ILiteralData;
-import org.n52.javaps.ogc.wps.description.LiteralDataDomainImpl;
-import org.n52.javaps.ogc.wps.description.LiteralOutputDescription;
-import org.n52.javaps.ogc.wps.description.LiteralOutputDescriptionImpl;
+class LiteralOutputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractOutputBinding<M, TypedLiteralOutputDescription>>
+        extends AbstractOutputAnnotationParser<LiteralOutput, M, TypedLiteralOutputDescription, B> {
 
-/**
- * TODO JavaDoc
- *
- * @author Christian Autermann
- */
-class LiteralOutputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractOutputBinding<M, LiteralOutputDescription>>
-        extends AbstractOutputAnnotationParser<LiteralOutput, M, LiteralOutputDescription, B> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(LiteralOutputAnnotationParser.class);
+    private final LiteralTypeRepository literalTypeRepository;
 
-    LiteralOutputAnnotationParser(Function<M, B> bindingFunction) {
+    LiteralOutputAnnotationParser(Function<M, B> bindingFunction, LiteralTypeRepository literalTypeRepository) {
         super(bindingFunction);
+        this.literalTypeRepository = Objects.requireNonNull(literalTypeRepository, "literalDataManager");
     }
 
     @Override
@@ -48,34 +42,30 @@ class LiteralOutputAnnotationParser<M extends AccessibleObject & Member, B exten
         return LiteralOutput.class;
     }
 
-    @Override
-    public Class<? extends ILiteralData> getBindingType(LiteralOutput annotation, B binding) {
+    @SuppressWarnings("unchecked")
+    public LiteralType<?> getLiteralType(LiteralOutput annotation, B binding) {
         Type payloadType = binding.getPayloadType();
-        Class<? extends ILiteralData> bindingType = annotation.binding();
-        if (bindingType == null || bindingType == ILiteralData.class) {
-            if (payloadType instanceof Class<?>) {
-                bindingType = BasicXMLTypeFactory.getBindingForPayloadType((Class<?>) payloadType);
-                if (bindingType == null) {
-                    LOGGER.error("Unable to locate binding class for {}; binding not found.", payloadType);
-                }
-            } else {
-                LOGGER.error("Unable to determine binding class for {}; type must fully resolved to use auto-binding", payloadType);
-            }
+        Class<? extends LiteralType<?>> bindingType = (Class<? extends LiteralType<?>>) annotation.binding();
+        if (payloadType instanceof Class<?>) {
+            return literalTypeRepository.getLiteralType(bindingType, (Class<?>) payloadType);
+        } else {
+            return literalTypeRepository.getLiteralType(bindingType);
         }
-        return bindingType;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public LiteralOutputDescription createDescription(LiteralOutput annotation, B binding) {
-        Class<? extends ILiteralData> bindingType = getBindingType(annotation, binding);
-        String dataType = BasicXMLTypeFactory.getXMLDataTypeforBinding(bindingType);
-        return LiteralOutputDescriptionImpl.builder()
+    public TypedLiteralOutputDescription createDescription(LiteralOutput annotation, B binding) {
+        LiteralType<?> bindingType = getLiteralType(annotation, binding);
+        TypedProcessDescriptionFactory descriptionFactory = new TypedProcessDescriptionFactory();
+        return descriptionFactory.literalOutput()
                 .withTitle(annotation.title())
                 .withAbstract(annotation.abstrakt())
                 .withIdentifier(annotation.identifier())
-                .withDefaultLiteralDataDomain(LiteralDataDomainImpl.builder().withDataType(dataType).withUOM(annotation.uom()))
-                .withBindingClass(bindingType)
+                .withDefaultLiteralDataDomain(descriptionFactory.literalDataDomain()
+                        .withDataType(bindingType.getDataType())
+                        .withUOM(annotation.uom()))
+                .withType(bindingType)
                 .build();
 
     }

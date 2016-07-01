@@ -20,8 +20,8 @@ import java.util.Collections;
 import java.util.Set;
 
 import org.n52.iceland.coding.decode.DecoderKey;
-import org.n52.javaps.ogc.wps.WPS200Constants;
-import org.n52.javaps.ogc.wps.WPSConstants;
+import org.n52.iceland.ogc.wps.WPS200Constants;
+import org.n52.iceland.ogc.wps.WPSConstants;
 import org.n52.javaps.request.GetStatusRequest;
 
 

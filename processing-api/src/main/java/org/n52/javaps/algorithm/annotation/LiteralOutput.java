@@ -23,7 +23,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.n52.javaps.io.data.ILiteralData;
+import org.n52.javaps.io.literal.LiteralType;
 
 /**
  *
@@ -33,14 +33,11 @@ import org.n52.javaps.io.data.ILiteralData;
 @Target({ ElementType.METHOD, ElementType.FIELD })
 @Inherited
 @Documented
+@SuppressWarnings("rawtypes")
 public @interface LiteralOutput {
     String identifier(); // identifier
-
     String title() default "";
-
     String abstrakt() default ""; // 'abstract' is java reserved keyword
-
     String uom() default "";
-
-    Class<? extends ILiteralData> binding() default ILiteralData.class;
+    Class<? extends LiteralType> binding() default LiteralType.class;
 }

@@ -21,12 +21,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.inject.Inject;
 
+import org.n52.iceland.ogc.wps.description.ProcessDescription;
 import org.n52.javaps.algorithm.AbstractAlgorithm;
 import org.n52.javaps.algorithm.ProcessInputs;
 import org.n52.javaps.algorithm.ProcessOutputs;
-import org.n52.javaps.io.GeneratorRepository;
-import org.n52.javaps.io.ParserRepository;
-import org.n52.javaps.ogc.wps.description.ProcessDescription;
+import org.n52.javaps.io.complex.GeneratorRepository;
+import org.n52.javaps.io.complex.ParserRepository;
+import org.n52.javaps.io.literal.LiteralTypeRepository;
 
 public class AnnotatedAlgorithm extends AbstractAlgorithm {
     private static final Map<Class<?>, AnnotatedAlgorithmMetadata> CACHE = new ConcurrentHashMap<>();
@@ -34,16 +35,18 @@ public class AnnotatedAlgorithm extends AbstractAlgorithm {
     private final Object algorithmInstance;
 
     @Inject
-    public AnnotatedAlgorithm(ParserRepository parserRepository, GeneratorRepository generatorRepository) {
-        this(parserRepository, generatorRepository, null);
+    public AnnotatedAlgorithm(ParserRepository parserRepository,
+                              GeneratorRepository generatorRepository,
+                              LiteralTypeRepository literalTypeRepository) {
+        this(parserRepository, generatorRepository, literalTypeRepository, null);
     }
 
     public AnnotatedAlgorithm(ParserRepository parserRepository, GeneratorRepository generatorRepository,
-                              Object algorithmInstance) {
+                              LiteralTypeRepository literalDataManager, Object algorithmInstance) {
         this.algorithmInstance = algorithmInstance == null ? this : algorithmInstance;
         this.metadata = CACHE
                 .computeIfAbsent(this.algorithmInstance.getClass(), c ->
-                        new AnnotatedAlgorithmMetadata(c, parserRepository, generatorRepository));
+                        new AnnotatedAlgorithmMetadata(c, parserRepository, generatorRepository, literalDataManager));
     }
 
     @Override

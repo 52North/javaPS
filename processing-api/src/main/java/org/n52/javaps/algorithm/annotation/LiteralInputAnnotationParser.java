@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 
 import org.slf4j.Logger;
@@ -32,12 +33,10 @@ import org.slf4j.LoggerFactory;
 
 import org.n52.iceland.ogc.ows.OwsAllowedValues;
 import org.n52.iceland.ogc.ows.OwsValue;
-import org.n52.javaps.io.BasicXMLTypeFactory;
-import org.n52.javaps.io.data.ILiteralData;
-import org.n52.javaps.ogc.wps.description.LiteralDataDomainImpl;
-import org.n52.javaps.ogc.wps.description.LiteralInputDescription;
-import org.n52.javaps.ogc.wps.description.LiteralInputDescription.Builder;
-import org.n52.javaps.ogc.wps.description.LiteralInputDescriptionImpl;
+import org.n52.iceland.ogc.wps.description.typed.TypedLiteralInputDescription;
+import org.n52.iceland.ogc.wps.description.typed.impl.TypedProcessDescriptionFactory;
+import org.n52.javaps.io.literal.LiteralType;
+import org.n52.javaps.io.literal.LiteralTypeRepository;
 
 /**
  * TODO JavaDoc
@@ -46,13 +45,17 @@ import org.n52.javaps.ogc.wps.description.LiteralInputDescriptionImpl;
  * @param <M> the accessible member type
  * @param <B> the binding type
  */
-class LiteralInputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractInputBinding<M, LiteralInputDescription>>
-       extends AbstractInputAnnotationParser<LiteralInput, M, LiteralInputDescription, B> {
+class LiteralInputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractInputBinding<M, TypedLiteralInputDescription>>
+       extends AbstractInputAnnotationParser<LiteralInput, M, TypedLiteralInputDescription, B> {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(AnnotationParser.class);
 
-    LiteralInputAnnotationParser(Function<M, B> bindingFunction) {
+    private final LiteralTypeRepository literalTypeRepository;
+
+
+    LiteralInputAnnotationParser(Function<M, B> bindingFunction, LiteralTypeRepository literalTypeRepository) {
         super(bindingFunction);
+        this.literalTypeRepository = Objects.requireNonNull(literalTypeRepository, "literalDataManager");
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -65,25 +68,58 @@ class LiteralInputAnnotationParser<M extends AccessibleObject & Member, B extend
     }
 
     @Override
-    public LiteralInputDescription createDescription(LiteralInput annotation, B binding) {
+    public TypedLiteralInputDescription createDescription(LiteralInput annotation, B binding) {
         // auto generate binding if it's not explicitly declared
-        Class<? extends ILiteralData> bindingType = getBindingType(annotation, binding);
+        LiteralType<?> bindingType = getLiteralType(annotation, binding);
+        List<String> allowedValues = getAllowedValues(annotation, binding);
+        TypedProcessDescriptionFactory descriptionFactory = new TypedProcessDescriptionFactory();
 
-        String defaultValue = annotation.defaultValue();
-        // If InputType is enum
-        // 1) generate allowedValues if not explicitly declared
-        // 2) validate allowedValues if explicitly declared
-        // 3) validate defaultValue if declared
-        // 4) check for special ENUM_COUNT maxOccurs flag
-        Builder<?, ?> builder = LiteralInputDescriptionImpl.builder();
-        builder.withIdentifier(annotation.identifier())
+        return descriptionFactory.literalInput()
+                .withIdentifier(annotation.identifier())
                 .withTitle(annotation.title())
                 .withAbstract(annotation.abstrakt())
                 .withMinimalOccurence(annotation.minOccurs())
-                .withBindingClass(bindingType);
+                .withMaximalOccurence(getMaxOccurence(annotation, allowedValues))
+                .withType(bindingType)
+                .withDefaultLiteralDataDomain(descriptionFactory.literalDataDomain()
+                    .withValueDescription(new OwsAllowedValues(allowedValues.stream().map(OwsValue::new)))
+                    .withDataType(bindingType.getDataType())
+                    .withDefaultValue(getDefaultValue(annotation, allowedValues))
+                    .withUOM(annotation.uom()))
+                .build();
+    }
 
+    @Override
+    public Class<? extends LiteralInput> getSupportedAnnotation() {
+        return LiteralInput.class;
+    }
 
+    public LiteralType<?> getLiteralType(LiteralInput annotation, B binding) {
+        Type payloadType = binding.getPayloadType();
+        @SuppressWarnings("unchecked")
+        Class<? extends LiteralType<?>> bindingType = (Class<? extends LiteralType<?>>) annotation.binding();
 
+        if (payloadType instanceof Class<?>) {
+            return this.literalTypeRepository.getLiteralType(bindingType, (Class<?>)payloadType);
+        } else {
+            return this.literalTypeRepository.getLiteralType(bindingType);
+        }
+    }
+
+    private int getMaxOccurence(LiteralInput annotation, List<String> allowedValues) {
+        if (annotation.maxOccurs() == LiteralInput.ENUM_COUNT) {
+            if (allowedValues.isEmpty()) {
+                LOGGER.warn("Invalid maxOccurs \"ENUM_COUNT\" specified for for input {}, setting maxOccurs to {}", annotation.identifier(), annotation.minOccurs());
+                return annotation.minOccurs() > 0 ? annotation.minOccurs() : 1;
+            } else {
+                return allowedValues.size();
+            }
+        } else {
+            return annotation.maxOccurs();
+        }
+    }
+
+    private List<String> getAllowedValues(LiteralInput annotation, B binding) {
         List<String> enumValues = getEnumValues(binding);
         List<String> allowedValues = new ArrayList<>(Arrays.asList(annotation.allowedValues()));
         if (!enumValues.isEmpty()) {
@@ -96,56 +132,18 @@ class LiteralInputAnnotationParser<M extends AccessibleObject & Member, B extend
                 allowedValues = enumValues;
             }
         }
+        return allowedValues;
+    }
 
-         if (annotation.maxOccurs() == LiteralInput.ENUM_COUNT) {
-            if (allowedValues.isEmpty()) {
-                LOGGER.warn("Invalid maxOccurs \"ENUM_COUNT\" specified for for input {}, setting maxOccurs to {}", annotation.identifier(), annotation.minOccurs());
-                builder.withMaximalOccurence(annotation.minOccurs() > 0 ? annotation.minOccurs() : 1);
-            } else {
-                builder.withMaximalOccurence(allowedValues.size());
-            }
-        } else {
-            builder.withMaximalOccurence(annotation.maxOccurs());
-        }
-
+    private String getDefaultValue(LiteralInput annotation, List<String> allowedValues) {
+        String defaultValue = annotation.defaultValue();
         if (!allowedValues.isEmpty() && !annotation.defaultValue().isEmpty()) {
             if (!allowedValues.contains(annotation.defaultValue())) {
                 LOGGER.warn("Invalid default value \"{}\" specified for for enumerated input {}, ignoring.", defaultValue, annotation.identifier());
                 defaultValue = null;
             }
         }
-
-        builder.withDefaultLiteralDataDomain(LiteralDataDomainImpl.builder()
-                .withValueDescription(new OwsAllowedValues(allowedValues.stream().map(OwsValue::new)))
-                .withDataType(BasicXMLTypeFactory.getXMLDataTypeforBinding(bindingType))
-                .withDefaultValue(defaultValue)
-                .withUOM(annotation.uom()));
-
-        return builder.build();
-    }
-
-    @Override
-    public Class<? extends LiteralInput> getSupportedAnnotation() {
-        return LiteralInput.class;
-    }
-
-    @Override
-    public Class<? extends ILiteralData> getBindingType(LiteralInput annotation, B binding) {
-        Type payloadType = binding.getPayloadType();
-        Class<? extends ILiteralData> bindingType = annotation.binding();
-        if (bindingType == null || ILiteralData.class.equals(bindingType)) {
-            if (payloadType instanceof Class<?>) {
-                bindingType = BasicXMLTypeFactory.getBindingForPayloadType((Class<?>) payloadType);
-                if (bindingType == null) {
-                    LOGGER.error("Unable to locate binding class for {}; binding not found.", payloadType);
-                }
-            } else if (binding.isMemberTypeList()) {
-                LOGGER.error("Unable to determine binding class for {}; List must be parameterized with a type matching a known binding payload to use auto-binding.", payloadType);
-            } else {
-                LOGGER.error("Unable to determine binding class for {}; type must fully resolved to use auto-binding", payloadType);
-            }
-        }
-        return bindingType;
+        return defaultValue;
     }
 
 }

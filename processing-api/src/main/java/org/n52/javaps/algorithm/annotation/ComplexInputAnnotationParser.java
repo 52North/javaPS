@@ -22,12 +22,11 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 
-import org.n52.javaps.io.ParserRepository;
-import org.n52.javaps.io.data.IComplexData;
-import org.n52.javaps.io.data.IData;
-import org.n52.javaps.ogc.wps.Format;
-import org.n52.javaps.ogc.wps.description.ComplexInputDescription;
-import org.n52.javaps.ogc.wps.description.ComplexInputDescriptionImpl;
+import org.n52.iceland.ogc.wps.Format;
+import org.n52.iceland.ogc.wps.description.typed.TypedComplexInputDescription;
+import org.n52.iceland.ogc.wps.description.typed.impl.TypedProcessDescriptionFactory;
+import org.n52.javaps.io.complex.ComplexData;
+import org.n52.javaps.io.complex.ParserRepository;
 
 /**
  * TODO JavaDoc
@@ -36,8 +35,8 @@ import org.n52.javaps.ogc.wps.description.ComplexInputDescriptionImpl;
  * @param <M> the accessible member type
  * @param <B> the binding type
  */
-class ComplexInputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractInputBinding<M, ComplexInputDescription>>
-        extends AbstractInputAnnotationParser<ComplexInput, M, ComplexInputDescription, B> {
+class ComplexInputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractInputBinding<M, TypedComplexInputDescription>>
+        extends AbstractInputAnnotationParser<ComplexInput, M, TypedComplexInputDescription, B> {
 
     private final ParserRepository parserRepository;
 
@@ -47,11 +46,12 @@ class ComplexInputAnnotationParser<M extends AccessibleObject & Member, B extend
     }
 
     @Override
-    protected ComplexInputDescription createDescription(ComplexInput annotation, B binding) {
-        Class<? extends IComplexData> bindingClass = annotation.binding();
+    protected TypedComplexInputDescription createDescription(ComplexInput annotation, B binding) {
+        @SuppressWarnings("unchecked")
+        Class<? extends ComplexData<?>> bindingClass = (Class<? extends ComplexData<?>>) annotation.binding();
         Set<Format> supportedFormats = this.parserRepository.getSupportedFormats(bindingClass);
         Format defaultFormat = this.parserRepository.getDefaultFormat(bindingClass).orElse(null);
-        return ComplexInputDescriptionImpl.builder()
+        return new TypedProcessDescriptionFactory().complexInput()
                 .withIdentifier(annotation.identifier())
                 .withAbstract(annotation.abstrakt())
                 .withTitle(annotation.title())
@@ -60,17 +60,12 @@ class ComplexInputAnnotationParser<M extends AccessibleObject & Member, B extend
                 .withMaximumMegabytes(annotation.maximumMegaBytes())
                 .withDefaultFormat(defaultFormat)
                 .withSupportedFormat(supportedFormats)
-                .withBindingClass(bindingClass)
+                .withType(bindingClass)
                 .build();
     }
 
     @Override
     public Class<? extends ComplexInput> getSupportedAnnotation() {
         return ComplexInput.class;
-    }
-
-    @Override
-    public Class<? extends IData> getBindingType(ComplexInput annotation, B binding) {
-        return annotation.binding();
     }
 }

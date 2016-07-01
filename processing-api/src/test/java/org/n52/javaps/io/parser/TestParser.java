@@ -18,15 +18,16 @@ package org.n52.javaps.io.parser;
 
 import java.io.InputStream;
 
+import org.n52.iceland.ogc.wps.Format;
 import org.n52.javaps.annotation.Properties;
-import org.n52.javaps.io.data.IComplexData;
-import org.n52.javaps.ogc.wps.Format;
+import org.n52.javaps.io.complex.AbstractParser;
+import org.n52.javaps.io.complex.ComplexData;
 
 @Properties(defaultPropertyFileName="testparser.json")
 public class TestParser extends AbstractParser {
 
     @Override
-    public IComplexData parse(InputStream input, Format format) {
+    public ComplexData<?> parse(InputStream input, Format format) {
         return null;
     }
 

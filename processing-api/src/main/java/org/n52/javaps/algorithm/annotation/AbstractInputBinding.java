@@ -31,8 +31,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.n52.javaps.io.data.IData;
-import org.n52.javaps.ogc.wps.description.ProcessInputDescription;
+import org.n52.iceland.ogc.wps.description.typed.TypedProcessInputDescription;
+import org.n52.javaps.io.Data;
 
 /**
  * TODO JavaDoc
@@ -41,7 +41,7 @@ import org.n52.javaps.ogc.wps.description.ProcessInputDescription;
  * @param <M> the accessible member type
  * @param <D> the description type
  */
-abstract class AbstractInputBinding<M extends AccessibleObject & Member, D extends ProcessInputDescription> extends AbstractDataBinding<M, D> {
+abstract class AbstractInputBinding<M extends AccessibleObject & Member, D extends TypedProcessInputDescription<?>> extends AbstractDataBinding<M, D> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractInputBinding.class);
 
@@ -86,13 +86,7 @@ abstract class AbstractInputBinding<M extends AccessibleObject & Member, D exten
 
     protected boolean checkType() {
         Type inputPayloadType = getPayloadType();
-        Class<?> bindingPayloadClass;
-        try {
-            Class<? extends IData> bindingClass = getDescription().getBindingClass();
-            bindingPayloadClass = bindingClass.getMethod("getPayload").getReturnType();
-        } catch (NoSuchMethodException e) {
-            throw new Error(e);
-        }
+        Class<?> bindingPayloadClass = getDescription().getPayloadType();
 
 
         if (inputPayloadType instanceof Class<?>) {
@@ -132,7 +126,7 @@ abstract class AbstractInputBinding<M extends AccessibleObject & Member, D exten
         return false;
     }
 
-    public Object unbindInput(List<IData> inputs) {
+    public Object unbindInput(List<Data<?>> inputs) {
         if (inputs != null && inputs.size() > 0) {
             if (isMemberTypeList()) {
                 return inputs.stream()
@@ -165,17 +159,17 @@ abstract class AbstractInputBinding<M extends AccessibleObject & Member, D exten
         return true;
     }
 
-    public abstract void set(Object annotatedObject, List<IData> boundInputList);
+    public abstract void set(Object annotatedObject, List<Data<?>> boundInputList);
 
-    public static <D extends ProcessInputDescription> AbstractInputBinding<Field, D> field(Field field) {
+    public static <D extends TypedProcessInputDescription<?>> AbstractInputBinding<Field, D> field(Field field) {
         return new InputFieldBinding<>(field);
     }
 
-    public static <D extends ProcessInputDescription> AbstractInputBinding<Method, D> method(Method method) {
+    public static <D extends TypedProcessInputDescription<?>> AbstractInputBinding<Method, D> method(Method method) {
         return new InputMethodBinding<>(method);
     }
 
-    private static class InputFieldBinding<D extends ProcessInputDescription> extends AbstractInputBinding<Field, D> {
+    private static class InputFieldBinding<D extends TypedProcessInputDescription<?>> extends AbstractInputBinding<Field, D> {
 
         InputFieldBinding(Field field) {
             super(field);
@@ -187,7 +181,7 @@ abstract class AbstractInputBinding<M extends AccessibleObject & Member, D exten
         }
 
         @Override
-        public void set(Object instance, List<IData> inputs) {
+        public void set(Object instance, List<Data<?>> inputs) {
             try {
                 getMember().set(instance, unbindInput(inputs));
             } catch (IllegalArgumentException | IllegalAccessException ex) {
@@ -197,7 +191,7 @@ abstract class AbstractInputBinding<M extends AccessibleObject & Member, D exten
 
     }
 
-    private static class InputMethodBinding<D extends ProcessInputDescription> extends AbstractInputBinding<Method, D> {
+    private static class InputMethodBinding<D extends TypedProcessInputDescription<?>> extends AbstractInputBinding<Method, D> {
 
         InputMethodBinding(Method method) {
             super(method);
@@ -210,7 +204,7 @@ abstract class AbstractInputBinding<M extends AccessibleObject & Member, D exten
         }
 
         @Override
-        public void set(Object instance, List<IData> inputs) {
+        public void set(Object instance, List<Data<?>> inputs) {
             try {
                 getMember().invoke(instance, unbindInput(inputs));
             } catch (IllegalAccessException | IllegalArgumentException ex) {

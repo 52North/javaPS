@@ -21,7 +21,7 @@ import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Member;
 import java.util.function.Function;
 
-import org.n52.javaps.ogc.wps.description.ProcessOutputDescription;
+import org.n52.iceland.ogc.wps.description.typed.TypedProcessOutputDescription;
 /**
  *
  * @author Tom Kunicki, Christian Autermann
@@ -30,7 +30,7 @@ import org.n52.javaps.ogc.wps.description.ProcessOutputDescription;
  * @param <D> the description type
  * @param <B> the binding type
  */
-abstract class AbstractOutputAnnotationParser<A extends Annotation, M extends AccessibleObject & Member, D extends ProcessOutputDescription, B extends AbstractOutputBinding<M, D>>
+abstract class AbstractOutputAnnotationParser<A extends Annotation, M extends AccessibleObject & Member, D extends TypedProcessOutputDescription<?>, B extends AbstractOutputBinding<M, D>>
         extends AbstractDataAnnotationParser<A, M, D, B> {
 
     AbstractOutputAnnotationParser(Function<M, B> bindingFunction) {

@@ -18,7 +18,7 @@ package org.n52.javaps.request;
 
 import org.n52.iceland.request.AbstractServiceRequest;
 import org.n52.iceland.response.AbstractServiceResponse;
-import org.n52.javaps.ogc.wps.JobId;
+import org.n52.iceland.ogc.wps.JobId;
 
 /**
  * TODO JavaDoc

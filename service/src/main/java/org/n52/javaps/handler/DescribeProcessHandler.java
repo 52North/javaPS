@@ -33,9 +33,9 @@ import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.iceland.ogc.ows.OwsDomain;
 import org.n52.iceland.ogc.ows.OwsValue;
 import org.n52.javaps.Engine;
-import org.n52.javaps.ogc.wps.ProcessOffering;
-import org.n52.javaps.ogc.wps.ProcessOfferings;
-import org.n52.javaps.ogc.wps.WPSConstants;
+import org.n52.iceland.ogc.wps.ProcessOffering;
+import org.n52.iceland.ogc.wps.ProcessOfferings;
+import org.n52.iceland.ogc.wps.WPSConstants;
 import org.n52.javaps.request.DescribeProcessRequest;
 import org.n52.javaps.response.DescribeProcessResponse;
 

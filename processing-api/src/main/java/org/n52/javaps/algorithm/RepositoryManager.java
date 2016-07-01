@@ -36,7 +36,9 @@ import org.slf4j.LoggerFactory;
 
 import org.n52.iceland.lifecycle.Constructable;
 import org.n52.iceland.ogc.ows.OwsCode;
-import org.n52.javaps.ogc.wps.description.ProcessDescription;
+import org.n52.iceland.ogc.wps.description.ProcessDescription;
+import org.n52.iceland.ogc.wps.description.ProcessInputDescription;
+import org.n52.iceland.ogc.wps.description.ProcessOutputDescription;
 
 
 /**
@@ -151,14 +153,13 @@ public class RepositoryManager implements Constructable, Destroyable {
         return getRepositories().filter(repo -> repo.containsAlgorithm(id)).findFirst();
     }
 
-    public Class<?> getInputDataTypeForAlgorithm(OwsCode process, OwsCode input) {
-        return getAlgorithm(process).getInputDataType(input);
+    public ProcessInputDescription getInputForAlgorithm(OwsCode process, OwsCode input) {
+        return getProcessDescription(process).get().getInput(input);
 
     }
 
-    public Class<?> getOutputDataTypeForAlgorithm(OwsCode process, OwsCode output) {
-        return getAlgorithm(process).getOutputDataType(output);
-
+    public ProcessOutputDescription getOutputForAlgorithm(OwsCode process, OwsCode output) {
+        return getProcessDescription(process).get().getOutput(output);
     }
 
     public boolean registerAlgorithm(OwsCode id, AlgorithmRepository repository) {
