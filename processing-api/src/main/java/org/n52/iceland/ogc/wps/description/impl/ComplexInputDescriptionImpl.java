@@ -90,7 +90,7 @@ public class ComplexInputDescriptionImpl
     @Override
     public Optional<BigInteger> getMaximumMegabytes() {
         return this.maximumMegabytes;
-    } 
+    }
 
     public static abstract class AbstractBuilder<T extends ComplexInputDescription, B extends AbstractBuilder<T, B>>
             extends AbstractProcessInputDescription.AbstractBuilder<T, B>

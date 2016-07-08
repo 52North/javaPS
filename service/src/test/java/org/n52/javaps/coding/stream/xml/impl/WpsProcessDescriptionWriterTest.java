@@ -53,7 +53,10 @@ import org.n52.javaps.io.complex.GeneratorRepository;
 import org.n52.javaps.io.complex.IGenerator;
 import org.n52.javaps.io.complex.IParser;
 import org.n52.javaps.io.complex.ParserRepository;
-import org.n52.javaps.io.literal.LiteralTypeRepositoryImpl;
+import org.n52.javaps.io.literal.LiteralType;
+import org.n52.javaps.io.literal.LiteralTypeRepository;
+import org.n52.javaps.io.literal.xsd.LiteralIntType;
+import org.n52.javaps.io.literal.xsd.LiteralStringType;
 import org.n52.javaps.response.DescribeProcessResponse;
 
 /**
@@ -97,7 +100,7 @@ public class WpsProcessDescriptionWriterTest {
 
     public ProcessDescription getProcessDescription() {
         IORepo ioRepo = new IORepo();
-        return new AnnotatedAlgorithmMetadata(TestProcess.class, ioRepo, ioRepo, new LiteralTypeRepositoryImpl()).getDescription();
+        return new AnnotatedAlgorithmMetadata(TestProcess.class, ioRepo, ioRepo, new LiteralDataManagerImpl()).getDescription();
     }
 
     private StreamWriterRepository createRepository() {
@@ -307,6 +310,37 @@ public class WpsProcessDescriptionWriterTest {
         @Override
         public Optional<IParser> getParser(Format format, Class<? extends ComplexData<?>> binding) {
             return Optional.empty();
+        }
+    }
+
+     static class LiteralDataManagerImpl implements LiteralTypeRepository {
+        public LiteralDataManagerImpl() {
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T> LiteralType<T> getLiteralType(
+                Class<? extends LiteralType<?>> literalType, Class<?> payloadType) {
+
+            if (literalType == null || literalType.equals(LiteralType.class)) {
+                if (payloadType != null) {
+                    if (payloadType.equals(String.class)) {
+                        return (LiteralType<T>) new LiteralStringType();
+                    } else if (payloadType.equals(Integer.class)) {
+                        return (LiteralType<T>) new LiteralIntType();
+                    } else {
+                        throw new Error("Unsupported payload type");
+                    }
+                } else {
+                    throw new Error("Neither payload type nro literal type given");
+                }
+            } else {
+                try {
+                    return (LiteralType<T>) literalType.newInstance();
+                } catch (InstantiationException | IllegalAccessException ex) {
+                    throw new Error(ex);
+                }
+            }
         }
     }
 }

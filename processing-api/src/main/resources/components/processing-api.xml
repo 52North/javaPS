@@ -32,12 +32,12 @@
     <bean id="localAlgorithmRepository" class="org.n52.javaps.algorithm.LocalAlgorithmRepository" />
     <bean id="contextAlgorithmRegistrator" class="org.n52.javaps.algorithm.ContextAlgorithmRegistrator"/>
     <bean id="serviceLoaderAlgorithmRepository" class="org.n52.javaps.algorithm.ServiceLoaderAlgorithmRepository"/>
-    
+
     <bean id="context" class="org.n52.javaps.utils.Context"/>
-    
+
     <bean id="generatorRepository" class="org.n52.javaps.io.GeneratorRepositoryImpl" />
     <bean id="parserRepository" class="org.n52.javaps.io.ParserRepositoryImpl" />
-    
+
     <bean id="literalTypeRepository" class="org.n52.javaps.io.literal.LiteralTypeRepositoryImpl"/>
 
     <bean class="org.n52.javaps.io.literal.xsd.LiteralAnySimpleType"/>
