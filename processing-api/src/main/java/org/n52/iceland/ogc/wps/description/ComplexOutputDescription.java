@@ -21,11 +21,30 @@ package org.n52.iceland.ogc.wps.description;
  *
  * @author Christian Autermann
  */
-public interface ComplexOutputDescription extends ComplexDescription,
-                                                  ProcessOutputDescription {
+public interface ComplexOutputDescription extends ComplexDescription, ProcessOutputDescription {
+
+    @Override
+    default ComplexOutputDescription asComplex() {
+        return this;
+    }
+
+    @Override
+    default boolean isComplex() {
+        return true;
+    }
+
+    @Override
+    default <T> T visit(ReturningVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
+
+    @Override
+    default <T, X extends Exception> T visit(ThrowingReturningVisitor<T, X> visitor) throws X {
+        return visitor.visit(this);
+    }
+
     interface Builder<T extends ComplexOutputDescription, B extends Builder<T, B>>
-            extends ProcessOutputDescription.Builder<T, B>,
-                    ComplexDescription.Builder<T, B> {
+            extends ProcessOutputDescription.Builder<T, B>, ComplexDescription.Builder<T, B> {
     }
 
 }

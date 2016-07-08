@@ -19,9 +19,7 @@ package org.n52.javaps.io.literal.xsd;
 import java.time.DateTimeException;
 import java.time.MonthDay;
 
-import org.n52.iceland.exception.ows.InvalidParameterValueException;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.javaps.io.DecodingException;
 
 /**
  * TODO JavaDoc
@@ -38,11 +36,11 @@ public class LiteralMonthDayType extends AbstractXSDLiteralType<MonthDay> {
     }
 
     @Override
-    public MonthDay parse(OwsCode name, String value) throws OwsExceptionReport {
+    public MonthDay parse(String value) throws DecodingException {
         try {
             return MonthDay.parse(value);
         } catch (DateTimeException ex) {
-            throw new InvalidParameterValueException(name.getValue(), value).causedBy(ex);
+            throw new DecodingException(ex);
         }
     }
 
@@ -52,7 +50,7 @@ public class LiteralMonthDayType extends AbstractXSDLiteralType<MonthDay> {
     }
 
     @Override
-    public String generate(OwsCode name, MonthDay value) throws OwsExceptionReport {
+    public String generate(MonthDay value) {
         return value.toString();
     }
 

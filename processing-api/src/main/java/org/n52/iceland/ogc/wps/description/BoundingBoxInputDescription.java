@@ -23,9 +23,29 @@ package org.n52.iceland.ogc.wps.description;
  */
 public interface BoundingBoxInputDescription
         extends BoundingBoxDescription, ProcessInputDescription {
+
+    @Override
+    default boolean isBoundingBox() {
+        return true;
+    }
+
+    @Override
+    default BoundingBoxInputDescription asBoundingBox() {
+        return this;
+    }
+
+    @Override
+    default <T> T visit(ReturningVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
+
+    @Override
+    default <T, X extends Exception> T visit(ThrowingReturningVisitor<T, X> visitor) throws X {
+        return visitor.visit(this);
+    }
+
     interface Builder<T extends BoundingBoxInputDescription, B extends Builder<T, B>>
-            extends ProcessInputDescription.Builder<T, B>,
-                    BoundingBoxDescription.Builder<T, B> {
+            extends ProcessInputDescription.Builder<T, B>, BoundingBoxDescription.Builder<T, B> {
     }
 
 }

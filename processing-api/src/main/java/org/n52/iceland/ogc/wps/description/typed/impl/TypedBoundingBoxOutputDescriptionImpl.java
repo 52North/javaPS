@@ -16,7 +16,6 @@
  */
 package org.n52.iceland.ogc.wps.description.typed.impl;
 
-import java.util.Objects;
 import java.util.Set;
 
 import org.n52.iceland.ogc.ows.OwsCRS;
@@ -26,12 +25,10 @@ import org.n52.iceland.ogc.ows.OwsLanguageString;
 import org.n52.iceland.ogc.ows.OwsMetadata;
 import org.n52.iceland.ogc.wps.description.impl.BoundingBoxOutputDescriptionImpl;
 import org.n52.iceland.ogc.wps.description.typed.TypedBoundingBoxOutputDescription;
-import org.n52.javaps.io.bbox.BoundingBoxData;
 
 public class TypedBoundingBoxOutputDescriptionImpl
         extends BoundingBoxOutputDescriptionImpl
         implements TypedBoundingBoxOutputDescription {
-    private final Class<? extends BoundingBoxData<?>> type;
 
     public TypedBoundingBoxOutputDescriptionImpl(OwsCode id,
                                                  OwsLanguageString title,
@@ -39,10 +36,8 @@ public class TypedBoundingBoxOutputDescriptionImpl
                                                  Set<OwsKeyword> keywords,
                                                  Set<OwsMetadata> metadata,
                                                  OwsCRS defaultCRS,
-                                                 Set<OwsCRS> supportedCRS,
-                                                 Class<? extends BoundingBoxData<?>> type) {
+                                                 Set<OwsCRS> supportedCRS) {
         super(id, title, abstrakt, keywords, metadata, defaultCRS, supportedCRS);
-        this.type = Objects.requireNonNull(type, "type");
     }
 
     protected TypedBoundingBoxOutputDescriptionImpl(AbstractBuilder<?, ?> builder) {
@@ -52,31 +47,12 @@ public class TypedBoundingBoxOutputDescriptionImpl
              builder.getKeywords(),
              builder.getMetadata(),
              builder.getDefaultCRS(),
-             builder.getSupportedCRS(),
-             builder.getType());
-    }
-
-    @Override
-    public Class<? extends BoundingBoxData<?>> getType() {
-        return this.type;
+             builder.getSupportedCRS());
     }
 
     public static abstract class AbstractBuilder<T extends TypedBoundingBoxOutputDescription, B extends AbstractBuilder<T, B>>
             extends BoundingBoxOutputDescriptionImpl.AbstractBuilder<T, B>
             implements TypedBoundingBoxOutputDescription.Builder<T, B> {
-        private Class<? extends BoundingBoxData<?>> type;
-
-        @Override
-        @SuppressWarnings("unchecked")
-        public B withType(Class<? extends BoundingBoxData<?>> type) {
-            this.type = Objects.requireNonNull(type);
-            return (B) this;
-        }
-
-        public Class<? extends BoundingBoxData<?>> getType() {
-            return type;
-        }
-
     }
 
     public static class Builder extends AbstractBuilder<TypedBoundingBoxOutputDescription, Builder> {

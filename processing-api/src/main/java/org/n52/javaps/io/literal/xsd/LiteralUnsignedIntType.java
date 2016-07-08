@@ -18,8 +18,7 @@ package org.n52.javaps.io.literal.xsd;
 
 import java.math.BigInteger;
 
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.javaps.io.DecodingException;
 
 /**
  * TODO JavaDoc
@@ -46,8 +45,8 @@ public class LiteralUnsignedIntType extends AbstractLiteralIntegerType<Long> {
     }
 
     @Override
-    public Long parse(OwsCode name, String value) throws OwsExceptionReport {
-        return asBigInteger(name, value).longValue();
+    public Long parse(String value) throws DecodingException {
+        return asBigInteger(value).longValue();
     }
 
     @Override
@@ -56,7 +55,7 @@ public class LiteralUnsignedIntType extends AbstractLiteralIntegerType<Long> {
     }
 
     @Override
-    public String generate(OwsCode name, Long value) throws OwsExceptionReport {
+    public String generate(Long value) {
         return value.toString();
     }
 

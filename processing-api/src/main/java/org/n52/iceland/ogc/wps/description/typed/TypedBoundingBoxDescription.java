@@ -16,6 +16,7 @@
  */
 package org.n52.iceland.ogc.wps.description.typed;
 
+import org.n52.iceland.ogc.ows.OwsBoundingBox;
 import org.n52.iceland.ogc.wps.description.BoundingBoxDescription;
 import org.n52.javaps.io.Data;
 import org.n52.javaps.io.bbox.BoundingBoxData;
@@ -25,25 +26,25 @@ import org.n52.javaps.io.bbox.BoundingBoxData;
  * @author Christian Autermann
  */
 public interface TypedBoundingBoxDescription extends BoundingBoxDescription,
-                                                     TypedDataDescription<Class<? extends BoundingBoxData<?>>> {
+                                                     TypedDataDescription<Class<? extends BoundingBoxData>> {
 
     @Override
     default Class<?> getPayloadType() {
-        try {
-            return getType().getMethod("getPayload").getReturnType();
-        } catch (NoSuchMethodException | SecurityException ex) {
-            throw new Error(ex);
-        }
+        return OwsBoundingBox.class;
     }
 
     @Override
     default Class<? extends Data<?>> getBindingType() {
-        return getType();
+        return BoundingBoxData.class;
     }
 
-    interface Builder<T extends TypedBoundingBoxDescription, B extends Builder<T, B>>  extends
-            BoundingBoxDescription.Builder<T, B>,
-            TypedDataDescription.Builder<Class<? extends BoundingBoxData<?>>, T, B> {
+    @Override
+    public default Class<? extends BoundingBoxData> getType() {
+        return BoundingBoxData.class;
+    }
+
+    interface Builder<T extends TypedBoundingBoxDescription, B extends Builder<T, B>>
+            extends BoundingBoxDescription.Builder<T, B> {
 
     }
 

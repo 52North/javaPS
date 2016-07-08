@@ -21,12 +21,30 @@ package org.n52.iceland.ogc.wps.description;
  *
  * @author Christian Autermann
  */
-public interface LiteralOutputDescription extends LiteralDescription,
-                                                  ProcessOutputDescription {
+public interface LiteralOutputDescription extends LiteralDescription, ProcessOutputDescription {
+
+    @Override
+    default LiteralOutputDescription asLiteral() {
+        return this;
+    }
+
+    @Override
+    default boolean isLiteral() {
+        return true;
+    }
+
+    @Override
+    default <T> T visit(ReturningVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
+
+    @Override
+    default <T, X extends Exception> T visit(ThrowingReturningVisitor<T, X> visitor) throws X {
+        return visitor.visit(this);
+    }
 
     interface Builder<T extends LiteralOutputDescription, B extends Builder<T, B>>
-            extends LiteralDescription.Builder<T, B>,
-                    ProcessOutputDescription.Builder<T, B> {
+            extends LiteralDescription.Builder<T, B>, ProcessOutputDescription.Builder<T, B> {
 
     }
 

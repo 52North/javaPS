@@ -23,5 +23,9 @@ import org.n52.iceland.ogc.wps.description.GroupOutputDescription;
  * @author Christian Autermann
  */
 public interface TypedGroupOutputDescription extends GroupOutputDescription, TypedProcessOutputDescriptionContainer {
+    @Override
+    default TypedGroupOutputDescription asGroup() {
+        return this;
+    }
 
 }

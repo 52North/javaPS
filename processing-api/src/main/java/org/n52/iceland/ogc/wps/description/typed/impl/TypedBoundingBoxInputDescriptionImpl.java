@@ -16,7 +16,6 @@
  */
 package org.n52.iceland.ogc.wps.description.typed.impl;
 
-import java.util.Objects;
 import java.util.Set;
 
 import org.n52.iceland.ogc.ows.OwsCRS;
@@ -26,15 +25,12 @@ import org.n52.iceland.ogc.ows.OwsLanguageString;
 import org.n52.iceland.ogc.ows.OwsMetadata;
 import org.n52.iceland.ogc.wps.InputOccurence;
 import org.n52.iceland.ogc.wps.description.impl.BoundingBoxInputDescriptionImpl;
+import org.n52.iceland.ogc.wps.description.impl.BoundingBoxInputDescriptionImpl.AbstractBuilder;
 import org.n52.iceland.ogc.wps.description.typed.TypedBoundingBoxInputDescription;
-import org.n52.iceland.ogc.wps.description.typed.impl.TypedBoundingBoxInputDescriptionImpl.AbstractBuilder;
-import org.n52.javaps.io.bbox.BoundingBoxData;
 
 public class TypedBoundingBoxInputDescriptionImpl
         extends BoundingBoxInputDescriptionImpl
         implements TypedBoundingBoxInputDescription {
-
-    private final Class<? extends BoundingBoxData<?>> type;
 
     public TypedBoundingBoxInputDescriptionImpl(OwsCode id,
                                                 OwsLanguageString title,
@@ -43,10 +39,8 @@ public class TypedBoundingBoxInputDescriptionImpl
                                                 Set<OwsMetadata> metadata,
                                                 InputOccurence occurence,
                                                 OwsCRS defaultCRS,
-                                                Set<OwsCRS> supportedCRS,
-                                                Class<? extends BoundingBoxData<?>> type) {
+                                                Set<OwsCRS> supportedCRS) {
         super(id, title, abstrakt, keywords, metadata, occurence, defaultCRS, supportedCRS);
-        this.type = Objects.requireNonNull(type, "type");
     }
 
     protected TypedBoundingBoxInputDescriptionImpl(AbstractBuilder<?, ?> builder) {
@@ -58,32 +52,7 @@ public class TypedBoundingBoxInputDescriptionImpl
              new InputOccurence(builder.getMinimalOccurence(),
                                 builder.getMaximalOccurence()),
              builder.getDefaultCRS(),
-             builder.getSupportedCRS(),
-             builder.getType());
-    }
-
-    @Override
-    public Class<? extends BoundingBoxData<?>> getType() {
-        return this.type;
-    }
-
-    public static abstract class AbstractBuilder<T extends TypedBoundingBoxInputDescription, B extends AbstractBuilder<T, B>>
-            extends BoundingBoxInputDescriptionImpl.AbstractBuilder<T, B>
-            implements TypedBoundingBoxInputDescription.Builder<T, B> {
-
-        private Class<? extends BoundingBoxData<?>> type;
-
-        @Override
-        @SuppressWarnings("unchecked")
-        public B withType(Class<? extends BoundingBoxData<?>> type) {
-            this.type = Objects.requireNonNull(type, "type");
-            return (B) this;
-        }
-
-        public Class<? extends BoundingBoxData<?>> getType() {
-            return type;
-        }
-
+             builder.getSupportedCRS());
     }
 
     public static class Builder extends AbstractBuilder<TypedBoundingBoxInputDescription, Builder> {

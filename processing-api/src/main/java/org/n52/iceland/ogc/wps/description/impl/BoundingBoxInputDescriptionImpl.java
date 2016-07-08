@@ -27,7 +27,6 @@ import org.n52.iceland.ogc.ows.OwsLanguageString;
 import org.n52.iceland.ogc.ows.OwsMetadata;
 import org.n52.iceland.ogc.wps.InputOccurence;
 import org.n52.iceland.ogc.wps.description.BoundingBoxInputDescription;
-import org.n52.javaps.io.bbox.BoundingBoxData;
 
 import com.google.common.collect.ImmutableSet;
 
@@ -80,36 +79,12 @@ public class BoundingBoxInputDescriptionImpl
         return this.defaultCRS;
     }
 
-    @Override
-    public boolean isBoundingBox() {
-        return true;
-    }
-
-    @Override
-    public BoundingBoxInputDescriptionImpl asBoundingBox() {
-        return this;
-    }
-
-    @Override
-    public <T> T visit(ReturningVisitor<T> visitor) {
-        return visitor.visit(this);
-    }
-
-    @Override
-    public <T, X extends Exception> T visit(
-            ThrowingReturningVisitor<T, X> visitor)
-            throws X {
-        return visitor.visit(this);
-    }
-
     public static abstract class AbstractBuilder<T extends BoundingBoxInputDescription, B extends AbstractBuilder<T, B>>
             extends AbstractProcessInputDescription.AbstractBuilder<T, B>
             implements BoundingBoxInputDescription.Builder<T, B> {
 
         private OwsCRS defaultCRS;
-        private final ImmutableSet.Builder<OwsCRS> supportedCRS
-                = ImmutableSet.builder();
-        private Class<? extends BoundingBoxData<?>> bindingClass;
+        private final ImmutableSet.Builder<OwsCRS> supportedCRS = ImmutableSet.builder();
 
         @SuppressWarnings(value = "unchecked")
         @Override

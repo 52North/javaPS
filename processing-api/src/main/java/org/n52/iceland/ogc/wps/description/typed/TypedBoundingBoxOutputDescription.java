@@ -24,9 +24,13 @@ import org.n52.javaps.io.bbox.BoundingBoxData;
  * @author Christian Autermann
  */
 public interface TypedBoundingBoxOutputDescription extends BoundingBoxOutputDescription, TypedBoundingBoxDescription,
-                                                           TypedProcessOutputDescription<Class<? extends BoundingBoxData<?>>> {
-    interface Builder<T extends TypedBoundingBoxOutputDescription, B extends Builder<T, B>> extends
-            BoundingBoxOutputDescription.Builder<T, B>,
-            TypedBoundingBoxDescription.Builder<T, B> {
+                                                           TypedProcessOutputDescription<Class<? extends BoundingBoxData>> {
+    @Override
+    default TypedBoundingBoxOutputDescription asBoundingBox() {
+        return this;
+    }
+
+    interface Builder<T extends TypedBoundingBoxOutputDescription, B extends Builder<T, B>>
+            extends BoundingBoxOutputDescription.Builder<T, B>, TypedBoundingBoxDescription.Builder<T, B> {
     }
 }

@@ -18,8 +18,7 @@ package org.n52.javaps.io.literal.xsd;
 
 import java.math.BigInteger;
 
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.javaps.io.DecodingException;
 
 /**
  * TODO JavaDoc
@@ -30,8 +29,8 @@ public abstract class AbstractLiteralBigIntegerType extends AbstractLiteralInteg
     private static final long serialVersionUID = -8636434243710047598L;
 
     @Override
-    public BigInteger parse(OwsCode name, String value) throws OwsExceptionReport {
-        return asBigInteger(name, value);
+    public BigInteger parse(String value) throws DecodingException {
+        return asBigInteger(value);
     }
 
     @Override
@@ -40,10 +39,8 @@ public abstract class AbstractLiteralBigIntegerType extends AbstractLiteralInteg
     }
 
     @Override
-    public String generate(OwsCode name, BigInteger value) throws OwsExceptionReport {
+    public String generate(BigInteger value) {
         return value.toString();
     }
-
-
 
 }

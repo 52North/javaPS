@@ -23,5 +23,24 @@ import org.n52.iceland.ogc.wps.description.ProcessOutputDescription;
  * @author Christian Autermann
  */
 public interface TypedProcessOutputDescription<X> extends ProcessOutputDescription, TypedDataDescription<X> {
+    @Override
+    default TypedLiteralOutputDescription asLiteral() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    default TypedBoundingBoxOutputDescription asBoundingBox() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    default TypedComplexOutputDescription asComplex() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    default TypedGroupOutputDescription asGroup() {
+        throw new UnsupportedOperationException();
+    }
 
 }

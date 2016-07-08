@@ -23,7 +23,12 @@ import org.n52.javaps.io.complex.ComplexData;
  *
  * @author Christian Autermann
  */
-public interface TypedComplexOutputDescription extends ComplexOutputDescription, TypedComplexDescription, TypedProcessOutputDescription<Class<? extends ComplexData<?>>> {
+public interface TypedComplexOutputDescription extends ComplexOutputDescription, TypedComplexDescription,
+                                                       TypedProcessOutputDescription<Class<? extends ComplexData<?>>> {
+    @Override
+    default TypedComplexOutputDescription asComplex() {
+        return this;
+    }
 
     interface Builder<T extends TypedComplexOutputDescription, B extends Builder<T, B>>
             extends ComplexOutputDescription.Builder<T, B>,

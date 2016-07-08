@@ -21,9 +21,7 @@ import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
-import org.n52.iceland.exception.ows.InvalidParameterValueException;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.javaps.io.DecodingException;
 
 /**
  * TODO JavaDoc
@@ -40,11 +38,11 @@ public class LiteralTimeType extends AbstractXSDLiteralType<LocalTime> {
     }
 
     @Override
-    public LocalTime parse(OwsCode name, String value) throws OwsExceptionReport {
+    public LocalTime parse(String value) throws DecodingException {
         try {
             return LocalTime.from(DateTimeFormatter.ISO_TIME.parse(value));
         } catch (DateTimeException ex) {
-            throw new InvalidParameterValueException(name.getValue(), value).causedBy(ex);
+            throw new DecodingException(ex);
         }
     }
 
@@ -54,7 +52,7 @@ public class LiteralTimeType extends AbstractXSDLiteralType<LocalTime> {
     }
 
     @Override
-    public String generate(OwsCode name, LocalTime value) throws OwsExceptionReport {
+    public String generate(LocalTime value) {
         return value.atOffset(ZoneOffset.UTC).toString();
     }
 

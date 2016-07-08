@@ -20,9 +20,7 @@ import java.time.DateTimeException;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
 
-import org.n52.iceland.exception.ows.InvalidParameterValueException;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.javaps.io.DecodingException;
 
 /**
  * TODO JavaDoc
@@ -40,11 +38,11 @@ public class LiteralMonthType extends AbstractXSDLiteralType<Month> {
     }
 
     @Override
-    public Month parse(OwsCode name, String value) throws OwsExceptionReport {
+    public Month parse(String value) throws DecodingException {
         try {
             return Month.from(FORMATTER.parse(value));
         } catch (DateTimeException ex) {
-            throw new InvalidParameterValueException(name.getValue(), value).causedBy(ex);
+            throw new DecodingException(ex);
         }
     }
 
@@ -54,7 +52,7 @@ public class LiteralMonthType extends AbstractXSDLiteralType<Month> {
     }
 
     @Override
-    public String generate(OwsCode name, Month value) throws OwsExceptionReport {
+    public String generate(Month value) {
         return FORMATTER.format(value);
     }
 

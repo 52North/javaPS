@@ -20,10 +20,8 @@ import java.util.Locale;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
-import org.n52.iceland.exception.ows.InvalidParameterValueException;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.i18n.LocaleHelper;
-import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.javaps.io.DecodingException;
 
 /**
  * TODO JavaDoc
@@ -41,11 +39,11 @@ public class LiteralLanguageType extends AbstractXSDLiteralType<Locale> {
     }
 
     @Override
-    public Locale parse(OwsCode name, String value) throws OwsExceptionReport {
+    public Locale parse(String value) throws DecodingException {
         if (PATTERN.test(value)) {
             return LocaleHelper.fromString(value);
         } else {
-            throw new InvalidParameterValueException(name.getValue(), value);
+            throw new DecodingException("value is not a valid language");
         }
     }
 
@@ -55,7 +53,7 @@ public class LiteralLanguageType extends AbstractXSDLiteralType<Locale> {
     }
 
     @Override
-    public String generate(OwsCode name, Locale value) throws OwsExceptionReport {
+    public String generate(Locale value) {
         return LocaleHelper.toString(value);
     }
 

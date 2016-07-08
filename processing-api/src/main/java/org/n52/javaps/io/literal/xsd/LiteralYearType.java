@@ -19,9 +19,7 @@ package org.n52.javaps.io.literal.xsd;
 import java.time.DateTimeException;
 import java.time.Year;
 
-import org.n52.iceland.exception.ows.InvalidParameterValueException;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.javaps.io.DecodingException;
 
 /**
  * TODO JavaDoc
@@ -38,11 +36,11 @@ public class LiteralYearType extends AbstractXSDLiteralType<Year> {
     }
 
     @Override
-    public Year parse(OwsCode name, String value) throws OwsExceptionReport {
+    public Year parse(String value) throws DecodingException {
         try {
             return Year.parse(value);
         } catch (DateTimeException ex) {
-            throw new InvalidParameterValueException(name.getValue(), value).causedBy(ex);
+            throw new DecodingException(ex);
         }
     }
 
@@ -52,7 +50,7 @@ public class LiteralYearType extends AbstractXSDLiteralType<Year> {
     }
 
     @Override
-    public String generate(OwsCode name, Year value) throws OwsExceptionReport {
+    public String generate(Year value) {
         return value.toString();
     }
 

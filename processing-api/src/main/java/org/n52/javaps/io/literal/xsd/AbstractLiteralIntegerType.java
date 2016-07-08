@@ -18,9 +18,7 @@ package org.n52.javaps.io.literal.xsd;
 
 import java.math.BigInteger;
 
-import org.n52.iceland.exception.ows.InvalidParameterValueException;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.javaps.io.DecodingException;
 
 /**
  * TODO JavaDoc
@@ -31,15 +29,15 @@ public abstract class AbstractLiteralIntegerType<T> extends AbstractXSDLiteralTy
 
     private static final long serialVersionUID = -315068838227868527L;
 
-    protected BigInteger asBigInteger(OwsCode name, String value) throws OwsExceptionReport {
+    protected BigInteger asBigInteger(String value) throws DecodingException {
         try {
             BigInteger bigInteger = new BigInteger(value);
             if (!isInRange(bigInteger)) {
-                throw new InvalidParameterValueException(name.getValue(), value);
+                throw new DecodingException("integer out of value range");
             }
             return bigInteger;
         } catch (IllegalArgumentException ex) {
-            throw new InvalidParameterValueException(name.getValue(), value).causedBy(ex);
+            throw new DecodingException(ex);
         }
     }
 

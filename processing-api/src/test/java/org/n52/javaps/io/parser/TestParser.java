@@ -16,18 +16,20 @@
  */
 package org.n52.javaps.io.parser;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import org.n52.iceland.ogc.wps.Format;
+import org.n52.iceland.ogc.wps.description.typed.TypedProcessInputDescription;
 import org.n52.javaps.annotation.Properties;
+import org.n52.javaps.io.Data;
 import org.n52.javaps.io.complex.AbstractParser;
-import org.n52.javaps.io.complex.ComplexData;
 
-@Properties(defaultPropertyFileName="testparser.json")
+@Properties(defaultPropertyFileName = "testparser.json")
 public class TestParser extends AbstractParser {
-
     @Override
-    public ComplexData<?> parse(InputStream input, Format format) {
+    public Data<?> decode(TypedProcessInputDescription<?> description, InputStream input, Format format)
+            throws IOException {
         return null;
     }
 

@@ -21,12 +21,30 @@ package org.n52.iceland.ogc.wps.description;
  *
  * @author Christian Autermann
  */
-public interface BoundingBoxOutputDescription extends BoundingBoxDescription,
-                                                      ProcessOutputDescription {
+public interface BoundingBoxOutputDescription extends BoundingBoxDescription, ProcessOutputDescription {
+
+    @Override
+    default BoundingBoxOutputDescription asBoundingBox() {
+        return this;
+    }
+
+    @Override
+    default boolean isBoundingBox() {
+        return true;
+    }
+
+    @Override
+    default <T> T visit(ReturningVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
+
+    @Override
+    default <T, X extends Exception> T visit(ThrowingReturningVisitor<T, X> visitor) throws X {
+        return visitor.visit(this);
+    }
 
     interface Builder<T extends BoundingBoxOutputDescription, B extends Builder<T, B>>
-            extends ProcessOutputDescription.Builder<T, B>,
-                    BoundingBoxDescription.Builder<T, B> {
+            extends ProcessOutputDescription.Builder<T, B>, BoundingBoxDescription.Builder<T, B> {
     }
 
 }

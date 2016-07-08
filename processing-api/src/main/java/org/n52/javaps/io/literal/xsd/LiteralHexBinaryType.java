@@ -19,9 +19,7 @@ package org.n52.javaps.io.literal.xsd;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 
-import org.n52.iceland.exception.ows.InvalidParameterValueException;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.javaps.io.DecodingException;
 
 /**
  * TODO JavaDoc
@@ -38,11 +36,11 @@ public class LiteralHexBinaryType extends AbstractXSDLiteralType<byte[]> {
     }
 
     @Override
-    public byte[] parse(OwsCode name, String value) throws OwsExceptionReport {
+    public byte[] parse(String value) throws DecodingException {
         try {
             return Hex.decodeHex(value.toCharArray());
         } catch (DecoderException ex) {
-            throw new InvalidParameterValueException(name.getValue(), value).causedBy(ex);
+            throw new DecodingException(ex);
         }
     }
 
@@ -52,7 +50,7 @@ public class LiteralHexBinaryType extends AbstractXSDLiteralType<byte[]> {
     }
 
     @Override
-    public String generate(OwsCode name, byte[] value) throws OwsExceptionReport {
+    public String generate(byte[] value) {
         return String.valueOf(Hex.encodeHex(value));
     }
 

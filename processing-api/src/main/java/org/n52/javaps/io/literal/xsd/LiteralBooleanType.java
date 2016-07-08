@@ -16,9 +16,7 @@
  */
 package org.n52.javaps.io.literal.xsd;
 
-import org.n52.iceland.exception.ows.InvalidParameterValueException;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.javaps.io.DecodingException;
 
 /**
  * TODO JavaDoc
@@ -35,14 +33,14 @@ public class LiteralBooleanType extends AbstractXSDLiteralType<Boolean> {
     }
 
     @Override
-    public Boolean parse(OwsCode name, String value) throws OwsExceptionReport {
+    public Boolean parse(String value) throws DecodingException {
         switch (value) {
             case "true":
                 return true;
             case "false":
                 return false;
             default:
-                throw new InvalidParameterValueException(name.getValue(), value);
+                throw new DecodingException("value is not a valid boolean");
         }
     }
 
@@ -52,7 +50,7 @@ public class LiteralBooleanType extends AbstractXSDLiteralType<Boolean> {
     }
 
     @Override
-    public String generate(OwsCode name, Boolean value) throws OwsExceptionReport {
+    public String generate(Boolean value) {
         return value ? "true" : "false";
     }
 

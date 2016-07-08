@@ -22,6 +22,9 @@ import java.io.InputStream;
 import org.apache.commons.codec.binary.Base64InputStream;
 
 import org.n52.iceland.ogc.wps.Format;
+import org.n52.iceland.ogc.wps.description.typed.TypedProcessOutputDescription;
+import org.n52.javaps.io.Data;
+import org.n52.javaps.io.EncodingException;
 
 /**
  * Basic interface for all Generators.
@@ -30,10 +33,11 @@ import org.n52.iceland.ogc.wps.Format;
  *
  */
 public interface IGenerator extends IOHandler {
-    InputStream generateStream(ComplexData<?> data, Format format) throws IOException;
+    InputStream encode(TypedProcessOutputDescription<?> description, Data<?> data, Format format)
+            throws IOException, EncodingException;
 
-    default InputStream generateBase64Stream(ComplexData<?> data, Format format) throws IOException {
-        InputStream stream = generateStream(data, format);
-        return new Base64InputStream(stream, true);
+    default InputStream encodeBase64(TypedProcessOutputDescription<?> description, Data<?> data, Format format)
+            throws IOException, EncodingException {
+        return new Base64InputStream(encode(description, data, format), true);
     }
 }

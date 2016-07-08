@@ -24,9 +24,28 @@ package org.n52.iceland.ogc.wps.description;
 public interface ComplexInputDescription extends ComplexDescription,
                                                  ProcessInputDescription {
 
+    @Override
+    default ComplexInputDescription asComplex() {
+        return this;
+    }
+
+    @Override
+    default boolean isComplex() {
+        return true;
+    }
+
+    @Override
+    default <T> T visit(ReturningVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
+
+    @Override
+    default <T, X extends Exception> T visit(ThrowingReturningVisitor<T, X> visitor) throws X {
+        return visitor.visit(this);
+    }
+
     interface Builder<T extends ComplexInputDescription, B extends Builder<T, B>>
-            extends ProcessInputDescription.Builder<T, B>,
-                    ComplexDescription.Builder<T, B> {
+            extends ProcessInputDescription.Builder<T, B>, ComplexDescription.Builder<T, B> {
 
     }
 }

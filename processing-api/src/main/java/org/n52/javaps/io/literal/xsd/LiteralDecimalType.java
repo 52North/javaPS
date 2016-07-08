@@ -18,9 +18,7 @@ package org.n52.javaps.io.literal.xsd;
 
 import java.math.BigDecimal;
 
-import org.n52.iceland.exception.ows.InvalidParameterValueException;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.javaps.io.DecodingException;
 
 /**
  * TODO JavaDoc
@@ -37,11 +35,11 @@ public class LiteralDecimalType extends AbstractXSDLiteralType<BigDecimal> {
     }
 
     @Override
-    public BigDecimal parse(OwsCode name, String value) throws OwsExceptionReport {
+    public BigDecimal parse(String value) throws DecodingException {
         try {
             return new BigDecimal(value);
         } catch (IllegalArgumentException ex) {
-            throw new InvalidParameterValueException(name.getValue(), value).causedBy(ex);
+            throw new DecodingException(ex);
         }
     }
 
@@ -51,7 +49,7 @@ public class LiteralDecimalType extends AbstractXSDLiteralType<BigDecimal> {
     }
 
     @Override
-    public String generate(OwsCode name, BigDecimal value) throws OwsExceptionReport {
+    public String generate(BigDecimal value) {
         return value.toPlainString();
     }
 

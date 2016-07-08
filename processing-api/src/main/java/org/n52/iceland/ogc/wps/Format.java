@@ -20,6 +20,7 @@ import static com.google.common.base.Strings.emptyToNull;
 import static com.google.common.base.Strings.nullToEmpty;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Objects;
@@ -265,8 +266,15 @@ public class Format implements Comparable<Format> {
     }
 
     public boolean isCharacterEncoding() {
-        Set<String> charsets = getAvailableCharsets();
-        return getEncoding().filter(charsets::contains).isPresent();
+        return getEncoding().filter(getAvailableCharsets()::contains).isPresent();
+    }
+
+    public Optional<Charset> getEncodingAsCharset() {
+        return getEncoding().filter(getAvailableCharsets()::contains).map(Charset::forName);
+    }
+
+    public Charset getEncodingAsCharsetOrDefault() {
+        return getEncodingAsCharset().orElse(StandardCharsets.UTF_8);
     }
 
     public boolean isBase64() {

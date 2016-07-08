@@ -19,6 +19,7 @@ package org.n52.javaps.io.complex;
 import java.util.Set;
 
 import org.n52.iceland.ogc.wps.Format;
+import org.n52.javaps.io.Data;
 
 public interface IOHandler {
 
@@ -43,6 +44,6 @@ public interface IOHandler {
 
     Set<Format> getSupportedFormats();
 
-    Set<Class<? extends ComplexData<?>>> getSupportedBindings();
+    Set<Class<? extends Data<?>>> getSupportedBindings();
 
 }

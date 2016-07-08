@@ -19,9 +19,7 @@ package org.n52.javaps.io.literal.xsd;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
-import org.n52.iceland.exception.ows.InvalidParameterValueException;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.javaps.io.DecodingException;
 
 /**
  * TODO JavaDoc
@@ -39,9 +37,9 @@ public class LiteralNormalizedStringType extends AbstractXSDLiteralType<String> 
     }
 
     @Override
-    public String parse(OwsCode name, String value) throws OwsExceptionReport {
+    public String parse(String value) throws DecodingException {
         if (!PATTERN.test(value)) {
-            throw new InvalidParameterValueException(name.getValue(), value);
+            throw new DecodingException("value is not a normalized string");
         }
         return value;
     }
@@ -52,7 +50,7 @@ public class LiteralNormalizedStringType extends AbstractXSDLiteralType<String> 
     }
 
     @Override
-    public String generate(OwsCode name, String value) throws OwsExceptionReport {
+    public String generate(String value)  {
         return value;
     }
 

@@ -20,9 +20,7 @@ import java.time.DateTimeException;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
 
-import org.n52.iceland.exception.ows.InvalidParameterValueException;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.javaps.io.DecodingException;
 
 /**
  * TODO JavaDoc
@@ -40,11 +38,11 @@ public class LiteralDayType extends AbstractXSDLiteralType<Day> {
     }
 
     @Override
-    public Day parse(OwsCode name, String value) throws OwsExceptionReport {
+    public Day parse(String value) throws DecodingException {
         try {
             return new Day(PARSER.parse(value).get(ChronoField.DAY_OF_MONTH));
         } catch (DateTimeException ex) {
-            throw new InvalidParameterValueException(name.getValue(), value).causedBy(ex);
+            throw new DecodingException(ex);
         }
     }
 
@@ -54,7 +52,7 @@ public class LiteralDayType extends AbstractXSDLiteralType<Day> {
     }
 
     @Override
-    public String generate(OwsCode name, Day value) throws OwsExceptionReport {
+    public String generate(Day value) {
         return String.format("--%02d", value.getAsInt());
     }
 

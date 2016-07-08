@@ -23,5 +23,24 @@ import org.n52.iceland.ogc.wps.description.ProcessInputDescription;
  * @author Christian Autermann
  */
 public interface TypedProcessInputDescription<X> extends ProcessInputDescription, TypedDataDescription<X> {
+    @Override
+    default TypedBoundingBoxInputDescription asBoundingBox() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    default TypedComplexInputDescription asComplex() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    default TypedGroupInputDescription asGroup() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    default TypedLiteralInputDescription asLiteral() {
+        throw new UnsupportedOperationException();
+    }
 
 }

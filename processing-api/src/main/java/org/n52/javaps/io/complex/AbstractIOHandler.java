@@ -23,6 +23,7 @@ import java.util.Set;
 
 import org.n52.iceland.ogc.wps.Format;
 import org.n52.javaps.annotation.ConfigurableClass;
+import org.n52.javaps.io.Data;
 
 
 /**
@@ -34,7 +35,7 @@ import org.n52.javaps.annotation.ConfigurableClass;
  *
  */
 public abstract class AbstractIOHandler extends ConfigurableClass implements IOHandler {
-    private Set<Class<? extends ComplexData<?>>> supportedBindings = new LinkedHashSet<>();
+    private Set<Class<? extends Data<?>>> supportedBindings = new LinkedHashSet<>();
     private Set<Format> supportedFormats = new LinkedHashSet<>();
 
     @Override
@@ -47,11 +48,11 @@ public abstract class AbstractIOHandler extends ConfigurableClass implements IOH
     }
 
     @Override
-    public Set<Class<? extends ComplexData<?>>> getSupportedBindings() {
+    public Set<Class<? extends Data<?>>> getSupportedBindings() {
         return Collections.unmodifiableSet(this.supportedBindings);
     }
 
-    public void setSupportedBindings(Set<Class<? extends ComplexData<?>>> supportedBindings) {
+    public void setSupportedBindings(Set<Class<? extends Data<?>>> supportedBindings) {
         this.supportedBindings = Objects.requireNonNull(supportedBindings);
     }
 

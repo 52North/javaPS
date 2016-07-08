@@ -16,9 +16,7 @@
  */
 package org.n52.javaps.io.literal.xsd;
 
-import org.n52.iceland.exception.ows.InvalidParameterValueException;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.javaps.io.DecodingException;
 
 import com.google.common.io.BaseEncoding;
 
@@ -37,11 +35,11 @@ public class LiteralBase64BinaryType extends AbstractXSDLiteralType<byte[]> {
     }
 
     @Override
-    public byte[] parse(OwsCode name, String value) throws OwsExceptionReport {
+    public byte[] parse(String value) throws DecodingException {
         try {
             return BaseEncoding.base64().decode(value);
         } catch (IllegalArgumentException ex) {
-            throw new InvalidParameterValueException(name.getValue(), value).causedBy(ex);
+            throw  new DecodingException(ex);
         }
     }
 
@@ -51,7 +49,7 @@ public class LiteralBase64BinaryType extends AbstractXSDLiteralType<byte[]> {
     }
 
     @Override
-    public String generate(OwsCode name, byte[] value) throws OwsExceptionReport {
+    public String generate(byte[] value) {
         return BaseEncoding.base64().encode(value);
     }
 

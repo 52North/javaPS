@@ -19,9 +19,7 @@ package org.n52.javaps.io.literal.xsd;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import org.n52.iceland.exception.ows.InvalidParameterValueException;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.javaps.io.DecodingException;
 
 /**
  * TODO JavaDoc
@@ -38,11 +36,11 @@ public class LiteralAnyURIType extends AbstractXSDLiteralType<URI> {
     }
 
     @Override
-    public URI parse(OwsCode name, String value) throws OwsExceptionReport {
+    public URI parse(String value) throws DecodingException {
         try {
             return new URI(value);
         } catch (URISyntaxException ex) {
-            throw new InvalidParameterValueException(name.getValue(), value).causedBy(ex);
+            throw new DecodingException(ex);
         }
     }
 
@@ -52,7 +50,7 @@ public class LiteralAnyURIType extends AbstractXSDLiteralType<URI> {
     }
 
     @Override
-    public String generate(OwsCode name, URI value) throws OwsExceptionReport {
+    public String generate(URI value) {
         return value.toString();
     }
 

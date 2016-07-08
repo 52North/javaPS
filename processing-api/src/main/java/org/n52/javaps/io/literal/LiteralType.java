@@ -19,9 +19,9 @@ package org.n52.javaps.io.literal;
 import java.io.Serializable;
 import java.net.URI;
 
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.iceland.ogc.ows.OwsDomainMetadata;
+import org.n52.javaps.io.DecodingException;
+import org.n52.javaps.io.EncodingException;
 
 /**
  * TODO JavaDoc
@@ -40,16 +40,16 @@ public interface LiteralType<T> extends Serializable {
         return new OwsDomainMetadata(getURI(), getName());
     }
 
-    default LiteralData<T> parseToBinding(OwsCode name, String value) throws OwsExceptionReport {
-        return parseToBinding(name, value, null);
+    default LiteralData parseToBinding(String value) throws DecodingException {
+        return parseToBinding(value, null);
     }
 
-    default LiteralData<T> parseToBinding(OwsCode name, String value, String uom) throws OwsExceptionReport {
-        return new LiteralData<>(parse(name, value), uom);
+    default LiteralData parseToBinding(String value, String uom) throws DecodingException {
+        return new LiteralData(parse(value), uom);
     }
 
-    T parse(OwsCode name, String value) throws OwsExceptionReport;
+    T parse(String value) throws DecodingException;
 
-    String generate(OwsCode name, T value) throws OwsExceptionReport;
+    String generate(T value) throws EncodingException;
 
 }

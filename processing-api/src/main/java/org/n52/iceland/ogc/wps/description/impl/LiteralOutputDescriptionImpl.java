@@ -67,26 +67,6 @@ public class LiteralOutputDescriptionImpl
     }
 
     @Override
-    public LiteralOutputDescriptionImpl asLiteral() {
-        return this;
-    }
-
-    @Override
-    public boolean isLiteral() {
-        return true;
-    }
-
-    @Override
-    public <T> T visit(ReturningVisitor<T> visitor) {
-        return visitor.visit(this);
-    }
-
-    @Override
-    public <T, X extends Exception> T visit(ThrowingReturningVisitor<T, X> visitor) throws X {
-        return visitor.visit(this);
-    }
-
-    @Override
     public Set<LiteralDataDomain> getSupportedLiteralDataDomains() {
         return Collections.unmodifiableSet(this.supportedLiteralDataDomains);
     }

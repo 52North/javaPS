@@ -16,9 +16,7 @@
  */
 package org.n52.javaps.io.literal.xsd;
 
-import org.n52.iceland.exception.ows.InvalidParameterValueException;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.javaps.io.DecodingException;
 
 /**
  * TODO JavaDoc
@@ -35,11 +33,11 @@ public class LiteralDoubleType extends AbstractXSDLiteralType<Double> {
     }
 
     @Override
-    public Double parse(OwsCode name, String value) throws OwsExceptionReport {
+    public Double parse(String value) throws DecodingException {
         try {
             return Double.parseDouble(value);
         } catch (IllegalArgumentException ex) {
-            throw new InvalidParameterValueException(name.getValue(), value).causedBy(ex);
+            throw new DecodingException(ex);
         }
     }
 
@@ -49,7 +47,7 @@ public class LiteralDoubleType extends AbstractXSDLiteralType<Double> {
     }
 
     @Override
-    public String generate(OwsCode name, Double value) throws OwsExceptionReport {
+    public String generate(Double value) {
         return value.toString();
     }
 

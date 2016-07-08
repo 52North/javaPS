@@ -88,28 +88,6 @@ public class ComplexOutputDescriptionImpl
         return this.maximumMegabytes;
     }
 
-    @Override
-    public ComplexOutputDescriptionImpl asComplex() {
-        return this;
-    }
-
-    @Override
-    public boolean isComplex() {
-        return true;
-    }
-
-    @Override
-    public <T> T visit(ReturningVisitor<T> visitor) {
-        return visitor.visit(this);
-    }
-
-    @Override
-    public <T, X extends Exception> T visit(
-            ThrowingReturningVisitor<T, X> visitor)
-            throws X {
-        return visitor.visit(this);
-    }
-
     public static abstract class AbstractBuilder<T extends ComplexOutputDescription, B extends AbstractBuilder<T, B>>
             extends AbstractProcessOutputDescription.AbstractBuilder<T, B>
             implements ComplexOutputDescription.Builder<T, B> {

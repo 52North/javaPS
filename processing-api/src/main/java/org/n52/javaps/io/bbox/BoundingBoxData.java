@@ -16,14 +16,25 @@
  */
 package org.n52.javaps.io.bbox;
 
+import org.n52.iceland.ogc.ows.OwsBoundingBox;
 import org.n52.javaps.io.Data;
 
-public interface BoundingBoxData<T> extends Data<T> {
-    String getCRS();
+public final class BoundingBoxData implements Data<OwsBoundingBox> {
+    private static final long serialVersionUID = -3219612972795621553L;
 
-    int getDimension();
+    private final OwsBoundingBox boundingBox;
 
-    double[] getLowerCorner();
+    public BoundingBoxData(OwsBoundingBox boundingBox) {
+        this.boundingBox = boundingBox;
+    }
 
-    double[] getUpperCorner();
+    @Override
+    public OwsBoundingBox getPayload() {
+        return this.boundingBox;
+    }
+
+    @Override
+    public Class<?> getSupportedClass() {
+        return OwsBoundingBox.class;
+    }
 }

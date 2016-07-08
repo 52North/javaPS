@@ -16,9 +16,6 @@
  */
 package org.n52.javaps.io.literal.xsd;
 
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.ows.OwsCode;
-
 /**
  * TODO JavaDoc
  *
@@ -34,7 +31,7 @@ public class LiteralStringType extends AbstractXSDLiteralType<String> {
     }
 
     @Override
-    public String parse(OwsCode name, String value) throws OwsExceptionReport {
+    public String parse(String value) {
         return value;
     }
 
@@ -44,7 +41,7 @@ public class LiteralStringType extends AbstractXSDLiteralType<String> {
     }
 
     @Override
-    public String generate(OwsCode name, String value) throws OwsExceptionReport {
+    public String generate(String value) {
         return value;
     }
 

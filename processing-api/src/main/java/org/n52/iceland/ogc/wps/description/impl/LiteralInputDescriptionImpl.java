@@ -69,27 +69,6 @@ public class LiteralInputDescriptionImpl
     }
 
     @Override
-    public boolean isLiteral() {
-        return true;
-    }
-
-    @Override
-    public LiteralInputDescriptionImpl asLiteral() {
-        return this;
-    }
-
-    @Override
-    public <T> T visit(ReturningVisitor<T> visitor) {
-        return visitor.visit(this);
-    }
-
-    @Override
-    public <T, X extends Exception> T visit(ThrowingReturningVisitor<T, X> visitor)
-            throws X {
-        return visitor.visit(this);
-    }
-
-    @Override
     public LiteralDataDomain getDefaultLiteralDataDomain() {
         return this.defaultLiteralDataDomain;
     }

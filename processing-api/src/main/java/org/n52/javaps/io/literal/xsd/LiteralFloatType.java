@@ -16,9 +16,7 @@
  */
 package org.n52.javaps.io.literal.xsd;
 
-import org.n52.iceland.exception.ows.InvalidParameterValueException;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.javaps.io.DecodingException;
 
 /**
  * TODO JavaDoc
@@ -35,11 +33,11 @@ public class LiteralFloatType extends AbstractXSDLiteralType<Float> {
     }
 
     @Override
-    public Float parse(OwsCode name, String value) throws OwsExceptionReport {
+    public Float parse(String value) throws DecodingException {
         try {
             return Float.parseFloat(value);
         } catch (IllegalArgumentException ex) {
-            throw new InvalidParameterValueException(name.getValue(), value).causedBy(ex);
+            throw new DecodingException(ex);
         }
     }
 
@@ -49,7 +47,7 @@ public class LiteralFloatType extends AbstractXSDLiteralType<Float> {
     }
 
     @Override
-    public String generate(OwsCode name, Float value) throws OwsExceptionReport {
+    public String generate(Float value) {
         return value.toString();
     }
 

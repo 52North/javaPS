@@ -21,17 +21,16 @@ import java.util.Optional;
 
 import org.n52.javaps.io.Data;
 
-public final class LiteralData<T> implements Data<T> {
+public final class LiteralData implements Data<Object> {
     private static final long serialVersionUID = -7088293056427203440L;
     private Optional<String> unitOfMeasurement;
+    private final Object payload;
 
-    private final T payload;
-
-    public LiteralData(T payload) {
+    public LiteralData(Object payload) {
         this(payload, null);
     }
 
-    public LiteralData(T payload, String unitOfMeasurment) {
+    public LiteralData(Object payload, String unitOfMeasurment) {
         this.payload = Objects.requireNonNull(payload);
         this.unitOfMeasurement = Optional.ofNullable(unitOfMeasurment);
     }
@@ -44,12 +43,13 @@ public final class LiteralData<T> implements Data<T> {
         this.unitOfMeasurement = Optional.ofNullable(unitOfMeasurement);
     }
 
-    public T getPayload() {
+    @Override
+    public Object getPayload() {
         return this.payload;
     }
 
+    @Override
     public Class<?> getSupportedClass() {
         return Object.class;
     }
-
 }

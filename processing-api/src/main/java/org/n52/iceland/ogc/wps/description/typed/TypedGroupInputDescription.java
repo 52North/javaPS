@@ -23,5 +23,9 @@ import org.n52.iceland.ogc.wps.description.GroupInputDescription;
  * @author Christian Autermann
  */
 public interface TypedGroupInputDescription extends GroupInputDescription, TypedProcessInputDescriptionContainer {
+    @Override
+    default TypedGroupInputDescription asGroup() {
+        return this;
+    }
 
 }

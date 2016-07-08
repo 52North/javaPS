@@ -25,7 +25,6 @@ import java.util.Set;
 
 import org.n52.iceland.lifecycle.Constructable;
 import org.n52.iceland.ogc.wps.Format;
-import org.n52.javaps.io.complex.ComplexData;
 
 public class GeneratorRepositoryImpl implements Constructable,
                                                 GeneratorRepository {

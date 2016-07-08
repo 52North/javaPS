@@ -31,12 +31,6 @@ import org.junit.Test;
 
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.ogc.ows.OwsCode;
-import org.n52.iceland.util.http.MediaTypes;
-import org.n52.javaps.coding.stream.StreamWriter;
-import org.n52.javaps.coding.stream.StreamWriterRepository;
-import org.n52.javaps.coding.stream.xml.DocumentXmlStreamWriter;
-import org.n52.javaps.coding.stream.xml.ElementXmlStreamWriter;
-import org.n52.javaps.coding.stream.xml.ElementXmlStreamWriterRepository;
 import org.n52.iceland.ogc.wps.Format;
 import org.n52.iceland.ogc.wps.JobId;
 import org.n52.iceland.ogc.wps.Result;
@@ -44,6 +38,12 @@ import org.n52.iceland.ogc.wps.data.Body;
 import org.n52.iceland.ogc.wps.data.GroupData;
 import org.n52.iceland.ogc.wps.data.InMemoryData;
 import org.n52.iceland.ogc.wps.data.ReferenceData;
+import org.n52.iceland.util.http.MediaTypes;
+import org.n52.javaps.coding.stream.StreamWriter;
+import org.n52.javaps.coding.stream.StreamWriterRepository;
+import org.n52.javaps.coding.stream.xml.DocumentXmlStreamWriter;
+import org.n52.javaps.coding.stream.xml.ElementXmlStreamWriter;
+import org.n52.javaps.coding.stream.xml.ElementXmlStreamWriterRepository;
 
 import com.google.common.io.BaseEncoding;
 

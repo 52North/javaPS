@@ -88,31 +88,9 @@ public class ComplexInputDescriptionImpl
     }
 
     @Override
-    public ComplexInputDescriptionImpl asComplex() {
-        return this;
-    }
-
-    @Override
-    public boolean isComplex() {
-        return true;
-    }
-
-    @Override
     public Optional<BigInteger> getMaximumMegabytes() {
         return this.maximumMegabytes;
-    }
-
-    @Override
-    public <T> T visit(ReturningVisitor<T> visitor) {
-        return visitor.visit(this);
-    }
-
-    @Override
-    public <T, X extends Exception> T visit(
-            ThrowingReturningVisitor<T, X> visitor)
-            throws X {
-        return visitor.visit(this);
-    }
+    } 
 
     public static abstract class AbstractBuilder<T extends ComplexInputDescription, B extends AbstractBuilder<T, B>>
             extends AbstractProcessInputDescription.AbstractBuilder<T, B>

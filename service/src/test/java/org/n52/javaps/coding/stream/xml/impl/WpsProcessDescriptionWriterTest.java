@@ -53,6 +53,7 @@ import org.n52.javaps.io.complex.GeneratorRepository;
 import org.n52.javaps.io.complex.IGenerator;
 import org.n52.javaps.io.complex.IParser;
 import org.n52.javaps.io.complex.ParserRepository;
+import org.n52.javaps.io.literal.LiteralTypeRepositoryImpl;
 import org.n52.javaps.response.DescribeProcessResponse;
 
 /**
@@ -96,7 +97,7 @@ public class WpsProcessDescriptionWriterTest {
 
     public ProcessDescription getProcessDescription() {
         IORepo ioRepo = new IORepo();
-        return new AnnotatedAlgorithmMetadata(TestProcess.class, ioRepo, ioRepo).getDescription();
+        return new AnnotatedAlgorithmMetadata(TestProcess.class, ioRepo, ioRepo, new LiteralTypeRepositoryImpl()).getDescription();
     }
 
     private StreamWriterRepository createRepository() {

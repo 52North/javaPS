@@ -16,11 +16,15 @@
  */
 package org.n52.javaps.io.complex;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.codec.binary.Base64InputStream;
 
 import org.n52.iceland.ogc.wps.Format;
+import org.n52.iceland.ogc.wps.description.typed.TypedProcessInputDescription;
+import org.n52.javaps.io.Data;
+import org.n52.javaps.io.DecodingException;
 
 /**
  * @author Matthias Mueller, TU Dresden
@@ -28,10 +32,12 @@ import org.n52.iceland.ogc.wps.Format;
  */
 public interface IParser extends IOHandler {
 
-    ComplexData<?> parse(InputStream input, Format format);
+    Data<?> decode(TypedProcessInputDescription<?> description, InputStream input, Format format)
+            throws IOException, DecodingException;
 
-    default ComplexData<?> parseBase64(InputStream input, Format format) {
-        return parse(new Base64InputStream(input), format);
+    default Data<?> decodeBase64(TypedProcessInputDescription<?> description, InputStream input, Format format)
+            throws IOException, DecodingException {
+        return decode(description, new Base64InputStream(input), format);
     }
 
 }
