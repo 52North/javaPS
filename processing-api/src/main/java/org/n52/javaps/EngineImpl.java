@@ -16,18 +16,13 @@
  */
 package org.n52.javaps;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.time.OffsetDateTime;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -44,31 +39,18 @@ import org.slf4j.LoggerFactory;
 
 import org.n52.iceland.lifecycle.Destroyable;
 import org.n52.iceland.ogc.ows.OwsCode;
-import org.n52.iceland.ogc.wps.Format;
 import org.n52.iceland.ogc.wps.JobId;
 import org.n52.iceland.ogc.wps.JobStatus;
 import org.n52.iceland.ogc.wps.OutputDefinition;
 import org.n52.iceland.ogc.wps.Result;
 import org.n52.iceland.ogc.wps.StatusInfo;
-import org.n52.iceland.ogc.wps.data.GroupProcessData;
 import org.n52.iceland.ogc.wps.data.ProcessData;
-import org.n52.iceland.ogc.wps.data.ReferenceProcessData;
-import org.n52.iceland.ogc.wps.data.ValueProcessData;
 import org.n52.iceland.ogc.wps.description.ProcessDescription;
-import org.n52.iceland.ogc.wps.description.typed.TypedGroupInputDescription;
 import org.n52.iceland.ogc.wps.description.typed.TypedProcessDescription;
-import org.n52.iceland.ogc.wps.description.typed.TypedProcessInputDescription;
-import org.n52.iceland.ogc.wps.description.typed.TypedProcessInputDescriptionContainer;
 import org.n52.javaps.algorithm.IAlgorithm;
 import org.n52.javaps.algorithm.ProcessInputs;
 import org.n52.javaps.algorithm.ProcessOutputs;
 import org.n52.javaps.algorithm.RepositoryManager;
-import org.n52.javaps.io.Data;
-import org.n52.javaps.io.DecodingException;
-import org.n52.javaps.io.GroupData;
-import org.n52.javaps.io.InputHandler;
-import org.n52.javaps.io.InputHandlerRepository;
-import org.n52.javaps.io.OutputHandlerRepository;
 
 import com.google.common.util.concurrent.AbstractFuture;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
@@ -79,16 +61,20 @@ public class EngineImpl implements Engine, Destroyable {
     private final RepositoryManager repositoryManager;
     private final Map<JobId, Job> jobs = new ConcurrentHashMap<>(16);
     private final Map<JobId, Cancelable> cancelers = new ConcurrentHashMap<>(16);
-    private final InputHandlerRepository inputHandlerRepository;
-    private final OutputHandlerRepository outputHandlerRepository;
+    private final ProcessInputDecoder processInputDecoder;
+    private final ProcessOutputEncoder processOutputEncoder;
+    private final JobIdGenerator jobIdGenerator;
 
     @Inject
     public EngineImpl(RepositoryManager repositoryManager,
-                      InputHandlerRepository inputHandlerRepository, OutputHandlerRepository outputHandlerRepository) {
+                      ProcessInputDecoder processInputDecoder,
+                      ProcessOutputEncoder processOutputEncoder,
+                      JobIdGenerator jobIdGenerator) {
         this.executor = createExecutor();
         this.repositoryManager = Objects.requireNonNull(repositoryManager);
-        this.inputHandlerRepository = Objects.requireNonNull(inputHandlerRepository);
-        this.outputHandlerRepository = Objects.requireNonNull(outputHandlerRepository);
+        this.processInputDecoder = Objects.requireNonNull(processInputDecoder);
+        this.processOutputEncoder = Objects.requireNonNull(processOutputEncoder);
+        this.jobIdGenerator = Objects.requireNonNull(jobIdGenerator);
     }
 
     @Override
@@ -126,18 +112,20 @@ public class EngineImpl implements Engine, Destroyable {
         LOG.info("Executing {}", identifier);
         IAlgorithm algorithm = getProcess(identifier);
 
-        ProcessInputs processInputs = decodeContainer(algorithm.getDescription(), inputs);
+        ProcessInputs processInputs = this.processInputDecoder.decode(algorithm.getDescription(), inputs);
 
         // TODO encode
-        Job job = new Job(algorithm, createJobId(), processInputs, outputDefinitions);
+        JobId jobId = jobIdGenerator.create(algorithm, processInputs, outputDefinitions);
+
+        Job job = new Job(algorithm, jobId, processInputs, outputDefinitions);
         LOG.info("Submitting {}", job.getJobId());
         Future<?> submit = this.executor.submit(job);
 
-        this.cancelers.put(job.getJobId(), () -> submit.cancel(true));
+        this.cancelers.put(jobId, () -> submit.cancel(true));
 
-        this.jobs.put(job.getJobId(), job);
+        this.jobs.put(jobId, job);
 
-        return job.getJobId();
+        return jobId;
     }
 
     @Override
@@ -150,10 +138,6 @@ public class EngineImpl implements Engine, Destroyable {
         ThreadFactory threadFactory = new ThreadFactoryBuilder().setNameFormat("javaps-%d").build();
         ExecutorService newCachedThreadPool = Executors.newCachedThreadPool(threadFactory);
         return newCachedThreadPool;
-    }
-
-    private JobId createJobId() {
-        return new JobId(UUID.randomUUID().toString());
     }
 
     @Override
@@ -171,70 +155,6 @@ public class EngineImpl implements Engine, Destroyable {
                 .orElseThrow(processNotFound(identifier));
     }
 
-    private Result createResult(TypedProcessDescription description, List<OutputDefinition> outputDefinitions, ProcessOutputs outputs) {
-        /* TODO implement org.n52.javaps.EngineImpl.Job.createResult() */
-        throw new UnsupportedOperationException("org.n52.javaps.EngineImpl.Job.createResult() not yet implemented");
-    }
-
-    private ProcessInputs decodeContainer(TypedProcessInputDescriptionContainer description,
-                                          List<ProcessData> processInputs) throws InputDecodingException {
-
-        Map<OwsCode, List<Data<?>>> data = new HashMap<>(processInputs.size());
-
-        for (ProcessData input : processInputs) {
-
-            Data<?> decodedInput = decode(description.getInput(input.getId()), input);
-
-            data.computeIfAbsent(input.getId(), id -> new LinkedList<>()).add(decodedInput);
-        }
-
-        return new ProcessInputs(data);
-    }
-
-    private Data<?> decode(TypedProcessInputDescription<?> description, ProcessData input) throws InputDecodingException {
-        if (input.isGroup()) {
-            return decodeGroup(description.asGroup(), input.asGroup());
-        } else if (input.isReference()) {
-            return decodeRefernce(description, input.asReference());
-        } else if (input.isValue()) {
-            return decodeValueInput(description, input.asValue());
-        } else {
-            throw new AssertionError("Unsupported input type: " + input);
-        }
-    }
-
-    private Data<?> decodeGroup(TypedGroupInputDescription description, GroupProcessData input)
-            throws InputDecodingException {
-        return new GroupData(decodeContainer(description, input.getElements()));
-    }
-
-    private Data<?> decodeRefernce(TypedProcessInputDescription<?> description, ReferenceProcessData input)
-            throws InputDecodingException {
-        ValueProcessData resolve;
-        try {
-            resolve = input.resolve();
-        } catch (IOException ex) {
-            throw new InputDecodingException(input.getId(), ex);
-        }
-        return decode(description, resolve);
-    }
-
-    private Data<?> decodeValueInput(TypedProcessInputDescription<?> description, ValueProcessData input)
-            throws InputDecodingException {
-        Format format = input.getFormat();
-        Class<? extends Data<?>> bindingType = description.getBindingType();
-
-        InputHandler handler = this.inputHandlerRepository
-                .getInputHandler(format, bindingType)
-                .orElseThrow(noHandlerFound(input.getId()));
-
-        try (InputStream data = input.getData()) {
-            return handler.parse(description, data, format);
-        } catch (IOException | DecodingException ex) {
-            throw new InputDecodingException(input.getId(), ex);
-        }
-    }
-
     private static Supplier<JobNotFoundException> jobNotFound(JobId id) {
         return () -> new JobNotFoundException(id);
     }
@@ -242,11 +162,6 @@ public class EngineImpl implements Engine, Destroyable {
     private static Supplier<ProcessNotFoundException> processNotFound(OwsCode id) {
         return () -> new ProcessNotFoundException(id);
     }
-
-    private static Supplier<InputDecodingException> noHandlerFound(OwsCode id) {
-        return () -> new InputDecodingException(id, new UnsupportedInputFormatException());
-    }
-
 
     @FunctionalInterface
     private interface Cancelable {
@@ -276,8 +191,9 @@ public class EngineImpl implements Engine, Destroyable {
             this.inputs = Objects.requireNonNull(inputs, "inputs");
             this.algorithm = Objects.requireNonNull(algorithm, "algorithm");
             this.description = algorithm.getDescription();
-            this.outputs = new ProcessOutputs();
             this.outputDefinitions = Objects.requireNonNull(outputDefinitions, "outputDefinitions");
+
+            this.outputs = new ProcessOutputs();
         }
 
         @Override
@@ -349,12 +265,8 @@ public class EngineImpl implements Engine, Destroyable {
             setStatus(JobStatus.running());
             try {
                 this.algorithm.execute(this);
-
                 setStatus(JobStatus.succeeded());
-
-                Result result = createResult(this.description, this.outputDefinitions, this.outputs);
-
-                set(result);
+                set(processOutputEncoder.create(this.description, this.outputDefinitions, this.outputs));
             } catch (Throwable t) {
                 setStatus(JobStatus.failed());
                 setException(t);
