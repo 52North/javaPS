@@ -16,20 +16,54 @@
  */
 package org.n52.javaps.operator.validation;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.n52.iceland.exception.ows.CompositeOwsException;
+import org.n52.iceland.exception.ows.InvalidParameterValueException;
+import org.n52.iceland.exception.ows.MissingParameterValueException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.request.operator.ParameterValidator;
+import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.javaps.request.DescribeProcessRequest;
 
 /**
+ * TODO JavaDoc
+ *
  * @author Christian Autermann
  */
-public class DescribeProcessParameterValidator
-        implements ParameterValidator<DescribeProcessRequest> {
+public class DescribeProcessParameterValidator extends EngineParameterValidator<DescribeProcessRequest> {
+    private static final String IDENTIFIER = "Identifier";
 
     @Override
-    public void validate(DescribeProcessRequest request)
-            throws OwsExceptionReport {
-        /* TODO implement org.n52.javaps.operator.validation.DescribeProcessParameterValidator.validate() */
+    public void validate(DescribeProcessRequest request) throws OwsExceptionReport {
+
+        List<OwsCode> identifiers = request.getProcessIdentifier();
+        if (identifiers == null || identifiers.isEmpty()) {
+            throw new MissingParameterValueException(IDENTIFIER);
+        }
+        checkIdentifiers(identifiers);
+    }
+
+    private void checkIdentifiers(List<OwsCode> identifiers) throws OwsExceptionReport {
+        CompositeOwsException exception = new CompositeOwsException();
+        identifiers.stream().map(this::checkIdentifier).filter(Optional::isPresent).map(Optional::get)
+                .forEach(exception::add);
+        exception.throwIfNotEmpty();
+    }
+
+    private Optional<OwsExceptionReport> checkIdentifier(OwsCode id) {
+        if (id == null) {
+            return Optional.of(new MissingParameterValueException(IDENTIFIER));
+        }
+        if (!isAll(id) && !getEngine().hasProcessDescription(id)) {
+            return Optional.of(new InvalidParameterValueException(IDENTIFIER, id.getValue()));
+        }
+        return Optional.empty();
+    }
+
+    private boolean isAll(OwsCode id) {
+        return !id.getCodeSpace().isPresent() &&
+               id.getValue().equals(DescribeProcessRequest.ALL_KEYWORD);
     }
 
 }

@@ -16,20 +16,31 @@
  */
 package org.n52.javaps.operator.validation;
 
+
+import org.n52.iceland.exception.ows.InvalidParameterValueException;
+import org.n52.iceland.exception.ows.MissingParameterValueException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.request.operator.ParameterValidator;
-import org.n52.javaps.request.GetResultRequest;
+import org.n52.iceland.ogc.wps.JobId;
+import org.n52.javaps.request.AbstractJobIdRequest;
+
 
 /**
+ * TODO JavaDoc
  * @author Christian Autermann
  */
-public class GetResultParameterValidator
-        implements ParameterValidator<GetResultRequest> {
+public class JobIdParameterValidator extends EngineParameterValidator<AbstractJobIdRequest<?>>{
+    private static final String JOB_ID = "JobId";
 
     @Override
-    public void validate(GetResultRequest request)
-            throws OwsExceptionReport {
-        /* TODO implement org.n52.javaps.operator.validation.GetResultParameterValidator.validate() */
+    public void validate(AbstractJobIdRequest<?> request) throws OwsExceptionReport {
+        JobId jobId = request.getJobId();
+        if (jobId == null || jobId.getValue() == null || jobId.getValue().isEmpty()) {
+            throw new MissingParameterValueException(JOB_ID);
+        }
+
+        if (!getEngine().hasJob(jobId)) {
+            throw new InvalidParameterValueException(JOB_ID, jobId.getValue());
+        }
     }
 
 }

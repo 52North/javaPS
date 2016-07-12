@@ -164,7 +164,7 @@
             <value type="java.lang.Class">org.n52.javaps.request.GetResultRequest</value>
         </constructor-arg>
         <constructor-arg name="validator">
-            <bean class="org.n52.javaps.operator.validation.GetResultParameterValidator" />
+            <bean class="org.n52.javaps.operator.validation.JobIdParameterValidator" />
         </constructor-arg>
     </bean>
     <bean class="org.n52.javaps.handler.GetResultHandler"/>
@@ -193,7 +193,7 @@
             <value type="java.lang.Class">org.n52.javaps.request.GetStatusRequest</value>
         </constructor-arg>
         <constructor-arg name="validator">
-            <bean class="org.n52.javaps.operator.validation.GetStatusParameterValidator" />
+            <bean class="org.n52.javaps.operator.validation.JobIdParameterValidator" />
         </constructor-arg>
     </bean>
     <bean class="org.n52.javaps.handler.GetStatusHandler"/>
@@ -222,7 +222,7 @@
             <value type="java.lang.Class">org.n52.javaps.request.DismissRequest</value>
         </constructor-arg>
         <constructor-arg name="validator">
-            <bean class="org.n52.javaps.operator.validation.DismissParameterValidator" />
+            <bean class="org.n52.javaps.operator.validation.JobIdParameterValidator" />
         </constructor-arg>
     </bean>
     <bean class="org.n52.javaps.handler.DismissHandler"/>

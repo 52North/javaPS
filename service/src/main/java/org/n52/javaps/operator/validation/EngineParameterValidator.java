@@ -16,21 +16,28 @@
  */
 package org.n52.javaps.operator.validation;
 
+import javax.inject.Inject;
 
-import org.n52.iceland.exception.ows.OwsExceptionReport;
+import org.n52.iceland.request.AbstractServiceRequest;
 import org.n52.iceland.request.operator.ParameterValidator;
-import org.n52.javaps.request.GetStatusRequest;
+import org.n52.javaps.Engine;
 
 /**
+ * TODO JavaDoc
+ *
  * @author Christian Autermann
  */
-public class GetStatusParameterValidator
-        implements ParameterValidator<GetStatusRequest> {
+public abstract class EngineParameterValidator<T extends AbstractServiceRequest<?>> implements ParameterValidator<T> {
 
-    @Override
-    public void validate(GetStatusRequest request)
-            throws OwsExceptionReport {
-        /* TODO implement org.n52.javaps.operator.validation.GetStatusParameterValidator.validate() */
+    private Engine engine;
+
+    @Inject
+    public void setEngine(Engine engine) {
+        this.engine = engine;
+    }
+
+    protected Engine getEngine() {
+        return this.engine;
     }
 
 }

@@ -71,7 +71,6 @@ public class ExecuteHandler extends AbstractEngineHandler
 
         String service = request.getService();
         String version = request.getVersion();
-
         JobId jobId;
         try {
             jobId = getEngine().execute(request.getId(), request.getInputs(), request.getOutputs());

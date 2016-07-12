@@ -40,9 +40,17 @@ public interface Engine {
 
     Set<JobId> getJobIdentifiers();
 
+    default boolean hasJob(JobId jobId) {
+        return  getJobIdentifiers().contains(jobId);
+    }
+
     Set<OwsCode> getProcessIdentifiers();
 
     Optional<ProcessDescription> getProcessDescription(OwsCode identifier);
+
+    default boolean hasProcessDescription(OwsCode identifier) {
+        return getProcessDescription(identifier).isPresent();
+    }
 
     default Set<ProcessDescription> getProcessDescriptions() {
         return getProcessIdentifiers().stream()
