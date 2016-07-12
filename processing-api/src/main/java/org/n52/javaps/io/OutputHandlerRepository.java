@@ -23,11 +23,17 @@ import org.n52.iceland.ogc.wps.Format;
 
 /**
  * TODO JavaDoc
+ *
  * @author Christian Autermann
  */
 public interface OutputHandlerRepository extends FormatRepository {
     Set<OutputHandler> getOutputHandlers();
 
     Optional<OutputHandler> getOutputHandler(Format format, Class<? extends Data<?>> binding);
+
+    @SuppressWarnings("unchecked")
+    default Optional<OutputHandler> getOutputHandler(Format format, Data<?> binding) {
+        return getOutputHandler(format, (Class<? extends Data<?>>) binding.getClass());
+    }
 
 }

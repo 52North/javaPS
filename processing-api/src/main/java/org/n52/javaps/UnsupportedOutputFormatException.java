@@ -14,34 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.io;
-
-import java.util.Objects;
-
-import org.n52.javaps.algorithm.ProcessInputs;
+package org.n52.javaps;
 
 /**
  * TODO JavaDoc
  *
  * @author Christian Autermann
  */
-public class GroupData implements Data<ProcessInputs> {
+public class UnsupportedOutputFormatException extends EngineException {
 
-    private static final long serialVersionUID = -8747518748439185542L;
-    private final ProcessInputs payload;
+    private static final long serialVersionUID = 3746355400310805878L;
 
-    public GroupData(ProcessInputs payload) {
-        this.payload = Objects.requireNonNull(payload);
+    public UnsupportedOutputFormatException() {
     }
 
-    @Override
-    public ProcessInputs getPayload() {
-        return this.payload;
+    public UnsupportedOutputFormatException(String message) {
+        super(message);
     }
 
-    @Override
-    public Class<?> getSupportedClass() {
-        return ProcessInputs.class;
+    public UnsupportedOutputFormatException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public UnsupportedOutputFormatException(Throwable cause) {
+        super(cause);
     }
 
 }

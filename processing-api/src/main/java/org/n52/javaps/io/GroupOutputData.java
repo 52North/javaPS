@@ -14,18 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps;
+package org.n52.javaps.io;
 
+import java.util.Objects;
 
-import org.n52.iceland.ogc.wps.Result;
+import org.n52.javaps.algorithm.ProcessOutputs;
 
 /**
  * TODO JavaDoc
  *
  * @author Christian Autermann
  */
-public interface ProcessOutputEncoder {
+public class GroupOutputData implements Data<ProcessOutputs> {
+    private static final long serialVersionUID = 7948964429686164730L;
 
-    Result create(ProcessExecutionContext context)
-            throws OutputEncodingException;
+    private final ProcessOutputs payload;
+
+    public GroupOutputData(ProcessOutputs payload) {
+        this.payload = Objects.requireNonNull(payload);
+    }
+
+    @Override
+    public ProcessOutputs getPayload() {
+        return this.payload;
+    }
+
+    @Override
+    public Class<?> getSupportedClass() {
+        return ProcessOutputs.class;
+    }
 }

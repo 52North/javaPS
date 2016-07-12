@@ -197,11 +197,6 @@ public class EngineImpl implements Engine, Destroyable {
         }
 
         @Override
-        public OwsCode getProcessId() {
-            return getDescription().getId();
-        }
-
-        @Override
         public JobId getJobId() {
             return this.jobId;
         }
@@ -221,6 +216,7 @@ public class EngineImpl implements Engine, Destroyable {
             return this.inputs;
         }
 
+        @Override
         public TypedProcessDescription getDescription() {
             return this.description;
         }
@@ -263,13 +259,23 @@ public class EngineImpl implements Engine, Destroyable {
         @Override
         public void run() {
             setStatus(JobStatus.running());
+            LOG.info("Executing {}", this.jobId);
             try {
                 this.algorithm.execute(this);
-                setStatus(JobStatus.succeeded());
-                set(processOutputEncoder.create(this.description, this.outputDefinitions, this.outputs));
-            } catch (Throwable t) {
+                LOG.info("Executed {}, creating result", this.jobId);
+                try {
+                    set(processOutputEncoder.create(this));
+                    LOG.info("Created result for {}", this.jobId);
+                    setStatus(JobStatus.succeeded());
+                } catch (OutputEncodingException ex) {
+                    LOG.error("Failed creating result for {}", this.jobId);
+                    setStatus(JobStatus.failed());
+                    setException(ex);
+                }
+            } catch (Throwable ex) {
+                LOG.error("{} failed", this.jobId);
                 setStatus(JobStatus.failed());
-                setException(t);
+                setException(ex);
             }
         }
 

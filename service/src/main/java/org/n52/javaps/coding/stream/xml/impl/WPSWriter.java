@@ -31,10 +31,6 @@ import javax.xml.stream.XMLStreamException;
 import org.n52.iceland.ogc.ows.OwsCRS;
 import org.n52.iceland.ogc.ows.OwsPossibleValues;
 import org.n52.iceland.ogc.ows.OwsValue;
-import org.n52.javaps.coding.stream.xml.impl.XMLConstants.OWS;
-import org.n52.javaps.coding.stream.xml.impl.XMLConstants.WPS;
-import org.n52.javaps.coding.stream.xml.impl.XMLConstants.XLink;
-import org.n52.javaps.coding.stream.xml.impl.XMLConstants.XMLSchema;
 import org.n52.iceland.ogc.wps.DataTransmissionMode;
 import org.n52.iceland.ogc.wps.Format;
 import org.n52.iceland.ogc.wps.JobControlOption;
@@ -45,8 +41,8 @@ import org.n52.iceland.ogc.wps.Result;
 import org.n52.iceland.ogc.wps.StatusInfo;
 import org.n52.iceland.ogc.wps.WPSCapabilities;
 import org.n52.iceland.ogc.wps.data.Body;
-import org.n52.iceland.ogc.wps.data.ProcessData;
 import org.n52.iceland.ogc.wps.data.GroupProcessData;
+import org.n52.iceland.ogc.wps.data.ProcessData;
 import org.n52.iceland.ogc.wps.data.ReferenceProcessData;
 import org.n52.iceland.ogc.wps.data.ValueProcessData;
 import org.n52.iceland.ogc.wps.description.BoundingBoxDescription;
@@ -67,6 +63,11 @@ import org.n52.iceland.ogc.wps.description.ProcessInputDescription;
 import org.n52.iceland.ogc.wps.description.ProcessInputDescriptionContainer;
 import org.n52.iceland.ogc.wps.description.ProcessOutputDescription;
 import org.n52.iceland.ogc.wps.description.ProcessOutputDescriptionContainer;
+import org.n52.javaps.coding.stream.xml.impl.XMLConstants.OWS;
+import org.n52.javaps.coding.stream.xml.impl.XMLConstants.WPS;
+import org.n52.javaps.coding.stream.xml.impl.XMLConstants.XLink;
+import org.n52.javaps.coding.stream.xml.impl.XMLConstants.XMLSchema;
+import org.n52.javaps.io.EncodingException;
 
 import com.google.common.io.BaseEncoding;
 import com.google.common.io.CharStreams;
@@ -364,7 +365,7 @@ public class WPSWriter extends AbstractOWSWriter {
                         writeBase64(data);
                     }
                 }
-            } catch (IOException ex) {
+            } catch (IOException | EncodingException ex) {
                 throw new XMLStreamException(ex);
             }
         });

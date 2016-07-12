@@ -16,10 +16,12 @@
  */
 package org.n52.iceland.ogc.wps.data;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.iceland.ogc.wps.Format;
+import org.n52.javaps.io.EncodingException;
 
 /**
  * TODO JavaDoc
@@ -40,7 +42,7 @@ public abstract class ValueProcessData extends FormattedProcessData {
         this(null, null);
     }
 
-    public abstract InputStream getData();
+    public abstract InputStream getData() throws EncodingException, IOException;
 
     @Override
     public boolean isValue() {

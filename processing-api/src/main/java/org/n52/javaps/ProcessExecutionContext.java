@@ -22,6 +22,7 @@ import java.util.Collection;
 import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.iceland.ogc.wps.JobId;
 import org.n52.iceland.ogc.wps.OutputDefinition;
+import org.n52.iceland.ogc.wps.description.typed.TypedProcessDescription;
 import org.n52.javaps.algorithm.ProcessInputs;
 import org.n52.javaps.algorithm.ProcessOutputs;
 
@@ -34,7 +35,11 @@ public interface ProcessExecutionContext {
 
     JobId getJobId();
 
-    OwsCode getProcessId();
+    default OwsCode getProcessId() {
+        return getDescription().getId();
+    }
+
+    TypedProcessDescription getDescription();
 
     ProcessInputs getInputs();
 

@@ -39,7 +39,8 @@ import org.n52.iceland.ogc.wps.description.typed.TypedProcessInputDescriptionCon
 import org.n52.javaps.algorithm.ProcessInputs;
 import org.n52.javaps.io.Data;
 import org.n52.javaps.io.DecodingException;
-import org.n52.javaps.io.GroupData;
+import org.n52.javaps.io.EncodingException;
+import org.n52.javaps.io.GroupInputData;
 import org.n52.javaps.io.InputHandler;
 import org.n52.javaps.io.InputHandlerRepository;
 
@@ -83,7 +84,7 @@ public class ProcessInputDecoderImpl implements ProcessInputDecoder {
 
     private Data<?> decodeGroup(TypedGroupInputDescription description, GroupProcessData input)
             throws InputDecodingException {
-        return new GroupData(decodeContainer(description, input.getElements()));
+        return new GroupInputData(decodeContainer(description, input.getElements()));
     }
 
     private Data<?> decodeRefernce(TypedProcessInputDescription<?> description, ReferenceProcessData input)
@@ -108,7 +109,7 @@ public class ProcessInputDecoderImpl implements ProcessInputDecoder {
 
         try (InputStream data = input.getData()) {
             return handler.parse(description, data, format);
-        } catch (IOException | DecodingException ex) {
+        } catch (IOException | DecodingException | EncodingException ex) {
             throw new InputDecodingException(input.getId(), ex);
         }
     }

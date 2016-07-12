@@ -36,6 +36,13 @@ public class Result {
     private Optional<JobId> jobId = Optional.empty();
     private final List<ProcessData> outputs = new LinkedList<>();
 
+    public Result(List<ProcessData> outputs) {
+        this.outputs.addAll(outputs);
+    }
+
+    public Result() {
+    }
+
     public Optional<OffsetDateTime> getExpirationDate() {
         return expirationDate;
     }

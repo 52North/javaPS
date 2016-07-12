@@ -16,16 +16,25 @@
  */
 package org.n52.javaps;
 
-
-import org.n52.iceland.ogc.wps.Result;
+import org.n52.iceland.ogc.ows.OwsCode;
 
 /**
  * TODO JavaDoc
  *
  * @author Christian Autermann
  */
-public interface ProcessOutputEncoder {
+public class OutputEncodingException extends EngineException {
+    private static final long serialVersionUID = -2415605845024915079L;
 
-    Result create(ProcessExecutionContext context)
-            throws OutputEncodingException;
+    private final OwsCode id;
+
+    public OutputEncodingException(OwsCode id, Throwable cause) {
+        super(cause);
+        this.id = id;
+    }
+
+    public OwsCode getId() {
+        return id;
+    }
+
 }
