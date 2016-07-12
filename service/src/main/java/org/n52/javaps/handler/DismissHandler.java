@@ -16,7 +16,6 @@
  */
 package org.n52.javaps.handler;
 
-
 import java.util.Collections;
 import java.util.Set;
 
@@ -24,11 +23,13 @@ import javax.inject.Inject;
 
 import org.n52.iceland.ds.GenericOperationHandler;
 import org.n52.iceland.ds.OperationHandlerKey;
+import org.n52.iceland.exception.ows.InvalidParameterValueException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.javaps.Engine;
 import org.n52.iceland.ogc.wps.JobId;
 import org.n52.iceland.ogc.wps.StatusInfo;
 import org.n52.iceland.ogc.wps.WPSConstants;
+import org.n52.javaps.Engine;
+import org.n52.javaps.JobNotFoundException;
 import org.n52.javaps.request.DismissRequest;
 import org.n52.javaps.response.DismissResponse;
 
@@ -51,10 +52,15 @@ public class DismissHandler extends AbstractJobHandler
     public DismissResponse handle(DismissRequest request)
             throws OwsExceptionReport {
         JobId jobId = request.getJobId();
-        StatusInfo status = getEngine().dismiss(jobId);
+        StatusInfo status;
+        try {
+            status = getEngine().dismiss(jobId);
+        } catch (JobNotFoundException ex) {
+            throw new InvalidParameterValueException(JOB_ID, jobId.getValue()).causedBy(ex);
+        }
         String service = request.getService();
         String version = request.getVersion();
-        return new DismissResponse(service, version,status);
+        return new DismissResponse(service, version, status);
     }
 
     @Override

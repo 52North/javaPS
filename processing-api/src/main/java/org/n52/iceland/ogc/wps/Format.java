@@ -27,8 +27,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Predicate;
+
+import org.n52.iceland.util.Optionals;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableSet;
@@ -39,32 +40,23 @@ import com.google.common.collect.ImmutableSet;
  * @author Christian Autermann
  */
 public class Format implements Comparable<Format> {
-    private static final Comparator<Format> COMPARATOR;
-    private static final Set<String> CHARSETS;
+
+    private static final Comparator<Format> COMPARATOR = Comparator.nullsLast(Comparator
+            .comparing(Format::getMimeType, Optionals.nullsFirst()))
+            .thenComparing(Format::getSchema, Optionals.nullsFirst())
+            .thenComparing(Format::getEncoding, Optionals.nullsFirst());
+
+    private static final Set<String> CHARSETS = ImmutableSet.copyOf(Charset.availableCharsets().keySet());
+
     public static final String BASE64_ENCODING = "base64";
     public static final String DEFAULT_ENCODING = "UTF-8";
-
-
-    static {
-        Function<Format, String> mimeType = ((Function<Format, Optional<String>>) Format::getMimeType).andThen(o -> o.orElse(null));
-        Function<Format, String> schema = ((Function<Format, Optional<String>>) Format::getSchema).andThen(o -> o.orElse(null));
-        Function<Format, String> encoding = ((Function<Format, Optional<String>>) Format::getEncoding).andThen(o -> o.orElse(null));
-
-        COMPARATOR = Comparator.nullsLast(Comparator.comparing(mimeType, Comparator.nullsFirst(Comparator.naturalOrder())))
-                .thenComparing(Comparator.comparing(schema, Comparator.nullsFirst(Comparator.naturalOrder())))
-                .thenComparing(Comparator.comparing(encoding, Comparator.nullsFirst(Comparator.naturalOrder())));
-    }
-
-    static {
-        CHARSETS = ImmutableSet.copyOf(Charset.availableCharsets().keySet());
-    }
 
     private final Optional<String> mimeType;
     private final Optional<String> encoding;
     private final Optional<String> schema;
 
     public Format(String mimeType) {
-        this(mimeType, null, null);
+        this(mimeType, (String) null, null);
     }
 
     public Format(String mimeType, String encoding) {
@@ -72,13 +64,27 @@ public class Format implements Comparable<Format> {
     }
 
     public Format(String mimeType, String encoding, String schema) {
-        this.mimeType = Optional.ofNullable(emptyToNull(mimeType));
-        this.encoding = Optional.ofNullable(emptyToNull(encoding));
-        this.schema = Optional.ofNullable(emptyToNull(schema));
+        this(Optional.ofNullable(emptyToNull(mimeType)),
+             Optional.ofNullable(emptyToNull(encoding)),
+             Optional.ofNullable(emptyToNull(schema)));
+    }
+
+    private Format(Optional<String> mimeType, Optional<String> encoding, Optional<String> schema) {
+        this.mimeType = Objects.requireNonNull(mimeType);
+        this.encoding = Objects.requireNonNull(encoding);
+        this.schema = Objects.requireNonNull(schema);
+    }
+
+    public Format(String mimeType, Charset encoding) {
+        this(mimeType, encoding, null);
+    }
+
+    public Format(String mimeType, Charset encoding, String schema) {
+        this(mimeType, encoding == null ? null : encoding.name(), schema);
     }
 
     public Format() {
-        this(null, null, null);
+        this(null, (String) null, null);
     }
 
     public Optional<String> getMimeType() {
@@ -162,9 +168,7 @@ public class Format implements Comparable<Format> {
     }
 
     public Format withEncoding(String encoding) {
-        return new Format(getMimeType().orElse(null),
-                          encoding,
-                          getSchema().orElse(null));
+        return new Format(getMimeType(), Optional.ofNullable(encoding), getSchema());
     }
 
     public Format withBase64Encoding() {
@@ -176,33 +180,23 @@ public class Format implements Comparable<Format> {
     }
 
     public Format withSchema(String schema) {
-        return new Format(getMimeType().orElse(null),
-                          getEncoding().orElse(null),
-                          schema);
+        return new Format(getMimeType(), getEncoding(), Optional.ofNullable(schema));
     }
 
     public Format withMimeType(String mimeType) {
-        return new Format(mimeType,
-                          getEncoding().orElse(null),
-                          getSchema().orElse(null));
+        return new Format(Optional.ofNullable(mimeType), getEncoding(), getSchema());
     }
 
     public Format withoutMimeType() {
-        return new Format(null,
-                          getEncoding().orElse(null),
-                          getSchema().orElse(null));
+        return new Format(Optional.empty(), getEncoding(), getSchema());
     }
 
     public Format withoutEncoding() {
-        return new Format(getMimeType().orElse(null),
-                          null,
-                          getSchema().orElse(null));
+        return new Format(getMimeType(), Optional.empty(), getSchema());
     }
 
     public Format withoutSchema() {
-        return new Format(getMimeType().orElse(null),
-                          getEncoding().orElse(null),
-                          null);
+        return new Format(getMimeType(), getEncoding(), Optional.empty());
     }
 
     @Override
@@ -247,9 +241,7 @@ public class Format implements Comparable<Format> {
                (!this.hasMimeType() || this.hasMimeType(other));
     }
 
-    public void setTo(Consumer<String> encoding,
-                      Consumer<String> mimeType,
-                      Consumer<String> schema) {
+    public void setTo(Consumer<String> encoding, Consumer<String> mimeType, Consumer<String> schema) {
         getEncoding().ifPresent(encoding);
         getMimeType().ifPresent(mimeType);
         getSchema().ifPresent(schema);
@@ -259,7 +251,6 @@ public class Format implements Comparable<Format> {
     public int compareTo(Format that) {
         return comparator().compare(this, that);
     }
-
 
     public boolean isXML() {
         return getMimeType().map(String::toLowerCase).filter(x -> x.endsWith("xml")).isPresent();

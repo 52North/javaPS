@@ -18,45 +18,20 @@ package org.n52.javaps.utils;
 
 import java.lang.annotation.Annotation;
 import java.util.Collection;
-import java.util.Objects;
 import java.util.Optional;
-
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 
 /**
  * TODO JavaDoc
  *
  * @author Christian Autermann
  */
-public class Context implements ApplicationContextAware {
-    private ApplicationContext applicationContext;
+public interface Context {
+    <T> Collection<Object> getAnnotatedInstances(Class<? extends Annotation> annotation);
 
-    public <T> T require(Class<T> type) {
-        return applicationContext.getBean(type);
-    }
+    <T> Optional<? extends T> getInstance(Class<T> type);
 
-    public <T> Optional<T> getInstance(Class<T> type) {
-        try {
-            return Optional.of(applicationContext.getBean(type));
-        } catch (NoSuchBeanDefinitionException ex) {
-            return Optional.empty();
-        }
-    }
+    <T> Collection<T> getInstances(Class<T> type);
 
-    public <T> Collection<T> getInstances(Class<T> type) {
-        return applicationContext.getBeansOfType(type).values();
-    }
-
-    public <T> Collection<Object> getAnnotatedInstances(Class<? extends Annotation> annotation) {
-        return applicationContext.getBeansWithAnnotation(annotation).values();
-    }
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = Objects.requireNonNull(applicationContext);
-    }
+    <T> T require(Class<T> type);
 
 }

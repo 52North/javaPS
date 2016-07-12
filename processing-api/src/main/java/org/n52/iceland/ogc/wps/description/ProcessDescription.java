@@ -29,8 +29,7 @@ import org.n52.iceland.ogc.ows.OwsCode;
  *
  * @author Christian Autermann
  */
-public interface ProcessDescription extends Description,
-                                            ProcessInputDescriptionContainer,
+public interface ProcessDescription extends ProcessInputDescriptionContainer,
                                             ProcessOutputDescriptionContainer,
                                             Comparable<ProcessDescription> {
 
@@ -52,8 +51,7 @@ public interface ProcessDescription extends Description,
     }
 
     interface Builder<T extends ProcessDescription, B extends Builder<T, B>>
-            extends Description.Builder<T, B>,
-                    ProcessInputDescriptionContainer.Builder<T, B>,
+            extends ProcessInputDescriptionContainer.Builder<T, B>,
                     ProcessOutputDescriptionContainer.Builder<T, B> {
 
         B statusSupported(boolean statusSupported);

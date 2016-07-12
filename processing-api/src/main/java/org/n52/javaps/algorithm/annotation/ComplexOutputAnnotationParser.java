@@ -26,7 +26,7 @@ import org.n52.iceland.ogc.wps.Format;
 import org.n52.iceland.ogc.wps.description.typed.TypedComplexOutputDescription;
 import org.n52.iceland.ogc.wps.description.typed.impl.TypedProcessDescriptionFactory;
 import org.n52.javaps.io.complex.ComplexData;
-import org.n52.javaps.io.complex.GeneratorRepository;
+import org.n52.javaps.io.OutputHandlerRepository;
 
 /**
  * TODO JavaDoc
@@ -38,9 +38,9 @@ import org.n52.javaps.io.complex.GeneratorRepository;
 class ComplexOutputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractOutputBinding<M, TypedComplexOutputDescription>>
         extends AbstractOutputAnnotationParser<ComplexOutput, M, TypedComplexOutputDescription, B> {
 
-    private final GeneratorRepository generatorRepository;
+    private final OutputHandlerRepository generatorRepository;
 
-    ComplexOutputAnnotationParser(Function<M, B> bindingFunction, GeneratorRepository generatorRepository) {
+    ComplexOutputAnnotationParser(Function<M, B> bindingFunction, OutputHandlerRepository generatorRepository) {
         super(bindingFunction);
         this.generatorRepository = Objects.requireNonNull(generatorRepository);
     }

@@ -17,6 +17,8 @@
 package org.n52.javaps.handler;
 
 
+import static org.n52.javaps.handler.AbstractJobHandler.JOB_ID;
+
 import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
@@ -26,11 +28,14 @@ import javax.inject.Inject;
 
 import org.n52.iceland.ds.GenericOperationHandler;
 import org.n52.iceland.ds.OperationHandlerKey;
+import org.n52.iceland.exception.ows.InvalidParameterValueException;
 import org.n52.iceland.exception.ows.NoApplicableCodeException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.javaps.Engine;
+import org.n52.iceland.ogc.wps.JobId;
 import org.n52.iceland.ogc.wps.Result;
 import org.n52.iceland.ogc.wps.WPSConstants;
+import org.n52.javaps.Engine;
+import org.n52.javaps.JobNotFoundException;
 import org.n52.javaps.request.GetResultRequest;
 import org.n52.javaps.response.GetResultResponse;
 
@@ -55,15 +60,18 @@ public class GetResultHandler extends AbstractJobHandler
 
         String service = request.getService();
         String version = request.getVersion();
+        JobId jobId = request.getJobId();
 
         try {
-            Future<Result> result = getEngine().getResult(request.getJobId());
+            Future<Result> result = getEngine().getResult(jobId);
 
             return new GetResultResponse(service, version, result.get());
         } catch (InterruptedException ex) {
             throw new NoApplicableCodeException().causedBy(ex);
         } catch (ExecutionException ex) {
             throw new NoApplicableCodeException().causedBy(ex.getCause());
+        } catch (JobNotFoundException ex) {
+            throw new InvalidParameterValueException(JOB_ID, jobId.getValue()).causedBy(ex);
         }
     }
 

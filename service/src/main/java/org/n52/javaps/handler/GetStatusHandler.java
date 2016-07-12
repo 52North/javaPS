@@ -16,6 +16,8 @@
  */
 package org.n52.javaps.handler;
 
+import static org.n52.javaps.handler.AbstractJobHandler.JOB_ID;
+
 import java.util.Collections;
 import java.util.Set;
 
@@ -23,11 +25,13 @@ import javax.inject.Inject;
 
 import org.n52.iceland.ds.GenericOperationHandler;
 import org.n52.iceland.ds.OperationHandlerKey;
+import org.n52.iceland.exception.ows.InvalidParameterValueException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.javaps.Engine;
 import org.n52.iceland.ogc.wps.JobId;
 import org.n52.iceland.ogc.wps.StatusInfo;
 import org.n52.iceland.ogc.wps.WPSConstants;
+import org.n52.javaps.Engine;
+import org.n52.javaps.JobNotFoundException;
 import org.n52.javaps.request.GetStatusRequest;
 import org.n52.javaps.response.GetStatusResponse;
 
@@ -53,7 +57,12 @@ public class GetStatusHandler extends AbstractJobHandler
         String service = request.getService();
         String version = request.getVersion();
         JobId jobId = request.getJobId();
-        StatusInfo status = getEngine().getStatus(jobId);
+        StatusInfo status;
+        try {
+            status = getEngine().getStatus(jobId);
+        } catch (JobNotFoundException ex) {
+            throw new InvalidParameterValueException(JOB_ID, jobId.getValue()).causedBy(ex);
+        }
         return new GetStatusResponse(service, version, status);
     }
 

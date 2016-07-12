@@ -27,6 +27,7 @@ import javax.inject.Inject;
 
 import org.n52.iceland.ds.GenericOperationHandler;
 import org.n52.iceland.ds.OperationHandlerKey;
+import org.n52.iceland.exception.ows.InvalidParameterValueException;
 import org.n52.iceland.exception.ows.NoApplicableCodeException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.ogc.ows.OwsAllowedValues;
@@ -35,12 +36,15 @@ import org.n52.iceland.ogc.ows.OwsDomain;
 import org.n52.iceland.ogc.ows.OwsNoValues;
 import org.n52.iceland.ogc.ows.OwsPossibleValues;
 import org.n52.iceland.ogc.ows.OwsValue;
-import org.n52.javaps.Engine;
 import org.n52.iceland.ogc.wps.ExecutionMode;
 import org.n52.iceland.ogc.wps.JobId;
 import org.n52.iceland.ogc.wps.Result;
 import org.n52.iceland.ogc.wps.StatusInfo;
 import org.n52.iceland.ogc.wps.WPSConstants;
+import org.n52.javaps.Engine;
+import org.n52.javaps.InputDecodingException;
+import org.n52.javaps.JobNotFoundException;
+import org.n52.javaps.ProcessNotFoundException;
 import org.n52.javaps.request.ExecuteRequest;
 import org.n52.javaps.response.ExecuteResponse;
 
@@ -68,22 +72,31 @@ public class ExecuteHandler extends AbstractEngineHandler
         String service = request.getService();
         String version = request.getVersion();
 
-        JobId jobId = getEngine().execute(
-                request.getId(),
-                request.getInputs(),
-                request.getOutputs());
+        JobId jobId;
+        try {
+            jobId = getEngine().execute(request.getId(), request.getInputs(), request.getOutputs());
+        } catch (ProcessNotFoundException ex) {
+            throw new InvalidParameterValueException(IDENTIFIER, request.getId().getValue());
+        } catch (InputDecodingException ex) {
+            throw new NoApplicableCodeException().causedBy(ex);
+        }
 
         if (request.getExecutionMode() == ExecutionMode.SYNC) {
             try {
                 Future<Result> result = getEngine().getResult(jobId);
                 return new ExecuteResponse(service, version, result.get());
-            } catch (InterruptedException ex) {
+            } catch (InterruptedException | JobNotFoundException ex) {
                 throw new NoApplicableCodeException().causedBy(ex);
             } catch (ExecutionException ex) {
                 throw new NoApplicableCodeException().causedBy(ex.getCause());
             }
         } else {
-            StatusInfo status = getEngine().getStatus(jobId);
+            StatusInfo status;
+            try {
+                status = getEngine().getStatus(jobId);
+            } catch (JobNotFoundException ex) {
+                throw new NoApplicableCodeException().causedBy(ex);
+            }
             return new ExecuteResponse(service, version, status);
         }
     }
@@ -100,7 +113,8 @@ public class ExecuteHandler extends AbstractEngineHandler
 
     @Override
     protected Set<OwsDomain> getOperationParameters(String service, String version) {
-        Set<OwsValue> algorithmIdentifiers = getEngine().getProcessIdentifiers().stream().map(OwsCode::getValue).map(OwsValue::new).collect(toSet());
+        Set<OwsValue> algorithmIdentifiers = getEngine().getProcessIdentifiers().stream().map(OwsCode::getValue)
+                .map(OwsValue::new).collect(toSet());
         OwsPossibleValues possibleValues;
         if (algorithmIdentifiers.isEmpty()) {
             possibleValues = OwsNoValues.instance();

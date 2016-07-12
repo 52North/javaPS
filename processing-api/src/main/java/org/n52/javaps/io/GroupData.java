@@ -14,44 +14,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.iceland.ogc.wps.data;
+package org.n52.javaps.io;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.Objects;
 
-import org.n52.iceland.ogc.ows.OwsCode;
-import org.n52.iceland.ogc.wps.Format;
+import org.n52.javaps.algorithm.ProcessInputs;
 
 /**
  * TODO JavaDoc
  *
  * @author Christian Autermann
  */
-public class InMemoryData extends ValueData {
+public class GroupData implements Data<ProcessInputs> {
 
-    private byte[] data;
+    private static final long serialVersionUID = -8747518748439185542L;
+    private final ProcessInputs payload;
 
-    public InMemoryData(OwsCode id) {
-        this(id, null, null);
-    }
-
-    public InMemoryData(OwsCode id, byte[] data) {
-        this(id, null, data);
-    }
-
-    public InMemoryData(OwsCode id, Format format, byte[] data) {
-        super(id, format);
-        this.data = data;
-    }
-
-    public void setData(byte[] data) {
-        this.data = Objects.requireNonNull(data);
+    public GroupData(ProcessInputs payload) {
+        this.payload = Objects.requireNonNull(payload);
     }
 
     @Override
-    public InputStream getData() {
-        return new ByteArrayInputStream(data);
+    public ProcessInputs getPayload() {
+        return this.payload;
+    }
+
+    @Override
+    public Class<?> getSupportedClass() {
+        return ProcessInputs.class;
     }
 
 }

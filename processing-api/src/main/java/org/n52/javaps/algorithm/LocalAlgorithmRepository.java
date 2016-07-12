@@ -36,9 +36,9 @@ import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.iceland.ogc.wps.description.ProcessDescription;
 import org.n52.javaps.algorithm.annotation.Algorithm;
 import org.n52.javaps.algorithm.annotation.AnnotatedAlgorithm;
-import org.n52.javaps.io.complex.GeneratorRepository;
-import org.n52.javaps.io.complex.ParserRepository;
 import org.n52.javaps.io.literal.LiteralTypeRepository;
+import org.n52.javaps.io.InputHandlerRepository;
+import org.n52.javaps.io.OutputHandlerRepository;
 
 /**
  * A static repository to retrieve the available algorithms.
@@ -52,14 +52,14 @@ public class LocalAlgorithmRepository implements AlgorithmRepository {
 
     private final Map<OwsCode, ProcessDescription> descriptions = new HashMap<>();
     private final Map<OwsCode, Supplier<IAlgorithm>> algorithms = new HashMap<>();
-    private final ParserRepository parserRepository;
-    private final GeneratorRepository generatorRepository;
+    private final InputHandlerRepository parserRepository;
+    private final OutputHandlerRepository generatorRepository;
     private final LiteralTypeRepository literalTypeRepository;
     private final AutowireCapableBeanFactory beanFactory;
 
     @Inject
-    public LocalAlgorithmRepository(ParserRepository parserRepository,
-                                    GeneratorRepository generatorRepository,
+    public LocalAlgorithmRepository(InputHandlerRepository parserRepository,
+                                    OutputHandlerRepository generatorRepository,
                                     LiteralTypeRepository literalTypeRepository,
                                     ApplicationContext applicationContext) {
         this.parserRepository = Objects.requireNonNull(parserRepository);

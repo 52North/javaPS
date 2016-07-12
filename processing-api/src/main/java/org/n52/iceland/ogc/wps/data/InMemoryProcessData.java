@@ -16,56 +16,42 @@
  */
 package org.n52.iceland.ogc.wps.data;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.Objects;
 
 import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.iceland.ogc.wps.Format;
 
 /**
  * TODO JavaDoc
  *
  * @author Christian Autermann
  */
-public abstract class Data {
+public class InMemoryProcessData extends ValueProcessData {
 
-    private OwsCode id;
+    private byte[] data;
 
-    public Data() {
-        this(null);
+    public InMemoryProcessData(OwsCode id) {
+        this(id, null, null);
     }
 
-    public Data(OwsCode id) {
-        this.id = id;
+    public InMemoryProcessData(OwsCode id, byte[] data) {
+        this(id, null, data);
     }
 
-    public OwsCode getId() {
-        return id;
+    public InMemoryProcessData(OwsCode id, Format format, byte[] data) {
+        super(id, format);
+        this.data = data;
     }
 
-    public void setId(OwsCode id) {
-        this.id = Objects.requireNonNull(id);
+    public void setData(byte[] data) {
+        this.data = Objects.requireNonNull(data);
     }
 
-    public boolean isGroup() {
-        return false;
+    @Override
+    public InputStream getData() {
+        return new ByteArrayInputStream(data);
     }
 
-    public GroupData asGroup() {
-        throw new UnsupportedOperationException();
-    }
-
-    public boolean isReference() {
-        return false;
-    }
-
-    public ReferenceData asReference() {
-        throw new UnsupportedOperationException();
-    }
-
-    public boolean isValue() {
-        return false;
-    }
-
-    public ValueData asValue() {
-        throw new UnsupportedOperationException();
-    }
 }

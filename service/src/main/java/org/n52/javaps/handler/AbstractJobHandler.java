@@ -27,8 +27,8 @@ import org.n52.iceland.ogc.ows.OwsDomain;
 import org.n52.iceland.ogc.ows.OwsNoValues;
 import org.n52.iceland.ogc.ows.OwsPossibleValues;
 import org.n52.iceland.ogc.ows.OwsValue;
-import org.n52.javaps.Engine;
 import org.n52.iceland.ogc.wps.JobId;
+import org.n52.javaps.Engine;
 
 /**
  * TODO JavaDoc
@@ -36,7 +36,7 @@ import org.n52.iceland.ogc.wps.JobId;
  * @author Christian Autermann
  */
 public abstract class AbstractJobHandler extends AbstractEngineHandler {
-    private static final String JOB_ID = "JobId";
+    protected static final String JOB_ID = "JobId";
 
     private final boolean discloseJobIds;
 

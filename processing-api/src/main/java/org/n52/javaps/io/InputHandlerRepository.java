@@ -14,41 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.iceland.ogc.wps.data;
+package org.n52.javaps.io;
 
-import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 
-import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.iceland.ogc.wps.Format;
 
 /**
- * TODO JavaDoc
  *
  * @author Christian Autermann
  */
-public abstract class FormattedData extends Data {
+public interface InputHandlerRepository extends FormatRepository {
+    Set<InputHandler> getInputHandlers();
 
-    private Format format;
-
-    public FormattedData(OwsCode id) {
-        this(id, null);
-    }
-
-    public FormattedData(OwsCode id, Format format) {
-        super(id);
-        this.format = format == null ? new Format() : format;
-    }
-
-    public FormattedData() {
-        this(null, null);
-    }
-
-    public Format getFormat() {
-        return format;
-    }
-
-    public void setFormat(Format format) {
-        this.format = Objects.requireNonNull(format);
-    }
-
+    Optional<InputHandler> getInputHandler(Format format, Class<? extends Data<?>> binding);
 }

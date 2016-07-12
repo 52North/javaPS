@@ -16,7 +16,6 @@
  */
 package org.n52.iceland.ogc.wps;
 
-
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -100,6 +99,10 @@ public class OutputDefinition {
 
     public void setOutputs(List<OutputDefinition> outputs) {
         this.outputs = outputs == null ? Collections.emptyList() : outputs;
+    }
+
+    public boolean hasOutputs() {
+        return !this.outputs.isEmpty();
     }
 
     @Override

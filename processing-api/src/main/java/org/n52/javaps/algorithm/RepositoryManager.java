@@ -16,12 +16,11 @@
  */
 package org.n52.javaps.algorithm;
 
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -133,16 +132,16 @@ public class RepositoryManager implements Constructable, Destroyable {
      *            The name of the algorithm class
      * @return IAlgorithm or null an instance of the algorithm class
      */
-    public IAlgorithm getAlgorithm(OwsCode id) {
-        return getRepositoryForAlgorithm(id).flatMap(r -> r.getAlgorithm(id)).orElse(null);
+    public Optional<IAlgorithm> getAlgorithm(OwsCode id) {
+        return getRepositoryForAlgorithm(id).flatMap(r -> r.getAlgorithm(id));
     }
 
     /**
      *
      * @return allAlgorithms
      */
-    public List<OwsCode> getAlgorithms() {
-        return getRepositories().flatMap(r -> r.getAlgorithmNames().stream()).collect(toList());
+    public Set<OwsCode> getAlgorithms() {
+        return getRepositories().flatMap(r -> r.getAlgorithmNames().stream()).collect(toSet());
     }
 
     public boolean containsAlgorithm(OwsCode id) {

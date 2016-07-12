@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.io.complex;
+package org.n52.javaps.io;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,8 +23,6 @@ import org.apache.commons.codec.binary.Base64InputStream;
 
 import org.n52.iceland.ogc.wps.Format;
 import org.n52.iceland.ogc.wps.description.typed.TypedProcessOutputDescription;
-import org.n52.javaps.io.Data;
-import org.n52.javaps.io.EncodingException;
 
 /**
  * Basic interface for all Generators.
@@ -32,12 +30,12 @@ import org.n52.javaps.io.EncodingException;
  * @author Matthias Mueller, TU Dresden
  *
  */
-public interface IGenerator extends IOHandler {
-    InputStream encode(TypedProcessOutputDescription<?> description, Data<?> data, Format format)
+public interface OutputHandler extends InputOutputHandler {
+    InputStream generate(TypedProcessOutputDescription<?> description, Data<?> data, Format format)
             throws IOException, EncodingException;
 
-    default InputStream encodeBase64(TypedProcessOutputDescription<?> description, Data<?> data, Format format)
+    default InputStream generateBase64(TypedProcessOutputDescription<?> description, Data<?> data, Format format)
             throws IOException, EncodingException {
-        return new Base64InputStream(encode(description, data, format), true);
+        return new Base64InputStream(generate(description, data, format), true);
     }
 }

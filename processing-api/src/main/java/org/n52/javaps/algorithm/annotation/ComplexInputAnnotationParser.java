@@ -26,7 +26,7 @@ import org.n52.iceland.ogc.wps.Format;
 import org.n52.iceland.ogc.wps.description.typed.TypedComplexInputDescription;
 import org.n52.iceland.ogc.wps.description.typed.impl.TypedProcessDescriptionFactory;
 import org.n52.javaps.io.complex.ComplexData;
-import org.n52.javaps.io.complex.ParserRepository;
+import org.n52.javaps.io.InputHandlerRepository;
 
 /**
  * TODO JavaDoc
@@ -38,9 +38,9 @@ import org.n52.javaps.io.complex.ParserRepository;
 class ComplexInputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractInputBinding<M, TypedComplexInputDescription>>
         extends AbstractInputAnnotationParser<ComplexInput, M, TypedComplexInputDescription, B> {
 
-    private final ParserRepository parserRepository;
+    private final InputHandlerRepository parserRepository;
 
-    ComplexInputAnnotationParser(Function<M, B> bindingFunction, ParserRepository parserRepository) {
+    ComplexInputAnnotationParser(Function<M, B> bindingFunction, InputHandlerRepository parserRepository) {
         super(bindingFunction);
         this.parserRepository = Objects.requireNonNull(parserRepository);
     }

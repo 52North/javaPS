@@ -14,21 +14,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.io.complex;
+package org.n52.iceland.ogc.wps.data;
 
-import java.util.Optional;
-import java.util.Set;
+import java.util.Objects;
 
+import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.iceland.ogc.wps.Format;
-import org.n52.javaps.io.complex.ComplexData;
 
 /**
  * TODO JavaDoc
+ *
  * @author Christian Autermann
  */
-public interface GeneratorRepository extends FormatRepository {
-    Set<IGenerator> getGenerators();
+public abstract class FormattedProcessData extends ProcessData {
 
-    Optional<IGenerator> getGenerator(Format format, Class<? extends ComplexData<?>> binding);
+    private Format format;
+
+    public FormattedProcessData(OwsCode id) {
+        this(id, null);
+    }
+
+    public FormattedProcessData(OwsCode id, Format format) {
+        super(id);
+        this.format = format == null ? new Format() : format;
+    }
+
+    public FormattedProcessData() {
+        this(null, null);
+    }
+
+    public Format getFormat() {
+        return format;
+    }
+
+    public void setFormat(Format format) {
+        this.format = Objects.requireNonNull(format);
+    }
 
 }

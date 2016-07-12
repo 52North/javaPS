@@ -14,24 +14,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.io.parser;
+package org.n52.iceland.ogc.wps.data;
 
-import java.io.IOException;
 import java.io.InputStream;
 
+import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.iceland.ogc.wps.Format;
-import org.n52.iceland.ogc.wps.description.typed.TypedProcessInputDescription;
-import org.n52.javaps.annotation.Properties;
-import org.n52.javaps.io.AbstractPropertiesInputOutputHandler;
-import org.n52.javaps.io.Data;
-import org.n52.javaps.io.InputHandler;
 
-@Properties(defaultPropertyFileName = "testparser.json")
-public class TestParser extends AbstractPropertiesInputOutputHandler implements InputHandler {
+/**
+ * TODO JavaDoc
+ *
+ * @author Christian Autermann
+ */
+public abstract class ValueProcessData extends FormattedProcessData {
+
+    public ValueProcessData(OwsCode id) {
+        this(id, null);
+    }
+
+    public ValueProcessData(OwsCode id, Format format) {
+        super(id, format);
+    }
+
+    public ValueProcessData() {
+        this(null, null);
+    }
+
+    public abstract InputStream getData();
+
     @Override
-    public Data<?> parse(TypedProcessInputDescription<?> description, InputStream input, Format format)
-            throws IOException {
-        return null;
+    public boolean isValue() {
+        return true;
+    }
+
+    @Override
+    public ValueProcessData asValue() {
+        return this;
     }
 
 }

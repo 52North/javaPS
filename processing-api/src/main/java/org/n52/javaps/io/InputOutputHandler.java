@@ -14,32 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.io.complex;
+package org.n52.javaps.io;
 
 import java.util.Set;
 
 import org.n52.iceland.ogc.wps.Format;
-import org.n52.javaps.io.Data;
 
-public interface IOHandler {
-
-    String DEFAULT_ENCODING = "UTF-8";
-
-    String ENCODING_BASE64 = "base64";
-
-    // String DEFAULT_MIMETYPE = "text/xml";
-
-    String MIME_TYPE_ZIPPED_SHP = "application/x-zipped-shp";
-
+public interface InputOutputHandler {
 
     default boolean isSupportedFormat(Format format) {
-        return getSupportedFormats().stream()
-                .anyMatch(f -> f.isCompatible(format));
+        return getSupportedFormats().stream().anyMatch(f -> f.isCompatible(format));
     }
 
-    default boolean isSupportedBinding(Class<? extends ComplexData<?>> binding) {
-        return getSupportedBindings().stream()
-                .anyMatch(binding::isAssignableFrom);
+    default boolean isSupportedBinding(Class<? extends Data<?>> binding) {
+        return getSupportedBindings().stream().anyMatch(binding::isAssignableFrom);
     }
 
     Set<Format> getSupportedFormats();

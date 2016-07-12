@@ -48,15 +48,15 @@ import org.n52.iceland.ogc.wps.Format;
 import org.n52.iceland.ogc.wps.description.typed.TypedProcessInputDescription;
 import org.n52.iceland.ogc.wps.description.typed.TypedProcessOutputDescription;
 import org.n52.javaps.io.Data;
-import org.n52.javaps.io.complex.IGenerator;
-import org.n52.javaps.io.complex.IParser;
+import org.n52.javaps.io.InputHandler;
+import org.n52.javaps.io.OutputHandler;
 
 /**
  * TODO JavaDoc
  *
  * @author Christian Autermann
  */
-public class BoundingBoxDataHandler implements IGenerator, IParser {
+public class BoundingBoxDataHandler implements OutputHandler, InputHandler {
 
     private static final HashSet<Format> FORMATS = new HashSet<>(Arrays.asList(new Format("text/xml"),
                                                                                new Format("application/xml")));
@@ -74,7 +74,7 @@ public class BoundingBoxDataHandler implements IGenerator, IParser {
     private final XMLInputFactory inputFactory = XMLInputFactory.newFactory();
 
     @Override
-    public InputStream encode(TypedProcessOutputDescription<?> description, Data<?> data, Format format)
+    public InputStream generate(TypedProcessOutputDescription<?> description, Data<?> data, Format format)
             throws IOException {
         try {
             OwsBoundingBox bbox = (OwsBoundingBox) data.getPayload();
@@ -90,7 +90,7 @@ public class BoundingBoxDataHandler implements IGenerator, IParser {
     }
 
     @Override
-    public Data<?> decode(TypedProcessInputDescription<?> description, InputStream input, Format format)
+    public Data<?> parse(TypedProcessInputDescription<?> description, InputStream input, Format format)
             throws IOException {
         Charset charset = format.getEncodingAsCharsetOrDefault();
         try (Reader reader = new InputStreamReader(input, charset)) {
@@ -178,11 +178,12 @@ public class BoundingBoxDataHandler implements IGenerator, IParser {
                 } else {
                     throw unexpectedTag(start);
                 }
-            } else if (event.isEndElement()) {
-                if (dimension == null) {
-                    return new OwsBoundingBox(lowerCorner, upperCorner, crs);
-                } else {
-                    return new OwsBoundingBox(lowerCorner, upperCorner, dimension, crs);
+                if (upperCorner != null && lowerCorner != null) {
+                    if (dimension == null) {
+                        return new OwsBoundingBox(lowerCorner, upperCorner, crs);
+                    } else {
+                        return new OwsBoundingBox(lowerCorner, upperCorner, dimension, crs);
+                    }
                 }
             }
         }

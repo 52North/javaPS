@@ -38,11 +38,11 @@ import org.n52.iceland.ogc.wps.JobId;
 import org.n52.iceland.ogc.wps.OutputDefinition;
 import org.n52.iceland.ogc.wps.ResponseMode;
 import org.n52.iceland.ogc.wps.data.Body;
-import org.n52.iceland.ogc.wps.data.Data;
-import org.n52.iceland.ogc.wps.data.GroupData;
-import org.n52.iceland.ogc.wps.data.ReferenceData;
-import org.n52.iceland.ogc.wps.data.StringValueData;
-import org.n52.iceland.ogc.wps.data.ValueData;
+import org.n52.iceland.ogc.wps.data.ProcessData;
+import org.n52.iceland.ogc.wps.data.GroupProcessData;
+import org.n52.iceland.ogc.wps.data.ReferenceProcessData;
+import org.n52.iceland.ogc.wps.data.StringValueProcessData;
+import org.n52.iceland.ogc.wps.data.ValueProcessData;
 import org.n52.iceland.request.AbstractServiceRequest;
 import org.n52.iceland.request.GetCapabilitiesRequest;
 import org.n52.javaps.coding.stream.StreamReaderKey;
@@ -398,11 +398,11 @@ public class WPSRequestReader extends AbstractElementXmlStreamReader {
         return new Format(mimeType, encoding, schema);
     }
 
-    private Data readInput(StartElement elem, XMLEventReader reader) throws XMLStreamException {
+    private ProcessData readInput(StartElement elem, XMLEventReader reader) throws XMLStreamException {
 
         OwsCode id = getAttribute(elem, WPS.Attr.AN_ID).map(OwsCode::new).orElse(null);
-        List<Data> inputs = new LinkedList<>();
-        Data data = null;
+        List<ProcessData> inputs = new LinkedList<>();
+        ProcessData data = null;
         while(reader.hasNext()) {
             XMLEvent event = reader.nextEvent();
             if (event.isStartElement()) {
@@ -421,7 +421,7 @@ public class WPSRequestReader extends AbstractElementXmlStreamReader {
                     if (inputs.isEmpty()) {
                         throw new IllegalStateException();
                     }
-                    data = new GroupData(id, inputs);
+                    data = new GroupProcessData(id, inputs);
                 }
                 return data;
 
@@ -430,9 +430,9 @@ public class WPSRequestReader extends AbstractElementXmlStreamReader {
         throw eof();
     }
 
-    private ReferenceData readReference(StartElement elem, XMLEventReader reader,
+    private ReferenceProcessData readReference(StartElement elem, XMLEventReader reader,
                                OwsCode id) throws XMLStreamException {
-        ReferenceData data = new ReferenceData(id);
+        ReferenceProcessData data = new ReferenceProcessData(id);
         data.setFormat(readFormat(elem));
         data.setURI(getAttribute(elem, XLink.Attr.QN_HREF).map(URI::create).orElse(null));
 
@@ -475,11 +475,11 @@ public class WPSRequestReader extends AbstractElementXmlStreamReader {
     }
 
 
-     private ValueData readData(StartElement start, XMLEventReader reader,
+     private ValueProcessData readData(StartElement start, XMLEventReader reader,
                                OwsCode id) throws XMLStreamException {
         Format format = readFormat(start);
         // TODO persist the inputs to disk?
         String string = asString(start, reader);
-        return new StringValueData(id, format, string);
+        return new StringValueProcessData(id, format, string);
     }
 }

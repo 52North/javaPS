@@ -28,7 +28,7 @@ import org.n52.iceland.ogc.wps.ExecutionMode;
 import org.n52.iceland.ogc.wps.OutputDefinition;
 import org.n52.iceland.ogc.wps.ResponseMode;
 import org.n52.iceland.ogc.wps.WPSConstants;
-import org.n52.iceland.ogc.wps.data.Data;
+import org.n52.iceland.ogc.wps.data.ProcessData;
 import org.n52.javaps.response.ExecuteResponse;
 
 
@@ -40,11 +40,11 @@ public class ExecuteRequest extends AbstractServiceRequest<ExecuteResponse> {
     private OwsCode id;
     private ExecutionMode executionMode = ExecutionMode.AUTO;
     private ResponseMode responseMode = ResponseMode.DOCUMENT;
-    private final List<Data> inputs = new LinkedList<>();
+    private final List<ProcessData> inputs = new LinkedList<>();
     private final List<OutputDefinition> outputs = new LinkedList<>();
 
 
-    public void addInput(Data input) {
+    public void addInput(ProcessData input) {
         this.inputs.add(Objects.requireNonNull(input));
     }
 
@@ -62,7 +62,7 @@ public class ExecuteRequest extends AbstractServiceRequest<ExecuteResponse> {
         return WPSConstants.Operations.Execute.name();
     }
 
-    public List<Data> getInputs() {
+    public List<ProcessData> getInputs() {
         return Collections.unmodifiableList(this.inputs);
     }
 

@@ -14,27 +14,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.algorithm;
+package org.n52.javaps;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.time.OffsetDateTime;
+import java.util.Collection;
 
 import org.n52.iceland.ogc.ows.OwsCode;
-import org.n52.javaps.io.Data;
+import org.n52.iceland.ogc.wps.JobId;
+import org.n52.iceland.ogc.wps.OutputDefinition;
+import org.n52.javaps.algorithm.ProcessInputs;
+import org.n52.javaps.algorithm.ProcessOutputs;
 
 /**
  * TODO JavaDoc
  *
  * @author Christian Autermann
  */
-public class ProcessOutputs extends HashMap<OwsCode, Data<?>> {
-    private static final long serialVersionUID = -3966745236341552277L;
+public interface ProcessExecutionContext {
 
-    public ProcessOutputs() {
-    }
+    JobId getJobId();
 
-    public ProcessOutputs(Map<? extends OwsCode, ? extends Data<?>> m) {
-        super(m);
-    }
+    OwsCode getProcessId();
 
+    ProcessInputs getInputs();
+
+    ProcessOutputs getOutputs();
+
+    Collection<OutputDefinition> getOutputDefinitions();
+
+    void setPercentCompleted(Short percentCompleted);
+
+    void setEstimatedCompletion(OffsetDateTime estimatedCompletion);
+
+    void setNextPoll(OffsetDateTime nextPoll);
 }

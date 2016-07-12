@@ -14,26 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.algorithm;
-
-import java.util.Collections;
-import java.util.List;
-
-import org.n52.iceland.ogc.wps.description.typed.TypedProcessDescription;
-import org.n52.javaps.ProcessExecutionContext;
+package org.n52.javaps;
 
 /**
- * @author Bastian Schaeffer, University of Muenster, Theodor Foerster, ITC
+ * TODO JavaDoc
  *
+ * @author Christian Autermann
  */
-public interface IAlgorithm {
+public class UnsupportedInputFormatException extends EngineException {
+    private static final long serialVersionUID = 7517335569301406179L;
 
-    void execute(ProcessExecutionContext context) throws ExecutionException;
-
-    @Deprecated
-    default List<String> getErrors() {
-        return Collections.emptyList();
+    public UnsupportedInputFormatException() {
     }
 
-    TypedProcessDescription getDescription();
+    public UnsupportedInputFormatException(String message) {
+        super(message);
+    }
+
+    public UnsupportedInputFormatException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public UnsupportedInputFormatException(Throwable cause) {
+        super(cause);
+    }
+
 }

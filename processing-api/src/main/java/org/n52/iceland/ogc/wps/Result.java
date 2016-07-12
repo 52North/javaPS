@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.n52.iceland.ogc.wps.data.Data;
+import org.n52.iceland.ogc.wps.data.ProcessData;
 
 /**
  * TODO JavaDoc
@@ -34,7 +34,7 @@ public class Result {
 
     private Optional<OffsetDateTime> expirationDate = Optional.empty();
     private Optional<JobId> jobId = Optional.empty();
-    private final List<Data> outputs = new LinkedList<>();
+    private final List<ProcessData> outputs = new LinkedList<>();
 
     public Optional<OffsetDateTime> getExpirationDate() {
         return expirationDate;
@@ -52,11 +52,11 @@ public class Result {
         this.jobId = Optional.ofNullable(jobId);
     }
 
-    public List<Data> getOutputs() {
+    public List<ProcessData> getOutputs() {
         return Collections.unmodifiableList(outputs);
     }
 
-    public void addOutput(Data output) {
+    public void addOutput(ProcessData output) {
         this.outputs.add(Objects.requireNonNull(output));
     }
 }

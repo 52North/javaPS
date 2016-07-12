@@ -16,22 +16,6 @@
  */
 package org.n52.javaps.annotation;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.List;
-
-import org.apache.commons.configuration2.io.ClasspathLocationStrategy;
-import org.apache.commons.configuration2.io.CombinedLocationStrategy;
-import org.apache.commons.configuration2.io.DefaultFileSystem;
-import org.apache.commons.configuration2.io.FileLocationStrategy;
-import org.apache.commons.configuration2.io.FileLocator;
-import org.apache.commons.configuration2.io.FileLocatorUtils;
-import org.apache.commons.configuration2.io.FileSystem;
-import org.apache.commons.configuration2.io.FileSystemLocationStrategy;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.n52.iceland.util.JSONUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -40,65 +24,11 @@ import com.fasterxml.jackson.databind.JsonNode;
  * @author Benjamin Pross
  *
  */
-@Properties
-public abstract class ConfigurableClass {
+public interface ConfigurableClass {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ConfigurableClass.class);
-
-    private final JsonNode properties;
-
-    public ConfigurableClass() {
-
-        List<FileLocationStrategy> subs = Arrays.asList(
-                new FileSystemLocationStrategy(),
-                new ClasspathLocationStrategy());
-
-        FileLocationStrategy strategy = new CombinedLocationStrategy(subs);
-
-        Properties annotation = this.getClass().getAnnotation(Properties.class);
-
-        if(annotation == null){
-            LOGGER.warn("Class extends {}, but is not annotated with {} annotation.", this.getClass().getName(), Properties.class.getName());
-            this.properties = JSONUtils.nodeFactory().objectNode();
-            return;
-        }
-
-        //first try non-default property file
-        String propertyFileName = annotation.propertyFileName();
-
-        if(propertyFileName == null || propertyFileName.isEmpty()){
-            //fall back to default property file
-            propertyFileName = annotation.defaultPropertyFileName();
-        }
-
-        if(propertyFileName == null || propertyFileName.isEmpty()){
-            LOGGER.warn("Class {} is annotated with {} annotation, but the annotation is empty.", this.getClass().getName(), Properties.class.getName());
-            this.properties = JSONUtils.nodeFactory().objectNode();
-            return;
-        }
-
-        FileSystem arg0 = new DefaultFileSystem();
-
-        FileLocator locator =
-                FileLocatorUtils.fileLocator().fileName(propertyFileName)
-                .create();
-
-        URL fileURL = strategy.locate(arg0, locator);
-
-        JsonNode props;
-        try {
-            props = JSONUtils.loadURL(fileURL);
-
-        } catch (IOException e) {
-            LOGGER.error("Could not read property file for class {}" + this.getClass().getName(), e);
-            props = JSONUtils.nodeFactory().objectNode();
-        }
-        this.properties = props;
+    default JsonNode getProperties() {
+        return ConfigurableClasses.get(getClass())
+                .orElseGet(JSONUtils.nodeFactory()::objectNode);
     }
-
-    protected final JsonNode getProperties() {
-        return properties;
-    }
-
 
 }

@@ -48,11 +48,12 @@ import org.n52.javaps.coding.stream.StreamWriterRepository;
 import org.n52.javaps.coding.stream.xml.DocumentXmlStreamWriter;
 import org.n52.javaps.coding.stream.xml.ElementXmlStreamWriter;
 import org.n52.javaps.coding.stream.xml.ElementXmlStreamWriterRepository;
+import org.n52.javaps.io.Data;
+import org.n52.javaps.io.InputHandler;
+import org.n52.javaps.io.InputHandlerRepository;
+import org.n52.javaps.io.OutputHandler;
+import org.n52.javaps.io.OutputHandlerRepository;
 import org.n52.javaps.io.complex.ComplexData;
-import org.n52.javaps.io.complex.GeneratorRepository;
-import org.n52.javaps.io.complex.IGenerator;
-import org.n52.javaps.io.complex.IParser;
-import org.n52.javaps.io.complex.ParserRepository;
 import org.n52.javaps.io.literal.LiteralType;
 import org.n52.javaps.io.literal.LiteralTypeRepository;
 import org.n52.javaps.io.literal.xsd.LiteralIntType;
@@ -90,8 +91,8 @@ public class WpsProcessDescriptionWriterTest {
     private static final Set<Format> FORMATS = new HashSet<>(Arrays.asList(
             new Format("text/xml", "UTF-8", "http://www.opengis.net/gml/3.2"),
             new Format("text/xml", "UTF-16", "http://www.opengis.net/gml/3.2"),
-            new Format("text/xml", null, "http://www.opengis.net/gml/3.2"),
-            new Format("text/xml", null, null),
+            new Format("text/xml", (String)null, "http://www.opengis.net/gml/3.2"),
+            new Format("text/xml", (String)null, null),
             new Format("text/xml", "UTF-8", null),
             new Format("text/xml", "UTF-16", null)));
 
@@ -281,15 +282,15 @@ public class WpsProcessDescriptionWriterTest {
         }
     }
 
-    private static class IORepo implements GeneratorRepository,ParserRepository {
+    private static class IORepo implements OutputHandlerRepository, InputHandlerRepository {
 
         @Override
-        public Set<IGenerator> getGenerators() {
+        public Set<OutputHandler> getOutputHandlers() {
             return Collections.emptySet();
         }
 
         @Override
-        public Optional<IGenerator> getGenerator(Format format, Class<? extends ComplexData<?>> binding) {
+        public Optional<OutputHandler> getOutputHandler(Format format, Class<? extends Data<?>> binding) {
             return Optional.empty();
         }
 
@@ -299,24 +300,21 @@ public class WpsProcessDescriptionWriterTest {
         }
 
         @Override
-        public Set<Format> getSupportedFormats(Class<? extends ComplexData<?>> binding) {
+        public Set<Format> getSupportedFormats(Class<? extends Data<?>> binding) {
             return getSupportedFormats();
         }
         @Override
-        public Set<IParser> getParsers() {
+        public Set<InputHandler> getInputHandlers() {
             return Collections.emptySet();
         }
 
         @Override
-        public Optional<IParser> getParser(Format format, Class<? extends ComplexData<?>> binding) {
+        public Optional<InputHandler> getInputHandler(Format format, Class<? extends Data<?>> binding) {
             return Optional.empty();
         }
     }
 
      static class LiteralDataManagerImpl implements LiteralTypeRepository {
-        public LiteralDataManagerImpl() {
-        }
-
         @Override
         @SuppressWarnings("unchecked")
         public <T> LiteralType<T> getLiteralType(

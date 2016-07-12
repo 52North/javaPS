@@ -24,7 +24,7 @@ import static org.hamcrest.Matchers.nullValue;
 import org.junit.Test;
 
 @Properties(defaultPropertyFileName="test.properties")
-public class TestAnnotation extends ConfigurableClass {
+public class TestAnnotation implements ConfigurableClass {
 
     public TestAnnotation(){
 

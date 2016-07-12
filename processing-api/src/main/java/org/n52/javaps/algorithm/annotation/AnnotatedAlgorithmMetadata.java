@@ -43,13 +43,161 @@ import org.n52.iceland.ogc.wps.description.ProcessInputDescription;
 import org.n52.iceland.ogc.wps.description.ProcessOutputDescription;
 import org.n52.iceland.ogc.wps.description.typed.TypedProcessDescription;
 import org.n52.iceland.ogc.wps.description.typed.impl.TypedProcessDescriptionFactory;
-import org.n52.javaps.io.complex.GeneratorRepository;
-import org.n52.javaps.io.complex.ParserRepository;
 
 import com.google.common.base.Strings;
 
 import org.n52.javaps.io.literal.LiteralTypeRepository;
 
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+
+import org.n52.javaps.io.InputHandlerRepository;
+
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+
+import org.n52.javaps.io.OutputHandlerRepository;
+
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
+import static java.util.stream.Collectors.toMap;
+import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.iceland.util.Streams.toSingleResult;
 import static java.util.stream.Collectors.toMap;
 import static org.n52.iceland.util.Streams.throwingMerger;
 import static org.n52.iceland.util.Streams.toSingleResult;
@@ -109,7 +257,7 @@ public class AnnotatedAlgorithmMetadata {
     private final TypedProcessDescription description;
     private final TypedProcessDescriptionFactory descriptionFactory;
 
-    public AnnotatedAlgorithmMetadata(Class<?> algorithmClass, ParserRepository parserRepository, GeneratorRepository generatorRepository, LiteralTypeRepository literalTypeRepository) {
+    public AnnotatedAlgorithmMetadata(Class<?> algorithmClass, InputHandlerRepository parserRepository, OutputHandlerRepository generatorRepository, LiteralTypeRepository literalTypeRepository) {
         this.descriptionFactory = new TypedProcessDescriptionFactory();
 
         //this.formatRepository = Objects.requireNonNull(formatRepository);
@@ -166,7 +314,7 @@ public class AnnotatedAlgorithmMetadata {
         }
     }
 
-    private Map<OwsCode, AbstractInputBinding<?, ?>> getInputBindings(Class<?> algorithmClass, ParserRepository parserRepository, LiteralTypeRepository literalTypeRepository) {
+    private Map<OwsCode, AbstractInputBinding<?, ?>> getInputBindings(Class<?> algorithmClass, InputHandlerRepository parserRepository, LiteralTypeRepository literalTypeRepository) {
         Stream<AbstractInputBinding<?, ?>> s1 = parseElements(getFields(algorithmClass), Arrays
                 .asList(new LiteralInputAnnotationParser<>(AbstractInputBinding::field, literalTypeRepository),
                         new ComplexInputAnnotationParser<>(AbstractInputBinding::field, parserRepository)))
@@ -182,7 +330,7 @@ public class AnnotatedAlgorithmMetadata {
         return Collections.unmodifiableMap(Stream.concat(s1, s2).collect(collector));
     }
 
-    private Map<OwsCode, AbstractOutputBinding<?, ?>> getOutputBindings(Class<?> algorithmClass, GeneratorRepository generatorRepository, LiteralTypeRepository literalTypeRepository) {
+    private Map<OwsCode, AbstractOutputBinding<?, ?>> getOutputBindings(Class<?> algorithmClass, OutputHandlerRepository generatorRepository, LiteralTypeRepository literalTypeRepository) {
         Stream<AbstractOutputBinding<?, ?>> s1 = parseElements(getFields(algorithmClass), Arrays
                     .asList(new LiteralOutputAnnotationParser<>(AbstractOutputBinding::field, literalTypeRepository),
                             new ComplexOutputAnnotationParser<>(AbstractOutputBinding::field, generatorRepository)))

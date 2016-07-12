@@ -14,26 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.algorithm;
-
-import java.util.Collections;
-import java.util.List;
-
-import org.n52.iceland.ogc.wps.description.typed.TypedProcessDescription;
-import org.n52.javaps.ProcessExecutionContext;
+package org.n52.javaps;
 
 /**
- * @author Bastian Schaeffer, University of Muenster, Theodor Foerster, ITC
- *
+ * TODO JavaDoc
+ * @author Christian Autermann
  */
-public interface IAlgorithm {
+public class EngineException extends Exception {
+    private static final long serialVersionUID = -6692899581547731691L;
 
-    void execute(ProcessExecutionContext context) throws ExecutionException;
-
-    @Deprecated
-    default List<String> getErrors() {
-        return Collections.emptyList();
+    public EngineException() {
     }
 
-    TypedProcessDescription getDescription();
+    public EngineException(String message) {
+        super(message);
+    }
+
+    public EngineException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public EngineException(Throwable cause) {
+        super(cause);
+    }
+
 }

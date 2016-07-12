@@ -18,7 +18,7 @@ package org.n52.iceland.ogc.wps.data;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Objects;
 
 import org.n52.iceland.ogc.ows.OwsCode;
@@ -26,40 +26,31 @@ import org.n52.iceland.ogc.wps.Format;
 
 import com.google.common.base.MoreObjects;
 
-/**
- * TODO JavaDoc
- *
- * @author Christian Autermann
- */
-public class StringValueData extends ValueData {
+public class ByteArrayValueProcessData extends ValueProcessData {
 
-    private final String string;
+    private final byte[] bytes;
 
-    public StringValueData(OwsCode id, String string) {
-        this(id, null, string);
+    public ByteArrayValueProcessData(OwsCode id, byte[] bytes) {
+        this(id, null, bytes);
     }
 
-    public StringValueData(OwsCode id, Format format, String string) {
+    public ByteArrayValueProcessData(OwsCode id, Format format, byte[] bytes) {
         super(id, format);
-        this.string = Objects.requireNonNull(string);
+        this.bytes = Objects.requireNonNull(bytes);
     }
 
-    public StringValueData(String string) {
-        this(null, null, string);
-    }
-
-    public StringValueData() {
-        this(null, null, null);
+    public ByteArrayValueProcessData(byte[] bytes) {
+        this(null, null, bytes);
     }
 
     @Override
     public InputStream getData() {
-        return new ByteArrayInputStream(string.getBytes(StandardCharsets.UTF_8));
+        return new ByteArrayInputStream(this.bytes);
     }
 
-      @Override
+    @Override
     public int hashCode() {
-        return Objects.hash(getId(), getFormat(), this.string);
+        return Objects.hash(getId(), getFormat(), this.bytes);
     }
 
     @Override
@@ -73,10 +64,10 @@ public class StringValueData extends ValueData {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final StringValueData other = (StringValueData) obj;
+        final ByteArrayValueProcessData other = (ByteArrayValueProcessData) obj;
         return Objects.equals(getId(), other.getId()) &&
                Objects.equals(getFormat(), other.getFormat()) &&
-               Objects.equals(this.string, other.string);
+               Arrays.equals(this.bytes, other.bytes);
     }
 
     @Override
@@ -84,7 +75,7 @@ public class StringValueData extends ValueData {
         return MoreObjects.toStringHelper(this).omitNullValues()
                 .add("id", getId())
                 .add("format", getFormat())
-                .add("value", this.string)
+                .add("value", this.bytes)
                 .toString();
     }
 

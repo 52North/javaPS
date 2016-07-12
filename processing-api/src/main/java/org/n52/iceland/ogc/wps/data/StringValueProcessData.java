@@ -16,13 +16,13 @@
  */
 package org.n52.iceland.ogc.wps.data;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.iceland.ogc.wps.Format;
 
 import com.google.common.base.MoreObjects;
 
@@ -31,51 +31,35 @@ import com.google.common.base.MoreObjects;
  *
  * @author Christian Autermann
  */
-public class GroupData extends Data {
+public class StringValueProcessData extends ValueProcessData {
 
-    private final List<Data> elements;
+    private final String string;
 
-    public GroupData() {
-        this(null, null);
+    public StringValueProcessData(OwsCode id, String string) {
+        this(id, null, string);
     }
 
-    public GroupData(OwsCode id) {
-        this(id, null);
+    public StringValueProcessData(OwsCode id, Format format, String string) {
+        super(id, format);
+        this.string = Objects.requireNonNull(string);
     }
 
-    public GroupData(OwsCode id, List<Data> elements) {
-        super(id);
-        this.elements = elements == null ? new LinkedList<>() : elements;
+    public StringValueProcessData(String string) {
+        this(null, null, string);
     }
 
-    public List<Data> getElements() {
-        return Collections.unmodifiableList(this.elements);
-    }
-
-    public void setElements(Collection<Data> elements) {
-        this.elements.clear();
-        if (elements != null) {
-            this.elements.addAll(elements);
-        }
-    }
-
-    public void addElement(Data input) {
-        this.elements.add(Objects.requireNonNull(input));
+    public StringValueProcessData() {
+        this(null, null, null);
     }
 
     @Override
-    public boolean isGroup() {
-        return true;
+    public InputStream getData() {
+        return new ByteArrayInputStream(string.getBytes(StandardCharsets.UTF_8));
     }
 
-    @Override
-    public GroupData asGroup() {
-        return this;
-    }
-
-    @Override
+      @Override
     public int hashCode() {
-        return Objects.hash(getId(), getElements());
+        return Objects.hash(getId(), getFormat(), this.string);
     }
 
     @Override
@@ -89,19 +73,19 @@ public class GroupData extends Data {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final GroupData other = (GroupData) obj;
+        final StringValueProcessData other = (StringValueProcessData) obj;
         return Objects.equals(getId(), other.getId()) &&
-                Objects.equals(getElements(), other.getElements());
+               Objects.equals(getFormat(), other.getFormat()) &&
+               Objects.equals(this.string, other.string);
     }
 
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this).omitNullValues()
                 .add("id", getId())
-                .add("elements", getElements())
+                .add("format", getFormat())
+                .add("value", this.string)
                 .toString();
     }
-
-
 
 }

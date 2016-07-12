@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.io.complex;
+package org.n52.javaps.io;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,21 +23,19 @@ import org.apache.commons.codec.binary.Base64InputStream;
 
 import org.n52.iceland.ogc.wps.Format;
 import org.n52.iceland.ogc.wps.description.typed.TypedProcessInputDescription;
-import org.n52.javaps.io.Data;
-import org.n52.javaps.io.DecodingException;
 
 /**
  * @author Matthias Mueller, TU Dresden
  *
  */
-public interface IParser extends IOHandler {
+public interface InputHandler extends InputOutputHandler {
 
-    Data<?> decode(TypedProcessInputDescription<?> description, InputStream input, Format format)
+    Data<?> parse(TypedProcessInputDescription<?> description, InputStream input, Format format)
             throws IOException, DecodingException;
 
-    default Data<?> decodeBase64(TypedProcessInputDescription<?> description, InputStream input, Format format)
+    default Data<?> parseBase64(TypedProcessInputDescription<?> description, InputStream input, Format format)
             throws IOException, DecodingException {
-        return decode(description, new Base64InputStream(input), format);
+        return parse(description, new Base64InputStream(input), format);
     }
 
 }

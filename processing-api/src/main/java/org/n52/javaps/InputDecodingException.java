@@ -14,42 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.iceland.ogc.wps.data;
+package org.n52.javaps;
 
-import java.io.InputStream;
 
 import org.n52.iceland.ogc.ows.OwsCode;
-import org.n52.iceland.ogc.wps.Format;
 
 /**
  * TODO JavaDoc
- *
  * @author Christian Autermann
  */
-public abstract class ValueData extends FormattedData {
+public class InputDecodingException extends EngineException {
 
-    public ValueData(OwsCode id) {
-        this(id, null);
+    private static final long serialVersionUID = -1065731367786870799L;
+    private final OwsCode id;
+
+    InputDecodingException(OwsCode id, Throwable cause) {
+        super(cause);
+        this.id = id;
     }
 
-    public ValueData(OwsCode id, Format format) {
-        super(id, format);
-    }
-
-    public ValueData() {
-        this(null, null);
-    }
-
-    public abstract InputStream getData();
-
-    @Override
-    public boolean isValue() {
-        return true;
-    }
-
-    @Override
-    public ValueData asValue() {
-        return this;
+    public OwsCode getId() {
+        return id;
     }
 
 }

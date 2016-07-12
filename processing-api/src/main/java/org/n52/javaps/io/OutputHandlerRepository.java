@@ -14,37 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.io.complex;
+package org.n52.javaps.io;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Optional;
 import java.util.Set;
 
 import org.n52.iceland.ogc.wps.Format;
-import org.n52.javaps.io.complex.ComplexData;
 
 /**
  * TODO JavaDoc
- *
  * @author Christian Autermann
  */
-public interface FormatRepository {
+public interface OutputHandlerRepository extends FormatRepository {
+    Set<OutputHandler> getOutputHandlers();
 
-    Set<Format> getSupportedFormats();
+    Optional<OutputHandler> getOutputHandler(Format format, Class<? extends Data<?>> binding);
 
-    default Optional<Format> getDefaultFormat(Class<? extends ComplexData<?>> binding) {
-        return getSupportedFormats(binding).stream().min(Comparator.naturalOrder());
-    }
-
-    Set<Format> getSupportedFormats(Class<? extends ComplexData<?>> binding);
-
-    @SuppressWarnings("unchecked")
-    default Set<Format> getSupportedFormats(ComplexData<?> binding) {
-        if (binding == null) {
-            return Collections.emptySet();
-        } else {
-            return getSupportedFormats((Class<? extends ComplexData<?>>) binding.getClass());
-        }
-    }
 }

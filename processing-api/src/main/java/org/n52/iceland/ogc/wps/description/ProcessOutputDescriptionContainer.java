@@ -27,7 +27,7 @@ import org.n52.iceland.ogc.ows.OwsCode;
  *
  * @author Christian Autermann
  */
-public interface ProcessOutputDescriptionContainer {
+public interface ProcessOutputDescriptionContainer extends Description {
 
     ProcessOutputDescription getOutput(OwsCode id);
 
@@ -39,7 +39,8 @@ public interface ProcessOutputDescriptionContainer {
 
     Set<OwsCode> getOutputs();
 
-    interface Builder<T extends ProcessOutputDescriptionContainer, B extends Builder<T, B>> {
+    interface Builder<T extends ProcessOutputDescriptionContainer, B extends Builder<T, B>>
+            extends Description.Builder<T, B> {
         B withOutput(ProcessOutputDescription output);
 
         default B withOutput(ProcessOutputDescription.Builder<?, ?> output) {

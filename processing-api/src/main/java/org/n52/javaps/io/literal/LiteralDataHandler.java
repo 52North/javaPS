@@ -49,8 +49,8 @@ import org.n52.iceland.ogc.wps.description.typed.TypedProcessOutputDescription;
 import org.n52.javaps.io.Data;
 import org.n52.javaps.io.DecodingException;
 import org.n52.javaps.io.EncodingException;
-import org.n52.javaps.io.complex.IGenerator;
-import org.n52.javaps.io.complex.IParser;
+import org.n52.javaps.io.InputHandler;
+import org.n52.javaps.io.OutputHandler;
 
 import com.google.common.io.CharStreams;
 
@@ -59,7 +59,7 @@ import com.google.common.io.CharStreams;
  *
  * @author Christian Autermann
  */
-public class LiteralDataHandler implements IParser, IGenerator {
+public class LiteralDataHandler implements InputHandler, OutputHandler {
 
     private static final Set<Class<? extends Data<?>>> BINDINGS = Collections.singleton(LiteralData.class);
     private static final Set<Format> FORMATS = new HashSet<>(Arrays.asList(new Format("application/xml"),
@@ -88,7 +88,7 @@ public class LiteralDataHandler implements IParser, IGenerator {
     }
 
     @Override
-    public Data<?> decode(TypedProcessInputDescription<?> description, InputStream input, Format format)
+    public Data<?> parse(TypedProcessInputDescription<?> description, InputStream input, Format format)
             throws IOException, DecodingException {
         if (format.isXML()) {
             return parseXML(description.asLiteral(), input, format);
@@ -98,7 +98,7 @@ public class LiteralDataHandler implements IParser, IGenerator {
     }
 
     @Override
-    public InputStream encode(TypedProcessOutputDescription<?> description, Data<?> data, Format format)
+    public InputStream generate(TypedProcessOutputDescription<?> description, Data<?> data, Format format)
             throws IOException, EncodingException {
         if (format.isXML()) {
             return generateXML(description.asLiteral(), (LiteralData) data, format);
@@ -174,7 +174,6 @@ public class LiteralDataHandler implements IParser, IGenerator {
 
     private LiteralData parseData(TypedLiteralInputDescription description, Reader reader)
             throws XMLStreamException, DecodingException {
-        LiteralData literalData = null;
         XMLEventReader xmlReader = inputFactory.createXMLEventReader(reader);
         while (xmlReader.hasNext()) {
             XMLEvent event = xmlReader.nextEvent();
@@ -184,12 +183,10 @@ public class LiteralDataHandler implements IParser, IGenerator {
                     // TODO check data type?
                     URI dataType = Optional.ofNullable(start.getAttributeByName(QN_DATA_TYPE)).map(Attribute::getValue).map(URI::create).orElse(null);
                     String uom = Optional.ofNullable(start.getAttributeByName(QN_UOM)).map(Attribute::getValue).orElse(null);
-                    literalData = description.getType().parseToBinding(xmlReader.getElementText(), uom);
+                    return description.getType().parseToBinding(xmlReader.getElementText(), uom);
                 } else {
                     throw unexpectedTag(start);
                 }
-            } else if (event.isEndElement()) {
-                return literalData;
             }
          }
         throw eof();

@@ -20,14 +20,14 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.n52.iceland.ogc.wps.description.ProcessDescription;
+import org.n52.iceland.ogc.wps.description.typed.TypedProcessDescription;
 
 public abstract class AbstractAlgorithm
         extends AbstractObservable implements IAlgorithm {
 
     private final List<String> errorList = Collections
             .synchronizedList(new LinkedList<>());
-    private ProcessDescription description;
+    private TypedProcessDescription description;
 
     @Override
     @Deprecated
@@ -41,12 +41,12 @@ public abstract class AbstractAlgorithm
     }
 
     @Override
-    public synchronized ProcessDescription getDescription() {
+    public synchronized TypedProcessDescription getDescription() {
         if (this.description == null) {
             this.description = createDescription();
         }
         return this.description;
     }
 
-    protected abstract ProcessDescription createDescription();
+    protected abstract TypedProcessDescription createDescription();
 }

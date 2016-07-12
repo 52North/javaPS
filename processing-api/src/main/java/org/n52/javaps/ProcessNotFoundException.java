@@ -14,19 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.io.complex;
+package org.n52.javaps;
 
-import java.util.Optional;
-import java.util.Set;
-
-import org.n52.iceland.ogc.wps.Format;
+import org.n52.iceland.ogc.ows.OwsCode;
 
 /**
+ * TODO JavaDoc
  *
  * @author Christian Autermann
  */
-public interface ParserRepository extends FormatRepository {
-    Set<IParser> getParsers();
+public class ProcessNotFoundException extends EngineException {
 
-    Optional<IParser> getParser(Format format, Class<? extends ComplexData<?>> binding);
+    private static final long serialVersionUID = 1746802928120713659L;
+
+    public ProcessNotFoundException(OwsCode id) {
+        super(String.format("Process %s could not be found", id));
+    }
+
 }

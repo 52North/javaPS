@@ -27,7 +27,7 @@ import org.n52.iceland.ogc.ows.OwsCode;
  *
  * @author Christian Autermann
  */
-public interface ProcessInputDescriptionContainer {
+public interface ProcessInputDescriptionContainer extends Description {
 
     ProcessInputDescription getInput(OwsCode id);
 
@@ -39,7 +39,9 @@ public interface ProcessInputDescriptionContainer {
 
     Set<OwsCode> getInputs();
 
-    interface Builder<T extends ProcessInputDescriptionContainer, B extends ProcessInputDescriptionContainer.Builder<T, B>> {
+    interface Builder<T extends ProcessInputDescriptionContainer, B extends ProcessInputDescriptionContainer.Builder<T, B>>
+            extends Description.Builder<T, B> {
+
         B withInput(ProcessInputDescription input);
 
         default B withInput(ProcessInputDescription.Builder<?, ?> input) {

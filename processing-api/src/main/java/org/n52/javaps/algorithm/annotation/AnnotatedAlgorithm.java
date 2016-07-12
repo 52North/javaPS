@@ -21,12 +21,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.inject.Inject;
 
-import org.n52.iceland.ogc.wps.description.ProcessDescription;
+import org.n52.iceland.ogc.wps.description.typed.TypedProcessDescription;
+import org.n52.javaps.ProcessExecutionContext;
 import org.n52.javaps.algorithm.AbstractAlgorithm;
-import org.n52.javaps.algorithm.ProcessInputs;
-import org.n52.javaps.algorithm.ProcessOutputs;
-import org.n52.javaps.io.complex.GeneratorRepository;
-import org.n52.javaps.io.complex.ParserRepository;
+import org.n52.javaps.algorithm.ExecutionException;
+import org.n52.javaps.io.InputHandlerRepository;
+import org.n52.javaps.io.OutputHandlerRepository;
 import org.n52.javaps.io.literal.LiteralTypeRepository;
 
 public class AnnotatedAlgorithm extends AbstractAlgorithm {
@@ -35,13 +35,13 @@ public class AnnotatedAlgorithm extends AbstractAlgorithm {
     private final Object algorithmInstance;
 
     @Inject
-    public AnnotatedAlgorithm(ParserRepository parserRepository,
-                              GeneratorRepository generatorRepository,
+    public AnnotatedAlgorithm(InputHandlerRepository parserRepository,
+                              OutputHandlerRepository generatorRepository,
                               LiteralTypeRepository literalTypeRepository) {
         this(parserRepository, generatorRepository, literalTypeRepository, null);
     }
 
-    public AnnotatedAlgorithm(ParserRepository parserRepository, GeneratorRepository generatorRepository,
+    public AnnotatedAlgorithm(InputHandlerRepository parserRepository, OutputHandlerRepository generatorRepository,
                               LiteralTypeRepository literalDataManager, Object algorithmInstance) {
         this.algorithmInstance = algorithmInstance == null ? this : algorithmInstance;
         this.metadata = CACHE
@@ -50,16 +50,14 @@ public class AnnotatedAlgorithm extends AbstractAlgorithm {
     }
 
     @Override
-    protected ProcessDescription createDescription() {
+    protected TypedProcessDescription createDescription() {
         return this.metadata.getDescription();
     }
 
     @Override
-    public ProcessOutputs run(ProcessInputs inputs) {
-        ProcessOutputs outputs = new ProcessOutputs();
-        this.metadata.getInputBindings().forEach((id, binding) -> binding.set(this.algorithmInstance, inputs.get(id)));
+    public void execute(ProcessExecutionContext context) throws ExecutionException {
+        this.metadata.getInputBindings().forEach((id, binding) -> binding.set(this.algorithmInstance, context.getInputs().get(id)));
         this.metadata.getExecuteBinding().execute(this.algorithmInstance);
-        this.metadata.getOutputBindings().forEach((id, binding) -> outputs.put(id, binding.get(this.algorithmInstance)));
-        return outputs;
+        this.metadata.getOutputBindings().forEach((id, binding) -> context.getOutputs().put(id, binding.get(this.algorithmInstance)));
     }
 }

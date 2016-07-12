@@ -45,10 +45,10 @@ import org.n52.iceland.ogc.wps.Result;
 import org.n52.iceland.ogc.wps.StatusInfo;
 import org.n52.iceland.ogc.wps.WPSCapabilities;
 import org.n52.iceland.ogc.wps.data.Body;
-import org.n52.iceland.ogc.wps.data.Data;
-import org.n52.iceland.ogc.wps.data.GroupData;
-import org.n52.iceland.ogc.wps.data.ReferenceData;
-import org.n52.iceland.ogc.wps.data.ValueData;
+import org.n52.iceland.ogc.wps.data.ProcessData;
+import org.n52.iceland.ogc.wps.data.GroupProcessData;
+import org.n52.iceland.ogc.wps.data.ReferenceProcessData;
+import org.n52.iceland.ogc.wps.data.ValueProcessData;
 import org.n52.iceland.ogc.wps.description.BoundingBoxDescription;
 import org.n52.iceland.ogc.wps.description.BoundingBoxInputDescription;
 import org.n52.iceland.ogc.wps.description.BoundingBoxOutputDescription;
@@ -99,12 +99,12 @@ public class WPSWriter extends AbstractOWSWriter {
             writeProcessOffering((ProcessOffering) object);
         } else if (object instanceof Result) {
             writeResult((Result) object);
-        } else if (object instanceof ValueData) {
-            writeValueData((ValueData) object);
+        } else if (object instanceof ValueProcessData) {
+            writeValueData((ValueProcessData) object);
         } else if (object instanceof StatusInfo) {
             writeStatusInfo((StatusInfo) object);
-        } else if (object instanceof ReferenceData) {
-            writeReferenceData((ReferenceData) object);
+        } else if (object instanceof ReferenceProcessData) {
+            writeReferenceData((ReferenceProcessData) object);
         } else if (object instanceof ProcessDescription) {
             writeProcessDescription((ProcessDescription) object);
         } else if (object instanceof WPSCapabilities) {
@@ -275,7 +275,7 @@ public class WPSWriter extends AbstractOWSWriter {
         });
     }
 
-    private void writeReferenceData(ReferenceData reference)
+    private void writeReferenceData(ReferenceProcessData reference)
             throws XMLStreamException {
         element(WPS.Elem.QN_REFERENCE, () -> {
             writeNamespaces();
@@ -321,7 +321,7 @@ public class WPSWriter extends AbstractOWSWriter {
         attr(WPS.Attr.AN_SCHEMA, format.getSchema());
     }
 
-    private void writeValueData(ValueData value)
+    private void writeValueData(ValueProcessData value)
             throws XMLStreamException {
         element(WPS.Elem.QN_DATA, value, x -> {
             writeNamespaces();
@@ -378,14 +378,14 @@ public class WPSWriter extends AbstractOWSWriter {
             element(WPS.Elem.QN_JOB_ID, x.getJobId().map(JobId::getValue));
             element(WPS.Elem.QN_EXPIRATION_DATE, x.getExpirationDate().map(this::format));
 
-            for (Data data : x.getOutputs()) {
+            for (ProcessData data : x.getOutputs()) {
                 writeOutput(data);
             }
         });
 
     }
 
-    private void writeOutput(Data data)
+    private void writeOutput(ProcessData data)
             throws XMLStreamException {
         element(WPS.Elem.QN_OUTPUT, data, x -> {
             attr(WPS.Attr.AN_ID, x.getId().getValue());
@@ -421,9 +421,9 @@ public class WPSWriter extends AbstractOWSWriter {
         namespace(XLink.NS_XLINK_PREFIX, XLink.NS_XLINK);
     }
 
-    private void writeGroupData(GroupData x)
+    private void writeGroupData(GroupProcessData x)
             throws XMLStreamException {
-        for (Data output : x.getElements()) {
+        for (ProcessData output : x.getElements()) {
             writeOutput(output);
         }
     }

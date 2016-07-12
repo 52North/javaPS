@@ -129,7 +129,7 @@ public class LiteralDataDomainImpl implements LiteralDataDomain {
 
     public static class Builder extends AbstractLiteralDataDomainBuilder<LiteralDataDomain, Builder> {
         @Override
-        public LiteralDataDomainImpl build() {
+        public LiteralDataDomain build() {
             return new LiteralDataDomainImpl(this);
         }
     }

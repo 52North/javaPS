@@ -42,7 +42,6 @@ import org.junit.rules.ErrorCollector;
 import org.xml.sax.SAXException;
 
 import org.n52.iceland.ogc.ows.OwsCode;
-import org.n52.iceland.request.GetCapabilitiesRequest;
 import org.n52.iceland.ogc.wps.DataTransmissionMode;
 import org.n52.iceland.ogc.wps.ExecutionMode;
 import org.n52.iceland.ogc.wps.Format;
@@ -50,9 +49,10 @@ import org.n52.iceland.ogc.wps.JobId;
 import org.n52.iceland.ogc.wps.OutputDefinition;
 import org.n52.iceland.ogc.wps.ResponseMode;
 import org.n52.iceland.ogc.wps.data.Body;
-import org.n52.iceland.ogc.wps.data.GroupData;
-import org.n52.iceland.ogc.wps.data.ReferenceData;
-import org.n52.iceland.ogc.wps.data.StringValueData;
+import org.n52.iceland.ogc.wps.data.GroupProcessData;
+import org.n52.iceland.ogc.wps.data.ReferenceProcessData;
+import org.n52.iceland.ogc.wps.data.StringValueProcessData;
+import org.n52.iceland.request.GetCapabilitiesRequest;
 import org.n52.javaps.request.DescribeProcessRequest;
 import org.n52.javaps.request.DismissRequest;
 import org.n52.javaps.request.ExecuteRequest;
@@ -155,19 +155,18 @@ public class WPSRequestReaderTest {
 
         errors.checkThat(request.getOutputs().size(), is(1));
         errors.checkThat(request.getOutputs(), contains(new OutputDefinition(new OwsCode("output1"), Format.empty(), DataTransmissionMode.REFERENCE)));
-        errors.checkThat(request.getInputs(), contains(
-                is(new ReferenceData(new OwsCode("referenceInput1"), new Format("application/xml", "UTF-8"), URI.create("http://some.data.server/mygmldata.xml"))),
-                is(new ReferenceData(new OwsCode("referenceInput2"), new Format("text/xml"), URI.create("http://some.data.server/mygmldata.xml"), Body.inline("\n                <my-great-request-bayload>hello world</my-great-request-bayload>\n            "))),
-                is(new ReferenceData(new OwsCode("referenceInput3"), new Format(null, null, "urn::schema:test"), URI.create("http://some.data.server/mygmldata.xml"), Body.inline("\n                <my-great-request-bayload>hello world</my-great-request-bayload>\n            "))),
-                is(new ReferenceData(new OwsCode("referenceInput4"), new Format(null, null, "urn::schema:test"), URI.create("http://some.data.server/mygmldata.xml"), Body.reference("http://some.data.server/mygmldata.xml"))),
-                is(new StringValueData(new OwsCode("literalInput1"), new Format(), "10.0")),
-                is(new StringValueData(new OwsCode("literalInput2"), new Format(), "hello world")),
-                is(new StringValueData(new OwsCode("complexInput1"), new Format("text/xml", "UTF-8", "urn::schema:test"), "\n" +
+        errors.checkThat(request.getInputs(), contains(is(new ReferenceProcessData(new OwsCode("referenceInput1"), new Format("application/xml", "UTF-8"), URI.create("http://some.data.server/mygmldata.xml"))),
+                is(new ReferenceProcessData(new OwsCode("referenceInput2"), new Format("text/xml"), URI.create("http://some.data.server/mygmldata.xml"), Body.inline("\n                <my-great-request-bayload>hello world</my-great-request-bayload>\n            "))),
+                is(new ReferenceProcessData(new OwsCode("referenceInput3"), new Format(null, (String)null, "urn::schema:test"), URI.create("http://some.data.server/mygmldata.xml"), Body.inline("\n                <my-great-request-bayload>hello world</my-great-request-bayload>\n            "))),
+                is(new ReferenceProcessData(new OwsCode("referenceInput4"), new Format(null, (String)null, "urn::schema:test"), URI.create("http://some.data.server/mygmldata.xml"), Body.reference("http://some.data.server/mygmldata.xml"))),
+                is(new StringValueProcessData(new OwsCode("literalInput1"), new Format(), "10.0")),
+                is(new StringValueProcessData(new OwsCode("literalInput2"), new Format(), "hello world")),
+                is(new StringValueProcessData(new OwsCode("complexInput1"), new Format("text/xml", "UTF-8", "urn::schema:test"), "\n" +
                         "            <great-xml-snippet xmlns:wps=\"http://www.opengis.net/wps/2.0\" xmlns=\"urn::schema:test\">\n" +
 "                <ows:Identifier xmlns:ows=\"http://www.opengis.net/ows/2.0\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xlink:href=\"asdf\">asdf</ows:Identifier>\n" +
 "            </great-xml-snippet>\n        ")),
-                is(new StringValueData(new OwsCode("complexInput2"), new Format("text/xml", "base64"), BaseEncoding.base64().encode("<sömekey>somevalüe</sömekey>".getBytes(StandardCharsets.UTF_8)))),
-                is(new GroupData(new OwsCode("outerNested"), Arrays.asList(new StringValueData(new OwsCode("innerNested1"), "10.0"), new StringValueData(new OwsCode("innerNested2"), "10.0"))))));
+                is(new StringValueProcessData(new OwsCode("complexInput2"), new Format("text/xml", "base64"), BaseEncoding.base64().encode("<sömekey>somevalüe</sömekey>".getBytes(StandardCharsets.UTF_8)))),
+                is(new GroupProcessData(new OwsCode("outerNested"), Arrays.asList(new StringValueProcessData(new OwsCode("innerNested1"), "10.0"), new StringValueProcessData(new OwsCode("innerNested2"), "10.0"))))));
     }
 
 

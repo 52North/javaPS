@@ -25,9 +25,10 @@ import org.n52.javaps.io.Data;
 
 /**
  * TODO JavaDoc
+ *
  * @author Christian Autermann
  */
-public class ProcessInputs extends HashMap<OwsCode, List<Data<?>>>{
+public class ProcessInputs extends HashMap<OwsCode, List<Data<?>>> {
 
     private static final long serialVersionUID = 921032882074907318L;
 

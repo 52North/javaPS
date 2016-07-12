@@ -33,30 +33,30 @@ import com.google.common.base.MoreObjects;
  *
  * @author Christian Autermann
  */
-public class ReferenceData extends FormattedData {
+public class ReferenceProcessData extends FormattedProcessData {
 
     private URI uri;
     private Optional<Body> body;
 
-    public ReferenceData(OwsCode id) {
+    public ReferenceProcessData(OwsCode id) {
         this(id, null, null, null);
     }
 
-    public ReferenceData(OwsCode id, URI uri) {
+    public ReferenceProcessData(OwsCode id, URI uri) {
         this(id, null, uri, null);
     }
 
-    public ReferenceData(OwsCode id, Format format, URI uri) {
+    public ReferenceProcessData(OwsCode id, Format format, URI uri) {
         this(id, format, uri, null);
     }
 
-    public ReferenceData(OwsCode id, Format format, URI uri, Body body) {
+    public ReferenceProcessData(OwsCode id, Format format, URI uri, Body body) {
         super(id, format);
         this.uri = uri;
         this.body = Optional.ofNullable(body);
     }
 
-    public ReferenceData() {
+    public ReferenceProcessData() {
         this(null, null, null, null);
     }
 
@@ -76,7 +76,7 @@ public class ReferenceData extends FormattedData {
         this.body = Optional.ofNullable(body);
     }
 
-    public ValueData resolve()
+    public ValueProcessData resolve()
             throws IOException {
         //TODO save as a file?
         final byte[] bytes;
@@ -86,7 +86,7 @@ public class ReferenceData extends FormattedData {
             bytes = HTTP.post(getURI(), getBody().get().getBody()
                               .getBytes(StandardCharsets.UTF_8));
         }
-        return new InMemoryData(getId(), getFormat(), bytes);
+        return new InMemoryProcessData(getId(), getFormat(), bytes);
     }
 
     @Override
@@ -95,7 +95,7 @@ public class ReferenceData extends FormattedData {
     }
 
     @Override
-    public ReferenceData asReference() {
+    public ReferenceProcessData asReference() {
         return this;
     }
 
@@ -125,7 +125,7 @@ public class ReferenceData extends FormattedData {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final ReferenceData other = (ReferenceData) obj;
+        final ReferenceProcessData other = (ReferenceProcessData) obj;
         return Objects.equals(getId(), other.getId()) &&
                Objects.equals(getFormat(), other.getFormat()) &&
                Objects.equals(getURI(), other.getURI()) &&

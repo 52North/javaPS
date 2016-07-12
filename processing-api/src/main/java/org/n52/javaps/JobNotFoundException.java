@@ -14,26 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.algorithm;
+package org.n52.javaps;
 
-import java.util.Collections;
-import java.util.List;
-
-import org.n52.iceland.ogc.wps.description.typed.TypedProcessDescription;
-import org.n52.javaps.ProcessExecutionContext;
+import org.n52.iceland.ogc.wps.JobId;
 
 /**
- * @author Bastian Schaeffer, University of Muenster, Theodor Foerster, ITC
+ * TODO JavaDoc
  *
+ * @author Christian Autermann
  */
-public interface IAlgorithm {
+public class JobNotFoundException extends EngineException {
+    private static final long serialVersionUID = -5551278888368672154L;
 
-    void execute(ProcessExecutionContext context) throws ExecutionException;
-
-    @Deprecated
-    default List<String> getErrors() {
-        return Collections.emptyList();
+    public JobNotFoundException(JobId id) {
+        super(String.format("Job %s could not be found", id));
     }
 
-    TypedProcessDescription getDescription();
 }
