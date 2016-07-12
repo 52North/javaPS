@@ -25,8 +25,6 @@ import java.util.concurrent.Future;
 
 import javax.inject.Inject;
 
-import org.n52.iceland.ds.GenericOperationHandler;
-import org.n52.iceland.ds.OperationHandlerKey;
 import org.n52.iceland.exception.ows.InvalidParameterValueException;
 import org.n52.iceland.exception.ows.NoApplicableCodeException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
@@ -41,6 +39,8 @@ import org.n52.iceland.ogc.wps.JobId;
 import org.n52.iceland.ogc.wps.Result;
 import org.n52.iceland.ogc.wps.StatusInfo;
 import org.n52.iceland.ogc.wps.WPSConstants;
+import org.n52.iceland.request.handler.GenericOperationHandler;
+import org.n52.iceland.request.handler.OperationHandlerKey;
 import org.n52.javaps.Engine;
 import org.n52.javaps.InputDecodingException;
 import org.n52.javaps.JobNotFoundException;

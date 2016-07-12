@@ -18,6 +18,7 @@ package org.n52.javaps.handler;
 
 import java.util.Objects;
 
+import org.n52.iceland.request.handler.AbstractOperationHandler;
 import org.n52.javaps.Engine;
 
 /**
@@ -25,7 +26,7 @@ import org.n52.javaps.Engine;
  *
  * @author Christian Autermann
  */
-public abstract class AbstractEngineHandler extends AbstractHandler {
+public abstract class AbstractEngineHandler extends AbstractOperationHandler {
 
     private final Engine engine;
 

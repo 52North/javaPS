@@ -25,8 +25,8 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
-import org.n52.iceland.ds.GenericOperationHandler;
-import org.n52.iceland.ds.OperationHandlerKey;
+import org.n52.iceland.request.handler.GenericOperationHandler;
+import org.n52.iceland.request.handler.OperationHandlerKey;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.ogc.ows.OwsAllowedValues;
 import org.n52.iceland.ogc.ows.OwsCode;

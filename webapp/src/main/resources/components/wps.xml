@@ -51,7 +51,7 @@
     <bean class="org.n52.javaps.coding.stream.xml.impl.WPSRequestReader" scope="prototype"/>
     <bean class="org.n52.javaps.coding.stream.xml.impl.WPSResponseWriter" scope="prototype"/>
 
-    <bean id="engine" class="org.n52.javaps.DummyEngine"/>
+    <bean id="engine" class="org.n52.javaps.EngineImpl"/>
 
     <!-- handlers -->
     <bean class="org.n52.iceland.service.operator.GenericServiceOperator">

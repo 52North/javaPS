@@ -26,8 +26,8 @@ import java.util.concurrent.Future;
 
 import javax.inject.Inject;
 
-import org.n52.iceland.ds.GenericOperationHandler;
-import org.n52.iceland.ds.OperationHandlerKey;
+import org.n52.iceland.request.handler.GenericOperationHandler;
+import org.n52.iceland.request.handler.OperationHandlerKey;
 import org.n52.iceland.exception.ows.InvalidParameterValueException;
 import org.n52.iceland.exception.ows.NoApplicableCodeException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;

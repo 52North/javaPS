@@ -47,6 +47,15 @@ public class WPSCapabilities extends OwsCapabilities {
         this.processOfferings = Optional.ofNullable(processOfferings);
     }
 
+    public WPSCapabilities(OwsCapabilities other, ProcessOfferings processOfferings) {
+        super(other);
+        this.processOfferings = Optional.ofNullable(processOfferings);
+    }
+
+    public WPSCapabilities(WPSCapabilities other) {
+        this(other, other.getProcessOfferings().orElse(null));
+    }
+
     public Optional<ProcessOfferings> getProcessOfferings() {
         return processOfferings;
     }
