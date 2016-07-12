@@ -24,22 +24,28 @@
                            http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
                            http://www.springframework.org/schema/util
                            http://www.springframework.org/schema/util/spring-util-4.1.xsd">
-
+    
+    <!-- algorithm repositories -->
     <bean id="repositoryManager" class="org.n52.javaps.algorithm.RepositoryManager">
         <constructor-arg name="updateInterval" value="1800000" />
     </bean>
-
     <bean id="localAlgorithmRepository" class="org.n52.javaps.algorithm.LocalAlgorithmRepository" />
     <bean id="contextAlgorithmRegistrator" class="org.n52.javaps.algorithm.ContextAlgorithmRegistrator"/>
     <bean id="serviceLoaderAlgorithmRepository" class="org.n52.javaps.algorithm.ServiceLoaderAlgorithmRepository"/>
 
     <bean id="context" class="org.n52.javaps.utils.SpringContext"/>
-
+    
+    <!-- the main service components -->
+    <bean id="engine" class="org.n52.javaps.EngineImpl"/>
     <bean id="inputHandlerRepository" class="org.n52.javaps.io.InputHandlerRepositoryImpl" />
     <bean id="outputHandlerRepository" class="org.n52.javaps.io.OutputHandlerRepositoryImpl" />
-
     <bean id="literalTypeRepository" class="org.n52.javaps.io.literal.LiteralTypeRepositoryImpl"/>
+    
+    <!-- default input/output handlers for literal and bounding box data -->
+    <bean id="literalDataHandler" class="org.n52.javaps.io.literal.LiteralDataHandler"/>
+    <bean id="boundingBoxDataHandler" class="org.n52.javaps.io.bbox.BoundingBoxDataHandler"/>
 
+    <!-- literal types for XML schema types -->
     <bean class="org.n52.javaps.io.literal.xsd.LiteralAnySimpleType"/>
     <bean class="org.n52.javaps.io.literal.xsd.LiteralAnyURIType"/>
     <bean class="org.n52.javaps.io.literal.xsd.LiteralBase64BinaryType"/>
@@ -74,8 +80,6 @@
     <bean class="org.n52.javaps.io.literal.xsd.LiteralYearMonthType"/>
     <bean class="org.n52.javaps.io.literal.xsd.LiteralYearType"/>
 
-    <bean id="literalDataHandler" class="org.n52.javaps.io.literal.LiteralDataHandler"/>
 
-    <bean id="boundingBoxDataHandler" class="org.n52.javaps.io.bbox.BoundingBoxDataHandler"/>
 
 </beans>

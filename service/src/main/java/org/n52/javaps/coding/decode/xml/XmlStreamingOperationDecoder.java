@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.inject.Inject;
 import javax.xml.namespace.QName;
 
 import org.n52.iceland.coding.OperationKey;
@@ -48,6 +49,7 @@ public class XmlStreamingOperationDecoder implements Decoder<Object, String> {
     private final OperationKey operation;
     private final StreamReaderRepository streamReaderRepository;
 
+    @Inject
     public XmlStreamingOperationDecoder(OperationKey operation, QName name, StreamReaderRepository streamReaderRepository) {
         this.name = Objects.requireNonNull(name);
         this.operation = Objects.requireNonNull(operation);

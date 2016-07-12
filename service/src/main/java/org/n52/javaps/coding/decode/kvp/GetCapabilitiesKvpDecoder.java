@@ -23,10 +23,10 @@ import org.n52.iceland.binding.kvp.AbstractKvpDecoder;
 import org.n52.iceland.coding.decode.DecoderKey;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.ogc.ows.OWSConstants;
-import org.n52.iceland.request.GetCapabilitiesRequest;
-import org.n52.iceland.util.KvpHelper;
 import org.n52.iceland.ogc.wps.WPS200Constants;
 import org.n52.iceland.ogc.wps.WPSConstants;
+import org.n52.iceland.request.GetCapabilitiesRequest;
+import org.n52.iceland.util.KvpHelper;
 
 import com.google.common.collect.Sets;
 
@@ -35,6 +35,13 @@ public class GetCapabilitiesKvpDecoder extends AbstractKvpDecoder<GetCapabilitie
     private static final Set<DecoderKey> KEYS = Sets.newHashSet(
             createKey(WPSConstants.SERVICE, null, OWSConstants.Operations.GetCapabilities),
             createKey(WPSConstants.SERVICE, WPS200Constants.VERSION, OWSConstants.Operations.GetCapabilities));
+    private static final String ACCEPT_FORMATS = "acceptformats";
+    private static final String UPDATE_SEQUENCE = "updatesequence";
+    private static final String SECTIONS = "sections";
+    private static final String ACCEPT_LANGUAGES = "acceptlanguages";
+    private static final String ACCEPT_VERSIONS = "acceptversions";
+    private static final String REQUEST = "request";
+    private static final String SERVICE = "service";
 
     @Override
     public Set<DecoderKey> getKeys() {
@@ -49,25 +56,25 @@ public class GetCapabilitiesKvpDecoder extends AbstractKvpDecoder<GetCapabilitie
     @Override
     protected void decodeParameter(GetCapabilitiesRequest request, String name, String value) throws OwsExceptionReport {
         switch (name.toLowerCase()) {
-            case "service":
+            case SERVICE:
                 request.setService(KvpHelper.checkParameterSingleValue(value, name));
                 break;
-            case "request":
+            case REQUEST:
                 KvpHelper.checkParameterSingleValue(value, name);
                 break;
-            case "acceptversions":
+            case ACCEPT_VERSIONS:
                 request.setAcceptVersions(KvpHelper.checkParameterMultipleValues(value, name));
                 break;
-            case "acceptformats":
+            case ACCEPT_FORMATS:
                 request.setAcceptFormats(KvpHelper.checkParameterMultipleValues(value, name));
                 break;
-            case "updatesequence":
+            case UPDATE_SEQUENCE:
                 request.setUpdateSequence(KvpHelper.checkParameterSingleValue(value, name));
                 break;
-            case "sections":
+            case SECTIONS:
                 request.setSections(KvpHelper.checkParameterMultipleValues(value, name));
                 break;
-            case "acceptlanguages":
+            case ACCEPT_LANGUAGES:
                 request.setAcceptLanguages(KvpHelper.checkParameterMultipleValues(value, name));
                 break;
             default:

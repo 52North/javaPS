@@ -18,8 +18,8 @@ package org.n52.javaps.coding.decode.kvp;
 
 import org.n52.iceland.binding.kvp.AbstractKvpDecoder;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.util.KvpHelper;
 import org.n52.iceland.ogc.wps.JobId;
+import org.n52.iceland.util.KvpHelper;
 import org.n52.javaps.request.AbstractJobIdRequest;
 
 /**
@@ -28,20 +28,24 @@ import org.n52.javaps.request.AbstractJobIdRequest;
  * @author Christian Autermann
  */
 public abstract class AbstractJobIdKvpDecoder<T extends AbstractJobIdRequest<?>> extends AbstractKvpDecoder<T> {
+    private static final String SERVICE = "service";
+    private static final String VERSION = "version";
+    private static final String REQUEST = "request";
+    private static final String JOBID = "jobid";
 
     @Override
     protected void decodeParameter(T request, String name, String value) throws OwsExceptionReport {
         switch (name.toLowerCase()) {
-            case "service":
+            case SERVICE:
                 request.setService(KvpHelper.checkParameterSingleValue(value, name));
                 break;
-            case "version":
+            case VERSION:
                 request.setVersion(KvpHelper.checkParameterSingleValue(value, name));
                 break;
-            case "request":
+            case REQUEST:
                 KvpHelper.checkParameterSingleValue(value, name);
                 break;
-            case "jobid":
+            case JOBID:
                 request.setJobId(new JobId(KvpHelper.checkParameterSingleValue(value, name)));
                 break;
             default:

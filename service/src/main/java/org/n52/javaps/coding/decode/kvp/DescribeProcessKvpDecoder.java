@@ -22,14 +22,18 @@ import java.util.Set;
 import org.n52.iceland.binding.kvp.AbstractKvpDecoder;
 import org.n52.iceland.coding.decode.DecoderKey;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.util.KvpHelper;
 import org.n52.iceland.ogc.wps.WPS200Constants;
 import org.n52.iceland.ogc.wps.WPSConstants;
+import org.n52.iceland.util.KvpHelper;
 import org.n52.javaps.request.DescribeProcessRequest;
 
 public class DescribeProcessKvpDecoder extends AbstractKvpDecoder<DescribeProcessRequest> {
     private static final DecoderKey KEY
             = createKey(WPSConstants.SERVICE, WPS200Constants.VERSION, WPSConstants.Operations.DescribeProcess);
+    private static final String SERVICE = "service";
+    private static final String VERSION = "version";
+    private static final String REQUEST = "request";
+    private static final String IDENTIFIER = "identifier";
 
     @Override
     public Set<DecoderKey> getKeys() {
@@ -46,16 +50,16 @@ public class DescribeProcessKvpDecoder extends AbstractKvpDecoder<DescribeProces
                                    String value)
             throws OwsExceptionReport {
         switch (name.toLowerCase()) {
-            case "service":
+            case SERVICE:
                 request.setService(KvpHelper.checkParameterSingleValue(value, name));
                 break;
-            case "version":
+            case VERSION:
                 request.setVersion(KvpHelper.checkParameterSingleValue(value, name));
                 break;
-            case "request":
+            case REQUEST:
                 KvpHelper.checkParameterSingleValue(value, name);
                 break;
-            case "identifier":
+            case IDENTIFIER:
                 KvpHelper.checkParameterMultipleValues(value, name).stream().forEach(request::addProcessIdentifier);
                 break;
             default:
