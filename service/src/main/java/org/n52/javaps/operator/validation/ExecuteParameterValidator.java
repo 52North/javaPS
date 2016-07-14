@@ -139,24 +139,13 @@ public class ExecuteParameterValidator
     private void validateInputs(List<ProcessData> inputs, ProcessInputDescriptionContainer descriptions)
             throws OwsExceptionReport {
         CompositeOwsException exception = new CompositeOwsException();
-        for (ProcessData input : inputs) {
-            ProcessInputDescription description = descriptions.getInput(input.getId());
-            if (description == null) {
-                exception.add(invalidInput(input, "no input with the specified identifier"));
-            } else {
-                try {
-                    if (input.isGroup()) {
-                        validateInput(input.asGroup(), description);
-                    } else if (input.isReference()) {
-                        validateInput(input.asReference(), description);
-                    } else if (input.isValue()) {
-                        validateInput(input.asValue(), description);
-                    }
-                } catch (OwsExceptionReport ex) {
-                    exception.add(ex);
-                }
+        inputs.stream().forEach(input -> {
+            try {
+                validateInput(input, descriptions);
+            } catch (OwsExceptionReport ex) {
+                exception.add(ex);
             }
-        }
+        });
         exception.throwIfNotEmpty();
     }
 
@@ -259,6 +248,20 @@ public class ExecuteParameterValidator
         }
 
         exception.throwIfNotEmpty();
+    }
+
+    private void validateInput(ProcessData input, ProcessInputDescriptionContainer descriptions)
+            throws OwsExceptionReport {
+        ProcessInputDescription description = descriptions.getInput(input.getId());
+        if (description == null) {
+            throw invalidInput(input, "no input with the specified identifier");
+        } else if (input.isGroup()) {
+            validateInput(input.asGroup(), description);
+        } else if (input.isReference()) {
+            validateInput(input.asReference(), description);
+        } else if (input.isValue()) {
+            validateInput(input.asValue(), description);
+        }
     }
 
     private static OwsExceptionReport invalidInput(ProcessData input, String messageDetail) {
