@@ -16,22 +16,59 @@
  */
 package org.n52.javaps.response;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.Optional;
 
+import org.n52.iceland.ogc.wps.Result;
+import org.n52.iceland.ogc.wps.StatusInfo;
+import org.n52.iceland.ogc.wps.WPSConstants;
 import org.n52.iceland.response.AbstractServiceResponse;
-import org.n52.javaps.ogc.wps.WPSConstants;
 
 /**
  * @author Christian Autermann
  */
 public class ExecuteResponse extends AbstractServiceResponse {
 
-    private static final Logger log = LoggerFactory.getLogger(ExecuteResponse.class);
+    private Optional<Result> result;
+    private Optional<StatusInfo> status;
+
+    public ExecuteResponse() {
+        this(null, null, null, null);
+    }
+
+    public ExecuteResponse(String service, String version, Result result) {
+        this(service, version, result, null);
+    }
+
+    public ExecuteResponse(String service, String version, StatusInfo status) {
+        this(service, version, null, status);
+    }
+
+    private ExecuteResponse(String service, String version, Result result,
+                            StatusInfo status) {
+        super(service, version);
+        this.result = Optional.ofNullable(result);
+        this.status = Optional.ofNullable(status);
+    }
 
     @Override
     public String getOperationName() {
         return WPSConstants.Operations.Execute.toString();
+    }
+
+    public Optional<Result> getResult() {
+        return this.result;
+    }
+
+    public void setResult(Result result) {
+        this.result = Optional.ofNullable(result);
+    }
+
+    public Optional<StatusInfo> getStatus() {
+        return this.status;
+    }
+
+    public void setStatus(StatusInfo status) {
+        this.status = Optional.ofNullable(status);
     }
 
 }

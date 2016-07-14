@@ -16,13 +16,24 @@
  */
 package org.n52.javaps.handler;
 
+import static org.n52.javaps.handler.AbstractJobHandler.JOB_ID;
+
 import java.util.Collections;
 import java.util.Set;
 
-import org.n52.iceland.ds.OperationHandlerKey;
+import javax.inject.Inject;
+
+import org.n52.iceland.request.handler.GenericOperationHandler;
+import org.n52.iceland.request.handler.OperationHandlerKey;
+import org.n52.iceland.exception.ows.InvalidParameterValueException;
+import org.n52.iceland.exception.ows.NoApplicableCodeException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.ows.OwsOperation;
-import org.n52.javaps.ogc.wps.WPSConstants;
+import org.n52.iceland.ogc.wps.JobId;
+import org.n52.iceland.ogc.wps.StatusInfo;
+import org.n52.iceland.ogc.wps.WPSConstants;
+import org.n52.javaps.Engine;
+import org.n52.javaps.EngineException;
+import org.n52.javaps.JobNotFoundException;
 import org.n52.javaps.request.GetStatusRequest;
 import org.n52.javaps.response.GetStatusResponse;
 
@@ -31,13 +42,32 @@ import org.n52.javaps.response.GetStatusResponse;
  *
  * @author Christian Autermann
  */
-public class GetStatusHandler implements
-        GenericHandler<GetStatusRequest, GetStatusResponse> {
+public class GetStatusHandler extends AbstractJobHandler
+        implements GenericOperationHandler<GetStatusRequest, GetStatusResponse> {
+    private static final OperationHandlerKey KEY
+            = new OperationHandlerKey(WPSConstants.SERVICE,
+                                      WPSConstants.Operations.GetStatus);
+
+    @Inject
+    public GetStatusHandler(Engine engine) {
+        super(engine, true);
+    }
 
     @Override
-    public GetStatusResponse handler(GetStatusRequest request)
+    public GetStatusResponse handle(GetStatusRequest request)
             throws OwsExceptionReport {
-        return request.getResponse();
+        String service = request.getService();
+        String version = request.getVersion();
+        JobId jobId = request.getJobId();
+        StatusInfo status;
+        try {
+            status = getEngine().getStatus(jobId);
+        } catch (JobNotFoundException ex) {
+            throw new InvalidParameterValueException(JOB_ID, jobId.getValue()).causedBy(ex);
+        } catch (EngineException ex) {
+            throw new NoApplicableCodeException().causedBy(ex);
+        }
+        return new GetStatusResponse(service, version, status);
     }
 
     @Override
@@ -46,16 +76,7 @@ public class GetStatusHandler implements
     }
 
     @Override
-    public OwsOperation getOperationsMetadata(String service, String version)
-            throws OwsExceptionReport {
-        return new OwsOperation();
-    }
-
-    @Override
     public Set<OperationHandlerKey> getKeys() {
-        return Collections
-                .singleton(new OperationHandlerKey(WPSConstants.SERVICE, WPSConstants.Operations.GetStatus
-                                                   .toString()));
+        return Collections.singleton(KEY);
     }
-
 }

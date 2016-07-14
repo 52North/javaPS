@@ -18,14 +18,13 @@ package org.n52.javaps.request;
 
 
 import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.request.AbstractServiceRequest;
-import org.n52.javaps.ogc.wps.WPSConstants;
+import org.n52.iceland.ogc.wps.WPSConstants;
 import org.n52.javaps.response.GetStatusResponse;
 
 /**
  * @author Christian Autermann
  */
-public class GetStatusRequest extends AbstractServiceRequest<GetStatusResponse>{
+public class GetStatusRequest extends AbstractJobIdRequest<GetStatusResponse>{
 
     @Override
     public GetStatusResponse getResponse() throws OwsExceptionReport {

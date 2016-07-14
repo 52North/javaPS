@@ -16,13 +16,11 @@
  */
 package org.n52.javaps.response;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Objects;
 
 import org.n52.iceland.response.AbstractServiceResponse;
-import org.n52.javaps.algorithm.ProcessDescription;
-import org.n52.javaps.ogc.wps.WPSConstants;
+import org.n52.iceland.ogc.wps.ProcessOfferings;
+import org.n52.iceland.ogc.wps.WPSConstants;
 
 /**
  * @author Benjamin Pross
@@ -30,19 +28,33 @@ import org.n52.javaps.ogc.wps.WPSConstants;
  */
 public class DescribeProcessResponse extends AbstractServiceResponse {
 
-    private final List<ProcessDescription> descriptions = new LinkedList<>();
+    private ProcessOfferings offerings;
+
+    public DescribeProcessResponse(String service, String version) {
+        this(service, version, null);
+    }
+
+    public DescribeProcessResponse(String service, String version,
+                                   ProcessOfferings offerings) {
+        super(service, version);
+        this.offerings = offerings;
+    }
+
+    public DescribeProcessResponse() {
+        this(null, null, null);
+    }
 
     @Override
     public String getOperationName() {
         return WPSConstants.Operations.DescribeProcess.name();
     }
 
-    public List<ProcessDescription> getProcessDescriptions() {
-        return Collections.unmodifiableList(this.descriptions);
+    public ProcessOfferings getProcessOfferings() {
+        return offerings;
     }
 
-    public void addProcessDescription(ProcessDescription description) {
-        this.descriptions.add(description);
+    public void setOfferings(ProcessOfferings offerings) {
+        this.offerings = Objects.requireNonNull(offerings);
     }
 
 }

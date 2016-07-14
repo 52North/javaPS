@@ -19,10 +19,17 @@ package org.n52.javaps.handler;
 import java.util.Collections;
 import java.util.Set;
 
-import org.n52.iceland.ds.OperationHandlerKey;
+import javax.inject.Inject;
+
+import org.n52.iceland.exception.ows.InvalidParameterValueException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.ows.OwsOperation;
-import org.n52.javaps.ogc.wps.WPSConstants;
+import org.n52.iceland.ogc.wps.JobId;
+import org.n52.iceland.ogc.wps.StatusInfo;
+import org.n52.iceland.ogc.wps.WPSConstants;
+import org.n52.iceland.request.handler.GenericOperationHandler;
+import org.n52.iceland.request.handler.OperationHandlerKey;
+import org.n52.javaps.Engine;
+import org.n52.javaps.JobNotFoundException;
 import org.n52.javaps.request.DismissRequest;
 import org.n52.javaps.response.DismissResponse;
 
@@ -31,13 +38,29 @@ import org.n52.javaps.response.DismissResponse;
  *
  * @author Christian Autermann
  */
-public class DismissHandler implements
-        GenericHandler<DismissRequest, DismissResponse> {
+public class DismissHandler extends AbstractJobHandler
+        implements GenericOperationHandler<DismissRequest, DismissResponse> {
+    private static final OperationHandlerKey KEY
+            = new OperationHandlerKey(WPSConstants.SERVICE, WPSConstants.Operations.Dismiss);
+
+    @Inject
+    public DismissHandler(Engine engine) {
+        super(engine, true);
+    }
 
     @Override
-    public DismissResponse handler(DismissRequest request)
+    public DismissResponse handle(DismissRequest request)
             throws OwsExceptionReport {
-        return request.getResponse();
+        JobId jobId = request.getJobId();
+        StatusInfo status;
+        try {
+            status = getEngine().dismiss(jobId);
+        } catch (JobNotFoundException ex) {
+            throw new InvalidParameterValueException(JOB_ID, jobId.getValue()).causedBy(ex);
+        }
+        String service = request.getService();
+        String version = request.getVersion();
+        return new DismissResponse(service, version, status);
     }
 
     @Override
@@ -46,16 +69,8 @@ public class DismissHandler implements
     }
 
     @Override
-    public OwsOperation getOperationsMetadata(String service, String version)
-            throws OwsExceptionReport {
-        return new OwsOperation();
-    }
-
-    @Override
     public Set<OperationHandlerKey> getKeys() {
-        return Collections
-                .singleton(new OperationHandlerKey(WPSConstants.SERVICE, WPSConstants.Operations.Dismiss
-                                                   .toString()));
+        return Collections.singleton(KEY);
     }
 
 }

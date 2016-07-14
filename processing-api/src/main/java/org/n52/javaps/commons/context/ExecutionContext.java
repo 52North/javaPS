@@ -20,7 +20,7 @@ import java.util.UUID;
 
 public class ExecutionContext {
 
-    private String tempFolderName;
+    private final String tempFolderName;
 
     public ExecutionContext() {
         this.tempFolderName = UUID.randomUUID().toString();

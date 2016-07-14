@@ -24,13 +24,13 @@ import static org.hamcrest.Matchers.nullValue;
 import org.junit.Test;
 
 @Properties(defaultPropertyFileName="test.properties")
-public class TestAnnotation extends ConfigurableClass {
+public class TestAnnotation implements ConfigurableClass {
 
     public TestAnnotation(){
 
-        assertThat(properties, not(nullValue()));
+        assertThat(getProperties(), not(nullValue()));
 
-        Object testValue = properties.get("testkey").asText();
+        Object testValue = getProperties().get("testkey").asText();
 
         assertThat(testValue, not(nullValue()));
         assertThat(testValue.toString(), equalTo("testvalue"));
@@ -38,7 +38,7 @@ public class TestAnnotation extends ConfigurableClass {
 
     @Test
     public void testAnnotation() {
-        new TestAnnotation();
+        TestAnnotation testAnnotation = new TestAnnotation();
     }
 
 }

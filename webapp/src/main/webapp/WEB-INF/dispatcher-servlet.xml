@@ -45,6 +45,6 @@
     <mvc:resources mapping="/" location="/static/index.html" />
 
     <!-- additional endpoints -->
-    <bean id="extraEndpoint" class="org.n52.javaps.InfoEndpoint" />
-
+    <bean id="infoEndpoint" class="org.n52.javaps.web.InfoEndpoint" />
+    <bean id="outputReferenceEndpoint" class="org.n52.javaps.web.OutputReferenceEndpoint"/>
 </beans>

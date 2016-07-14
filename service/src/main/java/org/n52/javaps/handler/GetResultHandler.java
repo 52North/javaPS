@@ -16,13 +16,26 @@
  */
 package org.n52.javaps.handler;
 
+import static org.n52.javaps.handler.AbstractJobHandler.JOB_ID;
+
 import java.util.Collections;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
-import org.n52.iceland.ds.OperationHandlerKey;
+import javax.inject.Inject;
+
+import org.n52.iceland.exception.ows.InvalidParameterValueException;
+import org.n52.iceland.exception.ows.NoApplicableCodeException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.ows.OwsOperation;
-import org.n52.javaps.ogc.wps.WPSConstants;
+import org.n52.iceland.ogc.wps.JobId;
+import org.n52.iceland.ogc.wps.Result;
+import org.n52.iceland.ogc.wps.WPSConstants;
+import org.n52.iceland.request.handler.GenericOperationHandler;
+import org.n52.iceland.request.handler.OperationHandlerKey;
+import org.n52.javaps.Engine;
+import org.n52.javaps.EngineException;
+import org.n52.javaps.JobNotFoundException;
 import org.n52.javaps.request.GetResultRequest;
 import org.n52.javaps.response.GetResultResponse;
 
@@ -31,13 +44,36 @@ import org.n52.javaps.response.GetResultResponse;
  *
  * @author Christian Autermann
  */
-public class GetResultHandler implements
-        GenericHandler<GetResultRequest, GetResultResponse> {
+public class GetResultHandler extends AbstractJobHandler
+        implements GenericOperationHandler<GetResultRequest, GetResultResponse> {
+    private static final OperationHandlerKey KEY
+            = new OperationHandlerKey(WPSConstants.SERVICE, WPSConstants.Operations.GetResult);
+
+    @Inject
+    public GetResultHandler(Engine engine) {
+        super(engine, true);
+    }
 
     @Override
-    public GetResultResponse handler(GetResultRequest request)
+    public GetResultResponse handle(GetResultRequest request)
             throws OwsExceptionReport {
-        return request.getResponse();
+
+        String service = request.getService();
+        String version = request.getVersion();
+        JobId jobId = request.getJobId();
+
+        try {
+            Future<Result> result = getEngine().getResult(jobId);
+
+            return new GetResultResponse(service, version, result.get());
+        } catch (JobNotFoundException ex) {
+            throw new InvalidParameterValueException(JOB_ID, jobId.getValue()).causedBy(ex);
+        } catch (InterruptedException | EngineException ex) {
+            throw new NoApplicableCodeException().causedBy(ex);
+        } catch (ExecutionException ex) {
+            throw new NoApplicableCodeException().causedBy(ex.getCause());
+        }
+
     }
 
     @Override
@@ -46,14 +82,8 @@ public class GetResultHandler implements
     }
 
     @Override
-    public OwsOperation getOperationsMetadata(String service, String version)
-            throws OwsExceptionReport {
-        return new OwsOperation();
-    }
-
-    @Override
     public Set<OperationHandlerKey> getKeys() {
-        return Collections.singleton(new OperationHandlerKey(WPSConstants.SERVICE, WPSConstants.Operations.GetResult.toString()));
+        return Collections.singleton(KEY);
     }
 
 }

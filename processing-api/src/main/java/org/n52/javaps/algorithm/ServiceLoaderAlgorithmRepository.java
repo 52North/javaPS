@@ -16,76 +16,67 @@
  */
 package org.n52.javaps.algorithm;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.ServiceLoader;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ServiceLoaderAlgorithmRepository implements IAlgorithmRepository {
+import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.iceland.ogc.wps.description.typed.TypedProcessDescription;
 
-    private static final Logger logger = LoggerFactory.getLogger(ServiceLoaderAlgorithmRepository.class);
+public class ServiceLoaderAlgorithmRepository implements AlgorithmRepository {
 
-    private Map<String, Class<? extends IAlgorithm>> currentAlgorithms;
+    private static final Logger LOG = LoggerFactory.getLogger(ServiceLoaderAlgorithmRepository.class);
+    private final Map<OwsCode, Class<? extends IAlgorithm>> currentAlgorithms;
 
     public ServiceLoaderAlgorithmRepository() {
         this.currentAlgorithms = loadAlgorithms();
     }
 
-    private Map<String, Class<? extends IAlgorithm>> loadAlgorithms() {
-        Map<String, Class<? extends IAlgorithm>> result = new HashMap<String, Class<? extends IAlgorithm>>();
+    private Map<OwsCode, Class<? extends IAlgorithm>> loadAlgorithms() {
+        Map<OwsCode, Class<? extends IAlgorithm>> result = new HashMap<>();
         ServiceLoader<IAlgorithm> loader = ServiceLoader.load(IAlgorithm.class);
 
         for (IAlgorithm ia : loader) {
-            logger.debug("Adding algorithm with identifier {} and class {}", ia.getWellKnownName(), ia.getClass().getCanonicalName());
-            result.put(ia.getWellKnownName(), ia.getClass());
+            LOG.debug("Adding algorithm with identifier {} and class {}", ia
+                    .getDescription().getId(), ia.getClass().getCanonicalName());
+            result.put(ia.getDescription().getId(), ia.getClass());
         }
 
         return result;
     }
 
     @Override
-    public Collection<String> getAlgorithmNames() {
+    public Set<OwsCode> getAlgorithmNames() {
         return this.currentAlgorithms.keySet();
     }
 
     @Override
-    public IAlgorithm getAlgorithm(String processID) {
-        Class<? extends IAlgorithm> clazz = this.currentAlgorithms.get(processID);
+    public Optional<IAlgorithm> getAlgorithm(OwsCode processID) {
+        Class<? extends IAlgorithm> clazz = this.currentAlgorithms
+                .get(processID);
         if (clazz != null) {
             try {
-                return clazz.newInstance();
-            } catch (InstantiationException e) {
-                logger.warn(e.getMessage(), e);
-            } catch (IllegalAccessException e) {
-                logger.warn(e.getMessage(), e);
+                return Optional.of(clazz.newInstance());
+            } catch (InstantiationException | IllegalAccessException e) {
+                LOG.warn(e.getMessage(), e);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override
-    public ProcessDescription getProcessDescription(String processID) {
-        IAlgorithm algo = getAlgorithm(processID);
-        if (algo != null) {
-            return algo.getDescription();
-        }
-        return null;
+    public Optional<TypedProcessDescription> getProcessDescription(OwsCode processID) {
+        return getAlgorithm(processID).map(IAlgorithm::getDescription);
     }
 
     @Override
-    public boolean containsAlgorithm(String processID) {
+    public boolean containsAlgorithm(OwsCode processID) {
         return this.currentAlgorithms.containsKey(processID);
-    }
-
-    @Override
-    public void shutdown() {
-    }
-
-    @Override
-    public void init() {
     }
 
 }

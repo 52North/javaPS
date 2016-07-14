@@ -16,22 +16,37 @@
  */
 package org.n52.javaps.response;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.Objects;
 
 import org.n52.iceland.response.AbstractServiceResponse;
-import org.n52.javaps.ogc.wps.WPSConstants;
+import org.n52.iceland.ogc.wps.StatusInfo;
+import org.n52.iceland.ogc.wps.WPSConstants;
 
 /**
  * @author Christian Autermann
  */
 public class GetStatusResponse extends AbstractServiceResponse {
+    private StatusInfo status;
 
-    private static final Logger log = LoggerFactory.getLogger(GetStatusResponse.class);
+    public GetStatusResponse() {
+    }
+
+    public GetStatusResponse(String service, String version, StatusInfo status) {
+        super(service, version);
+        this.status = status;
+    }
 
     @Override
     public String getOperationName() {
         return WPSConstants.Operations.GetStatus.toString();
+    }
+
+    public StatusInfo getStatus() {
+        return status;
+    }
+
+    public void setStatusInfo(StatusInfo status) {
+        this.status = Objects.requireNonNull(status);
     }
 
 }

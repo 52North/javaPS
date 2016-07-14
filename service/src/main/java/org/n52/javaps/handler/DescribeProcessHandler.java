@@ -16,70 +16,77 @@
  */
 package org.n52.javaps.handler;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import static java.util.stream.Collectors.toSet;
 
-import org.n52.iceland.ds.OperationHandlerKey;
-import org.n52.iceland.exception.ows.InvalidParameterValueException;
+import java.util.Collections;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Stream;
+
+import javax.inject.Inject;
+
 import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.ows.OwsOperation;
-import org.n52.iceland.util.http.HTTPStatus;
-import org.n52.javaps.algorithm.ProcessDescription;
-import org.n52.javaps.algorithm.RepositoryManager;
-import org.n52.javaps.ogc.wps.WPSConstants;
+import org.n52.iceland.ogc.ows.OwsAllowedValues;
+import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.iceland.ogc.ows.OwsDomain;
+import org.n52.iceland.ogc.ows.OwsValue;
+import org.n52.iceland.ogc.wps.ProcessOffering;
+import org.n52.iceland.ogc.wps.ProcessOfferings;
+import org.n52.iceland.ogc.wps.WPSConstants;
+import org.n52.iceland.request.handler.GenericOperationHandler;
+import org.n52.iceland.request.handler.OperationHandlerKey;
+import org.n52.javaps.Engine;
 import org.n52.javaps.request.DescribeProcessRequest;
 import org.n52.javaps.response.DescribeProcessResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * TODO JavaDoc
  *
  * @author Christian Autermann
  */
-public class DescribeProcessHandler implements
-        GenericHandler<DescribeProcessRequest, DescribeProcessResponse> {
+public class DescribeProcessHandler extends AbstractEngineHandler
+        implements GenericOperationHandler<DescribeProcessRequest, DescribeProcessResponse> {
+    private static final String IDENTIFIER = "Identifier";
+    private static final OperationHandlerKey KEY
+            = new OperationHandlerKey(WPSConstants.SERVICE,
+                                      WPSConstants.Operations.DescribeProcess);
 
-    @Autowired
-    private RepositoryManager repositoryManager;
-
-    @Override
-    public DescribeProcessResponse handler(DescribeProcessRequest request)
-            throws OwsExceptionReport {
-
-        DescribeProcessResponse describeProcessResponse = (DescribeProcessResponse) new DescribeProcessResponse().set(request);
-
-        List<String> identifiers = request.getProcessIdentifier();
-
-        for (String identifier : identifiers) {
-
-            try {
-                ProcessDescription processDescription = repositoryManager.getAlgorithm(identifier).getDescription();
-
-                describeProcessResponse.addProcessDescription(processDescription);
-
-            } catch (NullPointerException e) {
-                throw new InvalidParameterValueException("identifer", identifier).setStatus(HTTPStatus.BAD_REQUEST);
-            }
-        }
-
-        return describeProcessResponse;
+    @Inject
+    public DescribeProcessHandler(Engine engine) {
+        super(engine);
     }
 
-     @Override
+    @Override
+    public DescribeProcessResponse handle(DescribeProcessRequest request)
+            throws OwsExceptionReport {
+
+        Set<ProcessOffering> offerings = request.getProcessIdentifier().stream()
+                        .map(getEngine()::getProcessDescription)
+                        .filter(Optional::isPresent).map(Optional::get)
+                        .map(ProcessOffering::new).collect(toSet());
+
+        return new DescribeProcessResponse(
+                request.getService(),
+                request.getVersion(),
+                new ProcessOfferings(offerings));
+    }
+
+    @Override
     public String getOperationName() {
         return WPSConstants.Operations.DescribeProcess.toString();
     }
 
     @Override
-    public OwsOperation getOperationsMetadata(String service, String version)
-            throws OwsExceptionReport {
-        return new OwsOperation();
+    public Set<OperationHandlerKey> getKeys() {
+        return Collections.singleton(KEY);
     }
 
     @Override
-    public Set<OperationHandlerKey> getKeys() {
-        return Collections.singleton(new OperationHandlerKey(WPSConstants.SERVICE, WPSConstants.Operations.DescribeProcess.toString()));
+    protected Set<OwsDomain> getOperationParameters(String service, String version) {
+        Stream<OwsValue> specialIdentifiers = Stream.of(new OwsValue(DescribeProcessRequest.ALL_KEYWORD));
+        Stream<OwsValue> algorithmIdentifiers = getEngine().getProcessIdentifiers().stream().map(OwsCode::getValue).map(OwsValue::new);
+        OwsDomain identifierDomain = new OwsDomain(IDENTIFIER, new OwsAllowedValues(Stream.concat(specialIdentifiers, algorithmIdentifiers).collect(toSet())));
+        return Collections .singleton(identifierDomain);
     }
 
 }

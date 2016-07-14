@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 
 public class ExecutionContextFactory {
 
-    private static Logger log = LoggerFactory.getLogger(ExecutionContextFactory.class);
+    private static Logger LOG = LoggerFactory.getLogger(ExecutionContextFactory.class);
 
     private final static ThreadLocal<ExecutionContext> threadContexts = new ThreadLocal<ExecutionContext>();
 
@@ -54,7 +54,7 @@ public class ExecutionContextFactory {
             threadContexts.set(context);
         }
 
-        log.info("Context registered");
+        LOG.info("Context registered");
     }
 
     public static void unregisterContext() {
@@ -62,6 +62,6 @@ public class ExecutionContextFactory {
             threadContexts.remove();
         }
 
-        log.info("Context unregistered");
+        LOG.info("Context unregistered");
     }
 }
