@@ -14,23 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.io;
+package org.n52.javaps;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.Collection;
 
-import org.n52.iceland.ogc.wps.Format;
-import org.n52.iceland.ogc.wps.description.typed.TypedProcessOutputDescription;
+import org.n52.iceland.ogc.wps.JobId;
+import org.n52.iceland.ogc.wps.OutputDefinition;
+import org.n52.iceland.ogc.wps.Result;
+import org.n52.iceland.ogc.wps.data.ProcessData;
+import org.n52.javaps.io.EncodingException;
 
 /**
- * Basic interface for all Generators.
+ * TODO JavaDoc
  *
- * @author Matthias Mueller, TU Dresden
- *
+ * @author Christian Autermann
  */
-public interface OutputHandler extends InputOutputHandler {
+public interface ResultManager {
 
-    InputStream generate(TypedProcessOutputDescription<?> description, Data<?> data, Format format)
+    ProcessData getOutput(OutputReference reference)
+            throws JobNotFoundException, OutputNotFoundException, IOException;
+
+    Result getResult(JobId jobId) throws JobNotFoundException, IOException;
+
+    void saveResult(Result result, Collection<OutputDefinition> outputDefinitions)
             throws IOException, EncodingException;
 
 }

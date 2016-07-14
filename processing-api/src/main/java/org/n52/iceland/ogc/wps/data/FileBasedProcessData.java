@@ -14,21 +14,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.io;
+package org.n52.iceland.ogc.wps.data;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Objects;
 
+import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.iceland.ogc.wps.Format;
-import org.n52.iceland.ogc.wps.description.typed.TypedProcessInputDescription;
+import org.n52.javaps.io.EncodingException;
 
 /**
- * @author Matthias Mueller, TU Dresden
+ * TODO JavaDoc
  *
+ * @author Christian Autermann
  */
-public interface InputHandler extends InputOutputHandler {
+public class FileBasedProcessData extends ValueProcessData {
 
-    Data<?> parse(TypedProcessInputDescription<?> description, InputStream input, Format format)
-            throws IOException, DecodingException;
+    private final Path path;
+
+    public FileBasedProcessData(OwsCode id, Format format, Path path) {
+        super(id, format);
+        this.path = Objects.requireNonNull(path, "path");
+    }
+
+    @Override
+    public InputStream getData() throws EncodingException, IOException {
+        return Files.newInputStream(this.path);
+    }
+
+    public Path getPath() {
+        return this.path;
+    }
 
 }

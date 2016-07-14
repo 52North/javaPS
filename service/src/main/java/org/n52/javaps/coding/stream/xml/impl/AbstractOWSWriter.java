@@ -66,8 +66,6 @@ import org.n52.javaps.coding.stream.xml.impl.XMLConstants.OWS;
 
 import com.google.common.base.Strings;
 
-import static java.util.stream.Collectors.groupingBy;
-
 /**
  * TODO JavaDoc
  *

@@ -14,21 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.io;
+package org.n52.javaps;
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import org.n52.iceland.ogc.wps.Format;
-import org.n52.iceland.ogc.wps.description.typed.TypedProcessInputDescription;
+import java.net.URI;
 
 /**
- * @author Matthias Mueller, TU Dresden
  *
+ * @author Christian Autermann
  */
-public interface InputHandler extends InputOutputHandler {
+public interface OutputReferencer {
 
-    Data<?> parse(TypedProcessInputDescription<?> description, InputStream input, Format format)
-            throws IOException, DecodingException;
+    URI reference(OutputReference identifier);
+
+    OutputReference dereference(URI uri);
 
 }

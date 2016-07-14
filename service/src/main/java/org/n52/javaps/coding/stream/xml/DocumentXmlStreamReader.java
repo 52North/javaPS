@@ -17,6 +17,8 @@
 package org.n52.javaps.coding.stream.xml;
 
 
+import org.n52.iceland.util.XmlFactories;
+
 import java.io.InputStream;
 import java.util.Set;
 

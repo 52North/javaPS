@@ -16,8 +16,6 @@
  */
 package org.n52.javaps.coding.stream.xml;
 
-import static org.n52.javaps.coding.stream.xml.XmlFactories.outputFactory;
-
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
@@ -32,6 +30,8 @@ import javax.xml.stream.events.Namespace;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
+import org.n52.iceland.util.XmlFactories;
+
 import com.google.common.base.Strings;
 
 /**
@@ -39,8 +39,7 @@ import com.google.common.base.Strings;
  *
  * @author Christian Autermann
  */
-public abstract class AbstractElementXmlStreamReader extends XmlFactories
-        implements ElementXmlStreamReader {
+public abstract class AbstractElementXmlStreamReader extends XmlFactories implements ElementXmlStreamReader {
 
     protected byte[] asBytes(StartElement start, XMLEventReader reader)
             throws XMLStreamException {

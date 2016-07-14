@@ -26,6 +26,9 @@
                            http://www.springframework.org/schema/util/spring-util-4.1.xsd">
 
 
+    <!-- support for output references -->
+    <bean id="icelandOutputReferencer" class="org.n52.javaps.web.IcelandOutputReferencer"/>
+
     <!-- generic stream writer stuff -->
     <bean id="streamReaderRepository" class="org.n52.javaps.coding.stream.StreamReaderRepository"/>
     <bean id="streamWriterRepository" class="org.n52.javaps.coding.stream.StreamWriterRepository"/>

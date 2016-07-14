@@ -128,6 +128,12 @@ public class EngineImpl implements Engine, Destroyable {
         return jobId;
     }
 
+    private void onJobCompletion(Job job) {
+        this.jobs.remove(job.getJobId());
+        /* TODO implement org.n52.javaps.EngineImpl.Job.onJobCompletion() */
+        throw new UnsupportedOperationException("org.n52.javaps.EngineImpl.Job.onJobCompletion() not yet implemented");
+    }
+
     @Override
     public Future<Result> getResult(JobId identifier) throws JobNotFoundException {
         LOG.info("Getting result {}", identifier);
@@ -237,7 +243,8 @@ public class EngineImpl implements Engine, Destroyable {
                     statusInfo.setEstimatedCompletion(estimatedCompletion);
                     statusInfo.setPercentCompleted(percentCompleted);
                     statusInfo.setNextPoll(nextPoll);
-                } else if (status.equals(JobStatus.succeeded()) || status.equals(JobStatus.failed())) {
+                } else if (status.equals(JobStatus.succeeded()) ||
+                           status.equals(JobStatus.failed())) {
                     // TODO statusInfo.setExpirationDate(expirationDate);
                 }
 
@@ -276,6 +283,8 @@ public class EngineImpl implements Engine, Destroyable {
                 LOG.error("{} failed", this.jobId);
                 setStatus(JobStatus.failed());
                 setException(ex);
+            } finally {
+                onJobCompletion(this);
             }
         }
 

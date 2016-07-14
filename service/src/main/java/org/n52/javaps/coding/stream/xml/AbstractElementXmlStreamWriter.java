@@ -19,6 +19,8 @@ package org.n52.javaps.coding.stream.xml;
 
 
 
+import org.n52.iceland.util.XmlFactories;
+
 import static java.util.stream.Collectors.joining;
 
 import java.io.IOException;

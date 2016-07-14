@@ -18,6 +18,7 @@ package org.n52.iceland.ogc.wps;
 
 import static com.google.common.base.Strings.emptyToNull;
 import static com.google.common.base.Strings.nullToEmpty;
+import static java.util.stream.Collectors.toSet;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -50,6 +51,10 @@ public class Format implements Comparable<Format> {
 
     public static final String BASE64_ENCODING = "base64";
     public static final String DEFAULT_ENCODING = "UTF-8";
+
+    public static final Format TEXT_PLAIN = new Format("text/plain");
+    public static final Format APPLICATION_XML = new Format("application/xml");
+    public static final Format TEXT_XML = new Format("text/xml");
 
     private final Optional<String> mimeType;
     private final Optional<String> encoding;
@@ -282,5 +287,9 @@ public class Format implements Comparable<Format> {
 
     public static Comparator<Format> comparator() {
         return COMPARATOR;
+    }
+
+    public Set<Format> withAnyCharset() {
+        return getAvailableCharsets().stream().map(this::withEncoding).collect(toSet());
     }
 }

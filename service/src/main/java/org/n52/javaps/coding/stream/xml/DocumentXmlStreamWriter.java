@@ -37,6 +37,7 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.n52.iceland.exception.ows.NoApplicableCodeException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
+import org.n52.iceland.util.XmlFactories;
 import org.n52.iceland.util.function.ThrowingConsumer;
 import org.n52.javaps.coding.stream.StreamWriter;
 import org.n52.javaps.coding.stream.StreamWriterKey;

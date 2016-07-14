@@ -44,9 +44,27 @@
     <bean id="processInputDecoder" class="org.n52.javaps.ProcessInputDecoderImpl"/>
     <bean id="processOutputEncoder" class="org.n52.javaps.ProcessOutputEncoderImpl"/>
 
+    <bean id="resultManager" class="org.n52.javaps.FileBasedResultManager">
+        <property name="duration">
+            <bean class="java.time.Duration" factory-method="parse">
+                <constructor-arg value="PT2H" />
+            </bean>
+        </property>
+        <property name="basePath">
+            <bean class="java.nio.file.Paths" factory-method="get">
+                <constructor-arg value="/tmp/wps/outputs" />
+                <constructor-arg>
+                    <array value-type="java.lang.String" />
+                </constructor-arg>
+            </bean>
+        </property>
+    </bean>
+
     <!-- default input/output handlers for literal and bounding box data -->
-    <bean id="literalDataHandler" class="org.n52.javaps.io.literal.LiteralDataHandler"/>
-    <bean id="boundingBoxDataHandler" class="org.n52.javaps.io.bbox.BoundingBoxDataHandler"/>
+    <bean id="literalInputHandler" class="org.n52.javaps.io.literal.LiteralInputHandler"/>
+    <bean id="literalOutputHandler" class="org.n52.javaps.io.literal.LiteralOutputHandler"/>
+    <bean id="boundingBoxInputHandler" class="org.n52.javaps.io.bbox.BoundingBoxInputHandler"/>
+    <bean id="boundingBoxOutputHandler" class="org.n52.javaps.io.bbox.BoundingBoxOutputHandler"/>
 
     <!-- literal types for XML schema types -->
     <bean class="org.n52.javaps.io.literal.xsd.LiteralAnySimpleType"/>
@@ -84,5 +102,13 @@
     <bean class="org.n52.javaps.io.literal.xsd.LiteralYearType"/>
 
 
+    <bean class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters">
+            <set>
+                <bean class="org.n52.iceland.config.spring.converter.PathConverter"/>
+                <bean class="org.n52.iceland.config.spring.converter.DurationConverter"/>
+            </set>
+        </property>
+    </bean>
 
 </beans>

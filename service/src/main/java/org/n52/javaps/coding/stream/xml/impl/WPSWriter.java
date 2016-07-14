@@ -90,7 +90,8 @@ public class WPSWriter extends AbstractOWSWriter {
               Result.class,
               StatusInfo.class,
               ProcessDescription.class,
-              WPSCapabilities.class);
+              WPSCapabilities.class,
+              ProcessData.class);
     }
 
     @Override
@@ -389,6 +390,7 @@ public class WPSWriter extends AbstractOWSWriter {
     private void writeOutput(ProcessData data)
             throws XMLStreamException {
         element(WPS.Elem.QN_OUTPUT, data, x -> {
+            writeNamespaces();
             attr(WPS.Attr.AN_ID, x.getId().getValue());
             // FIXME codeSpace is not allowed here...
             attr(OWS.Attr.AN_CODE_SPACE, x.getId().getCodeSpace()

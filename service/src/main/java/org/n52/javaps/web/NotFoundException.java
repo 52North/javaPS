@@ -14,21 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.io;
+package org.n52.javaps.web;
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import org.n52.iceland.ogc.wps.Format;
-import org.n52.iceland.ogc.wps.description.typed.TypedProcessInputDescription;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * @author Matthias Mueller, TU Dresden
+ * TODO JavaDoc
  *
+ * @author Christian Autermann
  */
-public interface InputHandler extends InputOutputHandler {
+@ResponseStatus(value = HttpStatus.NOT_FOUND)
+public class NotFoundException extends Exception {
+    private static final long serialVersionUID = -2280408324031032864L;
 
-    Data<?> parse(TypedProcessInputDescription<?> description, InputStream input, Format format)
-            throws IOException, DecodingException;
+    public NotFoundException() {
+    }
+
+    public NotFoundException(String message) {
+        super(message);
+    }
+
+    public NotFoundException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public NotFoundException(Throwable cause) {
+        super(cause);
+    }
 
 }

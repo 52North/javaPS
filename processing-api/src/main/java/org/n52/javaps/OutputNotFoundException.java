@@ -14,21 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.io;
-
-import java.io.IOException;
-import java.io.InputStream;
-
-import org.n52.iceland.ogc.wps.Format;
-import org.n52.iceland.ogc.wps.description.typed.TypedProcessInputDescription;
+package org.n52.javaps;
 
 /**
- * @author Matthias Mueller, TU Dresden
+ * TODO JavaDoc
  *
+ * @author Christian Autermann
  */
-public interface InputHandler extends InputOutputHandler {
+public class OutputNotFoundException extends EngineException {
+    private static final long serialVersionUID = 8171062919686243073L;
 
-    Data<?> parse(TypedProcessInputDescription<?> description, InputStream input, Format format)
-            throws IOException, DecodingException;
+    public OutputNotFoundException() {
+    }
+
+    public OutputNotFoundException(String message) {
+        super(message);
+    }
+
+    public OutputNotFoundException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public OutputNotFoundException(Throwable cause) {
+        super(cause);
+    }
 
 }
