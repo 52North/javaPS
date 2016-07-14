@@ -16,6 +16,7 @@
  */
 package org.n52.javaps;
 
+
 import static java.util.stream.Collectors.toMap;
 
 import java.io.IOException;
@@ -25,7 +26,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.attribute.FileTime;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -34,10 +34,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.n52.iceland.lifecycle.Constructable;
+import org.n52.iceland.lifecycle.Destroyable;
 import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.iceland.ogc.wps.DataTransmissionMode;
 import org.n52.iceland.ogc.wps.Format;
@@ -51,6 +60,7 @@ import org.n52.iceland.ogc.wps.data.ProcessData;
 import org.n52.iceland.ogc.wps.data.ReferenceProcessData;
 import org.n52.iceland.util.Chain;
 import org.n52.iceland.util.JSONUtils;
+import org.n52.iceland.util.MoreFiles;
 import org.n52.javaps.io.EncodingException;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -61,14 +71,16 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
  *
  * @author Christian Autermann
  */
-public class FileBasedResultManager implements ResultManager {
+public class FileBasedResultManager implements ResultManager, Constructable, Destroyable {
     private static final String GROUP_TYPE = "group";
     private static final String REFERENCE_TYPE = "reference";
     private static final String VALUE_TYPE = "value";
     private static final String META_JSON_FILE_NAME = ".meta.json";
-
+    private static final Logger LOG = LoggerFactory.getLogger(FileBasedResultManager.class);
+    private Timer timer;
     private Path basePath;
-    private Duration duration;
+    private Duration duration = Duration.ofHours(2);
+    private Duration checkInterval = Duration.ofHours(1);
     private Optional<OutputReferencer> referencer;
 
     public void setBasePath(Path basePath) {
@@ -79,6 +91,10 @@ public class FileBasedResultManager implements ResultManager {
         this.duration = Objects.requireNonNull(duration);
     }
 
+    public void setCheckInterval(Duration checkInterval) {
+        this.checkInterval = Objects.requireNonNull(checkInterval);
+    }
+
     @Inject
     public void setReferencer(Optional<OutputReferencer> referencer) {
         this.referencer = Objects.requireNonNull(referencer);
@@ -86,6 +102,18 @@ public class FileBasedResultManager implements ResultManager {
 
     public void setReferencer(OutputReferencer referencer) {
         setReferencer(Optional.ofNullable(referencer));
+    }
+
+    @Override
+    public void init() {
+        this.timer = new Timer();
+        CleanupTask task = new CleanupTask(basePath, duration);
+        this.timer.scheduleAtFixedRate(task, 0, checkInterval.toMillis());
+    }
+
+    @Override
+    public void destroy() {
+        this.timer.cancel();
     }
 
     @Override
@@ -119,8 +147,7 @@ public class FileBasedResultManager implements ResultManager {
     }
 
     private OffsetDateTime getExpirationDate(Path directory) throws IOException {
-        FileTime lastModifiedTime = Files.getLastModifiedTime(directory);
-        return lastModifiedTime.toInstant().plus(this.duration).atOffset(ZoneOffset.UTC);
+        return getLastModifiedTimeChecked(directory).plus(this.duration);
     }
 
     private Map<OwsCode, OutputDefinition> byId(Collection<OutputDefinition> definitions) {
@@ -280,7 +307,61 @@ public class FileBasedResultManager implements ResultManager {
         return groupProcessData;
     }
 
-    private interface Keys {
+    private static Optional<OffsetDateTime> getLastModifiedTime(Path directory) {
+        try {
+            return Optional.of(getLastModifiedTimeChecked(directory));
+        } catch (IOException ex) {
+            LOG.warn("Could not read last modified time of " + directory, ex);
+            return Optional.empty();
+        }
+    }
+
+    private static OffsetDateTime getLastModifiedTimeChecked(Path directory) throws IOException {
+        return Files.getLastModifiedTime(directory).toInstant().atOffset(ZoneOffset.UTC);
+    }
+
+    private static class CleanupTask extends TimerTask {
+        private final Path basePath;
+        private final Duration duration;
+
+        CleanupTask(Path basePath, Duration duration) {
+            this.basePath = basePath;
+            this.duration = duration;
+        }
+
+        @Override
+        public void run() {
+            list(basePath)
+                    .filter(shouldBeDeleted(OffsetDateTime.now().minus(duration)))
+                    .forEach(this::delete);
+        }
+
+        private Predicate<Path> shouldBeDeleted(OffsetDateTime threshold) {
+            return path -> Files.isDirectory(path) &&
+                           getLastModifiedTime(path).filter(dt -> dt.compareTo(threshold) <= 0).isPresent();
+
+        }
+
+        private void delete(Path path) {
+            try {
+                MoreFiles.deleteRecursively(path);
+            } catch (IOException ex) {
+                LOG.warn("Could not delete " + path, ex);
+            }
+        }
+
+        private Stream<Path> list(Path path) {
+            try {
+                return Files.list(path);
+            } catch (IOException ex) {
+                LOG.warn("Could not list " + path, ex);
+                return Stream.empty();
+            }
+        }
+
+    }
+
+    private static interface Keys {
         String FORMAT = "format";
         String ENCODING = "encoding";
         String HREF = "href";
