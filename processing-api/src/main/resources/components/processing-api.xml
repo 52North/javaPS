@@ -26,9 +26,7 @@
                            http://www.springframework.org/schema/util/spring-util-4.1.xsd">
 
     <!-- algorithm repositories -->
-    <bean id="repositoryManager" class="org.n52.javaps.algorithm.RepositoryManager">
-        <constructor-arg name="updateInterval" value="1800000" />
-    </bean>
+    <bean id="repositoryManager" class="org.n52.javaps.algorithm.RepositoryManager"/>
     <bean id="localAlgorithmRepository" class="org.n52.javaps.algorithm.LocalAlgorithmRepository" />
     <bean id="contextAlgorithmRegistrator" class="org.n52.javaps.algorithm.ContextAlgorithmRegistrator"/>
     <bean id="serviceLoaderAlgorithmRepository" class="org.n52.javaps.algorithm.ServiceLoaderAlgorithmRepository"/>
@@ -44,7 +42,7 @@
     <bean id="processInputDecoder" class="org.n52.javaps.ProcessInputDecoderImpl"/>
     <bean id="processOutputEncoder" class="org.n52.javaps.ProcessOutputEncoderImpl"/>
 
-    <bean id="resultManager" class="org.n52.javaps.FileBasedResultManager">
+    <bean id="resultManager" class="org.n52.javaps.FileBasedResultPersistence">
         <property name="duration">
             <bean class="java.time.Duration" factory-method="parse">
                 <constructor-arg value="PT2H" />
@@ -61,10 +59,8 @@
     </bean>
 
     <!-- default input/output handlers for literal and bounding box data -->
-    <bean id="literalInputHandler" class="org.n52.javaps.io.literal.LiteralInputHandler"/>
-    <bean id="literalOutputHandler" class="org.n52.javaps.io.literal.LiteralOutputHandler"/>
-    <bean id="boundingBoxInputHandler" class="org.n52.javaps.io.bbox.BoundingBoxInputHandler"/>
-    <bean id="boundingBoxOutputHandler" class="org.n52.javaps.io.bbox.BoundingBoxOutputHandler"/>
+    <bean id="literalInputOutputHandler" class="org.n52.javaps.io.literal.LiteralInputOutputHandler"/>
+    <bean id="boundingBoxInputOutputHandler" class="org.n52.javaps.io.bbox.BoundingBoxInputOutputHandler"/>
 
     <!-- literal types for XML schema types -->
     <bean class="org.n52.javaps.io.literal.xsd.LiteralAnySimpleType"/>

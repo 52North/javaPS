@@ -40,11 +40,12 @@ import org.n52.iceland.ogc.wps.data.ProcessData;
 import org.n52.iceland.ogc.wps.data.ValueProcessData;
 import org.n52.iceland.util.http.MediaType;
 import org.n52.iceland.util.http.MediaTypes;
+import org.n52.javaps.EngineException;
 import org.n52.javaps.JobNotFoundException;
 import org.n52.javaps.OutputNotFoundException;
 import org.n52.javaps.OutputReference;
 import org.n52.javaps.OutputReferencer;
-import org.n52.javaps.ResultManager;
+import org.n52.javaps.ResultPersistence;
 import org.n52.javaps.coding.stream.MissingStreamWriterException;
 import org.n52.javaps.coding.stream.StreamWriter;
 import org.n52.javaps.coding.stream.StreamWriterKey;
@@ -64,12 +65,12 @@ public class OutputReferenceEndpoint {
     private static final Logger LOG = LoggerFactory.getLogger(OutputReferenceEndpoint.class);
 
     private final OutputReferencer outputReferencer;
-    private final ResultManager resultManager;
+    private final ResultPersistence resultManager;
     private final StreamWriterRepository streamWriterRepository;
 
     @Inject
     public OutputReferenceEndpoint(OutputReferencer outputReferencer,
-                                  ResultManager resultManager,
+                                  ResultPersistence resultManager,
                                   StreamWriterRepository streamWriterRepository) {
         this.outputReferencer = Objects.requireNonNull(outputReferencer);
         this.resultManager = Objects.requireNonNull(resultManager);
@@ -134,7 +135,7 @@ public class OutputReferenceEndpoint {
             return this.resultManager.getOutput(reference);
         } catch (JobNotFoundException | OutputNotFoundException ex) {
             throw new NotFoundException();
-        } catch (IOException ex) {
+        } catch (EngineException ex) {
             throw new InternalServerErrorException(ex);
         }
     }

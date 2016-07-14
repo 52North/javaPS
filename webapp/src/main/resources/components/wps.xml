@@ -178,7 +178,9 @@
             <!-- same as #getCapabilitiesOperation, but without version -->
             <bean class="org.n52.iceland.coding.OperationKey">
                 <constructor-arg name="service" value="WPS" />
-                <constructor-arg name="version"><null/></constructor-arg>
+                <constructor-arg name="version">
+                    <null/>
+                </constructor-arg>
                 <constructor-arg name="operation" value="GetCapabilities" />
             </bean>
         </constructor-arg>
@@ -205,5 +207,6 @@
         <constructor-arg name="name" ref="getStatusQName" />
     </bean>
 
+    <bean class="org.n52.javaps.web.TestAlgorithm"/>
 
 </beans>

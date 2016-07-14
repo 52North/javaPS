@@ -118,7 +118,7 @@ public class LiteralTypeRepositoryImpl implements LiteralTypeRepository {
     @Override
     public <T> LiteralType<T> getLiteralType(Class<? extends LiteralType<?>> literalType, Class<?> payloadType) {
         Optional<LiteralType> type;
-        if (literalType != null) {
+        if (literalType != null && !literalType.equals(LiteralType.class)) {
             type = getLiteralTypeForLiteralType(literalType);
         } else if (payloadType != null) {
             type = getLiteralTypeForPayloadType(payloadType);

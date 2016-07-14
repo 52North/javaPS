@@ -58,7 +58,7 @@ public class BoundingBoxOutputHandlerTest {
 
     @Before
     public void setup() {
-        this.outputHandler = new BoundingBoxOutputHandler();
+        this.outputHandler = new BoundingBoxInputOutputHandler();
         this.descriptionFactory = new TypedProcessDescriptionFactory();
         this.outputDescription = descriptionFactory.boundingBoxOutput()
                 .withIdentifier("input")

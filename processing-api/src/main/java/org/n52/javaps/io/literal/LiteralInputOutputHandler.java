@@ -16,21 +16,25 @@
  */
 package org.n52.javaps.io.literal;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
@@ -39,11 +43,15 @@ import org.apache.commons.codec.binary.Base64InputStream;
 
 import org.n52.iceland.ogc.wps.Format;
 import org.n52.iceland.ogc.wps.description.typed.TypedLiteralInputDescription;
+import org.n52.iceland.ogc.wps.description.typed.TypedLiteralOutputDescription;
 import org.n52.iceland.ogc.wps.description.typed.TypedProcessInputDescription;
+import org.n52.iceland.ogc.wps.description.typed.TypedProcessOutputDescription;
 import org.n52.iceland.util.XmlFactories;
 import org.n52.javaps.io.Data;
 import org.n52.javaps.io.DecodingException;
+import org.n52.javaps.io.EncodingException;
 import org.n52.javaps.io.InputHandler;
+import org.n52.javaps.io.OutputHandler;
 
 import com.google.common.io.CharStreams;
 
@@ -52,15 +60,20 @@ import com.google.common.io.CharStreams;
  *
  * @author Christian Autermann
  */
-public class LiteralInputHandler extends XmlFactories implements InputHandler {
+public class LiteralInputOutputHandler extends XmlFactories implements InputHandler, OutputHandler {
 
     private static final Set<Class<? extends Data<?>>> BINDINGS = Collections.singleton(LiteralData.class);
-    private static final Set<Format> FORMATS = new HashSet<>(Arrays
-            .asList(Format.APPLICATION_XML, Format.TEXT_XML, Format.TEXT_PLAIN, Format.TEXT_PLAIN.withBase64Encoding()));
+    public static final Set<Format> FORMATS = Collections.unmodifiableSet(new LinkedHashSet<>(Arrays
+            .asList(Format.APPLICATION_XML, Format.TEXT_XML, Format.TEXT_PLAIN, Format.TEXT_PLAIN.withBase64Encoding())));
 
-    private static final QName QN_DATA_TYPE = new QName("dataType");
-    private static final QName QN_UOM = new QName("uom");
-    private static final QName QN_LITERAL_VALUE = new QName("http://www.opengis.net/wps/2.0", "LiteralValue");
+    private static final String NS_WPS = "wps";
+    private static final String NS_WPS_URI = "http://www.opengis.net/wps/2.0";
+    private static final String EN_LITERAL_VALUE = "LiteralValue";
+    private static final String AN_UOM = "uom";
+    private static final String AN_DATA_TYPE = "dataType";
+    private static final QName QN_DATA_TYPE = new QName(AN_DATA_TYPE);
+    private static final QName QN_UOM = new QName(AN_UOM);
+    private static final QName QN_LITERAL_VALUE = new QName(NS_WPS_URI, EN_LITERAL_VALUE);
 
     @Override
     public Set<Format> getSupportedFormats() {
@@ -123,5 +136,72 @@ public class LiteralInputHandler extends XmlFactories implements InputHandler {
             }
         }
         throw eof();
+    }
+
+    @Override
+    public InputStream generate(TypedProcessOutputDescription<?> description, Data<?> data, Format format)
+            throws IOException, EncodingException {
+        LiteralData literalData = (LiteralData) data;
+        TypedLiteralOutputDescription literalDescription = description.asLiteral();
+
+        if (format.isXML()) {
+            return generateXML(literalDescription, literalData, format);
+        } else if (format.isBase64()) {
+            InputStream stream = generatePlain(literalDescription, literalData, format.withoutEncoding());
+            return new Base64InputStream(stream, true);
+        } else {
+            return generatePlain(literalDescription, literalData, format);
+        }
+    }
+
+    private InputStream generatePlain(TypedLiteralOutputDescription description, LiteralData data, Format format)
+            throws EncodingException {
+        return toStream(toString(description, data), format);
+    }
+
+    private InputStream generateXML(TypedLiteralOutputDescription description, LiteralData data, Format format)
+            throws IOException, EncodingException {
+        try {
+            StringWriter writer = new StringWriter();
+            writeData(description, writer, data);
+            return toStream(writer.toString(), format);
+        } catch (XMLStreamException ex) {
+            throw new IOException(ex);
+        }
+    }
+
+    private String toString(TypedLiteralOutputDescription description, LiteralData data)
+            throws EncodingException {
+        @SuppressWarnings("unchecked")
+        LiteralType<Object> type = (LiteralType<Object>) description.getType();
+        String value = type.generate(data.getPayload());
+        return value;
+    }
+
+    private void writeData(TypedLiteralOutputDescription description, Writer writer, LiteralData data)
+            throws XMLStreamException, EncodingException {
+        XMLStreamWriter xmlWriter = outputFactory().createXMLStreamWriter(writer);
+        try {
+            writeData(description, xmlWriter, data);
+        } finally {
+            xmlWriter.close();
+        }
+    }
+
+    private void writeData(TypedLiteralOutputDescription description, XMLStreamWriter writer, LiteralData data)
+            throws XMLStreamException, EncodingException {
+        writer.writeStartElement(NS_WPS, EN_LITERAL_VALUE, NS_WPS_URI);
+        writer.writeNamespace(NS_WPS, NS_WPS_URI);
+        writer.writeAttribute(AN_DATA_TYPE, description.getType().getURI().toString());
+        if (data.getUnitOfMeasurement().isPresent()) {
+            writer.writeAttribute(AN_UOM, data.getUnitOfMeasurement().get());
+        }
+        writer.writeCharacters(toString(description, data));
+        writer.writeEndElement();
+    }
+
+    private static InputStream toStream(String value, Format format) {
+        Charset charset = format.getEncodingAsCharsetOrDefault();
+        return new ByteArrayInputStream(value.getBytes(charset));
     }
 }

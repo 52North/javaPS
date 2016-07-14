@@ -22,7 +22,7 @@ import java.util.Set;
 import org.n52.iceland.lifecycle.Constructable;
 import org.n52.iceland.lifecycle.Destroyable;
 import org.n52.iceland.ogc.ows.OwsCode;
-import org.n52.iceland.ogc.wps.description.ProcessDescription;
+import org.n52.iceland.ogc.wps.description.typed.TypedProcessDescription;
 
 /**
  * @author Bastian Schaeffer, University of Muenster, Theodor Foerster, ITC
@@ -38,9 +38,9 @@ public interface AlgorithmRepository extends Constructable, Destroyable {
         return getAlgorithm(new OwsCode(id));
     }
 
-    Optional<ProcessDescription> getProcessDescription(OwsCode id);
+    Optional<TypedProcessDescription> getProcessDescription(OwsCode id);
 
-    default Optional<ProcessDescription> getProcessDescription(String id) {
+    default Optional<TypedProcessDescription> getProcessDescription(String id) {
         return getProcessDescription(new OwsCode(id));
     }
 

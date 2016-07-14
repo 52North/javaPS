@@ -16,7 +16,10 @@
  */
 package org.n52.javaps;
 
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,6 +27,8 @@ import java.util.Objects;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -32,6 +37,7 @@ import org.n52.iceland.ogc.wps.JobId;
 import org.n52.iceland.util.Chain;
 
 public class StaticURLOutputReferencer implements OutputReferencer {
+    private final Logger LOG = LoggerFactory.getLogger(StaticURLOutputReferencer.class);
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
     private URI baseURI;
 
@@ -56,7 +62,10 @@ public class StaticURLOutputReferencer implements OutputReferencer {
         UriComponents build;
         this.lock.readLock().lock();
         try {
-            build = UriComponentsBuilder.fromUri(this.baseURI.relativize(uri)).build();
+            URI relative = this.baseURI.relativize(new URL(this.baseURI.toURL(), uri.toString()).toURI());
+            build = UriComponentsBuilder.fromUri(relative).build();
+        } catch (MalformedURLException | URISyntaxException ex) {
+            throw new IllegalArgumentException(ex);
         } finally {
             this.lock.readLock().unlock();
         }

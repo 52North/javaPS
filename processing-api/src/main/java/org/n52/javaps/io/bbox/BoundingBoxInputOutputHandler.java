@@ -16,49 +16,64 @@
  */
 package org.n52.javaps.io.bbox;
 
+import static java.util.stream.Collectors.joining;
+
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
+import org.apache.commons.codec.binary.Base64InputStream;
+
 import org.n52.iceland.ogc.ows.OwsBoundingBox;
 import org.n52.iceland.ogc.wps.Format;
 import org.n52.iceland.ogc.wps.description.typed.TypedProcessInputDescription;
+import org.n52.iceland.ogc.wps.description.typed.TypedProcessOutputDescription;
 import org.n52.iceland.util.XmlFactories;
 import org.n52.javaps.io.Data;
 import org.n52.javaps.io.InputHandler;
+import org.n52.javaps.io.OutputHandler;
 
 /**
  * TODO JavaDoc
  *
  * @author Christian Autermann
  */
-public class BoundingBoxInputHandler extends XmlFactories implements InputHandler {
+public class BoundingBoxInputOutputHandler extends XmlFactories implements InputHandler, OutputHandler {
 
-    private static final HashSet<Format> FORMATS = new HashSet<>(Arrays.asList(Format.TEXT_XML,
-                                                                               Format.APPLICATION_XML));
+    public static final Set<Format> FORMATS = Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(Format.APPLICATION_XML, Format.TEXT_XML)));
     private static final Set<Class<? extends Data<?>>> BINDINGS = Collections.singleton(BoundingBoxData.class);
 
-    private static final String NS_URI = "http://www.opengis.net/ows/2.0";
-    private static final QName QN_BOUNDING_BOX = new QName(NS_URI, "BoundingBox");
-    private static final QName QN_CRS = new QName("crs");
-    private static final QName QN_DIMENSION = new QName("dimension");
-    private static final QName QN_LOWER_CORNER = new QName(NS_URI, "LowerCorner");
-    private static final QName QN_UPPER_CORNER = new QName(NS_URI, "UpperCorner");
+        private static final String NS_URI = "http://www.opengis.net/ows/2.0";
+        private static final String NS_PREFIX = "ows";
+        private static final String EN_UPPER_CORNER = "UpperCorner";
+        private static final String EN_LOWER_CORNER = "LowerCorner";
+        private static final String EN_BOUNDING_BOX = "BoundingBox";
+        private static final String AN_DIMENSION = "dimension";
+        private static final String AN_CRS = "crs";
+        private static final QName QN_BOUNDING_BOX = new QName(NS_URI, EN_BOUNDING_BOX);
+        private static final QName QN_CRS = new QName(AN_CRS);
+        private static final QName QN_DIMENSION = new QName(AN_DIMENSION);
+        private static final QName QN_LOWER_CORNER = new QName(NS_URI, EN_LOWER_CORNER);
+        private static final QName QN_UPPER_CORNER = new QName(NS_URI, EN_UPPER_CORNER);
 
     @Override
     public Data<?> parse(TypedProcessInputDescription<?> description, InputStream input, Format format)
@@ -143,5 +158,70 @@ public class BoundingBoxInputHandler extends XmlFactories implements InputHandle
         }
         throw eof();
     }
+
+
+    @Override
+    public InputStream generate(TypedProcessOutputDescription<?> description, Data<?> data, Format format)
+            throws IOException {
+        try {
+            Charset charset = format.getEncodingAsCharsetOrDefault();
+
+            byte[] bytes = encode(data).getBytes(charset);
+            InputStream stream = new ByteArrayInputStream(bytes);
+
+            if (format.isBase64()) {
+                stream = new Base64InputStream(stream, true);
+            }
+
+            return stream;
+        } catch (XMLStreamException ex) {
+            throw new IOException(ex);
+        }
+    }
+
+    private String encode(Data<?> data) throws XMLStreamException {
+        OwsBoundingBox bbox = (OwsBoundingBox) data.getPayload();
+        StringWriter writer = new StringWriter();
+        writeBoundingBox(writer, bbox);
+        return writer.toString();
+    }
+
+    private void writeBoundingBox(Writer writer, OwsBoundingBox bbox) throws XMLStreamException {
+        XMLStreamWriter xmlWriter = outputFactory().createXMLStreamWriter(writer);
+        try {
+            writeBoundingBox(xmlWriter, bbox);
+        } finally {
+            xmlWriter.close();
+        }
+    }
+
+    private void writeBoundingBox(XMLStreamWriter writer, OwsBoundingBox bbox) throws XMLStreamException {
+        writer.writeStartElement(NS_PREFIX, EN_BOUNDING_BOX, NS_URI);
+        writer.writeNamespace(NS_PREFIX, NS_URI);
+        if (bbox.getCRS().isPresent()) {
+            writer.writeAttribute(AN_CRS, bbox.getCRS().get().toString());
+        }
+        writer.writeAttribute(AN_DIMENSION, String.valueOf(bbox.getDimension()));
+        writeLowerCorner(writer, bbox.getLowerCorner());
+        writeUpperCorner(writer, bbox.getUpperCorner());
+        writer.writeEndElement();
+    }
+
+    private void writeLowerCorner(XMLStreamWriter writer, double[] lowerCorner) throws XMLStreamException {
+        writer.writeStartElement(NS_PREFIX, EN_LOWER_CORNER, NS_URI);
+        writerPositionType(writer, lowerCorner);
+        writer.writeEndElement();
+    }
+
+    private void writeUpperCorner(XMLStreamWriter writer, double[] upperCorner) throws XMLStreamException {
+        writer.writeStartElement(NS_PREFIX, EN_UPPER_CORNER, NS_URI);
+        writerPositionType(writer, upperCorner);
+        writer.writeEndElement();
+    }
+
+    private void writerPositionType(XMLStreamWriter writer, double[] coordinates) throws XMLStreamException {
+        writer.writeCharacters(Arrays.stream(coordinates).mapToObj(String::valueOf).collect(joining(" ")));
+    }
+
 
 }

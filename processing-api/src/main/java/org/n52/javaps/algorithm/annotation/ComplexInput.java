@@ -38,8 +38,8 @@ public @interface ComplexInput {
     String identifier(); // identifier
     String title() default "";
     String abstrakt() default ""; // 'abstract' is java reserved keyword
-    int minOccurs() default 1;
-    int maxOccurs() default 1;
-    int maximumMegaBytes() default 0;
+    long minOccurs() default 1;
+    long maxOccurs() default 1;
+    long maximumMegaBytes() default 0;
     Class<? extends ComplexData> binding();
 }

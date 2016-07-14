@@ -16,28 +16,26 @@
  */
 package org.n52.javaps;
 
-import java.io.IOException;
-import java.util.Collection;
+import java.util.Set;
 
 import org.n52.iceland.ogc.wps.JobId;
-import org.n52.iceland.ogc.wps.OutputDefinition;
 import org.n52.iceland.ogc.wps.Result;
+import org.n52.iceland.ogc.wps.StatusInfo;
 import org.n52.iceland.ogc.wps.data.ProcessData;
-import org.n52.javaps.io.EncodingException;
 
 /**
  * TODO JavaDoc
  *
  * @author Christian Autermann
  */
-public interface ResultManager {
+public interface ResultPersistence {
+    ProcessData getOutput(OutputReference reference) throws EngineException;
 
-    ProcessData getOutput(OutputReference reference)
-            throws JobNotFoundException, OutputNotFoundException, IOException;
+    Result getResult(JobId jobId) throws EngineException;
 
-    Result getResult(JobId jobId) throws JobNotFoundException, IOException;
+    StatusInfo getStatus(JobId jobId) throws EngineException;
 
-    void saveResult(Result result, Collection<OutputDefinition> outputDefinitions)
-            throws IOException, EncodingException;
+    void save(ProcessExecutionContext context);
 
+    Set<JobId> getJobIds();
 }

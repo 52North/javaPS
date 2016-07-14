@@ -26,6 +26,8 @@ import org.n52.iceland.ogc.ows.OwsKeyword;
 import org.n52.iceland.ogc.ows.OwsLanguageString;
 import org.n52.iceland.ogc.ows.OwsMetadata;
 
+import com.google.common.base.Strings;
+
 /**
  * TODO JavaDoc
  *
@@ -49,13 +51,11 @@ public interface Description {
         B withAbstract(OwsLanguageString abstrakt);
 
         default B withAbstract(String abstrakt) {
-            return withAbstract(abstrakt == null ? null
-                                        : new OwsLanguageString(abstrakt));
+            return withAbstract(Strings.emptyToNull(abstrakt) == null ? null : new OwsLanguageString(abstrakt));
         }
 
         default B withAbstract(String lang, String abstrakt) {
-            return withAbstract(abstrakt == null ? null
-                                        : new OwsLanguageString(lang, abstrakt));
+            return withAbstract(Strings.emptyToNull(abstrakt) == null ? null : new OwsLanguageString(lang, abstrakt));
         }
 
         B withIdentifier(OwsCode id);
@@ -75,12 +75,11 @@ public interface Description {
         B withTitle(OwsLanguageString title);
 
         default B withTitle(String title) {
-            return withTitle(title == null ? null : new OwsLanguageString(title));
+            return withTitle(Strings.emptyToNull(title) == null ? null : new OwsLanguageString(title));
         }
 
         default B withTitle(String lang, String title) {
-            return withTitle(title == null ? null
-                                     : new OwsLanguageString(lang, title));
+            return withTitle(Strings.emptyToNull(title) == null ? null : new OwsLanguageString(lang, title));
         }
 
         B withKeyword(OwsKeyword keyword);

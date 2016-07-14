@@ -133,7 +133,7 @@ abstract class AbstractInputBinding<M extends AccessibleObject & Member, D exten
                         .map(bound -> payloadToInput(bound.getPayload()))
                         .collect(toList());
             } else if (inputs.size() == 1) {
-                return payloadToInput(inputs.get(0));
+                return payloadToInput(inputs.get(0).getPayload());
             } else {
                 return null;
             }

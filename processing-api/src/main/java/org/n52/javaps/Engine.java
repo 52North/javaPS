@@ -64,8 +64,8 @@ public interface Engine {
     JobId execute(OwsCode identifier, List<ProcessData> inputs, List<OutputDefinition> outputs)
             throws ProcessNotFoundException, InputDecodingException;
 
-    StatusInfo getStatus(JobId jobId) throws JobNotFoundException;
+    StatusInfo getStatus(JobId jobId) throws EngineException;
 
-    Future<Result> getResult(JobId jobId) throws JobNotFoundException;
+    Future<Result> getResult(JobId jobId) throws EngineException;
 
 }

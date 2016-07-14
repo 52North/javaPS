@@ -19,7 +19,6 @@ package org.n52.javaps.operator.validation;
 import static org.n52.iceland.util.MoreCollectors.toCardinalities;
 
 import java.math.BigInteger;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -59,6 +58,8 @@ import org.n52.iceland.ogc.wps.description.ProcessOutputDescriptionContainer;
 import org.n52.iceland.request.operator.ParameterValidator;
 import org.n52.iceland.util.Chain;
 import org.n52.javaps.Engine;
+import org.n52.javaps.io.bbox.BoundingBoxInputOutputHandler;
+import org.n52.javaps.io.literal.LiteralInputOutputHandler;
 import org.n52.javaps.request.ExecuteRequest;
 
 /**
@@ -68,11 +69,6 @@ public class ExecuteParameterValidator
         implements ParameterValidator<ExecuteRequest> {
     private static final String INPUT = "Input";
     private static final String IDENTIFIER = "Identifier";
-    private static final Format TEXT_XML = new Format("text/xml");
-    private static final Format APPLICATION_XML = new Format("application/xml");
-    private static final Format TEXT_PLAIN = new Format("text/plain");
-    private static final List<Format> LITERAL_FORMATS = Arrays.asList(TEXT_PLAIN, TEXT_XML, APPLICATION_XML);
-    private static final List<Format> BOUNDING_BOX_FORMATS = Arrays.asList(TEXT_XML, APPLICATION_XML);
     private static final String OUTPUT = "Output";
 
     private final Engine engine;
@@ -183,7 +179,9 @@ public class ExecuteParameterValidator
                 }
             } else {
                 try {
-                    description.visit(new OutputFormatValidator(output));
+                    if (!output.getFormat().isEmpty()) {
+                        description.visit(new OutputFormatValidator(output));
+                    }
                 } catch (OwsExceptionReport ex) {
                     exception.add(ex);
                 }
@@ -194,7 +192,10 @@ public class ExecuteParameterValidator
 
     private void validateFormat(FormattedProcessData input, ProcessInputDescription inputDescription)
             throws OwsExceptionReport {
-        inputDescription.visit(new InputFormatValidator(input));
+        if (!input.getFormat().isEmpty()) {
+            inputDescription.visit(new InputFormatValidator(input));
+        }
+
     }
 
     private void validateInput(ReferenceProcessData input, ProcessInputDescription inputDescription)
@@ -279,7 +280,7 @@ public class ExecuteParameterValidator
 
         @Override
         public void visit(BoundingBoxOutputDescription description) throws OwsExceptionReport {
-            checkCompatibility(BOUNDING_BOX_FORMATS.stream());
+            checkCompatibility(BoundingBoxInputOutputHandler.FORMATS.stream());
         }
 
         @Override
@@ -290,7 +291,7 @@ public class ExecuteParameterValidator
 
         @Override
         public void visit(LiteralOutputDescription description) throws OwsExceptionReport {
-            checkCompatibility(LITERAL_FORMATS.stream());
+            checkCompatibility(LiteralInputOutputHandler.FORMATS.stream());
         }
 
         @Override
@@ -319,7 +320,7 @@ public class ExecuteParameterValidator
 
         @Override
         public void visit(BoundingBoxInputDescription description) throws OwsExceptionReport {
-            checkCompatibility(BOUNDING_BOX_FORMATS.stream());
+            checkCompatibility(BoundingBoxInputOutputHandler.FORMATS.stream());
         }
 
         @Override
@@ -330,7 +331,7 @@ public class ExecuteParameterValidator
 
         @Override
         public void visit(LiteralInputDescription description) throws OwsExceptionReport {
-            checkCompatibility(LITERAL_FORMATS.stream());
+            checkCompatibility(LiteralInputOutputHandler.FORMATS.stream());
         }
 
         @Override

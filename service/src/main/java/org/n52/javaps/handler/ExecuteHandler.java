@@ -21,7 +21,6 @@ import static java.util.stream.Collectors.toSet;
 import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 import javax.inject.Inject;
 
@@ -42,6 +41,7 @@ import org.n52.iceland.ogc.wps.WPSConstants;
 import org.n52.iceland.request.handler.GenericOperationHandler;
 import org.n52.iceland.request.handler.OperationHandlerKey;
 import org.n52.javaps.Engine;
+import org.n52.javaps.EngineException;
 import org.n52.javaps.InputDecodingException;
 import org.n52.javaps.JobNotFoundException;
 import org.n52.javaps.ProcessNotFoundException;
@@ -82,18 +82,20 @@ public class ExecuteHandler extends AbstractEngineHandler
 
         if (request.getExecutionMode() == ExecutionMode.SYNC) {
             try {
-                Future<Result> result = getEngine().getResult(jobId);
-                return new ExecuteResponse(service, version, result.get());
+                Result result = getEngine().getResult(jobId).get();
+                return new ExecuteResponse(service, version, result);
             } catch (InterruptedException | JobNotFoundException ex) {
                 throw new NoApplicableCodeException().causedBy(ex);
             } catch (ExecutionException ex) {
                 throw new NoApplicableCodeException().causedBy(ex.getCause());
+            } catch (EngineException ex) {
+                throw new NoApplicableCodeException().causedBy(ex);
             }
         } else {
             StatusInfo status;
             try {
                 status = getEngine().getStatus(jobId);
-            } catch (JobNotFoundException ex) {
+            } catch (EngineException ex) {
                 throw new NoApplicableCodeException().causedBy(ex);
             }
             return new ExecuteResponse(service, version, status);

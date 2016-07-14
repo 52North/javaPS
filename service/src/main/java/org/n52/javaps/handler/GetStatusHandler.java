@@ -26,11 +26,13 @@ import javax.inject.Inject;
 import org.n52.iceland.request.handler.GenericOperationHandler;
 import org.n52.iceland.request.handler.OperationHandlerKey;
 import org.n52.iceland.exception.ows.InvalidParameterValueException;
+import org.n52.iceland.exception.ows.NoApplicableCodeException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.ogc.wps.JobId;
 import org.n52.iceland.ogc.wps.StatusInfo;
 import org.n52.iceland.ogc.wps.WPSConstants;
 import org.n52.javaps.Engine;
+import org.n52.javaps.EngineException;
 import org.n52.javaps.JobNotFoundException;
 import org.n52.javaps.request.GetStatusRequest;
 import org.n52.javaps.response.GetStatusResponse;
@@ -62,6 +64,8 @@ public class GetStatusHandler extends AbstractJobHandler
             status = getEngine().getStatus(jobId);
         } catch (JobNotFoundException ex) {
             throw new InvalidParameterValueException(JOB_ID, jobId.getValue()).causedBy(ex);
+        } catch (EngineException ex) {
+            throw new NoApplicableCodeException().causedBy(ex);
         }
         return new GetStatusResponse(service, version, status);
     }

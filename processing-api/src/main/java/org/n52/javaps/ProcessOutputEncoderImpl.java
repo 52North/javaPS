@@ -40,6 +40,8 @@ import org.n52.javaps.io.GroupOutputData;
 import org.n52.javaps.io.OutputHandler;
 import org.n52.javaps.io.OutputHandlerRepository;
 
+import static java.util.stream.Collectors.toMap;
+
 public class ProcessOutputEncoderImpl implements ProcessOutputEncoder {
 
     private final OutputHandlerRepository outputHandlerRepository;

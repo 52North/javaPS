@@ -60,7 +60,7 @@ public class BoundingBoxInputHandlerTest {
 
     @Before
     public void setup() {
-        this.inputHandler = new BoundingBoxInputHandler();
+        this.inputHandler = new BoundingBoxInputOutputHandler();
         this.descriptionFactory = new TypedProcessDescriptionFactory();
         this.inputDescription = descriptionFactory.boundingBoxInput()
                 .withIdentifier("input")

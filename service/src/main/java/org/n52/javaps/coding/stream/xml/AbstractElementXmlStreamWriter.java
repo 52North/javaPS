@@ -21,8 +21,6 @@ package org.n52.javaps.coding.stream.xml;
 
 import org.n52.iceland.util.XmlFactories;
 
-import static java.util.stream.Collectors.joining;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -60,6 +58,7 @@ import com.google.common.io.ByteStreams;
 import com.google.common.xml.XmlEscapers;
 
 import static java.util.stream.Collectors.joining;
+
 
 public abstract class AbstractElementXmlStreamWriter extends XmlFactories
         implements ElementXmlStreamWriter {

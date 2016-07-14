@@ -19,14 +19,16 @@ package org.n52.javaps.coding.stream.xml.impl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.math.BigInteger;
 import java.net.URI;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
+import java.util.Iterator;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.xml.stream.XMLStreamException;
+
+import org.apache.commons.codec.binary.Base64InputStream;
 
 import org.n52.iceland.ogc.ows.OwsCRS;
 import org.n52.iceland.ogc.ows.OwsPossibleValues;
@@ -68,8 +70,9 @@ import org.n52.javaps.coding.stream.xml.impl.XMLConstants.WPS;
 import org.n52.javaps.coding.stream.xml.impl.XMLConstants.XLink;
 import org.n52.javaps.coding.stream.xml.impl.XMLConstants.XMLSchema;
 import org.n52.javaps.io.EncodingException;
+import org.n52.javaps.io.bbox.BoundingBoxInputOutputHandler;
+import org.n52.javaps.io.literal.LiteralInputOutputHandler;
 
-import com.google.common.io.BaseEncoding;
 import com.google.common.io.CharStreams;
 
 /**
@@ -220,6 +223,8 @@ public class WPSWriter extends AbstractOWSWriter {
     private void writeBoundingBoxDescription(BoundingBoxDescription input)
             throws XMLStreamException {
         element(WPS.Elem.QN_BOUNDING_BOX_DATA, input, x -> {
+            writeFormats(BoundingBoxInputOutputHandler.FORMATS);
+
             element(WPS.Elem.QN_SUPPORTED_CRS, x.getDefaultCRS(), crs -> {
                 attr(WPS.Attr.AN_DEFAULT, "true");
                 chars(crs.getValue().toString());
@@ -233,17 +238,14 @@ public class WPSWriter extends AbstractOWSWriter {
 
     private void writeComplexDescription(ComplexDescription input)
             throws XMLStreamException {
-        element(WPS.Elem.QN_COMPLEX_DATA, input, x -> {
-            writeFormat(x.getDefaultFormat(), x.getMaximumMegabytes(), true);
-            for (Format format : x.getSupportedFormats()) {
-                writeFormat(format, x.getMaximumMegabytes(), false);
-            }
-        });
+        element(WPS.Elem.QN_COMPLEX_DATA, input, x -> writeFormats(x));
     }
 
     private void writeLiteralDescription(LiteralDescription input)
             throws XMLStreamException {
         element(WPS.Elem.QN_LITERAL_DATA, input, x -> {
+            writeFormats(LiteralInputOutputHandler.FORMATS);
+
             writeLiteralDataDomain(x.getDefaultLiteralDataDomain(), true);
             for (LiteralDataDomain ldd : x.getSupportedLiteralDataDomains()) {
                 writeLiteralDataDomain(ldd, false);
@@ -352,14 +354,11 @@ public class WPSWriter extends AbstractOWSWriter {
 
                 } else {
                     // format describes some other thing, e.g. binary
-                    BaseEncoding base64 = base64();
                     writeDataEncodingAttributes(format.withBase64Encoding());
 
                     if (format.isBase64()) {
                         // it is already base64 encoded
-                        try (Reader reader
-                                = new InputStreamReader(data, StandardCharsets.US_ASCII);
-                             InputStream in = base64.decodingStream(reader)) {
+                        try (InputStream in = new Base64InputStream(data, false)) {
                             writeBase64(in);
                         }
                     } else {
@@ -439,6 +438,23 @@ public class WPSWriter extends AbstractOWSWriter {
                 writeProcessOffering(processOffering);
             }
         });
+    }
+
+    private void writeFormats(ComplexDescription x) throws XMLStreamException {
+        writeFormat(x.getDefaultFormat(), x.getMaximumMegabytes(), true);
+        for (Format format : x.getSupportedFormats()) {
+            writeFormat(format, x.getMaximumMegabytes(), false);
+        }
+    }
+
+    private void writeFormats(Set<Format> formats) throws XMLStreamException {
+        Iterator<Format> iter = formats.iterator();
+        if (iter.hasNext()) {
+            writeFormat(iter.next(), Optional.empty(), true);
+            while (iter.hasNext()) {
+                writeFormat(iter.next(), Optional.empty(), false);
+            }
+        }
     }
 
     private class ConcreteInputWriter implements

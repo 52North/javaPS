@@ -33,12 +33,12 @@ import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
 
 import org.n52.iceland.ogc.ows.OwsCode;
-import org.n52.iceland.ogc.wps.description.ProcessDescription;
+import org.n52.iceland.ogc.wps.description.typed.TypedProcessDescription;
 import org.n52.javaps.algorithm.annotation.Algorithm;
 import org.n52.javaps.algorithm.annotation.AnnotatedAlgorithm;
-import org.n52.javaps.io.literal.LiteralTypeRepository;
 import org.n52.javaps.io.InputHandlerRepository;
 import org.n52.javaps.io.OutputHandlerRepository;
+import org.n52.javaps.io.literal.LiteralTypeRepository;
 
 /**
  * A static repository to retrieve the available algorithms.
@@ -50,7 +50,7 @@ public class LocalAlgorithmRepository implements AlgorithmRepository {
 
     private static final Logger LOG = LoggerFactory.getLogger(LocalAlgorithmRepository.class);
 
-    private final Map<OwsCode, ProcessDescription> descriptions = new HashMap<>();
+    private final Map<OwsCode, TypedProcessDescription> descriptions = new HashMap<>();
     private final Map<OwsCode, Supplier<IAlgorithm>> algorithms = new HashMap<>();
     private final InputHandlerRepository parserRepository;
     private final OutputHandlerRepository generatorRepository;
@@ -74,7 +74,7 @@ public class LocalAlgorithmRepository implements AlgorithmRepository {
     }
 
     @Override
-    public Optional<ProcessDescription> getProcessDescription(OwsCode id) {
+    public Optional<TypedProcessDescription> getProcessDescription(OwsCode id) {
         return Optional.ofNullable(this.descriptions.get(id));
     }
 
@@ -100,7 +100,7 @@ public class LocalAlgorithmRepository implements AlgorithmRepository {
     public void addAlgorithm(Class<?> clazz) {
         Objects.requireNonNull(clazz, "clazz");
         instantiate(clazz).ifPresent(instance -> {
-            ProcessDescription description = instance.getDescription();
+            TypedProcessDescription description = instance.getDescription();
             if (this.descriptions.put(description.getId(), description) != null) {
                 LOG.warn("Duplicate algorithm identifier: {}", description.getId());
             }
@@ -113,7 +113,7 @@ public class LocalAlgorithmRepository implements AlgorithmRepository {
 
     public void addAlgorithm(IAlgorithm instance) {
         Objects.requireNonNull(instance, "instance");
-        ProcessDescription description = instance.getDescription();
+        TypedProcessDescription description = instance.getDescription();
         if (this.descriptions.put(description.getId(), description) != null) {
             LOG.warn("Duplicate algorithm identifier: {}", description.getId());
         }

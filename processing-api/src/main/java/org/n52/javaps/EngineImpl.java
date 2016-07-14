@@ -16,6 +16,8 @@
  */
 package org.n52.javaps;
 
+import static java.util.stream.Collectors.toSet;
+
 import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -24,6 +26,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -31,6 +34,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
@@ -53,6 +57,8 @@ import org.n52.javaps.algorithm.ProcessOutputs;
 import org.n52.javaps.algorithm.RepositoryManager;
 
 import com.google.common.util.concurrent.AbstractFuture;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.SettableFuture;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 public class EngineImpl implements Engine, Destroyable {
@@ -64,22 +70,26 @@ public class EngineImpl implements Engine, Destroyable {
     private final ProcessInputDecoder processInputDecoder;
     private final ProcessOutputEncoder processOutputEncoder;
     private final JobIdGenerator jobIdGenerator;
+    private final ResultPersistence resultPersistence;
 
     @Inject
     public EngineImpl(RepositoryManager repositoryManager,
                       ProcessInputDecoder processInputDecoder,
                       ProcessOutputEncoder processOutputEncoder,
-                      JobIdGenerator jobIdGenerator) {
+                      JobIdGenerator jobIdGenerator,
+                      ResultPersistence resultPersistence) {
         this.executor = createExecutor();
         this.repositoryManager = Objects.requireNonNull(repositoryManager);
         this.processInputDecoder = Objects.requireNonNull(processInputDecoder);
         this.processOutputEncoder = Objects.requireNonNull(processOutputEncoder);
         this.jobIdGenerator = Objects.requireNonNull(jobIdGenerator);
+        this.resultPersistence = Objects.requireNonNull(resultPersistence);
     }
 
     @Override
     public Set<JobId> getJobIdentifiers() {
-        return Collections.emptySet();
+        return Stream.concat(this.jobs.keySet().stream(),
+                             this.resultPersistence.getJobIds().stream()).collect(toSet());
     }
 
     @Override
@@ -89,7 +99,7 @@ public class EngineImpl implements Engine, Destroyable {
 
     @Override
     public Optional<ProcessDescription> getProcessDescription(OwsCode identifier) {
-        return this.repositoryManager.getProcessDescription(identifier);
+        return this.repositoryManager.getProcessDescription(identifier).map(x -> (ProcessDescription) x);
     }
 
     @Override
@@ -101,9 +111,14 @@ public class EngineImpl implements Engine, Destroyable {
     }
 
     @Override
-    public StatusInfo getStatus(JobId identifier) throws JobNotFoundException {
+    public StatusInfo getStatus(JobId identifier) throws EngineException {
         LOG.info("Getting status {}", identifier);
-        return getJob(identifier).getStatus();
+        Job job = this.jobs.get(identifier);
+        if (job != null) {
+            return job.getStatus();
+        } else {
+            return this.resultPersistence.getStatus(identifier);
+        }
     }
 
     @Override
@@ -128,16 +143,29 @@ public class EngineImpl implements Engine, Destroyable {
         return jobId;
     }
 
-    private void onJobCompletion(Job job) {
+    private Result onJobCompletion(Job job) throws EngineException {
+        this.cancelers.remove(job.getJobId());
+        this.resultPersistence.save(job);
         this.jobs.remove(job.getJobId());
-        /* TODO implement org.n52.javaps.EngineImpl.Job.onJobCompletion() */
-        throw new UnsupportedOperationException("org.n52.javaps.EngineImpl.Job.onJobCompletion() not yet implemented");
+        return this.resultPersistence.getResult(job.getJobId());
+
     }
 
     @Override
     public Future<Result> getResult(JobId identifier) throws JobNotFoundException {
         LOG.info("Getting result {}", identifier);
-        return getJob(identifier);
+        Job job = this.jobs.get(identifier);
+        if (job != null) {
+            return job;
+        } else {
+            try {
+                return Futures.immediateFuture(this.resultPersistence.getResult(identifier));
+            } catch (JobNotFoundException ex) {
+                throw ex;
+            } catch (EngineException ex) {
+                return Futures.immediateFailedFuture(ex);
+            }
+        }
     }
 
     private ExecutorService createExecutor() {
@@ -174,8 +202,7 @@ public class EngineImpl implements Engine, Destroyable {
         void cancel();
     }
 
-    private final class Job extends AbstractFuture<Result>
-            implements Runnable, ProcessExecutionContext, Future<Result> {
+    private final class Job extends AbstractFuture<Result> implements Runnable, ProcessExecutionContext, Future<Result> {
 
         private final ReadWriteLock lock = new ReentrantReadWriteLock();
 
@@ -185,14 +212,14 @@ public class EngineImpl implements Engine, Destroyable {
         private final TypedProcessDescription description;
         private final IAlgorithm algorithm;
         private final List<OutputDefinition> outputDefinitions;
-
+        private final SettableFuture<Result> nonPersistedResult = SettableFuture.create();
         private Short percentCompleted;
         private OffsetDateTime estimatedCompletion;
         private OffsetDateTime nextPoll;
-        private JobStatus status;
+        private JobStatus jobStatus;
 
         Job(IAlgorithm algorithm, JobId jobId, ProcessInputs inputs, List<OutputDefinition> outputDefinitions) {
-            this.status = JobStatus.accepted();
+            this.jobStatus = JobStatus.accepted();
             this.jobId = Objects.requireNonNull(jobId, "jobId");
             this.inputs = Objects.requireNonNull(inputs, "inputs");
             this.algorithm = Objects.requireNonNull(algorithm, "algorithm");
@@ -237,14 +264,15 @@ public class EngineImpl implements Engine, Destroyable {
 
             this.lock.readLock().lock();
             try {
-                statusInfo.setStatus(status);
+                statusInfo.setStatus(jobStatus);
 
-                if (status.equals(JobStatus.running())) {
+                if (jobStatus.equals(JobStatus.accepted()) ||
+                    jobStatus.equals(JobStatus.running())) {
                     statusInfo.setEstimatedCompletion(estimatedCompletion);
                     statusInfo.setPercentCompleted(percentCompleted);
                     statusInfo.setNextPoll(nextPoll);
-                } else if (status.equals(JobStatus.succeeded()) ||
-                           status.equals(JobStatus.failed())) {
+                } else if (jobStatus.equals(JobStatus.succeeded()) ||
+                           jobStatus.equals(JobStatus.failed())) {
                     // TODO statusInfo.setExpirationDate(expirationDate);
                 }
 
@@ -254,37 +282,46 @@ public class EngineImpl implements Engine, Destroyable {
             return statusInfo;
         }
 
-        private void setStatus(JobStatus s) {
+        private void setJobStatus(JobStatus s) {
             this.lock.writeLock().lock();
             try {
-                this.status = s;
+                this.jobStatus = s;
             } finally {
                 this.lock.writeLock().unlock();
             }
         }
 
         @Override
+        public JobStatus getJobStatus() {
+            return this.jobStatus;
+        }
+
+        @Override
         public void run() {
-            setStatus(JobStatus.running());
+            setJobStatus(JobStatus.running());
             LOG.info("Executing {}", this.jobId);
             try {
                 this.algorithm.execute(this);
                 LOG.info("Executed {}, creating result", this.jobId);
                 try {
-                    set(processOutputEncoder.create(this));
+                    this.nonPersistedResult.set(processOutputEncoder.create(this));
                     LOG.info("Created result for {}", this.jobId);
-                    setStatus(JobStatus.succeeded());
+                    setJobStatus(JobStatus.succeeded());
                 } catch (OutputEncodingException ex) {
                     LOG.error("Failed creating result for {}", this.jobId);
-                    setStatus(JobStatus.failed());
-                    setException(ex);
+                    setJobStatus(JobStatus.failed());
+                    this.nonPersistedResult.setException(ex);
                 }
             } catch (Throwable ex) {
                 LOG.error("{} failed", this.jobId);
-                setStatus(JobStatus.failed());
-                setException(ex);
+                setJobStatus(JobStatus.failed());
+                this.nonPersistedResult.setException(ex);
             } finally {
-                onJobCompletion(this);
+                try {
+                    set(onJobCompletion(this));
+                } catch (EngineException ex) {
+                    setException(ex);
+                }
             }
         }
 
@@ -315,6 +352,15 @@ public class EngineImpl implements Engine, Destroyable {
                 this.nextPoll = nextPoll;
             } finally {
                 this.lock.writeLock().unlock();
+            }
+        }
+
+        @Override
+        public Result getResult() throws Throwable {
+            try {
+                return this.nonPersistedResult.get();
+            } catch (ExecutionException ex) {
+                throw ex.getCause();
             }
         }
     }

@@ -106,7 +106,7 @@ class LiteralInputAnnotationParser<M extends AccessibleObject & Member, B extend
         }
     }
 
-    private int getMaxOccurence(LiteralInput annotation, List<String> allowedValues) {
+    private long getMaxOccurence(LiteralInput annotation, List<String> allowedValues) {
         if (annotation.maxOccurs() == LiteralInput.ENUM_COUNT) {
             if (allowedValues.isEmpty()) {
                 LOGGER.warn("Invalid maxOccurs \"ENUM_COUNT\" specified for for input {}, setting maxOccurs to {}", annotation.identifier(), annotation.minOccurs());

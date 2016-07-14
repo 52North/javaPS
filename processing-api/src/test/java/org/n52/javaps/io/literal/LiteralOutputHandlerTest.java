@@ -54,7 +54,7 @@ public class LiteralOutputHandlerTest {
 
     @Before
     public void setup() {
-        this.handler = new LiteralOutputHandler();
+        this.handler = new LiteralInputOutputHandler();
         this.descriptionFactory = new TypedProcessDescriptionFactory();
     }
 

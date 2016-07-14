@@ -19,109 +19,34 @@ package org.n52.javaps.algorithm;
 import static java.util.stream.Collectors.toSet;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.stream.Stream;
 
-import javax.security.auth.Destroyable;
+import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.n52.iceland.lifecycle.Constructable;
 import org.n52.iceland.ogc.ows.OwsCode;
-import org.n52.iceland.ogc.wps.description.ProcessDescription;
-import org.n52.iceland.ogc.wps.description.ProcessInputDescription;
-import org.n52.iceland.ogc.wps.description.ProcessOutputDescription;
+import org.n52.iceland.ogc.wps.description.typed.TypedProcessDescription;
+import org.n52.iceland.ogc.wps.description.typed.TypedProcessInputDescription;
+import org.n52.iceland.ogc.wps.description.typed.TypedProcessOutputDescription;
 
 
 /**
  * @author Bastian Schaeffer, University of Muenster
  *
  */
-public class RepositoryManager implements Constructable, Destroyable {
-
-    private static final Logger LOG = LoggerFactory.getLogger(RepositoryManager.class);
+public class RepositoryManager {
     private final Set<OwsCode> globalProcessIDs = Collections.synchronizedSet(new HashSet<>());
-    private final Timer timer = new Timer("repository-manager", true);
-    private final long updateInterval;
-    private Map<String, AlgorithmRepository> repositories;
-
-    public RepositoryManager(long updateInterval) {
-        this.updateInterval = updateInterval;
-    }
-
-
-    @Override
-    public void init() {
-        // clear registry
-        this.globalProcessIDs.clear();
-
-        // initialize all Repositories
-        loadAllRepositories();
-
-        this.timer.scheduleAtFixedRate(new ReloadTask(), this.updateInterval, this.updateInterval);
-
-
-    }
-
-    @Override
-    public void destroy() {
-        this.timer.cancel();
-        LOG.debug("Shutting down all repositories..");
-        getRepositories().forEach(AlgorithmRepository::destroy);
-    }
-
-    private Set<String> getRepositoryNames() {
-        return this.repositories.keySet();
-    }
-
-    private synchronized void loadAllRepositories() {
-        repositories = new HashMap<>();
-        LOG.debug("Loading all repositories: {} (doing a gc beforehand...)", repositories);
-
-        // TODO
-
-    }
-
-    private void loadRepository(String repositoryName, String repositoryClassName) {
-        LOG.debug("Loading repository: {}", repositoryName);
-        // if (repository.isActive() == false) {
-        // LOGGER.warn("Repository {} not active. Will not load it.",
-        // repositoryName);
-        // return;
-        // }
-
-        try {
-            AlgorithmRepository algorithmRepository = null;
-
-            Class<?> repositoryClass = RepositoryManager.class.getClassLoader().loadClass(repositoryClassName);
-
-            algorithmRepository = (AlgorithmRepository) repositoryClass.newInstance();
-
-            algorithmRepository.init();
-
-            LOG.info("Algorithm Repository {} initialized", repositoryClassName);
-            repositories.put(repositoryClassName, algorithmRepository);
-        } catch (Exception e) {
-            LOG.warn("An error occured while registering AlgorithmRepository: {}", repositoryClassName, e.getMessage());
-        }
-    }
+    private Set<AlgorithmRepository> repositories;
 
     private Stream<AlgorithmRepository> getRepositories() {
-        return getRepositoryNames().stream().map(repositories::get);
+        return this.repositories.stream();
     }
-    /**
-     * Allows to reInitialize the Repositories
-     *
-     */
-    protected void reloadRepositories() {
-//        loadAllRepositories();
+
+    @Inject
+    public void setRepositories(Set<AlgorithmRepository> repositories) {
+        this.repositories = repositories;
     }
 
     /**
@@ -136,10 +61,6 @@ public class RepositoryManager implements Constructable, Destroyable {
         return getRepositoryForAlgorithm(id).flatMap(r -> r.getAlgorithm(id));
     }
 
-    /**
-     *
-     * @return allAlgorithms
-     */
     public Set<OwsCode> getAlgorithms() {
         return getRepositories().flatMap(r -> r.getAlgorithmNames().stream()).collect(toSet());
     }
@@ -152,13 +73,13 @@ public class RepositoryManager implements Constructable, Destroyable {
         return getRepositories().filter(repo -> repo.containsAlgorithm(id)).findFirst();
     }
 
-    public ProcessInputDescription getInputForAlgorithm(OwsCode process, OwsCode input) {
-        return getProcessDescription(process).get().getInput(input);
+    public Optional<TypedProcessInputDescription<?>> getInputForAlgorithm(OwsCode process, OwsCode input) {
+        return getProcessDescription(process).map(x -> x.getInput(input));
 
     }
 
-    public ProcessOutputDescription getOutputForAlgorithm(OwsCode process, OwsCode output) {
-        return getProcessDescription(process).get().getOutput(output);
+    public Optional<TypedProcessOutputDescription<?>> getOutputForAlgorithm(OwsCode process, OwsCode output) {
+        return getProcessDescription(process).map(x -> x.getOutput(output));
     }
 
     public boolean registerAlgorithm(OwsCode id, AlgorithmRepository repository) {
@@ -169,40 +90,11 @@ public class RepositoryManager implements Constructable, Destroyable {
         return globalProcessIDs.remove(id);
     }
 
-    public AlgorithmRepository getAlgorithmRepository(String name) {
-        for (String repositoryClassName : getRepositoryNames()) {
-            AlgorithmRepository repository = repositories.get(repositoryClassName);
-            if (repository.getClass().getName().equals(name)) {
-                return repository;
-            }
-        }
-        return null;
-    }
-
-    public AlgorithmRepository getRepositoryForClassName(String className) {
-        for (String repositoryClassName : getRepositoryNames()) {
-            AlgorithmRepository repository = repositories.get(repositoryClassName);
-            if (repository.getClass().getName().equals(className)) {
-                return repository;
-            }
-        }
-        return null;
-    }
-
-    public Optional<ProcessDescription> getProcessDescription(String id) {
+    public Optional<TypedProcessDescription> getProcessDescription(String id) {
         return getProcessDescription(new OwsCode(id));
     }
 
-    public Optional<ProcessDescription> getProcessDescription(OwsCode id) {
+    public Optional<TypedProcessDescription> getProcessDescription(OwsCode id) {
         return getRepositoryForAlgorithm(id).flatMap(r -> r.getProcessDescription(id));
-    }
-
-    private class ReloadTask extends TimerTask {
-        @Override
-        public void run() {
-            LOG.info("Reloading repositories - this might take a while ...");
-            reloadRepositories();
-        }
-
     }
 }

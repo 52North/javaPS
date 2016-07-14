@@ -74,7 +74,7 @@ public class ProcessInputDecoderImpl implements ProcessInputDecoder {
         if (input.isGroup()) {
             return decodeGroup(description.asGroup(), input.asGroup());
         } else if (input.isReference()) {
-            return decodeRefernce(description, input.asReference());
+            return decodeReference(description, input.asReference());
         } else if (input.isValue()) {
             return decodeValueInput(description, input.asValue());
         } else {
@@ -87,7 +87,7 @@ public class ProcessInputDecoderImpl implements ProcessInputDecoder {
         return new GroupInputData(decodeContainer(description, input.getElements()));
     }
 
-    private Data<?> decodeRefernce(TypedProcessInputDescription<?> description, ReferenceProcessData input)
+    private Data<?> decodeReference(TypedProcessInputDescription<?> description, ReferenceProcessData input)
             throws InputDecodingException {
         ValueProcessData resolve;
         try {

@@ -38,7 +38,7 @@ public class IcelandOutputReferencer extends StaticURLOutputReferencer {
     @Setting(ServiceSettings.SERVICE_URL)
     public void setServiceURL(URI serviceUrl) {
         try {
-            setBaseURI(new URL(serviceUrl.toURL(), "outputs").toURI());
+            setBaseURI(new URL(serviceUrl.toURL(), "results").toURI());
         } catch (MalformedURLException | URISyntaxException ex) {
             throw new ConfigurationError(ex);
         }

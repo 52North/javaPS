@@ -21,7 +21,9 @@ import java.util.Collection;
 
 import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.iceland.ogc.wps.JobId;
+import org.n52.iceland.ogc.wps.JobStatus;
 import org.n52.iceland.ogc.wps.OutputDefinition;
+import org.n52.iceland.ogc.wps.Result;
 import org.n52.iceland.ogc.wps.description.typed.TypedProcessDescription;
 import org.n52.javaps.algorithm.ProcessInputs;
 import org.n52.javaps.algorithm.ProcessOutputs;
@@ -34,6 +36,8 @@ import org.n52.javaps.algorithm.ProcessOutputs;
 public interface ProcessExecutionContext {
 
     JobId getJobId();
+
+    JobStatus getJobStatus();
 
     default OwsCode getProcessId() {
         return getDescription().getId();
@@ -52,4 +56,6 @@ public interface ProcessExecutionContext {
     void setEstimatedCompletion(OffsetDateTime estimatedCompletion);
 
     void setNextPoll(OffsetDateTime nextPoll);
+
+    Result getResult() throws Throwable;
 }

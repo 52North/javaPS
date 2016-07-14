@@ -26,7 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.n52.iceland.ogc.ows.OwsCode;
-import org.n52.iceland.ogc.wps.description.ProcessDescription;
+import org.n52.iceland.ogc.wps.description.typed.TypedProcessDescription;
 
 public class ServiceLoaderAlgorithmRepository implements AlgorithmRepository {
 
@@ -70,7 +70,7 @@ public class ServiceLoaderAlgorithmRepository implements AlgorithmRepository {
     }
 
     @Override
-    public Optional<ProcessDescription> getProcessDescription(OwsCode processID) {
+    public Optional<TypedProcessDescription> getProcessDescription(OwsCode processID) {
         return getAlgorithm(processID).map(IAlgorithm::getDescription);
     }
 

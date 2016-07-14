@@ -16,24 +16,29 @@
  */
 package org.n52.javaps;
 
-
 import static java.util.stream.Collectors.toMap;
+import static java.util.stream.Collectors.toSet;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.function.Function;
@@ -51,13 +56,16 @@ import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.iceland.ogc.wps.DataTransmissionMode;
 import org.n52.iceland.ogc.wps.Format;
 import org.n52.iceland.ogc.wps.JobId;
+import org.n52.iceland.ogc.wps.JobStatus;
 import org.n52.iceland.ogc.wps.OutputDefinition;
 import org.n52.iceland.ogc.wps.Result;
+import org.n52.iceland.ogc.wps.StatusInfo;
 import org.n52.iceland.ogc.wps.data.Body;
 import org.n52.iceland.ogc.wps.data.FileBasedProcessData;
 import org.n52.iceland.ogc.wps.data.GroupProcessData;
 import org.n52.iceland.ogc.wps.data.ProcessData;
 import org.n52.iceland.ogc.wps.data.ReferenceProcessData;
+import org.n52.iceland.ogc.wps.data.ValueProcessData;
 import org.n52.iceland.util.Chain;
 import org.n52.iceland.util.JSONUtils;
 import org.n52.iceland.util.MoreFiles;
@@ -71,12 +79,12 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
  *
  * @author Christian Autermann
  */
-public class FileBasedResultManager implements ResultManager, Constructable, Destroyable {
+public class FileBasedResultPersistence implements ResultPersistence, Constructable, Destroyable {
     private static final String GROUP_TYPE = "group";
     private static final String REFERENCE_TYPE = "reference";
     private static final String VALUE_TYPE = "value";
     private static final String META_JSON_FILE_NAME = ".meta.json";
-    private static final Logger LOG = LoggerFactory.getLogger(FileBasedResultManager.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FileBasedResultPersistence.class);
     private Timer timer;
     private Path basePath;
     private Duration duration = Duration.ofHours(2);
@@ -117,33 +125,83 @@ public class FileBasedResultManager implements ResultManager, Constructable, Des
     }
 
     @Override
-    public Result getResult(JobId jobId) throws JobNotFoundException, IOException {
+    public void save(ProcessExecutionContext context) {
+        try {
+            String jobId = context.getJobId().getValue();
+            Path directory = Files.createDirectories(basePath.resolve(jobId));
+            OffsetDateTime expirationDate = getExpirationDate(directory);
 
-        Result result = new Result();
-        result.setJobId(jobId);
-        result.setExpirationDate(getExpirationDate(jobId));
+            ObjectNode rootNode = JSONUtils.nodeFactory().objectNode()
+                    .put(Keys.STATUS, context.getJobStatus().getValue())
+                    .put(Keys.JOB_ID, jobId)
+                    .put(Keys.EXPIRATION_DATE, expirationDate.toString());
 
-        JsonNode node = getJobMetadata(jobId);
+            try {
+                persist(directory,
+                        context.getResult().getOutputs(),
+                        context.getOutputDefinitions(),
+                        rootNode.putArray(Keys.OUTPUTS));
 
-        for (JsonNode outputNode : node.path(Keys.OUTPUTS)) {
-            OwsCode identifier = decodeIdentifier(outputNode);
-            OutputReference reference = new OutputReference(jobId, identifier);
-            result.addOutput(decodeOutput(reference, node, false));
+            } catch (Throwable ex) {
+                LOG.error("Error executing job " + context.getJobId(), ex);
+                rootNode.put(Keys.STATUS, JobStatus.failed().getValue());
+                rootNode.put(Keys.ERROR, persistFailureCause(directory, ex).toString());
+
+            }
+
+            Files.write(directory.resolve(META_JSON_FILE_NAME),
+                        JSONUtils.print(rootNode).getBytes(StandardCharsets.UTF_8));
+        } catch (IOException ex) {
+            LOG.error("Error writing result for job " + context.getJobId(), ex);
         }
-
-        return result;
     }
 
     @Override
-    public void saveResult(Result result, Collection<OutputDefinition> outputDefinitions)
-            throws IOException, EncodingException {
-        String jobId = result.getJobId().get().getValue();
-        Path directory = Files.createDirectories(basePath.resolve(jobId));
-        ObjectNode rootNode = JSONUtils.nodeFactory().objectNode();
-        rootNode.put(Keys.JOB_ID, jobId);
-        rootNode.put(Keys.EXPIRATION_DATE, getExpirationDate(directory).toString());
-        persist(directory, result.getOutputs(), outputDefinitions, rootNode.putArray(Keys.OUTPUTS));
-        Files.write(directory.resolve(META_JSON_FILE_NAME), JSONUtils.print(rootNode).getBytes(StandardCharsets.UTF_8));
+    public StatusInfo getStatus(JobId jobId) throws EngineException, JobNotFoundException {
+
+        try {
+            JsonNode jobMetadata = getJobMetadata(jobId);
+            OffsetDateTime expirationDate = getExpirationDate(jobId);
+
+            StatusInfo statusInfo = new StatusInfo();
+            statusInfo.setJobId(jobId);
+            statusInfo.setExpirationDate(expirationDate);
+            statusInfo.setStatus(new JobStatus(jobMetadata.path(Keys.STATUS).textValue()));
+            return statusInfo;
+        } catch (IOException ex) {
+            throw new EngineException(ex);
+        }
+    }
+
+    @Override
+    public Result getResult(JobId jobId) throws JobNotFoundException, EngineException {
+
+        try {
+            Result result = new Result();
+            result.setJobId(jobId);
+            result.setExpirationDate(getExpirationDate(jobId));
+
+            JsonNode node = getJobMetadata(jobId);
+
+            if (JobStatus.failed().getValue().equals(node.path(Keys.STATUS).textValue())) {
+                Path path = Paths.get(node.path(Keys.ERROR).textValue());
+                try (ObjectInputStream in = new ObjectInputStream(Files.newInputStream(path))) {
+                    throw new EngineException((Throwable) in.readObject());
+                } catch (ClassNotFoundException ex) {
+                    throw new EngineException(ex);
+                }
+            }
+
+            for (JsonNode outputNode : node.path(Keys.OUTPUTS)) {
+                OwsCode identifier = decodeIdentifier(outputNode);
+                OutputReference reference = new OutputReference(jobId, identifier);
+                result.addOutput(decodeOutput(reference, outputNode, false));
+            }
+
+            return result;
+        } catch (IOException ex) {
+            throw new EngineException(ex);
+        }
     }
 
     private OffsetDateTime getExpirationDate(Path directory) throws IOException {
@@ -162,8 +220,8 @@ public class FileBasedResultManager implements ResultManager, Constructable, Des
 
     private Format decodeFormat(JsonNode node) {
         return new Format(node.path(Keys.MIME_TYPE).textValue(),
-                          node.path(Keys.SCHEMA).textValue(),
-                          node.path(Keys.ENCODING).textValue());
+                          node.path(Keys.ENCODING).textValue(),
+                          node.path(Keys.SCHEMA).textValue());
     }
 
     private void persist(Path directory, List<ProcessData> outputs, Collection<OutputDefinition> outputDefinitions,
@@ -196,13 +254,14 @@ public class FileBasedResultManager implements ResultManager, Constructable, Des
                     }
                 }
             } else if (data.isValue()) {
+                ValueProcessData valueData = data.asValue();
                 outputNode.put(Keys.TYPE, VALUE_TYPE);
                 outputNode.put(Keys.DATA_TRANSMISSION_MODE, definition.getDataTransmissionMode().toString());
-                encodeFormat(data.asReference().getFormat(), outputNode.putObject(Keys.FORMAT));
+                encodeFormat(valueData.getFormat(), outputNode.putObject(Keys.FORMAT));
                 Path outputFile = Files.createTempFile(directory, null, null);
                 outputNode.put(Keys.FILE, outputFile.toString());
-                try (InputStream in = data.asValue().getData()) {
-                    Files.copy(in, outputFile);
+                try (InputStream in = valueData.getData()) {
+                    Files.copy(in, outputFile, StandardCopyOption.REPLACE_EXISTING);
                 }
             }
         }
@@ -227,8 +286,12 @@ public class FileBasedResultManager implements ResultManager, Constructable, Des
 
     @Override
     public ProcessData getOutput(OutputReference reference)
-            throws JobNotFoundException, OutputNotFoundException, IOException {
-        return getOutput(reference, reference.getOutputId(), getJobMetadata(reference.getJobId()).path(Keys.OUTPUTS));
+            throws EngineException {
+        try {
+            return getOutput(reference, reference.getOutputId(), getJobMetadata(reference.getJobId()).path(Keys.OUTPUTS));
+        } catch (IOException ex) {
+            throw new EngineException(ex);
+        }
     }
 
     private ProcessData getOutput(OutputReference reference, Chain<OwsCode> tail, JsonNode outputs)
@@ -285,7 +348,9 @@ public class FileBasedResultManager implements ResultManager, Constructable, Des
 
     private ProcessData decodeValueData(OutputReference reference, JsonNode node,
                                         boolean dereference) {
-        DataTransmissionMode mode = DataTransmissionMode.valueOf(node.path(Keys.DATA_TRANSMISSION_MODE).textValue());
+        DataTransmissionMode mode = DataTransmissionMode
+                .fromString(node.path(Keys.DATA_TRANSMISSION_MODE).textValue())
+                .orElse(DataTransmissionMode.VALUE);
         Format format = decodeFormat(node.path(Keys.FORMAT));
         if (dereference || mode == DataTransmissionMode.VALUE || !this.referencer.isPresent()) {
             Path path = Paths.get(node.path(Keys.FILE).textValue());
@@ -305,6 +370,30 @@ public class FileBasedResultManager implements ResultManager, Constructable, Des
             groupProcessData.addElement(childOutput);
         }
         return groupProcessData;
+    }
+
+    private Path persistFailureCause(Path directory, Throwable ex) throws IOException {
+        Path outputFile = Files.createTempFile(directory, null, null);
+        try (ObjectOutputStream out = new ObjectOutputStream(Files.newOutputStream(outputFile))) {
+            out.writeObject(ex);
+        }
+        return outputFile;
+    }
+
+    @Override
+    public Set<JobId> getJobIds() {
+        try {
+            return Files.list(this.basePath)
+                    .filter(Files::isDirectory)
+                    .map(Path::getFileName)
+                    .filter(Objects::nonNull)
+                    .map(Path::toString)
+                    .map(JobId::new)
+                    .collect(toSet());
+        } catch (IOException ex) {
+            LOG.error("Could not list " + basePath, ex);
+            return Collections.emptySet();
+        }
     }
 
     private static Optional<OffsetDateTime> getLastModifiedTime(Path directory) {
@@ -362,6 +451,8 @@ public class FileBasedResultManager implements ResultManager, Constructable, Des
     }
 
     private static interface Keys {
+        String ERROR = "error";
+        String STATUS = "status";
         String FORMAT = "format";
         String ENCODING = "encoding";
         String HREF = "href";
