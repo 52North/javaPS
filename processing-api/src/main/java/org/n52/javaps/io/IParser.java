@@ -14,16 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps;
+package org.n52.javaps.io;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.InputStream;
+
+import org.n52.javaps.commons.WPSConfig;
+import org.n52.javaps.io.data.IData;
 
 /**
- * @author Christian Autermann
+ * @author Matthias Mueller, TU Dresden
+ *
  */
-public class ProcessDescription {
+public interface IParser extends IOHandler {
 
-    private static final Logger log = LoggerFactory.getLogger(ProcessDescription.class);
+    IData parse(InputStream input,
+            String mimeType,
+            String schema);
 
+    IData parseBase64(InputStream input,
+            String mimeType,
+            String schema);
+
+    void init(WPSConfig wpsConfig);
 }

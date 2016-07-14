@@ -20,10 +20,16 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.request.AbstractServiceRequest;
+import org.n52.javaps.algorithm.ProcessDescription;
+import org.n52.javaps.algorithm.RepositoryManager;
+import org.n52.javaps.algorithm.descriptor.AlgorithmDescriptor;
 import org.n52.javaps.ogc.wps.WPSConstants;
 import org.n52.javaps.response.DescribeProcessResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class DescribeProcessRequest extends
         AbstractServiceRequest<DescribeProcessResponse> {
@@ -35,7 +41,10 @@ public class DescribeProcessRequest extends
     @Override
     public DescribeProcessResponse getResponse()
             throws OwsExceptionReport {
-        return (DescribeProcessResponse) new DescribeProcessResponse().set(this);
+
+        DescribeProcessResponse describeProcessResponse = (DescribeProcessResponse) new DescribeProcessResponse().set(this);
+
+        return describeProcessResponse;
     }
 
     @Override

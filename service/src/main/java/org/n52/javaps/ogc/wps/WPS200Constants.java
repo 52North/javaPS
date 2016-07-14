@@ -16,9 +16,29 @@
  */
 package org.n52.javaps.ogc.wps;
 
+import org.n52.iceland.w3c.SchemaLocation;
+
 /**
  * @author Christian Autermann
  */
 public interface WPS200Constants {
-    String VERSION = "2.0.0";
+
+    String NS_WPS2 = "http://www.opengis.net/wps/2.0";
+
+    /** Constant for the schema repository of the WPS */
+    String SCHEMA_LOCATION_WPS2 = "http://schemas.opengis.net/wps/2.0/wps.xsd";
+
+    SchemaLocation WPS2_SCHEMA_LOCATION = new SchemaLocation(NS_WPS2, SCHEMA_LOCATION_WPS2);
+
+    String SERVICEVERSION = "2.0.0";
+
+    String JOB_CONTROL_OPTION_SYNC_EXECUTE = "sync-execute";
+    String JOB_CONTROL_OPTION_ASYNC_EXECUTE = "async-execute";
+
+    String JOB_CONTROL_OPTIONS_SEPARATOR = " ";
+
+    String OUTPUT_TRANSMISSION_VALUE = "value";
+    String OUTPUT_TRANSMISSION_REFERENCE = "reference";
+
+    String OUTPUT_TRANSMISSIONS_SEPARATOR = " ";
 }

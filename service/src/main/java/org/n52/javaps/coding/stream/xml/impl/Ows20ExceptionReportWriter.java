@@ -87,7 +87,7 @@ public class Ows20ExceptionReportWriter extends AbstractXmlStreamWriter<OwsExcep
         }
         if (includeStackTraceInExceptionReport) {
             start(QN_EXCEPTION_TEXT);
-            chars("[EXEPTION]: \n");
+            chars("[EXCEPTION]: \n");
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             exception.printStackTrace(new PrintStream(os));
             chars(os.toString());

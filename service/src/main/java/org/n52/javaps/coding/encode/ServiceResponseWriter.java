@@ -65,7 +65,7 @@ public class ServiceResponseWriter implements ResponseWriter<AbstractServiceResp
         try {
             streamWriterRepository.getWriter(new StreamWriterKey(t.getClass(), t.getContentType()))
                     .orElseThrow(() -> new NoApplicableCodeException()
-                            .withMessage("No response encoder forund for %s",
+                            .withMessage("No response encoder found for %s",
                                          t.getClass()))
                     .write(t, out);
         } catch (XMLStreamException ex) {
