@@ -19,32 +19,22 @@ package org.n52.javaps.request;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
-import javax.inject.Inject;
-
-import org.n52.iceland.exception.ows.OwsExceptionReport;
+import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.iceland.ogc.wps.WPSConstants;
 import org.n52.iceland.request.AbstractServiceRequest;
-import org.n52.javaps.algorithm.ProcessDescription;
-import org.n52.javaps.algorithm.RepositoryManager;
-import org.n52.javaps.algorithm.descriptor.AlgorithmDescriptor;
-import org.n52.javaps.ogc.wps.WPSConstants;
 import org.n52.javaps.response.DescribeProcessResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class DescribeProcessRequest extends
         AbstractServiceRequest<DescribeProcessResponse> {
+    public static final String ALL_KEYWORD = "ALL";
 
-    private List<String> identifiers = new LinkedList<>();
-
-    private boolean all = false;
+    private final List<OwsCode> identifiers = new LinkedList<>();
 
     @Override
-    public DescribeProcessResponse getResponse()
-            throws OwsExceptionReport {
-
-        DescribeProcessResponse describeProcessResponse = (DescribeProcessResponse) new DescribeProcessResponse().set(this);
-
-        return describeProcessResponse;
+    public DescribeProcessResponse getResponse() {
+        return (DescribeProcessResponse) new DescribeProcessResponse().set(this);
     }
 
     @Override
@@ -52,17 +42,22 @@ public class DescribeProcessRequest extends
         return WPSConstants.Operations.DescribeProcess.name();
     }
 
-    public List<String> getProcessIdentifier() {
+    public List<OwsCode> getProcessIdentifier() {
         return Collections.unmodifiableList(identifiers);
     }
 
     public void addProcessIdentifier(String identifier) {
-        this.identifiers.add(identifier);
+        addProcessIdentifier(new OwsCode(identifier));
+    }
+
+    public void addProcessIdentifier(OwsCode identifier) {
+        this.identifiers.add(Objects.requireNonNull(identifier));
     }
 
     public boolean isAll() {
-        return getProcessIdentifier().stream().anyMatch(id -> id
-                .equalsIgnoreCase("ALL"));
+        return getProcessIdentifier().stream()
+                .filter(id -> !id.getCodeSpace().isPresent())
+                .anyMatch(id -> id.getValue().equalsIgnoreCase(ALL_KEYWORD));
     }
 
 }

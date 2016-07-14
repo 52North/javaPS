@@ -41,12 +41,12 @@ public class ServiceResponseWriterFactory implements ResponseWriterFactory {
 
     @Override
     public Set<ResponseWriterKey> getKeys() {
-        return Collections.singleton(ServiceResponseWriter.KEY);
+        return Collections.singleton(StreamingServiceResponseWriter.KEY);
     }
 
     @Override
     public ResponseWriter<?> create(ResponseWriterKey key) {
-        return new ServiceResponseWriter(responseWriterFactory);
+        return new StreamingServiceResponseWriter(responseWriterFactory);
     }
 
 }

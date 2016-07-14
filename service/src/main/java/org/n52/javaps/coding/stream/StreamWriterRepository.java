@@ -17,10 +17,14 @@
 package org.n52.javaps.coding.stream;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Optional;
+
+import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.n52.iceland.component.AbstractSimilarityKeyRepository;
 import org.n52.iceland.lifecycle.Constructable;
 import org.n52.iceland.util.http.MediaType;
 
@@ -30,27 +34,28 @@ import org.n52.iceland.util.http.MediaType;
  * @author Christian Autermann
  */
 public class StreamWriterRepository
-        extends AbstractSimilarityKeyRepository<StreamWriterKey, StreamWriter<?>, StreamWriterFactory>
+        extends AbstractSimilarityKeyRepository<StreamWriterKey, StreamWriter<?>>
         implements Constructable {
 
-    @Autowired(required = false)
-    private Collection<StreamWriter<?>> writers;
-    @Autowired(required = false)
-    private Collection<StreamWriterFactory> writerFactories;
+    private Collection<Provider<StreamWriter<?>>> writers;
 
     @Override
     public void init() {
-        setProducers(getProviders(writers, writerFactories));
+        Objects.requireNonNull(this.writers);
+        setProducers(this.writers);
     }
 
-    public <T> Optional<StreamWriter<T>> getWriter(MediaType mediaType, Class<? extends T> type) {
+    public <T> Optional<StreamWriter<? super T>> getWriter(MediaType mediaType, Class<? extends T> type) {
         return getWriter(new StreamWriterKey(type, mediaType));
     }
 
-    public <T> Optional<StreamWriter<T>> getWriter(StreamWriterKey key) {
-        @SuppressWarnings("unchecked")
-        StreamWriter<T> writer = (StreamWriter<T>) get(key);
-        return Optional.ofNullable(writer);
+    @SuppressWarnings("unchecked")
+    public <T> Optional<StreamWriter<? super T>> getWriter(StreamWriterKey key) {
+        return get(key).map(x -> (StreamWriter<T>) x);
     }
 
+    @Autowired(required = false)
+    public void set(Collection<Provider<StreamWriter<?>>> writers) {
+        this.writers = writers;
+    }
 }

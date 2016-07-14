@@ -16,10 +16,11 @@
  */
 package org.n52.javaps.algorithm;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
-import org.n52.javaps.io.data.IData;
+import org.n52.iceland.ogc.wps.description.typed.TypedProcessDescription;
+import org.n52.javaps.ProcessExecutionContext;
 
 /**
  * @author Bastian Schaeffer, University of Muenster, Theodor Foerster, ITC
@@ -27,36 +28,12 @@ import org.n52.javaps.io.data.IData;
  */
 public interface IAlgorithm {
 
-    Map<String, IData> run(Map<String, List<IData>> inputData) throws Exception;// TODO
-                                                                                // was
-                                                                                // ExceptionReport
+    void execute(ProcessExecutionContext context) throws ExecutionException;
 
-    List<String> getErrors();
+    @Deprecated
+    default List<String> getErrors() {
+        return Collections.emptyList();
+    }
 
-    ProcessDescription getDescription();// TODO could be replaced by
-                                        // descriptor..
-
-    /**
-     * Returns some well-known name for the process.
-     *
-     * @return Returns some well-known name for the process or algorithm if that
-     *         exists, else returns an empty String, never null. The
-     *         fully-qualified class name is gotten via getName();
-     */
-    String getWellKnownName();
-
-    /**
-     * Checks if the processDescription complies to the process itself and fits
-     * any schema or other dependencies.
-     *
-     * @param version
-     *            The version of the ProcessDescription to check
-     * @return true if the ProcessDescription is valid, false otherwise
-     */
-    boolean processDescriptionIsValid(String version);
-
-    Class<?> getInputDataType(String id);
-
-    Class<?> getOutputDataType(String id);
-
+    TypedProcessDescription getDescription();
 }

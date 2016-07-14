@@ -22,9 +22,6 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  *
  * @author Benjamin Pross, Daniel Nüst
@@ -35,8 +32,6 @@ public class WPSConfig implements Serializable {
     private static final long serialVersionUID = 3198223084611936675L;
 
     private static transient WPSConfig wpsConfig;
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(WPSConfig.class);
 
     // constants for the Property change event names
     public static final String WPSCONFIG_PROPERTY_EVENT_NAME = "WPSConfigUpdate";
@@ -60,19 +55,7 @@ public class WPSConfig implements Serializable {
 
     public static final String VERSION_200 = "2.0.0";
 
-    public static final List<String> SUPPORTED_VERSIONS = Arrays.asList(new String[] { VERSION_100, VERSION_200 });
-
-    public static final String JOB_CONTROL_OPTION_SYNC_EXECUTE = "sync-execute";
-
-    public static final String JOB_CONTROL_OPTION_ASYNC_EXECUTE = "async-execute";
-
-    public static final String JOB_CONTROL_OPTIONS_SEPARATOR = " ";
-
-    public static final String OUTPUT_TRANSMISSION_VALUE = "value";
-
-    public static final String OUTPUT_TRANSMISSION_REFERENCE = "reference";
-
-    public static final String OUTPUT_TRANSMISSIONS_SEPARATOR = " ";
+    public static final List<String> SUPPORTED_VERSIONS = Arrays.asList(new String[] { VERSION_200 });
 
     /**
      * returns an instance of the WPSConfig class. WPSConfig is a single. If

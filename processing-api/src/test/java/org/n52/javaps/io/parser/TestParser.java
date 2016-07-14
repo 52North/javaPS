@@ -16,18 +16,21 @@
  */
 package org.n52.javaps.io.parser;
 
+import java.io.IOException;
 import java.io.InputStream;
 
+import org.n52.iceland.ogc.wps.Format;
+import org.n52.iceland.ogc.wps.description.typed.TypedProcessInputDescription;
 import org.n52.javaps.annotation.Properties;
-import org.n52.javaps.io.data.IData;
+import org.n52.javaps.io.AbstractPropertiesInputOutputHandler;
+import org.n52.javaps.io.Data;
+import org.n52.javaps.io.InputHandler;
 
-@Properties(defaultPropertyFileName="testparser.json")
-public class TestParser extends AbstractParser {
-
+@Properties(defaultPropertyFileName = "testparser.json")
+public class TestParser extends AbstractPropertiesInputOutputHandler implements InputHandler {
     @Override
-    public IData parse(InputStream input,
-            String mimeType,
-            String schema) {
+    public Data<?> parse(TypedProcessInputDescription<?> description, InputStream input, Format format)
+            throws IOException {
         return null;
     }
 

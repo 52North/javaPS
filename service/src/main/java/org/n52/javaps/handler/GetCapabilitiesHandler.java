@@ -16,51 +16,42 @@
  */
 package org.n52.javaps.handler;
 
-import java.util.Collections;
-import java.util.Set;
+import static java.util.stream.Collectors.toSet;
 
-import org.n52.iceland.ds.OperationHandlerKey;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.ows.OwsOperation;
-import org.n52.iceland.request.GetCapabilitiesRequest;
-import org.n52.iceland.response.GetCapabilitiesResponse;
-import org.n52.javaps.ogc.wps.WPSCapabilities;
-import org.n52.javaps.ogc.wps.WPSConstants;
+import javax.inject.Inject;
+
+import org.n52.iceland.ogc.ows.OwsCapabilities;
+import org.n52.iceland.ogc.wps.ProcessOffering;
+import org.n52.iceland.ogc.wps.ProcessOfferings;
+import org.n52.iceland.ogc.wps.WPSCapabilities;
+import org.n52.iceland.ogc.wps.WPSConstants;
+import org.n52.iceland.request.handler.AbstractGetCapabilitiesHandler;
+import org.n52.javaps.Engine;
 
 /**
  * TODO JavaDoc
+ *
  * @author Christian Autermann
  */
-public class GetCapabilitiesHandler implements GenericHandler<GetCapabilitiesRequest, GetCapabilitiesResponse>{
+public class GetCapabilitiesHandler extends AbstractGetCapabilitiesHandler<ProcessOfferings> {
+    private Engine engine;
 
-    @Override
-    public GetCapabilitiesResponse handler(GetCapabilitiesRequest request) throws OwsExceptionReport {
+    public GetCapabilitiesHandler() {
+        super(WPSConstants.SERVICE);
+    }
 
-        WPSCapabilities capabilities = new WPSCapabilities(request.getVersion());
-
-        GetCapabilitiesResponse response = request.getResponse();
-
-        response.setCapabilities(capabilities);
-
-        return response;
-
-//        throw new InvalidParameterValueException("param", "the value");
+    @Inject
+    public void setEngine(Engine engine) {
+        this.engine = engine;
     }
 
     @Override
-    public String getOperationName() {
-        return WPSConstants.Operations.GetCapabilities.toString();
+    protected ProcessOfferings createContents(String service, String version) {
+        return new ProcessOfferings(engine.getProcessDescriptions().stream().map(ProcessOffering::new).collect(toSet()));
     }
 
     @Override
-    public OwsOperation getOperationsMetadata(String service, String version)
-            throws OwsExceptionReport {
-        return new OwsOperation();
+    protected OwsCapabilities createCapabilities(OwsCapabilities capabilities, ProcessOfferings processOfferings) {
+        return new WPSCapabilities(capabilities, processOfferings);
     }
-
-    @Override
-    public Set<OperationHandlerKey> getKeys() {
-        return Collections.singleton(new OperationHandlerKey(WPSConstants.SERVICE, WPSConstants.Operations.GetCapabilities.toString()));
-    }
-
 }

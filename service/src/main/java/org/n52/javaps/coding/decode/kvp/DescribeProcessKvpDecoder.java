@@ -19,19 +19,21 @@ package org.n52.javaps.coding.decode.kvp;
 import java.util.Collections;
 import java.util.Set;
 
+import org.n52.iceland.binding.kvp.AbstractKvpDecoder;
 import org.n52.iceland.coding.decode.DecoderKey;
-import org.n52.iceland.exception.ows.InvalidParameterValueException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
+import org.n52.iceland.ogc.wps.WPS200Constants;
+import org.n52.iceland.ogc.wps.WPSConstants;
 import org.n52.iceland.util.KvpHelper;
-import org.n52.javaps.ogc.wps.WPS200Constants;
-import org.n52.javaps.ogc.wps.WPSConstants;
 import org.n52.javaps.request.DescribeProcessRequest;
 
 public class DescribeProcessKvpDecoder extends AbstractKvpDecoder<DescribeProcessRequest> {
     private static final DecoderKey KEY
-            = createKey(WPSConstants.SERVICE,
-                        WPS200Constants.SERVICEVERSION,
-                        WPSConstants.Operations.DescribeProcess.toString());
+            = createKey(WPSConstants.SERVICE, WPS200Constants.VERSION, WPSConstants.Operations.DescribeProcess);
+    private static final String SERVICE = "service";
+    private static final String VERSION = "version";
+    private static final String REQUEST = "request";
+    private static final String IDENTIFIER = "identifier";
 
     @Override
     public Set<DecoderKey> getKeys() {
@@ -48,24 +50,20 @@ public class DescribeProcessKvpDecoder extends AbstractKvpDecoder<DescribeProces
                                    String value)
             throws OwsExceptionReport {
         switch (name.toLowerCase()) {
-            case "service":
-                request.setService(KvpHelper
-                        .checkParameterSingleValue(value, name));
+            case SERVICE:
+                request.setService(KvpHelper.checkParameterSingleValue(value, name));
                 break;
-            case "version":
-                request.setVersion(KvpHelper
-                        .checkParameterSingleValue(value, name));
+            case VERSION:
+                request.setVersion(KvpHelper.checkParameterSingleValue(value, name));
                 break;
-            case "identifier":
-                KvpHelper.checkParameterMultipleValues(value, name)
-                        .stream().forEach(request::addProcessIdentifier);
-                break;
-            case "request":
+            case REQUEST:
                 KvpHelper.checkParameterSingleValue(value, name);
                 break;
+            case IDENTIFIER:
+                KvpHelper.checkParameterMultipleValues(value, name).stream().forEach(request::addProcessIdentifier);
+                break;
             default:
-                throw new InvalidParameterValueException(name, value)
-                        .withMessage("The parameter '%s' is not supported.", name);
+                throw unsupportedParameter(name, value);
         }
     }
 

@@ -18,9 +18,8 @@ package org.n52.javaps.coding.stream;
 
 import java.io.OutputStream;
 
-import javax.xml.stream.XMLStreamException;
-
 import org.n52.iceland.component.Component;
+import org.n52.iceland.exception.ows.OwsExceptionReport;
 
 /**
  * @author Christian Autermann
@@ -28,5 +27,5 @@ import org.n52.iceland.component.Component;
 public interface StreamWriter<T> extends Component<StreamWriterKey> {
 
     void write(T object, OutputStream stream)
-            throws XMLStreamException;
+            throws OwsExceptionReport;
 }

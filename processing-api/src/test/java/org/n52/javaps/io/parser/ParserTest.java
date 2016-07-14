@@ -16,10 +16,11 @@
  */
 package org.n52.javaps.io.parser;
 
-import java.util.List;
+import java.util.Set;
 
 import org.junit.Test;
-import org.n52.javaps.io.Format;
+
+import org.n52.iceland.ogc.wps.Format;
 
 public class ParserTest {
 
@@ -28,7 +29,7 @@ public class ParserTest {
 
         TestParser testParser = new TestParser();
 
-        List<Format> formats = testParser.getSupportedFormats();
+        Set<Format> formats = testParser.getSupportedFormats();
 
         assert(formats != null);
 
