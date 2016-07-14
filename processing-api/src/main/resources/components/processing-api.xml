@@ -48,6 +48,11 @@
                 <constructor-arg value="PT2H" />
             </bean>
         </property>
+        <property name="checkInterval">
+            <bean class="java.time.Duration" factory-method="parse">
+                <constructor-arg value="PT1H" />
+            </bean>
+        </property>
         <property name="basePath">
             <bean class="java.nio.file.Paths" factory-method="get">
                 <constructor-arg value="/tmp/wps/outputs" />

@@ -48,7 +48,9 @@
     <bean id="getResultKvpDecoder" class="org.n52.javaps.coding.decode.kvp.GetResultKvpDecoder"/>
     <bean id="getStatusKvpDecoder" class="org.n52.javaps.coding.decode.kvp.GetStatusKvpDecoder"/>
 
-    <bean id="owsExceptionReportWriter" class="org.n52.javaps.coding.stream.xml.impl.OwsExceptionReportWriter"/>
+    <bean id="owsExceptionReportWriter" class="org.n52.javaps.coding.stream.xml.impl.OwsExceptionReportWriter">
+        <property name="includeStackTraceInExceptionReport" value="false" />
+    </bean>
     <bean id="owsExceptionReportEncoder" class="org.n52.javaps.coding.encode.OwsExceptionReportEncoder"/>
 
     <!-- element writers -->

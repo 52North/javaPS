@@ -34,10 +34,14 @@ import org.n52.javaps.response.OwsExceptionReportResponse;
  * @author Christian Autermann
  */
 public class OwsExceptionReportWriter extends AbstracSingleElementXmlStreamWriter<OwsExceptionReportResponse> {
-    private final boolean includeStackTraceInExceptionReport = true;
+    private boolean includeStackTraceInExceptionReport = false;
 
     public OwsExceptionReportWriter() {
         super(OwsExceptionReportResponse.class);
+    }
+
+    public void setIncludeStackTraceInExceptionReport(boolean include) {
+        this.includeStackTraceInExceptionReport = include;
     }
 
     @Override

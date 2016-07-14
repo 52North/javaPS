@@ -17,8 +17,10 @@
 package org.n52.javaps.operator.validation;
 
 import static org.n52.iceland.util.MoreCollectors.toCardinalities;
+import static org.n52.iceland.util.MoreCollectors.toDuplicateStream;
 
 import java.math.BigInteger;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -121,7 +123,7 @@ public class ExecuteParameterValidator
                 Optional.ofNullable(occurences.get(chain)).filter(occurence -> !occurence.isInBounds(cardinality))
                 .ifPresent(occurence -> exception.add(new InvalidParameterValueException().at(INPUT)
                         .withMessage("The input %s has an invalid cardinality of %s; should be in %s.",
-                                     chain.toString(), occurence, cardinality))));
+                                     chain.toString(), cardinality, occurence))));
 
         // check for missing inputs
         occurences.forEach((chain, occurence) -> {
@@ -158,9 +160,12 @@ public class ExecuteParameterValidator
         exception.throwIfNotEmpty();
     }
 
-    private void validateOutputs(Iterable<OutputDefinition> outputs, ProcessOutputDescriptionContainer processDescription)
+    private void validateOutputs(Collection<OutputDefinition> outputs, ProcessOutputDescriptionContainer processDescription)
             throws OwsExceptionReport {
         CompositeOwsException exception = new CompositeOwsException();
+
+        outputs.stream().map(OutputDefinition::getId).collect(toDuplicateStream())
+                .map(ExecuteParameterValidator::duplicateOutput).forEach(exception::add);
 
         for (OutputDefinition output : outputs) {
             ProcessOutputDescription description = processDescription.getOutput(output.getId());
@@ -259,15 +264,20 @@ public class ExecuteParameterValidator
     private static OwsExceptionReport invalidInput(ProcessData input, String messageDetail) {
         String id = input.getId().getValue();
         String message = "The value '%s' of the parameter '%s' is invalid: %s";
-        return new InvalidParameterValueException()
-                .withMessage(message, id, INPUT, messageDetail).at(INPUT);
+        return new InvalidParameterValueException().at(INPUT)
+                .withMessage(message, id, INPUT, messageDetail);
     }
 
     private static OwsExceptionReport invalidOutput(OutputDefinition output, String messageDetail) {
         String id = output.getId().getValue();
         String message = "The value '%s' of the parameter '%s' is invalid: %s";
-        return new InvalidParameterValueException()
-                .withMessage(message, id, OUTPUT, messageDetail).at(OUTPUT);
+        return new InvalidParameterValueException().at(OUTPUT)
+                .withMessage(message, id, OUTPUT, messageDetail);
+    }
+
+    private static OwsExceptionReport duplicateOutput(OwsCode id) {
+        return new InvalidParameterValueException().at(OUTPUT)
+                .withMessage("Duplicate output definition for output %s", id);
     }
 
     private static class OutputFormatValidator implements ProcessOutputDescription.ThrowingVisitor<OwsExceptionReport> {
