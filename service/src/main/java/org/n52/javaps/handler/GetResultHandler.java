@@ -29,10 +29,12 @@ import org.n52.iceland.exception.ows.InvalidParameterValueException;
 import org.n52.iceland.exception.ows.NoApplicableCodeException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.ogc.wps.JobId;
+import org.n52.iceland.ogc.wps.ResponseMode;
 import org.n52.iceland.ogc.wps.Result;
 import org.n52.iceland.ogc.wps.WPSConstants;
 import org.n52.iceland.request.handler.GenericOperationHandler;
 import org.n52.iceland.request.handler.OperationHandlerKey;
+import org.n52.iceland.util.http.MediaType;
 import org.n52.javaps.Engine;
 import org.n52.javaps.EngineException;
 import org.n52.javaps.JobNotFoundException;
@@ -64,8 +66,13 @@ public class GetResultHandler extends AbstractJobHandler
 
         try {
             Future<Result> result = getEngine().getResult(jobId);
+            GetResultResponse response = new GetResultResponse(service, version, result.get());
 
-            return new GetResultResponse(service, version, result.get());
+            if (response.getResult().getResponseMode() == ResponseMode.RAW) {
+                response.setContentType(new MediaType());
+            }
+
+            return response;
         } catch (JobNotFoundException ex) {
             throw new InvalidParameterValueException(JOB_ID, jobId.getValue()).causedBy(ex);
         } catch (InterruptedException | EngineException ex) {

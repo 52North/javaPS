@@ -35,7 +35,6 @@ import java.util.Set;
 public abstract class AbstractInputOutputHandler implements InputOutputHandler {
     private final Set<Class<? extends Data<?>>> supportedBindings;
 
-
     public AbstractInputOutputHandler() {
         this.supportedBindings = new LinkedHashSet<>();
     }

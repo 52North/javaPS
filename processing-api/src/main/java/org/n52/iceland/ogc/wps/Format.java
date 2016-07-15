@@ -31,6 +31,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import org.n52.iceland.util.Optionals;
+import org.n52.iceland.util.http.MediaType;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableSet;
@@ -240,10 +241,17 @@ public class Format implements Comparable<Format> {
         return this::hasMimeType;
     }
 
-    public boolean isCompatible(Format other) {
-        return (!this.hasEncoding() || this.hasEncoding(other)) &&
-               (!this.hasSchema() || this.hasSchema(other)) &&
-               (!this.hasMimeType() || this.hasMimeType(other));
+    public boolean isCompatible(Format that) {
+        if (!((!this.hasEncoding() && (!that.hasEncoding() || that.isCharacterEncoding())) || this.hasEncoding(that))) {
+            return false;
+        }
+
+
+        if (!MediaType.parse(that.getMimeType().orElse("*/*")).isCompatible(MediaType.parse(this.getMimeType().orElse("*/*")))) {
+            return false;
+        }
+
+        return (!this.hasSchema() || this.hasSchema(that));
     }
 
     public void setTo(Consumer<String> encoding, Consumer<String> mimeType, Consumer<String> schema) {

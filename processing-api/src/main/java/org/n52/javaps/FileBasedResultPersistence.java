@@ -58,6 +58,7 @@ import org.n52.iceland.ogc.wps.Format;
 import org.n52.iceland.ogc.wps.JobId;
 import org.n52.iceland.ogc.wps.JobStatus;
 import org.n52.iceland.ogc.wps.OutputDefinition;
+import org.n52.iceland.ogc.wps.ResponseMode;
 import org.n52.iceland.ogc.wps.Result;
 import org.n52.iceland.ogc.wps.StatusInfo;
 import org.n52.iceland.ogc.wps.data.Body;
@@ -125,7 +126,7 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
     }
 
     @Override
-    public void save(ProcessExecutionContext context) {
+    public void save(EngineProcessExecutionContext context) {
         try {
             String jobId = context.getJobId().getValue();
             Path directory = Files.createDirectories(basePath.resolve(jobId));
@@ -134,11 +135,12 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
             ObjectNode rootNode = JSONUtils.nodeFactory().objectNode()
                     .put(Keys.STATUS, context.getJobStatus().getValue())
                     .put(Keys.JOB_ID, jobId)
-                    .put(Keys.EXPIRATION_DATE, expirationDate.toString());
+                    .put(Keys.EXPIRATION_DATE, expirationDate.toString())
+                    .put(Keys.RESPONSE_MODE, context.getResponseMode().toString());
 
             try {
                 persist(directory,
-                        context.getResult().getOutputs(),
+                        context.getEncodedOutputs(),
                         context.getOutputDefinitions(),
                         rootNode.putArray(Keys.OUTPUTS));
 
@@ -183,6 +185,8 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
 
             JsonNode node = getJobMetadata(jobId);
 
+            ResponseMode.fromString(node.path(Keys.RESPONSE_MODE).textValue()).ifPresent(result::setResponseMode);
+
             if (JobStatus.failed().getValue().equals(node.path(Keys.STATUS).textValue())) {
                 Path path = Paths.get(node.path(Keys.ERROR).textValue());
                 try (ObjectInputStream in = new ObjectInputStream(Files.newInputStream(path))) {
@@ -224,12 +228,11 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
                           node.path(Keys.SCHEMA).textValue());
     }
 
-    private void persist(Path directory, List<ProcessData> outputs, Collection<OutputDefinition> outputDefinitions,
+    private void persist(Path directory, List<ProcessData> outputs, Map<OwsCode, OutputDefinition> outputDefinitions,
                          ArrayNode outputsNode) throws IOException, EncodingException {
-        Map<OwsCode, OutputDefinition> byId = byId(outputDefinitions);
 
         for (ProcessData data : outputs) {
-            OutputDefinition definition = byId.get(data.getId());
+            OutputDefinition definition = outputDefinitions.get(data.getId());
 
             ObjectNode outputNode = outputsNode.addObject();
             outputNode.putObject(Keys.ID)
@@ -239,7 +242,7 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
                 outputNode.put(Keys.TYPE, GROUP_TYPE);
                 persist(directory,
                         data.asGroup().getElements(),
-                        definition.getOutputs(),
+                        definition.getOutputsById(),
                         outputNode.putArray(Keys.OUTPUTS));
             } else if (data.isReference()) {
                 outputNode.put(Keys.TYPE, REFERENCE_TYPE);
@@ -451,6 +454,7 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
     }
 
     private static interface Keys {
+        String RESPONSE_MODE = "responseMode";
         String ERROR = "error";
         String STATUS = "status";
         String FORMAT = "format";

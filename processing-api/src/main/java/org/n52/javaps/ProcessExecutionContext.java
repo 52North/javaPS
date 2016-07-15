@@ -17,14 +17,11 @@
 package org.n52.javaps;
 
 import java.time.OffsetDateTime;
-import java.util.Collection;
+import java.util.Optional;
 
 import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.iceland.ogc.wps.JobId;
-import org.n52.iceland.ogc.wps.JobStatus;
 import org.n52.iceland.ogc.wps.OutputDefinition;
-import org.n52.iceland.ogc.wps.Result;
-import org.n52.iceland.ogc.wps.description.typed.TypedProcessDescription;
 import org.n52.javaps.algorithm.ProcessInputs;
 import org.n52.javaps.algorithm.ProcessOutputs;
 
@@ -37,19 +34,11 @@ public interface ProcessExecutionContext {
 
     JobId getJobId();
 
-    JobStatus getJobStatus();
-
-    default OwsCode getProcessId() {
-        return getDescription().getId();
-    }
-
-    TypedProcessDescription getDescription();
-
     ProcessInputs getInputs();
 
     ProcessOutputs getOutputs();
 
-    Collection<OutputDefinition> getOutputDefinitions();
+    Optional<OutputDefinition> getOutputDefinition(OwsCode output);
 
     void setPercentCompleted(Short percentCompleted);
 
@@ -57,5 +46,16 @@ public interface ProcessExecutionContext {
 
     void setNextPoll(OffsetDateTime nextPoll);
 
-    Result getResult() throws Throwable;
+    default Optional<OutputDefinition> getOutputDefinition(String output) {
+        return getOutputDefinition(new OwsCode(output));
+    }
+
+    default boolean hasOutputDefinition(String output) {
+        return hasOutputDefinition(new OwsCode(output));
+    }
+
+    default boolean hasOutputDefinition(OwsCode output) {
+        return getOutputDefinition(output).isPresent();
+    }
+
 }

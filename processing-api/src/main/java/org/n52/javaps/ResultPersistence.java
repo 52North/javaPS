@@ -35,7 +35,7 @@ public interface ResultPersistence {
 
     StatusInfo getStatus(JobId jobId) throws EngineException;
 
-    void save(ProcessExecutionContext context);
+    void save(EngineProcessExecutionContext context);
 
     Set<JobId> getJobIds();
 }

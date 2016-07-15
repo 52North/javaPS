@@ -35,11 +35,14 @@ import org.n52.iceland.ogc.ows.OwsPossibleValues;
 import org.n52.iceland.ogc.ows.OwsValue;
 import org.n52.iceland.ogc.wps.ExecutionMode;
 import org.n52.iceland.ogc.wps.JobId;
+import org.n52.iceland.ogc.wps.ResponseMode;
 import org.n52.iceland.ogc.wps.Result;
 import org.n52.iceland.ogc.wps.StatusInfo;
 import org.n52.iceland.ogc.wps.WPSConstants;
+import org.n52.iceland.ogc.wps.data.ProcessData;
 import org.n52.iceland.request.handler.GenericOperationHandler;
 import org.n52.iceland.request.handler.OperationHandlerKey;
+import org.n52.iceland.util.http.MediaType;
 import org.n52.javaps.Engine;
 import org.n52.javaps.EngineException;
 import org.n52.javaps.InputDecodingException;
@@ -67,13 +70,12 @@ public class ExecuteHandler extends AbstractEngineHandler
     @Override
     public ExecuteResponse handle(ExecuteRequest request)
             throws OwsExceptionReport {
-        // TODO response mode
 
         String service = request.getService();
         String version = request.getVersion();
         JobId jobId;
         try {
-            jobId = getEngine().execute(request.getId(), request.getInputs(), request.getOutputs());
+            jobId = getEngine().execute(request.getId(), request.getInputs(), request.getOutputs(), request.getResponseMode());
         } catch (ProcessNotFoundException ex) {
             throw new InvalidParameterValueException(IDENTIFIER, request.getId().getValue());
         } catch (InputDecodingException ex) {
@@ -83,7 +85,18 @@ public class ExecuteHandler extends AbstractEngineHandler
         if (request.getExecutionMode() == ExecutionMode.SYNC) {
             try {
                 Result result = getEngine().getResult(jobId).get();
-                return new ExecuteResponse(service, version, result);
+                ExecuteResponse response = new ExecuteResponse(service, version, result);
+
+                if (request.getResponseMode() == ResponseMode.RAW) {
+                    ProcessData data = response.getResult().get().getOutputs().iterator().next();
+                    if (data.isValue()) {
+                        response.setContentType(data.asValue().getFormat()
+                                .getMimeType().map(MediaType::parse)
+                                .orElseGet(MediaType::new));
+                    }
+                }
+                return response;
+
             } catch (InterruptedException | JobNotFoundException ex) {
                 throw new NoApplicableCodeException().causedBy(ex);
             } catch (ExecutionException ex) {
@@ -114,8 +127,8 @@ public class ExecuteHandler extends AbstractEngineHandler
 
     @Override
     protected Set<OwsDomain> getOperationParameters(String service, String version) {
-        Set<OwsValue> algorithmIdentifiers = getEngine().getProcessIdentifiers().stream().map(OwsCode::getValue)
-                .map(OwsValue::new).collect(toSet());
+        Set<OwsValue> algorithmIdentifiers = getEngine().getProcessIdentifiers().stream()
+                .map(OwsCode::getValue).map(OwsValue::new).collect(toSet());
         OwsPossibleValues possibleValues;
         if (algorithmIdentifiers.isEmpty()) {
             possibleValues = OwsNoValues.instance();

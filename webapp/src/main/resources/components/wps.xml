@@ -39,6 +39,7 @@
     <bean id="documentXmlStreamReader" class="org.n52.javaps.coding.stream.xml.DocumentXmlStreamReader"/>
     <bean id="documentXmlStreamWriter" class="org.n52.javaps.coding.stream.xml.DocumentXmlStreamWriter"/>
 
+    <bean id="streamingRawWriter" class="org.n52.javaps.coding.stream.StreamingRawWriter" />
     <bean id="serviceResponseWriterFactory" class="org.n52.javaps.coding.encode.ServiceResponseWriterFactory"/>
 
     <!-- kvp decoders -->

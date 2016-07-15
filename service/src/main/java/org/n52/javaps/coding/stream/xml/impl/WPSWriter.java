@@ -39,6 +39,7 @@ import org.n52.iceland.ogc.wps.JobControlOption;
 import org.n52.iceland.ogc.wps.JobId;
 import org.n52.iceland.ogc.wps.ProcessOffering;
 import org.n52.iceland.ogc.wps.ProcessOfferings;
+import org.n52.iceland.ogc.wps.ResponseMode;
 import org.n52.iceland.ogc.wps.Result;
 import org.n52.iceland.ogc.wps.StatusInfo;
 import org.n52.iceland.ogc.wps.WPSCapabilities;
@@ -104,12 +105,10 @@ public class WPSWriter extends AbstractOWSWriter {
             writeProcessOffering((ProcessOffering) object);
         } else if (object instanceof Result) {
             writeResult((Result) object);
-        } else if (object instanceof ValueProcessData) {
-            writeValueData((ValueProcessData) object);
         } else if (object instanceof StatusInfo) {
             writeStatusInfo((StatusInfo) object);
-        } else if (object instanceof ReferenceProcessData) {
-            writeReferenceData((ReferenceProcessData) object);
+        } else if (object instanceof ProcessData) {
+            writeOutput((ProcessData) object);
         } else if (object instanceof ProcessDescription) {
             writeProcessDescription((ProcessDescription) object);
         } else if (object instanceof WPSCapabilities) {
@@ -339,9 +338,7 @@ public class WPSWriter extends AbstractOWSWriter {
                     writeDataEncodingAttributes(format
                             .withEncoding(documentEncoding()));
 
-                    String encoding = format.getEncoding()
-                            .orElse(Format.DEFAULT_ENCODING);
-                    Charset charset = Charset.forName(encoding);
+                    Charset charset = format.getEncodingAsCharsetOrDefault();
 
                     try (InputStreamReader reader
                             = new InputStreamReader(data, charset)) {
@@ -373,17 +370,18 @@ public class WPSWriter extends AbstractOWSWriter {
 
     private void writeResult(Result result)
             throws XMLStreamException {
-        element(WPS.Elem.QN_RESULT, result, x -> {
-            writeNamespaces();
-
-            element(WPS.Elem.QN_JOB_ID, x.getJobId().map(JobId::getValue));
-            element(WPS.Elem.QN_EXPIRATION_DATE, x.getExpirationDate().map(this::format));
-
-            for (ProcessData data : x.getOutputs()) {
-                writeOutput(data);
-            }
-        });
-
+        if (result.getResponseMode() == ResponseMode.RAW) {
+            writeRawResult(result);
+        } else {
+            element(WPS.Elem.QN_RESULT, result, x -> {
+                writeNamespaces();
+                element(WPS.Elem.QN_JOB_ID, x.getJobId().map(JobId::getValue));
+                element(WPS.Elem.QN_EXPIRATION_DATE, x.getExpirationDate().map(this::format));
+                for (ProcessData data : x.getOutputs()) {
+                    writeOutput(data);
+                }
+            });
+        }
     }
 
     private void writeOutput(ProcessData data)
@@ -453,6 +451,22 @@ public class WPSWriter extends AbstractOWSWriter {
             writeFormat(iter.next(), Optional.empty(), true);
             while (iter.hasNext()) {
                 writeFormat(iter.next(), Optional.empty(), false);
+            }
+        }
+    }
+
+    private void writeRawResult(Result result) throws XMLStreamException {
+        ProcessData output = result.getOutputs().iterator().next();
+        if (output.isGroup() || output.isReference()) {
+            writeOutput(output);
+        } else {
+            // if we end up here the output is guaranteed to be XML
+            Charset charset = output.asValue().getFormat().getEncodingAsCharsetOrDefault();
+            try (InputStream in = output.asValue().getData();
+                 InputStreamReader reader = new InputStreamReader(in, charset)) {
+                write(reader);
+            } catch (IOException | EncodingException ex) {
+                throw new XMLStreamException(ex);
             }
         }
     }

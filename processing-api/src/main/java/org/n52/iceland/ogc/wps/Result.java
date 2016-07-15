@@ -35,10 +35,7 @@ public class Result {
     private Optional<OffsetDateTime> expirationDate = Optional.empty();
     private Optional<JobId> jobId = Optional.empty();
     private final List<ProcessData> outputs = new LinkedList<>();
-
-    public Result(List<ProcessData> outputs) {
-        this.outputs.addAll(outputs);
-    }
+    private ResponseMode responseMode = ResponseMode.DOCUMENT;
 
     public Result() {
     }
@@ -66,4 +63,13 @@ public class Result {
     public void addOutput(ProcessData output) {
         this.outputs.add(Objects.requireNonNull(output));
     }
+
+    public ResponseMode getResponseMode() {
+        return responseMode;
+    }
+
+    public void setResponseMode(ResponseMode responseMode) {
+        this.responseMode = Objects.requireNonNull(responseMode);
+    }
+
 }

@@ -38,12 +38,20 @@ public class StreamWriterKey extends ClassBasedComponentKey<Object>
 
     @Override
     public int getSimilarity(StreamWriterKey that) {
-        if (!this.mediaType.isCompatible(that.getMediaType())) {
-            return -1;
+        int mediaTypeSimilarity = getMediaType().getSimilarity(that.getMediaType());
+
+        if (mediaTypeSimilarity < 0) {
+            return mediaTypeSimilarity;
         }
-        return getSimiliarity(
-                    this.getType() != null ? this.getType() : Object.class,
-                    that.getType() != null ? that.getType() : Object.class);
+        int typeSimilarity = getSimiliarity(
+                this.getType() != null ? this.getType() : Object.class,
+                that.getType() != null ? that.getType() : Object.class);
+
+        if (typeSimilarity < 0) {
+            return typeSimilarity;
+        }
+
+        return typeSimilarity + mediaTypeSimilarity;
     }
 
 

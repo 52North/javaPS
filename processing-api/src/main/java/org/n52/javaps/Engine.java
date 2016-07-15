@@ -26,6 +26,7 @@ import java.util.concurrent.Future;
 import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.iceland.ogc.wps.JobId;
 import org.n52.iceland.ogc.wps.OutputDefinition;
+import org.n52.iceland.ogc.wps.ResponseMode;
 import org.n52.iceland.ogc.wps.Result;
 import org.n52.iceland.ogc.wps.StatusInfo;
 import org.n52.iceland.ogc.wps.data.ProcessData;
@@ -61,7 +62,7 @@ public interface Engine {
 
     StatusInfo dismiss(JobId identifier) throws JobNotFoundException;
 
-    JobId execute(OwsCode identifier, List<ProcessData> inputs, List<OutputDefinition> outputs)
+    JobId execute(OwsCode identifier, List<ProcessData> inputs, List<OutputDefinition> outputs, ResponseMode responseMode)
             throws ProcessNotFoundException, InputDecodingException;
 
     StatusInfo getStatus(JobId jobId) throws EngineException;

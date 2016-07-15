@@ -16,8 +16,9 @@
  */
 package org.n52.javaps;
 
+import java.util.List;
 
-import org.n52.iceland.ogc.wps.Result;
+import org.n52.iceland.ogc.wps.data.ProcessData;
 
 /**
  * TODO JavaDoc
@@ -26,6 +27,6 @@ import org.n52.iceland.ogc.wps.Result;
  */
 public interface ProcessOutputEncoder {
 
-    Result create(ProcessExecutionContext context)
+    List<ProcessData> create(EngineProcessExecutionContext context)
             throws OutputEncodingException;
 }

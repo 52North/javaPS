@@ -16,10 +16,14 @@
  */
 package org.n52.iceland.ogc.wps;
 
+import static java.util.stream.Collectors.toMap;
+
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 
 import org.n52.iceland.ogc.ows.OwsCode;
 
@@ -101,6 +105,10 @@ public class OutputDefinition {
         this.outputs = outputs == null ? Collections.emptyList() : outputs;
     }
 
+    public Map<OwsCode, OutputDefinition> getOutputsById() {
+        return getOutputsById(getOutputs());
+    }
+
     public boolean hasOutputs() {
         return !this.outputs.isEmpty();
     }
@@ -137,6 +145,10 @@ public class OutputDefinition {
                 .add("dataTransmissionMode", this.dataTransmissionMode)
                 .add("outputs", this.outputs)
                 .toString();
+    }
+
+    public static Map<OwsCode, OutputDefinition> getOutputsById(List<OutputDefinition> outputs) {
+        return outputs.stream().collect(toMap(OutputDefinition::getId, Function.identity()));
     }
 
 }

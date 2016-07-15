@@ -39,6 +39,7 @@ import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.iceland.ogc.wps.Format;
 import org.n52.iceland.ogc.wps.InputOccurence;
 import org.n52.iceland.ogc.wps.OutputDefinition;
+import org.n52.iceland.ogc.wps.ResponseMode;
 import org.n52.iceland.ogc.wps.data.FormattedProcessData;
 import org.n52.iceland.ogc.wps.data.GroupProcessData;
 import org.n52.iceland.ogc.wps.data.ProcessData;
@@ -228,6 +229,13 @@ public class ExecuteParameterValidator
 
     private void validate(ExecuteRequest request, ProcessDescription description) throws OwsExceptionReport {
         CompositeOwsException exception = new CompositeOwsException();
+
+        if (request.getResponseMode() == ResponseMode.RAW &&
+            (request.getOutputs().size() > 1 ||
+             (request.getOutputs().isEmpty() && description.getOutputs().size() > 1))) {
+            exception.add(new InvalidParameterValueException().at("responseMode")
+                    .withMessage("The value 'raw' of the parameter 'responseMode' is invalid. Single output is required."));
+        }
 
         try {
             validateInputs(request.getInputs(), description);
