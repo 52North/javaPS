@@ -1,0 +1,81 @@
+/*
+ * Copyright 2016 52°North Initiative for Geospatial Open Source
+ * Software GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.n52.iceland.coding.stream;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Collections;
+import java.util.Set;
+import java.util.function.Supplier;
+
+import org.n52.iceland.coding.encode.ResponseProxy;
+import org.n52.iceland.coding.encode.ResponseWriter;
+import org.n52.iceland.coding.encode.ResponseWriterKey;
+import org.n52.iceland.exception.ows.NoApplicableCodeException;
+import org.n52.iceland.exception.ows.OwsExceptionReport;
+import org.n52.iceland.response.AbstractServiceResponse;
+import org.n52.iceland.util.http.MediaType;
+
+/**
+ * TODO JavaDoc
+ *
+ * @author Christian Autermann
+ */
+public class StreamingServiceResponseWriter implements ResponseWriter<AbstractServiceResponse> {
+    public static final ResponseWriterKey KEY = new ResponseWriterKey(AbstractServiceResponse.class);
+
+    private MediaType contentType;
+    private final StreamWriterRepository repository;
+
+    public StreamingServiceResponseWriter(StreamWriterRepository streamWriterRepository) {
+        this.repository = streamWriterRepository;
+    }
+
+    @Override
+    public MediaType getContentType() {
+        return this.contentType;
+    }
+
+    @Override
+    public void setContentType(MediaType contentType) {
+        this.contentType = contentType;
+    }
+
+    @Override
+    public void write(AbstractServiceResponse t, OutputStream out, ResponseProxy responseProxy)
+            throws IOException, OwsExceptionReport {
+        StreamWriterKey key = new StreamWriterKey(t.getClass(), t.getContentType());
+        StreamWriter<Object> writer = repository.getWriter(key).orElseThrow(missingEncoder(t));
+        writer.write(t, out);
+    }
+
+    @Override
+    public boolean supportsGZip(AbstractServiceResponse t) {
+        return true;
+    }
+
+    @Override
+    public Set<ResponseWriterKey> getKeys() {
+        return Collections.singleton(KEY);
+
+    }
+
+    private static Supplier<OwsExceptionReport> missingEncoder(AbstractServiceResponse t) {
+        return () -> new NoApplicableCodeException()
+                .withMessage("No response encoder forund for %s", t.getClass());
+    }
+}
