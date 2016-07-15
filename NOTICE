@@ -16,8 +16,13 @@ limitations under the License.
 This project includes:
 
   52°North Iceland under The Apache Software License, Version 2.0
+  52°North Iceland Streaming Interfaces under The Apache Software License, Version 2.0
   52°North Iceland Util module under The Apache Software License, Version 2.0
   52°North Iceland WPS under The Apache Software License, Version 2.0
+  52°North Iceland WPS Bindings under The Apache Software License, Version 2.0
+  52°North Iceland WPS Core under The Apache Software License, Version 2.0
+  52°North Iceland WPS KVP Binding under The Apache Software License, Version 2.0
+  52°North Iceland WPS POX Binding under The Apache Software License, Version 2.0
   52°North Iceland WPS Processing API Implementation under The Apache Software License, Version 2.0
   52°North Iceland WPS Service Implementation under The Apache Software License, Version 2.0
   52°North Iceland WPS Webapp under The Apache Software License, Version 2.0
