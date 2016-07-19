@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.BinaryOperator;
+import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
 
@@ -42,6 +43,8 @@ import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.iceland.ogc.wps.description.ProcessInputDescription;
 import org.n52.iceland.ogc.wps.description.ProcessOutputDescription;
 import org.n52.javaps.description.TypedProcessDescription;
+import org.n52.javaps.description.TypedProcessInputDescription;
+import org.n52.javaps.description.TypedProcessOutputDescription;
 import org.n52.javaps.description.impl.TypedProcessDescriptionFactory;
 import org.n52.javaps.io.InputHandlerRepository;
 import org.n52.javaps.io.OutputHandlerRepository;
@@ -163,8 +166,10 @@ public class AnnotatedAlgorithmMetadata {
     }
 
     private TypedProcessDescription getDescription(Class<?> algorithmClass, Map<OwsCode, AbstractInputBinding<?, ?>> inputBindings, Map<OwsCode, AbstractOutputBinding<?, ?>> outputBindings) {
-        List<ProcessInputDescription> inputs = inputBindings.values().stream().map(AbstractInputBinding::getDescription).collect(toList());
-        List<ProcessOutputDescription> outputs = outputBindings.values().stream().map(AbstractOutputBinding::getDescription).collect(toList());
+        Function<AbstractInputBinding<?, ?>, TypedProcessInputDescription<?>> getInputDescription = AbstractInputBinding::getDescription;
+        List<ProcessInputDescription> inputs = inputBindings.values().stream().map(getInputDescription).collect(toList());
+        Function<AbstractOutputBinding<?, ?>, TypedProcessOutputDescription<?>> getOutputDescription = AbstractOutputBinding::getDescription;
+        List<ProcessOutputDescription> outputs = outputBindings.values().stream().map(getOutputDescription).collect(toList());
         return getDescription(algorithmClass, inputs, outputs);
     }
 
