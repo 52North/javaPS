@@ -33,7 +33,7 @@ import org.n52.javaps.description.TypedProcessOutputDescription;
 import org.n52.javaps.io.Data;
 import org.n52.javaps.io.literal.LiteralData;
 
-abstract class AbstractOutputBinding<M extends AccessibleObject & Member, D extends TypedProcessOutputDescription<?>> extends AbstractDataBinding<M, D> {
+abstract class AbstractOutputBinding<M extends AccessibleObject & Member> extends AbstractDataBinding<M, TypedProcessOutputDescription<?>> {
 
     private Function<Object, ? extends Data<?>> bindingConstructor;
 
@@ -98,15 +98,15 @@ abstract class AbstractOutputBinding<M extends AccessibleObject & Member, D exte
         }
     }
 
-    public static <D extends TypedProcessOutputDescription<?>> AbstractOutputBinding<Field, D> field(Field field) {
-        return new OutputFieldBinding<>(field);
+    public static AbstractOutputBinding<Field> field(Field field) {
+        return new OutputFieldBinding(field);
     }
 
-    public static <D extends TypedProcessOutputDescription<?>> AbstractOutputBinding<Method, D> method(Method method) {
-        return new OutputMethodBinding<>(method);
+    public static AbstractOutputBinding<Method> method(Method method) {
+        return new OutputMethodBinding(method);
     }
 
-    private static class OutputMethodBinding<D extends TypedProcessOutputDescription<?>> extends AbstractOutputBinding<Method, D> {
+    private static class OutputMethodBinding extends AbstractOutputBinding<Method> {
         private static final Logger LOGGER = LoggerFactory.getLogger(OutputMethodBinding.class);
 
         OutputMethodBinding(Method method) {
@@ -152,7 +152,7 @@ abstract class AbstractOutputBinding<M extends AccessibleObject & Member, D exte
 
     }
 
-    private static class OutputFieldBinding<D extends TypedProcessOutputDescription<?>> extends AbstractOutputBinding<Field, D> {
+    private static class OutputFieldBinding extends AbstractOutputBinding<Field> {
 
         private static final Logger LOGGER = LoggerFactory.getLogger(OutputFieldBinding.class);
 

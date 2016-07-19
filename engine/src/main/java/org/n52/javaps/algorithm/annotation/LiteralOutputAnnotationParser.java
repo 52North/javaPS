@@ -27,8 +27,8 @@ import org.n52.javaps.description.impl.TypedProcessDescriptionFactory;
 import org.n52.javaps.io.literal.LiteralType;
 import org.n52.javaps.io.literal.LiteralTypeRepository;
 
-class LiteralOutputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractOutputBinding<M, TypedLiteralOutputDescription>>
-        extends AbstractOutputAnnotationParser<LiteralOutput, M, TypedLiteralOutputDescription, B> {
+class LiteralOutputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractOutputBinding<M>>
+        extends AbstractOutputAnnotationParser<LiteralOutput, M, B> {
 
     private final LiteralTypeRepository literalTypeRepository;
 

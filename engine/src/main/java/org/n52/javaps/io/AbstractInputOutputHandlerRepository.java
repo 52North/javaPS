@@ -31,7 +31,7 @@ import org.n52.iceland.ogc.wps.Format;
  * TODO JavaDoc
  *
  * @author Christian Autermann
- * @param <T>
+ * @param <T> the input output handler type
  */
 public abstract class AbstractInputOutputHandlerRepository<T extends InputOutputHandler> implements FormatRepository {
 

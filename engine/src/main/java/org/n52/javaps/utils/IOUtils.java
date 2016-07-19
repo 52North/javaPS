@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.io.ByteStreams;
 
 public class IOUtils {
-    private static Logger LOGGER = LoggerFactory.getLogger(IOUtils.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(IOUtils.class);
 
     /**
      * Reads the given input stream as a string and decodes that base64 string

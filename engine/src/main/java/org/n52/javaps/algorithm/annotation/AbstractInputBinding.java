@@ -39,9 +39,8 @@ import org.n52.javaps.io.Data;
  *
  * @author Tom Kunicki, Christian Autermann
  * @param <M> the accessible member type
- * @param <D> the description type
  */
-abstract class AbstractInputBinding<M extends AccessibleObject & Member, D extends TypedProcessInputDescription<?>> extends AbstractDataBinding<M, D> {
+abstract class AbstractInputBinding<M extends AccessibleObject & Member> extends AbstractDataBinding<M, TypedProcessInputDescription<?>> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractInputBinding.class);
 
@@ -161,15 +160,15 @@ abstract class AbstractInputBinding<M extends AccessibleObject & Member, D exten
 
     public abstract void set(Object annotatedObject, List<Data<?>> boundInputList);
 
-    public static <D extends TypedProcessInputDescription<?>> AbstractInputBinding<Field, D> field(Field field) {
-        return new InputFieldBinding<>(field);
+    public static AbstractInputBinding<Field> field(Field field) {
+        return new InputFieldBinding(field);
     }
 
-    public static <D extends TypedProcessInputDescription<?>> AbstractInputBinding<Method, D> method(Method method) {
-        return new InputMethodBinding<>(method);
+    public static AbstractInputBinding<Method> method(Method method) {
+        return new InputMethodBinding(method);
     }
 
-    private static class InputFieldBinding<D extends TypedProcessInputDescription<?>> extends AbstractInputBinding<Field, D> {
+    private static class InputFieldBinding extends AbstractInputBinding<Field> {
 
         InputFieldBinding(Field field) {
             super(field);
@@ -191,7 +190,7 @@ abstract class AbstractInputBinding<M extends AccessibleObject & Member, D exten
 
     }
 
-    private static class InputMethodBinding<D extends TypedProcessInputDescription<?>> extends AbstractInputBinding<Method, D> {
+    private static class InputMethodBinding extends AbstractInputBinding<Method> {
 
         InputMethodBinding(Method method) {
             super(method);

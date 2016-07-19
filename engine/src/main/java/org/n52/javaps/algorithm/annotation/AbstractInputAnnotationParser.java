@@ -29,11 +29,10 @@ import org.n52.javaps.description.TypedProcessInputDescription;
  * @author Tom Kunicki, Christian Autermann
  * @param <A> the annotation type
  * @param <M> the accessible member type
- * @param <D> the description type
  * @param <B> the binding type
  */
-abstract class AbstractInputAnnotationParser<A extends Annotation, M extends AccessibleObject & Member, D extends TypedProcessInputDescription<?>, B extends AbstractInputBinding<M, D>>
-        extends AbstractDataAnnotationParser<A, M, D, B> {
+abstract class AbstractInputAnnotationParser<A extends Annotation, M extends AccessibleObject & Member, B extends AbstractInputBinding<M>>
+        extends AbstractDataAnnotationParser<A, M, TypedProcessInputDescription<?>, B> {
 
     AbstractInputAnnotationParser(Function<M, B> bindingFunction) {
         super(bindingFunction);

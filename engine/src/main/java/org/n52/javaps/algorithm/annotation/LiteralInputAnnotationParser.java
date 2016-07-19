@@ -45,8 +45,8 @@ import org.n52.javaps.io.literal.LiteralTypeRepository;
  * @param <M> the accessible member type
  * @param <B> the binding type
  */
-class LiteralInputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractInputBinding<M, TypedLiteralInputDescription>>
-       extends AbstractInputAnnotationParser<LiteralInput, M, TypedLiteralInputDescription, B> {
+class LiteralInputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractInputBinding<M>>
+       extends AbstractInputAnnotationParser<LiteralInput, M, B> {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(AnnotationParser.class);
 
