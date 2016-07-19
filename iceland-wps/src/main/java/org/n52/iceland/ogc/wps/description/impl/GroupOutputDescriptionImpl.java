@@ -26,6 +26,8 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collector;
 
 import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.iceland.ogc.ows.OwsKeyword;
@@ -64,8 +66,10 @@ public class GroupOutputDescriptionImpl extends AbstractProcessOutputDescription
                                       Set<OwsMetadata> metadata,
                                       Set<? extends ProcessOutputDescription> outputs) {
         super(id, title, abstrakt, keywords, metadata);
-        this.outputs = Optional.ofNullable(outputs).orElseGet(Collections::emptySet).stream()
-                .collect(groupingBy(Description::getId, toSingleResult()));
+        Function<ProcessOutputDescription, OwsCode> keyFunc = Description::getId;
+        Collector<ProcessOutputDescription, ?, ProcessOutputDescription> outputDownstreamCollector = toSingleResult();
+        Collector<ProcessOutputDescription, ?, Map<OwsCode, ProcessOutputDescription>> outputCollector = groupingBy(keyFunc, outputDownstreamCollector);
+        this.outputs = Optional.ofNullable(outputs).orElseGet(Collections::emptySet).stream().collect(outputCollector);
     }
 
     @Override

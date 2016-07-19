@@ -26,6 +26,8 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collector;
 
 import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.iceland.ogc.ows.OwsKeyword;
@@ -62,8 +64,10 @@ public class GroupInputDescriptionImpl extends AbstractProcessInputDescription i
                                      InputOccurence occurence,
                                      Set<? extends ProcessInputDescription> inputs) {
         super(id, title, abstrakt, keywords, metadata, occurence);
-        this.inputs = Optional.ofNullable(inputs).orElseGet(Collections::emptySet).stream()
-                .collect(groupingBy(Description::getId, toSingleResult()));
+        Function<ProcessInputDescription, OwsCode> keyFunc = Description::getId;
+        Collector<ProcessInputDescription, ?, ProcessInputDescription> outputDownstreamCollector = toSingleResult();
+        Collector<ProcessInputDescription, ?, Map<OwsCode, ProcessInputDescription>> outputCollector = groupingBy(keyFunc, outputDownstreamCollector);
+        this.inputs = Optional.ofNullable(inputs).orElseGet(Collections::emptySet).stream().collect(outputCollector);
     }
 
     @Override

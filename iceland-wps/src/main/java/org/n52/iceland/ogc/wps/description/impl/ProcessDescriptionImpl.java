@@ -26,6 +26,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collector;
 
 import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.iceland.ogc.ows.OwsKeyword;
@@ -78,10 +80,13 @@ public class ProcessDescriptionImpl
                                   boolean storeSupported,
                                   boolean statusSupported) {
         super(id, title, abstrakt, keywords, metadata);
-        this.inputs = Optional.ofNullable(inputs).orElseGet(Collections::emptySet).stream()
-                .collect(groupingBy(Description::getId, toSingleResult()));
-        this.outputs = Optional.ofNullable(outputs).orElseGet(Collections::emptySet).stream()
-                .collect(groupingBy(Description::getId, toSingleResult()));
+        Function<Description, OwsCode> keyFunc = Description::getId;
+        Collector<ProcessInputDescription, ?, ProcessInputDescription> inputDownstreamCollector = toSingleResult();
+        Collector<ProcessOutputDescription, ?, ProcessOutputDescription> outputDownstreamCollector = toSingleResult();
+        Collector<ProcessInputDescription, ?, Map<OwsCode, ProcessInputDescription>> inputCollector = groupingBy(keyFunc, inputDownstreamCollector);
+        Collector<ProcessOutputDescription, ?, Map<OwsCode, ProcessOutputDescription>> outputCollector = groupingBy(keyFunc, outputDownstreamCollector);
+        this.inputs = Optional.ofNullable(inputs).orElseGet(Collections::emptySet).stream().collect(inputCollector);
+        this.outputs = Optional.ofNullable(outputs).orElseGet(Collections::emptySet).stream().collect(outputCollector);
         this.storeSupported = storeSupported;
         this.statusSupported = statusSupported;
         this.version = Objects.requireNonNull(version, "version");
