@@ -19,7 +19,7 @@ package org.n52.iceland.ogc.wps.description.impl;
 
 
 import static java.util.stream.Collectors.groupingBy;
-import static org.n52.iceland.util.Streams.toSingleResult;
+import static org.n52.iceland.util.MoreCollectors.toSingleResult;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -38,8 +38,7 @@ import org.n52.iceland.ogc.wps.description.ProcessInputDescription;
 
 import com.google.common.collect.ImmutableSet;
 
-public class GroupInputDescriptionImpl extends AbstractProcessInputDescription
-        implements GroupInputDescription {
+public class GroupInputDescriptionImpl extends AbstractProcessInputDescription implements GroupInputDescription {
 
     private final Map<OwsCode, ProcessInputDescription> inputs;
 
@@ -73,9 +72,7 @@ public class GroupInputDescriptionImpl extends AbstractProcessInputDescription
     }
 
     @Override
-    public <T, X extends Exception> T visit(
-            ThrowingReturningVisitor<T, X> visitor)
-            throws X {
+    public <T, X extends Exception> T visit(ThrowingReturningVisitor<T, X> visitor) throws X {
         return visitor.visit(this);
     }
 

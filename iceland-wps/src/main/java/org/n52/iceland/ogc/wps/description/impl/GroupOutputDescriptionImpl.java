@@ -19,7 +19,7 @@ package org.n52.iceland.ogc.wps.description.impl;
 
 
 import static java.util.stream.Collectors.groupingBy;
-import static org.n52.iceland.util.Streams.toSingleResult;
+import static org.n52.iceland.util.MoreCollectors.toSingleResult;
 
 import java.util.Collection;
 import java.util.Collections;
