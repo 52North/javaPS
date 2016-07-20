@@ -64,8 +64,8 @@ public class InputOccurence {
     }
 
     public boolean isInBounds(BigInteger occurence) {
-        return this.min.compareTo(occurence) >= 0 &&
-               (!this.max.isPresent() || this.max.get().compareTo(occurence) <= 0);
+        return this.min.compareTo(occurence) <= 0 &&
+               (!this.max.isPresent() || this.max.get().compareTo(occurence) >= 0);
     }
 
     @Override
