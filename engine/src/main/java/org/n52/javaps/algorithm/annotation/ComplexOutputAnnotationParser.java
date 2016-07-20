@@ -25,8 +25,8 @@ import java.util.function.Function;
 import org.n52.iceland.ogc.wps.Format;
 import org.n52.javaps.description.TypedComplexOutputDescription;
 import org.n52.javaps.description.impl.TypedProcessDescriptionFactory;
-import org.n52.javaps.io.complex.ComplexData;
 import org.n52.javaps.io.OutputHandlerRepository;
+import org.n52.javaps.io.complex.ComplexData;
 
 /**
  * TODO JavaDoc
@@ -35,8 +35,8 @@ import org.n52.javaps.io.OutputHandlerRepository;
  * @param <M> the accessible member type
  * @param <B> the binding type
  */
-class ComplexOutputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractOutputBinding<M, TypedComplexOutputDescription>>
-        extends AbstractOutputAnnotationParser<ComplexOutput, M, TypedComplexOutputDescription, B> {
+class ComplexOutputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractOutputBinding<M>>
+        extends AbstractOutputAnnotationParser<ComplexOutput, M, B> {
 
     private final OutputHandlerRepository generatorRepository;
 

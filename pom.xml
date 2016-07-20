@@ -96,21 +96,12 @@
         <version.spring>4.2.3.RELEASE</version.spring>
         <version.slf4j>1.7.21</version.slf4j>
         <version.log4j>2.3</version.log4j>
+        <version.iceland>2-SNAPSHOT</version.iceland>
     </properties>
 	
     <dependencyManagement>
         <dependencies>
             
-            <dependency>
-                <groupId>javax.servlet</groupId>
-                <artifactId>javax.servlet-api</artifactId>
-                <version>3.1.0</version>
-            </dependency>
-            <dependency>
-                <groupId>stax</groupId>
-                <artifactId>stax-api</artifactId>
-                <version>1.0.1</version>
-            </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>service</artifactId>
@@ -150,17 +141,12 @@
             <dependency>
                 <groupId>org.n52.iceland</groupId>
                 <artifactId>iceland</artifactId>
-                <version>2-SNAPSHOT</version>
+                <version>${version.iceland}</version>
             </dependency>
             <dependency>
                 <groupId>org.n52.iceland</groupId>
                 <artifactId>util</artifactId>
-                <version>2-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>javax.inject</groupId>
-                <artifactId>javax.inject</artifactId>
-                <version>1</version>
+                <version>${version.iceland}</version>
             </dependency>
 
             <dependency>
@@ -269,6 +255,11 @@
             </dependency>
 
             <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>2.6.3</version>
+            </dependency>
+            <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>18.0</version>
@@ -312,25 +303,33 @@
                 <version>2.2.12</version>
             </dependency>
             <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>3.1.0</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.inject</groupId>
+                <artifactId>javax.inject</artifactId>
+                <version>1</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>stax</groupId>
+                <artifactId>stax-api</artifactId>
+                <version>1.0.1</version>
+            </dependency>
+            <dependency>
                 <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>
                 <version>1.10</version>
             </dependency>
-            <dependency>
-                <groupId>commons-io</groupId>
-                <artifactId>commons-io</artifactId>
-                <version>2.4</version>
-            </dependency>
+            
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-configuration2</artifactId>
                 <version>2.0</version>
             </dependency>
-            <dependency>
-                <artifactId>jackson-databind</artifactId>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <version>2.6.3</version>
-            </dependency>
+            
         </dependencies>
     </dependencyManagement>
 

@@ -19,13 +19,15 @@ package org.n52.iceland.ogc.wps.description.impl;
 
 
 import static java.util.stream.Collectors.groupingBy;
-import static org.n52.iceland.util.Streams.toSingleResult;
+import static org.n52.iceland.util.MoreCollectors.toSingleResult;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collector;
 
 import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.iceland.ogc.ows.OwsKeyword;
@@ -38,8 +40,7 @@ import org.n52.iceland.ogc.wps.description.ProcessInputDescription;
 
 import com.google.common.collect.ImmutableSet;
 
-public class GroupInputDescriptionImpl extends AbstractProcessInputDescription
-        implements GroupInputDescription {
+public class GroupInputDescriptionImpl extends AbstractProcessInputDescription implements GroupInputDescription {
 
     private final Map<OwsCode, ProcessInputDescription> inputs;
 
@@ -63,8 +64,10 @@ public class GroupInputDescriptionImpl extends AbstractProcessInputDescription
                                      InputOccurence occurence,
                                      Set<? extends ProcessInputDescription> inputs) {
         super(id, title, abstrakt, keywords, metadata, occurence);
-        this.inputs = Optional.ofNullable(inputs).orElseGet(Collections::emptySet).stream()
-                .collect(groupingBy(Description::getId, toSingleResult()));
+        Function<ProcessInputDescription, OwsCode> keyFunc = Description::getId;
+        Collector<ProcessInputDescription, ?, ProcessInputDescription> outputDownstreamCollector = toSingleResult();
+        Collector<ProcessInputDescription, ?, Map<OwsCode, ProcessInputDescription>> outputCollector = groupingBy(keyFunc, outputDownstreamCollector);
+        this.inputs = Optional.ofNullable(inputs).orElseGet(Collections::emptySet).stream().collect(outputCollector);
     }
 
     @Override
@@ -73,9 +76,7 @@ public class GroupInputDescriptionImpl extends AbstractProcessInputDescription
     }
 
     @Override
-    public <T, X extends Exception> T visit(
-            ThrowingReturningVisitor<T, X> visitor)
-            throws X {
+    public <T, X extends Exception> T visit(ThrowingReturningVisitor<T, X> visitor) throws X {
         return visitor.visit(this);
     }
 

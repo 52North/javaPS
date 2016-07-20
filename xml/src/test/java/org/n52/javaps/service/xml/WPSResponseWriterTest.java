@@ -16,9 +16,6 @@
  */
 package org.n52.javaps.service.xml;
 
-import org.n52.javaps.service.xml.WPSWriter;
-import org.n52.javaps.service.xml.WPSResponseWriter;
-
 import java.io.OutputStream;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
@@ -29,7 +26,6 @@ import java.util.Optional;
 
 import javax.inject.Provider;
 
-import org.apache.commons.io.Charsets;
 import org.junit.Test;
 
 import org.n52.iceland.coding.stream.StreamWriter;
@@ -75,7 +71,7 @@ public class WPSResponseWriterTest {
         group.addElement(new InMemoryValueProcessData(new OwsCode("output4"), new Format("application/json"), "{\"soamekey\": \"somevalue\"}".getBytes(StandardCharsets.UTF_8)));
         group.addElement(new InMemoryValueProcessData(new OwsCode("output5"), new Format("application/xml", "ISO-8859-1"), "<sömekey>somevalüe</sömekey>".getBytes(StandardCharsets.ISO_8859_1)));
         group.addElement(new InMemoryValueProcessData(new OwsCode("output6"), new Format("application/xml"), "<sömekey>somevalüe</sömekey>".getBytes(StandardCharsets.UTF_8)));
-        result.addOutput(new InMemoryValueProcessData(new OwsCode("output7"), new Format("application/xml").withBase64Encoding(), BaseEncoding.base64().encode("<sömekey>somevalüe</sömekey>".getBytes(StandardCharsets.UTF_8)).getBytes(Charsets.US_ASCII)));
+        result.addOutput(new InMemoryValueProcessData(new OwsCode("output7"), new Format("application/xml").withBase64Encoding(), BaseEncoding.base64().encode("<sömekey>somevalüe</sömekey>".getBytes(StandardCharsets.UTF_8)).getBytes(StandardCharsets.US_ASCII)));
         ReferenceProcessData output;
         output = new ReferenceProcessData(new OwsCode("output8"), new Format("application/xml").withUTF8Encoding(), URI.create("http://example.com/asdf"));
         output.setBody(Body.reference(URI.create("http://example.com/body")));

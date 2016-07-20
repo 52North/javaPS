@@ -27,4 +27,20 @@
 
     <bean id="context" class="org.n52.javaps.utils.SpringContext"/>
 
+    <bean id="fileExtensions" class="org.n52.javaps.commons.FileExtensions">
+        <property name="extensionsByString">
+            <map key-type="java.lang.String"  value-type="java.lang.String">
+                <entry key="application/xml" value="xml"/>
+                <entry key="application/netcdf" value="nc"/>
+                <entry key="application/geotiff" value="tiff"/>
+                <entry key="application/x-zipped-shp" value="zip"/>
+                <entry key="text/plain" value="txt"/>
+                <entry key="text/html" value="html"/>
+                <entry key="application/json" value="json"/>
+                <entry key="text/csv" value="csv"/>
+                <entry key="application/rData" value="rData"/>
+            </map>
+        </property>
+    </bean>
+
 </beans>
