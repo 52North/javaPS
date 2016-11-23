@@ -72,7 +72,6 @@ abstract class AbstractOutputBinding<M extends AccessibleObject & Member> extend
         }
         Class<?> bindingPayloadClass = (Class<?>) bindingPayloadType;
         if (!bindingPayloadClass.isAssignableFrom(outputPayloadClass)
-            || bindingPayloadClass.isInterface()
             || Modifier.isAbstract(bindingClass.getModifiers())) {
             return null;
         }
