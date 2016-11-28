@@ -18,10 +18,10 @@ package org.n52.javaps.engine;
 
 import java.util.Set;
 
-import org.n52.iceland.ogc.wps.JobId;
-import org.n52.iceland.ogc.wps.Result;
-import org.n52.iceland.ogc.wps.StatusInfo;
-import org.n52.iceland.ogc.wps.data.ProcessData;
+import org.n52.shetland.ogc.wps.JobId;
+import org.n52.shetland.ogc.wps.Result;
+import org.n52.shetland.ogc.wps.StatusInfo;
+import org.n52.shetland.ogc.wps.data.ProcessData;
 
 /**
  * TODO JavaDoc

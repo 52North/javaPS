@@ -23,9 +23,9 @@ import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.shetland.ogc.ows.OwsKeyword;
 import org.n52.shetland.ogc.ows.OwsLanguageString;
 import org.n52.shetland.ogc.ows.OwsMetadata;
-import org.n52.iceland.ogc.wps.InputOccurence;
-import org.n52.iceland.ogc.wps.description.LiteralDataDomain;
-import org.n52.iceland.ogc.wps.description.impl.LiteralInputDescriptionImpl;
+import org.n52.shetland.ogc.wps.InputOccurence;
+import org.n52.shetland.ogc.wps.description.LiteralDataDomain;
+import org.n52.shetland.ogc.wps.description.impl.LiteralInputDescriptionImpl;
 import org.n52.javaps.description.TypedLiteralInputDescription;
 import org.n52.javaps.io.literal.LiteralType;
 

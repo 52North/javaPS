@@ -27,7 +27,7 @@ import org.n52.shetland.ogc.ows.OwsDomain;
 import org.n52.shetland.ogc.ows.OwsNoValues;
 import org.n52.shetland.ogc.ows.OwsPossibleValues;
 import org.n52.shetland.ogc.ows.OwsValue;
-import org.n52.iceland.ogc.wps.JobId;
+import org.n52.shetland.ogc.wps.JobId;
 import org.n52.javaps.engine.Engine;
 
 /**

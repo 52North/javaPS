@@ -20,13 +20,13 @@ import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 
+import org.n52.shetland.utils.HTTP;
 import org.n52.shetland.ogc.ows.OwsCode;
-import org.n52.iceland.ogc.wps.Format;
-import org.n52.iceland.ogc.wps.data.Body;
-import org.n52.iceland.utils.HTTP;
-import org.n52.iceland.ogc.wps.data.ReferenceProcessData;
-import org.n52.iceland.ogc.wps.data.ValueProcessData;
-import org.n52.iceland.ogc.wps.data.impl.InMemoryValueProcessData;
+import org.n52.shetland.ogc.wps.Format;
+import org.n52.shetland.ogc.wps.data.Body;
+import org.n52.shetland.ogc.wps.data.ReferenceProcessData;
+import org.n52.shetland.ogc.wps.data.ValueProcessData;
+import org.n52.shetland.ogc.wps.data.impl.InMemoryValueProcessData;
 
 
 /**

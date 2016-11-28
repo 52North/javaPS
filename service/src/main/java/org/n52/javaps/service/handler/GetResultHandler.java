@@ -25,10 +25,10 @@ import java.util.concurrent.Future;
 
 import javax.inject.Inject;
 
-import org.n52.iceland.ogc.wps.JobId;
-import org.n52.iceland.ogc.wps.ResponseMode;
-import org.n52.iceland.ogc.wps.Result;
-import org.n52.iceland.ogc.wps.WPSConstants;
+import org.n52.shetland.ogc.wps.JobId;
+import org.n52.shetland.ogc.wps.ResponseMode;
+import org.n52.shetland.ogc.wps.Result;
+import org.n52.shetland.ogc.wps.WPSConstants;
 import org.n52.iceland.request.handler.GenericOperationHandler;
 import org.n52.iceland.request.handler.OperationHandlerKey;
 import org.n52.janmayen.http.MediaType;

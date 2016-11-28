@@ -25,7 +25,7 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-import org.n52.iceland.ogc.wps.Format;
+import org.n52.shetland.ogc.wps.Format;
 
 /**
  * XMLParserFactory. Will be initialized within each Framework.

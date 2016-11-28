@@ -21,11 +21,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-import org.n52.iceland.ogc.wps.ExecutionMode;
-import org.n52.iceland.ogc.wps.OutputDefinition;
-import org.n52.iceland.ogc.wps.ResponseMode;
-import org.n52.iceland.ogc.wps.WPSConstants;
-import org.n52.iceland.ogc.wps.data.ProcessData;
+import org.n52.shetland.ogc.wps.ExecutionMode;
+import org.n52.shetland.ogc.wps.OutputDefinition;
+import org.n52.shetland.ogc.wps.ResponseMode;
+import org.n52.shetland.ogc.wps.WPSConstants;
+import org.n52.shetland.ogc.wps.data.ProcessData;
 import org.n52.iceland.request.AbstractServiceRequest;
 import org.n52.shetland.ogc.ows.OwsCode;
 

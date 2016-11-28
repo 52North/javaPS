@@ -22,7 +22,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 
-import org.n52.iceland.ogc.wps.Format;
+import org.n52.shetland.ogc.wps.Format;
 import org.n52.javaps.description.TypedComplexInputDescription;
 import org.n52.javaps.description.impl.TypedProcessDescriptionFactory;
 import org.n52.javaps.io.InputHandlerRepository;

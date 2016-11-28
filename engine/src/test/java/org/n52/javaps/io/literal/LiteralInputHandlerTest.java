@@ -32,8 +32,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 
-import org.n52.iceland.ogc.wps.Format;
-import org.n52.iceland.ogc.wps.description.LiteralDataDomain;
+import org.n52.shetland.ogc.wps.Format;
+import org.n52.shetland.ogc.wps.description.LiteralDataDomain;
 import org.n52.javaps.description.TypedLiteralInputDescription;
 import org.n52.javaps.description.impl.TypedProcessDescriptionFactory;
 import org.n52.javaps.io.Data;

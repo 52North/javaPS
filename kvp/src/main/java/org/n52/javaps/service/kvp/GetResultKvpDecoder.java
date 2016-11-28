@@ -16,8 +16,8 @@
  */
 package org.n52.javaps.service.kvp;
 
-import org.n52.iceland.ogc.wps.WPS200Constants;
-import org.n52.iceland.ogc.wps.WPSConstants;
+import org.n52.shetland.ogc.wps.WPS200Constants;
+import org.n52.shetland.ogc.wps.WPSConstants;
 import org.n52.javaps.request.GetResultRequest;
 
 /**

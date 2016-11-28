@@ -27,9 +27,9 @@ import java.util.function.Supplier;
 import javax.inject.Inject;
 
 import org.n52.shetland.ogc.ows.OwsCode;
-import org.n52.iceland.ogc.wps.OutputDefinition;
-import org.n52.iceland.ogc.wps.data.GroupProcessData;
-import org.n52.iceland.ogc.wps.data.ProcessData;
+import org.n52.shetland.ogc.wps.OutputDefinition;
+import org.n52.shetland.ogc.wps.data.GroupProcessData;
+import org.n52.shetland.ogc.wps.data.ProcessData;
 import org.n52.javaps.engine.EngineProcessExecutionContext;
 import org.n52.javaps.engine.OutputEncodingException;
 import org.n52.javaps.engine.ProcessOutputEncoder;

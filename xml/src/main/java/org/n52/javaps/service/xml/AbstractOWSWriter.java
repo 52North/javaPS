@@ -32,7 +32,7 @@ import java.util.TreeSet;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
 
-import org.n52.iceland.coding.stream.xml.AbstractMultiElementXmlStreamWriter;
+import org.n52.svalbard.encode.stream.xml.AbstractMultiElementXmlStreamWriter;
 import org.n52.iceland.i18n.LocaleHelper;
 import org.n52.janmayen.Optionals;
 import org.n52.janmayen.http.HTTPMethods;

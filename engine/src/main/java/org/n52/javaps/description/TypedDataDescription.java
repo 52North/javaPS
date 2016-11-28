@@ -16,7 +16,7 @@
  */
 package org.n52.javaps.description;
 
-import org.n52.iceland.ogc.wps.description.DataDescription;
+import org.n52.shetland.ogc.wps.description.DataDescription;
 import org.n52.javaps.io.Data;
 
 /**

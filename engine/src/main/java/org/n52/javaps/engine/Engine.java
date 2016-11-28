@@ -24,13 +24,13 @@ import java.util.Set;
 import java.util.concurrent.Future;
 
 import org.n52.shetland.ogc.ows.OwsCode;
-import org.n52.iceland.ogc.wps.JobId;
-import org.n52.iceland.ogc.wps.OutputDefinition;
-import org.n52.iceland.ogc.wps.ResponseMode;
-import org.n52.iceland.ogc.wps.Result;
-import org.n52.iceland.ogc.wps.StatusInfo;
-import org.n52.iceland.ogc.wps.data.ProcessData;
-import org.n52.iceland.ogc.wps.description.ProcessDescription;
+import org.n52.shetland.ogc.wps.JobId;
+import org.n52.shetland.ogc.wps.OutputDefinition;
+import org.n52.shetland.ogc.wps.ResponseMode;
+import org.n52.shetland.ogc.wps.Result;
+import org.n52.shetland.ogc.wps.StatusInfo;
+import org.n52.shetland.ogc.wps.data.ProcessData;
+import org.n52.shetland.ogc.wps.description.ProcessDescription;
 
 /**
  * TODO JavaDoc

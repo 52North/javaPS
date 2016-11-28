@@ -16,7 +16,7 @@
  */
 package org.n52.javaps.description;
 
-import org.n52.iceland.ogc.wps.description.GroupOutputDescription;
+import org.n52.shetland.ogc.wps.description.GroupOutputDescription;
 
 /**
  *

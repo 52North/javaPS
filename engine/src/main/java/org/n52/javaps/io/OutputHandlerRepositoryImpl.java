@@ -26,7 +26,7 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-import org.n52.iceland.ogc.wps.Format;
+import org.n52.shetland.ogc.wps.Format;
 
 public class OutputHandlerRepositoryImpl extends AbstractInputOutputHandlerRepository<OutputHandler>
         implements OutputHandlerRepository {

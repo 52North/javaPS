@@ -21,7 +21,7 @@ import java.util.Comparator;
 import java.util.Optional;
 import java.util.Set;
 
-import org.n52.iceland.ogc.wps.Format;
+import org.n52.shetland.ogc.wps.Format;
 
 /**
  * TODO JavaDoc

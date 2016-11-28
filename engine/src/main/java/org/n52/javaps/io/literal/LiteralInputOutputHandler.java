@@ -41,7 +41,7 @@ import javax.xml.stream.events.XMLEvent;
 
 import org.apache.commons.codec.binary.Base64InputStream;
 
-import org.n52.iceland.ogc.wps.Format;
+import org.n52.shetland.ogc.wps.Format;
 import org.n52.javaps.description.TypedLiteralInputDescription;
 import org.n52.javaps.description.TypedLiteralOutputDescription;
 import org.n52.javaps.description.TypedProcessInputDescription;

@@ -19,8 +19,8 @@ package org.n52.javaps.engine.impl;
 import java.util.List;
 import java.util.UUID;
 
-import org.n52.iceland.ogc.wps.JobId;
-import org.n52.iceland.ogc.wps.OutputDefinition;
+import org.n52.shetland.ogc.wps.JobId;
+import org.n52.shetland.ogc.wps.OutputDefinition;
 import org.n52.javaps.engine.JobIdGenerator;
 import org.n52.javaps.algorithm.IAlgorithm;
 import org.n52.javaps.algorithm.ProcessInputs;

@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import org.n52.iceland.ogc.wps.JobId;
+import org.n52.shetland.ogc.wps.JobId;
 import org.n52.janmayen.Chain;
 import org.n52.javaps.engine.OutputReference;
 import org.n52.javaps.engine.OutputReferencer;

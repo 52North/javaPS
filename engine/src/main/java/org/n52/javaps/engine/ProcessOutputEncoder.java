@@ -18,7 +18,7 @@ package org.n52.javaps.engine;
 
 import java.util.List;
 
-import org.n52.iceland.ogc.wps.data.ProcessData;
+import org.n52.shetland.ogc.wps.data.ProcessData;
 
 /**
  * TODO JavaDoc

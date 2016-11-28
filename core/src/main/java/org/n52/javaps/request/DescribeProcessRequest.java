@@ -21,7 +21,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-import org.n52.iceland.ogc.wps.WPSConstants;
+import org.n52.shetland.ogc.wps.WPSConstants;
 import org.n52.iceland.request.AbstractServiceRequest;
 import org.n52.shetland.ogc.ows.OwsCode;
 

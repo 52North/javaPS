@@ -18,9 +18,9 @@ package org.n52.javaps.response;
 
 import java.util.Optional;
 
-import org.n52.iceland.ogc.wps.Result;
-import org.n52.iceland.ogc.wps.StatusInfo;
-import org.n52.iceland.ogc.wps.WPSConstants;
+import org.n52.shetland.ogc.wps.Result;
+import org.n52.shetland.ogc.wps.StatusInfo;
+import org.n52.shetland.ogc.wps.WPSConstants;
 import org.n52.iceland.response.AbstractServiceResponse;
 
 /**

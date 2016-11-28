@@ -19,7 +19,7 @@ package org.n52.javaps.io;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.n52.iceland.ogc.wps.Format;
+import org.n52.shetland.ogc.wps.Format;
 import org.n52.javaps.description.TypedProcessInputDescription;
 
 /**

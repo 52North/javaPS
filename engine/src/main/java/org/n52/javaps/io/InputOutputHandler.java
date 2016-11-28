@@ -18,7 +18,7 @@ package org.n52.javaps.io;
 
 import java.util.Set;
 
-import org.n52.iceland.ogc.wps.Format;
+import org.n52.shetland.ogc.wps.Format;
 
 public interface InputOutputHandler {
 

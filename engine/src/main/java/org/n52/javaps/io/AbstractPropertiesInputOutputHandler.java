@@ -24,7 +24,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.StreamSupport;
 
-import org.n52.iceland.ogc.wps.Format;
+import org.n52.shetland.ogc.wps.Format;
 import org.n52.javaps.annotation.ConfigurableClass;
 
 import com.fasterxml.jackson.databind.JsonNode;

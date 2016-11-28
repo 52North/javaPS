@@ -17,7 +17,7 @@
 package org.n52.javaps.service.operator.validation;
 
 
-import org.n52.iceland.ogc.wps.JobId;
+import org.n52.shetland.ogc.wps.JobId;
 import org.n52.javaps.request.AbstractJobIdRequest;
 import org.n52.shetland.ogc.ows.exception.InvalidParameterValueException;
 import org.n52.shetland.ogc.ows.exception.MissingParameterValueException;

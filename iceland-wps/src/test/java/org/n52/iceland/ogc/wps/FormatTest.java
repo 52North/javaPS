@@ -16,6 +16,8 @@
  */
 package org.n52.iceland.ogc.wps;
 
+import org.n52.shetland.ogc.wps.Format;
+
 import static org.hamcrest.Matchers.is;
 
 import java.nio.charset.StandardCharsets;

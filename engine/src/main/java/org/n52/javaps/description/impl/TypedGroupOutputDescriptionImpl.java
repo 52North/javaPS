@@ -23,8 +23,8 @@ import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.shetland.ogc.ows.OwsKeyword;
 import org.n52.shetland.ogc.ows.OwsLanguageString;
 import org.n52.shetland.ogc.ows.OwsMetadata;
-import org.n52.iceland.ogc.wps.description.ProcessOutputDescription;
-import org.n52.iceland.ogc.wps.description.impl.GroupOutputDescriptionImpl;
+import org.n52.shetland.ogc.wps.description.ProcessOutputDescription;
+import org.n52.shetland.ogc.wps.description.impl.GroupOutputDescriptionImpl;
 import org.n52.javaps.description.TypedGroupOutputDescription;
 import org.n52.javaps.description.TypedProcessOutputDescription;
 

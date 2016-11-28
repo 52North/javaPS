@@ -16,9 +16,9 @@
  */
 package org.n52.javaps.description.impl;
 
-import org.n52.iceland.ogc.wps.description.LiteralDataDomain;
-import org.n52.iceland.ogc.wps.description.ProcessDescriptionBuilderFactory;
-import org.n52.iceland.ogc.wps.description.impl.LiteralDataDomainImpl;
+import org.n52.shetland.ogc.wps.description.LiteralDataDomain;
+import org.n52.shetland.ogc.wps.description.ProcessDescriptionBuilderFactory;
+import org.n52.shetland.ogc.wps.description.impl.LiteralDataDomainImpl;
 import org.n52.javaps.description.TypedBoundingBoxInputDescription;
 import org.n52.javaps.description.TypedBoundingBoxOutputDescription;
 import org.n52.javaps.description.TypedComplexInputDescription;

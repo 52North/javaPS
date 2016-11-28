@@ -32,8 +32,8 @@ import org.junit.rules.ErrorCollector;
 
 import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.shetland.ogc.ows.OwsLanguageString;
-import org.n52.iceland.ogc.wps.Format;
-import org.n52.iceland.ogc.wps.description.ProcessDescription;
+import org.n52.shetland.ogc.wps.Format;
+import org.n52.shetland.ogc.wps.description.ProcessDescription;
 import org.n52.javaps.io.Data;
 import org.n52.javaps.io.InputHandler;
 import org.n52.javaps.io.InputHandlerRepository;

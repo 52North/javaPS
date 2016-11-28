@@ -23,7 +23,7 @@ import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.shetland.ogc.ows.OwsKeyword;
 import org.n52.shetland.ogc.ows.OwsLanguageString;
 import org.n52.shetland.ogc.ows.OwsMetadata;
-import org.n52.iceland.ogc.wps.description.impl.BoundingBoxOutputDescriptionImpl;
+import org.n52.shetland.ogc.wps.description.impl.BoundingBoxOutputDescriptionImpl;
 import org.n52.javaps.description.TypedBoundingBoxOutputDescription;
 
 public class TypedBoundingBoxOutputDescriptionImpl

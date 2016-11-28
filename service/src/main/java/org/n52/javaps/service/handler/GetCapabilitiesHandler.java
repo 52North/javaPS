@@ -21,10 +21,10 @@ import static java.util.stream.Collectors.toSet;
 import javax.inject.Inject;
 
 import org.n52.shetland.ogc.ows.OwsCapabilities;
-import org.n52.iceland.ogc.wps.ProcessOffering;
-import org.n52.iceland.ogc.wps.ProcessOfferings;
-import org.n52.iceland.ogc.wps.WPSCapabilities;
-import org.n52.iceland.ogc.wps.WPSConstants;
+import org.n52.shetland.ogc.wps.ProcessOffering;
+import org.n52.shetland.ogc.wps.ProcessOfferings;
+import org.n52.shetland.ogc.wps.WPSCapabilities;
+import org.n52.shetland.ogc.wps.WPSConstants;
 import org.n52.iceland.request.handler.AbstractGetCapabilitiesHandler;
 import org.n52.javaps.engine.Engine;
 

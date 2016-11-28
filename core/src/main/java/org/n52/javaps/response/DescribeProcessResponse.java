@@ -19,8 +19,8 @@ package org.n52.javaps.response;
 import java.util.Objects;
 
 import org.n52.iceland.response.AbstractServiceResponse;
-import org.n52.iceland.ogc.wps.ProcessOfferings;
-import org.n52.iceland.ogc.wps.WPSConstants;
+import org.n52.shetland.ogc.wps.ProcessOfferings;
+import org.n52.shetland.ogc.wps.WPSConstants;
 
 /**
  * @author Benjamin Pross

@@ -25,15 +25,15 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import org.n52.iceland.coding.stream.MissingStreamWriterException;
-import org.n52.iceland.coding.stream.StreamWriter;
-import org.n52.iceland.coding.stream.StreamWriterKey;
-import org.n52.iceland.coding.stream.StreamWriterRepository;
-import org.n52.iceland.coding.stream.UnsupportedStreamWriterInputException;
-import org.n52.iceland.coding.stream.xml.XmlStreamWriterKey;
-import org.n52.iceland.ogc.wps.ResponseMode;
-import org.n52.iceland.ogc.wps.Result;
-import org.n52.iceland.ogc.wps.data.ProcessData;
+import org.n52.svalbard.encode.stream.MissingStreamWriterException;
+import org.n52.svalbard.encode.stream.StreamWriter;
+import org.n52.svalbard.encode.stream.StreamWriterKey;
+import org.n52.svalbard.encode.stream.StreamWriterRepository;
+import org.n52.svalbard.encode.stream.UnsupportedStreamWriterInputException;
+import org.n52.svalbard.encode.stream.xml.XmlStreamWriterKey;
+import org.n52.shetland.ogc.wps.ResponseMode;
+import org.n52.shetland.ogc.wps.Result;
+import org.n52.shetland.ogc.wps.data.ProcessData;
 import org.n52.janmayen.http.MediaType;
 import org.n52.javaps.response.ExecuteResponse;
 import org.n52.svalbard.encode.exception.EncodingException;

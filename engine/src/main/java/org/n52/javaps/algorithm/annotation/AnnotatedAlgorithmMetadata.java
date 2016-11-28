@@ -38,8 +38,8 @@ import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
 
-import org.n52.iceland.ogc.wps.description.ProcessInputDescription;
-import org.n52.iceland.ogc.wps.description.ProcessOutputDescription;
+import org.n52.shetland.ogc.wps.description.ProcessInputDescription;
+import org.n52.shetland.ogc.wps.description.ProcessOutputDescription;
 import org.n52.janmayen.MoreCollectors;
 import org.n52.janmayen.Streams;
 import org.n52.javaps.description.TypedProcessDescription;

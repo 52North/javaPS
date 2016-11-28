@@ -20,8 +20,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
 
-import org.n52.iceland.ogc.wps.OutputDefinition;
-import org.n52.iceland.ogc.wps.data.ValueProcessData;
+import org.n52.shetland.ogc.wps.OutputDefinition;
+import org.n52.shetland.ogc.wps.data.ValueProcessData;
 import org.n52.javaps.description.TypedProcessOutputDescription;
 import org.n52.javaps.io.Data;
 import org.n52.javaps.io.EncodingException;

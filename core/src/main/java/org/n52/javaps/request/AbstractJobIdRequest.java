@@ -16,7 +16,7 @@
  */
 package org.n52.javaps.request;
 
-import org.n52.iceland.ogc.wps.JobId;
+import org.n52.shetland.ogc.wps.JobId;
 import org.n52.iceland.request.AbstractServiceRequest;
 
 /**
