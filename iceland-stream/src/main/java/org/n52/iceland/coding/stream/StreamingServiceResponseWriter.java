@@ -20,15 +20,14 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collections;
 import java.util.Set;
-import java.util.function.Supplier;
 
 import org.n52.iceland.coding.encode.ResponseProxy;
 import org.n52.iceland.coding.encode.ResponseWriter;
 import org.n52.iceland.coding.encode.ResponseWriterKey;
-import org.n52.iceland.exception.ows.NoApplicableCodeException;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.response.AbstractServiceResponse;
-import org.n52.iceland.util.http.MediaType;
+import org.n52.janmayen.http.MediaType;
+import org.n52.svalbard.encode.exception.EncodingException;
+import org.n52.svalbard.encode.exception.NoEncoderForKeyException;
 
 /**
  * TODO JavaDoc
@@ -57,9 +56,9 @@ public class StreamingServiceResponseWriter implements ResponseWriter<AbstractSe
 
     @Override
     public void write(AbstractServiceResponse t, OutputStream out, ResponseProxy responseProxy)
-            throws IOException, OwsExceptionReport {
+            throws IOException, EncodingException {
         StreamWriterKey key = new StreamWriterKey(t.getClass(), t.getContentType());
-        StreamWriter<Object> writer = repository.getWriter(key).orElseThrow(missingEncoder(t));
+        StreamWriter<Object> writer = repository.getWriter(key).orElseThrow(() -> new NoEncoderForKeyException(key));
         writer.write(t, out);
     }
 
@@ -74,8 +73,4 @@ public class StreamingServiceResponseWriter implements ResponseWriter<AbstractSe
 
     }
 
-    private static Supplier<OwsExceptionReport> missingEncoder(AbstractServiceResponse t) {
-        return () -> new NoApplicableCodeException()
-                .withMessage("No response encoder forund for %s", t.getClass());
-    }
 }

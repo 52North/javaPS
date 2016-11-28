@@ -16,9 +16,6 @@
  */
 package org.n52.javaps.service.reference;
 
-import org.n52.javaps.service.InternalServerErrorException;
-import org.n52.javaps.service.NotFoundException;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -41,18 +38,20 @@ import org.n52.iceland.coding.stream.MissingStreamWriterException;
 import org.n52.iceland.coding.stream.StreamWriter;
 import org.n52.iceland.coding.stream.StreamWriterKey;
 import org.n52.iceland.coding.stream.StreamWriterRepository;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.ogc.wps.Format;
 import org.n52.iceland.ogc.wps.data.ProcessData;
 import org.n52.iceland.ogc.wps.data.ValueProcessData;
-import org.n52.iceland.util.http.MediaType;
-import org.n52.iceland.util.http.MediaTypes;
+import org.n52.janmayen.http.MediaType;
+import org.n52.janmayen.http.MediaTypes;
 import org.n52.javaps.engine.EngineException;
 import org.n52.javaps.engine.JobNotFoundException;
 import org.n52.javaps.engine.OutputNotFoundException;
 import org.n52.javaps.engine.OutputReference;
 import org.n52.javaps.engine.OutputReferencer;
 import org.n52.javaps.engine.ResultPersistence;
+import org.n52.javaps.service.InternalServerErrorException;
+import org.n52.javaps.service.NotFoundException;
+import org.n52.svalbard.encode.exception.EncodingException;
 
 import com.google.common.io.ByteStreams;
 
@@ -99,7 +98,7 @@ public class OutputReferenceEndpoint {
             StreamWriter<? super ProcessData> writer = getWriter(output, mediaType);
             response.setHeader(HttpHeaders.CONTENT_TYPE, mediaType.toString());
             writer.write(output, response.getOutputStream());
-        } catch (IOException | OwsExceptionReport ex) {
+        } catch (IOException | EncodingException ex) {
             throw new InternalServerErrorException(ex);
         }
     }

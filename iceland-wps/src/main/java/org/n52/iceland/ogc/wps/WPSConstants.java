@@ -19,7 +19,7 @@ package org.n52.iceland.ogc.wps;
 
 import java.util.Set;
 
-import org.n52.iceland.util.http.MediaTypes;
+import org.n52.janmayen.http.MediaTypes;
 
 import com.google.common.collect.ImmutableSet;
 

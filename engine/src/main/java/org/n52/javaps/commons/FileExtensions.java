@@ -22,7 +22,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.n52.iceland.util.http.MediaType;
+import org.n52.janmayen.http.MediaType;
 
 /**
  *

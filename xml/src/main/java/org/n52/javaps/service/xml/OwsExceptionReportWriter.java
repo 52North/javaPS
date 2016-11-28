@@ -24,8 +24,8 @@ import javax.xml.stream.XMLStreamException;
 
 import org.n52.iceland.coding.stream.OwsExceptionReportResponse;
 import org.n52.iceland.coding.stream.xml.AbstractSingleElementXmlStreamWriter;
-import org.n52.iceland.exception.CodedException;
-import org.n52.iceland.exception.ows.OwsExceptionCode;
+import org.n52.shetland.ogc.ows.exception.CodedException;
+import org.n52.shetland.ogc.ows.exception.OwsExceptionCode;
 
 /**
  * TODO JavaDoc

@@ -17,7 +17,6 @@ This project includes:
 
   52°North Iceland under The Apache Software License, Version 2.0
   52°North Iceland Streaming Interfaces under The Apache Software License, Version 2.0
-  52°North Iceland Util module under The Apache Software License, Version 2.0
   52°North Iceland WPS under The Apache Software License, Version 2.0
   52°North Iceland WPS Bindings under The Apache Software License, Version 2.0
   52°North Iceland WPS Core under The Apache Software License, Version 2.0
@@ -26,6 +25,8 @@ This project includes:
   52°North Iceland WPS Processing API Implementation under The Apache Software License, Version 2.0
   52°North Iceland WPS Service Implementation under The Apache Software License, Version 2.0
   52°North Iceland WPS Webapp under The Apache Software License, Version 2.0
+  52°North Jan Mayen under The Apache Software License, Version 2.0
+  52°North Shetland under The Apache Software License, Version 2.0
   AOP alliance under Public Domain
   Apache Commons Codec under Apache License, Version 2.0
   Apache Commons Configuration under Apache License, Version 2.0
@@ -50,6 +51,7 @@ This project includes:
   javax.inject under The Apache Software License, Version 2.0
   JCL 1.1.1 implemented over SLF4J under MIT License
   Joda-Time under Apache 2
+  JTS Topology Suite under Lesser General Public License (LGPL)
   JUnit under Eclipse Public License 1.0
   PJL Compressing Filter under Apache Software License V2.0
   SLF4J API Module under MIT License

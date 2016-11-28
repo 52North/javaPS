@@ -19,9 +19,9 @@ package org.n52.javaps.io.literal;
 import java.io.Serializable;
 import java.net.URI;
 
-import org.n52.iceland.ogc.ows.OwsDomainMetadata;
 import org.n52.javaps.io.DecodingException;
 import org.n52.javaps.io.EncodingException;
+import org.n52.shetland.ogc.ows.OwsDomainMetadata;
 
 /**
  * TODO JavaDoc

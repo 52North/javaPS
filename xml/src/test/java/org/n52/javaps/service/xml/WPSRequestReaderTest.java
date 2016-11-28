@@ -43,7 +43,7 @@ import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 import org.xml.sax.SAXException;
 
-import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.iceland.ogc.wps.DataTransmissionMode;
 import org.n52.iceland.ogc.wps.ExecutionMode;
 import org.n52.iceland.ogc.wps.Format;

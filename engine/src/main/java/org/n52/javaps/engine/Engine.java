@@ -23,7 +23,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.Future;
 
-import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.iceland.ogc.wps.JobId;
 import org.n52.iceland.ogc.wps.OutputDefinition;
 import org.n52.iceland.ogc.wps.ResponseMode;

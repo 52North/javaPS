@@ -39,15 +39,16 @@ import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
 
-import org.n52.iceland.ogc.gml.time.TimeInstant;
-import org.n52.iceland.ogc.gml.time.TimePosition;
-import org.n52.iceland.util.DateTimeHelper;
 import org.n52.iceland.util.XmlFactories;
-import org.n52.iceland.w3c.SchemaLocation;
-import org.n52.iceland.w3c.W3CConstants;
-import org.n52.iceland.w3c.xlink.Link;
-import org.n52.iceland.w3c.xlink.Link.Actuate;
-import org.n52.iceland.w3c.xlink.Link.Show;
+import org.n52.shetland.ogc.gml.time.TimeInstant;
+import org.n52.shetland.ogc.gml.time.TimePosition;
+import org.n52.shetland.util.DateTimeHelper;
+import org.n52.shetland.w3c.SchemaLocation;
+import org.n52.shetland.w3c.W3CConstants;
+import org.n52.shetland.w3c.xlink.Actuate;
+import org.n52.shetland.w3c.xlink.Link;
+import org.n52.shetland.w3c.xlink.Show;
+import org.n52.svalbard.encode.exception.EncodingException;
 
 import com.google.common.base.Strings;
 import com.google.common.escape.Escaper;
@@ -235,7 +236,7 @@ public abstract class AbstractElementXmlStreamWriter extends XmlFactories
         attr(new QName(name), coll, mapper);
     }
 
-    protected <T> void delegate(T object) throws XMLStreamException {
+    protected <T> void delegate(T object) throws XMLStreamException, EncodingException {
         context().write(object);
     }
 

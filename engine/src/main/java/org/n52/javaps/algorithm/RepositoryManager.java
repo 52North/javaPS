@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
-import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.javaps.description.TypedProcessDescription;
 import org.n52.javaps.description.TypedProcessInputDescription;
 import org.n52.javaps.description.TypedProcessOutputDescription;

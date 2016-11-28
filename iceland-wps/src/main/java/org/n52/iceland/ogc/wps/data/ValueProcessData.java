@@ -19,7 +19,7 @@ package org.n52.iceland.ogc.wps.data;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.iceland.ogc.wps.Format;
 
 /**

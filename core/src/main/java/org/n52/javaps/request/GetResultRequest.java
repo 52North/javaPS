@@ -18,21 +18,21 @@ package org.n52.javaps.request;
 
 
 import org.n52.iceland.ogc.wps.WPSConstants;
-import org.n52.javaps.response.GetResultResponse;
 
 /**
  * @author Christian Autermann
  */
-public class GetResultRequest extends AbstractJobIdRequest<GetResultResponse> {
-
-    @Override
-    public GetResultResponse getResponse() {
-        return (GetResultResponse) new GetResultResponse().set(this);
+public class GetResultRequest extends AbstractJobIdRequest {
+    public GetResultRequest() {
+        super(null, null, WPSConstants.Operations.GetResult.name());
     }
 
-    @Override
-    public String getOperationName() {
-        return WPSConstants.Operations.GetResult.toString();
+    public GetResultRequest(String service, String version) {
+        super(service, version, WPSConstants.Operations.GetResult.name());
+    }
+
+    public GetResultRequest(String service, String version, String operationName) {
+        super(service, version, operationName);
     }
 
 }

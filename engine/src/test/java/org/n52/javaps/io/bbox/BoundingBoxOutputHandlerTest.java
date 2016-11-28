@@ -32,7 +32,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 
-import org.n52.iceland.ogc.ows.OwsBoundingBox;
+import org.n52.shetland.ogc.ows.OwsBoundingBox;
 import org.n52.iceland.ogc.wps.Format;
 import org.n52.javaps.description.TypedBoundingBoxOutputDescription;
 import org.n52.javaps.description.impl.TypedProcessDescriptionFactory;

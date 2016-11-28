@@ -18,8 +18,9 @@ package org.n52.iceland.coding.stream.xml;
 
 import javax.xml.stream.XMLStreamException;
 
-import org.n52.iceland.component.Component;
 import org.n52.iceland.coding.stream.StreamWriterKey;
+import org.n52.janmayen.component.Component;
+import org.n52.svalbard.encode.exception.EncodingException;
 
 /**
  *
@@ -28,6 +29,6 @@ import org.n52.iceland.coding.stream.StreamWriterKey;
 public interface ElementXmlStreamWriter extends Component<StreamWriterKey> {
 
     void setContext(XmlStreamWritingContext context);
-    void writeElement(Object object) throws XMLStreamException;
+    void writeElement(Object object) throws XMLStreamException, EncodingException;
 
 }

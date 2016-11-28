@@ -31,8 +31,8 @@ import java.util.function.Function;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.n52.iceland.ogc.ows.OwsAllowedValues;
-import org.n52.iceland.ogc.ows.OwsValue;
+import org.n52.shetland.ogc.ows.OwsAllowedValues;
+import org.n52.shetland.ogc.ows.OwsValue;
 import org.n52.javaps.description.TypedLiteralInputDescription;
 import org.n52.javaps.description.impl.TypedProcessDescriptionFactory;
 import org.n52.javaps.io.literal.LiteralType;

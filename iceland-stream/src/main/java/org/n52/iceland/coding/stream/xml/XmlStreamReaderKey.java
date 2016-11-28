@@ -20,8 +20,8 @@ import java.util.Objects;
 
 import javax.xml.namespace.QName;
 
-import org.n52.iceland.util.http.MediaTypes;
 import org.n52.iceland.coding.stream.StreamReaderKey;
+import org.n52.janmayen.http.MediaTypes;
 
 /**
  * TODO JavaDoc

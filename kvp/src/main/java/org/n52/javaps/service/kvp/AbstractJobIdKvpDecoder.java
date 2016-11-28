@@ -16,40 +16,36 @@
  */
 package org.n52.javaps.service.kvp;
 
-import org.n52.iceland.binding.kvp.AbstractKvpDecoder;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.wps.JobId;
-import org.n52.iceland.util.KvpHelper;
-import org.n52.javaps.request.AbstractJobIdRequest;
+import java.util.Collection;
+import java.util.function.Supplier;
 
-/**
- * TODO JavaDoc
- *
- * @author Christian Autermann
- */
-public abstract class AbstractJobIdKvpDecoder<T extends AbstractJobIdRequest<?>> extends AbstractKvpDecoder<T> {
-    private static final String SERVICE = "service";
-    private static final String VERSION = "version";
-    private static final String REQUEST = "request";
-    private static final String JOBID = "jobid";
+import org.n52.iceland.binding.kvp.AbstractKvpDecoder;
+import org.n52.javaps.request.AbstractJobIdRequest;
+import org.n52.svalbard.decode.DecoderKey;
+
+public abstract class AbstractJobIdKvpDecoder<T extends AbstractJobIdRequest> extends AbstractKvpDecoder<T> {
+
+    private static final String JOB_ID = "JobId";
+
+    public AbstractJobIdKvpDecoder(Supplier<? extends T> supplier, String service, String version, String operation) {
+        super(supplier, service, version, operation);
+    }
+
+    public AbstractJobIdKvpDecoder(Supplier<? extends T> supplier, String service, String version, Enum<?> operation) {
+        super(supplier, service, version, operation);
+    }
+
+    public AbstractJobIdKvpDecoder(Supplier<? extends T> supplier, DecoderKey... keys) {
+        super(supplier, keys);
+    }
+
+    public AbstractJobIdKvpDecoder(Supplier<? extends T> supplier, Collection<? extends DecoderKey> keys) {
+        super(supplier, keys);
+    }
 
     @Override
-    protected void decodeParameter(T request, String name, String value) throws OwsExceptionReport {
-        switch (name.toLowerCase()) {
-            case SERVICE:
-                request.setService(KvpHelper.checkParameterSingleValue(value, name));
-                break;
-            case VERSION:
-                request.setVersion(KvpHelper.checkParameterSingleValue(value, name));
-                break;
-            case REQUEST:
-                KvpHelper.checkParameterSingleValue(value, name);
-                break;
-            case JOBID:
-                request.setJobId(new JobId(KvpHelper.checkParameterSingleValue(value, name)));
-                break;
-            default:
-                throw unsupportedParameter(name, value);
-        }
+    protected void getRequestParameterDefinitions(Builder<T> builder) {
+        builder.add(JOB_ID, AbstractJobIdRequest::setJobId);
     }
+
 }

@@ -37,10 +37,9 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.n52.iceland.coding.stream.StreamWriter;
 import org.n52.iceland.coding.stream.StreamWriterKey;
-import org.n52.iceland.exception.ows.NoApplicableCodeException;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.util.XmlFactories;
-import org.n52.iceland.util.function.ThrowingConsumer;
+import org.n52.janmayen.function.ThrowingConsumer;
+import org.n52.svalbard.encode.exception.EncodingException;
 
 import com.google.common.base.Throwables;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
@@ -66,21 +65,23 @@ public class DocumentXmlStreamWriter extends XmlFactories implements StreamWrite
 
     @Override
     public void write(Object object, OutputStream stream)
-            throws OwsExceptionReport {
+            throws EncodingException {
         try {
             writeIndenting(stream, (out) -> {
-                        try (XmlStreamWritingContext context = createContext(out)) {
-                            context.startDocument();
-                            context.write(object);
-                            context.endDocument();
-                        }
-                    });
-        } catch (XMLStreamException | TransformerException | IOException | InterruptedException ex) {
-            throw new NoApplicableCodeException().causedBy(ex);
+                       try (XmlStreamWritingContext context = createContext(out)) {
+                           context.startDocument();
+                           context.write(object);
+                           context.endDocument();
+                       } catch (XMLStreamException ex) {
+                           throw new EncodingException(ex);
+                       }
+                   });
+        } catch (TransformerException | IOException | InterruptedException ex) {
+            throw new EncodingException(ex);
         }
     }
 
-    private <X extends Throwable> void writeIndenting(OutputStream stream, ThrowingConsumer<OutputStream, X> writer)
+    private <X extends Exception> void writeIndenting(OutputStream stream, ThrowingConsumer<OutputStream, X> writer)
             throws X, TransformerException, IOException, InterruptedException {
         try {
             PipedOutputStream pos = new PipedOutputStream();

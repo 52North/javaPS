@@ -18,8 +18,8 @@ package org.n52.iceland.coding.stream;
 
 import java.util.Objects;
 
-import org.n52.iceland.util.Similar;
-import org.n52.iceland.util.http.MediaType;
+import org.n52.janmayen.http.MediaType;
+import org.n52.janmayen.similar.Similar;
 
 /**
  * TODO JavaDoc

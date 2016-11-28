@@ -16,7 +16,6 @@
  */
 package org.n52.javaps.annotation;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
@@ -32,9 +31,10 @@ import org.apache.commons.configuration2.io.FileLocator;
 import org.apache.commons.configuration2.io.FileLocatorUtils;
 import org.apache.commons.configuration2.io.FileSystem;
 import org.apache.commons.configuration2.io.FileSystemLocationStrategy;
-import org.n52.iceland.util.JSONUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.n52.iceland.util.JSONUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.base.Strings;

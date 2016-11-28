@@ -18,16 +18,26 @@ package org.n52.javaps.request;
 
 import org.n52.iceland.ogc.wps.JobId;
 import org.n52.iceland.request.AbstractServiceRequest;
-import org.n52.iceland.response.AbstractServiceResponse;
 
 /**
  * TODO JavaDoc
  *
  * @author Christian Autermann
  */
-public abstract class AbstractJobIdRequest<T extends AbstractServiceResponse> extends AbstractServiceRequest<T> {
+public abstract class AbstractJobIdRequest extends AbstractServiceRequest {
 
     private JobId jobId;
+
+    public AbstractJobIdRequest() {
+    }
+
+    public AbstractJobIdRequest(String service, String version) {
+        super(service, version);
+    }
+
+    public AbstractJobIdRequest(String service, String version, String operationName) {
+        super(service, version, operationName);
+    }
 
     public JobId getJobId() {
         return jobId;

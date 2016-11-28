@@ -19,10 +19,10 @@ package org.n52.javaps.description.impl;
 import java.util.Collection;
 import java.util.Set;
 
-import org.n52.iceland.ogc.ows.OwsCode;
-import org.n52.iceland.ogc.ows.OwsKeyword;
-import org.n52.iceland.ogc.ows.OwsLanguageString;
-import org.n52.iceland.ogc.ows.OwsMetadata;
+import org.n52.shetland.ogc.ows.OwsCode;
+import org.n52.shetland.ogc.ows.OwsKeyword;
+import org.n52.shetland.ogc.ows.OwsLanguageString;
+import org.n52.shetland.ogc.ows.OwsMetadata;
 import org.n52.iceland.ogc.wps.description.ProcessInputDescription;
 import org.n52.iceland.ogc.wps.description.ProcessOutputDescription;
 import org.n52.iceland.ogc.wps.description.impl.ProcessDescriptionImpl;

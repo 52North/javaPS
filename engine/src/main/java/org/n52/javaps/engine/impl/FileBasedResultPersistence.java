@@ -50,9 +50,6 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.n52.iceland.lifecycle.Constructable;
-import org.n52.iceland.lifecycle.Destroyable;
-import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.iceland.ogc.wps.DataTransmissionMode;
 import org.n52.iceland.ogc.wps.Format;
 import org.n52.iceland.ogc.wps.JobId;
@@ -62,19 +59,15 @@ import org.n52.iceland.ogc.wps.ResponseMode;
 import org.n52.iceland.ogc.wps.Result;
 import org.n52.iceland.ogc.wps.StatusInfo;
 import org.n52.iceland.ogc.wps.data.Body;
-import org.n52.iceland.ogc.wps.data.impl.FileBasedProcessData;
 import org.n52.iceland.ogc.wps.data.GroupProcessData;
 import org.n52.iceland.ogc.wps.data.ProcessData;
 import org.n52.iceland.ogc.wps.data.ValueProcessData;
-import org.n52.iceland.util.Chain;
+import org.n52.iceland.ogc.wps.data.impl.FileBasedProcessData;
 import org.n52.iceland.util.JSONUtils;
 import org.n52.iceland.util.MoreFiles;
-import org.n52.javaps.io.EncodingException;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
+import org.n52.janmayen.Chain;
+import org.n52.janmayen.lifecycle.Constructable;
+import org.n52.janmayen.lifecycle.Destroyable;
 import org.n52.javaps.engine.EngineException;
 import org.n52.javaps.engine.EngineProcessExecutionContext;
 import org.n52.javaps.engine.JobNotFoundException;
@@ -82,10 +75,12 @@ import org.n52.javaps.engine.OutputNotFoundException;
 import org.n52.javaps.engine.OutputReference;
 import org.n52.javaps.engine.OutputReferencer;
 import org.n52.javaps.engine.ResultPersistence;
+import org.n52.javaps.io.EncodingException;
+import org.n52.shetland.ogc.ows.OwsCode;
 
-import static java.util.stream.Collectors.toMap;
-import static java.util.stream.Collectors.toMap;
-import static java.util.stream.Collectors.toMap;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
  *

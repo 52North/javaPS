@@ -22,7 +22,7 @@ import static java.util.Comparator.nullsLast;
 
 import java.util.Comparator;
 
-import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.shetland.ogc.ows.OwsCode;
 
 /**
  * TODO JavaDoc

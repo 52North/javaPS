@@ -32,6 +32,10 @@
             <artifactId>iceland-wps</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.n52.shetland</groupId>
+            <artifactId>shetland</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.n52.iceland</groupId>
             <artifactId>iceland</artifactId>
         </dependency>

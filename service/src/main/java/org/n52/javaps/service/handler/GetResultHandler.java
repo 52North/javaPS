@@ -25,21 +25,21 @@ import java.util.concurrent.Future;
 
 import javax.inject.Inject;
 
-import org.n52.iceland.exception.ows.InvalidParameterValueException;
-import org.n52.iceland.exception.ows.NoApplicableCodeException;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.ogc.wps.JobId;
 import org.n52.iceland.ogc.wps.ResponseMode;
 import org.n52.iceland.ogc.wps.Result;
 import org.n52.iceland.ogc.wps.WPSConstants;
 import org.n52.iceland.request.handler.GenericOperationHandler;
 import org.n52.iceland.request.handler.OperationHandlerKey;
-import org.n52.iceland.util.http.MediaType;
+import org.n52.janmayen.http.MediaType;
 import org.n52.javaps.engine.Engine;
 import org.n52.javaps.engine.EngineException;
 import org.n52.javaps.engine.JobNotFoundException;
 import org.n52.javaps.request.GetResultRequest;
 import org.n52.javaps.response.GetResultResponse;
+import org.n52.shetland.ogc.ows.exception.InvalidParameterValueException;
+import org.n52.shetland.ogc.ows.exception.NoApplicableCodeException;
+import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
 
 /**
  * TODO JavaDoc

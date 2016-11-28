@@ -16,26 +16,23 @@
  */
 package org.n52.javaps.request;
 
-
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.iceland.ogc.wps.ExecutionMode;
 import org.n52.iceland.ogc.wps.OutputDefinition;
 import org.n52.iceland.ogc.wps.ResponseMode;
 import org.n52.iceland.ogc.wps.WPSConstants;
 import org.n52.iceland.ogc.wps.data.ProcessData;
 import org.n52.iceland.request.AbstractServiceRequest;
-import org.n52.javaps.response.ExecuteResponse;
-
+import org.n52.shetland.ogc.ows.OwsCode;
 
 /**
  * @author Christian Autermann
  */
-public class ExecuteRequest extends AbstractServiceRequest<ExecuteResponse> {
+public class ExecuteRequest extends AbstractServiceRequest {
 
     private OwsCode id;
     private ExecutionMode executionMode = ExecutionMode.AUTO;
@@ -43,6 +40,17 @@ public class ExecuteRequest extends AbstractServiceRequest<ExecuteResponse> {
     private final List<ProcessData> inputs = new LinkedList<>();
     private final List<OutputDefinition> outputs = new LinkedList<>();
 
+    public ExecuteRequest() {
+        super(null, null, WPSConstants.Operations.Dismiss.name());
+    }
+
+    public ExecuteRequest(String service, String version) {
+        super(service, version, WPSConstants.Operations.Dismiss.name());
+    }
+
+    public ExecuteRequest(String service, String version, String operationName) {
+        super(service, version, operationName);
+    }
 
     public void addInput(ProcessData input) {
         this.inputs.add(Objects.requireNonNull(input));
@@ -50,16 +58,6 @@ public class ExecuteRequest extends AbstractServiceRequest<ExecuteResponse> {
 
     public void addOutput(OutputDefinition output) {
         this.outputs.add(Objects.requireNonNull(output));
-    }
-
-    @Override
-    public ExecuteResponse getResponse() {
-        return (ExecuteResponse) new ExecuteResponse().set(this);
-    }
-
-    @Override
-    public String getOperationName() {
-        return WPSConstants.Operations.Execute.name();
     }
 
     public List<ProcessData> getInputs() {

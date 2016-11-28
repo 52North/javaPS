@@ -16,7 +16,7 @@
  */
 package org.n52.iceland.coding.stream;
 
-import org.n52.iceland.exception.ows.OwsExceptionReport;
+import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
 import org.n52.iceland.response.AbstractServiceResponse;
 
 /**

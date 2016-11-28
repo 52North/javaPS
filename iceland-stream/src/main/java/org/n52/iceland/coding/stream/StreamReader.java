@@ -18,8 +18,8 @@ package org.n52.iceland.coding.stream;
 
 import java.io.InputStream;
 
-import org.n52.iceland.component.Component;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
+import org.n52.janmayen.component.Component;
+import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
 
 /**
  * TODO JavaDoc

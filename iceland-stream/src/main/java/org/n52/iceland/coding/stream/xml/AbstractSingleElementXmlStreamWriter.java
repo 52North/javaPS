@@ -20,6 +20,8 @@ import java.util.Objects;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.n52.svalbard.encode.exception.EncodingException;
+
 /**
  * TODO JavaDoc
  *
@@ -36,7 +38,7 @@ public abstract class AbstractSingleElementXmlStreamWriter<S> extends AbstractMu
     @Override
     @SuppressWarnings("unchecked")
     public void writeElement(Object object)
-            throws XMLStreamException {
+            throws XMLStreamException, EncodingException {
         if (context() == null) {
             throw new IllegalStateException();
         }

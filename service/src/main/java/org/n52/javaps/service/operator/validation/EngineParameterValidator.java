@@ -27,7 +27,7 @@ import org.n52.javaps.engine.Engine;
  *
  * @author Christian Autermann
  */
-public abstract class EngineParameterValidator<T extends AbstractServiceRequest<?>> implements ParameterValidator<T> {
+public abstract class EngineParameterValidator<T extends AbstractServiceRequest> implements ParameterValidator<T> {
 
     private Engine engine;
 

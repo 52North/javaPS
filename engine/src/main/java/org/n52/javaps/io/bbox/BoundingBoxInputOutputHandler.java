@@ -43,7 +43,7 @@ import javax.xml.stream.events.XMLEvent;
 
 import org.apache.commons.codec.binary.Base64InputStream;
 
-import org.n52.iceland.ogc.ows.OwsBoundingBox;
+import org.n52.shetland.ogc.ows.OwsBoundingBox;
 import org.n52.iceland.ogc.wps.Format;
 import org.n52.javaps.description.TypedProcessInputDescription;
 import org.n52.javaps.description.TypedProcessOutputDescription;

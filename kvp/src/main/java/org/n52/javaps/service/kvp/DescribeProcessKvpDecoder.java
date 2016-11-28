@@ -16,55 +16,32 @@
  */
 package org.n52.javaps.service.kvp;
 
-import java.util.Collections;
-import java.util.Set;
-
 import org.n52.iceland.binding.kvp.AbstractKvpDecoder;
-import org.n52.iceland.coding.decode.DecoderKey;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.ogc.wps.WPS200Constants;
 import org.n52.iceland.ogc.wps.WPSConstants;
-import org.n52.iceland.util.KvpHelper;
+import org.n52.janmayen.function.ThrowingBiConsumer;
 import org.n52.javaps.request.DescribeProcessRequest;
+import org.n52.shetland.ogc.ows.OwsCode;
+import org.n52.svalbard.decode.exception.DecodingException;
 
 public class DescribeProcessKvpDecoder extends AbstractKvpDecoder<DescribeProcessRequest> {
-    private static final DecoderKey KEY
-            = createKey(WPSConstants.SERVICE, WPS200Constants.VERSION, WPSConstants.Operations.DescribeProcess);
-    private static final String SERVICE = "service";
-    private static final String VERSION = "version";
-    private static final String REQUEST = "request";
     private static final String IDENTIFIER = "identifier";
 
-    @Override
-    public Set<DecoderKey> getKeys() {
-        return Collections.singleton(KEY);
+    public DescribeProcessKvpDecoder() {
+        super(DescribeProcessRequest::new,
+              WPSConstants.SERVICE,
+              WPS200Constants.VERSION,
+              WPSConstants.Operations.DescribeProcess);
     }
 
     @Override
-    protected DescribeProcessRequest createRequest() {
-        return new DescribeProcessRequest();
+    protected void getRequestParameterDefinitions(Builder<DescribeProcessRequest> builder) {
+        builder.add(IDENTIFIER, asList(DescribeProcessRequest::addProcessIdentifiers));
     }
 
-    @Override
-    protected void decodeParameter(DescribeProcessRequest request, String name,
-                                   String value)
-            throws OwsExceptionReport {
-        switch (name.toLowerCase()) {
-            case SERVICE:
-                request.setService(KvpHelper.checkParameterSingleValue(value, name));
-                break;
-            case VERSION:
-                request.setVersion(KvpHelper.checkParameterSingleValue(value, name));
-                break;
-            case REQUEST:
-                KvpHelper.checkParameterSingleValue(value, name);
-                break;
-            case IDENTIFIER:
-                KvpHelper.checkParameterMultipleValues(value, name).stream().forEach(request::addProcessIdentifier);
-                break;
-            default:
-                throw unsupportedParameter(name, value);
-        }
+    protected <T> ThrowingBiConsumer<T, String, DecodingException> asOwsCode(
+            ThrowingBiConsumer<T, OwsCode, DecodingException> delegate) {
+        return (t, u) -> delegate.accept(t, new OwsCode(u));
     }
 
 }

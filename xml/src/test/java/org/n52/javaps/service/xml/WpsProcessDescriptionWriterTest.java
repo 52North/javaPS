@@ -16,9 +16,6 @@
  */
 package org.n52.javaps.service.xml;
 
-import org.n52.javaps.service.xml.WPSWriter;
-import org.n52.javaps.service.xml.WPSResponseWriter;
-
 import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Collections;
@@ -38,12 +35,11 @@ import org.n52.iceland.coding.stream.StreamWriterRepository;
 import org.n52.iceland.coding.stream.xml.DocumentXmlStreamWriter;
 import org.n52.iceland.coding.stream.xml.ElementXmlStreamWriter;
 import org.n52.iceland.coding.stream.xml.ElementXmlStreamWriterRepository;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.ogc.wps.Format;
 import org.n52.iceland.ogc.wps.ProcessOffering;
 import org.n52.iceland.ogc.wps.ProcessOfferings;
 import org.n52.iceland.ogc.wps.description.ProcessDescription;
-import org.n52.iceland.util.http.MediaTypes;
+import org.n52.janmayen.http.MediaTypes;
 import org.n52.javaps.algorithm.annotation.Algorithm;
 import org.n52.javaps.algorithm.annotation.AnnotatedAlgorithmMetadata;
 import org.n52.javaps.algorithm.annotation.ComplexInput;
@@ -62,6 +58,7 @@ import org.n52.javaps.io.literal.LiteralTypeRepository;
 import org.n52.javaps.io.literal.xsd.LiteralIntType;
 import org.n52.javaps.io.literal.xsd.LiteralStringType;
 import org.n52.javaps.response.DescribeProcessResponse;
+import org.n52.svalbard.encode.exception.EncodingException;
 
 /**
  * TODO JavaDoc
@@ -74,7 +71,7 @@ public class WpsProcessDescriptionWriterTest {
             = Arrays.asList(WPSResponseWriter::new, WPSWriter::new);
 
     @Test
-    public void test() throws OwsExceptionReport {
+    public void test() throws EncodingException {
         StreamWriterRepository repo = createRepository();
 
         ProcessOffering processOffering = new ProcessOffering(getProcessDescription());
@@ -117,7 +114,7 @@ public class WpsProcessDescriptionWriterTest {
     }
 
     private <T> void write(StreamWriterRepository repo, T object, OutputStream out)
-            throws OwsExceptionReport {
+            throws EncodingException {
         @SuppressWarnings("unchecked")
         Class<? extends T> aClass = (Class<? extends T>) object.getClass();
         Optional<StreamWriter<? super T>> writer = repo.getWriter(MediaTypes.APPLICATION_XML, aClass);

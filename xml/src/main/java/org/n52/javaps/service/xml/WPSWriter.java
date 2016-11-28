@@ -31,9 +31,6 @@ import javax.xml.stream.XMLStreamException;
 import org.apache.commons.codec.binary.Base64InputStream;
 
 import org.n52.iceland.coding.stream.xml.XLinkConstants;
-import org.n52.iceland.ogc.ows.OwsCRS;
-import org.n52.iceland.ogc.ows.OwsPossibleValues;
-import org.n52.iceland.ogc.ows.OwsValue;
 import org.n52.iceland.ogc.wps.DataTransmissionMode;
 import org.n52.iceland.ogc.wps.Format;
 import org.n52.iceland.ogc.wps.JobControlOption;
@@ -69,6 +66,10 @@ import org.n52.iceland.ogc.wps.description.ProcessOutputDescription;
 import org.n52.iceland.ogc.wps.description.ProcessOutputDescriptionContainer;
 import org.n52.javaps.io.bbox.BoundingBoxInputOutputHandler;
 import org.n52.javaps.io.literal.LiteralInputOutputHandler;
+import org.n52.shetland.ogc.ows.OwsCRS;
+import org.n52.shetland.ogc.ows.OwsPossibleValues;
+import org.n52.shetland.ogc.ows.OwsValue;
+import org.n52.svalbard.encode.exception.EncodingException;
 
 import com.google.common.io.CharStreams;
 
@@ -96,7 +97,7 @@ public class WPSWriter extends AbstractOWSWriter {
 
     @Override
     public void writeElement(Object object)
-            throws XMLStreamException {
+            throws XMLStreamException, EncodingException {
         if (object instanceof ProcessOffering) {
             writeProcessOffering((ProcessOffering) object);
         } else if (object instanceof Result) {

@@ -24,9 +24,9 @@ import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-import org.n52.iceland.component.AbstractSimilarityKeyRepository;
-import org.n52.iceland.lifecycle.Constructable;
-import org.n52.iceland.util.http.MediaType;
+import org.n52.janmayen.component.AbstractSimilarityKeyRepository;
+import org.n52.janmayen.http.MediaType;
+import org.n52.janmayen.lifecycle.Constructable;
 
 /**
  * TODO JavaDoc

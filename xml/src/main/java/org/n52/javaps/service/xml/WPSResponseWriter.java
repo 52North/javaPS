@@ -25,6 +25,7 @@ import org.n52.javaps.response.DismissResponse;
 import org.n52.javaps.response.ExecuteResponse;
 import org.n52.javaps.response.GetResultResponse;
 import org.n52.javaps.response.GetStatusResponse;
+import org.n52.svalbard.encode.exception.EncodingException;
 
 /**
  * TODO JavaDoc
@@ -44,7 +45,7 @@ public class WPSResponseWriter extends AbstractMultiElementXmlStreamWriter {
 
     @Override
     public void writeElement(Object object)
-            throws XMLStreamException {
+            throws XMLStreamException, EncodingException {
         if (object instanceof DescribeProcessResponse) {
             DescribeProcessResponse response = (DescribeProcessResponse) object;
             delegate(response.getProcessOfferings());

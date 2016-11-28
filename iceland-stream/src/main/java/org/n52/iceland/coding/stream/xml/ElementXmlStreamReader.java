@@ -19,8 +19,8 @@ package org.n52.iceland.coding.stream.xml;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
 
-import org.n52.iceland.component.Component;
 import org.n52.iceland.coding.stream.StreamReaderKey;
+import org.n52.janmayen.component.Component;
 
 /**
  * TODO JavaDoc

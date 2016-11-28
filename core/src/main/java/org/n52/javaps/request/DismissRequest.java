@@ -17,20 +17,21 @@
 package org.n52.javaps.request;
 
 import org.n52.iceland.ogc.wps.WPSConstants;
-import org.n52.javaps.response.DismissResponse;
 
 /**
  * @author Christian Autermann
  */
-public class DismissRequest extends AbstractJobIdRequest<DismissResponse> {
-
-    @Override
-    public DismissResponse getResponse() {
-        return (DismissResponse) new DismissResponse().set(this);
+public class DismissRequest extends AbstractJobIdRequest {
+    public DismissRequest() {
+        super(null, null, WPSConstants.Operations.Dismiss.name());
     }
 
-    @Override
-    public String getOperationName() {
-        return WPSConstants.Operations.Dismiss.name();
+    public DismissRequest(String service, String version) {
+        super(service, version, WPSConstants.Operations.Dismiss.name());
     }
+
+    public DismissRequest(String service, String version, String operationName) {
+        super(service, version, operationName);
+    }
+
 }

@@ -16,7 +16,7 @@
  */
 package org.n52.javaps.commons;
 
-import org.n52.iceland.util.http.MediaType;
+import org.n52.janmayen.http.MediaType;
 
 /**
  * TODO JavaDoc

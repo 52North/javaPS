@@ -21,25 +21,25 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.iceland.ogc.wps.WPSConstants;
 import org.n52.iceland.request.AbstractServiceRequest;
-import org.n52.javaps.response.DescribeProcessResponse;
+import org.n52.shetland.ogc.ows.OwsCode;
 
-public class DescribeProcessRequest extends
-        AbstractServiceRequest<DescribeProcessResponse> {
+public class DescribeProcessRequest extends AbstractServiceRequest {
     public static final String ALL_KEYWORD = "ALL";
 
     private final List<OwsCode> identifiers = new LinkedList<>();
 
-    @Override
-    public DescribeProcessResponse getResponse() {
-        return (DescribeProcessResponse) new DescribeProcessResponse().set(this);
+    public DescribeProcessRequest() {
+        super(null, null, WPSConstants.Operations.DescribeProcess.name());
     }
 
-    @Override
-    public String getOperationName() {
-        return WPSConstants.Operations.DescribeProcess.name();
+    public DescribeProcessRequest(String service, String version) {
+        super(service, version, WPSConstants.Operations.DescribeProcess.name());
+    }
+
+    public DescribeProcessRequest(String service, String version, String operationName) {
+        super(service, version, operationName);
     }
 
     public List<OwsCode> getProcessIdentifier() {
@@ -48,6 +48,10 @@ public class DescribeProcessRequest extends
 
     public void addProcessIdentifier(String identifier) {
         addProcessIdentifier(new OwsCode(identifier));
+    }
+
+    public void addProcessIdentifiers(List<String> identifiers) {
+        identifiers.forEach(this::addProcessIdentifier);
     }
 
     public void addProcessIdentifier(OwsCode identifier) {

@@ -16,8 +16,6 @@
  */
 package org.n52.iceland.coding.stream.xml;
 
-import org.n52.iceland.util.XmlFactories;
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Reader;
@@ -37,6 +35,8 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
 
 import org.n52.iceland.coding.stream.MissingStreamWriterException;
+import org.n52.iceland.util.XmlFactories;
+import org.n52.svalbard.encode.exception.EncodingException;
 
 /**
  * TODO JavaDoc
@@ -59,7 +59,7 @@ public class XmlStreamWritingContext extends XmlFactories implements AutoCloseab
     }
 
     public <T> void write(T object)
-            throws XMLStreamException {
+            throws XMLStreamException, EncodingException {
         if (object != null) {
             XmlStreamWriterKey key = new XmlStreamWriterKey(object.getClass());
             ElementXmlStreamWriter delegate = this.writerProvider

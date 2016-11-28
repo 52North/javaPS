@@ -20,9 +20,9 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.iceland.ogc.wps.JobId;
-import org.n52.iceland.util.Chain;
+import org.n52.janmayen.Chain;
+import org.n52.shetland.ogc.ows.OwsCode;
 
 /**
  * TODO JavaDoc

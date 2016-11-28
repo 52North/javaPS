@@ -21,7 +21,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.SortedSet;
 
-import org.n52.iceland.util.CollectionHelper;
+import org.n52.shetland.util.CollectionHelper;
 
 
 /**

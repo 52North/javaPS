@@ -17,8 +17,6 @@
 package org.n52.iceland.coding.stream.xml;
 
 
-import org.n52.iceland.util.XmlFactories;
-
 import java.io.InputStream;
 import java.util.Set;
 
@@ -28,12 +26,13 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
-import org.n52.iceland.component.Component;
-import org.n52.iceland.exception.ows.NoApplicableCodeException;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.coding.stream.MissingStreamReaderException;
 import org.n52.iceland.coding.stream.StreamReader;
 import org.n52.iceland.coding.stream.StreamReaderKey;
+import org.n52.iceland.util.XmlFactories;
+import org.n52.janmayen.component.Component;
+import org.n52.shetland.ogc.ows.exception.NoApplicableCodeException;
+import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
 
 
 /**

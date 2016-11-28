@@ -16,7 +16,7 @@
  */
 package org.n52.iceland.ogc.wps;
 
-import org.n52.iceland.w3c.SchemaLocation;
+import org.n52.shetland.w3c.SchemaLocation;
 
 /**
  * WpsConstants holds all important and often used constants (e.g. name of the

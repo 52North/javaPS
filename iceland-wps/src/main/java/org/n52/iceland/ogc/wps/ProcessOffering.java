@@ -24,7 +24,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.n52.iceland.ogc.wps.description.ProcessDescription;
-import org.n52.iceland.util.CollectionHelper;
+import org.n52.shetland.util.CollectionHelper;
 
 /**
  * TODO JavaDoc

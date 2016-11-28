@@ -18,11 +18,11 @@ package org.n52.javaps.description.impl;
 
 import java.util.Set;
 
-import org.n52.iceland.ogc.ows.OwsCRS;
-import org.n52.iceland.ogc.ows.OwsCode;
-import org.n52.iceland.ogc.ows.OwsKeyword;
-import org.n52.iceland.ogc.ows.OwsLanguageString;
-import org.n52.iceland.ogc.ows.OwsMetadata;
+import org.n52.shetland.ogc.ows.OwsCRS;
+import org.n52.shetland.ogc.ows.OwsCode;
+import org.n52.shetland.ogc.ows.OwsKeyword;
+import org.n52.shetland.ogc.ows.OwsLanguageString;
+import org.n52.shetland.ogc.ows.OwsMetadata;
 import org.n52.iceland.ogc.wps.description.impl.BoundingBoxOutputDescriptionImpl;
 import org.n52.javaps.description.TypedBoundingBoxOutputDescription;
 

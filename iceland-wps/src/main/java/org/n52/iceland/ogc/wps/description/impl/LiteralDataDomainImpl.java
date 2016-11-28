@@ -19,10 +19,10 @@ package org.n52.iceland.ogc.wps.description.impl;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.n52.iceland.ogc.ows.OwsAnyValue;
-import org.n52.iceland.ogc.ows.OwsDomainMetadata;
-import org.n52.iceland.ogc.ows.OwsPossibleValues;
-import org.n52.iceland.ogc.ows.OwsValue;
+import org.n52.shetland.ogc.ows.OwsAnyValue;
+import org.n52.shetland.ogc.ows.OwsDomainMetadata;
+import org.n52.shetland.ogc.ows.OwsPossibleValues;
+import org.n52.shetland.ogc.ows.OwsValue;
 import org.n52.iceland.ogc.wps.description.LiteralDataDomain;
 
 public class LiteralDataDomainImpl implements LiteralDataDomain {

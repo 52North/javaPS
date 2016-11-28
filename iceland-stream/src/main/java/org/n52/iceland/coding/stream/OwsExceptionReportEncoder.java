@@ -20,15 +20,15 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
-import org.n52.iceland.coding.HelperValues;
-import org.n52.iceland.coding.encode.Encoder;
-import org.n52.iceland.coding.encode.EncoderKey;
-import org.n52.iceland.coding.encode.EncodingException;
-import org.n52.iceland.coding.encode.ExceptionEncoderKey;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.response.AbstractServiceResponse;
-import org.n52.iceland.util.http.MediaType;
-import org.n52.iceland.util.http.MediaTypes;
+import org.n52.janmayen.http.MediaType;
+import org.n52.janmayen.http.MediaTypes;
+import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
+import org.n52.svalbard.HelperValues;
+import org.n52.svalbard.encode.Encoder;
+import org.n52.svalbard.encode.EncoderKey;
+import org.n52.svalbard.encode.ExceptionEncoderKey;
+import org.n52.svalbard.encode.exception.EncodingException;
 
 /**
  * Helper class to wrap a thrown {@link OwsExceptionReport} into a

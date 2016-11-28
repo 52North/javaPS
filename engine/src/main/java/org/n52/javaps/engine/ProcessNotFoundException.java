@@ -16,7 +16,7 @@
  */
 package org.n52.javaps.engine;
 
-import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.shetland.ogc.ows.OwsCode;
 
 /**
  * TODO JavaDoc

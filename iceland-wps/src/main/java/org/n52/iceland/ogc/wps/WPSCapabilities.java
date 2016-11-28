@@ -16,13 +16,14 @@
  */
 package org.n52.iceland.ogc.wps;
 
+import java.util.Collection;
 import java.util.Optional;
-import java.util.Set;
 
-import org.n52.iceland.ogc.ows.OwsCapabilities;
-import org.n52.iceland.ogc.ows.OwsOperationsMetadata;
-import org.n52.iceland.ogc.ows.OwsServiceIdentification;
-import org.n52.iceland.ogc.ows.OwsServiceProvider;
+import org.n52.shetland.ogc.ows.OwsCapabilities;
+import org.n52.shetland.ogc.ows.OwsCapabilitiesExtension;
+import org.n52.shetland.ogc.ows.OwsOperationsMetadata;
+import org.n52.shetland.ogc.ows.OwsServiceIdentification;
+import org.n52.shetland.ogc.ows.OwsServiceProvider;
 
 public class WPSCapabilities extends OwsCapabilities {
 
@@ -32,18 +33,20 @@ public class WPSCapabilities extends OwsCapabilities {
                            OwsServiceIdentification serviceIdentification,
                            OwsServiceProvider serviceProvider,
                            OwsOperationsMetadata operationsMetadata,
-                           Set<String> languages,
+                           Collection<String> languages,
+                           Collection<OwsCapabilitiesExtension> extension,
                            ProcessOfferings processOfferings) {
-        this(WPSConstants.SERVICE, version, updateSequence, serviceIdentification, serviceProvider, operationsMetadata, languages, processOfferings);
+        this(WPSConstants.SERVICE, version, updateSequence, serviceIdentification, serviceProvider, operationsMetadata, languages, extension, processOfferings);
     }
 
     public WPSCapabilities(String service, String version, String updateSequence,
                            OwsServiceIdentification serviceIdentification,
                            OwsServiceProvider serviceProvider,
                            OwsOperationsMetadata operationsMetadata,
-                           Set<String> languages,
+                           Collection<String> languages,
+                           Collection<OwsCapabilitiesExtension> extension,
                            ProcessOfferings processOfferings) {
-        super(service, version, updateSequence, serviceIdentification, serviceProvider, operationsMetadata, languages);
+        super(service, version, updateSequence, serviceIdentification, serviceProvider, operationsMetadata, languages, extension);
         this.processOfferings = Optional.ofNullable(processOfferings);
     }
 

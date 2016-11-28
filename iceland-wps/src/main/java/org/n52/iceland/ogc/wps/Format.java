@@ -30,8 +30,8 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-import org.n52.iceland.util.Optionals;
-import org.n52.iceland.util.http.MediaType;
+import org.n52.janmayen.Optionals;
+import org.n52.janmayen.http.MediaType;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableSet;

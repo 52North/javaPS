@@ -16,7 +16,7 @@
  */
 package org.n52.javaps.io.bbox;
 
-import org.n52.iceland.ogc.ows.OwsBoundingBox;
+import org.n52.shetland.ogc.ows.OwsBoundingBox;
 import org.n52.javaps.io.Data;
 
 public final class BoundingBoxData implements Data<OwsBoundingBox> {

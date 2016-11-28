@@ -16,24 +16,22 @@
  */
 package org.n52.javaps.request;
 
-
-import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.ogc.wps.WPSConstants;
-import org.n52.javaps.response.GetStatusResponse;
 
 /**
  * @author Christian Autermann
  */
-public class GetStatusRequest extends AbstractJobIdRequest<GetStatusResponse>{
-
-    @Override
-    public GetStatusResponse getResponse() throws OwsExceptionReport {
-        return (GetStatusResponse) new GetStatusResponse().set(this);
+public class GetStatusRequest extends AbstractJobIdRequest {
+    public GetStatusRequest() {
+        super(null, null, WPSConstants.Operations.GetStatus.name());
     }
 
-    @Override
-    public String getOperationName() {
-        return WPSConstants.Operations.GetStatus.toString();
+    public GetStatusRequest(String service, String version) {
+        super(service, version, WPSConstants.Operations.GetStatus.name());
+    }
+
+    public GetStatusRequest(String service, String version, String operationName) {
+        super(service, version, operationName);
     }
 
 }

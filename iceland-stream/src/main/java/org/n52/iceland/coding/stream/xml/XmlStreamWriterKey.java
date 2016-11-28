@@ -16,8 +16,8 @@
  */
 package org.n52.iceland.coding.stream.xml;
 
-import org.n52.iceland.util.http.MediaTypes;
 import org.n52.iceland.coding.stream.StreamWriterKey;
+import org.n52.janmayen.http.MediaTypes;
 
 /**
  * TODO JavaDoc

@@ -24,15 +24,6 @@ import java.util.concurrent.ExecutionException;
 
 import javax.inject.Inject;
 
-import org.n52.iceland.exception.ows.InvalidParameterValueException;
-import org.n52.iceland.exception.ows.NoApplicableCodeException;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.ows.OwsAllowedValues;
-import org.n52.iceland.ogc.ows.OwsCode;
-import org.n52.iceland.ogc.ows.OwsDomain;
-import org.n52.iceland.ogc.ows.OwsNoValues;
-import org.n52.iceland.ogc.ows.OwsPossibleValues;
-import org.n52.iceland.ogc.ows.OwsValue;
 import org.n52.iceland.ogc.wps.ExecutionMode;
 import org.n52.iceland.ogc.wps.JobId;
 import org.n52.iceland.ogc.wps.ResponseMode;
@@ -42,7 +33,7 @@ import org.n52.iceland.ogc.wps.WPSConstants;
 import org.n52.iceland.ogc.wps.data.ProcessData;
 import org.n52.iceland.request.handler.GenericOperationHandler;
 import org.n52.iceland.request.handler.OperationHandlerKey;
-import org.n52.iceland.util.http.MediaType;
+import org.n52.janmayen.http.MediaType;
 import org.n52.javaps.engine.Engine;
 import org.n52.javaps.engine.EngineException;
 import org.n52.javaps.engine.InputDecodingException;
@@ -50,6 +41,15 @@ import org.n52.javaps.engine.JobNotFoundException;
 import org.n52.javaps.engine.ProcessNotFoundException;
 import org.n52.javaps.request.ExecuteRequest;
 import org.n52.javaps.response.ExecuteResponse;
+import org.n52.shetland.ogc.ows.OwsAllowedValues;
+import org.n52.shetland.ogc.ows.OwsCode;
+import org.n52.shetland.ogc.ows.OwsDomain;
+import org.n52.shetland.ogc.ows.OwsNoValues;
+import org.n52.shetland.ogc.ows.OwsPossibleValues;
+import org.n52.shetland.ogc.ows.OwsValue;
+import org.n52.shetland.ogc.ows.exception.InvalidParameterValueException;
+import org.n52.shetland.ogc.ows.exception.NoApplicableCodeException;
+import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
 
 /**
  * TODO JavaDoc

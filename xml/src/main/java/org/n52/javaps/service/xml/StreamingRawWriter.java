@@ -31,13 +31,12 @@ import org.n52.iceland.coding.stream.StreamWriterKey;
 import org.n52.iceland.coding.stream.StreamWriterRepository;
 import org.n52.iceland.coding.stream.UnsupportedStreamWriterInputException;
 import org.n52.iceland.coding.stream.xml.XmlStreamWriterKey;
-import org.n52.iceland.exception.ows.NoApplicableCodeException;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.ogc.wps.ResponseMode;
 import org.n52.iceland.ogc.wps.Result;
 import org.n52.iceland.ogc.wps.data.ProcessData;
-import org.n52.iceland.util.http.MediaType;
+import org.n52.janmayen.http.MediaType;
 import org.n52.javaps.response.ExecuteResponse;
+import org.n52.svalbard.encode.exception.EncodingException;
 
 import com.google.common.io.ByteStreams;
 
@@ -58,7 +57,7 @@ public class StreamingRawWriter implements StreamWriter<ExecuteResponse> {
     }
 
     @Override
-    public void write(ExecuteResponse object, OutputStream outputStream) throws OwsExceptionReport {
+    public void write(ExecuteResponse object, OutputStream outputStream) throws EncodingException {
         Result result = object.getResult().filter(r -> r.getResponseMode() == ResponseMode.RAW)
                 .orElseThrow(() -> new UnsupportedStreamWriterInputException(object));
 
@@ -67,7 +66,7 @@ public class StreamingRawWriter implements StreamWriter<ExecuteResponse> {
             try (InputStream dataStream = data.asValue().getData()) {
                 ByteStreams.copy(dataStream, outputStream);
             } catch (IOException ex) {
-                throw new NoApplicableCodeException().causedBy(ex);
+                throw new EncodingException(ex);
             }
         } else if (data.isReference() || data.isGroup()) {
             getStreamWriter(data).write(data, outputStream);

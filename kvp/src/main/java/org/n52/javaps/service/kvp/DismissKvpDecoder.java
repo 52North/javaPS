@@ -16,14 +16,9 @@
  */
 package org.n52.javaps.service.kvp;
 
-import java.util.Collections;
-import java.util.Set;
-
-import org.n52.iceland.coding.decode.DecoderKey;
 import org.n52.iceland.ogc.wps.WPS200Constants;
 import org.n52.iceland.ogc.wps.WPSConstants;
 import org.n52.javaps.request.DismissRequest;
-
 
 /**
  * TODO JavaDoc
@@ -31,17 +26,8 @@ import org.n52.javaps.request.DismissRequest;
  * @author Christian Autermann
  */
 public class DismissKvpDecoder extends AbstractJobIdKvpDecoder<DismissRequest> {
-    private static final DecoderKey KEY
-            = createKey(WPSConstants.SERVICE, WPS200Constants.VERSION, WPSConstants.Operations.Dismiss);
 
-    @Override
-    protected DismissRequest createRequest() {
-        return new DismissRequest();
+    public DismissKvpDecoder() {
+        super(DismissRequest::new, WPSConstants.SERVICE, WPS200Constants.VERSION, WPSConstants.Operations.Dismiss);
     }
-
-    @Override
-    public Set<DecoderKey> getKeys() {
-        return Collections.singleton(KEY);
-    }
-
 }

@@ -19,8 +19,7 @@ package org.n52.javaps.algorithm.annotation;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
-import static org.n52.iceland.util.MoreCollectors.toSingleResult;
-import static org.n52.iceland.util.Streams.throwingMerger;
+import static org.n52.janmayen.Streams.throwingMerger;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
@@ -39,9 +38,10 @@ import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
 
-import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.iceland.ogc.wps.description.ProcessInputDescription;
 import org.n52.iceland.ogc.wps.description.ProcessOutputDescription;
+import org.n52.janmayen.MoreCollectors;
+import org.n52.janmayen.Streams;
 import org.n52.javaps.description.TypedProcessDescription;
 import org.n52.javaps.description.TypedProcessInputDescription;
 import org.n52.javaps.description.TypedProcessOutputDescription;
@@ -49,6 +49,7 @@ import org.n52.javaps.description.impl.TypedProcessDescriptionFactory;
 import org.n52.javaps.io.InputHandlerRepository;
 import org.n52.javaps.io.OutputHandlerRepository;
 import org.n52.javaps.io.literal.LiteralTypeRepository;
+import org.n52.shetland.ogc.ows.OwsCode;
 
 import com.google.common.base.Strings;
 
@@ -131,7 +132,7 @@ public class AnnotatedAlgorithmMetadata {
                 .asList(new LiteralInputAnnotationParser<>(AbstractInputBinding::method, literalTypeRepository),
                         new ComplexInputAnnotationParser<>(AbstractInputBinding::method, parserRepository)))
                 .map(x -> (AbstractInputBinding<Method>)x);
-        BinaryOperator<AbstractInputBinding<?>> merger = throwingMerger((a, b) ->
+        BinaryOperator<AbstractInputBinding<?>> merger = Streams.throwingMerger((a, b) ->
                 new RuntimeException("duplicated identifier: " + a.getDescription().getId()));
         Collector<AbstractInputBinding<?>, ?, LinkedHashMap<OwsCode, AbstractInputBinding<?>>> collector
                 = toMap(b -> b.getDescription().getId(), identity(), merger, LinkedHashMap::new);
@@ -161,7 +162,7 @@ public class AnnotatedAlgorithmMetadata {
                 .filter(method -> method.isAnnotationPresent(parser.getSupportedAnnotation()))
                 .map(method -> parser.parse(method))
                 .filter(Objects::nonNull)
-                .collect(toSingleResult(() ->
+                .collect(MoreCollectors.toSingleResult(() ->
                         new RuntimeException("Multiple execute method bindings encountered for class "
                                              + algorithmClass.getCanonicalName())));
     }

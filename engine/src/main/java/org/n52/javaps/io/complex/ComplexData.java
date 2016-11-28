@@ -16,7 +16,7 @@
  */
 package org.n52.javaps.io.complex;
 
-import org.n52.iceland.lifecycle.Destroyable;
+import org.n52.janmayen.lifecycle.Destroyable;
 import org.n52.javaps.io.Data;
 
 public interface ComplexData<T> extends Data<T>, Destroyable {

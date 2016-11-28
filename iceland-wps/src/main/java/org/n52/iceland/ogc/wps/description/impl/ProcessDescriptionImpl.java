@@ -18,7 +18,6 @@ package org.n52.iceland.ogc.wps.description.impl;
 
 import static com.google.common.base.Strings.emptyToNull;
 import static java.util.stream.Collectors.groupingBy;
-import static org.n52.iceland.util.MoreCollectors.toSingleResult;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -29,14 +28,15 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collector;
 
-import org.n52.iceland.ogc.ows.OwsCode;
-import org.n52.iceland.ogc.ows.OwsKeyword;
-import org.n52.iceland.ogc.ows.OwsLanguageString;
-import org.n52.iceland.ogc.ows.OwsMetadata;
 import org.n52.iceland.ogc.wps.description.Description;
 import org.n52.iceland.ogc.wps.description.ProcessDescription;
 import org.n52.iceland.ogc.wps.description.ProcessInputDescription;
 import org.n52.iceland.ogc.wps.description.ProcessOutputDescription;
+import org.n52.janmayen.MoreCollectors;
+import org.n52.shetland.ogc.ows.OwsCode;
+import org.n52.shetland.ogc.ows.OwsKeyword;
+import org.n52.shetland.ogc.ows.OwsLanguageString;
+import org.n52.shetland.ogc.ows.OwsMetadata;
 
 import com.google.common.collect.ImmutableSet;
 
@@ -81,8 +81,8 @@ public class ProcessDescriptionImpl
                                   boolean statusSupported) {
         super(id, title, abstrakt, keywords, metadata);
         Function<Description, OwsCode> keyFunc = Description::getId;
-        Collector<ProcessInputDescription, ?, ProcessInputDescription> inputDownstreamCollector = toSingleResult();
-        Collector<ProcessOutputDescription, ?, ProcessOutputDescription> outputDownstreamCollector = toSingleResult();
+        Collector<ProcessInputDescription, ?, ProcessInputDescription> inputDownstreamCollector = MoreCollectors.toSingleResult();
+        Collector<ProcessOutputDescription, ?, ProcessOutputDescription> outputDownstreamCollector = MoreCollectors.toSingleResult();
         Collector<ProcessInputDescription, ?, Map<OwsCode, ProcessInputDescription>> inputCollector = groupingBy(keyFunc, inputDownstreamCollector);
         Collector<ProcessOutputDescription, ?, Map<OwsCode, ProcessOutputDescription>> outputCollector = groupingBy(keyFunc, outputDownstreamCollector);
         this.inputs = Optional.ofNullable(inputs).orElseGet(Collections::emptySet).stream().collect(inputCollector);

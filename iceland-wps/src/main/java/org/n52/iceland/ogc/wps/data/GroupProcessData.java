@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.shetland.ogc.ows.OwsCode;
 
 import com.google.common.base.MoreObjects;
 

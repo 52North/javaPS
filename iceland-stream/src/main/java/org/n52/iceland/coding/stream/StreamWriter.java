@@ -18,8 +18,8 @@ package org.n52.iceland.coding.stream;
 
 import java.io.OutputStream;
 
-import org.n52.iceland.component.Component;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
+import org.n52.janmayen.component.Component;
+import org.n52.svalbard.encode.exception.EncodingException;
 
 /**
  * @author Christian Autermann
@@ -27,5 +27,5 @@ import org.n52.iceland.exception.ows.OwsExceptionReport;
 public interface StreamWriter<T> extends Component<StreamWriterKey> {
 
     void write(T object, OutputStream stream)
-            throws OwsExceptionReport;
+            throws EncodingException;
 }

@@ -21,7 +21,7 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.shetland.ogc.ows.OwsCode;
 
 /**
  *

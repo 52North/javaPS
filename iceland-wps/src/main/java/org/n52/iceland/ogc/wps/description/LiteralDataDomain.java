@@ -19,9 +19,9 @@ package org.n52.iceland.ogc.wps.description;
 import java.net.URI;
 import java.util.Optional;
 
-import org.n52.iceland.ogc.ows.OwsDomainMetadata;
-import org.n52.iceland.ogc.ows.OwsPossibleValues;
-import org.n52.iceland.ogc.ows.OwsValue;
+import org.n52.shetland.ogc.ows.OwsDomainMetadata;
+import org.n52.shetland.ogc.ows.OwsPossibleValues;
+import org.n52.shetland.ogc.ows.OwsValue;
 
 import com.google.common.base.Strings;
 

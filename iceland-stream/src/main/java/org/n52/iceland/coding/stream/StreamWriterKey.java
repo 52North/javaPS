@@ -18,17 +18,17 @@ package org.n52.iceland.coding.stream;
 
 import java.util.Objects;
 
-import org.n52.iceland.component.ClassBasedComponentKey;
-import org.n52.iceland.util.Similar;
-import org.n52.iceland.util.http.MediaType;
+import org.n52.janmayen.component.ClassBasedComponentKey;
+import org.n52.janmayen.http.MediaType;
+import org.n52.janmayen.similar.Similar;
+
 
 /**
  * TODO JavaDoc
  *
  * @author Christian Autermann
  */
-public class StreamWriterKey extends ClassBasedComponentKey<Object>
-        implements Similar<StreamWriterKey> {
+public class StreamWriterKey extends ClassBasedComponentKey<Object> implements Similar<StreamWriterKey> {
     private final MediaType mediaType;
 
     public StreamWriterKey(Class<? extends Object> type, MediaType mediaType) {

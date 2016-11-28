@@ -34,7 +34,6 @@ import org.n52.iceland.coding.stream.StreamReaderKey;
 import org.n52.iceland.coding.stream.xml.AbstractElementXmlStreamReader;
 import org.n52.iceland.coding.stream.xml.XLinkConstants;
 import org.n52.iceland.coding.stream.xml.XmlStreamReaderKey;
-import org.n52.iceland.ogc.ows.OwsCode;
 import org.n52.iceland.ogc.wps.DataTransmissionMode;
 import org.n52.iceland.ogc.wps.ExecutionMode;
 import org.n52.iceland.ogc.wps.Format;
@@ -54,6 +53,7 @@ import org.n52.javaps.request.DismissRequest;
 import org.n52.javaps.request.ExecuteRequest;
 import org.n52.javaps.request.GetResultRequest;
 import org.n52.javaps.request.GetStatusRequest;
+import org.n52.shetland.ogc.ows.OwsCode;
 
 /**
  * TODO JavaDoc
@@ -76,7 +76,7 @@ public class WPSRequestReader extends AbstractElementXmlStreamReader {
     }
 
     @Override
-    public AbstractServiceRequest<?> readElement(XMLEventReader reader)
+    public AbstractServiceRequest readElement(XMLEventReader reader)
             throws XMLStreamException {
         while (reader.hasNext()) {
             XMLEvent event = reader.nextEvent();
@@ -131,7 +131,7 @@ public class WPSRequestReader extends AbstractElementXmlStreamReader {
     }
 
     private void readServiceAndVersion(StartElement elem,
-                                       AbstractServiceRequest<?> request) {
+                                       AbstractServiceRequest request) {
         getAttribute(elem, WPSConstants.Attr.AN_SERVICE).ifPresent(request::setService);
         getAttribute(elem, WPSConstants.Attr.AN_VERSION).ifPresent(request::setVersion);
     }

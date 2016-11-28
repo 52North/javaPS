@@ -16,7 +16,7 @@
  */
 package org.n52.javaps.description;
 
-import org.n52.iceland.ogc.ows.OwsBoundingBox;
+import org.n52.shetland.ogc.ows.OwsBoundingBox;
 import org.n52.iceland.ogc.wps.description.BoundingBoxDescription;
 import org.n52.javaps.io.Data;
 import org.n52.javaps.io.bbox.BoundingBoxData;

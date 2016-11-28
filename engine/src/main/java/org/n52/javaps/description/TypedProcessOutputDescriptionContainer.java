@@ -18,7 +18,7 @@ package org.n52.javaps.description;
 
 import java.util.Collection;
 
-import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.iceland.ogc.wps.description.ProcessOutputDescriptionContainer;
 
 /**

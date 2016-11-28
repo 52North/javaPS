@@ -19,7 +19,7 @@ package org.n52.javaps.engine;
 import java.time.OffsetDateTime;
 import java.util.Optional;
 
-import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.iceland.ogc.wps.JobId;
 import org.n52.iceland.ogc.wps.OutputDefinition;
 import org.n52.javaps.algorithm.ProcessInputs;

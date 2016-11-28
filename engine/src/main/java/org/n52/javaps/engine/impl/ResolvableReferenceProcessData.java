@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 
-import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.iceland.ogc.wps.Format;
 import org.n52.iceland.ogc.wps.data.Body;
 import org.n52.iceland.utils.HTTP;

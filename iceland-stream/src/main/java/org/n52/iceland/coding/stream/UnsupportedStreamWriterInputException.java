@@ -16,11 +16,13 @@
  */
 package org.n52.iceland.coding.stream;
 
+import org.n52.svalbard.encode.exception.EncodingException;
+
 /**
  * TODO JavaDoc
  * @author Christian Autermann
  */
-public class UnsupportedStreamWriterInputException extends RuntimeException {
+public class UnsupportedStreamWriterInputException extends EncodingException {
     private static final long serialVersionUID = 3114346491116147405L;
 
     public UnsupportedStreamWriterInputException(Object input) {
