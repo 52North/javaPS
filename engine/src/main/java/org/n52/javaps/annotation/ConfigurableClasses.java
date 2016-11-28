@@ -16,6 +16,7 @@
  */
 package org.n52.javaps.annotation;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
@@ -31,17 +32,20 @@ import org.apache.commons.configuration2.io.FileLocator;
 import org.apache.commons.configuration2.io.FileLocatorUtils;
 import org.apache.commons.configuration2.io.FileSystem;
 import org.apache.commons.configuration2.io.FileSystemLocationStrategy;
+import org.n52.iceland.util.JSONUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.n52.iceland.util.JSONUtils;
-import org.n52.iceland.util.Optionals;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.base.Strings;
 
 /**
- * TODO JavaDoc
+ * This class searches for a <code>Properties</code> annotation and tries to parse
+ * the properties to a JSON object. First it checks, if the propertyFilename of the
+ * annotation leads to a existing file. If this is the case, the properties are parsed.
+ * If the propertyFilename doesn't lead to an existing file, the defaultPropertyFilename
+ * is checked.
+ *
  * @author Christian Autermann
  */
 public class ConfigurableClasses {
@@ -59,10 +63,26 @@ public class ConfigurableClasses {
             LOGGER.warn("Class extends {}, but is not annotated with {} annotation.", clazz.getName(), Properties.class.getName());
         } else {
             Optional<String> fileName = getPropertiesFileName(annotation);
-            if (!fileName.isPresent()) {
+            Optional<String> defaultFileName = getDefaultPropertiesFileName(annotation);
+            if (!fileName.isPresent() && !defaultFileName.isPresent()) {
                 LOGGER.warn("Class {} is annotated with {} annotation, but the annotation is empty.", clazz.getName(), Properties.class.getName());
-            } else {
-                URL fileURL = locateFile(fileName.get());
+            }
+
+            URL fileURL = null;
+            //always check propertyFilename first
+            if(fileName.isPresent()){
+                fileURL = locateFile(fileName.get());
+                //check if the strategies found something
+                if (fileURL != null) {
+                    try {
+                        return Optional.of(JSONUtils.loadURL(fileURL));
+                    } catch (IOException e) {
+                        LOGGER.error("Could not read property file for class " + clazz.getName(), e);
+                    }
+                }
+            }
+            if(defaultFileName.isPresent()){
+                fileURL = locateFile(defaultFileName.get());
                 try {
                     return Optional.of(JSONUtils.loadURL(fileURL));
                 } catch (IOException e) {
@@ -82,8 +102,11 @@ public class ConfigurableClasses {
     }
 
     private static Optional<String> getPropertiesFileName(Properties annotation) {
-        return Optionals.or(Optional.ofNullable(annotation.propertyFileName()).map(Strings::emptyToNull),
-                            Optional.ofNullable(annotation.defaultPropertyFileName()).map(Strings::emptyToNull));
+        return Optional.ofNullable(annotation.propertyFileName()).map(Strings::emptyToNull);
+    }
+
+    private static Optional<String> getDefaultPropertiesFileName(Properties annotation) {
+        return Optional.ofNullable(annotation.defaultPropertyFileName()).map(Strings::emptyToNull);
     }
 
 }
