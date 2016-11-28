@@ -17,14 +17,14 @@
 package org.n52.svalbard.encode.stream;
 
 import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
-import org.n52.iceland.response.AbstractServiceResponse;
+import org.n52.shetland.ogc.ows.service.OwsServiceResponse;
 
 /**
  * TODO JavaDoc
  *
  * @author Christian Autermann
  */
-public class OwsExceptionReportResponse extends AbstractServiceResponse {
+public class OwsExceptionReportResponse extends OwsServiceResponse {
 
     private final OwsExceptionReport owsExceptionReport;
 

@@ -24,7 +24,7 @@ import java.util.Set;
 import org.n52.iceland.coding.encode.ResponseProxy;
 import org.n52.iceland.coding.encode.ResponseWriter;
 import org.n52.iceland.coding.encode.ResponseWriterKey;
-import org.n52.iceland.response.AbstractServiceResponse;
+import org.n52.shetland.ogc.ows.service.OwsServiceResponse;
 import org.n52.janmayen.http.MediaType;
 import org.n52.svalbard.encode.exception.EncodingException;
 import org.n52.svalbard.encode.exception.NoEncoderForKeyException;
@@ -34,8 +34,8 @@ import org.n52.svalbard.encode.exception.NoEncoderForKeyException;
  *
  * @author Christian Autermann
  */
-public class StreamingServiceResponseWriter implements ResponseWriter<AbstractServiceResponse> {
-    public static final ResponseWriterKey KEY = new ResponseWriterKey(AbstractServiceResponse.class);
+public class StreamingServiceResponseWriter implements ResponseWriter<OwsServiceResponse> {
+    public static final ResponseWriterKey KEY = new ResponseWriterKey(OwsServiceResponse.class);
 
     private MediaType contentType;
     private final StreamWriterRepository repository;
@@ -55,7 +55,7 @@ public class StreamingServiceResponseWriter implements ResponseWriter<AbstractSe
     }
 
     @Override
-    public void write(AbstractServiceResponse t, OutputStream out, ResponseProxy responseProxy)
+    public void write(OwsServiceResponse t, OutputStream out, ResponseProxy responseProxy)
             throws IOException, EncodingException {
         StreamWriterKey key = new StreamWriterKey(t.getClass(), t.getContentType());
         StreamWriter<Object> writer = repository.getWriter(key).orElseThrow(() -> new NoEncoderForKeyException(key));
@@ -63,7 +63,7 @@ public class StreamingServiceResponseWriter implements ResponseWriter<AbstractSe
     }
 
     @Override
-    public boolean supportsGZip(AbstractServiceResponse t) {
+    public boolean supportsGZip(OwsServiceResponse t) {
         return true;
     }
 

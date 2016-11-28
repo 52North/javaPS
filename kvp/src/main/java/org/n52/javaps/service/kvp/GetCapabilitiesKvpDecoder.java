@@ -20,7 +20,7 @@ package org.n52.javaps.service.kvp;
 import org.n52.iceland.binding.kvp.AbstractKvpDecoder;
 import org.n52.shetland.ogc.wps.WPS200Constants;
 import org.n52.shetland.ogc.wps.WPSConstants;
-import org.n52.iceland.request.GetCapabilitiesRequest;
+import org.n52.shetland.ogc.ows.service.GetCapabilitiesRequest;
 import org.n52.janmayen.http.MediaTypes;
 import org.n52.shetland.ogc.ows.OWSConstants;
 import org.n52.shetland.ogc.ows.OWSConstants.GetCapabilitiesParams;

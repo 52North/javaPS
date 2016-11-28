@@ -21,12 +21,12 @@ import java.util.Optional;
 import org.n52.shetland.ogc.wps.Result;
 import org.n52.shetland.ogc.wps.StatusInfo;
 import org.n52.shetland.ogc.wps.WPSConstants;
-import org.n52.iceland.response.AbstractServiceResponse;
+import org.n52.shetland.ogc.ows.service.OwsServiceResponse;
 
 /**
  * @author Christian Autermann
  */
-public class ExecuteResponse extends AbstractServiceResponse {
+public class ExecuteResponse extends OwsServiceResponse {
 
     private Optional<Result> result;
     private Optional<StatusInfo> status;

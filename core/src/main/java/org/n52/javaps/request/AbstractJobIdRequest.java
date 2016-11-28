@@ -17,14 +17,14 @@
 package org.n52.javaps.request;
 
 import org.n52.shetland.ogc.wps.JobId;
-import org.n52.iceland.request.AbstractServiceRequest;
+import org.n52.shetland.ogc.ows.service.OwsServiceRequest;
 
 /**
  * TODO JavaDoc
  *
  * @author Christian Autermann
  */
-public abstract class AbstractJobIdRequest extends AbstractServiceRequest {
+public abstract class AbstractJobIdRequest extends OwsServiceRequest {
 
     private JobId jobId;
 

@@ -18,7 +18,7 @@ package org.n52.javaps.service.operator.validation;
 
 import javax.inject.Inject;
 
-import org.n52.iceland.request.AbstractServiceRequest;
+import org.n52.shetland.ogc.ows.service.OwsServiceRequest;
 import org.n52.iceland.request.operator.ParameterValidator;
 import org.n52.javaps.engine.Engine;
 
@@ -27,7 +27,7 @@ import org.n52.javaps.engine.Engine;
  *
  * @author Christian Autermann
  */
-public abstract class EngineParameterValidator<T extends AbstractServiceRequest> implements ParameterValidator<T> {
+public abstract class EngineParameterValidator<T extends OwsServiceRequest> implements ParameterValidator<T> {
 
     private Engine engine;
 

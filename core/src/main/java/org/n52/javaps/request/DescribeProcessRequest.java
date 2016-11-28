@@ -22,10 +22,10 @@ import java.util.List;
 import java.util.Objects;
 
 import org.n52.shetland.ogc.wps.WPSConstants;
-import org.n52.iceland.request.AbstractServiceRequest;
+import org.n52.shetland.ogc.ows.service.OwsServiceRequest;
 import org.n52.shetland.ogc.ows.OwsCode;
 
-public class DescribeProcessRequest extends AbstractServiceRequest {
+public class DescribeProcessRequest extends OwsServiceRequest {
     public static final String ALL_KEYWORD = "ALL";
 
     private final List<OwsCode> identifiers = new LinkedList<>();

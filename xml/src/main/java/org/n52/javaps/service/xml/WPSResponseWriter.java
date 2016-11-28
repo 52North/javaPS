@@ -19,7 +19,7 @@ package org.n52.javaps.service.xml;
 import javax.xml.stream.XMLStreamException;
 
 import org.n52.svalbard.encode.stream.xml.AbstractMultiElementXmlStreamWriter;
-import org.n52.iceland.response.GetCapabilitiesResponse;
+import org.n52.shetland.ogc.ows.service.GetCapabilitiesResponse;
 import org.n52.javaps.response.DescribeProcessResponse;
 import org.n52.javaps.response.DismissResponse;
 import org.n52.javaps.response.ExecuteResponse;

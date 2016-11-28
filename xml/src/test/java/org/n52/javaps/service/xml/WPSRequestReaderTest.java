@@ -54,7 +54,7 @@ import org.n52.shetland.ogc.wps.data.Body;
 import org.n52.shetland.ogc.wps.data.GroupProcessData;
 import org.n52.shetland.ogc.wps.data.ReferenceProcessData;
 import org.n52.shetland.ogc.wps.data.impl.StringValueProcessData;
-import org.n52.iceland.request.GetCapabilitiesRequest;
+import org.n52.shetland.ogc.ows.service.GetCapabilitiesRequest;
 import org.n52.javaps.request.DescribeProcessRequest;
 import org.n52.javaps.request.DismissRequest;
 import org.n52.javaps.request.ExecuteRequest;

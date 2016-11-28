@@ -17,7 +17,7 @@
 package org.n52.javaps.service.operator.validation;
 
 import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
-import org.n52.iceland.request.GetCapabilitiesRequest;
+import org.n52.shetland.ogc.ows.service.GetCapabilitiesRequest;
 import org.n52.iceland.request.operator.ParameterValidator;
 
 /**

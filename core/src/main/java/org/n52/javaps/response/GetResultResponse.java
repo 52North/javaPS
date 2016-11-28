@@ -18,14 +18,14 @@ package org.n52.javaps.response;
 
 import java.util.Objects;
 
-import org.n52.iceland.response.AbstractServiceResponse;
+import org.n52.shetland.ogc.ows.service.OwsServiceResponse;
 import org.n52.shetland.ogc.wps.Result;
 import org.n52.shetland.ogc.wps.WPSConstants;
 
 /**
  * @author Christian Autermann
  */
-public class GetResultResponse extends AbstractServiceResponse {
+public class GetResultResponse extends OwsServiceResponse {
 
     private Result result;
 

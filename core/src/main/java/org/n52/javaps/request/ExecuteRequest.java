@@ -26,13 +26,13 @@ import org.n52.shetland.ogc.wps.OutputDefinition;
 import org.n52.shetland.ogc.wps.ResponseMode;
 import org.n52.shetland.ogc.wps.WPSConstants;
 import org.n52.shetland.ogc.wps.data.ProcessData;
-import org.n52.iceland.request.AbstractServiceRequest;
+import org.n52.shetland.ogc.ows.service.OwsServiceRequest;
 import org.n52.shetland.ogc.ows.OwsCode;
 
 /**
  * @author Christian Autermann
  */
-public class ExecuteRequest extends AbstractServiceRequest {
+public class ExecuteRequest extends OwsServiceRequest {
 
     private OwsCode id;
     private ExecutionMode executionMode = ExecutionMode.AUTO;

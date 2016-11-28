@@ -46,8 +46,8 @@ import org.n52.shetland.ogc.wps.data.ProcessData;
 import org.n52.shetland.ogc.wps.data.ReferenceProcessData;
 import org.n52.shetland.ogc.wps.data.ValueProcessData;
 import org.n52.shetland.ogc.wps.data.impl.StringValueProcessData;
-import org.n52.iceland.request.AbstractServiceRequest;
-import org.n52.iceland.request.GetCapabilitiesRequest;
+import org.n52.shetland.ogc.ows.service.OwsServiceRequest;
+import org.n52.shetland.ogc.ows.service.GetCapabilitiesRequest;
 import org.n52.javaps.request.DescribeProcessRequest;
 import org.n52.javaps.request.DismissRequest;
 import org.n52.javaps.request.ExecuteRequest;
@@ -76,7 +76,7 @@ public class WPSRequestReader extends AbstractElementXmlStreamReader {
     }
 
     @Override
-    public AbstractServiceRequest readElement(XMLEventReader reader)
+    public OwsServiceRequest readElement(XMLEventReader reader)
             throws XMLStreamException {
         while (reader.hasNext()) {
             XMLEvent event = reader.nextEvent();
@@ -131,7 +131,7 @@ public class WPSRequestReader extends AbstractElementXmlStreamReader {
     }
 
     private void readServiceAndVersion(StartElement elem,
-                                       AbstractServiceRequest request) {
+                                       OwsServiceRequest request) {
         getAttribute(elem, WPSConstants.Attr.AN_SERVICE).ifPresent(request::setService);
         getAttribute(elem, WPSConstants.Attr.AN_VERSION).ifPresent(request::setVersion);
     }

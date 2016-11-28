@@ -20,7 +20,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
-import org.n52.iceland.response.AbstractServiceResponse;
+import org.n52.shetland.ogc.ows.service.OwsServiceResponse;
 import org.n52.janmayen.http.MediaType;
 import org.n52.janmayen.http.MediaTypes;
 import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
@@ -32,7 +32,7 @@ import org.n52.svalbard.encode.exception.EncodingException;
 
 /**
  * Helper class to wrap a thrown {@link OwsExceptionReport} into a
- * {@link AbstractServiceResponse}.
+ * {@link OwsServiceResponse}.
  *
  * @author Christian Autermann
  */
