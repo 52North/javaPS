@@ -33,13 +33,13 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 
-import org.n52.shetland.ogc.ows.OwsBoundingBox;
-import org.n52.shetland.ogc.wps.Format;
 import org.n52.javaps.description.TypedBoundingBoxInputDescription;
 import org.n52.javaps.description.impl.TypedProcessDescriptionFactory;
 import org.n52.javaps.io.Data;
 import org.n52.javaps.io.DecodingException;
 import org.n52.javaps.io.InputHandler;
+import org.n52.shetland.ogc.ows.OwsBoundingBox;
+import org.n52.shetland.ogc.wps.Format;
 
 import com.google.common.primitives.Doubles;
 
