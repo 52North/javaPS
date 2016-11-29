@@ -52,7 +52,7 @@ import org.n52.shetland.ogc.wps.description.ProcessOutputDescription;
 import org.n52.shetland.ogc.wps.description.ProcessOutputDescriptionContainer;
 import org.n52.iceland.request.operator.ParameterValidator;
 import org.n52.janmayen.Chain;
-import org.n52.janmayen.MoreCollectors;
+import org.n52.janmayen.stream.MoreCollectors;
 import org.n52.javaps.engine.Engine;
 import org.n52.javaps.io.bbox.BoundingBoxInputOutputHandler;
 import org.n52.javaps.io.literal.LiteralInputOutputHandler;

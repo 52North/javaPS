@@ -19,7 +19,7 @@ package org.n52.javaps.algorithm.annotation;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
-import static org.n52.janmayen.Streams.throwingMerger;
+import static org.n52.janmayen.stream.Streams.throwingMerger;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
@@ -40,8 +40,8 @@ import java.util.stream.Stream;
 
 import org.n52.shetland.ogc.wps.description.ProcessInputDescription;
 import org.n52.shetland.ogc.wps.description.ProcessOutputDescription;
-import org.n52.janmayen.MoreCollectors;
-import org.n52.janmayen.Streams;
+import org.n52.janmayen.stream.MoreCollectors;
+import org.n52.janmayen.stream.Streams;
 import org.n52.javaps.description.TypedProcessDescription;
 import org.n52.javaps.description.TypedProcessInputDescription;
 import org.n52.javaps.description.TypedProcessOutputDescription;

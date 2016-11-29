@@ -31,7 +31,7 @@ import java.util.stream.Collector;
 import org.n52.shetland.ogc.wps.description.Description;
 import org.n52.shetland.ogc.wps.description.GroupOutputDescription;
 import org.n52.shetland.ogc.wps.description.ProcessOutputDescription;
-import org.n52.janmayen.MoreCollectors;
+import org.n52.janmayen.stream.MoreCollectors;
 import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.shetland.ogc.ows.OwsKeyword;
 import org.n52.shetland.ogc.ows.OwsLanguageString;
