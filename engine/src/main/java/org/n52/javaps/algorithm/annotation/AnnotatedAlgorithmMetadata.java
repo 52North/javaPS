@@ -38,8 +38,6 @@ import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
 
-import org.n52.shetland.ogc.wps.description.ProcessInputDescription;
-import org.n52.shetland.ogc.wps.description.ProcessOutputDescription;
 import org.n52.janmayen.stream.MoreCollectors;
 import org.n52.janmayen.stream.Streams;
 import org.n52.javaps.description.TypedProcessDescription;
@@ -50,6 +48,8 @@ import org.n52.javaps.io.InputHandlerRepository;
 import org.n52.javaps.io.OutputHandlerRepository;
 import org.n52.javaps.io.literal.LiteralTypeRepository;
 import org.n52.shetland.ogc.ows.OwsCode;
+import org.n52.shetland.ogc.wps.description.ProcessInputDescription;
+import org.n52.shetland.ogc.wps.description.ProcessOutputDescription;
 
 import com.google.common.base.Strings;
 
