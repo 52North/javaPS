@@ -55,11 +55,11 @@ import org.n52.shetland.ogc.wps.data.GroupProcessData;
 import org.n52.shetland.ogc.wps.data.ReferenceProcessData;
 import org.n52.shetland.ogc.wps.data.impl.StringValueProcessData;
 import org.n52.shetland.ogc.ows.service.GetCapabilitiesRequest;
-import org.n52.javaps.request.DescribeProcessRequest;
-import org.n52.javaps.request.DismissRequest;
-import org.n52.javaps.request.ExecuteRequest;
-import org.n52.javaps.request.GetResultRequest;
-import org.n52.javaps.request.GetStatusRequest;
+import org.n52.shetland.ogc.wps.response.DescribeProcessRequest;
+import org.n52.shetland.ogc.wps.response.DismissRequest;
+import org.n52.shetland.ogc.wps.response.ExecuteRequest;
+import org.n52.shetland.ogc.wps.response.GetResultRequest;
+import org.n52.shetland.ogc.wps.response.GetStatusRequest;
 
 import com.google.common.io.BaseEncoding;
 

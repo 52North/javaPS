@@ -35,11 +35,11 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import org.n52.svalbard.encode.stream.StreamWriter;
-import org.n52.svalbard.encode.stream.StreamWriterKey;
 import org.n52.iceland.util.XmlFactories;
 import org.n52.janmayen.function.ThrowingConsumer;
 import org.n52.svalbard.encode.exception.EncodingException;
+import org.n52.svalbard.encode.stream.StreamWriter;
+import org.n52.svalbard.encode.stream.StreamWriterKey;
 
 import com.google.common.base.Throwables;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
@@ -81,6 +81,7 @@ public class DocumentXmlStreamWriter extends XmlFactories implements StreamWrite
         }
     }
 
+    @SuppressWarnings("unchecked")
     private <X extends Exception> void writeIndenting(OutputStream stream, ThrowingConsumer<OutputStream, X> writer)
             throws X, TransformerException, IOException, InterruptedException {
         try {
@@ -98,15 +99,21 @@ public class DocumentXmlStreamWriter extends XmlFactories implements StreamWrite
                 }
                 return null; // use a callable to allow exception throwing
             });
-
-            writer.accept(pos);
+            
+            try {
+                writer.accept(pos);
+            } catch (Exception e) {
+                Throwables.throwIfUnchecked(e);
+                throw (X) e;
+            }
 
             t.get(); // wait for the transformer to finish
 
         } catch (ExecutionException ex) {
-            Throwables.propagateIfInstanceOf(ex.getCause(), TransformerException.class);
-            Throwables.propagateIfInstanceOf(ex.getCause(), IOException.class);
-            throw Throwables.propagate(ex.getCause());
+            Throwables.throwIfInstanceOf(ex.getCause(), TransformerException.class);
+            Throwables.throwIfInstanceOf(ex.getCause(), IOException.class);
+            Throwables.throwIfUnchecked(ex.getCause());
+            throw new RuntimeException(ex.getCause());
         }
     }
 

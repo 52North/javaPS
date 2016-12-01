@@ -17,14 +17,13 @@
 package org.n52.svalbard.encode.stream;
 
 import java.util.Collections;
-import java.util.Map;
 import java.util.Set;
 
-import org.n52.shetland.ogc.ows.service.OwsServiceResponse;
 import org.n52.janmayen.http.MediaType;
 import org.n52.janmayen.http.MediaTypes;
 import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
-import org.n52.svalbard.HelperValues;
+import org.n52.shetland.ogc.ows.service.OwsServiceResponse;
+import org.n52.svalbard.EncodingContext;
 import org.n52.svalbard.encode.Encoder;
 import org.n52.svalbard.encode.EncoderKey;
 import org.n52.svalbard.encode.ExceptionEncoderKey;
@@ -52,9 +51,7 @@ public class OwsExceptionReportEncoder implements
     }
 
     @Override
-    public OwsExceptionReportResponse encode(
-            OwsExceptionReport objectToEncode,
-            Map<HelperValues, String> additionalValues)
+    public OwsExceptionReportResponse encode(OwsExceptionReport objectToEncode, EncodingContext additionalValues)
             throws EncodingException {
         return encode(objectToEncode);
     }

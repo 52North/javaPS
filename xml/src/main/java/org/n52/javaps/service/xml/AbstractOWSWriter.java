@@ -32,7 +32,6 @@ import java.util.TreeSet;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
 
-import org.n52.svalbard.encode.stream.xml.AbstractMultiElementXmlStreamWriter;
 import org.n52.iceland.i18n.LocaleHelper;
 import org.n52.janmayen.Optionals;
 import org.n52.janmayen.http.HTTPMethods;
@@ -62,6 +61,7 @@ import org.n52.shetland.ogc.ows.OwsValue;
 import org.n52.shetland.ogc.ows.OwsValueRestriction;
 import org.n52.shetland.ogc.ows.OwsValuesReference;
 import org.n52.shetland.ogc.ows.OwsValuesUnit;
+import org.n52.svalbard.encode.stream.xml.AbstractMultiElementXmlStreamWriter;
 
 import com.google.common.base.Strings;
 

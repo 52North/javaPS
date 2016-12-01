@@ -25,18 +25,18 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import org.n52.janmayen.http.MediaType;
+import org.n52.shetland.ogc.wps.request.ExecuteResponse;
+import org.n52.shetland.ogc.wps.ResponseMode;
+import org.n52.shetland.ogc.wps.Result;
+import org.n52.shetland.ogc.wps.data.ProcessData;
+import org.n52.svalbard.encode.exception.EncodingException;
 import org.n52.svalbard.encode.stream.MissingStreamWriterException;
 import org.n52.svalbard.encode.stream.StreamWriter;
 import org.n52.svalbard.encode.stream.StreamWriterKey;
 import org.n52.svalbard.encode.stream.StreamWriterRepository;
 import org.n52.svalbard.encode.stream.UnsupportedStreamWriterInputException;
 import org.n52.svalbard.encode.stream.xml.XmlStreamWriterKey;
-import org.n52.shetland.ogc.wps.ResponseMode;
-import org.n52.shetland.ogc.wps.Result;
-import org.n52.shetland.ogc.wps.data.ProcessData;
-import org.n52.janmayen.http.MediaType;
-import org.n52.javaps.response.ExecuteResponse;
-import org.n52.svalbard.encode.exception.EncodingException;
 
 import com.google.common.io.ByteStreams;
 

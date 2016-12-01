@@ -18,7 +18,7 @@ package org.n52.javaps.service.kvp;
 
 import org.n52.shetland.ogc.wps.WPS200Constants;
 import org.n52.shetland.ogc.wps.WPSConstants;
-import org.n52.javaps.request.DismissRequest;
+import org.n52.shetland.ogc.wps.response.DismissRequest;
 
 /**
  * TODO JavaDoc

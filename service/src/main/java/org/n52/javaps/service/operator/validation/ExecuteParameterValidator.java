@@ -56,7 +56,7 @@ import org.n52.janmayen.stream.MoreCollectors;
 import org.n52.javaps.engine.Engine;
 import org.n52.javaps.io.bbox.BoundingBoxInputOutputHandler;
 import org.n52.javaps.io.literal.LiteralInputOutputHandler;
-import org.n52.javaps.request.ExecuteRequest;
+import org.n52.shetland.ogc.wps.response.ExecuteRequest;
 import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.shetland.ogc.ows.exception.CompositeOwsException;
 import org.n52.shetland.ogc.ows.exception.InvalidParameterValueException;

@@ -40,9 +40,7 @@
         <module>service</module>
         <module>kvp</module>
         <module>xml</module>
-        <module>core</module>
         <module>webapp</module>
-        <module>iceland-wps</module>
         <module>iceland-stream</module>
         <module>engine</module>
     </modules>

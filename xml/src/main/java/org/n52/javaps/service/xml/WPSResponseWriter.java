@@ -20,11 +20,11 @@ import javax.xml.stream.XMLStreamException;
 
 import org.n52.svalbard.encode.stream.xml.AbstractMultiElementXmlStreamWriter;
 import org.n52.shetland.ogc.ows.service.GetCapabilitiesResponse;
-import org.n52.javaps.response.DescribeProcessResponse;
-import org.n52.javaps.response.DismissResponse;
-import org.n52.javaps.response.ExecuteResponse;
-import org.n52.javaps.response.GetResultResponse;
-import org.n52.javaps.response.GetStatusResponse;
+import org.n52.shetland.ogc.wps.request.DescribeProcessResponse;
+import org.n52.shetland.ogc.wps.request.DismissResponse;
+import org.n52.shetland.ogc.wps.request.ExecuteResponse;
+import org.n52.shetland.ogc.wps.request.GetResultResponse;
+import org.n52.shetland.ogc.wps.request.GetStatusResponse;
 import org.n52.svalbard.encode.exception.EncodingException;
 
 /**

@@ -24,7 +24,7 @@ import org.n52.shetland.ogc.ows.exception.InvalidParameterValueException;
 import org.n52.shetland.ogc.ows.exception.MissingParameterValueException;
 import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
 import org.n52.shetland.ogc.ows.OwsCode;
-import org.n52.javaps.request.DescribeProcessRequest;
+import org.n52.shetland.ogc.wps.response.DescribeProcessRequest;
 
 /**
  * TODO JavaDoc
