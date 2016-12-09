@@ -19,12 +19,12 @@ package org.n52.javaps.service.operator.validation;
 import java.util.List;
 import java.util.Optional;
 
+import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.shetland.ogc.ows.exception.CompositeOwsException;
 import org.n52.shetland.ogc.ows.exception.InvalidParameterValueException;
 import org.n52.shetland.ogc.ows.exception.MissingParameterValueException;
 import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
-import org.n52.shetland.ogc.ows.OwsCode;
-import org.n52.shetland.ogc.wps.response.DescribeProcessRequest;
+import org.n52.shetland.ogc.wps.request.DescribeProcessRequest;
 
 /**
  * TODO JavaDoc

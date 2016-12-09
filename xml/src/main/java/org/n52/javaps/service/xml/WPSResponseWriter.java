@@ -18,14 +18,14 @@ package org.n52.javaps.service.xml;
 
 import javax.xml.stream.XMLStreamException;
 
-import org.n52.svalbard.encode.stream.xml.AbstractMultiElementXmlStreamWriter;
 import org.n52.shetland.ogc.ows.service.GetCapabilitiesResponse;
-import org.n52.shetland.ogc.wps.request.DescribeProcessResponse;
-import org.n52.shetland.ogc.wps.request.DismissResponse;
-import org.n52.shetland.ogc.wps.request.ExecuteResponse;
-import org.n52.shetland.ogc.wps.request.GetResultResponse;
-import org.n52.shetland.ogc.wps.request.GetStatusResponse;
+import org.n52.shetland.ogc.wps.response.DescribeProcessResponse;
+import org.n52.shetland.ogc.wps.response.DismissResponse;
+import org.n52.shetland.ogc.wps.response.ExecuteResponse;
+import org.n52.shetland.ogc.wps.response.GetResultResponse;
+import org.n52.shetland.ogc.wps.response.GetStatusResponse;
 import org.n52.svalbard.encode.exception.EncodingException;
+import org.n52.svalbard.encode.stream.xml.AbstractMultiElementXmlStreamWriter;
 
 /**
  * TODO JavaDoc

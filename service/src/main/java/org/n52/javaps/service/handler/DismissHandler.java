@@ -30,8 +30,8 @@ import org.n52.iceland.request.handler.GenericOperationHandler;
 import org.n52.iceland.request.handler.OperationHandlerKey;
 import org.n52.javaps.engine.Engine;
 import org.n52.javaps.engine.JobNotFoundException;
-import org.n52.shetland.ogc.wps.response.DismissRequest;
-import org.n52.shetland.ogc.wps.request.DismissResponse;
+import org.n52.shetland.ogc.wps.request.DismissRequest;
+import org.n52.shetland.ogc.wps.response.DismissResponse;
 
 /**
  * TODO JavaDoc

@@ -18,9 +18,9 @@ package org.n52.javaps.service.operator.validation;
 
 import javax.inject.Inject;
 
-import org.n52.shetland.ogc.ows.service.OwsServiceRequest;
 import org.n52.iceland.request.operator.ParameterValidator;
 import org.n52.javaps.engine.Engine;
+import org.n52.shetland.ogc.ows.service.OwsServiceRequest;
 
 /**
  * TODO JavaDoc

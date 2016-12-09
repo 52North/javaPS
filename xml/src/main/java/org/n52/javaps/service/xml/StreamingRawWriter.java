@@ -26,7 +26,7 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import org.n52.janmayen.http.MediaType;
-import org.n52.shetland.ogc.wps.request.ExecuteResponse;
+import org.n52.shetland.ogc.wps.response.ExecuteResponse;
 import org.n52.shetland.ogc.wps.ResponseMode;
 import org.n52.shetland.ogc.wps.Result;
 import org.n52.shetland.ogc.wps.data.ProcessData;

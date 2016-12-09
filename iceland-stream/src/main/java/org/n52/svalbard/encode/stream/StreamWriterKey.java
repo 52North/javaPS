@@ -100,7 +100,7 @@ public class StreamWriterKey extends ClassBasedComponentKey<Object> implements S
             return difference < 0 ? -1 : 1 + difference;
         }
     }
-    
+
     private static int getSimiliarity1(Class<?> superClass, Class<?> clazz, int difference) {
         if (superClass.isAssignableFrom(clazz)) {
             int cd = getSimiliarity(superClass, clazz);

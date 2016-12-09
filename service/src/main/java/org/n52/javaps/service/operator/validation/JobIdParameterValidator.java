@@ -16,19 +16,18 @@
  */
 package org.n52.javaps.service.operator.validation;
 
-
-import org.n52.shetland.ogc.wps.JobId;
-import org.n52.shetland.ogc.wps.response.AbstractJobIdRequest;
 import org.n52.shetland.ogc.ows.exception.InvalidParameterValueException;
 import org.n52.shetland.ogc.ows.exception.MissingParameterValueException;
 import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
-
+import org.n52.shetland.ogc.wps.JobId;
+import org.n52.shetland.ogc.wps.request.AbstractJobIdRequest;
 
 /**
  * TODO JavaDoc
+ *
  * @author Christian Autermann
  */
-public class JobIdParameterValidator extends EngineParameterValidator<AbstractJobIdRequest>{
+public class JobIdParameterValidator extends EngineParameterValidator<AbstractJobIdRequest> {
     private static final String JOB_ID = "JobId";
 
     @Override

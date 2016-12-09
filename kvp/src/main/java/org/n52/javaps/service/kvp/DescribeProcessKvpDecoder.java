@@ -17,11 +17,11 @@
 package org.n52.javaps.service.kvp;
 
 import org.n52.iceland.binding.kvp.AbstractKvpDecoder;
+import org.n52.janmayen.function.ThrowingBiConsumer;
+import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.shetland.ogc.wps.WPS200Constants;
 import org.n52.shetland.ogc.wps.WPSConstants;
-import org.n52.janmayen.function.ThrowingBiConsumer;
-import org.n52.shetland.ogc.wps.response.DescribeProcessRequest;
-import org.n52.shetland.ogc.ows.OwsCode;
+import org.n52.shetland.ogc.wps.request.DescribeProcessRequest;
 import org.n52.svalbard.decode.exception.DecodingException;
 
 public class DescribeProcessKvpDecoder extends AbstractKvpDecoder<DescribeProcessRequest> {

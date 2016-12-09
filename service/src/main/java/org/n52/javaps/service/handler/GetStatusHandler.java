@@ -34,8 +34,8 @@ import org.n52.iceland.request.handler.OperationHandlerKey;
 import org.n52.javaps.engine.Engine;
 import org.n52.javaps.engine.EngineException;
 import org.n52.javaps.engine.JobNotFoundException;
-import org.n52.shetland.ogc.wps.response.GetStatusRequest;
-import org.n52.shetland.ogc.wps.request.GetStatusResponse;
+import org.n52.shetland.ogc.wps.request.GetStatusRequest;
+import org.n52.shetland.ogc.wps.response.GetStatusResponse;
 
 /**
  * TODO JavaDoc

@@ -57,7 +57,7 @@ import org.n52.javaps.io.literal.LiteralType;
 import org.n52.javaps.io.literal.LiteralTypeRepository;
 import org.n52.javaps.io.literal.xsd.LiteralIntType;
 import org.n52.javaps.io.literal.xsd.LiteralStringType;
-import org.n52.shetland.ogc.wps.request.DescribeProcessResponse;
+import org.n52.shetland.ogc.wps.response.DescribeProcessResponse;
 import org.n52.svalbard.encode.exception.EncodingException;
 
 /**

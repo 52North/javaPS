@@ -36,8 +36,8 @@ import org.n52.shetland.ogc.wps.WPSConstants;
 import org.n52.iceland.request.handler.GenericOperationHandler;
 import org.n52.iceland.request.handler.OperationHandlerKey;
 import org.n52.javaps.engine.Engine;
-import org.n52.shetland.ogc.wps.response.DescribeProcessRequest;
-import org.n52.shetland.ogc.wps.request.DescribeProcessResponse;
+import org.n52.shetland.ogc.wps.request.DescribeProcessRequest;
+import org.n52.shetland.ogc.wps.response.DescribeProcessResponse;
 
 /**
  * TODO JavaDoc

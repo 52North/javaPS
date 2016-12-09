@@ -20,7 +20,7 @@ import java.util.Collection;
 import java.util.function.Supplier;
 
 import org.n52.iceland.binding.kvp.AbstractKvpDecoder;
-import org.n52.shetland.ogc.wps.response.AbstractJobIdRequest;
+import org.n52.shetland.ogc.wps.request.AbstractJobIdRequest;
 import org.n52.svalbard.decode.DecoderKey;
 
 public abstract class AbstractJobIdKvpDecoder<T extends AbstractJobIdRequest> extends AbstractKvpDecoder<T> {

@@ -20,8 +20,6 @@ package org.n52.javaps.service.xml;
 
 
 
-import org.n52.javaps.service.xml.WPSRequestReader;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.contains;
@@ -44,6 +42,7 @@ import org.junit.rules.ErrorCollector;
 import org.xml.sax.SAXException;
 
 import org.n52.shetland.ogc.ows.OwsCode;
+import org.n52.shetland.ogc.ows.service.GetCapabilitiesRequest;
 import org.n52.shetland.ogc.wps.DataTransmissionMode;
 import org.n52.shetland.ogc.wps.ExecutionMode;
 import org.n52.shetland.ogc.wps.Format;
@@ -54,12 +53,11 @@ import org.n52.shetland.ogc.wps.data.Body;
 import org.n52.shetland.ogc.wps.data.GroupProcessData;
 import org.n52.shetland.ogc.wps.data.ReferenceProcessData;
 import org.n52.shetland.ogc.wps.data.impl.StringValueProcessData;
-import org.n52.shetland.ogc.ows.service.GetCapabilitiesRequest;
-import org.n52.shetland.ogc.wps.response.DescribeProcessRequest;
-import org.n52.shetland.ogc.wps.response.DismissRequest;
-import org.n52.shetland.ogc.wps.response.ExecuteRequest;
-import org.n52.shetland.ogc.wps.response.GetResultRequest;
-import org.n52.shetland.ogc.wps.response.GetStatusRequest;
+import org.n52.shetland.ogc.wps.request.DescribeProcessRequest;
+import org.n52.shetland.ogc.wps.request.DismissRequest;
+import org.n52.shetland.ogc.wps.request.ExecuteRequest;
+import org.n52.shetland.ogc.wps.request.GetResultRequest;
+import org.n52.shetland.ogc.wps.request.GetStatusRequest;
 
 import com.google.common.io.BaseEncoding;
 
@@ -146,6 +144,7 @@ public class WPSRequestReaderTest {
 
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testExecuteRequest() throws Exception {
         ExecuteRequest request = read("wpsExecuteRequestExample.xml");
         errors.checkThat(request, is(notNullValue()));
