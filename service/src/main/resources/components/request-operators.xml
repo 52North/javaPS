@@ -29,37 +29,37 @@
     <bean id="getCapabilitiesOperator" class="org.n52.iceland.request.operator.GenericRequestOperator">
         <constructor-arg name="operation" ref="getCapabilitiesOperation" />
         <constructor-arg name="defaultActive" value="true" />
-        <constructor-arg name="requestType" value="org.n52.iceland.request.GetCapabilitiesRequest" />
+        <constructor-arg name="requestType" value="org.n52.shetland.ogc.ows.service.GetCapabilitiesRequest" />
         <constructor-arg name="validator" ref="getCapabiltiesParameterValidator" />
     </bean>
     <bean id="describeProcessOperator" class="org.n52.iceland.request.operator.GenericRequestOperator">
         <constructor-arg name="operation" ref="describeProcessOperation"/>
         <constructor-arg name="defaultActive" value="true" />
-        <constructor-arg name="requestType" value="org.n52.javaps.request.DescribeProcessRequest" />
+        <constructor-arg name="requestType" value="org.n52.shetland.ogc.wps.request.DescribeProcessRequest" />
         <constructor-arg name="validator" ref="describeProcessParameterValidator" />
     </bean>
     <bean id="executeOperator" class="org.n52.iceland.request.operator.GenericRequestOperator">
         <constructor-arg name="operation" ref="executeOperation" />
         <constructor-arg name="defaultActive" value="true" />
-        <constructor-arg name="requestType" value="org.n52.javaps.request.ExecuteRequest" />
+        <constructor-arg name="requestType" value="org.n52.shetland.ogc.wps.request.ExecuteRequest" />
         <constructor-arg name="validator" ref="executeParameterValidator"/>
     </bean>
     <bean id="getResultOperator" class="org.n52.iceland.request.operator.GenericRequestOperator">
         <constructor-arg name="operation" ref="getResultOperation" />
         <constructor-arg name="defaultActive" value="true" />
-        <constructor-arg name="requestType" value="org.n52.javaps.request.GetResultRequest" />
+        <constructor-arg name="requestType" value="org.n52.shetland.ogc.wps.request.GetResultRequest" />
         <constructor-arg name="validator" ref="jobIdParameterValidator" />
     </bean>
     <bean id="getStatusOperator" class="org.n52.iceland.request.operator.GenericRequestOperator">
         <constructor-arg name="operation" ref="getStatusOperation" />
         <constructor-arg name="defaultActive" value="true" />
-        <constructor-arg name="requestType" value="org.n52.javaps.request.GetStatusRequest" />
+        <constructor-arg name="requestType" value="org.n52.shetland.ogc.wps.request.GetStatusRequest" />
         <constructor-arg name="validator" ref="jobIdParameterValidator" />
     </bean>
     <bean id="dismissOperator" class="org.n52.iceland.request.operator.GenericRequestOperator">
         <constructor-arg name="operation" ref="dismissOperation" />
         <constructor-arg name="defaultActive" value="true" />
-        <constructor-arg name="requestType" value="org.n52.javaps.request.DismissRequest"/>
+        <constructor-arg name="requestType" value="org.n52.shetland.ogc.wps.request.DismissRequest"/>
         <constructor-arg name="validator" ref="jobIdParameterValidator" />
     </bean>
 </beans>

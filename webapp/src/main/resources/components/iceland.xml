@@ -45,8 +45,8 @@
     <bean id="serviceOperatorRepository" class="org.n52.iceland.service.operator.ServiceOperatorRepository" />
     <bean id="requestOperatorRepository" class="org.n52.iceland.request.operator.RequestOperatorRepository" />
     <bean id="converterRepository" class="org.n52.iceland.convert.ConverterRepository" />
-    <bean id="decoderRepository" class="org.n52.iceland.coding.decode.DecoderRepository" />
-    <bean id="encoderRepository" class="org.n52.iceland.coding.encode.EncoderRepository" />
+    <bean id="decoderRepository" class="org.n52.svalbard.decode.DecoderRepository" />
+    <bean id="encoderRepository" class="org.n52.svalbard.encode.EncoderRepository" />
 
     <bean id="documentBuilderProvider" class="org.n52.iceland.coding.DocumentBuilderProvider"/>
 

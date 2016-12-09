@@ -193,7 +193,7 @@
                     <webApp>
                         <contextPath>/wps</contextPath>
                     </webApp>
-                    <dumpOnStart>true</dumpOnStart>
+                    <dumpOnStart>false</dumpOnStart>
                     <contextXml>${basedir}/src/main/webapp/WEB-INF/jetty-web.xml</contextXml>
                 </configuration>
             </plugin>
