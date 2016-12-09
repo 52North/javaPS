@@ -26,7 +26,7 @@
         <artifactId>javaPS</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
-	
+
     <artifactId>service</artifactId>
 
     <name>52°North Iceland WPS Service Implementation</name>
@@ -49,10 +49,6 @@
             <artifactId>engine</artifactId>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>core</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.n52.iceland</groupId>
             <artifactId>iceland</artifactId>
             <exclusions>
@@ -65,10 +61,6 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>iceland-wps</artifactId>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -116,7 +108,7 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    
+
     <build>
         <plugins>
             <plugin>
@@ -132,7 +124,7 @@
                         <configuration>
                             <dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
                             <generateGitPropertiesFile>true</generateGitPropertiesFile>
-                            <!--<verbose>true</verbose>--> 
+                            <!--<verbose>true</verbose>-->
                             <gitDescribe>
                                 <!-- Faster to get just branch if skip = true -->
                                 <!--  true to solve https://github.com/ktoso/maven-git-commit-id-plugin/issues/61 -->
@@ -142,7 +134,7 @@
                     </execution>
                 </executions>
             </plugin>
-            
+
         </plugins>
     </build>
 

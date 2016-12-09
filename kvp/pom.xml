@@ -28,14 +28,6 @@
     <name>52°North Iceland WPS KVP Binding</name>
     <dependencies>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>iceland-wps</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.n52.iceland</groupId>
             <artifactId>iceland</artifactId>
         </dependency>

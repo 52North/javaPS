@@ -29,10 +29,6 @@
     <dependencies>
         <dependency>
             <groupId>org.n52.wps</groupId>
-            <artifactId>core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.n52.wps</groupId>
             <artifactId>engine</artifactId>
         </dependency>
         <dependency>
@@ -54,10 +50,6 @@
         <dependency>
             <groupId>org.n52.wps</groupId>
             <artifactId>iceland-stream</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.n52.wps</groupId>
-            <artifactId>iceland-wps</artifactId>
         </dependency>
         <dependency>
             <groupId>javax.inject</groupId>
