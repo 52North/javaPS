@@ -99,7 +99,7 @@ public class DocumentXmlStreamWriter extends XmlFactories implements StreamWrite
                 }
                 return null; // use a callable to allow exception throwing
             });
-            
+
             try {
                 writer.accept(pos);
             } catch (Exception e) {

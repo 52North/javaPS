@@ -26,13 +26,13 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
-import org.n52.svalbard.decode.stream.MissingStreamReaderException;
-import org.n52.svalbard.decode.stream.StreamReader;
-import org.n52.svalbard.decode.stream.StreamReaderKey;
 import org.n52.iceland.util.XmlFactories;
 import org.n52.janmayen.component.Component;
 import org.n52.shetland.ogc.ows.exception.NoApplicableCodeException;
 import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
+import org.n52.svalbard.decode.stream.MissingStreamReaderException;
+import org.n52.svalbard.decode.stream.StreamReader;
+import org.n52.svalbard.decode.stream.StreamReaderKey;
 
 
 /**

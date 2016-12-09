@@ -24,9 +24,6 @@ import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.n52.janmayen.component.AbstractSimilarityKeyRepository;
 import org.n52.janmayen.lifecycle.Constructable;
 
@@ -38,8 +35,6 @@ import org.n52.janmayen.lifecycle.Constructable;
 public class StreamReaderRepository
         extends AbstractSimilarityKeyRepository<StreamReaderKey, StreamReader<?>>
         implements Constructable {
-
-    private static final Logger LOG = LoggerFactory.getLogger(StreamReaderRepository.class);
 
     private Collection<Provider<StreamReader<?>>> readers;
 

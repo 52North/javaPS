@@ -26,6 +26,5 @@ import org.n52.svalbard.encode.exception.EncodingException;
  */
 public interface StreamWriter<T> extends Component<StreamWriterKey> {
 
-    void write(T object, OutputStream stream)
-            throws EncodingException;
+    void write(T object, OutputStream stream) throws EncodingException;
 }

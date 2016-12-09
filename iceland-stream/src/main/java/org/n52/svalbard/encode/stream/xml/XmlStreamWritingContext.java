@@ -34,9 +34,9 @@ import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
 
-import org.n52.svalbard.encode.stream.MissingStreamWriterException;
 import org.n52.iceland.util.XmlFactories;
 import org.n52.svalbard.encode.exception.EncodingException;
+import org.n52.svalbard.encode.stream.MissingStreamWriterException;
 
 /**
  * TODO JavaDoc
@@ -142,8 +142,7 @@ public class XmlStreamWritingContext extends XmlFactories implements AutoCloseab
         }
     }
 
-    public void flush()
-            throws XMLStreamException {
+    public void flush() throws XMLStreamException {
         this.writer.flush();
     }
 }

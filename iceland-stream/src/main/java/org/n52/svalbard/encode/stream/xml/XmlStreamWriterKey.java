@@ -16,8 +16,8 @@
  */
 package org.n52.svalbard.encode.stream.xml;
 
-import org.n52.svalbard.encode.stream.StreamWriterKey;
 import org.n52.janmayen.http.MediaTypes;
+import org.n52.svalbard.encode.stream.StreamWriterKey;
 
 /**
  * TODO JavaDoc

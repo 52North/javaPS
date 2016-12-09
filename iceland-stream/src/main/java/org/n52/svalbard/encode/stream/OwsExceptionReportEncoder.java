@@ -35,17 +35,14 @@ import org.n52.svalbard.encode.exception.EncodingException;
  *
  * @author Christian Autermann
  */
-public class OwsExceptionReportEncoder implements
-        Encoder<OwsExceptionReportResponse, OwsExceptionReport> {
-    private static final ExceptionEncoderKey KEY
-            = new ExceptionEncoderKey(MediaTypes.APPLICATION_XML);
+public class OwsExceptionReportEncoder implements Encoder<OwsExceptionReportResponse, OwsExceptionReport> {
+    private static final ExceptionEncoderKey KEY = new ExceptionEncoderKey(MediaTypes.APPLICATION_XML);
     private static final Set<EncoderKey> KEYS = Collections.singleton(KEY);
     private final MediaType contentType = MediaTypes.APPLICATION_XML;
 
     @Override
     public OwsExceptionReportResponse encode(OwsExceptionReport report) {
-        OwsExceptionReportResponse response
-                = new OwsExceptionReportResponse(report);
+        OwsExceptionReportResponse response = new OwsExceptionReportResponse(report);
         response.setContentType(this.contentType);
         return response;
     }

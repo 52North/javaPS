@@ -49,14 +49,13 @@ import org.n52.shetland.w3c.xlink.Actuate;
 import org.n52.shetland.w3c.xlink.Link;
 import org.n52.shetland.w3c.xlink.Show;
 import org.n52.svalbard.encode.exception.EncodingException;
+import org.n52.svalbard.stream.XLinkConstants;
 
 import com.google.common.base.Strings;
 import com.google.common.escape.Escaper;
 import com.google.common.io.BaseEncoding;
 import com.google.common.io.ByteStreams;
 import com.google.common.xml.XmlEscapers;
-
-import org.n52.svalbard.stream.XLinkConstants;
 
 
 public abstract class AbstractElementXmlStreamWriter extends XmlFactories

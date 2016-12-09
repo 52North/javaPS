@@ -28,9 +28,6 @@ import javax.xml.namespace.QName;
 
 import org.n52.iceland.coding.OperationKey;
 import org.n52.iceland.coding.decode.OwsDecodingException;
-import org.n52.svalbard.decode.stream.MissingStreamReaderException;
-import org.n52.svalbard.decode.stream.StreamReader;
-import org.n52.svalbard.decode.stream.StreamReaderRepository;
 import org.n52.janmayen.http.MediaTypes;
 import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
 import org.n52.svalbard.decode.Decoder;
@@ -38,6 +35,9 @@ import org.n52.svalbard.decode.DecoderKey;
 import org.n52.svalbard.decode.OperationDecoderKey;
 import org.n52.svalbard.decode.XmlStringOperationDecoderKey;
 import org.n52.svalbard.decode.exception.DecodingException;
+import org.n52.svalbard.decode.stream.MissingStreamReaderException;
+import org.n52.svalbard.decode.stream.StreamReader;
+import org.n52.svalbard.decode.stream.StreamReaderRepository;
 
 /**
  * TODO JavaDoc

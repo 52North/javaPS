@@ -19,8 +19,8 @@ package org.n52.svalbard.decode.stream.xml;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
 
-import org.n52.svalbard.decode.stream.StreamReaderKey;
 import org.n52.janmayen.component.Component;
+import org.n52.svalbard.decode.stream.StreamReaderKey;
 
 /**
  * TODO JavaDoc

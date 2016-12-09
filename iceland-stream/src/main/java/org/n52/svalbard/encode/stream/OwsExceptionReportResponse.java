@@ -32,11 +32,6 @@ public class OwsExceptionReportResponse extends OwsServiceResponse {
         this.owsExceptionReport = owsExceptionReport;
     }
 
-    @Override
-    public String getOperationName() {
-        return null;
-    }
-
     public OwsExceptionReport getOwsExceptionReport() {
         return owsExceptionReport;
     }

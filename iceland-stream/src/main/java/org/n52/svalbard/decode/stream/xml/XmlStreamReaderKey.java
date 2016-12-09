@@ -20,8 +20,8 @@ import java.util.Objects;
 
 import javax.xml.namespace.QName;
 
-import org.n52.svalbard.decode.stream.StreamReaderKey;
 import org.n52.janmayen.http.MediaTypes;
+import org.n52.svalbard.decode.stream.StreamReaderKey;
 
 /**
  * TODO JavaDoc

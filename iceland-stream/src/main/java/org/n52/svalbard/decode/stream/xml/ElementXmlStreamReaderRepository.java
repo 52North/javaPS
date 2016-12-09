@@ -25,9 +25,9 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-import org.n52.svalbard.decode.stream.StreamReaderKey;
 import org.n52.janmayen.component.AbstractSimilarityKeyRepository;
 import org.n52.janmayen.lifecycle.Constructable;
+import org.n52.svalbard.decode.stream.StreamReaderKey;
 
 /**
  * TODO JavaDoc

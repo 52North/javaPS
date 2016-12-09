@@ -54,6 +54,24 @@ public class StreamWriterKey extends ClassBasedComponentKey<Object> implements S
         return typeSimilarity + mediaTypeSimilarity;
     }
 
+    public MediaType getMediaType() {
+        return this.mediaType;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == null || other.getClass() != getClass()) {
+            return false;
+        }
+        StreamWriterKey that = (StreamWriterKey) other;
+        return Objects.equals(this.getMediaType(), that.getMediaType()) &&
+               Objects.equals(this.getType(), that.getType());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getMediaType(), getType());
+    }
 
     public static int getSimiliarity(Class<?> superClass, Class<?> clazz) {
         if (clazz.isArray()) {
@@ -82,7 +100,7 @@ public class StreamWriterKey extends ClassBasedComponentKey<Object> implements S
             return difference < 0 ? -1 : 1 + difference;
         }
     }
-
+    
     private static int getSimiliarity1(Class<?> superClass, Class<?> clazz, int difference) {
         if (superClass.isAssignableFrom(clazz)) {
             int cd = getSimiliarity(superClass, clazz);
@@ -90,26 +108,6 @@ public class StreamWriterKey extends ClassBasedComponentKey<Object> implements S
         } else {
             return difference;
         }
-    }
-
-
-    public MediaType getMediaType() {
-        return this.mediaType;
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if (other == null || other.getClass() != getClass()) {
-            return false;
-        }
-        StreamWriterKey that = (StreamWriterKey) other;
-        return Objects.equals(this.getMediaType(), that.getMediaType()) &&
-               Objects.equals(this.getType(), that.getType());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getMediaType(), getType());
     }
 
 }

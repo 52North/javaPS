@@ -24,8 +24,8 @@ import java.util.Set;
 import org.n52.iceland.coding.encode.ResponseProxy;
 import org.n52.iceland.coding.encode.ResponseWriter;
 import org.n52.iceland.coding.encode.ResponseWriterKey;
-import org.n52.shetland.ogc.ows.service.OwsServiceResponse;
 import org.n52.janmayen.http.MediaType;
+import org.n52.shetland.ogc.ows.service.OwsServiceResponse;
 import org.n52.svalbard.encode.exception.EncodingException;
 import org.n52.svalbard.encode.exception.NoEncoderForKeyException;
 
