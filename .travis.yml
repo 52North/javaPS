@@ -1,6 +1,5 @@
 language: java
 sudo: false
-before_install: "chmod +x .travis-install-iceland.sh && ./.travis-install-iceland.sh"
 install: true
 script: mvn -q install
 jdk:
