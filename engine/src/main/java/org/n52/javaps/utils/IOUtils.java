@@ -44,6 +44,8 @@ import com.google.common.io.ByteStreams;
 public class IOUtils {
     private static final Logger LOGGER = LoggerFactory.getLogger(IOUtils.class);
 
+    private IOUtils() {}
+
     /**
      * Reads the given input stream as a string and decodes that base64 string
      * into a file with the specified extension
@@ -71,6 +73,15 @@ public class IOUtils {
     }
 
     /**
+     * Copies the input stream to the specified file.
+     *
+     * @param inputStream the input stream
+     * @param extension   the file extension (ignored)
+     * @param file        the file
+     *
+     * @return the file
+     *
+     * @throws java.io.IOException if an error occurs
      * @deprecated use {@link Files#copy(java.io.InputStream, java.nio.file.Path, java.nio.file.CopyOption...) }
      */
     @Deprecated
