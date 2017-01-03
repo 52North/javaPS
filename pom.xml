@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright 2016 52°North Initiative for Geospatial Open Source
+    Copyright 2016-2017 52°North Initiative for Geospatial Open Source
     Software GmbH
 
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -387,6 +387,28 @@
             </plugin>
 
             <plugin>
+                <groupId>org.codehaus.groovy.maven</groupId>
+                <artifactId>gmaven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                        <configuration>
+                            <source>
+                                import java.util.Date
+                                import java.text.MessageFormat
+                                def vartimestamp = MessageFormat.format("{0,date,yyyy}", new
+                                Date())
+                                project.properties['currentYearDynamic'] = vartimestamp
+                            </source>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
                 <groupId>com.mycila</groupId>
                 <artifactId>license-maven-plugin</artifactId>
                 <inherited>false</inherited>
@@ -399,7 +421,7 @@
                     </includes>
                     <strictCheck>true</strictCheck>
                     <properties>
-                        <year>2016</year>
+                        <year>${project.inceptionYear}-${currentYearDynamic}</year>
                     </properties>
                     <mapping>
                         <java>SLASHSTAR_STYLE</java>
