@@ -34,7 +34,7 @@ import org.apache.commons.configuration2.io.FileSystemLocationStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.n52.iceland.util.JSONUtils;
+import org.n52.janmayen.Json;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.base.Strings;
@@ -75,7 +75,7 @@ public class ConfigurableClasses {
                 //check if the strategies found something
                 if (fileURL != null) {
                     try {
-                        return Optional.of(JSONUtils.loadURL(fileURL));
+                        return Optional.of(Json.loadURL(fileURL));
                     } catch (IOException e) {
                         LOGGER.error("Could not read property file for class " + clazz.getName(), e);
                     }
@@ -84,7 +84,7 @@ public class ConfigurableClasses {
             if(defaultFileName.isPresent()){
                 fileURL = locateFile(defaultFileName.get());
                 try {
-                    return Optional.of(JSONUtils.loadURL(fileURL));
+                    return Optional.of(Json.loadURL(fileURL));
                 } catch (IOException e) {
                     LOGGER.error("Could not read property file for class " + clazz.getName(), e);
                 }

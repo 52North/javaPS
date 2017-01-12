@@ -63,7 +63,7 @@ import org.n52.shetland.ogc.wps.data.GroupProcessData;
 import org.n52.shetland.ogc.wps.data.ProcessData;
 import org.n52.shetland.ogc.wps.data.ValueProcessData;
 import org.n52.shetland.ogc.wps.data.impl.FileBasedProcessData;
-import org.n52.iceland.util.JSONUtils;
+import org.n52.janmayen.Json;
 import org.n52.iceland.util.MoreFiles;
 import org.n52.janmayen.Chain;
 import org.n52.janmayen.lifecycle.Constructable;
@@ -138,7 +138,7 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
             Path directory = Files.createDirectories(basePath.resolve(jobId));
             OffsetDateTime expirationDate = getExpirationDate(directory);
 
-            ObjectNode rootNode = JSONUtils.nodeFactory().objectNode()
+            ObjectNode rootNode = Json.nodeFactory().objectNode()
                     .put(Keys.STATUS, context.getJobStatus().getValue())
                     .put(Keys.JOB_ID, jobId)
                     .put(Keys.EXPIRATION_DATE, expirationDate.toString())
@@ -158,7 +158,7 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
             }
 
             Files.write(directory.resolve(META_JSON_FILE_NAME),
-                        JSONUtils.print(rootNode).getBytes(StandardCharsets.UTF_8));
+                        Json.print(rootNode).getBytes(StandardCharsets.UTF_8));
         } catch (IOException ex) {
             LOG.error("Error writing result for job " + context.getJobId(), ex);
         }
@@ -290,7 +290,7 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
     }
 
     private JsonNode getJobMetadata(JobId jobId) throws JobNotFoundException, IOException {
-        return JSONUtils.loadPath(getJobDirectory(jobId).resolve(META_JSON_FILE_NAME));
+        return Json.loadPath(getJobDirectory(jobId).resolve(META_JSON_FILE_NAME));
     }
 
     @Override

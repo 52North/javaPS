@@ -30,10 +30,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import org.n52.iceland.config.annotation.Configurable;
-import org.n52.iceland.config.annotation.Setting;
+import org.n52.faroe.annotation.Configurable;
+import org.n52.faroe.annotation.Setting;
 import org.n52.iceland.service.ServiceSettings;
-import org.n52.iceland.util.JSONUtils;
+import org.n52.janmayen.Json;
 import org.n52.iceland.util.Validation;
 
 import com.google.common.io.ByteSource;
@@ -90,7 +90,7 @@ public class InfoEndpoint {
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public String info() {
 
-        return JSONUtils.print(JSONUtils.nodeFactory().objectNode()
+        return Json.print(Json.nodeFactory().objectNode()
                 .put(ENDPOINT, this.serviceURL)
                 .put(BRANCH, this.branch)
                 .put(COMMIT, this.commit)

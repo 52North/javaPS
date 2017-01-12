@@ -20,7 +20,7 @@ import java.util.Locale;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
-import org.n52.iceland.i18n.LocaleHelper;
+import org.n52.janmayen.i18n.LocaleHelper;
 import org.n52.javaps.io.DecodingException;
 
 /**
@@ -41,7 +41,7 @@ public class LiteralLanguageType extends AbstractXSDLiteralType<Locale> {
     @Override
     public Locale parse(String value) throws DecodingException {
         if (PATTERN.test(value)) {
-            return LocaleHelper.fromString(value);
+            return LocaleHelper.decode(value);
         } else {
             throw new DecodingException("value is not a valid language");
         }
@@ -54,7 +54,7 @@ public class LiteralLanguageType extends AbstractXSDLiteralType<Locale> {
 
     @Override
     public String generate(Locale value) {
-        return LocaleHelper.toString(value);
+        return LocaleHelper.encode(value);
     }
 
 }

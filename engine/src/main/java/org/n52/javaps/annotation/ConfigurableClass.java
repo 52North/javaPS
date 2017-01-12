@@ -16,7 +16,7 @@
  */
 package org.n52.javaps.annotation;
 
-import org.n52.iceland.util.JSONUtils;
+import org.n52.janmayen.Json;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -28,7 +28,7 @@ public interface ConfigurableClass {
 
     default JsonNode getProperties() {
         return ConfigurableClasses.get(getClass())
-                .orElseGet(JSONUtils.nodeFactory()::objectNode);
+                .orElseGet(Json.nodeFactory()::objectNode);
     }
 
 }

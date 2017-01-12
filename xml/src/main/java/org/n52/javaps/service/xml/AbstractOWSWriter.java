@@ -32,10 +32,10 @@ import java.util.TreeSet;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
 
-import org.n52.iceland.i18n.LocaleHelper;
 import org.n52.janmayen.Optionals;
 import org.n52.janmayen.http.HTTPMethods;
-import org.n52.shetland.i18n.MultilingualString;
+import org.n52.janmayen.i18n.LocaleHelper;
+import org.n52.janmayen.i18n.MultilingualString;
 import org.n52.shetland.ogc.ows.OwsAddress;
 import org.n52.shetland.ogc.ows.OwsAllowedValues;
 import org.n52.shetland.ogc.ows.OwsAnyValue;
@@ -152,7 +152,7 @@ public abstract class AbstractOWSWriter extends AbstractMultiElementXmlStreamWri
     }
 
     protected void langAttr(Locale lang) throws XMLStreamException {
-        attr("xml:lang", Optional.of(Strings.emptyToNull(LocaleHelper.toString(lang))));
+        attr("xml:lang", Optional.of(Strings.emptyToNull(LocaleHelper.encode(lang))));
     }
 
     protected void writeCode(QName name, Optional<OwsCode> id)
