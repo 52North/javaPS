@@ -46,8 +46,8 @@ Then just run `mvn clean install` on the repositories root directory.
 
 ## Contact
 
-Christian Autermann (c.autermann (at) 52north.org)
-Benjamin Pross (b.pross (at) 52north.org)
+ * Christian Autermann (c.autermann (at) 52north.org)
+ * Benjamin Pross (b.pross (at) 52north.org)
 
 ## Support
 
