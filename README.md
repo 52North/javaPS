@@ -6,7 +6,7 @@ Next generation standardized web-based geo-processing.
 
 javaPS enables the deployment of geo-processes on the web in a standardized way. It features a pluggable architecture for processes and data encodings.
 
-The 52°North WPS implements the [OGC WPS specification](http://www.opengeospatial.org/standards/wps).
+javaPS implements the [OGC WPS specification, version 2.0](http://docs.opengeospatial.org/is/14-065/14-065.html).
 
 ## Build Status
 * Develop: [![Develop Build Status](https://travis-ci.org/52North/javaPS.png?branch=develop)](https://travis-ci.org/52North/javaPS)
