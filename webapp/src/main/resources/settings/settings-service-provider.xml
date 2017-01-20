@@ -21,11 +21,11 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
-    <bean id="serviceProviderSettingsDefitionGroup" class="org.n52.iceland.config.SettingDefinitionGroup">
+    <bean id="serviceProviderSettingsDefitionGroup" class="org.n52.faroe.SettingDefinitionGroup">
         <property name="title" value="Service Provider" />
         <property name="order" value="0.0" />
     </bean>
-    <bean class="org.n52.iceland.config.settings.StringSettingDefinition">
+    <bean class="org.n52.faroe.settings.StringSettingDefinition">
         <property name="key" value="serviceProvider.country" />
         <property name="title" value="Country" />
         <property name="description" value="The country of the responsible person." />
@@ -33,7 +33,7 @@
         <property name="group" ref="serviceProviderSettingsDefitionGroup" />
         <property name="defaultValue" value="Germany" />
     </bean>
-    <bean class="org.n52.iceland.config.settings.StringSettingDefinition">
+    <bean class="org.n52.faroe.settings.StringSettingDefinition">
         <property name="key" value="serviceProvider.email" />
         <property name="title" value="Mail-Address" />
         <property name="description" value="The electronic mail address of the responsible person." />
@@ -41,7 +41,7 @@
         <property name="group" ref="serviceProviderSettingsDefitionGroup" />
         <property name="defaultValue" value="info@52north.org" />
     </bean>
-    <bean class="org.n52.iceland.config.settings.StringSettingDefinition">
+    <bean class="org.n52.faroe.settings.StringSettingDefinition">
         <property name="key" value="serviceProvider.address" />
         <property name="title" value="Address" />
         <property name="description" value="The street address of the responsible person." />
@@ -49,7 +49,7 @@
         <property name="group" ref="serviceProviderSettingsDefitionGroup" />
         <property name="defaultValue" value="Martin-Luther-King-Weg 24" />
     </bean>
-    <bean class="org.n52.iceland.config.settings.StringSettingDefinition">
+    <bean class="org.n52.faroe.settings.StringSettingDefinition">
         <property name="key" value="serviceProvider.state" />
         <property name="title" value="State" />
         <property name="description" value="The state of the responsible person." />
@@ -57,7 +57,7 @@
         <property name="group" ref="serviceProviderSettingsDefitionGroup" />
         <property name="defaultValue" value="North Rhine-Westphalia" />
     </bean>
-    <bean class="org.n52.iceland.config.settings.StringSettingDefinition">
+    <bean class="org.n52.faroe.settings.StringSettingDefinition">
         <property name="key" value="serviceProvider.positionName" />
         <property name="title" value="Position" />
         <property name="description" value="The position of the responsible person." />
@@ -65,7 +65,7 @@
         <property name="group" ref="serviceProviderSettingsDefitionGroup" />
         <property name="defaultValue" value="TBA" />
     </bean>
-    <bean class="org.n52.iceland.config.settings.StringSettingDefinition">
+    <bean class="org.n52.faroe.settings.StringSettingDefinition">
         <property name="key" value="serviceProvider.postalCode" />
         <property name="title" value="Postal Code" />
         <property name="description" value="The postal code of the responsible person." />
@@ -73,7 +73,7 @@
         <property name="group" ref="serviceProviderSettingsDefitionGroup" />
         <property name="defaultValue" value="48155" />
     </bean>
-    <bean class="org.n52.iceland.config.settings.StringSettingDefinition">
+    <bean class="org.n52.faroe.settings.StringSettingDefinition">
         <property name="key" value="serviceProvider.phone" />
         <property name="title" value="Phone" />
         <property name="description" value="The phone number of the responsible person." />
@@ -81,7 +81,7 @@
         <property name="group" ref="serviceProviderSettingsDefitionGroup" />
         <property name="defaultValue" value="+49(0)251/396 371-0" />
     </bean>
-    <bean class="org.n52.iceland.config.settings.StringSettingDefinition">
+    <bean class="org.n52.faroe.settings.StringSettingDefinition">
         <property name="key" value="serviceProvider.city" />
         <property name="title" value="City" />
         <property name="description" value="The city of the responsible person." />
@@ -89,7 +89,7 @@
         <property name="group" ref="serviceProviderSettingsDefitionGroup" />
         <property name="defaultValue" value="Münster" />
     </bean>
-    <bean class="org.n52.iceland.config.settings.StringSettingDefinition">
+    <bean class="org.n52.faroe.settings.StringSettingDefinition">
         <property name="key" value="serviceProvider.name" />
         <property name="title" value="Name" />
         <property name="description" value="Your or your company&apos;s name." />
@@ -97,7 +97,7 @@
         <property name="group" ref="serviceProviderSettingsDefitionGroup" />
         <property name="defaultValue" value="52North" />
     </bean>
-    <bean class="org.n52.iceland.config.settings.UriSettingDefinition">
+    <bean class="org.n52.faroe.settings.UriSettingDefinition">
         <property name="key" value="serviceProvider.site" />
         <property name="title" value="Website" />
         <property name="description" value="Your website." />
@@ -105,7 +105,7 @@
         <property name="group" ref="serviceProviderSettingsDefitionGroup" />
         <property name="defaultValue" value="http://52north.org" />
     </bean>
-    <bean class="org.n52.iceland.config.settings.StringSettingDefinition">
+    <bean class="org.n52.faroe.settings.StringSettingDefinition">
         <property name="key" value="serviceProvider.individualName" />
         <property name="title" value="Responsible Person" />
         <property name="description" value="The name of the responsible person of this service." />
@@ -113,7 +113,7 @@
         <property name="group" ref="serviceProviderSettingsDefitionGroup" />
         <property name="defaultValue" value="TBA" />
     </bean>
-    <bean class="org.n52.iceland.config.settings.FileSettingDefinition">
+    <bean class="org.n52.faroe.settings.FileSettingDefinition">
         <property name="key" value="serviceProvider.file" />
         <property name="title" value="Service Provider File" />
         <property name="description" value="The path to a file containing an ows:ServiceProvider overriding the above settings. It can be either an absolute path (like &lt;code&gt;/home/user/config/provider.xml&lt;/code&gt;) or a path relative to the web application directory (e.g. &lt;code&gt;WEB-INF/provider.xml&lt;/code&gt;)." />
@@ -121,7 +121,7 @@
         <property name="optional" value="true" />
         <property name="group" ref="serviceProviderSettingsDefitionGroup" />
     </bean>
-    <bean class="org.n52.iceland.config.settings.StringSettingDefinition">
+    <bean class="org.n52.faroe.settings.StringSettingDefinition">
         <property name="key" value="serviceProvider.facsimile" />
         <property name="title" value="Facsimile" />
         <property name="description" value="The facsimile of the responsible person." />
@@ -129,7 +129,7 @@
         <property name="optional" value="true" />
         <property name="group" ref="serviceProviderSettingsDefitionGroup" />
     </bean>
-    <bean class="org.n52.iceland.config.settings.StringSettingDefinition">
+    <bean class="org.n52.faroe.settings.StringSettingDefinition">
         <property name="key" value="serviceProvider.hoursOfService" />
         <property name="title" value="Hours of service" />
         <property name="description" value="Time period (including time zone) when individuals can contact the organization or individual." />
@@ -137,7 +137,7 @@
         <property name="optional" value="true" />
         <property name="group" ref="serviceProviderSettingsDefitionGroup" />
     </bean>
-    <bean class="org.n52.iceland.config.settings.StringSettingDefinition">
+    <bean class="org.n52.faroe.settings.StringSettingDefinition">
         <property name="key" value="serviceProvider.contactInstructions" />
         <property name="title" value="Contact instructions" />
         <property name="description" value="Supplemental instructions on how or when to contact the individual or organization." />
@@ -145,7 +145,7 @@
         <property name="optional" value="true" />
         <property name="group" ref="serviceProviderSettingsDefitionGroup" />
     </bean>
-    <bean class="org.n52.iceland.config.settings.StringSettingDefinition">
+    <bean class="org.n52.faroe.settings.StringSettingDefinition">
         <property name="key" value="serviceProvider.onlineResource" />
         <property name="title" value="Online resources" />
         <property name="description" value="On-line information that can be used to contact the individual or organization, in the format &lt;code&gt;title:url&lt;/code&gt;, e.g. 'contact person website|http://52north.org/about/52-north-team/27-daniel-nuest'. The '|' character (pipe) is used to seperate the two parts and therefore may not be used in either title or URI." />
@@ -153,7 +153,7 @@
         <property name="optional" value="true" />
         <property name="group" ref="serviceProviderSettingsDefitionGroup" />
     </bean>
-    <bean class="org.n52.iceland.config.settings.StringSettingDefinition">
+    <bean class="org.n52.faroe.settings.StringSettingDefinition">
         <property name="key" value="serviceProvider.role.value" />
         <property name="title" value="Role" />
         <property name="description" value="Function performed by the responsible party. Possible values of this Role shall include the values and the meanings listed in Subclause B.5.5 of ISO 19115:2003." />
@@ -161,7 +161,7 @@
         <property name="optional" value="true" />
         <property name="group" ref="serviceProviderSettingsDefitionGroup" />
     </bean>
-    <bean class="org.n52.iceland.config.settings.UriSettingDefinition">
+    <bean class="org.n52.faroe.settings.UriSettingDefinition">
         <property name="key" value="serviceProvider.role.codespace" />
         <property name="title" value="Role codespace" />
         <property name="description" value="CodeSpace for the role element, see above, e.g. &lt;code&gt;http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode&lt;/code&gt;." />

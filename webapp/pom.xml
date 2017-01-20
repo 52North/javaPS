@@ -42,10 +42,14 @@
     </licenses>
 
     <dependencies>
-        
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>service</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.n52.faroe</groupId>
+            <artifactId>faroe-json</artifactId>
             <scope>runtime</scope>
         </dependency>
         <dependency>
