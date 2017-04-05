@@ -30,11 +30,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import org.n52.faroe.Validation;
 import org.n52.faroe.annotation.Configurable;
 import org.n52.faroe.annotation.Setting;
 import org.n52.iceland.service.ServiceSettings;
 import org.n52.janmayen.Json;
-import org.n52.svalbard.Validation;
 
 import com.google.common.io.ByteSource;
 import com.google.common.io.Resources;

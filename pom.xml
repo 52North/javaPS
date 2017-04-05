@@ -94,6 +94,7 @@
         <version.spring>4.2.3.RELEASE</version.spring>
         <version.slf4j>1.7.21</version.slf4j>
         <version.log4j>2.3</version.log4j>
+        <version.faroe>1.1.0</version.faroe>
     </properties>
 
     <dependencyManagement>
@@ -120,13 +121,18 @@
             </dependency>
             <dependency>
                 <groupId>org.n52.faroe</groupId>
-                <artifactId>faroe</artifactId>
-                <version>1.0.0</version>
+                <artifactId>faroe-annotations</artifactId>
+                <version>${version.faroe}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.n52.faroe</groupId>
+                <artifactId>faroe-utils</artifactId>
+                <version>${version.faroe}</version>
             </dependency>
             <dependency>
                 <groupId>org.n52.faroe</groupId>
                 <artifactId>faroe-json</artifactId>
-                <version>1.0.0</version>
+                <version>${version.faroe}</version>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
