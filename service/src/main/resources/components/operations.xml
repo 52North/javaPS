@@ -26,32 +26,32 @@
                            http://www.springframework.org/schema/util/spring-util-4.1.xsd">
 
     <!-- operations -->
-    <bean id="getCapabilitiesOperation" class="org.n52.svalbard.OperationKey">
+    <bean id="getCapabilitiesOperation" class="org.n52.shetland.ogc.ows.service.OwsOperationKey">
         <constructor-arg name="service" value="WPS" />
         <constructor-arg name="version" value="2.0.0" />
         <constructor-arg name="operation" value="GetCapabilities" />
     </bean>
-    <bean id="describeProcessOperation" class="org.n52.svalbard.OperationKey">
+    <bean id="describeProcessOperation" class="org.n52.shetland.ogc.ows.service.OwsOperationKey">
         <constructor-arg name="service" value="WPS" />
         <constructor-arg name="version" value="2.0.0" />
         <constructor-arg name="operation" value="DescribeProcess" />
     </bean>
-    <bean id="executeOperation" class="org.n52.svalbard.OperationKey">
+    <bean id="executeOperation" class="org.n52.shetland.ogc.ows.service.OwsOperationKey">
         <constructor-arg name="service" value="WPS" />
         <constructor-arg name="version" value="2.0.0" />
         <constructor-arg name="operation" value="Execute" />
     </bean>
-    <bean id="getResultOperation" class="org.n52.svalbard.OperationKey">
+    <bean id="getResultOperation" class="org.n52.shetland.ogc.ows.service.OwsOperationKey">
         <constructor-arg name="service" value="WPS" />
         <constructor-arg name="version" value="2.0.0" />
         <constructor-arg name="operation" value="GetResult" />
     </bean>
-    <bean id="getStatusOperation" class="org.n52.svalbard.OperationKey">
+    <bean id="getStatusOperation" class="org.n52.shetland.ogc.ows.service.OwsOperationKey">
         <constructor-arg name="service" value="WPS" />
         <constructor-arg name="version" value="2.0.0" />
         <constructor-arg name="operation" value="GetStatus" />
     </bean>
-    <bean id="dismissOperation" class="org.n52.svalbard.OperationKey">
+    <bean id="dismissOperation" class="org.n52.shetland.ogc.ows.service.OwsOperationKey">
         <constructor-arg name="service" value="WPS" />
         <constructor-arg name="version" value="2.0.0" />
         <constructor-arg name="operation" value="Dismiss" />
