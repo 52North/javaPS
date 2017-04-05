@@ -29,7 +29,7 @@ import javax.xml.namespace.QName;
 import org.n52.iceland.coding.decode.OwsDecodingException;
 import org.n52.janmayen.http.MediaTypes;
 import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
-import org.n52.svalbard.OperationKey;
+import org.n52.shetland.ogc.ows.service.OwsOperationKey;
 import org.n52.svalbard.decode.Decoder;
 import org.n52.svalbard.decode.DecoderKey;
 import org.n52.svalbard.decode.OperationDecoderKey;
@@ -45,11 +45,11 @@ import org.n52.svalbard.decode.stream.StreamReaderRepository;
  */
 public class XmlStreamingOperationDecoder implements Decoder<Object, String> {
     private final QName name;
-    private final OperationKey operation;
+    private final OwsOperationKey operation;
     private final StreamReaderRepository streamReaderRepository;
 
     @Inject
-    public XmlStreamingOperationDecoder(OperationKey operation, QName name, StreamReaderRepository streamReaderRepository) {
+    public XmlStreamingOperationDecoder(OwsOperationKey operation, QName name, StreamReaderRepository streamReaderRepository) {
         this.name = Objects.requireNonNull(name);
         this.operation = Objects.requireNonNull(operation);
         this.streamReaderRepository = Objects.requireNonNull(streamReaderRepository);
