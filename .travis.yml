@@ -1,6 +1,10 @@
 language: java
 sudo: false
 install: true
-script: mvn -q install
+script: mvn -fae -U -B clean install
 jdk:
-- oraclejdk8
+  - oraclejdk8
+cache:
+  directories:
+    - $HOME/.m2
+
