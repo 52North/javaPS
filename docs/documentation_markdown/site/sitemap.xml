@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+    
+    <url>
+     <loc>/</loc>
+     <lastmod>2017-02-22</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
+    <url>
+     <loc>/architecture/architecture/</loc>
+     <lastmod>2017-02-22</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
+        
+    <url>
+     <loc>/sequence_diagrams/sequence_diagrams/</loc>
+     <lastmod>2017-02-22</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>/sequence_diagrams/workflow_general/general_workflow/</loc>
+     <lastmod>2017-02-22</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>/sequence_diagrams/workflow_wps_operations/workflow_wps_operations/</loc>
+     <lastmod>2017-02-22</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    
+
+    
+    <url>
+     <loc>/algorithm_definition/algorithm_definition/</loc>
+     <lastmod>2017-02-22</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+</urlset>
