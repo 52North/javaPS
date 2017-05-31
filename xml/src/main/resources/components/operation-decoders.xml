@@ -29,7 +29,7 @@
     <bean class="org.n52.svalbard.decode.stream.xml.XmlStreamingOperationDecoder">
         <constructor-arg name="operation">
             <!-- same as #getCapabilitiesOperation, but without version -->
-            <bean class="org.n52.iceland.coding.OperationKey">
+            <bean class="org.n52.shetland.ogc.ows.service.OwsOperationKey">
                 <constructor-arg name="service" value="WPS" />
                 <constructor-arg name="version"><null/></constructor-arg>
                 <constructor-arg name="operation" value="GetCapabilities" />
