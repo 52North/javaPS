@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -50,31 +50,24 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.n52.iceland.lifecycle.Constructable;
-import org.n52.iceland.lifecycle.Destroyable;
-import org.n52.iceland.ogc.ows.OwsCode;
-import org.n52.iceland.ogc.wps.DataTransmissionMode;
-import org.n52.iceland.ogc.wps.Format;
-import org.n52.iceland.ogc.wps.JobId;
-import org.n52.iceland.ogc.wps.JobStatus;
-import org.n52.iceland.ogc.wps.OutputDefinition;
-import org.n52.iceland.ogc.wps.ResponseMode;
-import org.n52.iceland.ogc.wps.Result;
-import org.n52.iceland.ogc.wps.StatusInfo;
-import org.n52.iceland.ogc.wps.data.Body;
-import org.n52.iceland.ogc.wps.data.impl.FileBasedProcessData;
-import org.n52.iceland.ogc.wps.data.GroupProcessData;
-import org.n52.iceland.ogc.wps.data.ProcessData;
-import org.n52.iceland.ogc.wps.data.ValueProcessData;
-import org.n52.iceland.util.Chain;
-import org.n52.iceland.util.JSONUtils;
+import org.n52.shetland.ogc.wps.DataTransmissionMode;
+import org.n52.shetland.ogc.wps.Format;
+import org.n52.shetland.ogc.wps.JobId;
+import org.n52.shetland.ogc.wps.JobStatus;
+import org.n52.shetland.ogc.wps.OutputDefinition;
+import org.n52.shetland.ogc.wps.ResponseMode;
+import org.n52.shetland.ogc.wps.Result;
+import org.n52.shetland.ogc.wps.StatusInfo;
+import org.n52.shetland.ogc.wps.data.Body;
+import org.n52.shetland.ogc.wps.data.GroupProcessData;
+import org.n52.shetland.ogc.wps.data.ProcessData;
+import org.n52.shetland.ogc.wps.data.ValueProcessData;
+import org.n52.shetland.ogc.wps.data.impl.FileBasedProcessData;
+import org.n52.janmayen.Json;
 import org.n52.iceland.util.MoreFiles;
-import org.n52.javaps.io.EncodingException;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
+import org.n52.janmayen.Chain;
+import org.n52.janmayen.lifecycle.Constructable;
+import org.n52.janmayen.lifecycle.Destroyable;
 import org.n52.javaps.engine.EngineException;
 import org.n52.javaps.engine.EngineProcessExecutionContext;
 import org.n52.javaps.engine.JobNotFoundException;
@@ -82,10 +75,12 @@ import org.n52.javaps.engine.OutputNotFoundException;
 import org.n52.javaps.engine.OutputReference;
 import org.n52.javaps.engine.OutputReferencer;
 import org.n52.javaps.engine.ResultPersistence;
+import org.n52.javaps.io.EncodingException;
+import org.n52.shetland.ogc.ows.OwsCode;
 
-import static java.util.stream.Collectors.toMap;
-import static java.util.stream.Collectors.toMap;
-import static java.util.stream.Collectors.toMap;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
  *
@@ -143,7 +138,7 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
             Path directory = Files.createDirectories(basePath.resolve(jobId));
             OffsetDateTime expirationDate = getExpirationDate(directory);
 
-            ObjectNode rootNode = JSONUtils.nodeFactory().objectNode()
+            ObjectNode rootNode = Json.nodeFactory().objectNode()
                     .put(Keys.STATUS, context.getJobStatus().getValue())
                     .put(Keys.JOB_ID, jobId)
                     .put(Keys.EXPIRATION_DATE, expirationDate.toString())
@@ -163,7 +158,7 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
             }
 
             Files.write(directory.resolve(META_JSON_FILE_NAME),
-                        JSONUtils.print(rootNode).getBytes(StandardCharsets.UTF_8));
+                        Json.print(rootNode).getBytes(StandardCharsets.UTF_8));
         } catch (IOException ex) {
             LOG.error("Error writing result for job " + context.getJobId(), ex);
         }
@@ -295,7 +290,7 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
     }
 
     private JsonNode getJobMetadata(JobId jobId) throws JobNotFoundException, IOException {
-        return JSONUtils.loadPath(getJobDirectory(jobId).resolve(META_JSON_FILE_NAME));
+        return Json.loadPath(getJobDirectory(jobId).resolve(META_JSON_FILE_NAME));
     }
 
     @Override

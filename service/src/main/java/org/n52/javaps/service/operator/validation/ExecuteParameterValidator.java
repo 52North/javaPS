@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,9 +16,6 @@
  */
 package org.n52.javaps.service.operator.validation;
 
-import static org.n52.iceland.util.MoreCollectors.toCardinalities;
-import static org.n52.iceland.util.MoreCollectors.toDuplicateStream;
-
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Collections;
@@ -31,39 +28,40 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
-import org.n52.iceland.exception.ows.CompositeOwsException;
-import org.n52.iceland.exception.ows.InvalidParameterValueException;
-import org.n52.iceland.exception.ows.MissingParameterValueException;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.ows.OwsCode;
-import org.n52.iceland.ogc.wps.Format;
-import org.n52.iceland.ogc.wps.InputOccurence;
-import org.n52.iceland.ogc.wps.OutputDefinition;
-import org.n52.iceland.ogc.wps.ResponseMode;
-import org.n52.iceland.ogc.wps.data.FormattedProcessData;
-import org.n52.iceland.ogc.wps.data.GroupProcessData;
-import org.n52.iceland.ogc.wps.data.ProcessData;
-import org.n52.iceland.ogc.wps.data.ReferenceProcessData;
-import org.n52.iceland.ogc.wps.data.ValueProcessData;
-import org.n52.iceland.ogc.wps.description.BoundingBoxInputDescription;
-import org.n52.iceland.ogc.wps.description.BoundingBoxOutputDescription;
-import org.n52.iceland.ogc.wps.description.ComplexInputDescription;
-import org.n52.iceland.ogc.wps.description.ComplexOutputDescription;
-import org.n52.iceland.ogc.wps.description.GroupInputDescription;
-import org.n52.iceland.ogc.wps.description.GroupOutputDescription;
-import org.n52.iceland.ogc.wps.description.LiteralInputDescription;
-import org.n52.iceland.ogc.wps.description.LiteralOutputDescription;
-import org.n52.iceland.ogc.wps.description.ProcessDescription;
-import org.n52.iceland.ogc.wps.description.ProcessInputDescription;
-import org.n52.iceland.ogc.wps.description.ProcessInputDescriptionContainer;
-import org.n52.iceland.ogc.wps.description.ProcessOutputDescription;
-import org.n52.iceland.ogc.wps.description.ProcessOutputDescriptionContainer;
+import org.n52.shetland.ogc.wps.Format;
+import org.n52.shetland.ogc.wps.InputOccurence;
+import org.n52.shetland.ogc.wps.OutputDefinition;
+import org.n52.shetland.ogc.wps.ResponseMode;
+import org.n52.shetland.ogc.wps.data.FormattedProcessData;
+import org.n52.shetland.ogc.wps.data.GroupProcessData;
+import org.n52.shetland.ogc.wps.data.ProcessData;
+import org.n52.shetland.ogc.wps.data.ReferenceProcessData;
+import org.n52.shetland.ogc.wps.data.ValueProcessData;
+import org.n52.shetland.ogc.wps.description.BoundingBoxInputDescription;
+import org.n52.shetland.ogc.wps.description.BoundingBoxOutputDescription;
+import org.n52.shetland.ogc.wps.description.ComplexInputDescription;
+import org.n52.shetland.ogc.wps.description.ComplexOutputDescription;
+import org.n52.shetland.ogc.wps.description.GroupInputDescription;
+import org.n52.shetland.ogc.wps.description.GroupOutputDescription;
+import org.n52.shetland.ogc.wps.description.LiteralInputDescription;
+import org.n52.shetland.ogc.wps.description.LiteralOutputDescription;
+import org.n52.shetland.ogc.wps.description.ProcessDescription;
+import org.n52.shetland.ogc.wps.description.ProcessInputDescription;
+import org.n52.shetland.ogc.wps.description.ProcessInputDescriptionContainer;
+import org.n52.shetland.ogc.wps.description.ProcessOutputDescription;
+import org.n52.shetland.ogc.wps.description.ProcessOutputDescriptionContainer;
 import org.n52.iceland.request.operator.ParameterValidator;
-import org.n52.iceland.util.Chain;
+import org.n52.janmayen.Chain;
+import org.n52.janmayen.stream.MoreCollectors;
 import org.n52.javaps.engine.Engine;
 import org.n52.javaps.io.bbox.BoundingBoxInputOutputHandler;
 import org.n52.javaps.io.literal.LiteralInputOutputHandler;
-import org.n52.javaps.request.ExecuteRequest;
+import org.n52.shetland.ogc.wps.request.ExecuteRequest;
+import org.n52.shetland.ogc.ows.OwsCode;
+import org.n52.shetland.ogc.ows.exception.CompositeOwsException;
+import org.n52.shetland.ogc.ows.exception.InvalidParameterValueException;
+import org.n52.shetland.ogc.ows.exception.MissingParameterValueException;
+import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
 
 /**
  * @author Christian Autermann
@@ -112,7 +110,7 @@ public class ExecuteParameterValidator
 
         InputOccurenceCollector collector = new InputOccurenceCollector();
 
-        Map<Chain<OwsCode>, BigInteger> cardinalities = inputs.stream().collect(toCardinalities(
+        Map<Chain<OwsCode>, BigInteger> cardinalities = inputs.stream().collect(MoreCollectors.toCardinalities(
                 ProcessData::getId, ProcessData::isGroup, x -> x.asGroup().stream()));
 
         Map<Chain<OwsCode>, InputOccurence> occurences = description.getInputDescriptions().stream()
@@ -154,7 +152,7 @@ public class ExecuteParameterValidator
             throws OwsExceptionReport {
         CompositeOwsException exception = new CompositeOwsException();
 
-        outputs.stream().map(OutputDefinition::getId).collect(toDuplicateStream())
+        outputs.stream().map(OutputDefinition::getId).collect(MoreCollectors.toDuplicateStream())
                 .map(ExecuteParameterValidator::duplicateOutput).forEach(exception::add);
 
         for (OutputDefinition output : outputs) {

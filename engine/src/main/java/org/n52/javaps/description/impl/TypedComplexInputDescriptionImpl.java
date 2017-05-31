@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,13 +20,13 @@ import java.math.BigInteger;
 import java.util.Objects;
 import java.util.Set;
 
-import org.n52.iceland.ogc.ows.OwsCode;
-import org.n52.iceland.ogc.ows.OwsKeyword;
-import org.n52.iceland.ogc.ows.OwsLanguageString;
-import org.n52.iceland.ogc.ows.OwsMetadata;
-import org.n52.iceland.ogc.wps.Format;
-import org.n52.iceland.ogc.wps.InputOccurence;
-import org.n52.iceland.ogc.wps.description.impl.ComplexInputDescriptionImpl;
+import org.n52.shetland.ogc.ows.OwsCode;
+import org.n52.shetland.ogc.ows.OwsKeyword;
+import org.n52.shetland.ogc.ows.OwsLanguageString;
+import org.n52.shetland.ogc.ows.OwsMetadata;
+import org.n52.shetland.ogc.wps.Format;
+import org.n52.shetland.ogc.wps.InputOccurence;
+import org.n52.shetland.ogc.wps.description.impl.ComplexInputDescriptionImpl;
 import org.n52.javaps.description.TypedComplexInputDescription;
 import org.n52.javaps.io.complex.ComplexData;
 

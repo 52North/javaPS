@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,10 +22,10 @@ import java.util.Optional;
 
 import javax.xml.stream.XMLStreamException;
 
-import org.n52.iceland.coding.stream.OwsExceptionReportResponse;
-import org.n52.iceland.coding.stream.xml.AbstractSingleElementXmlStreamWriter;
-import org.n52.iceland.exception.CodedException;
-import org.n52.iceland.exception.ows.OwsExceptionCode;
+import org.n52.shetland.ogc.ows.exception.CodedException;
+import org.n52.shetland.ogc.ows.exception.OwsExceptionCode;
+import org.n52.svalbard.encode.stream.OwsExceptionReportResponse;
+import org.n52.svalbard.encode.stream.xml.AbstractSingleElementXmlStreamWriter;
 
 /**
  * TODO JavaDoc

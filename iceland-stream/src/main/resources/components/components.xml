@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright 2016 52°North Initiative for Geospatial Open Source
+    Copyright 2016-2017 52°North Initiative for Geospatial Open Source
     Software GmbH
 
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,12 +24,12 @@
                            http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
                            http://www.springframework.org/schema/util
                            http://www.springframework.org/schema/util/spring-util-4.1.xsd">
-    <bean id="streamReaderRepository" class="org.n52.iceland.coding.stream.StreamReaderRepository"/>
-    <bean id="streamWriterRepository" class="org.n52.iceland.coding.stream.StreamWriterRepository"/>
-    <bean id="elementXmlStreamWriterRepository" class="org.n52.iceland.coding.stream.xml.ElementXmlStreamWriterRepository"/>
-    <bean id="elementXmlStreamReaderRepository" class="org.n52.iceland.coding.stream.xml.ElementXmlStreamReaderRepository"/>
-    <bean id="documentXmlStreamReader" class="org.n52.iceland.coding.stream.xml.DocumentXmlStreamReader"/>
-    <bean id="documentXmlStreamWriter" class="org.n52.iceland.coding.stream.xml.DocumentXmlStreamWriter"/>
-    <bean id="serviceResponseWriterFactory" class="org.n52.iceland.coding.stream.ServiceResponseWriterFactory"/>
-    <bean id="owsExceptionReportEncoder" class="org.n52.iceland.coding.stream.OwsExceptionReportEncoder"/>
+    <bean id="streamReaderRepository" class="org.n52.svalbard.decode.stream.StreamReaderRepository"/>
+    <bean id="streamWriterRepository" class="org.n52.svalbard.encode.stream.StreamWriterRepository"/>
+    <bean id="elementXmlStreamWriterRepository" class="org.n52.svalbard.encode.stream.xml.ElementXmlStreamWriterRepository"/>
+    <bean id="elementXmlStreamReaderRepository" class="org.n52.svalbard.decode.stream.xml.ElementXmlStreamReaderRepository"/>
+    <bean id="documentXmlStreamReader" class="org.n52.svalbard.decode.stream.xml.DocumentXmlStreamReader"/>
+    <bean id="documentXmlStreamWriter" class="org.n52.svalbard.encode.stream.xml.DocumentXmlStreamWriter"/>
+    <bean id="serviceResponseWriterFactory" class="org.n52.svalbard.encode.stream.ServiceResponseWriterFactory"/>
+    <bean id="owsExceptionReportEncoder" class="org.n52.svalbard.encode.stream.OwsExceptionReportEncoder"/>
 </beans>

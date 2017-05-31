@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright 2016 52°North Initiative for Geospatial Open Source
+    Copyright 2016-2017 52°North Initiative for Geospatial Open Source
     Software GmbH
 
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -42,10 +42,14 @@
     </licenses>
 
     <dependencies>
-        
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>service</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.n52.faroe</groupId>
+            <artifactId>faroe-json</artifactId>
             <scope>runtime</scope>
         </dependency>
         <dependency>
@@ -193,7 +197,7 @@
                     <webApp>
                         <contextPath>/wps</contextPath>
                     </webApp>
-                    <dumpOnStart>true</dumpOnStart>
+                    <dumpOnStart>false</dumpOnStart>
                     <contextXml>${basedir}/src/main/webapp/WEB-INF/jetty-web.xml</contextXml>
                 </configuration>
             </plugin>

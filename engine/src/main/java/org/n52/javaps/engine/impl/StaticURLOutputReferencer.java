@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,11 +32,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import org.n52.iceland.ogc.ows.OwsCode;
-import org.n52.iceland.ogc.wps.JobId;
-import org.n52.iceland.util.Chain;
+import org.n52.shetland.ogc.wps.JobId;
+import org.n52.janmayen.Chain;
 import org.n52.javaps.engine.OutputReference;
 import org.n52.javaps.engine.OutputReferencer;
+import org.n52.shetland.ogc.ows.OwsCode;
 
 public class StaticURLOutputReferencer implements OutputReferencer {
     private final Logger LOG = LoggerFactory.getLogger(StaticURLOutputReferencer.class);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,45 +30,46 @@ import javax.xml.stream.XMLStreamException;
 
 import org.apache.commons.codec.binary.Base64InputStream;
 
-import org.n52.iceland.coding.stream.xml.XLinkConstants;
-import org.n52.iceland.ogc.ows.OwsCRS;
-import org.n52.iceland.ogc.ows.OwsPossibleValues;
-import org.n52.iceland.ogc.ows.OwsValue;
-import org.n52.iceland.ogc.wps.DataTransmissionMode;
-import org.n52.iceland.ogc.wps.Format;
-import org.n52.iceland.ogc.wps.JobControlOption;
-import org.n52.iceland.ogc.wps.JobId;
-import org.n52.iceland.ogc.wps.ProcessOffering;
-import org.n52.iceland.ogc.wps.ProcessOfferings;
-import org.n52.iceland.ogc.wps.ResponseMode;
-import org.n52.iceland.ogc.wps.Result;
-import org.n52.iceland.ogc.wps.StatusInfo;
-import org.n52.iceland.ogc.wps.WPSCapabilities;
-import org.n52.iceland.ogc.wps.data.Body;
-import org.n52.iceland.ogc.wps.data.GroupProcessData;
-import org.n52.iceland.ogc.wps.data.ProcessData;
-import org.n52.iceland.ogc.wps.data.ReferenceProcessData;
-import org.n52.iceland.ogc.wps.data.ValueProcessData;
-import org.n52.iceland.ogc.wps.description.BoundingBoxDescription;
-import org.n52.iceland.ogc.wps.description.BoundingBoxInputDescription;
-import org.n52.iceland.ogc.wps.description.BoundingBoxOutputDescription;
-import org.n52.iceland.ogc.wps.description.ComplexDescription;
-import org.n52.iceland.ogc.wps.description.ComplexInputDescription;
-import org.n52.iceland.ogc.wps.description.ComplexOutputDescription;
-import org.n52.iceland.ogc.wps.description.Description;
-import org.n52.iceland.ogc.wps.description.GroupInputDescription;
-import org.n52.iceland.ogc.wps.description.GroupOutputDescription;
-import org.n52.iceland.ogc.wps.description.LiteralDataDomain;
-import org.n52.iceland.ogc.wps.description.LiteralDescription;
-import org.n52.iceland.ogc.wps.description.LiteralInputDescription;
-import org.n52.iceland.ogc.wps.description.LiteralOutputDescription;
-import org.n52.iceland.ogc.wps.description.ProcessDescription;
-import org.n52.iceland.ogc.wps.description.ProcessInputDescription;
-import org.n52.iceland.ogc.wps.description.ProcessInputDescriptionContainer;
-import org.n52.iceland.ogc.wps.description.ProcessOutputDescription;
-import org.n52.iceland.ogc.wps.description.ProcessOutputDescriptionContainer;
+import org.n52.svalbard.stream.XLinkConstants;
+import org.n52.shetland.ogc.wps.DataTransmissionMode;
+import org.n52.shetland.ogc.wps.Format;
+import org.n52.shetland.ogc.wps.JobControlOption;
+import org.n52.shetland.ogc.wps.JobId;
+import org.n52.shetland.ogc.wps.ProcessOffering;
+import org.n52.shetland.ogc.wps.ProcessOfferings;
+import org.n52.shetland.ogc.wps.ResponseMode;
+import org.n52.shetland.ogc.wps.Result;
+import org.n52.shetland.ogc.wps.StatusInfo;
+import org.n52.shetland.ogc.wps.WPSCapabilities;
+import org.n52.shetland.ogc.wps.data.Body;
+import org.n52.shetland.ogc.wps.data.GroupProcessData;
+import org.n52.shetland.ogc.wps.data.ProcessData;
+import org.n52.shetland.ogc.wps.data.ReferenceProcessData;
+import org.n52.shetland.ogc.wps.data.ValueProcessData;
+import org.n52.shetland.ogc.wps.description.BoundingBoxDescription;
+import org.n52.shetland.ogc.wps.description.BoundingBoxInputDescription;
+import org.n52.shetland.ogc.wps.description.BoundingBoxOutputDescription;
+import org.n52.shetland.ogc.wps.description.ComplexDescription;
+import org.n52.shetland.ogc.wps.description.ComplexInputDescription;
+import org.n52.shetland.ogc.wps.description.ComplexOutputDescription;
+import org.n52.shetland.ogc.wps.description.Description;
+import org.n52.shetland.ogc.wps.description.GroupInputDescription;
+import org.n52.shetland.ogc.wps.description.GroupOutputDescription;
+import org.n52.shetland.ogc.wps.description.LiteralDataDomain;
+import org.n52.shetland.ogc.wps.description.LiteralDescription;
+import org.n52.shetland.ogc.wps.description.LiteralInputDescription;
+import org.n52.shetland.ogc.wps.description.LiteralOutputDescription;
+import org.n52.shetland.ogc.wps.description.ProcessDescription;
+import org.n52.shetland.ogc.wps.description.ProcessInputDescription;
+import org.n52.shetland.ogc.wps.description.ProcessInputDescriptionContainer;
+import org.n52.shetland.ogc.wps.description.ProcessOutputDescription;
+import org.n52.shetland.ogc.wps.description.ProcessOutputDescriptionContainer;
 import org.n52.javaps.io.bbox.BoundingBoxInputOutputHandler;
 import org.n52.javaps.io.literal.LiteralInputOutputHandler;
+import org.n52.shetland.ogc.ows.OwsCRS;
+import org.n52.shetland.ogc.ows.OwsPossibleValues;
+import org.n52.shetland.ogc.ows.OwsValue;
+import org.n52.svalbard.encode.exception.EncodingException;
 
 import com.google.common.io.CharStreams;
 
@@ -96,7 +97,7 @@ public class WPSWriter extends AbstractOWSWriter {
 
     @Override
     public void writeElement(Object object)
-            throws XMLStreamException {
+            throws XMLStreamException, EncodingException {
         if (object instanceof ProcessOffering) {
             writeProcessOffering((ProcessOffering) object);
         } else if (object instanceof Result) {

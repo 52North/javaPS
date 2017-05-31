@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,23 +16,22 @@
  */
 package org.n52.javaps.service.operator.validation;
 
-
-import org.n52.iceland.exception.ows.InvalidParameterValueException;
-import org.n52.iceland.exception.ows.MissingParameterValueException;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.wps.JobId;
-import org.n52.javaps.request.AbstractJobIdRequest;
-
+import org.n52.shetland.ogc.ows.exception.InvalidParameterValueException;
+import org.n52.shetland.ogc.ows.exception.MissingParameterValueException;
+import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
+import org.n52.shetland.ogc.wps.JobId;
+import org.n52.shetland.ogc.wps.request.AbstractJobIdRequest;
 
 /**
  * TODO JavaDoc
+ *
  * @author Christian Autermann
  */
-public class JobIdParameterValidator extends EngineParameterValidator<AbstractJobIdRequest<?>>{
+public class JobIdParameterValidator extends EngineParameterValidator<AbstractJobIdRequest> {
     private static final String JOB_ID = "JobId";
 
     @Override
-    public void validate(AbstractJobIdRequest<?> request) throws OwsExceptionReport {
+    public void validate(AbstractJobIdRequest request) throws OwsExceptionReport {
         JobId jobId = request.getJobId();
         if (jobId == null || jobId.getValue() == null || jobId.getValue().isEmpty()) {
             throw new MissingParameterValueException(JOB_ID);

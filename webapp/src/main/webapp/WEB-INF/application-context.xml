@@ -1,6 +1,6 @@
 <!--
 
-    Copyright 2016 52°North Initiative for Geospatial Open Source
+    Copyright 2016-2017 52°North Initiative for Geospatial Open Source
     Software GmbH
 
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,22 +26,22 @@
 
     <ctx:annotation-config />
 
-    <bean id="eventBus" class="org.n52.iceland.event.ServiceEventBus">
+    <bean id="eventBus" class="org.n52.janmayen.event.EventBus">
         <property name="async" value="false" />
     </bean>
 
     <!--  settings related beans -->
     <bean id="configLocationProvider" class="org.n52.iceland.service.ServletConfigLocationProvider" />
-    <bean id="settingsService" class="org.n52.iceland.config.SettingsServiceImpl" />
+    <bean id="settingsService" class="org.n52.faroe.SettingsServiceImpl" />
     <bean id="adminUserService" class="org.n52.iceland.config.AdminUserServiceImpl" />
-    <bean id="settingsEncoder" class="org.n52.iceland.config.json.JsonSettingsEncoder" />
+    <bean id="settingsEncoder" class="org.n52.faroe.json.JsonSettingsEncoder" />
     <bean id="activationService" class="org.n52.iceland.config.ActivationService" />
     <bean id="activationDao" class="org.n52.iceland.config.json.JsonActivationDao" />
-    <bean id="settingsDao" class="org.n52.iceland.config.json.JsonSettingsDao" />
+    <bean id="settingsDao" class="org.n52.faroe.json.JsonSettingsDao" />
     <bean id="adminUserDao" class="org.n52.iceland.config.json.JsonAdminUserDao" />
-    <bean id="settingValueFactory" class="org.n52.iceland.config.json.JsonSettingValueFactory" />
+    <bean id="settingValueFactory" class="org.n52.faroe.json.JsonSettingValueFactory" />
 
-    <bean id="jsonConfiguration" class="org.n52.iceland.config.json.JsonConfiguration" init-method="init">
+    <bean id="jsonConfiguration" class="org.n52.faroe.json.JsonConfiguration" init-method="init">
         <property name="fileName" value="configuration.json" />
         <property name="writeTimeout" value="1000" />
         <property name="configLocationProvider" ref="configLocationProvider"/>

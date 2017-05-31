@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright 2016 52°North Initiative for Geospatial Open Source
+    Copyright 2016-2017 52°North Initiative for Geospatial Open Source
     Software GmbH
 
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,36 +26,34 @@
                            http://www.springframework.org/schema/util/spring-util-4.1.xsd">
 
     <!-- generic streaming decoder for every request -->
-    <bean class="org.n52.iceland.coding.stream.xml.XmlStreamingOperationDecoder">
+    <bean class="org.n52.svalbard.decode.stream.xml.XmlStreamingOperationDecoder">
         <constructor-arg name="operation">
             <!-- same as #getCapabilitiesOperation, but without version -->
             <bean class="org.n52.iceland.coding.OperationKey">
                 <constructor-arg name="service" value="WPS" />
-                <constructor-arg name="version">
-                    <null/>
-                </constructor-arg>
+                <constructor-arg name="version"><null/></constructor-arg>
                 <constructor-arg name="operation" value="GetCapabilities" />
             </bean>
         </constructor-arg>
         <constructor-arg name="name" ref="getCapabilitiesQName" />
     </bean>
-    <bean class="org.n52.iceland.coding.stream.xml.XmlStreamingOperationDecoder">
+    <bean class="org.n52.svalbard.decode.stream.xml.XmlStreamingOperationDecoder">
         <constructor-arg name="operation" ref="describeProcessOperation"/>
         <constructor-arg name="name" ref="describeProcessQName" />
     </bean>
-    <bean class="org.n52.iceland.coding.stream.xml.XmlStreamingOperationDecoder">
+    <bean class="org.n52.svalbard.decode.stream.xml.XmlStreamingOperationDecoder">
         <constructor-arg name="operation" ref="executeOperation"/>
         <constructor-arg name="name" ref="executeQName" />
     </bean>
-    <bean class="org.n52.iceland.coding.stream.xml.XmlStreamingOperationDecoder">
+    <bean class="org.n52.svalbard.decode.stream.xml.XmlStreamingOperationDecoder">
         <constructor-arg name="operation" ref="getResultOperation"/>
         <constructor-arg name="name" ref="getResultQName" />
     </bean>
-    <bean class="org.n52.iceland.coding.stream.xml.XmlStreamingOperationDecoder">
+    <bean class="org.n52.svalbard.decode.stream.xml.XmlStreamingOperationDecoder">
         <constructor-arg name="operation" ref="dismissOperation"/>
         <constructor-arg name="name" ref="dismissQName" />
     </bean>
-    <bean class="org.n52.iceland.coding.stream.xml.XmlStreamingOperationDecoder">
+    <bean class="org.n52.svalbard.decode.stream.xml.XmlStreamingOperationDecoder">
         <constructor-arg name="operation" ref="getStatusOperation"/>
         <constructor-arg name="name" ref="getStatusQName" />
     </bean>

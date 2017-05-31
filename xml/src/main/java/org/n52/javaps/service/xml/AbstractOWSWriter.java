@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,36 +32,36 @@ import java.util.TreeSet;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
 
-import org.n52.iceland.coding.stream.xml.AbstractMultiElementXmlStreamWriter;
-import org.n52.iceland.i18n.LocaleHelper;
-import org.n52.iceland.i18n.MultilingualString;
-import org.n52.iceland.ogc.ows.OwsAddress;
-import org.n52.iceland.ogc.ows.OwsAllowedValues;
-import org.n52.iceland.ogc.ows.OwsAnyValue;
-import org.n52.iceland.ogc.ows.OwsCapabilities;
-import org.n52.iceland.ogc.ows.OwsCode;
-import org.n52.iceland.ogc.ows.OwsContact;
-import org.n52.iceland.ogc.ows.OwsDCP;
-import org.n52.iceland.ogc.ows.OwsDomain;
-import org.n52.iceland.ogc.ows.OwsDomainMetadata;
-import org.n52.iceland.ogc.ows.OwsKeyword;
-import org.n52.iceland.ogc.ows.OwsLanguageString;
-import org.n52.iceland.ogc.ows.OwsMetadata;
-import org.n52.iceland.ogc.ows.OwsNoValues;
-import org.n52.iceland.ogc.ows.OwsOperation;
-import org.n52.iceland.ogc.ows.OwsOperationsMetadata;
-import org.n52.iceland.ogc.ows.OwsPhone;
-import org.n52.iceland.ogc.ows.OwsPossibleValues;
-import org.n52.iceland.ogc.ows.OwsRequestMethod;
-import org.n52.iceland.ogc.ows.OwsResponsibleParty;
-import org.n52.iceland.ogc.ows.OwsServiceIdentification;
-import org.n52.iceland.ogc.ows.OwsServiceProvider;
-import org.n52.iceland.ogc.ows.OwsValue;
-import org.n52.iceland.ogc.ows.OwsValueRestriction;
-import org.n52.iceland.ogc.ows.OwsValuesReference;
-import org.n52.iceland.ogc.ows.OwsValuesUnit;
-import org.n52.iceland.util.Optionals;
-import org.n52.iceland.util.http.HTTPMethods;
+import org.n52.janmayen.Optionals;
+import org.n52.janmayen.http.HTTPMethods;
+import org.n52.janmayen.i18n.LocaleHelper;
+import org.n52.janmayen.i18n.MultilingualString;
+import org.n52.shetland.ogc.ows.OwsAddress;
+import org.n52.shetland.ogc.ows.OwsAllowedValues;
+import org.n52.shetland.ogc.ows.OwsAnyValue;
+import org.n52.shetland.ogc.ows.OwsCapabilities;
+import org.n52.shetland.ogc.ows.OwsCode;
+import org.n52.shetland.ogc.ows.OwsContact;
+import org.n52.shetland.ogc.ows.OwsDCP;
+import org.n52.shetland.ogc.ows.OwsDomain;
+import org.n52.shetland.ogc.ows.OwsDomainMetadata;
+import org.n52.shetland.ogc.ows.OwsKeyword;
+import org.n52.shetland.ogc.ows.OwsLanguageString;
+import org.n52.shetland.ogc.ows.OwsMetadata;
+import org.n52.shetland.ogc.ows.OwsNoValues;
+import org.n52.shetland.ogc.ows.OwsOperation;
+import org.n52.shetland.ogc.ows.OwsOperationsMetadata;
+import org.n52.shetland.ogc.ows.OwsPhone;
+import org.n52.shetland.ogc.ows.OwsPossibleValues;
+import org.n52.shetland.ogc.ows.OwsRequestMethod;
+import org.n52.shetland.ogc.ows.OwsResponsibleParty;
+import org.n52.shetland.ogc.ows.OwsServiceIdentification;
+import org.n52.shetland.ogc.ows.OwsServiceProvider;
+import org.n52.shetland.ogc.ows.OwsValue;
+import org.n52.shetland.ogc.ows.OwsValueRestriction;
+import org.n52.shetland.ogc.ows.OwsValuesReference;
+import org.n52.shetland.ogc.ows.OwsValuesUnit;
+import org.n52.svalbard.encode.stream.xml.AbstractMultiElementXmlStreamWriter;
 
 import com.google.common.base.Strings;
 
@@ -119,11 +119,22 @@ public abstract class AbstractOWSWriter extends AbstractMultiElementXmlStreamWri
                 throws XMLStreamException {
         writeDomainMetadata(name, Optional.ofNullable(dmd));
     }
-    protected void writeDomainMetadata(QName name, Optional<OwsDomainMetadata> metadata) throws XMLStreamException {
-        element(name, metadata, (OwsDomainMetadata x) -> {
-            attr(OWSConstants.Attr.AN_REFERENCE, x.getReference().map(URI::toString));
-            chars(x.getValue());
-        });
+
+    protected void writeDomainMetadata(QName name, Optional<OwsDomainMetadata> metadata)
+            throws XMLStreamException {
+        if (metadata.isPresent()) {
+            OwsDomainMetadata m = metadata.get();
+            if (Optionals.any(m.getValue(), metadata.get().getReference())) {
+                element(name, m, (OwsDomainMetadata x) -> {
+                    attr(OWSConstants.Attr.AN_REFERENCE, x.getReference().map(URI::toString));
+                    if (x.getValue().isPresent()) {
+                        chars(x.getValue().get());
+                    }
+                });
+            } else {
+                empty(name);
+            }
+        }
     }
 
     protected void writeLanguageString(QName name, Optional<OwsLanguageString> value)
@@ -141,7 +152,7 @@ public abstract class AbstractOWSWriter extends AbstractMultiElementXmlStreamWri
     }
 
     protected void langAttr(Locale lang) throws XMLStreamException {
-        attr("xml:lang", Optional.of(Strings.emptyToNull(LocaleHelper.toString(lang))));
+        attr("xml:lang", Optional.of(Strings.emptyToNull(LocaleHelper.encode(lang))));
     }
 
     protected void writeCode(QName name, Optional<OwsCode> id)

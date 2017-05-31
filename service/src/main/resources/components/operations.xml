@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright 2016 52°North Initiative for Geospatial Open Source
+    Copyright 2016-2017 52°North Initiative for Geospatial Open Source
     Software GmbH
 
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,32 +26,32 @@
                            http://www.springframework.org/schema/util/spring-util-4.1.xsd">
 
     <!-- operations -->
-    <bean id="getCapabilitiesOperation" class="org.n52.iceland.coding.OperationKey">
+    <bean id="getCapabilitiesOperation" class="org.n52.shetland.ogc.ows.service.OwsOperationKey">
         <constructor-arg name="service" value="WPS" />
         <constructor-arg name="version" value="2.0.0" />
         <constructor-arg name="operation" value="GetCapabilities" />
     </bean>
-    <bean id="describeProcessOperation" class="org.n52.iceland.coding.OperationKey">
+    <bean id="describeProcessOperation" class="org.n52.shetland.ogc.ows.service.OwsOperationKey">
         <constructor-arg name="service" value="WPS" />
         <constructor-arg name="version" value="2.0.0" />
         <constructor-arg name="operation" value="DescribeProcess" />
     </bean>
-    <bean id="executeOperation" class="org.n52.iceland.coding.OperationKey">
+    <bean id="executeOperation" class="org.n52.shetland.ogc.ows.service.OwsOperationKey">
         <constructor-arg name="service" value="WPS" />
         <constructor-arg name="version" value="2.0.0" />
         <constructor-arg name="operation" value="Execute" />
     </bean>
-    <bean id="getResultOperation" class="org.n52.iceland.coding.OperationKey">
+    <bean id="getResultOperation" class="org.n52.shetland.ogc.ows.service.OwsOperationKey">
         <constructor-arg name="service" value="WPS" />
         <constructor-arg name="version" value="2.0.0" />
         <constructor-arg name="operation" value="GetResult" />
     </bean>
-    <bean id="getStatusOperation" class="org.n52.iceland.coding.OperationKey">
+    <bean id="getStatusOperation" class="org.n52.shetland.ogc.ows.service.OwsOperationKey">
         <constructor-arg name="service" value="WPS" />
         <constructor-arg name="version" value="2.0.0" />
         <constructor-arg name="operation" value="GetStatus" />
     </bean>
-    <bean id="dismissOperation" class="org.n52.iceland.coding.OperationKey">
+    <bean id="dismissOperation" class="org.n52.shetland.ogc.ows.service.OwsOperationKey">
         <constructor-arg name="service" value="WPS" />
         <constructor-arg name="version" value="2.0.0" />
         <constructor-arg name="operation" value="Dismiss" />

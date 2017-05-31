@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,11 +30,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import org.n52.iceland.config.annotation.Configurable;
-import org.n52.iceland.config.annotation.Setting;
+import org.n52.faroe.Validation;
+import org.n52.faroe.annotation.Configurable;
+import org.n52.faroe.annotation.Setting;
 import org.n52.iceland.service.ServiceSettings;
-import org.n52.iceland.util.JSONUtils;
-import org.n52.iceland.util.Validation;
+import org.n52.janmayen.Json;
 
 import com.google.common.io.ByteSource;
 import com.google.common.io.Resources;
@@ -90,7 +90,7 @@ public class InfoEndpoint {
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public String info() {
 
-        return JSONUtils.print(JSONUtils.nodeFactory().objectNode()
+        return Json.print(Json.nodeFactory().objectNode()
                 .put(ENDPOINT, this.serviceURL)
                 .put(BRANCH, this.branch)
                 .put(COMMIT, this.commit)

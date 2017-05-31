@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,21 +28,21 @@ import javax.inject.Provider;
 
 import org.junit.Test;
 
-import org.n52.iceland.coding.stream.StreamWriter;
-import org.n52.iceland.coding.stream.StreamWriterRepository;
-import org.n52.iceland.coding.stream.xml.DocumentXmlStreamWriter;
-import org.n52.iceland.coding.stream.xml.ElementXmlStreamWriter;
-import org.n52.iceland.coding.stream.xml.ElementXmlStreamWriterRepository;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.ows.OwsCode;
-import org.n52.iceland.ogc.wps.Format;
-import org.n52.iceland.ogc.wps.JobId;
-import org.n52.iceland.ogc.wps.Result;
-import org.n52.iceland.ogc.wps.data.Body;
-import org.n52.iceland.ogc.wps.data.GroupProcessData;
-import org.n52.iceland.ogc.wps.data.ReferenceProcessData;
-import org.n52.iceland.ogc.wps.data.impl.InMemoryValueProcessData;
-import org.n52.iceland.util.http.MediaTypes;
+import org.n52.svalbard.encode.stream.StreamWriter;
+import org.n52.svalbard.encode.stream.StreamWriterRepository;
+import org.n52.svalbard.encode.stream.xml.DocumentXmlStreamWriter;
+import org.n52.svalbard.encode.stream.xml.ElementXmlStreamWriter;
+import org.n52.svalbard.encode.stream.xml.ElementXmlStreamWriterRepository;
+import org.n52.shetland.ogc.wps.Format;
+import org.n52.shetland.ogc.wps.JobId;
+import org.n52.shetland.ogc.wps.Result;
+import org.n52.shetland.ogc.wps.data.Body;
+import org.n52.shetland.ogc.wps.data.GroupProcessData;
+import org.n52.shetland.ogc.wps.data.ReferenceProcessData;
+import org.n52.shetland.ogc.wps.data.impl.InMemoryValueProcessData;
+import org.n52.janmayen.http.MediaTypes;
+import org.n52.shetland.ogc.ows.OwsCode;
+import org.n52.svalbard.encode.exception.EncodingException;
 
 import com.google.common.io.BaseEncoding;
 
@@ -58,7 +58,7 @@ public class WPSResponseWriterTest {
 
 
     @Test
-    public void test() throws OwsExceptionReport {
+    public void test() throws EncodingException {
         BaseEncoding.base64().encode("<sömekey>somevalüe</sömekey>".getBytes(StandardCharsets.UTF_8));
 
         Result result = new Result();
@@ -94,7 +94,7 @@ public class WPSResponseWriterTest {
     }
 
     private <T> void write(StreamWriterRepository repo, T object, OutputStream out)
-            throws OwsExceptionReport {
+            throws EncodingException {
         @SuppressWarnings("unchecked")
         Class<? extends T> aClass = (Class<? extends T>) object.getClass();
         Optional<StreamWriter<? super T>> writer = repo.getWriter(MediaTypes.APPLICATION_XML, aClass);

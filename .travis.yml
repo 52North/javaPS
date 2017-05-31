@@ -1,7 +1,10 @@
 language: java
 sudo: false
-before_install: "chmod +x .travis-install-iceland.sh && ./.travis-install-iceland.sh"
 install: true
-script: mvn -q install
+script: mvn -fae -U -B clean install
 jdk:
-- oraclejdk8
+  - oraclejdk8
+cache:
+  directories:
+    - $HOME/.m2
+

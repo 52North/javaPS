@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,9 +16,9 @@
  */
 package org.n52.javaps.description.impl;
 
-import org.n52.iceland.ogc.wps.description.LiteralDataDomain;
-import org.n52.iceland.ogc.wps.description.ProcessDescriptionBuilderFactory;
-import org.n52.iceland.ogc.wps.description.impl.LiteralDataDomainImpl;
+import org.n52.shetland.ogc.wps.description.LiteralDataDomain;
+import org.n52.shetland.ogc.wps.description.ProcessDescriptionBuilderFactory;
+import org.n52.shetland.ogc.wps.description.impl.LiteralDataDomainImpl;
 import org.n52.javaps.description.TypedBoundingBoxInputDescription;
 import org.n52.javaps.description.TypedBoundingBoxOutputDescription;
 import org.n52.javaps.description.TypedComplexInputDescription;

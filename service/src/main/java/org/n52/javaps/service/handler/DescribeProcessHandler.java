@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,19 +25,19 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.ows.OwsAllowedValues;
-import org.n52.iceland.ogc.ows.OwsCode;
-import org.n52.iceland.ogc.ows.OwsDomain;
-import org.n52.iceland.ogc.ows.OwsValue;
-import org.n52.iceland.ogc.wps.ProcessOffering;
-import org.n52.iceland.ogc.wps.ProcessOfferings;
-import org.n52.iceland.ogc.wps.WPSConstants;
+import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
+import org.n52.shetland.ogc.ows.OwsAllowedValues;
+import org.n52.shetland.ogc.ows.OwsCode;
+import org.n52.shetland.ogc.ows.OwsDomain;
+import org.n52.shetland.ogc.ows.OwsValue;
+import org.n52.shetland.ogc.wps.ProcessOffering;
+import org.n52.shetland.ogc.wps.ProcessOfferings;
+import org.n52.shetland.ogc.wps.WPSConstants;
 import org.n52.iceland.request.handler.GenericOperationHandler;
 import org.n52.iceland.request.handler.OperationHandlerKey;
 import org.n52.javaps.engine.Engine;
-import org.n52.javaps.request.DescribeProcessRequest;
-import org.n52.javaps.response.DescribeProcessResponse;
+import org.n52.shetland.ogc.wps.request.DescribeProcessRequest;
+import org.n52.shetland.ogc.wps.response.DescribeProcessResponse;
 
 /**
  * TODO JavaDoc

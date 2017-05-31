@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,9 +15,6 @@
  * limitations under the License.
  */
 package org.n52.javaps.service.reference;
-
-import org.n52.javaps.service.InternalServerErrorException;
-import org.n52.javaps.service.NotFoundException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,22 +34,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import org.n52.iceland.coding.stream.MissingStreamWriterException;
-import org.n52.iceland.coding.stream.StreamWriter;
-import org.n52.iceland.coding.stream.StreamWriterKey;
-import org.n52.iceland.coding.stream.StreamWriterRepository;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.wps.Format;
-import org.n52.iceland.ogc.wps.data.ProcessData;
-import org.n52.iceland.ogc.wps.data.ValueProcessData;
-import org.n52.iceland.util.http.MediaType;
-import org.n52.iceland.util.http.MediaTypes;
+import org.n52.svalbard.encode.stream.MissingStreamWriterException;
+import org.n52.svalbard.encode.stream.StreamWriter;
+import org.n52.svalbard.encode.stream.StreamWriterKey;
+import org.n52.svalbard.encode.stream.StreamWriterRepository;
+import org.n52.shetland.ogc.wps.Format;
+import org.n52.shetland.ogc.wps.data.ProcessData;
+import org.n52.shetland.ogc.wps.data.ValueProcessData;
+import org.n52.janmayen.http.MediaType;
+import org.n52.janmayen.http.MediaTypes;
 import org.n52.javaps.engine.EngineException;
 import org.n52.javaps.engine.JobNotFoundException;
 import org.n52.javaps.engine.OutputNotFoundException;
 import org.n52.javaps.engine.OutputReference;
 import org.n52.javaps.engine.OutputReferencer;
 import org.n52.javaps.engine.ResultPersistence;
+import org.n52.javaps.service.InternalServerErrorException;
+import org.n52.javaps.service.NotFoundException;
+import org.n52.svalbard.encode.exception.EncodingException;
 
 import com.google.common.io.ByteStreams;
 
@@ -99,7 +98,7 @@ public class OutputReferenceEndpoint {
             StreamWriter<? super ProcessData> writer = getWriter(output, mediaType);
             response.setHeader(HttpHeaders.CONTENT_TYPE, mediaType.toString());
             writer.write(output, response.getOutputStream());
-        } catch (IOException | OwsExceptionReport ex) {
+        } catch (IOException | EncodingException ex) {
             throw new InternalServerErrorException(ex);
         }
     }

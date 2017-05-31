@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,30 +30,30 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
-import org.n52.iceland.coding.stream.StreamReaderKey;
-import org.n52.iceland.coding.stream.xml.AbstractElementXmlStreamReader;
-import org.n52.iceland.coding.stream.xml.XLinkConstants;
-import org.n52.iceland.coding.stream.xml.XmlStreamReaderKey;
-import org.n52.iceland.ogc.ows.OwsCode;
-import org.n52.iceland.ogc.wps.DataTransmissionMode;
-import org.n52.iceland.ogc.wps.ExecutionMode;
-import org.n52.iceland.ogc.wps.Format;
-import org.n52.iceland.ogc.wps.JobId;
-import org.n52.iceland.ogc.wps.OutputDefinition;
-import org.n52.iceland.ogc.wps.ResponseMode;
-import org.n52.iceland.ogc.wps.data.Body;
-import org.n52.iceland.ogc.wps.data.GroupProcessData;
-import org.n52.iceland.ogc.wps.data.ProcessData;
-import org.n52.iceland.ogc.wps.data.ReferenceProcessData;
-import org.n52.iceland.ogc.wps.data.ValueProcessData;
-import org.n52.iceland.ogc.wps.data.impl.StringValueProcessData;
-import org.n52.iceland.request.AbstractServiceRequest;
-import org.n52.iceland.request.GetCapabilitiesRequest;
-import org.n52.javaps.request.DescribeProcessRequest;
-import org.n52.javaps.request.DismissRequest;
-import org.n52.javaps.request.ExecuteRequest;
-import org.n52.javaps.request.GetResultRequest;
-import org.n52.javaps.request.GetStatusRequest;
+import org.n52.shetland.ogc.ows.OwsCode;
+import org.n52.shetland.ogc.ows.service.GetCapabilitiesRequest;
+import org.n52.shetland.ogc.ows.service.OwsServiceRequest;
+import org.n52.shetland.ogc.wps.DataTransmissionMode;
+import org.n52.shetland.ogc.wps.ExecutionMode;
+import org.n52.shetland.ogc.wps.Format;
+import org.n52.shetland.ogc.wps.JobId;
+import org.n52.shetland.ogc.wps.OutputDefinition;
+import org.n52.shetland.ogc.wps.ResponseMode;
+import org.n52.shetland.ogc.wps.data.Body;
+import org.n52.shetland.ogc.wps.data.GroupProcessData;
+import org.n52.shetland.ogc.wps.data.ProcessData;
+import org.n52.shetland.ogc.wps.data.ReferenceProcessData;
+import org.n52.shetland.ogc.wps.data.ValueProcessData;
+import org.n52.shetland.ogc.wps.data.impl.StringValueProcessData;
+import org.n52.shetland.ogc.wps.request.DescribeProcessRequest;
+import org.n52.shetland.ogc.wps.request.DismissRequest;
+import org.n52.shetland.ogc.wps.request.ExecuteRequest;
+import org.n52.shetland.ogc.wps.request.GetResultRequest;
+import org.n52.shetland.ogc.wps.request.GetStatusRequest;
+import org.n52.svalbard.decode.stream.StreamReaderKey;
+import org.n52.svalbard.decode.stream.xml.AbstractElementXmlStreamReader;
+import org.n52.svalbard.decode.stream.xml.XmlStreamReaderKey;
+import org.n52.svalbard.stream.XLinkConstants;
 
 /**
  * TODO JavaDoc
@@ -76,7 +76,7 @@ public class WPSRequestReader extends AbstractElementXmlStreamReader {
     }
 
     @Override
-    public AbstractServiceRequest<?> readElement(XMLEventReader reader)
+    public OwsServiceRequest readElement(XMLEventReader reader)
             throws XMLStreamException {
         while (reader.hasNext()) {
             XMLEvent event = reader.nextEvent();
@@ -131,7 +131,7 @@ public class WPSRequestReader extends AbstractElementXmlStreamReader {
     }
 
     private void readServiceAndVersion(StartElement elem,
-                                       AbstractServiceRequest<?> request) {
+                                       OwsServiceRequest request) {
         getAttribute(elem, WPSConstants.Attr.AN_SERVICE).ifPresent(request::setService);
         getAttribute(elem, WPSConstants.Attr.AN_VERSION).ifPresent(request::setVersion);
     }

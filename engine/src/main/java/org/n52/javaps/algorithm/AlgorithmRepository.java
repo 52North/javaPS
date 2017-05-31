@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,10 +19,10 @@ package org.n52.javaps.algorithm;
 import java.util.Optional;
 import java.util.Set;
 
-import org.n52.iceland.lifecycle.Constructable;
-import org.n52.iceland.lifecycle.Destroyable;
-import org.n52.iceland.ogc.ows.OwsCode;
+import org.n52.janmayen.lifecycle.Constructable;
+import org.n52.janmayen.lifecycle.Destroyable;
 import org.n52.javaps.description.TypedProcessDescription;
+import org.n52.shetland.ogc.ows.OwsCode;
 
 /**
  * @author Bastian Schaeffer, University of Muenster, Theodor Foerster, ITC
@@ -51,8 +51,10 @@ public interface AlgorithmRepository extends Constructable, Destroyable {
     }
 
     @Override
-    default void init() {}
+    default void init() {
+    }
 
     @Override
-    default void destroy() {}
+    default void destroy() {
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,8 +15,6 @@
  * limitations under the License.
  */
 package org.n52.javaps.engine.impl;
-
-import org.n52.javaps.engine.InputDecodingException;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
@@ -44,32 +42,26 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.n52.iceland.lifecycle.Destroyable;
-import org.n52.iceland.ogc.ows.OwsCode;
-import org.n52.iceland.ogc.wps.JobId;
-import org.n52.iceland.ogc.wps.JobStatus;
-import org.n52.iceland.ogc.wps.OutputDefinition;
-import org.n52.iceland.ogc.wps.ResponseMode;
-import org.n52.iceland.ogc.wps.Result;
-import org.n52.iceland.ogc.wps.StatusInfo;
-import org.n52.iceland.ogc.wps.data.ProcessData;
-import org.n52.iceland.ogc.wps.description.ProcessDescription;
-import org.n52.javaps.description.TypedProcessDescription;
-import org.n52.javaps.description.TypedProcessOutputDescription;
-import org.n52.javaps.description.TypedProcessOutputDescriptionContainer;
+import org.n52.shetland.ogc.wps.JobId;
+import org.n52.shetland.ogc.wps.JobStatus;
+import org.n52.shetland.ogc.wps.OutputDefinition;
+import org.n52.shetland.ogc.wps.ResponseMode;
+import org.n52.shetland.ogc.wps.Result;
+import org.n52.shetland.ogc.wps.StatusInfo;
+import org.n52.shetland.ogc.wps.data.ProcessData;
+import org.n52.shetland.ogc.wps.description.ProcessDescription;
+import org.n52.janmayen.lifecycle.Destroyable;
 import org.n52.javaps.algorithm.IAlgorithm;
 import org.n52.javaps.algorithm.ProcessInputs;
 import org.n52.javaps.algorithm.ProcessOutputs;
 import org.n52.javaps.algorithm.RepositoryManager;
-
-import com.google.common.util.concurrent.AbstractFuture;
-import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.SettableFuture;
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
-
+import org.n52.javaps.description.TypedProcessDescription;
+import org.n52.javaps.description.TypedProcessOutputDescription;
+import org.n52.javaps.description.TypedProcessOutputDescriptionContainer;
 import org.n52.javaps.engine.Engine;
 import org.n52.javaps.engine.EngineException;
 import org.n52.javaps.engine.EngineProcessExecutionContext;
+import org.n52.javaps.engine.InputDecodingException;
 import org.n52.javaps.engine.JobIdGenerator;
 import org.n52.javaps.engine.JobNotFoundException;
 import org.n52.javaps.engine.OutputEncodingException;
@@ -78,6 +70,12 @@ import org.n52.javaps.engine.ProcessInputDecoder;
 import org.n52.javaps.engine.ProcessNotFoundException;
 import org.n52.javaps.engine.ProcessOutputEncoder;
 import org.n52.javaps.engine.ResultPersistence;
+import org.n52.shetland.ogc.ows.OwsCode;
+
+import com.google.common.util.concurrent.AbstractFuture;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.SettableFuture;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 public class EngineImpl implements Engine, Destroyable {
     private final Logger LOG = LoggerFactory.getLogger(EngineImpl.class);

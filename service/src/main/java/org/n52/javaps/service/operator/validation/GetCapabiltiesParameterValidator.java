@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,9 +16,9 @@
  */
 package org.n52.javaps.service.operator.validation;
 
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.request.GetCapabilitiesRequest;
 import org.n52.iceland.request.operator.ParameterValidator;
+import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
+import org.n52.shetland.ogc.ows.service.GetCapabilitiesRequest;
 
 /**
  * @author Christian Autermann

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,13 +18,14 @@ package org.n52.javaps.service.xml;
 
 import javax.xml.stream.XMLStreamException;
 
-import org.n52.iceland.coding.stream.xml.AbstractMultiElementXmlStreamWriter;
-import org.n52.iceland.response.GetCapabilitiesResponse;
-import org.n52.javaps.response.DescribeProcessResponse;
-import org.n52.javaps.response.DismissResponse;
-import org.n52.javaps.response.ExecuteResponse;
-import org.n52.javaps.response.GetResultResponse;
-import org.n52.javaps.response.GetStatusResponse;
+import org.n52.shetland.ogc.ows.service.GetCapabilitiesResponse;
+import org.n52.shetland.ogc.wps.response.DescribeProcessResponse;
+import org.n52.shetland.ogc.wps.response.DismissResponse;
+import org.n52.shetland.ogc.wps.response.ExecuteResponse;
+import org.n52.shetland.ogc.wps.response.GetResultResponse;
+import org.n52.shetland.ogc.wps.response.GetStatusResponse;
+import org.n52.svalbard.encode.exception.EncodingException;
+import org.n52.svalbard.encode.stream.xml.AbstractMultiElementXmlStreamWriter;
 
 /**
  * TODO JavaDoc
@@ -44,7 +45,7 @@ public class WPSResponseWriter extends AbstractMultiElementXmlStreamWriter {
 
     @Override
     public void writeElement(Object object)
-            throws XMLStreamException {
+            throws XMLStreamException, EncodingException {
         if (object instanceof DescribeProcessResponse) {
             DescribeProcessResponse response = (DescribeProcessResponse) object;
             delegate(response.getProcessOfferings());

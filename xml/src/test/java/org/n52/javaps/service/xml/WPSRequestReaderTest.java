@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,8 +19,6 @@ package org.n52.javaps.service.xml;
 
 
 
-
-import org.n52.javaps.service.xml.WPSRequestReader;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -43,23 +41,23 @@ import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 import org.xml.sax.SAXException;
 
-import org.n52.iceland.ogc.ows.OwsCode;
-import org.n52.iceland.ogc.wps.DataTransmissionMode;
-import org.n52.iceland.ogc.wps.ExecutionMode;
-import org.n52.iceland.ogc.wps.Format;
-import org.n52.iceland.ogc.wps.JobId;
-import org.n52.iceland.ogc.wps.OutputDefinition;
-import org.n52.iceland.ogc.wps.ResponseMode;
-import org.n52.iceland.ogc.wps.data.Body;
-import org.n52.iceland.ogc.wps.data.GroupProcessData;
-import org.n52.iceland.ogc.wps.data.ReferenceProcessData;
-import org.n52.iceland.ogc.wps.data.impl.StringValueProcessData;
-import org.n52.iceland.request.GetCapabilitiesRequest;
-import org.n52.javaps.request.DescribeProcessRequest;
-import org.n52.javaps.request.DismissRequest;
-import org.n52.javaps.request.ExecuteRequest;
-import org.n52.javaps.request.GetResultRequest;
-import org.n52.javaps.request.GetStatusRequest;
+import org.n52.shetland.ogc.ows.OwsCode;
+import org.n52.shetland.ogc.ows.service.GetCapabilitiesRequest;
+import org.n52.shetland.ogc.wps.DataTransmissionMode;
+import org.n52.shetland.ogc.wps.ExecutionMode;
+import org.n52.shetland.ogc.wps.Format;
+import org.n52.shetland.ogc.wps.JobId;
+import org.n52.shetland.ogc.wps.OutputDefinition;
+import org.n52.shetland.ogc.wps.ResponseMode;
+import org.n52.shetland.ogc.wps.data.Body;
+import org.n52.shetland.ogc.wps.data.GroupProcessData;
+import org.n52.shetland.ogc.wps.data.ReferenceProcessData;
+import org.n52.shetland.ogc.wps.data.impl.StringValueProcessData;
+import org.n52.shetland.ogc.wps.request.DescribeProcessRequest;
+import org.n52.shetland.ogc.wps.request.DismissRequest;
+import org.n52.shetland.ogc.wps.request.ExecuteRequest;
+import org.n52.shetland.ogc.wps.request.GetResultRequest;
+import org.n52.shetland.ogc.wps.request.GetStatusRequest;
 
 import com.google.common.io.BaseEncoding;
 
@@ -146,6 +144,7 @@ public class WPSRequestReaderTest {
 
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testExecuteRequest() throws Exception {
         ExecuteRequest request = read("wpsExecuteRequestExample.xml");
         errors.checkThat(request, is(notNullValue()));

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,6 @@
  */
 package org.n52.javaps.annotation;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
@@ -32,9 +31,10 @@ import org.apache.commons.configuration2.io.FileLocator;
 import org.apache.commons.configuration2.io.FileLocatorUtils;
 import org.apache.commons.configuration2.io.FileSystem;
 import org.apache.commons.configuration2.io.FileSystemLocationStrategy;
-import org.n52.iceland.util.JSONUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.n52.janmayen.Json;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.base.Strings;
@@ -75,7 +75,7 @@ public class ConfigurableClasses {
                 //check if the strategies found something
                 if (fileURL != null) {
                     try {
-                        return Optional.of(JSONUtils.loadURL(fileURL));
+                        return Optional.of(Json.loadURL(fileURL));
                     } catch (IOException e) {
                         LOGGER.error("Could not read property file for class " + clazz.getName(), e);
                     }
@@ -84,7 +84,7 @@ public class ConfigurableClasses {
             if(defaultFileName.isPresent()){
                 fileURL = locateFile(defaultFileName.get());
                 try {
-                    return Optional.of(JSONUtils.loadURL(fileURL));
+                    return Optional.of(Json.loadURL(fileURL));
                 } catch (IOException e) {
                     LOGGER.error("Could not read property file for class " + clazz.getName(), e);
                 }

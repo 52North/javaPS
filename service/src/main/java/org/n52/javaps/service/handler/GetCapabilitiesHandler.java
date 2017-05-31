@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,11 +20,11 @@ import static java.util.stream.Collectors.toSet;
 
 import javax.inject.Inject;
 
-import org.n52.iceland.ogc.ows.OwsCapabilities;
-import org.n52.iceland.ogc.wps.ProcessOffering;
-import org.n52.iceland.ogc.wps.ProcessOfferings;
-import org.n52.iceland.ogc.wps.WPSCapabilities;
-import org.n52.iceland.ogc.wps.WPSConstants;
+import org.n52.shetland.ogc.ows.OwsCapabilities;
+import org.n52.shetland.ogc.wps.ProcessOffering;
+import org.n52.shetland.ogc.wps.ProcessOfferings;
+import org.n52.shetland.ogc.wps.WPSCapabilities;
+import org.n52.shetland.ogc.wps.WPSConstants;
 import org.n52.iceland.request.handler.AbstractGetCapabilitiesHandler;
 import org.n52.javaps.engine.Engine;
 

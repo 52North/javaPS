@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,14 +16,9 @@
  */
 package org.n52.javaps.service.kvp;
 
-import java.util.Collections;
-import java.util.Set;
-
-import org.n52.iceland.coding.decode.DecoderKey;
-import org.n52.iceland.ogc.wps.WPS200Constants;
-import org.n52.iceland.ogc.wps.WPSConstants;
-import org.n52.javaps.request.GetStatusRequest;
-
+import org.n52.shetland.ogc.wps.WPS200Constants;
+import org.n52.shetland.ogc.wps.WPSConstants;
+import org.n52.shetland.ogc.wps.request.GetStatusRequest;
 
 /**
  * TODO JavaDoc
@@ -31,17 +26,9 @@ import org.n52.javaps.request.GetStatusRequest;
  * @author Christian Autermann
  */
 public class GetStatusKvpDecoder extends AbstractJobIdKvpDecoder<GetStatusRequest> {
-    private static final DecoderKey KEY
-            = createKey(WPSConstants.SERVICE, WPS200Constants.VERSION, WPSConstants.Operations.GetStatus);
 
-    @Override
-    protected GetStatusRequest createRequest() {
-        return new GetStatusRequest();
-    }
-
-    @Override
-    public Set<DecoderKey> getKeys() {
-        return Collections.singleton(KEY);
+    public GetStatusKvpDecoder() {
+        super(GetStatusRequest::new, WPSConstants.SERVICE, WPS200Constants.VERSION, WPSConstants.Operations.GetStatus);
     }
 
 }

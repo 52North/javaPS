@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -41,22 +41,19 @@ import javax.xml.stream.events.XMLEvent;
 
 import org.apache.commons.codec.binary.Base64InputStream;
 
-import org.n52.iceland.ogc.wps.Format;
+import org.n52.iceland.util.XmlFactories;
 import org.n52.javaps.description.TypedLiteralInputDescription;
 import org.n52.javaps.description.TypedLiteralOutputDescription;
 import org.n52.javaps.description.TypedProcessInputDescription;
 import org.n52.javaps.description.TypedProcessOutputDescription;
-import org.n52.iceland.util.XmlFactories;
 import org.n52.javaps.io.Data;
 import org.n52.javaps.io.DecodingException;
 import org.n52.javaps.io.EncodingException;
 import org.n52.javaps.io.InputHandler;
 import org.n52.javaps.io.OutputHandler;
+import org.n52.shetland.ogc.wps.Format;
 
 import com.google.common.io.CharStreams;
-
-import org.n52.javaps.io.literal.LiteralData;
-import org.n52.javaps.io.literal.LiteralType;
 
 /**
  * TODO JavaDoc
