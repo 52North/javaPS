@@ -32,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.n52.shetland.ogc.ows.OwsAllowedValues;
+import org.n52.shetland.ogc.ows.OwsAnyValue;
 import org.n52.shetland.ogc.ows.OwsValue;
 import org.n52.javaps.description.TypedLiteralInputDescription;
 import org.n52.javaps.description.impl.TypedProcessDescriptionFactory;
@@ -58,7 +59,7 @@ class LiteralInputAnnotationParser<M extends AccessibleObject & Member, B extend
         this.literalTypeRepository = Objects.requireNonNull(literalTypeRepository, "literalDataManager");
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"unchecked" })
     private List<String> getEnumValues(B binding) {
         if (!binding.isEnum()) {
             return Collections.emptyList();
@@ -82,7 +83,7 @@ class LiteralInputAnnotationParser<M extends AccessibleObject & Member, B extend
                 .withMaximalOccurence(getMaxOccurence(annotation, allowedValues))
                 .withType(bindingType)
                 .withDefaultLiteralDataDomain(descriptionFactory.literalDataDomain()
-                    .withValueDescription(new OwsAllowedValues(allowedValues.stream().map(OwsValue::new)))
+                    .withValueDescription(allowedValues.isEmpty()? OwsAnyValue.instance() : new OwsAllowedValues(allowedValues.stream().map(OwsValue::new)))
                     .withDataType(bindingType.getDataType())
                     .withDefaultValue(getDefaultValue(annotation, allowedValues))
                     .withUOM(annotation.uom()))
