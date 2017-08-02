@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">   
+    <link rel="shortcut icon" href="../../img/favicon.ico">
+
+    <title>Guide for Creation of custom Algorithms/Processes - JavaPS</title>
+
+    <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/font-hack/2.018/css/hack.min.css">
+    <link href='//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700,700italic&subset=latin-ext,latin' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,600,700&subset=latin-ext,latin' rel='stylesheet' type='text/css'>
+    <link href="../../css/base.css" rel="stylesheet">
+    <link href="../../css/cinder.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/highlight.css">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js"></script>
+    <script>
+    WebFont.load({
+        google: {
+            families: ['Open Sans', 'PT Sans']
+        }
+    });
+    </script>
+
+    
+</head>
+
+<body>
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="../..">JavaPS</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li >
+                        <a href="../..">Home</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../../architecture/architecture/">Architectural Details</a>
+                    </li>
+                
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dynamic Aspects - Workflow Diagrams <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../../sequence_diagrams/sequence_diagrams/">Introduction</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../sequence_diagrams/workflow_general/general_workflow/">Generic Workflow Descriptions</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../sequence_diagrams/workflow_wps_operations/workflow_wps_operations/">Workflow Descriptions of WPS Operations</a>
+</li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li class="active">
+                        <a href="./">Guide for Creation of custom Algorithms/Processes</a>
+                    </li>
+                
+                
+                </ul>
+            
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                
+                    <li >
+                        <a rel="next" href="../../sequence_diagrams/workflow_wps_operations/workflow_wps_operations/">
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li class="disabled">
+                        <a rel="prev" >
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a href="https://github.com/52North/javaPS">
+                            
+                                <i class="fa fa-github"></i>
+                            
+                            GitHub
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+    <div class="container">
+        
+        <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="first-level active"><a href="#javaps-documentation-adding-new-processesalgorithms">JavaPS Documentation - Adding new Processes/Algorithms</a></li>
+        
+            <li class="second-level"><a href="#how-to-add-custom-processesalgorithms-to-javaps">How to add custom Processes/Algorithms to JavaPS</a></li>
+            
+                <li class="third-level">
+                
+                  
+                    <a href="#custom-algorithm-definitions-through-java-annotations">Custom Algorithm Definitions through Java Annotations</a>
+                  
+                
+                  
+                </li>    
+            
+                <li class="third-level">
+                
+                  
+                    <a href="#class-annotation-algorithm">Class Annotation @Algorithm</a>
+                  
+                
+                  
+                </li>    
+            
+                <li class="third-level">
+                
+                  
+                
+                  
+                    <div class="row">
+                      <div class="col-md-10">
+                        <a href="#annotations-for-the-definition-of-process-inputs">Annotations for the Definition of Process Inputs</a>
+                      </div>
+                      <div class="dropdown col-md-2">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                          
+                            <li class="fourth-level"><a href="#setter-annotation-literalinput">Setter Annotation @LiteralInput</a></li>
+                           
+                            <li class="fourth-level"><a href="#setter-annotation-complexinput">Setter Annotation @ComplexInput</a></li>
+                           
+                        </ul>
+                      </div>  
+                    </div>
+                  
+                </li>    
+            
+                <li class="third-level">
+                
+                  
+                
+                  
+                    <div class="row">
+                      <div class="col-md-10">
+                        <a href="#annotations-for-the-definition-of-process-outputs">Annotations for the Definition of Process Outputs</a>
+                      </div>
+                      <div class="dropdown col-md-2">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                          
+                            <li class="fourth-level"><a href="#setter-annotation-literaloutput">Setter Annotation @LiteralOutput</a></li>
+                           
+                            <li class="fourth-level"><a href="#setter-annotation-complexoutput">Setter Annotation @ComplexOutput</a></li>
+                           
+                        </ul>
+                      </div>  
+                    </div>
+                  
+                </li>    
+            
+                <li class="third-level">
+                
+                  
+                    <a href="#the-role-of-the-binding-implementations">The Role of the Binding Implementations</a>
+                  
+                
+                  
+                </li>    
+            
+                <li class="third-level">
+                
+                  
+                    <a href="#annotation-execute">Annotation @Execute</a>
+                  
+                
+                  
+                </li>    
+            
+                <li class="third-level">
+                
+                  
+                    <a href="#conclusion-and-recommendation-for-an-external-processing-repository">Conclusion and Recommendation for an External Processing Repository</a>
+                  
+                
+                  
+                </li>    
+            
+        
+            <li class="second-level"><a href="#creating-an-external-processing-repository-epr">Creating an External Processing Repository (EPR)</a></li>
+            
+                <li class="third-level">
+                
+                  
+                    <a href="#introduction-what-is-an-epr">Introduction - What is an EPR?</a>
+                  
+                
+                  
+                </li>    
+            
+                <li class="third-level">
+                
+                  
+                    <a href="#benefits-of-using-an-epr">Benefits of using an EPR</a>
+                  
+                
+                  
+                </li>    
+            
+                <li class="third-level">
+                
+                  
+                
+                  
+                    <div class="row">
+                      <div class="col-md-10">
+                        <a href="#contents-of-an-epr-how-to-writecreate-an-epr-for-javaps">Contents of an EPR - How to write/create an EPR for JavaPS</a>
+                      </div>
+                      <div class="dropdown col-md-2">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                          
+                            <li class="fourth-level"><a href="#project-structure-of-exemplar-javaps-jts-backend-algorithm-repository">Project Structure of exemplar "javaps-jts-backend" Algorithm Repository</a></li>
+                           
+                            <li class="fourth-level"><a href="#java-resources-exemplar-algorithmprocess-definition-of-jtsconvexhullalgorithm">Java resources - Exemplar Algorithm/Process Definition of "JTSConvexHullAlgorithm"</a></li>
+                           
+                            <li class="fourth-level"><a href="#registration-of-an-epr-within-javaps-via-maven-and-spring-configuration">Registration of an EPR within JavaPS via Maven and Spring configuration</a></li>
+                           
+                        </ul>
+                      </div>  
+                    </div>
+                  
+                </li>    
+            
+        
+    
+    </ul>
+</div></div>
+        <div class="col-md-9" role="main">
+
+<h1 id="javaps-documentation-adding-new-processesalgorithms">JavaPS Documentation - Adding new Processes/Algorithms</h1>
+<p>This page aims to guide developers on how to create and add new custom processes to <strong>JavaPS</strong>. The introduction is split into two main parts. First, the creation of <a href="#custom-algorithm-definitions-through-java-annotations">custom algorithms/processes through Java annotations</a> is focused. Second, the guide provides recommendations on how to bundle custom <em>algorithm</em> definitions within a so-called <a href="#creating-an-external-processing-repository-epr">External Processing Repository (EPR)</a>. In general, it takes more than writing a single Java class to create a new custom <em>algorithm/process</em>, as a developer also has to include definitions of appropriate <em>bindings</em> or <em>data handling</em> components assisting in de-/encoding and processing <em>in-</em> and <em>output data</em>. Here, an <strong>EPR</strong> may collect all relevant Java components within a stand-alone Maven project, which is separated from JavaPS. Registration of its components is accomplished via Maven and Spring configuration, as explained in section <a href="#registration-of-an-epr-within-javaps-via-maven-and-spring-configuration">Registration of an EPR within JavaPS via Maven and Spring configuration</a>.</p>
+<h2 id="how-to-add-custom-processesalgorithms-to-javaps">How to add custom Processes/Algorithms to JavaPS</h2>
+<h3 id="custom-algorithm-definitions-through-java-annotations">Custom Algorithm Definitions through Java Annotations</h3>
+<p>As described in the <a href="../../architecture/architecture/">Architectural Details Page</a>, processes are implementations of the interface <strong><em>IAlgorithm</em></strong>, which prescribes an <em>execute()</em> method and a <strong><em>TypedProcessDescription</em></strong>, the Java representation of a process description. The abstract component <strong><em>AbstractAlgorithm</em></strong> implements the interface and thus provides the rudimentary skeleton for any <strong><em>Algorithm</em></strong> implementation. However, algorithm developers do not have to extend <strong><em>AbstractAlgorithm</em></strong> themselves. Instead, <strong>JavaPS</strong> offers a more elegant and simple way of implementing custom <strong><em>Algorithms</em></strong>. Through suitable <em>Java annotations</em>, any Java class may become an <strong><em>Algorithm</em></strong> that is found at application start-up by <strong>JavaPS</strong>. This functionality is provided by component <strong><em>AnnotatedAlgorithm</em></strong>, which extends <strong><em>AbstractAlgorithm</em></strong> and thus provides a full implementation of the requirements (<em>process description</em> and <em>execute()</em> method). The necessary information is automatically parsed and derived from the <em>annotations</em>.</p>
+<p>The following example demonstrates the definition of an <em>annotated algorithm</em>. The exemplar <em>"TestAlgorithm"</em> is marked as an implementation of <strong><em>IAlgorithm</em></strong> by annotating certain methods with key annotation, such as <strong>@Algorithm</strong>, <strong>@LiteralInput</strong>, <strong>@LiteralOutput</strong> and <strong>@Execute</strong>.</p>
+<pre><code>package org.n52.javaps.service;
+
+//import statements omitted
+
+@Algorithm(version = &quot;1.0.0&quot;)
+public class TestAlgorithm {
+    private String input1;
+    private String input2;
+    private String output1;
+    private String output2;
+
+    @LiteralInput(identifier = &quot;input1&quot;)
+    public void setInput1(String value) {
+         this.input1 = value;
+    }
+
+    @LiteralInput(identifier = &quot;input2&quot;)
+    public void setInput2(String value) {
+         this.input2 = value;
+    }
+
+    @Execute
+    public void execute() {
+         this.output1 = input1;
+         this.output2 = input2;
+    }
+
+    @LiteralOutput(identifier = &quot;output1&quot;)
+    public String getOutput1() {
+         return this.output1;
+    }
+
+    @LiteralOutput(identifier = &quot;output2&quot;)
+    public String getOutput2() {
+         return this.output2;
+    }
+
+}
+</code></pre>
+
+<p>Basically, the Java class is annotated with <code>@Algorithm</code> to tell <strong>JavaPS</strong>, that this class is an <strong><em>Algorithm</em></strong>. During initialization, <strong>JavaPS</strong> scans through available resources to find all classes marked with <code>@Algorithm</code> and uses the remaining annotated elements to automatically derive the associated <strong><em>ProcessDescription</em></strong>. In consequence, certain annotations are expected and investigated in order to create the components of the <strong><em>ProcessDescription</em></strong>, such as a single mandatory <strong><em>@Excecute</em></strong> annotation to declare the functional behaviour of the <strong><em>Algorithm</em></strong> or an arbitrary number of process <em>input</em> and <em>output</em> definitions. Each of the relevant annotations is described in detail below.</p>
+<h3 id="class-annotation-algorithm">Class Annotation <strong>@Algorithm</strong></h3>
+<p>The annotation <code>@Algorithm</code> marks a Java class comprises the following additional properties:</p>
+<ul>
+<li>String <strong>identifier</strong>: specifies the unique <em>job identifier</em> of the process; if not set, the <em>fully qualified class name</em> (Java package and class name) is used</li>
+<li>String <strong>title</strong>: the title of the process; can be chosen arbitrarily; if not set, the <em>fully qualified class name</em> (Java package and class name) is used</li>
+<li>String <strong>abstrakt</strong>: a description of the process to let others know what it can do and how to serve it</li>
+<li>String <strong>version</strong>: the version of the process</li>
+<li>Boolean <strong>storeSupported</strong>: <em>true</em>, if the process allows persistence of the results; <em>true</em> per default</li>
+<li>Boolean <strong>statusSupported</strong>: <em>true</em>, if the process supports status; <em>true</em> per default</li>
+</ul>
+<h3 id="annotations-for-the-definition-of-process-inputs">Annotations for the Definition of <em>Process Inputs</em></h3>
+<p>Typically, a process has one or more <em>inputs</em> and produces one or more <em>outputs</em>. Consequently, the <em>in-</em> and <em>outputs</em> can be defined via appropriate annotations as well. E.g., the annotation <code>@LiteralInput(identifier = "X")</code> marks a Java <em>setter-method</em> that sets the literal input with identifier "X". The input itself is stored as a Java class property, which is set by the annotated method when parsing the request and instantiating the <strong><em>Algorithm</em></strong>. However, as of January 2017, only <em>literal</em> and <em>complex inputs</em> can be defined within <strong>annotated algorithms</strong>. Support for <em>bounding box inputs</em> is not yet implemented. To define a <em>complex input</em>, an <em>input</em> <em>setter-method</em> may be annotated with <code>@ComplexInput</code>. In the same way, any <em>output</em> may be specified by annotating a suitable <em>getter-method</em> with <code>@LiteralOutput</code> or <code>@ComplexOutput</code>. Similar to <code>@Algorithm</code> the <em>in-</em> and <em>output</em> definitions provide additional properties to specify details. Subsequently, these properties are explained:</p>
+<h4 id="setter-annotation-literalinput">Setter Annotation <strong>@LiteralInput</strong></h4>
+<p>Annotation <code>@LiteralInput</code> Properties</p>
+<ul>
+<li>String <strong>identifier</strong>: specifies the unique <em>input identifier</em> of the input</li>
+<li>String <strong>title</strong>: the title of the input; can be chosen arbitrarily</li>
+<li>String <strong>abstrakt</strong>: a description of the input</li>
+<li>long <strong>minOccurs</strong>: the minimum number of occurrences within an <em>Execute</em> request; default value is "1"</li>
+<li>long <strong>maxOccurs</strong>: the maximum number of occurrences within an <em>Execute</em> request; default value is "1"</li>
+<li>String <strong>defaultValue</strong>: a default value that is used when the input is not specified within an <em>Execute</em> request</li>
+<li>String[] <strong>allowedValues</strong>: an array of concrete allowed values for the input;</li>
+<li>String <strong>uom</strong>: specification of the <em>unit of measure</em></li>
+<li>Class <strong>binding</strong>: reference to a <em>binding</em> class that implements/extends <em>LiteralType.class</em> and thus is able to parse the input from an <em>Execute</em> request correctly; basically this <em>binding</em> component acts as a wrapper for the input; more information about <em>binding</em> is provided in section <a href="#the-role-of-the-binding-implementations">The Role of the Binding Implementations</a></li>
+</ul>
+<h4 id="setter-annotation-complexinput">Setter Annotation <strong>@ComplexInput</strong></h4>
+<p>Annotation <code>@ComplexInput</code> Properties</p>
+<ul>
+<li>String <strong>identifier</strong>: specifies the unique <em>input identifier</em> of the input</li>
+<li>String <strong>title</strong>: the title of the input; can be chosen arbitrarily</li>
+<li>String <strong>abstrakt</strong>: a description of the input</li>
+<li>long <strong>minOccurs</strong>: the minimum number of occurrences within an <em>Execute</em> request; default value is "1"</li>
+<li>long <strong>maxOccurs</strong>: the maximum number of occurrences within an <em>Execute</em> request; default value is "1"</li>
+<li>long <strong>maximumMegaBytes</strong>: a limitation of the maximum size of the complex input's payload</li>
+<li>Class <strong>binding</strong>: reference to a <em>binding</em> class that implements/extends <em>ComplexData.class</em> and thus is able to parse the complex input from an <em>Execute</em> request correctly; basically this <em>binding</em> component acts as a wrapper for the input; more information about <em>binding</em> is provided in section <a href="#the-role-of-the-binding-implementations">The Role of the Binding Implementations</a></li>
+</ul>
+<h3 id="annotations-for-the-definition-of-process-outputs">Annotations for the Definition of <em>Process Outputs</em></h3>
+<h4 id="setter-annotation-literaloutput">Setter Annotation <strong>@LiteralOutput</strong></h4>
+<p>Annotation <code>@LiteralOutput</code> Properties</p>
+<ul>
+<li>String <strong>identifier</strong>: specifies the unique <em>output identifier</em> of the output</li>
+<li>String <strong>title</strong>: the title of the output; can be chosen arbitrarily</li>
+<li>String <strong>abstrakt</strong>: a description of the output</li>
+<li>String <strong>uom</strong>: specification of the <em>unit of measure</em></li>
+<li>Class <strong>binding</strong>: reference to a <em>binding</em> class that implements/extends <em>LiteralType.class</em> and thus is able to encode the output correctly; basically this <em>binding</em> component acts as a wrapper for the output; more information about <em>binding</em> is provided in section <a href="#the-role-of-the-binding-implementations">The Role of the Binding Implementations</a></li>
+</ul>
+<h4 id="setter-annotation-complexoutput">Setter Annotation <strong>@ComplexOutput</strong></h4>
+<p>Annotation <code>@ComplexOutput</code> Properties</p>
+<ul>
+<li>String <strong>identifier</strong>: specifies the unique <em>output identifier</em> of the output</li>
+<li>String <strong>title</strong>: the title of the output; can be chosen arbitrarily</li>
+<li>String <strong>abstrakt</strong>: a description of the output</li>
+<li>Class <strong>binding</strong>: reference to a <em>binding</em> class that implements/extends <em>ComplexData.class</em> and thus is able to encode the output correctly; basically this <em>binding</em> component acts as a wrapper for the output; more information about <em>binding</em> is provided in section <a href="#the-role-of-the-binding-implementations">The Role of the Binding Implementations</a></li>
+</ul>
+<h3 id="the-role-of-the-binding-implementations">The Role of the Binding Implementations</h3>
+<p>During the previous explanation of the annotations for <em>in-</em> and <em>outputs</em>, a specific annotation called <strong>binding</strong> was introduced. Its purpose and relevance will be described in this section. In general, a <strong>WPS</strong> process defines several process <em>in-</em> and <em>outputs</em>. When a client constructs and sends an <strong>Execute request</strong>, the <em>inputs</em> are specified using a certain <strong>format/encoding</strong>. Also the client may request the process <em>output(s)</em> to be <strong>encoded in a certain format</strong>. While the available <strong>formats</strong> are predefined by the <strong>JavaPS</strong> implementation of that process, the <strong><em>Algorithm</em></strong> implementation uses a single internal representation of the <em>in-</em> and <em>outputs</em>. Hence, transformation between the different data representations is necessary.</p>
+<p>In essence, a <strong>JavaPS</strong> <strong><em>Algorithm</em></strong> may internally rely on format <em>Internal_A</em> to interpret data and perform computations. A client however may send an <strong>Execute request</strong>, where the input is specified using different format <em>External_B</em> and the output should be encoded in another format <em>External_C</em>. During process management and execution, the external input representation (<em>External_B</em>) first has to be transformed/decoded into the internal representation (<em>Internal_A</em>) so the process may use it to compute the result (which again uses the internal data representation of the <strong><em>Algorithm</em></strong> implementation). When creating the <strong>Execute response object</strong>, the internal representation of the process <em>output/result</em> then has to be encoded according to the external format (<em>External_C</em>) as requested by the client.</p>
+<p>Whenever differences within the data representations of process <em>in-</em> and <em>outputs</em> between internal <strong><em>Algorithm</em></strong> implementation and external request/response objects occur, a <strong>binding</strong> implementation can be used. It acts as a wrapping component for the internal data representation and provides means to access and manage its data. In collaboration with appropriate <strong>data handling</strong> components, <strong>binding</strong> implementations control the correct transformations between the different internal and external data representations.</p>
+<p>As process <em>in-</em> and <em>outputs</em> may have different types (e.g. <em>literal</em> or <em>complex</em>), a <strong>binding</strong> component must implement the relevant interface. While <strong><em>binding</em></strong> classes for <em>literal in-/outputs</em> implement the interface <code>LiteralData</code>, the interface <code>ComplexData</code> has to be implemented by those <strong><em>bindings</em></strong> that wrap a <em>complex in-/output</em>. A detailed example is provided in the context of an <a href="#creating-an-external-processing-repository-epr">External Processing Repository (EPR)</a> in sub-section <a href="#binding-and-data-handlers-for-data-representationtransformation-of-process-in--and-outputs">Binding and Data Handlers for Data Representation/Transformation of Process In- and Outputs</a>.</p>
+<h3 id="annotation-execute">Annotation <strong>@Execute</strong></h3>
+<p>After specifying the <em>in-</em> and <em>outputs</em> of the process, only one mandatory annotation/specification is required. Per <strong><em>Algorithm</em></strong> one method has to exist that is annotated by <code>@Execute</code>. This method is called when the process is executed and hence its method body has to compute its <em>result(s)/output(s)</em>.</p>
+<h3 id="conclusion-and-recommendation-for-an-external-processing-repository">Conclusion and Recommendation for an <strong>External Processing Repository</strong></h3>
+<p>Concluding, the whole definition of an <strong><em>Algorithm</em></strong> can be specified through the appropriate Java annotations. On start-up, the application automatically scans Java resources defined as <strong>Spring beans</strong> for classes annotated with <code>@Algorithm</code> and thus makes them operatable. If necessary, new implementations of <strong><em>LiteralType</em></strong> or <strong><em>ComplexData</em></strong> (so-called <strong>bindings</strong>) may be provided alongside to correctly parse and encode the in- and outputs of the process.</p>
+<p>In theory, new implementations may be added within the packages of <strong>JavaPS</strong> directly. However, it is recommended to outsource the <strong><em>Algorithm</em></strong> implementations into a so-called <strong>External Processing/Algorithm Repository</strong>, e.g. as stand-alone <a href="https://maven.apache.org/">Maven</a> project that encapsulates the definitions of all algorithms and necessary <strong>binding</strong> implementations of <strong><em>LiteralType</em></strong> and <strong><em>ComplexData</em></strong> and accompanying <strong>data handlers</strong> for proper de- and encoding of process <em>in-</em> and <em>outputs</em>. Hints and useful information for creating such an external repository are presented below.</p>
+<h2 id="creating-an-external-processing-repository-epr">Creating an External Processing Repository (EPR)</h2>
+<h3 id="introduction-what-is-an-epr">Introduction - What is an EPR?</h3>
+<p>An <strong>External Processing Repository (EPR)</strong> bundles <em>algorithm/process</em> definitions for <strong>JavaPS</strong> in a separate Maven project including necessary <em>binding</em> implementations. Within this section, the <a href="#benefits-of-using-an-epr">benefits</a> and hints for the <a href="#contents-of-an-epr-how-to-writecreate-an-epr-for-javaps">creation and contents</a> of such an <strong>EPR</strong> are presented.</p>
+<h3 id="benefits-of-using-an-epr">Benefits of using an EPR</h3>
+<p>Possible benefits are the clear separation of concerns, as the WPS <em>process implementations</em> are detached from the actual WPS <em>infrastructure implementation</em>. Hence, both components can be maintained and developed independent from each other. In addition, by organizing <em>process implementations</em> in external repositories, each repository may include only <strong><em>Algorithms</em></strong> within a certain application context (e.g. one repository for geographic/geometric analysis, another for data/format conversions). By docking one or more such thematically specialized repositories on to <strong>JavaPS</strong> (through suitable Maven and Spring configuration), subject-oriented WPS instances can be set-up.</p>
+<h3 id="contents-of-an-epr-how-to-writecreate-an-epr-for-javaps">Contents of an EPR - How to write/create an EPR for JavaPS</h3>
+<p>The following sub-sections concentrate on the required contents of an <strong>EPR</strong> and provide developers with a guide on how to create their own <em>processing repository</em>.</p>
+<p>An exemplar <strong>EPR</strong> for <strong>JavaPS</strong> is the 52&deg;North GitHub-project <a href="https://github.com/52North/javaps-jts-backend">javaps-jts-backend</a>. It comprises a single additional <em>algorithm/process</em> definition and required other Java components as well as configuration files. JTS stands for <a href="https://live.osgeo.org/en/overview/jts_overview.html">Java Topology Suite</a>, an open source Java library providing spatial processing and analysis functionalities for 2D linear geometries. This project is used as an example to highlight the assets of an <strong>EPR</strong> subsequently.</p>
+<p>In general, an <strong>EPR</strong> adds the following components to the basic <strong>JavaPS</strong> WPS infrastructure:</p>
+<ul>
+<li><strong>Algorithm</strong> definitions through annotated Java classes as described above.</li>
+<li><strong>Binding</strong> implementations for de- and encoding of process <em>in-</em> and <em>outputs</em>, as described in section <a href="#the-role-of-the-binding-implementations">The Role of the Binding Implementations</a>.</li>
+<li><strong>In- and Output Handlers</strong>: Together with an associated <strong>Binding</strong> these handlers provide serviceable data required by the associated <strong>algorithm/process</strong>. This is relevant in the context of <strong>data representation</strong> and its <strong>de-</strong> and <strong>encoding</strong>, as indicated in the description of <a href="../../sequence_diagrams/workflow_wps_operations/workflow_wps_operations/#execute-detailed-request-handling">handling an Execute request</a>. E.g., while in a WPS <strong>Execute</strong> request, input geometries might be encoded using <em>Well-Known-Text(WKT)</em> format, an internal <strong>algorithm/process</strong> within <strong>javaps-jts-backend</strong> may require them as proper <em>JTS Java objects</em>. Furthermore, while the process may use these <em>JTS inputs</em> to compute certain <em>JTS output objects</em>, the <strong>Execute</strong> response object that is returned to the client could display them as <em>WKT</em> again (to be precise, the user submits the desired in- and output format within request parameters). In conclusion, <strong>In- and Output Handlers</strong> combined with suitable <strong>Binding</strong> implementations take care of proper format transformations between different internal and external representations of process in- and outputs. Section <a href="#java-resources-exemplar-algorithmprocess-definition-of-jtsconvexhullalgorithm">Java resources - Exemplar Algorithm/Process Definition of "JTSConvexHullAlgorithm"</a> explains their coexistence in more detail.</li>
+</ul>
+<p>The presentation of the exemplar <a href="https://github.com/52North/javaps-jts-backend">javaps-jts-backend</a> is divided into three parts. First, its <a href="#project-structure-of-exemplar-javaps-jts-backend-algorithm-repository">project structure</a> is shown followed by an explanation of the required <a href="#java-resources-exemplar-algorithmprocess-definition-of-jtsconvexhullalgorithm">Java resources</a> and finally ends with the necessary <a href="#registration-of-an-epr-within-javaps-via-maven-and-spring-configuration">Maven and Spring configuration</a>.</p>
+<h4 id="project-structure-of-exemplar-javaps-jts-backend-algorithm-repository">Project Structure of exemplar "javaps-jts-backend" Algorithm Repository</h4>
+<p>The <a href="https://maven.apache.org/">Maven</a> project <a href="https://github.com/52North/javaps-jts-backend">javaps-jts-backend</a> is organized as follows. Note that the subsequent project outline only comprises the folders and files related to Maven and the algorithm implementation. Other files, such as GitHub README or licensing information files are neglected and can be inspected on the <a href="https://github.com/52North/javaps-jts-backend">repository on GitHub</a>.</p>
+<pre>
+<i>javaps-jts-backend</i>
+        |
+        | - <b>"pom.xml"</b>
+        | - <i>src</i>
+             |
+             | - <i>main</i>
+                  |
+                  | - <i>config</i>
+                        |
+                        | - ... // additional config file(s), omitted
+                  | - <i>java</i>
+                        |
+                        | - <i>org/n52/geoprocessing/jts</i>
+                                |
+                                | - <i>algorithm</i>
+                                      |
+                                      | <b>"JTSConvexHullAlgorithm.java"</b>
+                                | - <i>io</i>
+                                      |
+                                      | - <i>data/binding/complex</i>
+                                            |
+                                            | <b>"JTSGeometryBinding.java"</b>
+                                      | - <i>datahandler</i>
+                                            |
+                                            | - <i>generator</i>
+                                                  |
+                                                  | - <b>"WKTGenerator.java"</b>
+                                            | - <i>parser</i>
+                                                  |
+                                                  | - <b>"WKTParser.java"</b>
+                  | - <i>resources</i>
+                        |
+                        | - <b>"wkt.properties"</b>   
+                        | - <i>components</i>
+                                |
+                                | - <b>"jts-backend.xml"</b>
+             | - <i>test</i>
+                  |
+                  | - ... // omitted
+</pre>
+
+<p>The general folder structure is predefined by Maven. The project's root tier contains the <strong>pom.xml</strong> file, which comprises the necessary information regarding dependencies and project building. While Java classes are included in <code>src/main/java</code> relevant resources are located in <code>src/main/resources</code>. <code>src/test/java</code> and <code>src/test/resources</code> complete Mavens project structure and comprise test cases for <a href="http://junit.org/junit4/">JUnit</a> tests. In addition to this mandatory structure, the folder <code>src/main/config</code> comprises relevant configuration files, e.g. containing information related to the Maven build process. Within the scope of this documentation, only the required steps to produce a valid <em>processing backend/repository</em> for <strong>JavaPS</strong> are presented. Thus, the following sections focus only on the necessary Java definitions within <code>src/main/java</code> and resource files within <code>src/main/resources</code>.</p>
+<p>While new <strong>algorithms/processes</strong> and related <em>binding</em> and <em>data handling</em> components are defined through appropriate <a href="#java-resources-exemplar-algorithmprocess-definition-of-jtsconvexhullalgorithm">Java implementaions</a>) under <code>src/main/java</code>, <code>src/main/resources</code> comprises an <a href="#registration-of-an-epr-within-javaps-via-maven-and-spring-configuration">XML Spring configuration file</a> including bean definitions of the implemented Java classes is required to register those components within <strong>JavaPS</strong>. Both aspects are described in more detail below.</p>
+<h4 id="java-resources-exemplar-algorithmprocess-definition-of-jtsconvexhullalgorithm">Java resources - Exemplar Algorithm/Process Definition of "JTSConvexHullAlgorithm"</h4>
+<p>This section focuses on the presentation of an exemplar <strong><em>Algorithm</em></strong> implementation and related additional Java resources of the <strong>javaps-jts-backend</strong>. For clarification, the folder structure and important Java files are given below:</p>
+<pre>
+<i>javaps-jts-backend</i>
+        |
+        | - <b>"pom.xml"</b>
+        | - <i>src</i>
+             |
+             | - <i>main</i>
+                  |
+                  | - <i>java</i>
+                        |
+                        | - <i>org/n52/geoprocessing/jts</i>
+                                |
+                                | - <i>algorithm</i>
+                                      |
+                                      | <b>"JTSConvexHullAlgorithm.java"</b>
+                                | - <i>io</i>
+                                      |
+                                      | - <i>data/binding/complex</i>
+                                            |
+                                            | <b>"JTSGeometryBinding.java"</b>
+                                      | - <i>datahandler</i>
+                                            |
+                                            | - <i>generator</i>
+                                                  |
+                                                  | - <b>"WKTGenerator.java"</b>
+                                            | - <i>parser</i>
+                                                  |
+                                                  | - <b>"WKTParser.java"</b>
+</pre>
+
+<p>The <strong>algorithm/process</strong> and related <em>binding</em> and <em>data handling</em> components are defined in the sub-packages of <code>src/main/java/</code>. To be precise, an implementation of a convex hull algorithm is provided in <code>org/n52/geoprocessing/jts/algorithm/JTSConvexHullAlgorithm.java</code>. According to <a href="#how-to-add-custom-processesalgorithms-to-javaps">the guide on how to add new processes/algorithms to JavaPS</a>, this component is the implementation of an <strong><em>AnnotatedAlgorithm</em></strong> that adds a process to compute the convex hull of an input geometry to <strong>JavaPS</strong>. However, in most cases a new <strong><em>Algorithm</em></strong> implementation has to be accompanied by additional <em>binding</em> and <em>data handling</em> components. As mentioned in section <a href="#the-role-of-the-binding-implementations">The Role of the Binding Implementations</a>, those additional components take care of suitable data representation between <strong>Execute requests</strong> and the internal <strong>Algorithm representation</strong> including the required transformation (or de- and encoding) steps. Within the scope of the <code>JTSConvexHullAlgorithm</code>, those components are implemented by the <em>binding</em> <code>JTSGeometryBinding</code> and the two data handlers <code>WKTGenerator</code> and <code>WKTParser</code>. Each of these components is introduced in detail subsequently.</p>
+<h5 id="algorithm-definition">Algorithm Definition</h5>
+<p>Package: <code>src/main/java/org/n52/geoprocessing/jts/algorithm/</code>.</p>
+<p>Component: <code>JTSConvexHullAlgorithm.java</code></p>
+<p>Java Code:</p>
+<pre><code>package org.n52.geoprocessing.jts.algorithm;
+
+import org.n52.geoprocessing.jts.io.data.binding.complex.JTSGeometryBinding;
+import org.n52.javaps.algorithm.annotation.Algorithm;
+import org.n52.javaps.algorithm.annotation.ComplexInput;
+import org.n52.javaps.algorithm.annotation.ComplexOutput;
+import org.n52.javaps.algorithm.annotation.Execute;
+
+import com.vividsolutions.jts.geom.Geometry;
+
+/**
+ * This algorithm creates a convex hull of a JTS geometry using build the in method.
+ * @author BenjaminPross
+ *
+ */
+@Algorithm(version = &quot;1.1.0&quot;)
+public class JTSConvexHullAlgorithm{
+
+    private Geometry result;
+    private Geometry data;
+
+    @ComplexOutput(identifier = &quot;result&quot;, binding = JTSGeometryBinding.class)
+    public Geometry getResult() {
+        return result;
+    }
+
+    @ComplexInput(identifier = &quot;data&quot;, binding = JTSGeometryBinding.class)
+    public void setData(Geometry data) {
+        this.data = data;
+    }
+
+    @Execute
+    public void runAlgorithm() {
+        result = data.convexHull();
+    }
+}
+</code></pre>
+
+<p>The <strong><em>AnnotatedAlgorithm</em></strong> <code>JTSConvexHullAlgorithm</code> is a process implementation for <strong>JavaPS</strong> that makes use of the <a href="https://live.osgeo.org/en/overview/jts_overview.html">Java Topology Suite</a> to compute the <em>convex hull</em> of an input geometry. It comprises two properties, <code>data</code> for the <em>input</em> geometry and <code>result</code> for the <em>output</em> convex hull geometry. Both are of type JTS <code>Geometry</code>. The <code>setData(Geometry data)</code> and <code>getResult()</code> methods are annotated by <code>@ComplexInput</code> and <code>@ComplexOutput</code> respectively to indicate that both deal with <strong>complex data</strong> with regard to the WPS specification. Both annotations include the definitions of the <em>in-</em> and <em>output</em> <code>identifier</code> as well as the associated <em>binding</em> implementation by component <code>JTSGeometryBinding.class</code>. The latter is explained in the following section. Finally, the annotation <code>@Execute</code> marks the method <code>runAlgorithm()</code>, which will be run on process execution. It computes the convex hull of <code>data</code> and stores it in the <code>result</code> property.</p>
+<h5 id="binding-and-data-handlers-for-data-representationtransformation-of-process-in-and-outputs">Binding and Data Handlers for Data Representation/Transformation of Process In- and Outputs</h5>
+<p>To integrate the <code>JTSConvexHullAlgorithm</code> into JavaPS, additional <strong>binding</strong> and <strong>data handler</strong> components are required to handle data conversion from <em>external request inputs</em> &#8594; <em>internal algorithm data</em> and vice versa from <em>internal algorithm data</em> &#8594; <em>external response outputs</em>. In particular, the <code>JTSConvexHullAlgorithm</code> expects input data as JTS <code>Geometry</code> and it computes its convex hull also as JTS <code>Geometry</code>. The <strong>javaps-jts-backend</strong> however provides a new <strong>binding</strong> and <strong>data handlers</strong> that allow clients to deliver the <em>input data</em> and receive <em>output results</em> using the <em>WKT (Well Known Text)</em> format. The <strong>binding</strong> wraps the internal JTS <code>Geometry</code> and the data handlers integrate into the infrastructure of <strong>JavaPS</strong> and take care of converting between <em>WKT</em> &#8596; <em>JTS Geometry</em> by relying on the binding. In the following, both aspects are intensified.</p>
+<h6 id="binding">Binding</h6>
+<p>Package: <code>src/main/java/org/n52/geoprocessing/jts/io/data/binding/complex</code></p>
+<p>Component: <code>JTSGeometryBinding.java</code></p>
+<p>Java Code:</p>
+<pre><code>package org.n52.geoprocessing.jts.io.data.binding.complex;
+
+import org.n52.javaps.io.complex.ComplexData;
+
+import com.vividsolutions.jts.geom.Geometry;
+
+/**
+ * This class wraps a JTS Geometry.
+ * @author Benjamin Pross
+ *
+ */
+public class JTSGeometryBinding implements ComplexData&lt;Geometry&gt; {
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = 3415522592135759594L;
+    private Geometry geom;
+
+    public JTSGeometryBinding(Geometry geom){
+        this.geom = geom;
+    }
+
+    public Geometry getPayload() {
+        return this.geom;
+    }
+
+    public Class&lt;?&gt; getSupportedClass() {
+        return Geometry.class;
+    }
+
+    public void dispose() {
+
+    }
+
+}
+</code></pre>
+
+<p>The <code>JTSGeometryBinding</code> implements the interface <code>ComplexData</code> and acts as a Wrapper for a JTS <code>Geometry</code>. Its constructor takes one parameter of type JTS <code>Geometry</code> that is stored as class property <code>geom</code>. The methods <code>getPayload()</code> and <code>getSupportedClass()</code> are inherited from <code>ComplexData</code> and contain important information required by the infrastructure of <strong>JavaPS</strong>. While <code>getSupportedClass()</code> points to the Java type that is supported by this <strong>binding</strong> (here <code>Geometry.class</code>), <code>getPayload()</code> retrieves the <strong>bindings</strong> actual value (here the wrapped JTS <code>Geometry</code> instance). From the perspective of <strong>JavaPS</strong> the <em>supportedClass</em> is required to determine, which <strong>bindings</strong> are available for which type of data.</p>
+<h6 id="data-handlers-implementations-of-interface-inputoutputhandler">Data Handlers - Implementations of Interface "InputOutputHandler"</h6>
+<p>While <strong>bindings</strong> wrap a certain type of data, they do not convert between different data representations themselves. Instead, this action is performed by <strong>data handlers</strong>. E.g., the <strong>javaps-jts-backend</strong> provides such handlers to manage data transformations of geometric data between <em>WKT (Well Known Text)</em> &#8596; <em>JTS Geometry (via JTSGeometryBinding)</em>. Consequently, there is a component <code>WKTGenerator</code> handling the conversion from <em>JTS Geometry (via JTSGeometryBinding)</em> &#8594; <em>WKT</em> and another component <code>WKTParser</code> that performs the conversion from <em>WKT</em> &#8594; <em>JTS Geometry (via JTSGeometryBinding)</em>. To integrate into the infrastructure of <strong>JavaPS</strong>, these <strong>data handlers</strong> have to implement certain interfaces and extend certain abstract classes. The following UML class diagram highlights these hierarchy aspects of both components:</p>
+<p><img alt="Data Handlers Type Hierarchy" src="../UML_Diagrams/DataHandlers_ClassHierarchy.png" /><em>Data Handlers Type Hierarchy</em></p>
+<p>The red coloured abstract classes and interfaces derive from <strong>JavaPS</strong>, whereas the magenta coloured components <code>WKTGenerator</code> and <code>WKTParser</code> come from <strong>javaps-jts-backend</strong>. At the top of the diagram, the central interface <code>InputOutputHandler</code> prescribes essential methods concerning supported <em>formats</em> and <em>bindings</em> that have to be implemented by any <strong>data handler</strong>. Note that for reasons of simplicity, the Java types of the method parameters are neglected within the diagram. On the left, two abstract components <code>AbstractInputOutputHandler</code> and <code>AbstractPropertiesInputOutputHandler</code> implement <code>InputOutputHandler</code> and further provide methods to <em>add</em> a new supported <em>format</em> or <em>binding</em>. It has to be mentioned here that these abstract classes already provide an abstract implementation of the interface methods dictated by <code>InputOutputHandler</code>. Hence, custom <strong>data handlers</strong> do not have to implement those themselves. In addition, the <code>AbstractPropertiesInputOutputHandler</code> implements another interface called <code>ConfigurableClass</code> that provides means to fetch available formats from a JSON properties file.</p>
+<p>On the right side, the two supplementary interfaces <code>InputHandler</code> and <code>OutputHandler</code> inherit from generic <code>InputOutputHandler</code> and constitute specializations regarding the handling of <em>in-</em> or <em>outputs</em>. In particular, <code>InputHandler</code> prescribes the method <code>parse(description, input, format)</code> whose task is to <em>parse an input from the request object and deliver it as serviceable data for the target algorithm</em>. In contrast, <code>OutputHandler</code> demands a method <code>generate(description, data, format)</code> that should take the <em>result data</em> produced by an <strong><em>Algorithm</em></strong> and <em>generate an appropriate output representation for inclusion within a client response object</em>.</p>
+<p>Finally, the actual <em>data handlers</em> <code>WKTParser</code> as well as <code>WKTGenerator</code> both inherit from <code>AbstractPropertiesInputOutputHandler</code> and thus inherit the abstract implementation of the generic <em>format</em> and <em>binding</em> management. Moreover, they implement their counterpart of the two specialized interfaces <code>InputHandler</code> or <code>OutputHandler</code> respectively. In consequence, <code>WKTParser</code> has to implement the <code>parse(description, input, format)</code> method, while <code>WKTGenerator</code> must implement <code>generate(description, data, format)</code>.</p>
+<p><strong>Source Code of WKTParser and WKTGenerator</strong></p>
+<p>In the following, the source code of both <strong>data handlers</strong> <code>WKTParser</code> and <code>WKTGenerator</code> is presented. Beneath method descriptions the interaction/cooperation with the <strong>binding</strong> component <code>JTSGeometryBinding</code> is highlighted.</p>
+<p><strong>WKTParser</strong></p>
+<p>Package: <code>src/main/java/org/n52/geoprocessing/jts/io/datahandler/</code></p>
+<p>Component: and <code>parser/WKTParser.java</code></p>
+<p>Source Code:</p>
+<pre><code>//package and import statements omitted
+
+/**
+ * This class parses String representations out of JTS Geometries.
+ *
+ * @author Benjamin Pross
+ *
+ */
+@Properties(
+        defaultPropertyFileName = &quot;wkt.properties&quot;)
+public class WKTParser extends AbstractPropertiesInputOutputHandler implements InputHandler {
+
+    private static Logger LOGGER = LoggerFactory.getLogger(WKTParser.class);
+
+    public WKTParser() {
+        super();
+        addSupportedBinding(JTSGeometryBinding.class);
+    }
+
+    public Data&lt;?&gt; parse(TypedProcessInputDescription&lt;?&gt; description,
+            InputStream input,
+            Format format) throws IOException, DecodingException {
+        try {
+            Geometry g = new WKTReader().read(new InputStreamReader(input));
+
+            return new JTSGeometryBinding(g);
+
+        } catch (ParseException e) {
+            LOGGER.error(e.getMessage(), e);
+        } finally {
+            try {
+                input.close();
+            } catch (IOException e) {
+                LOGGER.error(e.getMessage(), e);
+            }
+        }
+        return null;
+    }
+
+}
+</code></pre>
+
+<p><code>WKTParser</code> only comprises a default constructor and the <code>parse()</code> method. The former is used to add/register the associated <strong>binding(s)</strong> and <strong>format(s)</strong> to its internal <em>set of supported bindings</em> and <em>set of supported formats</em>. With regard to the <strong>formats</strong>, the <code>super()</code> call invokes the <code>getFormatFromProperties()</code> method of super class <code>AbstractPropertiesInputOutputHandler</code>, which expects a <em>resource file</em> containing entries of JSON encoded <em>supported formats</em>. For this reason, the class <code>WKTParser</code> is annotated with <code>@Properties(defaultPropertyFileName = "wkt.properties")</code> referencing the name of the associated <em>resource file</em> located in <code>src/main/resources</code>. Its content is displayed below:</p>
+<p><em>Content of wkt.properties resource file</em></p>
+<pre><code>{
+  &quot;formats&quot;: [
+  {&quot;mimeType&quot;:&quot;application/wkt&quot;, &quot;default&quot;:true},
+  {&quot;mimeType&quot;:&quot;application/wkt&quot;, &quot;encoding&quot;:&quot;base64&quot;}
+  ]
+}
+</code></pre>
+
+<p>The JSON array contains valid <strong>format definitions</strong> that are supported by <code>WKTParser</code> (i.e. <em>WKT</em> related formats) that, as mentioned above, are registered during its instantiation.</p>
+<p>Concerning supported <strong>bindings</strong>, <code>WKTParser</code> directly registers them within the constructor via <code>addSupportedBinding()</code>. Here, only the <strong>binding</strong> <code>JTSGeometryBinding</code> is supported.</p>
+<p>The inherited <code>parse()</code> method contains the implementation to transform a <em>WKT Geometry String</em> into a <em>JTS Geometry</em> using the named <strong>binding</strong>. In particular, a <code>WKTReader</code> from the <a href="https://live.osgeo.org/en/overview/jts_overview.html">Java Topology Suite</a> is utilized to <code>read</code> an incoming <code>InputStream</code> that holds the <em>WKT Geometry String</em> and produce a <em>JTS</em> <code>Geometry</code> instance. Then a new instance of <code>JTSGeometryBinding</code> is created and returned wrapping the <em>JTS</em> <code>Geometry</code>. Afterwards, the <strong>JavaPS</strong> infrastructure may use it to set the <em>input</em> parameter of the <strong><em>JTSConvexHullAlgorithm</em></strong>.</p>
+<p><strong>WKTGenerator</strong></p>
+<p>Package: <code>src/main/java/org/n52/geoprocessing/jts/io/datahandler/</code></p>
+<p>Component: <code>generator/WKTGenerator.java</code></p>
+<p>Source Code:</p>
+<pre><code>//package and import statements omitted
+
+/**
+ * This class generates a String representation out of a JTS Geometry.
+ *
+ * @author Benjamin Pross
+ *
+ */
+@Properties(
+        defaultPropertyFileName = &quot;wkt.properties&quot;)
+public class WKTGenerator extends AbstractPropertiesInputOutputHandler implements OutputHandler {
+
+    public WKTGenerator() {
+        super();
+        addSupportedBinding(JTSGeometryBinding.class);
+    }
+
+    public InputStream generate(TypedProcessOutputDescription&lt;?&gt; description,
+            Data&lt;?&gt; data,
+            Format format) throws IOException, EncodingException {
+        if (data instanceof JTSGeometryBinding) {
+            Geometry g = ((JTSGeometryBinding) data).getPayload();
+
+            String wktString = new WKTWriter().write(g);
+
+            InputStream is = new ByteArrayInputStream(wktString.getBytes());
+
+            return is;
+        }
+        return null;
+    }
+
+}
+</code></pre>
+
+<p>Similar to <code>WKTParser</code> the implementation of <code>WKTGenerator</code> comprises an equivalent constructor performing the registration of the same <strong>format(s)</strong> (<em>WKT</em> related) and <strong>binding(s)</strong> (<strong><em>JTSGeometryBinding</em></strong>). Moreover, it implements the <code>generate()</code> function inherited by <code>OutputHandler</code> to convert a <em>JTS Geometry</em> to a <em>WKT String</em> <code>InputStream</code> that can be used for a client response object. In detail, the <code>generate()</code> method includes the relevant <code>Data&lt;?&gt; data</code> object as parameter. In general, it will be delivered using the associated <strong>binding</strong>. In this case, <code>data</code> is an instance of <code>JTSGeometryBinding</code> wrapping the <em>JTS</em> <code>Geometry</code> object. From the <strong>binding</strong>, the wrapped content is extracted with the help of <code>getPayload()</code>. Then the <em>JTS</em> <code>WKTWriter</code> is utilized to <code>write()</code> the <em>JTS</em> <code>Geometry</code> object as <em>WKT String</em>, which is afterwards returned as <code>InputStream</code>.</p>
+<p>In summary, this section highlighted how the presented <strong>data handlers</strong> <code>WKTParser</code> and <code>WKTGenerator</code> work in cooperation with their associated <strong>binding</strong> <code>JTSGeometryBinding</code> to decode request <em>inputs</em> into serviceable internal Java objects and encode job results into client-specified <em>output</em> response representations. As example, the transformation between <em>WKT String representations</em> and <em>JTS Geometry instances</em> were focused.</p>
+<h4 id="registration-of-an-epr-within-javaps-via-maven-and-spring-configuration">Registration of an EPR within JavaPS via Maven and Spring configuration</h4>
+<p>In the previous sections the components and functional responsibilities of the <strong>javaps-jts-backend</strong> were described. This paragraph explains, how those components have to be registered within <strong>JavaPS</strong>. To integrate the <strong>algorithms</strong>, <strong>bindings</strong>, <strong>data handlers</strong> and their accompanying resources into the <strong>JavaPS</strong> infrastructure, a developer has to do two things: first, create a <strong>Spring configuration file</strong> declaring the implemented Java resources as <em>Spring beans</em> and second <em>register</em> the <strong>EPR</strong> within <strong>JavaPS</strong>. Once both conditions are fulfilled, the <strong>JavaPS</strong> infrastructure is capable of identifying the contents of the <strong>EPR</strong> (by loading them through the <strong>Spring configuration file</strong>) and make them available within its service offerings. Both aspects are described in detail below.</p>
+<h5 id="spring-configuration-file">Spring Configuration file</h5>
+<p>As <strong>JavaPS</strong> expects <strong>Spring configuration files</strong> to be located in <code>src/main/resources/components</code> the configuration file of <strong>javaps-jts-backend</strong> is located in <code>src/main/resources/components/jts-backend.xml</code>. Its content is included below:</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+       xmlns:util=&quot;http://www.springframework.org/schema/util&quot;
+       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+                           http://www.springframework.org/schema/util
+                           http://www.springframework.org/schema/util/spring-util-4.1.xsd&quot;&gt;
+
+    &lt;bean id=&quot;wktParser&quot; class=&quot;org.n52.geoprocessing.jts.io.datahandler.parser.WKTParser&quot; /&gt;
+    &lt;bean id=&quot;wktGenerator&quot; class=&quot;org.n52.geoprocessing.jts.io.datahandler.generator.WKTGenerator&quot; /&gt;
+    &lt;bean id=&quot;jtsConvexHullAlgorithm&quot; class=&quot;org.n52.geoprocessing.jts.algorithm.JTSConvexHullAlgorithm&quot; /&gt;
+
+&lt;/beans&gt;
+</code></pre>
+
+<p>As described in <a href="../../architecture/architecture/#spring-bean-configuration">the JavaPS architecture description</a>, JavaPS makes use of <a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/html/beans.html#beans-factory-metadata">XML configuration</a> for bean declaration. The relevant part of the upper <strong>Spring configuration file</strong> includes three bean definitions comprising both <strong>data handlers</strong> (<code>WKTParser</code> and <code>WKTGenerator</code>) and the <strong><em>Algorithm</em></strong> implementation <code>JTSConvexHullAlgorithm</code>. By declaring those components of <strong>javaps-jts-backend</strong> as <em>Spring beans</em>, they will be automatically loaded by Spring during startup of the <strong>JavaPS</strong> application. Of course, this implies that <strong>javaps-jts-backend</strong> is <em>registered</em> within <strong>JavaPS</strong> as described <a href="#registration-of-epr-within-javaps">below</a>.</p>
+<p>Note that the <strong>binding</strong> implementation is not included as <strong>Spring bean</strong>. This is not necessary, as the components <code>WKTParser</code> and <code>WKTGenerator</code> explicitly reference it during their initialization.</p>
+<h5 id="registration-of-epr-within-javaps">Registration of EPR within JavaPS</h5>
+<p>Registration of <strong>EPRs</strong> like <strong>javaps-jts-backend</strong> may be accomplished through either one of following two ways:</p>
+<ol>
+<li>Build <strong>JavaPS</strong> from the scratch with <strong>EPR</strong> as dependency:<ul>
+<li>Declare the stand-alone Maven <strong>External Processing Repository</strong> project as <em>dependency</em> within the main <code>pom.xml</code> file of <strong>JavaPS</strong></li>
+<li>build Maven project <strong>JavaPS</strong> with <strong>EPR</strong> as dependency, e.g. by executing command <code>mvn clean install</code>.</li>
+<li>deploy the generated <code>WAR</code> file on a suitable server</li>
+<li>check if custom <strong><em>Algorithm</em></strong> of <strong>EPR</strong> is available by inspecting the <em>Contents</em> section of the <strong>Capabilities</strong> document by calling the <strong>GetCapabilities</strong> operation of JavaPS.</li>
+</ul>
+</li>
+<li>Integrate <strong>EPR</strong> into a running <strong>JavaPS</strong> application:<ul>
+<li>package the stand-alone Maven <strong>External Processing Repository</strong> project as a <code>JAR</code> container</li>
+<li>drop the <code>JAR</code> container into folder <code>WEB-inf/lib</code> of an already deployed <strong>JavaPS</strong> application.</li>
+<li>shutdown and restart the <strong>JavaPS</strong> application. The <strong>EPR</strong> library should then be found and its contents be added to the <strong>JavaPS</strong> infrastructure.</li>
+<li>check if custom <strong><em>Algorithm</em></strong> of <strong>EPR</strong> is available by inspecting the <em>Contents</em> section of the <strong>Capabilities</strong> document by calling the <strong>GetCapabilities</strong> operation of JavaPS.</li>
+</ul>
+</li>
+</ol></div>
+        
+    </div>
+
+    <footer class="col-md-12 text-center">
+        <hr>
+        <p>
+        <small>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p></small>
+    </footer>
+
+    <script src="../../js/jquery-1.10.2.min.js"></script>
+    <script src="../../js/bootstrap-3.0.3.min.js"></script>
+    <script src="../../js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script>
+    var base_url = '../..';
+    </script>
+    <script data-main="../../mkdocs/js/search.js" src="../../mkdocs/js/require.js"></script>
+    <script src="../../js/base.js"></script>
+
+    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        From here you can search these documents. Enter your search terms below.
+                    </p>
+                    <form role="form">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                        </div>
+                    </form>
+                    <div id="mkdocs-search-results"></div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </body>
+
+</html>
