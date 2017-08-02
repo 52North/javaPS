@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">   
+    <link rel="shortcut icon" href="../../../img/favicon.ico">
+
+    <title>Workflow Descriptions of WPS Operations - JavaPS</title>
+
+    <link href="../../../css/bootstrap-custom.min.css" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/font-hack/2.018/css/hack.min.css">
+    <link href='//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700,700italic&subset=latin-ext,latin' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,600,700&subset=latin-ext,latin' rel='stylesheet' type='text/css'>
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link href="../../../css/cinder.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/highlight.css">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js"></script>
+    <script>
+    WebFont.load({
+        google: {
+            families: ['Open Sans', 'PT Sans']
+        }
+    });
+    </script>
+
+    
+</head>
+
+<body>
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="../../..">JavaPS</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li >
+                        <a href="../../..">Home</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../../../architecture/architecture/">Architectural Details</a>
+                    </li>
+                
+                
+                
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dynamic Aspects - Workflow Diagrams <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../../sequence_diagrams/">Introduction</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../workflow_general/general_workflow/">Generic Workflow Descriptions</a>
+</li>
+
+                        
+                            
+<li class="active">
+    <a href="./">Workflow Descriptions of WPS Operations</a>
+</li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../../../algorithm_definition/algorithm_definition/">Guide for Creation of custom Algorithms/Processes</a>
+                    </li>
+                
+                
+                </ul>
+            
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                
+                    <li >
+                        <a rel="next" href="../../workflow_general/general_workflow/">
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="../../../algorithm_definition/algorithm_definition/">
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a href="https://github.com/52North/javaPS">
+                            
+                                <i class="fa fa-github"></i>
+                            
+                            GitHub
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+    <div class="container">
+        
+        <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="first-level active"><a href="#javaps-documentation-workflow-of-wps-20-operations">JavaPS Documentation - Workflow of WPS 2.0 Operations</a></li>
+        
+            <li class="second-level"><a href="#workflow-of-wps-200-operations">Workflow of WPS 2.0.0 Operations</a></li>
+            
+                <li class="third-level">
+                
+                  
+                
+                  
+                    <div class="row">
+                      <div class="col-md-10">
+                        <a href="#getcapabilities">GetCapabilities</a>
+                      </div>
+                      <div class="dropdown col-md-2">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                          
+                            <li class="fourth-level"><a href="#getcapabilities-basic-workflow">GetCapabilities - Basic Workflow</a></li>
+                           
+                            <li class="fourth-level"><a href="#getcapabilities-request-validation">GetCapabilities - Request Validation</a></li>
+                           
+                            <li class="fourth-level"><a href="#getcapabilities-detailed-request-handling">GetCapabilities - Detailed Request Handling</a></li>
+                           
+                        </ul>
+                      </div>  
+                    </div>
+                  
+                </li>    
+            
+                <li class="third-level">
+                
+                  
+                
+                  
+                    <div class="row">
+                      <div class="col-md-10">
+                        <a href="#describeprocess">DescribeProcess</a>
+                      </div>
+                      <div class="dropdown col-md-2">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                          
+                            <li class="fourth-level"><a href="#describeprocess-basic-workflow">DescribeProcess - Basic Workflow</a></li>
+                           
+                            <li class="fourth-level"><a href="#describeprocess-request-validation">DescribeProcess - Request Validation</a></li>
+                           
+                            <li class="fourth-level"><a href="#describeprocess-detailed-request-handling">DescribeProcess - Detailed Request Handling</a></li>
+                           
+                        </ul>
+                      </div>  
+                    </div>
+                  
+                </li>    
+            
+                <li class="third-level">
+                
+                  
+                
+                  
+                    <div class="row">
+                      <div class="col-md-10">
+                        <a href="#execute">Execute</a>
+                      </div>
+                      <div class="dropdown col-md-2">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                          
+                            <li class="fourth-level"><a href="#execute-basic-workflow">Execute - Basic Workflow</a></li>
+                           
+                            <li class="fourth-level"><a href="#execute-request-validation">Execute - Request Validation</a></li>
+                           
+                            <li class="fourth-level"><a href="#execute-detailed-request-handling">Execute - Detailed Request Handling</a></li>
+                           
+                        </ul>
+                      </div>  
+                    </div>
+                  
+                </li>    
+            
+                <li class="third-level">
+                
+                  
+                
+                  
+                    <div class="row">
+                      <div class="col-md-10">
+                        <a href="#getstatus">GetStatus</a>
+                      </div>
+                      <div class="dropdown col-md-2">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                          
+                            <li class="fourth-level"><a href="#getstatus-basic-workflow">GetStatus - Basic Workflow</a></li>
+                           
+                            <li class="fourth-level"><a href="#getstatus-request-validation">GetStatus - Request Validation</a></li>
+                           
+                            <li class="fourth-level"><a href="#getstatus-detailed-request-handling">GetStatus - Detailed Request Handling</a></li>
+                           
+                        </ul>
+                      </div>  
+                    </div>
+                  
+                </li>    
+            
+                <li class="third-level">
+                
+                  
+                
+                  
+                    <div class="row">
+                      <div class="col-md-10">
+                        <a href="#getresult">GetResult</a>
+                      </div>
+                      <div class="dropdown col-md-2">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                          
+                            <li class="fourth-level"><a href="#getresult-basic-workflow">GetResult - Basic Workflow</a></li>
+                           
+                            <li class="fourth-level"><a href="#getresult-request-validation">GetResult - Request Validation</a></li>
+                           
+                            <li class="fourth-level"><a href="#getresult-detailed-request-handling">GetResult - Detailed Request Handling</a></li>
+                           
+                        </ul>
+                      </div>  
+                    </div>
+                  
+                </li>    
+            
+                <li class="third-level">
+                
+                  
+                
+                  
+                    <div class="row">
+                      <div class="col-md-10">
+                        <a href="#dismiss">Dismiss</a>
+                      </div>
+                      <div class="dropdown col-md-2">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                          
+                            <li class="fourth-level"><a href="#dismiss-basic-workflow">Dismiss - Basic Workflow</a></li>
+                           
+                            <li class="fourth-level"><a href="#dismiss-request-validation">Dismiss - Request Validation</a></li>
+                           
+                            <li class="fourth-level"><a href="#dismiss-detailed-request-handling">Dismiss - Detailed Request Handling</a></li>
+                           
+                            <li class="fourth-level"><a href="#cancelling-an-accepted-or-running-job-via-dismiss-an-example-from-the-developer-perspective">Cancelling an accepted or running Job via Dismiss - an Example from the Developer Perspective</a></li>
+                           
+                        </ul>
+                      </div>  
+                    </div>
+                  
+                </li>    
+            
+        
+    
+    </ul>
+</div></div>
+        <div class="col-md-9" role="main">
+
+<h1 id="javaps-documentation-workflow-of-wps-20-operations">JavaPS Documentation - Workflow of WPS 2.0 Operations</h1>
+<h2 id="workflow-of-wps-200-operations">Workflow of WPS 2.0.0 Operations</h2>
+<p>Within the following sections the workflow of each operation of the WPS 2.0.0 standard that is supported by <strong>JavaPS</strong> is introduced in detail. Each description begins with a <em>coarse workflow</em> overview of the operation, then focuses <em>request validation</em> and finally presents the <em>request handling</em> in detail. With regard to the <em>request validation</em>, <strong>JavaPS</strong> only comprises validating components that check each request object for WPS specific parameters. As <strong>Iceland</strong> is a generic service infrastructure for numerous OCG Web services, it also performs the basic check of the standard parameters <em>"service"</em>, <em>"version"</em> and <em>"request"</em>. In particular, the value of the <em>"request"</em> parameter indicates, which WPS operation is requested and thus which <strong><em>ValidationHandler</em></strong> and <strong><em>OperationHandler</em></strong> components are used. In the following, the operations <a href="#getcapabilities">GetCapabilities</a>, <a href="#describeprocess">DescribeProcess</a>, <a href="#execute">Execute</a>, <a href="#getstatus">GetStatus</a>, <a href="#getresult">GetResult</a> and <a href="#dismiss">Dismiss</a> are focused.</p>
+<p>Throughout all sequence diagrams the UML sequence diagram notation is used. In addition, the colours (<em>blue</em> and <em>red</em>) of the participating application components indicate their membership within either <strong>JavaPS</strong> or <strong>Iceland</strong>. While <em>blue</em> components belong to <strong>Iceland</strong>, <em>red</em> components are offered by <strong>JavaPS</strong>.</p>
+<h3 id="getcapabilities">GetCapabilities</h3>
+<h4 id="getcapabilities-basic-workflow">GetCapabilities - Basic Workflow</h4>
+<p>Within the <strong>GetCapabilities</strong> operation the service capabilities of the WPS instance are retrieved. The subsequent diagram shows the coarse workflow between the participating system components for a <strong>GetCapabilities GET</strong> request. <strong>JavaPS</strong> uses <strong><em>KvpBinding</em></strong> to parse the request as a <strong><em>GetCapabilitiesRequest</em></strong>, validates the request with the help of <strong><em>GetCapabilitiesParameterValidator</em></strong> and request handling is done by <strong><em>GetCapabilitiesHandler</em></strong>. The latter returns a <strong><em>GetCapabilitiesResponse</em></strong> object including the retrieved capabilities.</p>
+<p><img alt="GetCapabilities Workflow coarse" src="../UML_Diagrams/GetCapabilities_GET/GetCapabilities_coarse.png" /><em>GetCapabilities Workflow coarse</em></p>
+<h4 id="getcapabilities-request-validation">GetCapabilities - Request Validation</h4>
+<p>As of January 2017 there is no validation code for <em>GetGapabilities</em> operation.</p>
+<h4 id="getcapabilities-detailed-request-handling">GetCapabilities - Detailed Request Handling</h4>
+<p>To highlight the request handling workflow the subsequent diagram focuses only the <em>handle()</em> method of the <strong><em>GetCapabilitiesHandler</em></strong>. To increase response time of <em>GetCapabilities</em> requests against the WPS, <strong>Iceland</strong> and <strong>JavaPS</strong> make use of a caching mechanism that holds the capabilities information within the memory for rapid access. Hereby, the capabilities information is extracted from the actual data source from time to time to keep the cached data up to date. When answering a <em>GetCapabilities</em> request, the data is directly read from the cached information and used to create the response object without accessing the actual data source.</p>
+<p>The main tasks of the <em>GetCapabilities</em> request handling are:</p>
+<ol>
+<li>use the <strong><em>GetCapabilitiesRequest</em></strong> object to create a <strong><em>GetCapabilitiesResponse</em></strong> object and set basic information about <em>service</em> ("WPS") and <em>version</em> (e.g. "2.0.0").</li>
+<li>then inspect the <strong><em>GetCapabilitiesRequest</em></strong> object for the requested <em>sections</em> (filter for contents) and <em>locale</em> (language). Available sections are:<ul>
+<li><em>ServiceIdentification</em> - information about the WPS itself</li>
+<li><em>ServiceProvider</em> - information about the provider offering the WPS</li>
+<li><em>OperationsMetadata</em> - information about the supported operations and bindings</li>
+<li><em>Languages/Locales</em> - information about available languages</li>
+<li><em>Contents</em> - information about processes offered by the WPS</li>
+</ul>
+</li>
+<li>for each of the above listed Capabilities sections the application inspects whether it is requested, and if so, extracts that information from the cached data. The sections <em>ServiceIdentification</em>, <em>ServiceProvider</em> and <em>Languages/Locales</em> are stored within the <strong><em>ServiceMetadataRepository</em></strong>. The <em>OperationsMetadata</em> is extracted from the <strong><em>RequestOperatorRepository</em></strong> and the available processes are extracted from the <strong><em>Engine</em></strong>. The <strong><em>Engine</em></strong> is a central component of <strong>JavaPS</strong> to manage jobs and processes and control their execution as well as persistence of job results. Each available process is represented by an instance of <strong><em>ProcessOffering</em></strong>. The available processes are returned as <strong><em>Set\&lt;ProcessOffering></em></strong>, from which a new instance of <strong><em>ProcessOfferings</em></strong> is created.</li>
+<li>as <strong>Iceland</strong> is a generic abstract framework for arbitrary OGC Web services it offers the component <strong><em>OwsCapabilities</em></strong> to include common <strong>Capabilities</strong> information. Hence an instance of <strong><em>OwsCapabilities</em></strong> is created from all requested section objects except the WPS specific <em>ProcessOfferings</em>.</li>
+<li>finally, a new instance of <strong><em>WPSCapabilities</em></strong> is created from <em>OwsCapabilities</em> and <em>ProcessOfferings</em>, which is set within the <strong><em>GetCapabilitiesResponse</em></strong> and returned.</li>
+</ol>
+<p><img alt="GetCapabilities Workflow - handleRequest detailed" src="../UML_Diagrams/GetCapabilities_GET/GetCapabilities_handleRequest.png" /><em>GetCapabilities Workflow - handleRequest detailed</em></p>
+<h3 id="describeprocess">DescribeProcess</h3>
+<h4 id="describeprocess-basic-workflow">DescribeProcess - Basic Workflow</h4>
+<p>The <strong>DescribeProcess</strong> Operation is used by clients to retrieve the <em>process description</em> of a certain WPS process. The subsequent diagram shows the coarse workflow between the participating system components for a <strong>DescribeProcess GET</strong> request. <strong>JavaPS</strong> uses <strong><em>KvpBinding</em></strong> to parse the request as a <strong><em>DescribeProcessRequest</em></strong>, validates the request with the help of <strong><em>DescribeProcessParameterValidator</em></strong> and request handling is done by <strong><em>DescribeProcessHandler</em></strong>. The latter returns a <strong><em>DescribeProcessResponse</em></strong> object including the requested <em>process description</em>.</p>
+<p><img alt="DescribeProcess Workflow coarse" src="../UML_Diagrams/DescribeProcess_GET/DescribeProcess_coarse.png" /><em>DescribeProcess Workflow coarse</em></p>
+<h4 id="describeprocess-request-validation">DescribeProcess - Request Validation</h4>
+<p>Validation of a <strong>DescribeProcess</strong> request is done by <strong><em>DescribeProcessParameterValidator</em></strong> and visualized in the diagram at the end of this section. Basically, a request has to contain the parameter <em>"identifier"</em>. Its value might be a reference to a single identifier of the associated process or a list of references to multiple processes or it may be the word <em>"ALL"</em> to request all process descriptions from the WPS. Hence, during validation, the <strong><em>DescribeProcessRequest</em></strong> object is analyzed for the existence of the required parameter. If it does not exist or is an empty value, a <strong><em>MissingParameterValueException</em></strong> is immediately thrown. Otherwise, each individual parameter value has to be checked. Before that an empty <strong><em>CompositeOwsException</em></strong> is created, which is used to collect any <em>exception</em> that might occur when checking each <em>identifier value</em>. Validating a single <em>identifier value</em> is split in two checks. First, if the <em>identifier value</em> is a <em>NULL</em> object, then a <strong><em>MissingParameterValueException</em></strong> is added to <strong><em>CompositeOwsException</em></strong>. Second, the <em>parameter value</em> must reference an existing <em>process</em> within the WPS instance. To verify this, the <strong><em>Engine</em></strong> component is asked whether it contains an associated <em>process description</em>. If not, an <strong><em>InvalidParameterValueException</em></strong> is added to <strong><em>CompositeOwsException</em></strong>. Finally, as soon as each identifier has been checked, the <strong><em>CompositeOwsException</em></strong> object is analyzed. If it contains any <em>exception</em>, it is thrown as the request contained invalid or missing parameter values. If it empty, then validation was successful and the actual operation handling can be continued.</p>
+<p><img alt="DescribeProcess Request Validation" src="../UML_Diagrams/DescribeProcess_GET/DescribeProcess_validation.png" /><em>DescribeProcess Request Validation</em></p>
+<p>As indicated by the notes within the diagram, the upper description of the validation process have been simplified. Actually, Java Lambda expressions and <strong><em>Optional</em></strong> objects are used when creating an <strong><em>Exception</em></strong> first that are afterwards investigated to transfer any <strong><em>Exception</em></strong> to <strong><em>CompositeOwsException</em></strong>. For reasons of simplicity, the sequence diagram displays these steps in a different way.</p>
+<h4 id="describeprocess-detailed-request-handling">DescribeProcess - Detailed Request Handling</h4>
+<p>The subsequent diagram highlights the request handling of the <strong>DescribeProcess</strong> request. Basically, the <em>process identifier</em> is extracted from the <strong><em>DescribeProcessRequest</em></strong> and used to acquire the associated <em>process description</em> as <strong><em>ProcessOffering</em></strong>. <strong>JavaPS</strong> organises available processes as child classes of interface <strong><em>IAlgorithm</em></strong>. Hence, a <em>process</em> is an <strong><em>IAlgorithm</em></strong> that has a <em>process description</em> as property and an <em>execute()</em> method to run the algorithm.</p>
+<p>In more detail, the following tasks are performed:</p>
+<ol>
+<li>extract <em>process identifier</em> from <strong><em>DescribeProcessRequest</em></strong></li>
+<li>call <em>getProcessDescription()</em> method from <strong><em>Engine</em></strong>. Within this method, the <strong><em>Engine</em></strong> contacts the <strong><em>RepositoryManager</em></strong> to find a suitable <strong><em>AlgorithmRepository</em></strong>, from which the <strong><em>ProcessDescription</em></strong> is retrieved.</li>
+<li>an instance of <strong><em>ProcessOffering</em></strong> is created using the <strong><em>ProcessDescription</em></strong> as parameter.</li>
+<li>eventually a <strong><em>DescribeProcessResponse</em></strong> object is created from <em>service</em> ("WPS") and <em>version</em> (e.g. "2.0.0") and the <strong><em>ProcessOffering</em></strong> and returned.</li>
+</ol>
+<p><img alt="DescribeProcess - handleRequest detailed" src="../UML_Diagrams/DescribeProcess_GET/DescribeProcess_handleRequest.png" /><em>DescribeProcess - handleRequest detailed</em></p>
+<h3 id="execute">Execute</h3>
+<h4 id="execute-basic-workflow">Execute - Basic Workflow</h4>
+<p>In contrast to the previous WPS <em>GET</em> operations examples, the <strong>Execute</strong> operation is demonstrated using HTTP <em>POST</em> and <em>POX</em> binding. With regard to the coarse workflow, the <strong><em>PoxBinding</em></strong> component parses the request as <strong><em>ExecuteRequest</em></strong> within the <em>doPostOperation()</em> method. The request is validated by <strong><em>ExecuteParameterValidator</em></strong>, which performs a lot more checks compared to all other WPS operations as explained below. After validation, the <strong><em>ExecuteHandler</em></strong> processes the request and returns an <strong><em>ExecuteResponse</em></strong>. In short, a new <strong><em>Job</em></strong> instance is created that is executed synchronously or asynchronously. While in the first case (synchronous execution), the response contains the computed <em>result(s)</em>, the latter case includes a <em>status info</em> document within the response.</p>
+<p><img alt="Execute Workflow coarse" src="../UML_Diagrams/Execute_POST/Execute_coarse.png" /><em>Execute Workflow coarse</em></p>
+<h4 id="execute-request-validation">Execute - Request Validation</h4>
+<p>Validation of an <strong>Execute</strong> requires much more steps compared to all other WPS operations. An <strong>Execute</strong> request comprises the following parameters:</p>
+<ul>
+<li><em>identifier</em>: the identifier of the process to be executed</li>
+<li><em>input</em>: one or more input definitions as process inputs. Hereby, inputs may be mandatory or optional and their cardinality (minimum and maximum occurrences) may be different. Also an input is defined using a certain format. The input value can be specified directly or might be given as a reference to a resource that must be fetched by the WPS first.</li>
+<li><em>output</em>: one or more output definitions as process outputs. Similar to the input definition, outputs may be mandatory or optional, uses a certain format and can be offered as value or as reference (URL to external resource).</li>
+<li><em>mode</em>: the execution mode, whose value indicates <em>synchronous</em> or <em>asynchronous</em> process execution.</li>
+<li><em>response</em>: the response format, whose value indicates whether outputs shall be encoded as formal <em>response document</em> or as <em>raw output</em>.</li>
+</ul>
+<p>In short, the validation of an <strong>Execute</strong> request comprises the following checks:</p>
+<ul>
+<li>validation of <em>process identifier</em>: is it missing or does it address a non-existent process?</li>
+<li>validation of <em>response mode</em> in combination with requested outputs: if it is set to <em>RAW</em>, then only one single output can be requested.</li>
+<li>validation of <em>inputs</em>: does <em>input identifier</em> point to an existing <em>input</em> of the selected process? Is the <em>input</em> content defined correctly with regard to its description?</li>
+<li>validation of <em>outputs</em>: does <em>output identifier</em> point to an existing <em>output</em> of the selected process? Is the <em>output</em> content defined correctly with regard to its description?</li>
+<li>validation of <em>cardinalities</em>: in general a process might require certain mandatory inputs. Also a process may restrict the number of certain inputs to a lower and upper boundary. Hence this check looks for missing mandatory inputs and inspects the numbers of included inputs.</li>
+</ul>
+<p>The following sequence diagrams and sub-sections visualize these main steps. First a coarse overview is presented. Afterwards the validations of <em>inputs</em>, <em>outputs</em> and <em>cardinalities</em> are focused in more detail separately.</p>
+<h5 id="coarse-overview-of-execute-request-validation">Coarse Overview of Execute Request Validation</h5>
+<p>Validation is performed by <strong><em>ExecuteParameterValidator</em></strong>. Each individual step of the validation process may cause a certain <strong><em>Exception</em></strong>. Thus, as first step, a generic <strong><em>CompositeOwsException</em></strong> object is created, which is supposed to hold one ore multiple occurring <strong><em>Exceptions</em></strong> to throw them as a composed object.</p>
+<p>Then the <em>process identifier</em> is extracted from the <strong><em>ExecuteRequest</em></strong>. If it is missing, then a <strong><em>MissingParameterValueException</em></strong> for parameter <em>identifier</em> is created and added to <strong><em>CompositeOwsException</em></strong>. Afterwards, the <strong><em>Engine</em></strong> component is used to retrieve the <strong><em>ProcessDescription</em></strong> associated to the <em>process identifier</em>. If not description object can be found, an <strong><em>InvalidParameterValueException</em></strong> for parameter <em>identifier</em> is created as the identifier does not point to an existing process within the <strong>WPS</strong>.</p>
+<p>Once a <strong><em>ProcessDescription</em></strong> is identified the <em>validate(request, description)</em> method is called to analyse the remaining request parameters. Again, a new <strong><em>CompositeOwsException</em></strong> object is created to collect any occurring exceptions. As next check, the parameters <em>responseMode</em> and <em>output</em> definition are extracted from <strong><em>ExecuteRequest</em></strong> for investigation. If <em>responseMode</em> is set to <strong>"RAW"</strong>, then only one single <em>output</em> must be defined. If that condition is violated (e.g. none or more than one output is requested) than a <strong><em>InvalidParameterValueException</em></strong> for parameter <em>responseMode</em> is added to <strong><em>CompositeOwsException</em></strong>.</p>
+<p>Next, the <em>input</em> definitions of <strong><em>ExecuteRequest</em></strong> are validated according to their individual <em>input description</em>. This will be explained in section <a href="#input-validation-in-detail">Input Validation in detail</a>.</p>
+<p>Similarly, the <em>output</em> definitions of <strong><em>ExecuteRequest</em></strong> are checked for validity according to their individual <em>output description</em>. This is described in detail in section <a href="#output-validation-in-detail">Output Validation in detail</a>.</p>
+<p>Last, the <em>cardinalities</em> of in- and outputs analysed, which is highlighted in section <a href="#cardinality-validation-in-detail">Cardinality Validation in detail</a>.</p>
+<p>If any <strong><em>Exception</em></strong> has been created during the validation process (due to incorrect request parameters), it is collected within <strong><em>CompositeOwsException</em></strong> instances. Should they contain any <strong><em>Exception</em></strong>, they are ultimately thrown and validation fails. Otherwise (no error/exception occurred), validation succeeds and the actual processing of the <strong><em>ExecuteRequest</em></strong> may continue.</p>
+<p><img alt="Execute Request Validation" src="../UML_Diagrams/Execute_POST/validation/Execute_validation_coarse.png" /><em>Execute Request Validation</em></p>
+<h5 id="input-validation-in-detail">Input Validation in detail</h5>
+<p>In this section the validation of the <em>inputs</em> within an <strong><em>ExecuteRequest</em></strong> is described as depicted in the following diagram. While the diagram repeats some general validation steps related to <em>inputs</em>, other steps are completely omitted.</p>
+<p>With regard to <em>input</em> validation, the <strong><em>ProcessDescription</em></strong> as well as the <em>inputs</em> (where each input is represented by a single Java component <strong><em>ProcessData</em></strong>) are required. The <em>validateInputs()</em> method takes both as arguments and first creates a <strong><em>CompositeOwsException</em></strong> to collect possible <strong><em>InvalidParameterValueExceptions</em></strong>.</p>
+<p>Then each <strong><em>ProcessData</em></strong> input is validated individually within the method <em>validateInput()</em>. Its <em>inputIdentifier</em> is used to find the associated <strong><em>ProcessInputDescription</em></strong> that e.g. holds definitions of allowed <em>formats</em> or restrictions like <em>allowed input values</em>. During validation, the <strong><em>ProcessData</em></strong> input from the request is checked for compatibility with its formal description. If no associated <strong><em>ProcessInputDescription</em></strong> can be found, an <strong><em>InvalidParameterValueException</em></strong> for the <em>input identifier</em> is added to <strong><em>CompositeOwsException</em></strong>.</p>
+<p>An <strong>Execute</strong> <em>input</em> can be of three types, <strong>value input</strong> (value is directly provided within definition), <strong>reference input</strong> (input only defines an URI where the value can be obtained) or <strong>group data</strong> (for nested input definitions). Depending on its type, the validation of each <strong><em>ProcessData</em></strong> input differs. As the continuing validation for each type comprises multiple sub-tasks, their description follows in separate diagrams below.</p>
+<p>Finally, the <strong><em>CompositeOwsException</em></strong> is inspected for any containing <strong><em>Exceptions</em></strong> that have to be thrown.</p>
+<p><img alt="Execute Request - Input Validation" src="../UML_Diagrams/Execute_POST/validation/Execute_validation_input_detailed.png" /><em>Execute Request - Input Validation</em></p>
+<h6 id="group-input-validation">Group Input Validation</h6>
+<p>In the following, the validation of a <strong>group input</strong> within the method <em>validateInputs()</em> of <strong><em>ExecuteParameterValidator</em></strong> is focused. A <strong>group input</strong> comprises multiple nested <em>input</em> definitions. Hence, the <strong><em>ProcessData</em></strong> is processed as <strong><em>GroupProcessData</em></strong> and also the <strong><em>ProcessInputDescription</em></strong> has to be the description of a <strong>group input</strong>, which is checked by calling its method <em>isGroup()</em>. If that is false (input is group but description is not), then an <strong><em>InvalidParameterValueException</em></strong> for the input is added to <strong><em>CompositeOwsException</em></strong>. Otherwise, the <em>list of nested inputs</em> is fetched from <strong><em>GroupProcessData</em></strong> and the <strong><em>ProcessInputDescription</em></strong> is turned into a <strong><em>GroupInputDescription</em></strong> via <em>asGroup()</em>. Next, the method <em>validateInputs()</em> of <strong><em>ExecuteParameterValidator</em></strong> is re-called with the <em>list</em> of nested <strong><em>ProcessData</em></strong> <em>inputs</em> and the <strong><em>GroupInputDescription</em></strong> as parameters. Again, each nested input may be of type <strong>value input</strong>, <strong>reference input</strong> or <strong>group input</strong>. Validation of the first two are described below.</p>
+<p><img alt="Execute Request - Validation of Input as Group" src="../UML_Diagrams/Execute_POST/validation/Execute_validation_input_group_detailed.png" /><em>Execute Request - Validation of Input as Group</em></p>
+<h6 id="reference-input-validation">Reference Input Validation</h6>
+<p>Subsequently, the validation of a <strong>reference input</strong> is demonstrated. The input should contain a <em>URI</em> to the resource containing the actual value and specify a valid <em>format</em> for its value. The <strong><em>ProcessData</em></strong> input is thus interpreted as <strong><em>ReferenceProcessData</em></strong>. Within the <em>validateInput()</em> method a new <strong><em>CompositeOwsException</em></strong> is created to collect possible <strong><em>Exceptions</em></strong>. Next, the <em>URI</em> is extracted from <strong><em>ReferenceProcessData</em></strong> via <em>getURI()</em>. If it is equal to <strong>NULL</strong>, an <strong><em>InvalidParameterValueException</em></strong> is added to <strong><em>CompositeOwsException</em></strong>. Otherwise the specified <em>format</em> has to be validated within <em>validateFormat()</em>. As this comprises multiple sub-tasks, it is described together with the validation of <strong>Value Inputs</strong> below. After that, if <strong><em>CompositeOwsException</em></strong> contains any <strong><em>Exceptions</em></strong>, then it is thrown.</p>
+<p><img alt="Execute Request - Validation of Input as Reference" src="../UML_Diagrams/Execute_POST/validation/Execute_validation_input_reference_detailed.png" /><em>Execute Request - Validation of Input as Reference</em></p>
+<h6 id="value-input-and-format-validation">Value Input and Format Validation</h6>
+<p>Here, the <strong><em>ProcessData</em></strong> input is treated as a <strong><em>ValueProcessData</em></strong> that directly contains the input value. The only validation required is the validation of the input <em>format</em> within the method <em>validateFormat()</em>. The remaining steps are equal to <strong>group inputs</strong> or <strong>referenceInputs</strong> and are omitted here.</p>
+<p><img alt="Execute Request - Validation of Input as Value" src="../UML_Diagrams/Execute_POST/validation/Execute_validation_input_value_detailed.png" /><em>Execute Request - Validation of Input as Value</em></p>
+<p>The following diagram finally presents the validation of the input <em>format</em>. Again, at the top of the diagram, some necessary steps from previous validation steps are included to show the context of the <em>validateFormat()</em> method. However the description of these tasks is omitted here as it was already described before.</p>
+<p>The explanation focuses the tasks of the <em>validateFormat()</em> method. First, the <strong><em>Format</em></strong> is fetched from <strong><em>ProcessData</em></strong> input. Two checks have to be performed to confirm validity of the <strong><em>Format</em></strong>. First, it must not be <em>empty()</em> and second, its value must <strong>match a supported format</strong> of the selected process. To verify the latter, a new instance of <strong><em>InputFormatValidator</em></strong> is created using the <strong><em>ProcessData</em></strong> as parameter. As an input may be of type <strong>literal</strong>, <strong>complex</strong>, <strong>bounding box</strong> or <strong>group</strong>, it offers associated <em>visit()</em> methods that take the <strong><em>ProcessInputDescription</em></strong> as parameter to compare the Execute request input to its formal definition/description. Next, the method <em>visit()</em> of <strong><em>ProcessInputDescription</em></strong> is called with the <strong><em>InputFormatValidator</em></strong> as parameter. Depending on the input type it delegates the validation to the appropriate <em>visit()</em> method of <strong><em>InputFormatValidator</em></strong>. There, all allowed/accepted formats for the current <strong><em>ProcessData</em></strong> input are retrieved and compared to the <strong><em>Format</em></strong> of the investigated input. If there is no match, the format specified by the Execute input is not accepted and hence an <strong><em>InvalidParameterValueException</em></strong> is added to <strong><em>CompositeOwsException</em></strong>. Otherwise, the input <strong><em>Format</em></strong> is successfully validated.</p>
+<p><img alt="Execute Request - Validation of Input Format" src="../UML_Diagrams/Execute_POST/validation/Execute_validation_input_validateFormat_detailed.png" /><em>Execute Request - Validation of Input Format</em></p>
+<h5 id="output-validation-in-detail">Output Validation in detail</h5>
+<p>The process of validating the Execute request <em>output</em> definitions is similar to the validation of request <em>inputs</em>. The first method calls again show, how the <strong><em>ProcessDescription</em></strong> is fetched from the <strong><em>Engine</em></strong> with help of the <em>process identifier</em> extracted from the <strong><em>ExecuteRequest</em></strong>. This section focuses the <em>validateOutputs()</em> method that takes the <strong><em>OutputDefinitions</em></strong> and <strong><em>ProcessDescription</em></strong> as parameters. On the left side of the diagram, vertical grey bars indicate what task is performed at the associated method calls. So basically, <strong><em>OutputDefinitions</em></strong> are checked for duplicates and afterwards, their <strong><em>Format</em></strong> definitions have to match a supported <strong><em>Format</em></strong> for each output. The relevant steps are described in more detail as follows.</p>
+<p>First, a new instance of <strong><em>CompositeOwsException</em></strong> is created to collect later <strong><em>Exceptions</em></strong>. Then the list of <strong><em>OutputDefinitions</em></strong> is checked for duplicates by comparing their <em>output identifiers</em>. If the same output was delivered more than once, an <strong><em>InvalidParameterValueException</em></strong> is added to <strong><em>CompositeOwsException</em></strong>.</p>
+<p>Afterwards, each <strong><em>OutputDefinitions</em></strong> is validated individually. Its <em>output identifier</em> is used to retrieve the associated <strong><em>ProcessOutputDescription</em></strong> from <strong><em>ProcessDescription</em></strong>. If no such description can be found then the requested output does not exist and an <strong><em>InvalidParameterValueException</em></strong> is added to <strong><em>CompositeOwsException</em></strong>. In general, an <strong><em>OutputDefinition</em></strong> may be a <strong>group output</strong> containing nested <strong><em>OutputDefinitions</em></strong> or a single <strong><em>OutputDefinition</em></strong>. If it is a <strong>group input</strong> then the whole validation process has to be redone for the nested outputs by re-calling <em>validateOutputs()</em> with the nested <strong><em>OutputDefinitions</em></strong> and the description as parameters. Otherwise, the single <strong><em>OutputDefinition</em></strong> is validated through verification of a matching <strong><em>Format</em></strong>. As the process of validating an output <strong><em>Format</em></strong> is more or less identical to the validation of an input <strong><em>Format</em></strong> the description is omitted here. It was already described in the final paragraphs of section <a href="#input-validation-in-detail">Input Validation in detail</a>.</p>
+<p><img alt="Execute Request - Output Validation" src="../UML_Diagrams/Execute_POST/validation/Execute_validation_output_detailed.png" /><em>Execute Request - Output Validation</em></p>
+<h5 id="cardinality-validation-in-detail">Cardinality Validation in detail</h5>
+<p>As final step of validating an Execute request, the <strong>cardinalities of the inputs</strong> have to be checked. In general, each WPS process defines one or more inputs, each having a certain range of occurrences within a single Execute request specified by a <em>minimum</em> and <em>maximum</em> number. At the same time, inputs might be mandatory or optional. E.g., a process to compute a buffer geometry requires a "distance" attribute and one ore more "input geometries" to buffer. While both inputs are mandatory (as the algorithm/process creates buffer geometries for each "input geometry" using the specified "distance"), a third optional input, let us name it "annotation", could be specified by the user in order to attach a text value as annotation for each created buffer geometry. However, in contrast to the mandatory inputs, the user may also leave this optional input out of the request.</p>
+<p>Concluding, the validation of <strong>input cardinalities</strong> must verify two main conditions:</p>
+<ol>
+<li>Check if the specified request inputs comply to their allowed range of occurrences.</li>
+<li>Check if any mandatory/required input is missing within the request.</li>
+</ol>
+<p>The <strong><em>ProcessDescription</em></strong> objects holds the necessary <strong><em>ProcessInputDescriptions</em></strong> to perform these verifications. Within the subsequent diagram, the necessary validation steps are depicted. The beginning method executions again show the context of the <em>validateCardinalities()</em> method and show, how required Java components are prepared.</p>
+<p>As first step, like within all the other validations, a new instance of <strong><em>CompositeOwsException</em></strong> is created to collect any <strong><em>Exceptions</em></strong>. Then two basic Java <strong><em>Map</em></strong> objects named <strong><em>Cardinalities</em></strong> and <strong><em>Occurrences</em></strong> are computed (for simplicity, their computation has been omitted within the diagram). With respect to the <strong><em>Cardinalities</em></strong>, each <strong><em>ProcessData</em></strong> input from <strong><em>ExecuteRequest</em></strong> is visited and its number of occurrences is counted. Thus, <strong><em>Cardinalities</em></strong> maps the identifier of each <em>request input</em> to its factual number of occurrences. In contrast to that, <strong><em>Occurrences</em></strong> analyses the <strong><em>ProcessInputDescription</em></strong> of each input defined for the WPS process and maps its identifier to a component named <strong><em>InputOccurrence</em></strong>, which represents the <em>minimum</em> and <em>maximum</em> number of times this input may occur within a request. Summing it up, while <strong><em>Cardinalities</em></strong> holds the factual number of occurrences for each input (the so-called <em>cardinality</em>), <strong><em>Occurrences</em></strong> stores the allowed number of occurrences.</p>
+<p>The next step is to iterate over each entry of <strong><em>Cardinalities</em></strong> and check if its <em>cardinality</em> is valid. For this reason, the associated <strong><em>InputOccurrence</em></strong> of <strong><em>Occurrences</em></strong> is retrieved (linked through the same map key <em>input identifier</em>). Its method <em>isInBounds()</em> checks if the factual <em>cardinality</em> is within the range of allowed occurrences (between <em>min</em> and <em>max</em>) and return a boolean value. If the factual <em>cardinality</em> is out of bounds (<em>isInBounds()</em> return <em>false</em>) then an <strong><em>InvalidParameterValueException</em></strong> is added to <strong><em>CompositeOwsException</em></strong>.</p>
+<p>As final validation, the code iterates over each entry of <strong><em>Occurrences</em></strong> in order to identify whether all required/mandatory inputs are defined within <strong><em>ExecuteRequest</em></strong>. Each <strong><em>InputOccurrence</em></strong> object is checked if it <em>isRequired()</em> (its <em>min</em> value is &gt; 1). If so, the <strong><em>Cardinalities</em></strong> map is checked to contain an entry with the same <em>input identifier</em> as key. Should there be any missing mandatory input (<strong><em>Cardinalities</em></strong> does not have a matching entry for the <em>input identifier</em>), then a <strong><em>MissingParameterValueException</em></strong> is added to <strong><em>CompositeOwsException</em></strong>.</p>
+<p>If any <strong><em>Exception</em></strong> has been added to <strong><em>CompositeOwsException</em></strong> during the validation process it is thrown. Otherwise validation succeeded with no errors.</p>
+<p><img alt="Execute Request - Validation of Input Cardinalities" src="../UML_Diagrams/Execute_POST/validation/Execute_validation_cardinalities_detailed.png" /><em>Execute Request - Validation of Input Cardinalities</em></p>
+<h4 id="execute-detailed-request-handling">Execute - Detailed Request Handling</h4>
+<p>To concretize the handling and processing of an <strong><em>ExecuteRequest</em></strong>, the <em>handle()</em> method of the <strong><em>ExecuteHandler</em></strong> is inspected in more detail:</p>
+<ol>
+<li>all necessary parameters are extracted from the <strong><em>ExecuteRequest</em></strong>. This includes:<ul>
+<li><em>service</em>: "WPS"</li>
+<li><em>version</em>: e.g. "2.0.0"</li>
+<li><em>process identifier</em>: the identifier of the process to be executed</li>
+<li><em>inputs</em>: the list of inputs for the selected process</li>
+<li><em>outputs</em>: the list of outputs for the selected process</li>
+<li><em>response mode</em>: either <strong>"document"</strong> to receive an <strong>ExecuteResponse</strong> including a complete <em>ResultDocument</em> according to the <a href="http://docs.opengeospatial.org/is/14-065/14-065.html">WPS standard</a> or <strong>"raw"</strong> to request <em>one single</em> raw output without a formal <em>ResultDocument</em> structure.</li>
+<li><em>execution mode</em>: either <strong>"async"</strong> for an asynchronous execution, which will produce a <strong><em>ExecuteResponse</em></strong> with an embedded <em>status info</em> document or <strong>"sync"</strong> for a synchronous execution that first completes execution of the process/job and then includes the computed <em>result(s)</em> within the <strong><em>ExecuteResponse</em></strong>.</li>
+</ul>
+</li>
+<li>the method <em>execute()</em> of <strong><em>Engine</em></strong> is called with <em>process identifier</em>, <em>inputs</em>, <em>outputs</em> and <em>response mode</em> as parameters. This will cause the <strong><em>Engine</em></strong> to create a new <strong><em>Job</em></strong> instance to be executed. Its associated <em>job identifier</em> is returned to <strong><em>ExecuteHandler</em></strong>.</li>
+<li>depending on the parameter <em>execution mode</em> ("sync" or "async"), the subsequent processing differs. Both cases are described subsequently:<ul>
+<li>case <strong>sync</strong>: in short, the processing waits for the <strong><em>Job</em></strong> to complete and retrieves the <strong><em>Result</em></strong> object that includes all computed <em>outputs</em> to return them along with the <strong><em>ExecutionResponse</em></strong>. If in addition the parameter <em>response mode</em> is set to <strong>raw</strong>, then only one <em>output</em> is extracted from the <strong><em>Result</em></strong> as instance of <strong><em>ProcessData</em></strong>. From this <strong><em>ProcessData</em></strong> <em>output</em> the <em>content/media type</em> is extracted and set within the <strong><em>ExecuteResponse</em></strong>, which is then returned.</li>
+<li>case <strong>async</strong>: in contrast to the previous case, <strong>JavaPS</strong> does not wait for the <strong><em>Job</em></strong> execution to complete. Instead, only the <em>status</em> of the <strong><em>Job</em></strong> is fetched via the <em>getStatus()</em> method. It uses the parameter <em>job identifier</em> to locate the <strong><em>Job</em></strong>, from which its <em>status</em> is retrieved as <strong><em>StatusInfo</em></strong>. Afterwards the <strong><em>StatusInfo</em></strong> is embedded within the <strong><em>ExecuteResponse</em></strong> and returned.</li>
+</ul>
+</li>
+</ol>
+<p><img alt="Execute Workflow - handleRequest detailed" src="../UML_Diagrams/Execute_POST/Execute_handleRequest.png" /><em>Execute Workflow - handleRequest detailed</em></p>
+<p>To complete the description of the <strong>Execute</strong> operation, the next diagram focuses the execution of a <strong><em>Job</em></strong>. In the previous diagram, this step was simplified and only showed that a <strong><em>Job</em></strong> instance was created, whose execution produces a <strong><em>Result</em></strong> object containing all requested <em>outputs</em> as <strong><em>ProcessData</em></strong>. Hence, a more detailed description of the necessary processing steps is given below:</p>
+<ol>
+<li>when the <strong><em>Engine</em></strong> is called via the <em>execute()</em> method, it first has to retrieve the <strong><em>IAlgorithm</em></strong> implementation that is associated to the <em>process identifier</em>. For this reason, it delegates the retrieval to the <strong><em>RepositoryManager</em></strong> that locates the <strong><em>AlgorithmRepository</em></strong> containing the <strong><em>IAlgorithm</em></strong> implementation for the <em>process identifier</em>.</li>
+<li>from the <strong><em>IAlgorithm</em></strong> implementation, its <strong><em>ProcessDescription</em></strong> is used to decode the <em>inputs</em> as <strong><em>ProcessInputs</em></strong> with the help of <strong><em>ProcessInputDecoder</em></strong>. More information about the decoding of process inputs is provided in section <a href="../../../algorithm_definition/algorithm_definition/#binding-and-data-handlers-for-data-representationtransformation-of-process-in--and-outputs">Binding and Data Handlers for Data Representation/Transformation of Process In- and Outputs</a> of a separate guide about <a href="../../../algorithm_definition/algorithm_definition/">Algorithm definitions and the creation of an External Processing Repository</a>.</li>
+<li>next, the <strong><em>JobIdGenerator</em></strong> component is called to <em>create()</em> a new unique <em>job identifier</em>. Once done, a new <strong><em>Job</em></strong> instance is created as <strong><em>Future</em></strong> object using the parameters <em>algorithm</em>, <em>job identifier</em>, <em>inputs</em>, <em>outputs</em> and <em>response mode</em>.</li>
+<li>the <strong><em>Job</em></strong> instance is <em>submitted</em> to the <strong><em>ExecutorService</em></strong>, which is a component that manages and triggers job execution. As the <strong><em>Job</em></strong> is also a <strong><em>Future</em></strong> object it can be queried for information such as its <em>status</em> at any time. Only the <strong><em>Result</em></strong> cannot be retrieved right away, since that has to be computed before. However, any <strong><em>Future</em></strong> object offers a <em>get()</em> method, which will wait, if necessary, to complete the execution and then return the <em>result</em>. The <strong><em>Engine</em></strong> now adds the <strong><em>Job</em></strong> to its class property maps <strong>cancelers</strong> and <strong>jobs</strong> and return the <em>job identifier</em> to the <strong><em>ExecuteHandler</em></strong>.</li>
+<li>depending on the <em>execution strategy</em> the <strong><em>ExecutorService</em></strong> will <em>run()</em> the execution of the <strong><em>Job</em></strong> eventually. The <strong><em>Job</em></strong>'s <em>status</em> is updated to <strong>running</strong> and the <strong><em>IAlgorithm</em></strong> implementation is triggered to <em>execute()</em> the process.</li>
+<li><strong><em>IAlgorithm</em></strong> implementation performs the process-specific steps to compute the <em>outputs</em>. These <em>outputs</em> are then properly encoded with the help of <strong><em>ProcessOutputEncoder</em></strong> and set as property <em>nonPersistendResult</em> of the <strong><em>Job</em></strong>. The <strong><em>Job</em></strong>'s <em>status</em> is set to <strong>succeeded</strong>. Of course, if any error occurred during process execution, then processing is aborted and the <em>status</em> is set to <strong>failed</strong> instead.</li>
+<li>After successful job completion, the <strong><em>Engine</em></strong> is informed via <em>onJobCompletion()</em> to <em>save()</em> the <strong><em>Job</em></strong> information including its <em>status</em> and <em>result</em> (<em>outputs</em>), e.g. on the local hard drive of the server hosting the WPS. Here, the component <strong><em>ResultPersistence</em></strong> is used to persist the information.</li>
+<li>the <strong><em>Engine</em></strong> removes the <strong><em>Job</em></strong> from its class property maps <strong>cancelers</strong> and <strong>jobs</strong> and retrieves the persisted <strong><em>Result</em></strong> from <strong><em>ResultPersistence</em></strong> to return it to the <strong><em>Job</em></strong>.</li>
+<li>the <strong><em>Job</em></strong> sets the <strong><em>Result</em></strong> and executes any <em>listeners</em> that are registered for the event.</li>
+</ol>
+<p><img alt="Execute Workflow - Job Execution detailed" src="../UML_Diagrams/Execute_POST/Execute_handleRequest_jobExecutionDetailed.png" /><em>Execute Workflow - Job Execution detailed</em></p>
+<h3 id="getstatus">GetStatus</h3>
+<h4 id="getstatus-basic-workflow">GetStatus - Basic Workflow</h4>
+<p>The aim of the <strong>GetStatus</strong> operation is to retrieve the current <em>status</em> of the <em>job</em> with the submitted <em>job identifier</em>. The following coarse workflow diagram shows an exemplar <strong>GetStatus GET</strong> request. The request is parsed by <strong><em>KvpBinding</em></strong> as a <strong><em>GetStatusRequest</em></strong>. Validation is performed by <strong><em>JobIdParameterValidator</em></strong>, which checks whether a parameter named <em>jobId</em> exists whose value can be resolved to an existing <em>job identifier</em> within the WPS. Subsequently, the <strong><em>GetStatusHandler</em></strong> performs the actual request handling to retrieve the current <em>job status</em> and return it within a <strong><em>GetStatusResponse</em></strong>.</p>
+<p><img alt="GetStatus Workflow coarse" src="../UML_Diagrams/GetStatus_GET/GetStatus_coarse.png" /><em>GetStatus Workflow coarse</em></p>
+<h4 id="getstatus-request-validation">GetStatus - Request Validation</h4>
+<p>As indicated in the lower diagram, the component <strong><em>JobIdParameterValidator</em></strong> performs validation of a <strong>GetStatus</strong> request object. In particular, it extracts the parameter <em>jobId</em> from the request object and checks the following conditions:</p>
+<ul>
+<li><em>jobId</em> is a <em>NULL</em> object</li>
+<li>the value of <em>jobId</em> is a <em>NULL</em> object</li>
+<li>the value of <em>jobId</em> is an <em>empty</em> object</li>
+</ul>
+<p>If any of these conditions is <em>true</em>, then a <strong><em>MissingParameterValueException</em></strong> is thrown, as the request does not specify a <em>jobId</em> parameter value at all. Otherwise, the <em>jobId</em> value specified within the request object is checked for validity. In particular, the <strong><em>Engine</em></strong> is asked whether it contains a <strong><em>Job</em></strong> instance associated to the <em>jobId</em>. If not, an <strong><em>InvalidParameterValueException</em></strong> is thrown. When not exception was thrown, then the <em>jobId</em> does point to an existing <strong><em>Job</em></strong> and validation was successful.</p>
+<p><img alt="GetStatus Request Validation" src="../UML_Diagrams/GetStatus_GET/GetStatus_validation.png" /><em>GetStatus Request Validation</em></p>
+<h4 id="getstatus-detailed-request-handling">GetStatus - Detailed Request Handling</h4>
+<p>The details of the <em>handle()</em> method of the <strong><em>GetStatusHandler</em></strong> are demonstrated in the next diagram. The following sub-tasks are performed:</p>
+<ol>
+<li>From the <strong><em>GetStatusRequest</em></strong> object the parameters <em>service</em>, <em>version</em> and <em>jobId</em> are extracted. The latter is an identifier pointing to the <strong><em>Job</em></strong> instance that has to be present within the <strong>WPS</strong>.</li>
+<li>
+<p>The method <em>getStatus()</em> from <strong><em>Engine</em></strong> is called with <em>jobId</em> as parameter. Depending on the existence of a <strong><em>Job</em></strong> instance with the specified <em>jobId</em> within <strong><em>engineInstance.jobs</em></strong>, the workflow differs as described below. For one, the job might exist within the memory (e.g. when the job is currently executed or has only been <em>accepted</em> but is not running yet) and hence the <em>job information</em> can directly be retrieved from the <strong><em>Job</em></strong> instance. Otherwise the <em>job information</em> has already been persisted (e.g. because the job was finished) and hence has to be retrieved using <strong><em>ResultPersistence</em></strong>, which retrieves the required information from the persisted resource.</p>
+<ol>
+<li><strong>Job exists within engineInstance.jobs and thus exists in memory</strong>:<ul>
+<li>the method <em>getStatus()</em> of the existing <strong><em>Job</em></strong> instance with identifier <em>jobId</em> is called. Within this method, a new <strong><em>StatusInfo</em></strong> object is created and filled with relevant information like <em>job identifier</em>.</li>
+<li>from the <strong><em>Job</em></strong> instance, the <strong><em>JobStatus</em></strong> object can be retrieved, which contains the requested <em>status information</em>. It is used to set the <em>status</em> property within <strong><em>StatusInfo</em></strong>.</li>
+<li>Depending on the <strong><em>JobStatus</em></strong>, additional information has to be set within <strong><em>StatusInfo</em></strong>. If the <strong><em>JobStatus</em></strong> is <em>accepted</em> or <em>running</em>, then the properties <em>estimatedCompletion</em> (date of estimated completion of job), <em>percentCompleted</em> and <em>nextPoll</em> (information for clients when to re-request the status) are set. Else if the <strong><em>JobStatus</em></strong> is <em>succeeded</em> or <em>failed</em>, no additional information is added to <strong><em>StatusInfo</em></strong>. Actually, the code suggests that an <em>expiration date</em> (indicated when the job information is deleted) has to be computed and set, but as of 12.12.2016 there is no implementation yet.</li>
+<li>the <strong><em>StatusInfo</em></strong> object is then returned and forwarded to <strong><em>GetStatusHandler</em></strong>.</li>
+</ul>
+</li>
+<li><strong>Job information has been persisted</strong>:<ul>
+<li>here, the job has already finished and its information like <em>status</em> or <em>results</em> have been previously persisted (e.g. as a JSON file). Hence, this information has to be retrieved from the persisted resource using <strong><em>ResultPersistence</em></strong>. In consequence, its method <em>getStatus()</em> is called using the <em>jobId</em> as parameter.</li>
+<li>the relevant <em>job metadata</em> and <em>expiration date</em> are loaded from the persisted job resource via <em>getJobMetadata(jobId)</em> and <em>getExpirationDate(jobId)</em>.</li>
+<li>a new instance of <strong><em>StatusInfo</em></strong> is created and instantiated with the parameters <em>jobId</em> and <em>expiration date</em>.</li>
+<li>a new <strong><em>JobStatus</em></strong> object is created from <em>job metadata</em> and also set within <strong><em>StatusInfo</em></strong>.</li>
+<li>finally, the <strong><em>StatusInfo</em></strong> instance is returned and forwarded to <strong><em>GetStatusHandler</em></strong>.</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>
+<p>A new <strong><em>GetStatusResponse</em></strong> is created using <em>service</em>, <em>version</em> and the retrieved <em>statusInfo</em> as parameters. This response object is then returned.</p>
+</li>
+</ol>
+<p><img alt="GetStatus - handleRequest detailed" src="../UML_Diagrams/GetStatus_GET/GetStatus_handleRequest.png" /><em>GetStatus - handleRequest detailed</em></p>
+<h3 id="getresult">GetResult</h3>
+<h4 id="getresult-basic-workflow">GetResult - Basic Workflow</h4>
+<p>A <strong>GetResult</strong> operation is used to retrieve the <em>result(s)</em> of the <em>job</em> with the submitted <em>job identifier</em>. The following coarse workflow diagram shows an exemplar <strong>GetResult GET</strong> request. The request is parsed by <strong><em>KvpBinding</em></strong> as a <strong><em>GetResultRequest</em></strong> and validation is performed by <strong><em>JobIdParameterValidator</em></strong>, which checks whether the parameter <em>jobId</em> points to an existing <em>job identifier</em> within the WPS. If so, the <strong><em>GetResultHandler</em></strong> performs the actual request handling and returns the requested <em>output(s)/result(s)</em> within a <strong><em>GetResultResponse</em></strong>.</p>
+<p><img alt="GetResult Workflow coarse" src="../UML_Diagrams/GetResult_GET/GetResult_coarse.png" /><em>GetResult Workflow coarse</em></p>
+<h4 id="getresult-request-validation">GetResult - Request Validation</h4>
+<p>Similar to the validation of a <strong>GetStatus</strong> request, the component <strong><em>JobIdParameterValidator</em></strong> performs validation of a <strong>GetResult</strong> request object. Thus, the validation workflow is identical as already described in section <a href="#getstatus-request-validation">validation of GetStatus request</a>.</p>
+<p><img alt="GetResult Request Validation" src="../UML_Diagrams/GetResult_GET/GetResult_validation.png" /><em>GetResult Request Validation</em></p>
+<h4 id="getresult-detailed-request-handling">GetResult - Detailed Request Handling</h4>
+<p>Similar to the previous operation descriptions, the following diagram focuses the <em>handle()</em> method of <strong><em>GetResultHandler</em></strong>. In general, the required information is stored within the associated <strong><em>Job</em></strong> object, which may or may not have been persisted. If it has not yet been persisted, the result can simply be retrieved from the associated <strong><em>Job</em></strong> instance. Otherwise, the information has to be loaded from the persisted resource and the <strong><em>Result</em></strong> object has to be constructed from the scratch. Subsequently, both cases are described in detail. The <em>handle()</em> method comprises the following sub-tasks:</p>
+<ol>
+<li>The parameters <em>service</em>, <em>version</em> and <em>jobId</em> are extracted from the <strong><em>GetResultRequest</em></strong> object. The <em>jobId</em> is an identifier pointing to the <strong><em>Job</em></strong> instance that has to be present within the <strong>WPS</strong>.</li>
+<li>
+<p>The method <em>getResult()</em> from <strong><em>Engine</em></strong> is called with <em>jobId</em> as parameter. Depending on the existence of a <strong><em>Job</em></strong> instance with the specified <em>jobId</em> within <strong><em>engineInstance.jobs</em></strong>, the workflow differs as described below. For one, the job might exist within the memory (e.g. when the job is currently executed or has only been <em>accepted</em> but is not running yet) and hence the <em>job information</em> containing the <strong><em>Result</em></strong> can directly be retrieved from the <strong><em>Job</em></strong> instance. Otherwise the <em>job information</em> has already been persisted (e.g. because the job was finished) and hence has to be retrieved using <strong><em>ResultPersistence</em></strong>, which retrieves the required information from the persisted resource. Bot cases are highlighted in the following:</p>
+<ol>
+<li><strong>Job exists within engineInstance.jobs and thus exists in memory</strong>:<ul>
+<li>the <strong><em>Job</em></strong> object contains the <strong><em>Result</em></strong> object or, if the job is not yet finished, will compute it to guarantee its existence. Since the <strong><em>Job</em></strong> instance can directly be fetched from <strong><em>Engine</em></strong>, it is simply returned, as it contains the <strong><em>Result</em></strong>.</li>
+</ul>
+</li>
+<li><strong>Job information has been persisted after Job finished (succeeded or failed)</strong>:<ul>
+<li>here, the <em>job information</em> was previously persisted and thus has to be reloaded from the associated resource (e.g. a JSON file). Hence, the <em>getResult()</em> method of <strong><em>ResultPersistence</em></strong> is called with the <em>jobId</em> as parameter to refer to the right <strong><em>Job</em></strong>.</li>
+<li><strong><em>ResultPersistence</em></strong> now creates a new instance of <strong><em>Result</em></strong>, which is subsequently instantiated with the relevant information from the persisted <strong><em>Job</em></strong> resource. First, the <em>jobId</em> is set.</li>
+<li><strong><em>ResultPersistence</em></strong> loads the <em>job metadata</em> from the persisted resource and sets the following properties within the created <strong><em>Result</em></strong> object: <em>expirationDate</em> (date when the <strong><em>Job</em></strong> will permanently be deleted by the <strong>WPS</strong>), <em>responseMode</em> (possible values are either <strong>document</strong> for a formal response document or <strong>raw</strong> to request a single <em>raw output</em> without surrounding response document), <em>jobStatus</em> (possible values may be <strong>succeeded</strong> or <strong>failed</strong> according to <strong>WPS specification</strong>)</li>
+<li>if <em>jobStatus</em> equals <strong>failed</strong>, then the job execution was not successful. Hence, the <em>errorMessage</em> property is extracted from <em>job metadata</em> and used to throw a suitable <strong><em>Exception</em></strong>.</li>
+<li>otherwise (the job was executed without errors and <em>jobStatus</em> equals <strong>succeeded</strong>), the computed outputs of the <strong><em>Job</em></strong> have to be extracted and set within the <strong><em>Result</em></strong> object. For that reason, the property <em>outputNodes</em> is extracted from <em>job metadata</em>. Then a loop over each <em>outputNode</em> of <em>outputNodes</em> decodes the output information and creates a <strong><em>ProcessData</em></strong> instance for each <em>outputNode</em>. Depending on the <em>output type</em> (possible types are <strong>literal</strong>, <strong>complex</strong> or <strong>boundingBox</strong> according to <strong>WPS specification</strong>) and <em>transmissionMode</em> (possible modes are <strong>value</strong> or <strong>reference</strong> according to <strong>WPS specification</strong>) the <strong><em>ProcessData</em></strong> may represent a <strong>value</strong> output, a <strong>reference</strong> output or a <strong>group data</strong> output.</li>
+<li>after each <strong><em>ProcessData</em></strong> output is set within <strong><em>Result</em></strong> it is returned to <strong><em>GetResultHandler</em></strong>.</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>
+<p><strong><em>GetResultHandler</em></strong> creates a new instance of <strong><em>GetResultResponse</em></strong> using <em>service</em>, <em>version</em> and <em>result</em> as parameters and returns it.</p>
+</li>
+</ol>
+<p><img alt="GetResult - handleRequest detailed" src="../UML_Diagrams/GetResult_GET/GetResult_handleRequest.png" /><em>GetResult - handleRequest detailed</em></p>
+<h3 id="dismiss">Dismiss</h3>
+<h4 id="dismiss-basic-workflow">Dismiss - Basic Workflow</h4>
+<p>The <strong>Dismiss</strong> operation is used to cancel an <em>accepted</em> or <em>running</em> <strong>job</strong>. A <strong>Dismiss</strong> GET request is parsed by <strong><em>KvpBinding</em></strong> as a <strong><em>DismissRequest</em></strong>. Validation is performed by <strong><em>JobIdParameterValidator</em></strong> that checks whether a parameter named <em>jobId</em> exists and whether its value can be resolved to an existing <em>job identifier</em> within the WPS. Subsequently, the <strong><em>DismissHandler</em></strong> processes the request to cancel the specified job if possible and returns a <strong><em>DismissResponse</em></strong>, which includes the jobs <em>Status Info</em> document.</p>
+<p><img alt="Dismiss Workflow coarse" src="../UML_Diagrams/Dismiss_GET/Dismiss_coarse.png" /><em>Dismiss Workflow coarse</em></p>
+<h4 id="dismiss-request-validation">Dismiss - Request Validation</h4>
+<p>Similar to the validation of a <strong>GetStatus</strong> and <strong>GetResult</strong> request, the component <strong><em>JobIdParameterValidator</em></strong> performs validation of a <strong>Dismiss</strong> request object. Thus, the validation workflow is identical as already described in section <a href="#getstatus-request-validation">validation of GetStatus request</a>.</p>
+<p><img alt="Dismiss Request Validation" src="../UML_Diagrams/Dismiss_GET/Dismiss_validation.png" /><em>Dismiss Request Validation</em></p>
+<h4 id="dismiss-detailed-request-handling">Dismiss - Detailed Request Handling</h4>
+<p>Again, more detailed information about the sub-tasks within the <em>handle()</em> method of <strong><em>DismissHandler</em></strong> are explained in the following:</p>
+<ol>
+<li>the necessary parameters of the <strong><em>DismissRequest</em></strong> are extracted, including <em>service</em> ("WPS"), <em>version</em> (e.g. "2.0.0") and <em>jobId</em>.</li>
+<li>after that the <strong><em>Engine</em></strong> is informed to <em>dismiss()</em> the job with the extracted <em>jobId</em>. For this reason, the <strong><em>Engine</em></strong> retrieves the <strong><em>Job</em></strong> and at the same checks whether the job is available as <strong><em>Cancelable</em></strong>. Here, it has to be considered that the <strong><em>Engine</em></strong> manages jobs within multiple class properties, for one the <strong><em>Job</em></strong> instances within a <strong><em>ConcurrentHashMap<jobid, job></em></strong> and, if their job execution is not yet finished, also as <strong><em>Cancelable</em></strong> within a second <strong><em>ConcurrentHashMap<jobid, cancelable></em></strong>. On completed job execution, the job is removed from the cancelable map.</li>
+<li>in consequence, if a job is available as <strong><em>Cancelable</em></strong>, then its <em>cancel()</em> method is called to abort its execution. A <em>boolean</em> value indicates whether this event was successful. The subsequent section shows an <a href="#cancelling-an-accepted-or-running-job-via-dismiss-an-example-from-the-developer-perspective">process algorithm example</a> to clarify how an accepted or running job is <em>dismissed</em>.</li>
+<li>the <em>JobStatus</em> of the <strong><em>Job</em></strong> instance with identifier <em>jobId</em> is retrieved and forwarded to the <strong><em>DismissHandler</em></strong>.</li>
+<li>finally, a new <strong><em>DismissResponse</em></strong> instance is created from <em>service</em> ("WPS"), <em>version</em> (e.g. "2.0.0") and <strong><em>JobStatus</em></strong>. Hence the response object contains the <em>status info</em> document of the dismissed job.</li>
+</ol>
+<p><img alt="Dismiss - handleRequest detailed" src="../UML_Diagrams/Dismiss_GET/Dismiss_handleRequest.png" /><em>Dismiss - handleRequest detailed</em></p>
+<h4 id="cancelling-an-accepted-or-running-job-via-dismiss-an-example-from-the-developer-perspective">Cancelling an accepted or running Job via Dismiss - an Example from the Developer Perspective</h4>
+<p>Cancelling a <em>job</em> before it completes its computation is a key aspect of the <strong>WPS specification</strong>. As shown in the previous section, the <em>Dismiss</em> operation triggers the WPS server to <em>cancel()</em> the execution of a certain <strong><em>Job</em></strong>.</p>
+<p>As explained in section <a href="#execute-detailed-request-handling">Execute - Detailed Request Handling</a>, when a <strong><em>Job</em></strong> is submitted to the <strong><em>ExecutorService</em></strong> that manages process/algorithm execution, a <strong><em>Future</em></strong> object is created and added as <strong><em>Cancelable</em></strong> to the <strong><em>Engines</em></strong> property <em>engine.cancelers</em>. A <strong><em>Future</em></strong> object comprises the method <em>cancel()</em>, which prevents the <strong><em>Future</em></strong> from executing if not already run or interrupts it if currently running. To be precise, if the execution has not started yet, a call to the <em>cancel()</em> method prevents the process from starting at all. When the process is already being executed, the <em>cancel()</em> method interrupts the thread, in which the <strong><em>Future</em></strong> is executed (compare <a href="https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/Future.html#cancel(boolean)">Oracle Java Doc of Future</a>). However, interrupting the thread <strong>does not stop the execution directly</strong>. Instead the developer of the process/algorithm code explicitly has to consider the <strong>interrupt state</strong> and check it manually in order to abort the execution.</p>
+<p>E.g. the following Java code shows an example of an execute method that computes buffer geometries for a list of input geometries. Note that the definition of an <strong><em>Algorithm</em></strong> for <strong>JavaPS</strong> is explained in section <a href="../../../algorithm_definition/algorithm_definition/">How to add new Processes/Algorithms</a> and thus not explained here. What is important to know is that in- and outputs of an <strong><em>Algorithm</em></strong> are stored as Java properties of the implementing class. Within a method annotated by <strong><em>@Execute</em></strong> the computation that is called when executing the associated <strong><em>Job</em></strong> is implemented. The code below only shows that method. The computation of all the buffer geometries is done within a for-loop that iterates over all input geometries. Within each iteration, the condition <code>if (Thread.currentThread().isInterrupted())</code> is called to check whether the thread has been interrupted. If so, then the computation should be aborted, e.g. by the simple statement <code>return</code>.</p>
+<pre><code>
+@Execute
+/**
+ * This is an exemplary job execution to show how the
+ * &quot;Dismiss&quot; operation works and what a Developer has
+ * to have in mind when implementing the process
+ * execution method
+ */
+public void computeBuffer_dismissable() {
+
+    /*
+     * inputGeometries might be a huge number of geometries
+     * for which a buffer shall be computed
+     */
+    List&lt;Geometry&gt; inputGeometries = this.data;
+    double radius = this.radius;
+
+    List&lt;Geometry&gt; bufferedGeometries = new ArrayList&lt;Geometry&gt;(inputGeometries.size());
+
+    for (Geometry geometry : inputGeometries) {
+
+        /*
+         * before computing the buffer for the current geometry
+         * check if the current thread was interrupted
+         *
+         * if so, then we must manually exit the computation and return!
+         */
+        if (Thread.currentThread().isInterrupted())
+            return;
+
+        /*
+         * else continue computation
+         */
+        else{
+            Geometry buffer = geometry.buffer(radius);
+            bufferedGeometries.add(buffer);
+        }
+}
+
+        /*
+         * computation was successful and we set the output-property
+         * with the computed buffered geometries
+         */
+        this.bufferedOutput = bufferedGeometries;
+    }
+
+</code></pre>
+
+<p>Hence, as a developer, you have to take care of properly quitting a running process in case the computation is <em>cancelled</em> via a <strong>Dismiss</strong> request. To do so, you have to check <code>if (Thread.currentThread().isInterrupted())</code> where applicable. Otherwise, the execution would finish as the <strong><em>Futures</em></strong> <em>cancel()</em> method cannot stop it directly.</p></div>
+        
+    </div>
+
+    <footer class="col-md-12 text-center">
+        <hr>
+        <p>
+        <small>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p></small>
+    </footer>
+
+    <script src="../../../js/jquery-1.10.2.min.js"></script>
+    <script src="../../../js/bootstrap-3.0.3.min.js"></script>
+    <script src="../../../js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script>
+    var base_url = '../../..';
+    </script>
+    <script data-main="../../../mkdocs/js/search.js" src="../../../mkdocs/js/require.js"></script>
+    <script src="../../../js/base.js"></script>
+
+    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        From here you can search these documents. Enter your search terms below.
+                    </p>
+                    <form role="form">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                        </div>
+                    </form>
+                    <div id="mkdocs-search-results"></div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </body>
+
+</html>

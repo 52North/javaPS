@@ -1,0 +1,39 @@
+<div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    {% for toc_item in toc %}
+        <li class="first-level {% if toc_item.active %}active{% endif %}"><a href="{{ toc_item.url }}">{{ toc_item.title }}</a></li>
+        {% for toc_item in toc_item.children %}
+            <li class="second-level"><a href="{{ toc_item.url }}">{{ toc_item.title }}</a></li>
+            {% for toc_item in toc_item.children %}         
+                <li class="third-level">
+                
+                  <!-- CUSTOMIZATION BEGIN -->
+                
+                  {% if not toc_item.children %}
+                    <a href="{{ toc_item.url }}">{{ toc_item.title }}</a>
+                  {% endif %}
+                
+                  {% if toc_item.children %}
+                    <div class="row">
+                      <div class="col-md-10">
+                        <a href="{{ toc_item.url }}">{{ toc_item.title }}</a>
+                      </div>
+                      <div class="dropdown col-md-2">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                          {% for toc_item in toc_item.children %}
+                            <li class="fourth-level"><a href="{{ toc_item.url }}">{{ toc_item.title }}</a></li>
+                           {% endfor %}
+                        </ul>
+                      </div>  
+                    </div>
+                  {% endif %}
+                  
+                  <!-- CUSTOMIZATION END -->
+                                    
+                </li>    
+            {% endfor %}
+        {% endfor %}
+    {% endfor %}
+    </ul>
+</div>
