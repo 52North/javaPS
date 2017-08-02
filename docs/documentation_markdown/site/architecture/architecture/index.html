@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">   
+    <link rel="shortcut icon" href="../../img/favicon.ico">
+
+    <title>Architectural Details - JavaPS</title>
+
+    <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/font-hack/2.018/css/hack.min.css">
+    <link href='//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700,700italic&subset=latin-ext,latin' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,600,700&subset=latin-ext,latin' rel='stylesheet' type='text/css'>
+    <link href="../../css/base.css" rel="stylesheet">
+    <link href="../../css/cinder.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/highlight.css">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js"></script>
+    <script>
+    WebFont.load({
+        google: {
+            families: ['Open Sans', 'PT Sans']
+        }
+    });
+    </script>
+
+    
+</head>
+
+<body>
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="../..">JavaPS</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li >
+                        <a href="../..">Home</a>
+                    </li>
+                
+                
+                
+                    <li class="active">
+                        <a href="./">Architectural Details</a>
+                    </li>
+                
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dynamic Aspects - Workflow Diagrams <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../../sequence_diagrams/sequence_diagrams/">Introduction</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../sequence_diagrams/workflow_general/general_workflow/">Generic Workflow Descriptions</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../sequence_diagrams/workflow_wps_operations/workflow_wps_operations/">Workflow Descriptions of WPS Operations</a>
+</li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../../algorithm_definition/algorithm_definition/">Guide for Creation of custom Algorithms/Processes</a>
+                    </li>
+                
+                
+                </ul>
+            
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                
+                    <li >
+                        <a rel="next" href="../..">
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="../../sequence_diagrams/sequence_diagrams/">
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a href="https://github.com/52North/javaPS">
+                            
+                                <i class="fa fa-github"></i>
+                            
+                            GitHub
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+    <div class="container">
+        
+        <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="first-level active"><a href="#javaps-documentation-architectural-details">JavaPS Documentation - Architectural Details</a></li>
+        
+            <li class="second-level"><a href="#architectural-details">Architectural Details</a></li>
+            
+        
+            <li class="second-level"><a href="#overview-of-maven-modules">Overview of Maven Modules</a></li>
+            
+        
+            <li class="second-level"><a href="#spring-bean-configuration">Spring Bean Configuration</a></li>
+            
+        
+    
+    </ul>
+</div></div>
+        <div class="col-md-9" role="main">
+
+<h1 id="javaps-documentation-architectural-details">JavaPS Documentation - Architectural Details</h1>
+<h2 id="architectural-details">Architectural Details</h2>
+<p><strong>JavaPS</strong> is based on another 52°North project named <a href="https://github.com/52North/iceland">Iceland</a>. The following UML diagram highlights the core architectural aspects. To be precise, it shows the main components of <strong>Icelands</strong> generic infrastructure that ensures equal handling of different OGC Web services. Furthermore, the diagram also explains, how <strong>JavaPS</strong> extends the generic <strong>Iceland</strong> infrastructure by offering several <strong>WPS</strong> specific components and Java implementations. Hereby, the notation of UML component diagrams is used. For clarification, the notation is explained in the following. On the left side, the three yellow boxes indicate the three tiers <em>client</em>, <em>server</em> and <em>data</em> of classical 3-Tier Web service architectures. While the <em>client</em> and <em>data</em> tier contain few elements, the core attention should be paid on the <em>server</em> tier. It illustrates that <strong>Iceland</strong> provides the main infrastucture to handle client requests and manage the whole request lifecycle comprising the tasks request receival, identification of suitable request handler to process the request as well as the creation the response object. Hence, <strong>Iceland</strong> is split into several key components, as shown in the subsequent diagram. While the blue coloured infrastructure components are completely provided by <strong>Iceland</strong>, those coloured in cyan are implemented and offered by <strong>JavaPS</strong> to create a <strong>WPS</strong> specific application. For separation purposes the main components of <strong>JavaPS</strong> are coloured in red. Each components name is enclosed in "&lt;&lt; &gt;&gt;" to separate it from its description. Arrows within the diagram indicate that the connected resources work together. Where necessary, arrows are annotated to clarify their task.</p>
+<p><img alt="System Architecture" src="../UML_Diagrams/Architecture/architecture_deployment.png" /><em>System Architecture</em></p>
+<p>Subsequently, the basic components and their interaction and dependencies are explained. First <strong>Iceland</strong> components are explained. Afterwards, special attention is paid to the additions provided by <strong>JavaPS</strong>.</p>
+<p><strong>Iceland</strong>:</p>
+<ol>
+<li><strong>Iceland</strong> - <strong><em>Servlet/Service</em></strong>: <strong>Iceland</strong> is based on the open source <a href="https://spring.io/">Spring Framework</a>, which offers essential receival of incoming requests as well as other benefits like dependency injection and bean/component handling. Hence, the <strong><em>Servlet</em></strong> component within <strong>Iceland</strong> is offered by <strong>Spring</strong> (so-called <em>DispatcherServlet</em>). Building on Springs infrastructure, <strong>Iceland</strong> provides a <strong><em>Service</em></strong> component as central <em>Spring Controller</em>. Note that a <a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/html/mvc.html"><em>Spring Controller</em></a> is required to handle incoming Web requests within the application. While in theory, an application may implement multiple <em>Controllers</em>, <strong>Iceland</strong> uses a single <em>Spring Controller</em> to react on arbitrary Web requests targeting different OGC Web service operations (e.g. <em>GetCapabilities</em> or <strong>WPS</strong> <em>DescribeProcess</em> operation).</li>
+<li><strong>Iceland</strong> - <strong><em>Binding</em></strong> and <strong><em>coding</em></strong>: After receival of a request, the <strong><em>Binding</em></strong> component uses <strong><em>de-</em></strong> and <strong><em>encoders</em></strong> to determine the <em>binding</em> of the request. Possible bindings might be <em>KVP</em> (Key Value Pair) for HTTP GET or <em>POX</em> (Plain Old XML), <em>SOAP</em> (Simple Object Access Protocol) and <em>JSON</em> (JavaScript Object Notation) for HTTP POST requests. For each <em>binding</em>, a separate implementation exists to properly parse the request. Here, <strong>JavaPS</strong> may implement additional <strong><em>Bindings</em></strong> or <strong><em>de-</em></strong> and <strong><em>encoders</em></strong> specific for <strong>WPS</strong> operations and register them via Spring configuration files as explained <a href="#spring-bean-configuration">below</a>.</li>
+<li><strong>Iceland</strong> - <strong><em>Operator</em></strong>: As <strong>Iceland</strong> is organised in a generic manner, it provides generic components <strong><em>ServiceOperator</em></strong> and <strong><em>RequestOperator</em></strong> to manage arbitrary OGC request from arbitrary OGC Web services. They are used to derive the appropriate <strong><em>Request</em></strong> object and <strong><em>OperationHandler</em></strong>, as described next.</li>
+<li><strong>Iceland</strong> - <strong><em>Request</em></strong>, <strong><em>Response</em></strong> and <strong><em>OperationHandler</em></strong>: For each supported operation of an OGC Web service, <strong><em>Iceland</em></strong> requires suitable <strong><em>Request</em></strong>, <strong><em>Response</em></strong> and <strong><em>OperationHandler</em></strong> implementations. However, each different OGC Web service defines different <em>operations</em> that have to be supported. Only the <strong>GetCapabilities</strong> operation is equal for <strong>ALL</strong> OGC Web services and is thus directly implemented within <strong><em>Iceland</em></strong> (to be correct, only the <strong><em>GetCapabilitiesHandler</em></strong> has to be provided by <strong>JavaPS</strong>). Hence, <strong>JavaPS</strong> provides the missing <strong>WPS</strong> <strong><em>Request</em></strong>, <strong><em>Response</em></strong> and <strong><em>OperationHandler</em></strong> implementations for the operations <em>DescribeProcess</em>, <em>Execute</em>, <em>GetStatus</em>, <em>GetResult</em> and <em>Dismiss</em>. The general workflow uses the <strong><em>OperationHandler</em></strong> to extract and process the information from the <strong><em>Request</em></strong> object and to compute the associated <strong><em>Response</em></strong> object.</li>
+<li><strong>Iceland</strong> - <strong><em>Content Cache</em></strong>: As mentioned above, the <strong>GetCapabilities</strong> operation handling is completely implemented within <strong><em>Iceland</em></strong> (only the <strong><em>GetCapabilitiesHandler</em></strong> has to be provided by <strong>JavaPS</strong>). The <em>Capabilities</em> document contains basic information about the associated OGC Web service (service identification and service provider) as well as service specific details. E.g., for a WPS it contains information about available <em>processes</em>. To keep access to the storing data source minimal, <strong><em>Iceland</em></strong> implements a <strong><em>Capabilities Content Cache</em></strong> that holds the necessary <em>Capabilities information</em> in main memory and which is updated on data changes or on a regular time interval. The benefit is a faster and resource-saving processing of <strong>GetCapabilities</strong> requests, as the information can be taken from main memory instead of extracting it from the original data source.</li>
+<li><strong>Iceland</strong> - <strong><em>DataSource</em></strong>: The <strong><em>DataSource</em></strong> component manages access to the underlying data source from the <strong>Data Tier</strong>. This is especially necessary when updating the <strong><em>Content Cache</em></strong> described above.</li>
+</ol>
+<p><strong>JavaPS</strong>:</p>
+<p>As already explained, the generic infrastructure of <strong>Iceland</strong> is concretized through <strong>JavaPS</strong> in order to create a <strong>WPS</strong> oriented Web application. For this reason, <strong>JavaPS</strong> supplements key components by specializing the abstract interfaces of <strong>Iceland</strong>. In short, the following list presents the main parts of <strong>JavaPS</strong>:</p>
+<ol>
+<li><strong>JavaPS</strong> - <strong><em>Stream</em></strong>: A <strong><em>Streaming</em></strong> component supports <strong>Icelands</strong> <strong><em>Binding</em></strong> component and is used to read/parse requests and write responses.</li>
+<li><strong>JavaPS</strong> - <strong><em>Decoders</em></strong>: In order to correctly parse requests, additional <strong><em>Decoders</em></strong> might be offered. This supplements the <strong><em>Binding</em></strong> component of <strong>Iceland</strong>.</li>
+<li><strong>JavaPS</strong> - <strong><em>WPS Classes</em></strong>: Additional <strong>WPS</strong> specific Java representations have to be provided within the scope of handling <strong>WPS</strong> operations. As exemplary components <strong><em>Requests</em></strong> and <strong><em>Responses</em></strong> are implemented and used within <strong>Icelands</strong> execution workflow. Of course, also the actual operation handling and job management within <strong>JavaPS</strong> requires several <strong>WPS</strong> specific Java classes. E.g., the following two components <strong><em>Engine</em></strong> and <strong><em>Service</em></strong> also make use of <strong><em>WPS Classes</em></strong>.</li>
+<li><strong>JavaPS</strong> - <strong><em>Engine</em></strong>: The <strong><em>Engine</em></strong> component implements the job and persistence management. In short it is responsible for planning and executing <strong>WPS</strong> processes/jobs and offer mechanisms to persist and retrieve computed results as well as general job information (e.g. <strong>Job Status</strong>). For instance, the <strong><em>Engine</em></strong> might use the local hard drive of the application server to persist job information within JSON files or complex output results as files of their own. A process is implemented as <strong><em>Algorithm</em></strong> and the available <strong><em>Algorithms</em></strong> are stored within <strong><em>AlgorithmRepositories</em></strong>. Not only can <strong><em>Algorithms</em></strong> be implemented within <strong>JavaPS</strong> but can also be added via <strong>external Processing/Algorithm Repositories</strong>, that only offer additional <strong><em>Algorithm</em></strong> implementations.</li>
+<li><strong>JavaPS</strong> - <strong><em>Service</em></strong>: The last main part of <strong>JavaPS</strong> is to provide implementations of <strong><em>OperationHandler</em></strong> and <strong><em>ValidationHandler</em></strong> to handle <strong>WPS</strong> requests. Hence, for each <strong>WPS</strong> operation (<em>GetCapabilities</em>, <em>DescribeProcess</em>, <em>Execute</em>, <em>GetStatus</em>, <em>GetResult</em>, <em>Dismiss</em>) , <strong>JavaPS</strong> implements one <strong><em>OperationHandler</em></strong>. <strong><em>ValidationHandlers</em></strong> are required to check and validate each request. E.g. within some <strong>WPS</strong> operations, a parameter <em>jobId</em> has to be included that references an existing process/algorithm within <strong>JavaPS</strong>, otherwise an exception can be thrown. By offering the appropriate <strong><em>OperationHandler</em></strong>, the responsibility of handling and answering <strong>WPS</strong> request is assigned to <strong>JavaPS</strong>. For most <strong>WPS</strong> requests, the <strong><em>OperationHandler</em></strong> make use of the <strong><em>Engine</em></strong> to perform actions related to a certain job (e.g. create and execute a new job or retrieve the results of finished jobs).</li>
+</ol>
+<h2 id="overview-of-maven-modules">Overview of Maven Modules</h2>
+<p><strong>JavaPS</strong> and <strong>Iceland</strong> both use <a href="https://maven.apache.org/">Apache Maven</a> as build automation tool to manage project dependencies and external libraries. <strong>JavaPS</strong> defines several sub-modules, each dedicated to a certain task. The following table shows each Maven module and its task:</p>
+<p><em>Overview of JavaPS Maven Modules and their Tasks</em></p>
+<table>
+<thead>
+<tr>
+<th align="center">Maven Module Name</th>
+<th align="center">Task</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">core</td>
+<td align="center">provides Java representations of WPS requests and responses</td>
+</tr>
+<tr>
+<td align="center">engine</td>
+<td align="center">implements the necessary processing engine to execute and manage jobs</td>
+</tr>
+<tr>
+<td align="center">iceland-stream</td>
+<td align="center">provides (XML) stream readers and writers</td>
+</tr>
+<tr>
+<td align="center">iceland-wps</td>
+<td align="center">provides elementary Java representations/implementations of all relevant WPS components defined within the official WPS 2.0 standard of the OGC</td>
+</tr>
+<tr>
+<td align="center">kvp</td>
+<td align="center">provides additional KVP decoders for each WPS 2.0 operations (except Execute)</td>
+</tr>
+<tr>
+<td align="center">service</td>
+<td align="center">provides operation validators and handlers for each WPS 2.0 operation</td>
+</tr>
+<tr>
+<td align="center">xml</td>
+<td align="center">provides helper components for interacting with XML requests/responses of WPS operations</td>
+</tr>
+<tr>
+<td align="center">webapp</td>
+<td align="center">provides deployment descriptor etc.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="spring-bean-configuration">Spring Bean Configuration</h2>
+<p>Iceland is based on the <a href="https://spring.io/">Spring Framework</a>. By declaring certain Java classes as so-called <em>beans</em>, Spring's <a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/html/beans.html">dependency injection</a> mechanism can be used to automatically inject these beans into other components. <strong>Iceland</strong> and <strong>JavaPS</strong> make use of classic <a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/html/beans.html#beans-factory-metadata">XML configuration</a> files for bean declaration. For this reason, each Maven module of <strong>JavaPS</strong> comprises a number of <em>bean declaration XML files</em> that are located in <em>src/main/resources/components/</em>.</p></div>
+        
+    </div>
+
+    <footer class="col-md-12 text-center">
+        <hr>
+        <p>
+        <small>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p></small>
+    </footer>
+
+    <script src="../../js/jquery-1.10.2.min.js"></script>
+    <script src="../../js/bootstrap-3.0.3.min.js"></script>
+    <script src="../../js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script>
+    var base_url = '../..';
+    </script>
+    <script data-main="../../mkdocs/js/search.js" src="../../mkdocs/js/require.js"></script>
+    <script src="../../js/base.js"></script>
+
+    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        From here you can search these documents. Enter your search terms below.
+                    </p>
+                    <form role="form">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                        </div>
+                    </form>
+                    <div id="mkdocs-search-results"></div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </body>
+
+</html>
