@@ -226,7 +226,6 @@ public abstract class AbstractOWSWriter extends AbstractMultiElementXmlStreamWri
                     .getHoursOfService());
             element(OWSConstants.Elem.QN_CONTACT_INSTRUCTIONS, contactInfo
                     .getContactInstructions());
-            writeCode(OWSConstants.Elem.QN_ROLE, serviceContact.getRole());
         });
     }
 
@@ -257,6 +256,7 @@ public abstract class AbstractOWSWriter extends AbstractMultiElementXmlStreamWri
                     .getIndividualName());
             element(OWSConstants.Elem.QN_POSITION_NAME, serviceContact.getPositionName());
             writeContactInfo(serviceContact);
+            writeCode(OWSConstants.Elem.QN_ROLE, serviceContact.getRole());
         });
     }
 
