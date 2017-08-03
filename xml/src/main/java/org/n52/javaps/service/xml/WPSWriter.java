@@ -122,6 +122,7 @@ public class WPSWriter extends AbstractOWSWriter {
         element(WPSConstants.Elem.QN_CAPABILITIES, object, (WPSCapabilities capabilities) -> {
             writeNamespaces();
 
+            attr(OWSConstants.Attr.AN_SERVICE, capabilities.getService());
             attr(OWSConstants.Attr.AN_VERSION, capabilities.getVersion());
             attr(OWSConstants.Attr.AN_UPDATE_SEQUENCE, capabilities.getUpdateSequence());
 

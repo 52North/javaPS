@@ -110,7 +110,7 @@ public interface WPSConstants {
         String EN_LITERAL_DATA = "LiteralData";
         QName QN_LITERAL_DATA = wps(EN_LITERAL_DATA);
         String EN_LITERAL_DATA_DOMAIN = "LiteralDataDomain";
-        QName QN_LITERAL_DATA_DOMAIN = wps(EN_LITERAL_DATA_DOMAIN);
+        QName QN_LITERAL_DATA_DOMAIN = new QName(EN_LITERAL_DATA_DOMAIN);
         String EN_LITERAL_VALUE = "LiteralValue";
         QName QN_LITERAL_VALUE = wps(EN_LITERAL_VALUE);
         String EN_NEXT_POLL = "NextPoll";

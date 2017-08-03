@@ -126,7 +126,7 @@ public abstract class AbstractOWSWriter extends AbstractMultiElementXmlStreamWri
             OwsDomainMetadata m = metadata.get();
             if (Optionals.any(m.getValue(), metadata.get().getReference())) {
                 element(name, m, (OwsDomainMetadata x) -> {
-                    attr(OWSConstants.Attr.AN_REFERENCE, x.getReference().map(URI::toString));
+                    attr(OWSConstants.Attr.QN_REFERENCE, x.getReference().map(URI::toString));
                     if (x.getValue().isPresent()) {
                         chars(x.getValue().get());
                     }
@@ -226,7 +226,6 @@ public abstract class AbstractOWSWriter extends AbstractMultiElementXmlStreamWri
                     .getHoursOfService());
             element(OWSConstants.Elem.QN_CONTACT_INSTRUCTIONS, contactInfo
                     .getContactInstructions());
-            writeCode(OWSConstants.Elem.QN_ROLE, serviceContact.getRole());
         });
     }
 
@@ -257,6 +256,7 @@ public abstract class AbstractOWSWriter extends AbstractMultiElementXmlStreamWri
                     .getIndividualName());
             element(OWSConstants.Elem.QN_POSITION_NAME, serviceContact.getPositionName());
             writeContactInfo(serviceContact);
+            writeCode(OWSConstants.Elem.QN_ROLE, serviceContact.getRole());
         });
     }
 
