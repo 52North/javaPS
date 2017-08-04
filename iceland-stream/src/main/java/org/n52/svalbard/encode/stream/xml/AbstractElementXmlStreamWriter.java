@@ -193,7 +193,7 @@ public abstract class AbstractElementXmlStreamWriter extends XmlFactories
         String merged = mergeSchemaLocationsToString(schemaLocations);
         if (!Strings.isNullOrEmpty(merged)) {
             namespace(W3CConstants.NS_XSI_PREFIX, W3CConstants.NS_XSI);
-            attr(W3CConstants.NS_XSI, W3CConstants.SCHEMA_LOCATION, merged);
+            attr(W3CConstants.QN_SCHEMA_LOCATION_PREFIXED, merged);
         }
     }
 
