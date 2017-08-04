@@ -280,7 +280,7 @@ public class WPSWriter extends AbstractOWSWriter {
     private void writeReferenceData(ReferenceProcessData reference)
             throws XMLStreamException {
         element(WPSConstants.Elem.QN_REFERENCE, () -> {
-            writeNamespacesWithSchemalocation();
+            writeNamespaces();
 
             attr(XLinkConstants.Attr.QN_HREF, reference.getURI().toString());
             writeDataEncodingAttributes(reference.getFormat());
