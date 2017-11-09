@@ -16,24 +16,22 @@
  */
 package org.n52.javaps.service.handler;
 
-import static org.n52.javaps.service.handler.AbstractJobHandler.JOB_ID;
-
 import java.util.Collections;
 import java.util.Set;
 
 import javax.inject.Inject;
 
+import org.n52.iceland.request.handler.GenericOperationHandler;
+import org.n52.iceland.request.handler.OperationHandlerKey;
+import org.n52.javaps.engine.Engine;
+import org.n52.javaps.engine.EngineException;
+import org.n52.javaps.engine.JobNotFoundException;
 import org.n52.shetland.ogc.ows.exception.InvalidParameterValueException;
 import org.n52.shetland.ogc.ows.exception.NoApplicableCodeException;
 import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
 import org.n52.shetland.ogc.wps.JobId;
 import org.n52.shetland.ogc.wps.StatusInfo;
 import org.n52.shetland.ogc.wps.WPSConstants;
-import org.n52.iceland.request.handler.GenericOperationHandler;
-import org.n52.iceland.request.handler.OperationHandlerKey;
-import org.n52.javaps.engine.Engine;
-import org.n52.javaps.engine.EngineException;
-import org.n52.javaps.engine.JobNotFoundException;
 import org.n52.shetland.ogc.wps.request.GetStatusRequest;
 import org.n52.shetland.ogc.wps.response.GetStatusResponse;
 
@@ -78,5 +76,10 @@ public class GetStatusHandler extends AbstractJobHandler
     @Override
     public Set<OperationHandlerKey> getKeys() {
         return Collections.singleton(KEY);
+    }
+
+    @Override
+    public boolean isSupported() {
+        return true;
     }
 }

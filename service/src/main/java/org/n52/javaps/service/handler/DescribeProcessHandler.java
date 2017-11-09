@@ -89,4 +89,9 @@ public class DescribeProcessHandler extends AbstractEngineHandler
         return Collections .singleton(identifierDomain);
     }
 
+    @Override
+    public boolean isSupported() {
+        return true;
+    }
+
 }
