@@ -40,7 +40,7 @@ Then just run `mvn clean install` on the repositories root directory.
 
 ## User guide/tutorial
 
-TBD
+http://52north.github.io/javaPS/documentation_markdown/site/index.html
 
 ## Demo
 
