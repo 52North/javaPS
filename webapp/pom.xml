@@ -30,7 +30,7 @@
     <artifactId>webapp</artifactId>
     <packaging>war</packaging>
 
-    <name>52&deg;North Iceland WPS Webapp</name>
+    <name>52&deg;North javaPS Webapp</name>
     
     <licenses>
         <license>

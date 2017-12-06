@@ -29,7 +29,7 @@
 
     <artifactId>service</artifactId>
 
-    <name>52°North Iceland WPS Service Implementation</name>
+    <name>52&deg;North javaPS Service Implementation</name>
 
     <dependencies>
         <dependency>

@@ -29,7 +29,7 @@
 
     <artifactId>engine</artifactId>
 
-    <name>52°North Iceland WPS Processing API Implementation</name>
+    <name>52&deg;North javaPS Processing API Implementation</name>
 
     <dependencies>
         <dependency>
