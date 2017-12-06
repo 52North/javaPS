@@ -18,6 +18,7 @@ package org.n52.javaps.commons.context;
 
 import java.util.UUID;
 
+@Deprecated
 public class ExecutionContext {
 
     private final String tempFolderName;

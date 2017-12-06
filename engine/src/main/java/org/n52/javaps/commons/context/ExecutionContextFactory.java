@@ -19,6 +19,7 @@ package org.n52.javaps.commons.context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Deprecated
 public class ExecutionContextFactory {
 
     private static Logger LOG = LoggerFactory.getLogger(ExecutionContextFactory.class);
