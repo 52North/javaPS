@@ -29,7 +29,7 @@
 
     <artifactId>service</artifactId>
 
-    <name>52&deg;North javaPS Service Implementation</name>
+    <name>52&#x00B0;North javaPS Service Implementation</name>
 
     <dependencies>
         <dependency>
