@@ -145,6 +145,18 @@
     "misc.includeOriginalRequest" : {
       "type" : "boolean",
       "value" : false
+    },
+    "misc.baseDirectory" : {
+      "type" : "file",
+      "value" : "/tmp/wps/outputs/"
+    },
+    "misc.duration" : {
+      "type" : "string",
+      "value" : "PT2H"
+    },
+    "misc.checkInterval" : {
+      "type" : "string",
+      "value" : "PT1H"
     }
   }
 }
