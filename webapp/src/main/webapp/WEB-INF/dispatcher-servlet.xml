@@ -1,6 +1,6 @@
 <!--
 
-    Copyright 2016 52°North Initiative for Geospatial Open Source
+    Copyright 2016-2017 52°North Initiative for Geospatial Open Source
     Software GmbH
 
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,14 +37,11 @@
         <description>This calls SettingsManager#configure for all beans.</description>
     </bean>
 
-    <import resource="classpath:components/*.xml" />
+    <import resource="classpath*:components/*.xml" />
 
     <mvc:default-servlet-handler/>
     <mvc:annotation-driven />
     <mvc:resources mapping="/**" location="/static/" />
     <mvc:resources mapping="/" location="/static/index.html" />
-
-    <!-- additional endpoints -->
-    <bean id="extraEndpoint" class="org.n52.javaps.InfoEndpoint" />
 
 </beans>

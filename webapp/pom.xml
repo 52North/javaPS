@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright 2016 52°North Initiative for Geospatial Open Source
+    Copyright 2016-2017 52°North Initiative for Geospatial Open Source
     Software GmbH
 
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,7 +30,7 @@
     <artifactId>webapp</artifactId>
     <packaging>war</packaging>
 
-    <name>52&deg;North Iceland WPS Webapp</name>
+    <name>52&deg;North javaPS Webapp</name>
     
     <licenses>
         <license>
@@ -42,6 +42,32 @@
     </licenses>
 
     <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>service</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.n52.faroe</groupId>
+            <artifactId>faroe-json</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>engine</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>kvp</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>xml</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        
         <dependency>
             <groupId>net.sourceforge.pjl-comp-filter</groupId>
             <artifactId>pjl-comp-filter</artifactId>
@@ -67,26 +93,30 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>org.n52.wps</groupId>
-            <artifactId>service</artifactId>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-web</artifactId>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>fluent-hc</artifactId>
             <scope>test</scope>
-            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
             <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>net.sf.saxon</groupId>
-            <artifactId>Saxon-HE</artifactId>
-            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.xmlmatchers</groupId>
@@ -101,13 +131,12 @@
         </dependency>
         <dependency>
             <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-core</artifactId>
+            <artifactId>hamcrest-all</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpcore</artifactId>
-            <version>4.4.3</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -123,8 +152,7 @@
     </dependencies>
     
     <build>
-        <finalName>${project.groupId}-${project.artifactId}-${project.version}</finalName>
-
+        <finalName>${project.parent.artifactId}-${project.artifactId}-${project.version}</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -169,7 +197,7 @@
                     <webApp>
                         <contextPath>/wps</contextPath>
                     </webApp>
-                    <dumpOnStart>true</dumpOnStart>
+                    <dumpOnStart>false</dumpOnStart>
                     <contextXml>${basedir}/src/main/webapp/WEB-INF/jetty-web.xml</contextXml>
                 </configuration>
             </plugin>

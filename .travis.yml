@@ -1,5 +1,10 @@
 language: java
-jdk:
-    - oraclejdk8
+sudo: false
 install: true
-script: mvn clean install -P check
+script: mvn -fae -U -B clean install
+jdk:
+  - oraclejdk8
+cache:
+  directories:
+    - $HOME/.m2
+

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+    Software GmbH
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<wps:Execute
+    xmlns:wps="http://www.opengis.net/wps/2.0"
+    xmlns:ows="http://www.opengis.net/ows/2.0"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.opengis.net/wps/2.0 ../wps.xsd"
+    service="WPS"
+    version="2.0.0"
+    response="document"
+    mode="async">
+
+    <ows:Identifier>http://my.wps.server/processes/proximity/Planar-Buffer</ows:Identifier>
+
+    <wps:Input id="referenceInput1">
+        <wps:Reference mimeType="application/xml" encoding="UTF-8" xlink:href="http://some.data.server/mygmldata.xml"/>
+    </wps:Input>
+
+    <wps:Input id="referenceInput2">
+        <wps:Reference mimeType="text/xml" xlink:href="http://some.data.server/mygmldata.xml">
+            <wps:Body>
+                <my-great-request-bayload>hello world</my-great-request-bayload>
+            </wps:Body>
+        </wps:Reference>
+    </wps:Input>
+
+    <wps:Input id="referenceInput3">
+        <wps:Reference schema="urn::schema:test" xlink:href="http://some.data.server/mygmldata.xml">
+            <wps:Body>
+                <my-great-request-bayload>hello world</my-great-request-bayload>
+            </wps:Body>
+        </wps:Reference>
+    </wps:Input>
+
+    <wps:Input id="referenceInput4">
+        <wps:Reference schema="urn::schema:test" xlink:href="http://some.data.server/mygmldata.xml">
+            <wps:BodyReference xlink:href="http://some.data.server/mygmldata.xml" />
+        </wps:Reference>
+    </wps:Input>
+
+
+    <wps:Input id="literalInput1">
+        <wps:Data>10.0</wps:Data>
+    </wps:Input>
+
+    <wps:Input id="literalInput2">
+        <wps:Data>hello world</wps:Data>
+    </wps:Input>
+
+    <wps:Input id="complexInput1">
+        <wps:Data schema="urn::schema:test" encoding="UTF-8" mimeType="text/xml">
+            <great-xml-snippet xmlns:wps="http://www.opengis.net/wps/2.0" xmlns="urn::schema:test">
+                <ows:Identifier xlink:href="asdf">asdf</ows:Identifier>
+            </great-xml-snippet>
+        </wps:Data>
+    </wps:Input>
+
+
+    <wps:Input id="complexInput2">
+        <wps:Data mimeType="text/xml" encoding="base64">PHPDtm1la2V5PnNvbWV2YWzDvGU8L3PDtm1la2V5Pg==</wps:Data>
+    </wps:Input>
+
+    <wps:Input id="outerNested">
+        <wps:Input id="innerNested1">
+            <wps:Data>10.0</wps:Data>
+        </wps:Input>
+        <wps:Input id="innerNested2">
+            <wps:Data>10.0</wps:Data>
+        </wps:Input>
+    </wps:Input>
+
+    <wps:Output id="output1" transmission="reference" />
+
+</wps:Execute>

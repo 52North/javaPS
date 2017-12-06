@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,13 +16,15 @@
  */
 package org.n52.javaps;
 
-import com.google.common.io.Resources;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+
 import org.apache.http.client.fluent.Request;
 import org.apache.http.entity.ContentType;
 import org.xmlmatchers.namespace.SimpleNamespaceContext;
+
+import com.google.common.io.Resources;
 
 /**
  *
@@ -36,7 +38,7 @@ public class Base {
             withBinding("xlink", "http://www.w3.org/1999/xlink").
             withBinding("xsi", "http://www.w3.org/2001/XMLSchema-instance").
             withBinding("xs", "http://www.w3.org/2001/XMLSchema").
-            withBinding("ows", "http://www.opengis.net/ows");
+            withBinding("ows", "http://www.opengis.net/ows/2.0");
 
     public int getPort() {
         return Integer.parseInt(System.getProperty("test.port", "8080"));

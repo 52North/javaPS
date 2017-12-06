@@ -15,12 +15,25 @@ limitations under the License.
 
 This project includes:
 
+  52°North Faroe under The Apache Software License, Version 2.0
+  52°North Faroe Annotations under The Apache Software License, Version 2.0
+  52°North Faroe JSON Backend under The Apache Software License, Version 2.0
+  52°North Faroe Utilities under The Apache Software License, Version 2.0
   52°North Iceland under The Apache Software License, Version 2.0
-  52°North Iceland WPS under The Apache Software License, Version 2.0
-  52°North Iceland WPS Service Implementation under The Apache Software License, Version 2.0
-  52°North Iceland WPS Webapp under The Apache Software License, Version 2.0
+  52°North Iceland Streaming Interfaces under The Apache Software License, Version 2.0
+  52°North Jan Mayen under The Apache Software License, Version 2.0
+  52°North javaPS under The Apache Software License, Version 2.0
+  52°North javaPS KVP Binding under The Apache Software License, Version 2.0
+  52°North javaPS POX Binding under The Apache Software License, Version 2.0
+  52°North javaPS Processing API Implementation under The Apache Software License, Version 2.0
+  52°North javaPS Service Implementation under The Apache Software License, Version 2.0
+  52°North javaPS Webapp under The Apache Software License, Version 2.0
+  52°North Shetland under The Apache Software License, Version 2.0
+  52°North Svalbard Core under The Apache Software License, Version 2.0
   AOP alliance under Public Domain
-  Apache Commons Codec under The Apache Software License, Version 2.0
+  Apache Commons Codec under Apache License, Version 2.0
+  Apache Commons Configuration under Apache License, Version 2.0
+  Apache Commons Lang under The Apache Software License, Version 2.0
   Apache Commons Logging under The Apache Software License, Version 2.0
   Apache HttpClient under Apache License, Version 2.0
   Apache HttpClient Fluent API under Apache License, Version 2.0
@@ -30,21 +43,27 @@ This project includes:
   Apache Log4j SLF4J Binding under The Apache Software License, Version 2.0
   Apache Log4j Web under The Apache Software License, Version 2.0
   ClassLoader Leak Prevention library under Apache 2
+  Commons Lang under The Apache Software License, Version 2.0
   Cross-Origin Resource Sharing (CORS) Filter under The Apache Software License, Version 2.0
+  EXIficient under MIT License
+  EXIficient-Core under MIT License
+  EXIficient-Grammars under MIT License
+  FindBugs-jsr305 under The Apache Software License, Version 2.0
   Guava: Google Core Libraries for Java under The Apache Software License, Version 2.0
   Hamcrest All under New BSD License
-  Hamcrest Core under New BSD License
   Jackson-annotations under The Apache Software License, Version 2.0
   Jackson-core under The Apache Software License, Version 2.0
   jackson-databind under The Apache Software License, Version 2.0
   Java Property Utility under The Apache Software License, Version 2.0
+  Java Servlet API under CDDL 1.1 or GPL2 w/ CPE
   javax.inject under The Apache Software License, Version 2.0
   JCL 1.1.1 implemented over SLF4J under MIT License
   Joda-Time under Apache 2
+  JTS Topology Suite under Lesser General Public License (LGPL)
   JUnit under Eclipse Public License 1.0
   PJL Compressing Filter under Apache Software License V2.0
-  Saxon-HE under Mozilla Public License Version 2.0
   SLF4J API Module under MIT License
+  SLF4J Simple Binding under MIT License
   Spring AOP under The Apache Software License, Version 2.0
   Spring Beans under The Apache Software License, Version 2.0
   Spring Context under The Apache Software License, Version 2.0
@@ -53,6 +72,9 @@ This project includes:
   Spring Web under The Apache Software License, Version 2.0
   Spring Web MVC under The Apache Software License, Version 2.0
   StAX API under The Apache Software License, Version 2.0
+  Xerces2-j under The Apache Software License, Version 2.0
+  XML Commons External Components XML APIs under The Apache Software License, Version 2.0 or The SAX License or The W3C License
   xml-matchers under Apache License, Version 2.0
+  XmlBeans under The Apache Software License, Version 2.0
   XMLUnit for Java under BSD License
 

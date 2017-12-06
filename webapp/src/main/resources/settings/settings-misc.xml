@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright 2016 52°North Initiative for Geospatial Open Source
+    Copyright 2016-2017 52°North Initiative for Geospatial Open Source
     Software GmbH
 
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,11 +22,11 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
 
-    <bean id="miscellaneousSettingDefinitionGroup" class="org.n52.iceland.config.SettingDefinitionGroup">
+    <bean id="miscellaneousSettingDefinitionGroup" class="org.n52.faroe.SettingDefinitionGroup">
         <property name="title" value="Miscellaneous" />
         <property name="order" value="3.0" />
     </bean>
-    <bean class="org.n52.iceland.config.settings.StringSettingDefinition">
+    <bean class="org.n52.faroe.settings.StringSettingDefinition">
         <property name="key" value="misc.characterEncoding" />
         <property name="title" value="Character Encoding" />
         <property name="description" value="The character encoding used for responses." />
@@ -34,7 +34,7 @@
         <property name="group" ref="miscellaneousSettingDefinitionGroup" />
         <property name="defaultValue" value="UTF-8" />
     </bean>
-    <bean class="org.n52.iceland.config.settings.BooleanSettingDefinition">
+    <bean class="org.n52.faroe.settings.BooleanSettingDefinition">
         <property name="key" value="misc.includeStackTraceInExceptionReport" />
         <property name="title" value="Detailed Error Messages" />
         <property name="description" value="Should OWS ExceptionReports include a complete stack trace for the causing exception?" />
@@ -42,7 +42,7 @@
         <property name="group" ref="miscellaneousSettingDefinitionGroup" />
         <property name="defaultValue" value="false" />
     </bean>
-    <bean class="org.n52.iceland.config.settings.BooleanSettingDefinition">
+    <bean class="org.n52.faroe.settings.BooleanSettingDefinition">
         <property name="key" value="misc.httpResponseCodeUseInKvpAndPoxBinding" />
         <property name="title" value="Use HTTP Status Codes in KVP and POX Binding?" />
         <property name="description" value="Should the response returned by KVP and POX binding use the exception specific HTTP status code or always &lt;tt&gt;HTTP 200 - OK&lt;/tt&gt;." />
@@ -50,7 +50,7 @@
         <property name="group" ref="miscellaneousSettingDefinitionGroup" />
         <property name="defaultValue" value="false" />
     </bean>
-    <bean class="org.n52.iceland.config.settings.BooleanSettingDefinition">
+    <bean class="org.n52.faroe.settings.BooleanSettingDefinition">
         <property name="key" value="statistics.counting-outputstream" />
         <property name="title" value="The response document size is calculated" />
         <property name="description"
@@ -59,12 +59,36 @@
         <property name="group" ref="miscellaneousSettingDefinitionGroup" />
         <property name="defaultValue" value="false" />
     </bean>
-        <bean class="org.n52.iceland.config.settings.BooleanSettingDefinition">
+    <bean class="org.n52.faroe.settings.BooleanSettingDefinition">
         <property name="key" value="misc.includeOriginalRequest" />
         <property name="title" value="Include original request" />
         <property name="description" value="Should the full (!) original request be included in the decoded Java classes to be used by handlers and operators?" />
         <property name="order" value="20.0" />
         <property name="group" ref="miscellaneousSettingDefinitionGroup" />
         <property name="defaultValue" value="false" />
+    </bean>
+    <bean class="org.n52.faroe.settings.FileSettingDefinition">
+        <property name="key" value="misc.baseDirectory" />
+        <property name="title" value="Base directory" />
+        <property name="description" value="Directory for storing outputs." />
+        <property name="order" value="20.0" />
+        <property name="group" ref="miscellaneousSettingDefinitionGroup" />
+        <property name="defaultValue" value="/tmp/wps/outputs" />
+    </bean>
+    <bean class="org.n52.faroe.settings.StringSettingDefinition">
+        <property name="key" value="misc.duration" />
+        <property name="title" value="Duration" />
+        <property name="description" value="Duration that outputs are stored." />
+        <property name="order" value="20.0" />
+        <property name="group" ref="miscellaneousSettingDefinitionGroup" />
+        <property name="defaultValue" value="PT2H" />
+    </bean>
+    <bean class="org.n52.faroe.settings.StringSettingDefinition">
+        <property name="key" value="misc.checkInterval" />
+        <property name="title" value="Check interval" />
+        <property name="description" value="Check for outdated outputs within this time interval." />
+        <property name="order" value="20.0" />
+        <property name="group" ref="miscellaneousSettingDefinitionGroup" />
+        <property name="defaultValue" value="PT1H" />
     </bean>
 </beans>

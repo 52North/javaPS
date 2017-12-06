@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright 2016 52°North Initiative for Geospatial Open Source
+    Copyright 2016-2017 52°North Initiative for Geospatial Open Source
     Software GmbH
 
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,6 +23,7 @@
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </Console>
 
+        <!--
         <RollingFile name="skeletonrollingfile" fileName="logs/iceland-skeleton.log" immediateFlush="false"
                      filePattern="logs/$${date:yyyy-MM}/iceland-skeleton-%d{MM-dd-yyyy}-%i.log.gz">
             <PatternLayout>
@@ -33,21 +34,22 @@
                 <SizeBasedTriggeringPolicy size="25 MB"/>
             </Policies>
         </RollingFile>
+        -->
     </Appenders>
 
     <Loggers>
         <Logger name="org.n52" level="trace" additivity="false">
             <AppenderRef ref="console"/>
-            <AppenderRef ref="skeletonrollingfile"/>
+            <!--<AppenderRef ref="skeletonrollingfile"/>-->
         </Logger>
         <Logger name="org.springframework" level="info" additivity="false">
             <AppenderRef ref="console"/>
-            <AppenderRef ref="skeletonrollingfile"/>
+            <!--<AppenderRef ref="skeletonrollingfile"/>-->
         </Logger>
 
         <Root level="warn">
             <AppenderRef ref="console"/>
-            <AppenderRef ref="skeletonrollingfile"/>
+            <!--<AppenderRef ref="skeletonrollingfile"/>-->
         </Root>
     </Loggers>
 </Configuration>

@@ -1,0 +1,11 @@
+{
+    "formats": [
+        {
+            "mimetype": "application/wkt"
+        },
+        {
+            "mimetype": "application/wkt",
+            "encoding": "base64"
+        }
+    ]
+}

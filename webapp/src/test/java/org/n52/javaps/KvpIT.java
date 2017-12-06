@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,14 +16,16 @@
  */
 package org.n52.javaps;
 
-import java.io.IOException;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import org.junit.Test;
 import static org.xmlmatchers.XmlMatchers.hasXPath;
 import static org.xmlmatchers.transform.XmlConverters.the;
-import org.xmlmatchers.xpath.XpathReturnType;
 import static org.xmlmatchers.xpath.XpathReturnType.returningAString;
+
+import java.io.IOException;
+
+import org.junit.Test;
+import org.xmlmatchers.xpath.XpathReturnType;
 
 /**
  *
@@ -48,7 +50,7 @@ public class KvpIT extends Base {
         assertThat("document contains root element", the(response),
                 hasXPath("/DemoResponse", usingNamespaces));
         assertThat("parameters three is corret", the(response),
-                hasXPath("count(/*/three[1])", usingNamespaces, XpathReturnType.returningANumber(), equalTo("2.0")));
+                hasXPath("count(/*/three[1])", usingNamespaces, XpathReturnType.returningANumber(), equalTo(2.0)));
         assertThat("parameters three is corret", the(response),
                 hasXPath("/*/three[1]", usingNamespaces, returningAString(), equalTo("htroN25")));
         assertThat("parameter three is corret", the(response),

@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">   
+    <link rel="shortcut icon" href="../../../img/favicon.ico">
+
+    <title>Generic Workflow Descriptions - JavaPS</title>
+
+    <link href="../../../css/bootstrap-custom.min.css" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/font-hack/2.018/css/hack.min.css">
+    <link href='//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700,700italic&subset=latin-ext,latin' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,600,700&subset=latin-ext,latin' rel='stylesheet' type='text/css'>
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link href="../../../css/cinder.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/highlight.css">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js"></script>
+    <script>
+    WebFont.load({
+        google: {
+            families: ['Open Sans', 'PT Sans']
+        }
+    });
+    </script>
+
+    
+</head>
+
+<body>
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="../../..">JavaPS</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li >
+                        <a href="../../..">Home</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../../../architecture/architecture/">Architectural Details</a>
+                    </li>
+                
+                
+                
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dynamic Aspects - Workflow Diagrams <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../../sequence_diagrams/">Introduction</a>
+</li>
+
+                        
+                            
+<li class="active">
+    <a href="./">Generic Workflow Descriptions</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../workflow_wps_operations/workflow_wps_operations/">Workflow Descriptions of WPS Operations</a>
+</li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../../../algorithm_definition/algorithm_definition/">Guide for Creation of custom Algorithms/Processes</a>
+                    </li>
+                
+                
+                </ul>
+            
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                
+                    <li >
+                        <a rel="next" href="../../sequence_diagrams/">
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="../../workflow_wps_operations/workflow_wps_operations/">
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a href="https://github.com/52North/javaPS">
+                            
+                                <i class="fa fa-github"></i>
+                            
+                            GitHub
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+    <div class="container">
+        
+        <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="first-level active"><a href="#javaps-documentation-generic-workflow-from-request-to-response">JavaPS Documentation - Generic Workflow from Request to Response</a></li>
+        
+            <li class="second-level"><a href="#general-workflow-abstract-request-to-response">General Workflow (abstract Request to Response)</a></li>
+            
+                <li class="third-level">
+                
+                  
+                    <a href="#overview-from-request-to-response">Overview from Request to Response</a>
+                  
+                
+                  
+                </li>    
+            
+                <li class="third-level">
+                
+                  
+                    <a href="#iceland-service-events-throughout-operations">Iceland Service Events throughout Operations</a>
+                  
+                
+                  
+                </li>    
+            
+                <li class="third-level">
+                
+                  
+                
+                  
+                    <div class="row">
+                      <div class="col-md-10">
+                        <a href="#identification-of-binding-in-detail">Identification of Binding in detail</a>
+                      </div>
+                      <div class="dropdown col-md-2">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                          
+                            <li class="fourth-level"><a href="#generic-workflow-binding">Generic Workflow - Binding</a></li>
+                           
+                            <li class="fourth-level"><a href="#kvp-binding-example-for-get-request">KVP Binding Example for GET Request</a></li>
+                           
+                            <li class="fourth-level"><a href="#pox-binding-example-for-post-request">POX Binding Example for POST Request</a></li>
+                           
+                        </ul>
+                      </div>  
+                    </div>
+                  
+                </li>    
+            
+                <li class="third-level">
+                
+                  
+                
+                  
+                    <div class="row">
+                      <div class="col-md-10">
+                        <a href="#parsing-of-a-request-in-detail">Parsing of a Request in detail</a>
+                      </div>
+                      <div class="dropdown col-md-2">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                          
+                            <li class="fourth-level"><a href="#generic-workflow-parse-request">Generic Workflow - Parse Request</a></li>
+                           
+                            <li class="fourth-level"><a href="#capabilities-get-example">Capabilities GET Example</a></li>
+                           
+                            <li class="fourth-level"><a href="#execute-post-example-with-pox-binding">Execute POST Example with POX Binding</a></li>
+                           
+                        </ul>
+                      </div>  
+                    </div>
+                  
+                </li>    
+            
+                <li class="third-level">
+                
+                  
+                    <a href="#identification-of-operationhandler-in-detail">Identification of OperationHandler in detail</a>
+                  
+                
+                  
+                </li>    
+            
+        
+    
+    </ul>
+</div></div>
+        <div class="col-md-9" role="main">
+
+<h1 id="javaps-documentation-generic-workflow-from-request-to-response">JavaPS Documentation - Generic Workflow from Request to Response</h1>
+<p>In order to better understand the dynamic relationships between the participating service components this section uses a variety of UML sequence diagrams showing the method workflow during key WPS operations. This section is structured as follows: First, an <a href="#general-workflow-abstract-request-to-response">abstract workflow description</a> from an arbitrary request to its response is demonstrated. Within this description the documentation highlights, how the request binding is determined (<a href="#identification-of-binding-in-detail">Binding in detail</a>) and how the request is parsed (<a href="#parsing-of-a-request-in-detail">Parsing in detail</a>). The actual implementation of each <strong>WPS 2.0 operation</strong> (<em>GetCapabilities</em>, <em>DescribeProcess</em>, <em>Execute</em>, <em>GetStatus</em>, <em>GetResult</em>, <em>Dismiss</em>) is introduced on the separate page <a href="../../workflow_wps_operations/workflow_wps_operations/">Workflow of WPS 2.0 operations</a>.</p>
+<p>Throughout all sequence diagrams the UML sequence diagram notation is used. In addition, the colours (<em>blue</em> and <em>red</em>) of the participating application components indicate their membership within either <strong>JavaPS</strong> or <strong>Iceland</strong>. While <em>blue</em> components belong to <strong>Iceland</strong>, <em>red</em> components are offered by <strong>JavaPS</strong>.</p>
+<h2 id="general-workflow-abstract-request-to-response">General Workflow (abstract Request to Response)</h2>
+<p>In this section, the workflow and main method calls between key components of <strong>JavaPS</strong> and <strong>Iceland</strong> are described in an abstract way. It comprises a <a href="#overview-from-request-to-response">generic workflow description</a>, including an overview of <a href="#iceland-service-events-throughout-operations">service events</a> as well as detailed descriptions of <a href="#identification-of-binding-in-detail">binding identification</a> and <a href="#parsing-of-a-request-in-detail">request parsing</a>.</p>
+<p>Concrete operation workflows with particular focus on <em>request handling</em> are explained in section <a href="../../workflow_wps_operations/workflow_wps_operations/">Workflow of WPS 2.0 operations</a>.</p>
+<h3 id="overview-from-request-to-response">Overview from Request to Response</h3>
+<p>First a general overview is presented subsequently. It shows the main processing steps and participating components from <em>receiving a request</em> to <em>returning the response</em>.</p>
+<p><img alt="Generic Workflow" src="../UML_Diagrams/Generic_Workflow/Generic_Workflow.png" /><em>Generic Workflow</em></p>
+<p>As <strong>JavaPS</strong> / <strong>Iceland</strong> is build on Spring, the <strong><em>Service</em></strong> component acts as the central Spring controller, receiving any incoming request. For each WPS request its processing is structured in the following subtasks:</p>
+<ol>
+<li>determine the <em>Binding</em> (e.g. KVP, POX, SOAP, JSON) from the request. This will identify a certain <strong><em>Binding</em></strong> implementation from <strong>Iceland</strong>. How the <strong><em>Binding</em></strong> is determined is explained in section <a href="#identification-of-binding-in-detail">Identification of Binding in detail</a>.</li>
+<li>call the <em>doXOperation()</em> method from the found <strong><em>Binding</em></strong> component. Here the <em>X</em> indicates that different <strong><em>Binding</em></strong> implementations use different <em>do</em>-operations. E.g. a GET request is usually handled by a <strong><em>KvpBinding</em></strong> component, which offers a <em>doGetOperation()</em> method. Opposite a POST request is handled by a <strong><em>Binding</em></strong> implementation that has a <em>doPostOperation()</em> method.</li>
+<li>the request is <em>parsed</em> and transformed into the associated <strong><em>Request</em></strong> object. The request <em>parsing</em> is explained in section <a href="#parsing-of-a-request-in-detail">Parsing of a Request in detail</a>.</li>
+<li>determine the <em>service operator</em> that <em>receives</em> the request. <strong>Iceland</strong> offers a <strong><em>GenericServiceOperator</em></strong> component, which is used for all possible WPS requests. Hence the implementation is kept generic at this point.</li>
+<li>within the <em>receiveRequest()</em> method, the generic <em>service operator</em> fetches an appropriate <em>request operator</em>. Again <strong>Iceland</strong> offers a generic implementation named <strong><em>GenericRequestOperator</em></strong> that can handle all types of WPS requests. However, as each request requires a different processing from this point onwards, the generic <em>request operator</em> is instantiated with request specific properties. For instance a <strong><em>RequestOperatorKey</em></strong> property stores the parameters <em>service</em>, <em>version</em> and <em>operation name</em> of an incoming request. Based on these properties, <strong><em>GenericRequestOperator</em></strong> is able to determine, which concrete other components are required during the next processing steps described below.</li>
+<li>as next step, the request needs to be <em>validated</em> by the request specific implementation of <strong><em>ParameterValidator</em></strong>, e.g. by performing sanity checks on the delivered parameters or by checking certain values of request parameters. If a request parameter is missing or a non-existent resource is requested, an exception will be thrown. Relying on its request specific properties, the <strong><em>GenericRequestOperator</em></strong> knows, which validating component is responsible for this task. Note that the actual implementation of <strong><em>ParameterValidator</em></strong> is located within <strong>JavaPS</strong>! The section <a href="../../workflow_wps_operations/workflow_wps_operations/">Workflow of WPS 2.0 operations</a> contains detailed sequence diagrams of the validation process for each <strong>WPS</strong> operation.</li>
+<li>after successful validation the appropriate <em>operation handler</em> is fetched from the <strong><em>OperationHandlerRepository</em></strong>. For each WPS request/operation (<em>GetCapabilities</em>, <em>DescribeProcess</em>, <em>Execute</em>, <em>GetStatus</em>, <em>GetResult</em>, <em>Dismiss</em>), exactly one implementation of the interface <strong><em>OperationHandler</em></strong> exists. Each comprises a <em>handle()</em> method to perform operation-specific processing steps. The section <a href="#identification-of-binding-in-detail">Identification of Binding in detail</a> describes how Iceland fetches the appropriate <strong><em>OperationHandler</em></strong>.</li>
+<li>the <strong><em>OperationHandler</em></strong> implementation performs the necessary steps to process the request and eventually creates a request/operation specific <strong><em>Response</em></strong> object. Note that the processing steps of each different request greatly vary. Detailed sequence diagrams of the <em>request handling</em> of each <strong>WPS operation</strong> are included in section <a href="../../workflow_wps_operations/workflow_wps_operations/">Workflow of WPS 2.0 operations</a>.</li>
+<li>finally, the response is forwarded to the <strong><em>Binding</em></strong> component, where it is properly <em>written</em> using output streams and the corresponding <em>binding</em>. This will return the response to the client.</li>
+</ol>
+<p>It has to be mentioned, that the diagram simplifies certain processing steps by hiding their complexity. For instance, the Identification of the binding includes several sub-tasks that are not reflected within the diagram. For this reason, some simplified steps are explained more detailed subsequently, comprising the <em>identification of binding</em> and the <em>parsing of requests</em>. Before that, the next paragraph focuses several <strong>service events</strong> that are triggered during operation handling.</p>
+<h3 id="iceland-service-events-throughout-operations">Iceland Service Events throughout Operations</h3>
+<p>At several workflow points of the operation handling process described above, the <strong>Iceland</strong> infrastructure fires special <strong>events</strong>, for which <strong>listeners</strong> may have registered before. For this reason, <strong>Iceland</strong> implements a component named <strong><em>ServiceEventBus</em></strong>, which is capable of managing events implementing the interface <strong><em>ServiceEvent</em></strong>. It allows <strong><em>ServiceEventListener</em></strong> components to register to certain <strong><em>ServiceEvents</em></strong> and thus execute associated code once such an event is fired. For instance, some statistics can be managed through associated listeners. The following diagram shows a simplified Workflow diagram from a WPS request to response. In contrast to the previous workflow diagram it contains four additional <strong><em>ServicEvent</em></strong> calls that are triggered for each possible WPS request:</p>
+<ol>
+<li>Upon receival of a new request the <strong><em>Service</em></strong> component <em>submits</em> an <strong><em>IncomingRequestEvent</em></strong> to the <strong><em>ServiceEventBus</em></strong>. This <strong><em>IncomingRequestEvent</em></strong> is a generic event and is independent from a concrete WPS operation.</li>
+<li>The component <strong><em>GenericRequestOperator</em></strong> <em>submits</em> a <strong><em>RequestEvent</em></strong> before forwarding the request to the <strong><em>OperationHandler</em></strong>. A <strong><em>RequestEvent</em></strong> differs for each different WPS operation. It comprises a property <strong>request</strong> containing the concrete <em>request object</em> (e.g. a <strong><em>GetCapabilitiesRequest</em></strong> for a GetCapabilities operation).</li>
+<li>Once the <strong>response</strong> is generated, the <strong><em>GenericRequestOperator</em></strong> <em>submits</em> a <strong><em>ResponseEvent</em></strong>, which is also specific for each WPS operation as it comprises a <strong>response</strong> property that contains the concrete <em>response object</em> (e.g. a <strong><em>GetCapabilitiesResponse</em></strong> for a GetCapabilities operation).</li>
+<li>As soon as the <strong>response</strong> has been <em>written</em> and send to the client, the <strong><em>Service</em></strong> component <em>submits</em> the final <strong><em>OutgoingResponseEvent</em></strong>.</li>
+</ol>
+<p><img alt="Service Events" src="../UML_Diagrams/ServiceEventBus/ServiceEventBus_Generic_Workflow.png" /><em>Service Events</em></p>
+<h3 id="identification-of-binding-in-detail">Identification of Binding in detail</h3>
+<p>Details on how the application determines the <em>binding</em> from the request are described in the following. First, an abstract generic workflow description is presented followed by two concrete examples (<a href="#kvp-binding-example-for-get-request">KVP Binding Example - GetCapabilities GET Request</a> and <a href="#pox-binding-example-for-post-request">POX Binding Example - Execute POST Request</a>).</p>
+<h4 id="generic-workflow-binding">Generic Workflow - Binding</h4>
+<p>As mentioned in the previous section, <strong>Iceland</strong> offers a <strong><em>Binding</em></strong> interface. To determine the appropriate implementation for an incoming request, the <em>content type</em> (also called <em>media type</em> or <em>mime type</em>) is extracted and analysed.</p>
+<p>As shown in the sequence diagram, the associated <em>getBinding()</em> method consists of these main sub-tasks:</p>
+<ol>
+<li>get <em>request URI</em> and check if it is <em>null</em>, <em>empty</em> or equals "/".</li>
+<li>depending on the if-, determine the <em>content type</em> of the request or extract the <em>prefix</em> from the <em>request URI</em>.</li>
+<li>identify the appropriate <strong><em>Binding</em></strong> implementation from the <strong><em>BindingRepository</em></strong>.</li>
+<li>call the associated <em>doXOperation()</em> method, where X either stands for <em>Get</em> or <em>Post</em>, depending on the returned binding.</li>
+</ol>
+<p>However, the first step is not as simple as it sounds. There are multiple <em>if-cases</em> that have to be resolved, as illustrated in the diagram.</p>
+<p><img alt="Generic Workflow - Binding" src="../UML_Diagrams/Generic_Workflow/Binding/Get_Binding.png" /><em>Generic Workflow - Binding</em></p>
+<p>In general, if the request is a <strong>GET</strong> request, then the content type is set to <strong>application/x-kvp</strong> indicating that any <strong>GET</strong> request is associated to a KVP (Key Value Pair) binding. If otherwise it is a POST request then a <strong><em>MediaType</em></strong> object is created from the <em>content type</em>.</p>
+<p>To concretize this abstract description, two examples are illustrated below. First an exemplar GET request (<em>KVP</em> binding) is demonstrated followed by an example of a POST request with <em>POX</em> binding.</p>
+<h4 id="kvp-binding-example-for-get-request">KVP Binding Example for GET Request</h4>
+<p>The following diagram is based on the abstract binding-diagram from the previous section but instantiates the participating components to a <strong>GetCapabilities GET</strong> request. As a consequence, the implementation of the <strong><em>Binding</em></strong> interface is resolved to <strong><em>KvpBinding</em></strong> to handle a <strong>GET</strong> request. Furthermore, the diagram uses green colour to show the path within the various if-statements.</p>
+<p><img alt="KVP Binding Example" src="../UML_Diagrams/Generic_Workflow/Binding/Get_Binding_KVP.png" /><em>KVP Binding Example</em></p>
+<h4 id="pox-binding-example-for-post-request">POX Binding Example for POST Request</h4>
+<p>In contrast to a <strong>GET</strong> request, the workflow of a <strong>POST</strong> request differs. Again the green colour indicates the path within the if-statements. As it is a <strong>POST</strong> request using a <strong>POX</strong> (Plain Old XML) binding, the <em>content type</em> ("application/xml") is extracted from the request and used to identify the corresponding <strong><em>Binding</em></strong> implementation, which resolves to <strong><em>PoxBinding</em></strong>.</p>
+<p><img alt="POX Binding Example" src="../UML_Diagrams/Generic_Workflow/Binding/Get_Binding_POX.png" /><em>POX Binding Example</em></p>
+<h3 id="parsing-of-a-request-in-detail">Parsing of a Request in detail</h3>
+<p>This section focuses on <strong>request parsing</strong> and presents more detailed workflow diagrams of this specific task. Similar to the detailed description of the binding identification, the presentation starts with a generic and abstract overview followed by two concrete examples (<a href="#capabilities-get-example">GetCapabilities GET Example</a> and <a href="#execute-post-example-with-pox-binding">Execute POST Example</a>).</p>
+<h4 id="generic-workflow-parse-request">Generic Workflow - Parse Request</h4>
+<p>Parsing of a request is executed by the <strong><em>Binding</em></strong> component. It analyses the request and fetches a suitable <strong><em>Decoder</em></strong> to parse the request. While the interface <strong><em>Decoder</em></strong> is located within <strong>Iceland</strong>, its implementations are offered by <strong>JavaPS</strong>. As main sub-tasks the following actions are performed:</p>
+<ol>
+<li>the <em>WPS operation</em> is determined from the request object.</li>
+<li>with the help of the <em>operation identification</em> and the request <em>media/content type</em>, a new <strong><em>DecoderKey</em></strong> object is created.</li>
+<li>using the <strong><em>DecoderKey</em></strong>, the appropriate <strong><em>Decoder</em></strong> implementation is retrieved from the <strong><em>DecoderRepository</em></strong>.</li>
+<li>via the method <em>decode()</em> of the <strong><em>Decoder</em></strong>, the request is transformed into the suitable instance of <strong><em>AbstractServiceRequest</em></strong>. Note that <strong>JavaPS</strong> offers exactly one implementation of <strong><em>AbstractServiceRequest</em></strong> for each WPS request/operation.</li>
+<li>after instantiation of the request object it can be processed.</li>
+</ol>
+<p><img alt="Generic Workflow - Parse Request" src="../UML_Diagrams/Generic_Workflow/parse_request/parse_request_generic.png" /><em>Generic Workflow - Parse Request</em></p>
+<p>The following two sub-sections demonstrate request parsing including a <em>GetCapabilities GET</em> and an <em>Execute POST</em> request.</p>
+<h4 id="capabilities-get-example">Capabilities GET Example</h4>
+<p>A <strong>GetCapabilities GET</strong> request is parsed by <strong><em>KvpBinding</em></strong>. First the <em>parameter value map</em> is extracted from the request and used to acquire <em>service</em> ("wps"), <em>version</em> ("2.0.0"), <em>operation</em> ("GetCapabilities") and <em>content/media type</em> ("application/x-kvp"). With this information, the <strong><em>DecoderKey</em></strong> is created and used to retrieve the <strong><em>GetCapabilitiesKvpDecoder</em></strong> from the <strong><em>DecoderRepository</em></strong>. Note that this decoder is specialized to handle <em>GetCapabilities GET</em> requests. Via its <em>decoder()</em> method, which receives the <em>parameter value map</em> as argument, a <strong><em>GetCapabilitiesRequest</em></strong> instance is created and returned.</p>
+<p><img alt="Parse Request - Capabilities GET Example" src="../UML_Diagrams/Generic_Workflow/parse_request/parse_request_generic_capabilities_get.png" /><em>Parse Request - Capabilities GET Example</em></p>
+<h4 id="execute-post-example-with-pox-binding">Execute POST Example with POX Binding</h4>
+<p>An <strong>Execute POST</strong> request with <em>POX</em> binding is parsed by <strong><em>PoxBinding</em></strong>. Since the request body is delivered as XML document, the <strong><em>PoxBinding</em></strong> first derives the <em>encoding</em> ("UTF-8") and parses the <em>XML body</em> as String. Via the method <em>getDecoderKey()</em>, which takes the <em>encoding</em> and <em>XML String</em> as arguments, a new <strong><em>XmlStringOperationDecoderKey</em></strong> is created and used to retrieve the <strong><em>XmlStreamingOperationDecoder</em></strong> from the <strong><em>DecoderRepository</em></strong>.</p>
+<p>Then this decoder is used to read and parse the <em>Execute</em> request body String. <strong>JavaPS</strong> is designed to use <em>stream readers</em> to perform this task. It offers the interface <strong><em>StremReader</em></strong> and manages a repository of concrete child classes to parse the information from different formats. E.g. with regard to the XML body String of the request, an associated <strong><em>XmlStreamReaderKey</em></strong> is created to find the <strong><em>DocumentXmlStreamReader</em></strong> that extracts the required information from the XML String and creates an <strong><em>ExecuteRequest</em></strong> instance.</p>
+<p><img alt="Parse Request - Execute POST Example" src="../UML_Diagrams/Generic_Workflow/parse_request/parse_request_generic_execute_post.png" /><em>Parse Request - Execute POST Example</em></p>
+<h3 id="identification-of-operationhandler-in-detail">Identification of OperationHandler in detail</h3>
+<p>Another interesting aspect of <strong>Iceland's</strong> generic infrastructure is the <em>identification of a suitable OperationHandler</em>, which processes a certain type of requests. As described in section <a href="#overview-from-request-to-response">Overview from Request to Response</a>, the <strong><em>GenericRequestOperator</em></strong> possesses certain request-specific properties that aid during this step. In particular, it includes a property <em>requestOperatorKey</em> of type <strong><em>RequestOperatorKey</em></strong> storing information about <em>service</em>, <em>version</em> and <em>operation name</em> of an incoming request. The diagram at the end of this section illustrates, how this information is used in order to fetch the correct <strong><em>OperationHandler</em></strong> from the associated <strong><em>OperationHandlerRepository</em></strong>. It comprises the following steps:</p>
+<ul>
+<li>Within its <em>receiveRequest(request)</em> method the <strong><em>GenericRequestOperator</em></strong> delegates the task of fetching the <strong><em>OperationHandler</em></strong> to its internal methods <em>getOperationHander()</em> and <em>getOptionalOperationHandler()</em>. The latter first retrieves the instance of <strong><em>OperationHandler</em></strong> as an <strong><em>Optional</em></strong> object to throw an exception in case no suitable handler is identified (as described in the final point of this list).</li>
+<li>From the aforementioned <strong><em>RequestOperatorKey</em></strong>, the request parameters <em>service</em> and <em>operationName</em> are extracted. While <em>service</em> always has to be set to <strong>"WPS"</strong> and is thus a constant value for all WPS request within the scope of <strong>JavaPS</strong> as a Web Processing Service implementation, the parameter <em>operationName</em> carries the operation the client targets. Possible Values are the operation specified in the <a href="http://docs.opengeospatial.org/is/14-065/14-065.html">OGC WPS 2.0 specification</a>, i.e. <strong>GetCapabilities</strong>, <strong>DescribeProcess</strong>, <strong>Execute</strong>, <strong>GetStatus</strong>, <strong>GetResult</strong>, <strong>Dismiss</strong>.</li>
+<li><em>service</em> and <em>version</em> are then used as parameters when calling the <em>getOperationHander(service, operationName)</em> method of <strong><em>OperationHandlerRepository</em></strong>.</li>
+<li>Amongst others, <strong><em>OperationHandlerRepository</em></strong> comprises a <code>Map&lt;OperationHandlerKey,Producer&lt;OperationHandler&gt;&gt; operationHandlers</code> property that maps an unambiguous <strong><em>OperationHandlerKey</em></strong> to its associated <strong><em>OperationHandler</em></strong>. The latter is wrapped by a <strong><em>Producer</em></strong>. In order to determine the correct <strong><em>OperationHandler</em></strong>, a new instance of <strong><em>OperationHandlerKey</em></strong> is created from both request parameters <em>service</em> and <em>operationName</em> and used to retrieve the associated <strong><em>Producer<OperationHandler></em></strong> from the <code>Map</code> object. In case of an invalid combination of <em>service</em> and <em>operationName</em>, then no handler is found at all. The following table shows the possible combinations and to which handler they are resolved:</li>
+</ul>
+<p><em>Valid combination of parameters "service" and "operationName"</em></p>
+<table>
+<thead>
+<tr>
+<th align="center">service</th>
+<th align="center">operationName</th>
+<th align="center">OperationHandler instance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">WPS</td>
+<td align="center">GetCapabilities</td>
+<td align="center">GetCapabilitiesHandler</td>
+</tr>
+<tr>
+<td align="center">WPS</td>
+<td align="center">DescribeProcess</td>
+<td align="center">DescribeProcessHandler</td>
+</tr>
+<tr>
+<td align="center">WPS</td>
+<td align="center">Execute</td>
+<td align="center">ExecuteHandler</td>
+</tr>
+<tr>
+<td align="center">WPS</td>
+<td align="center">GetStatus</td>
+<td align="center">GetStatusHandler</td>
+</tr>
+<tr>
+<td align="center">WPS</td>
+<td align="center">GetResult</td>
+<td align="center">GetResultHandler</td>
+</tr>
+<tr>
+<td align="center">WPS</td>
+<td align="center">Dismiss</td>
+<td align="center">DismissHandler</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>From the returned <strong><em>Producer<OperationHandler></em></strong>, the actual <strong><em>OperationHandler</em></strong> is extracted and then returned as an <strong><em>Optional</em></strong>.</li>
+<li>If no valid <strong><em>OperationHandler</em></strong> could be found (i.e. the <strong><em>Optional</em></strong> contains <em>NULL</em>), a <strong><em>NullPointerException</em></strong> is thrown as the client requested an operation that is not supported by <strong>JavaPS</strong>. Otherwise, the <strong><em>OperationHandler</em></strong> is utilized to <em>handle()</em> the request.</li>
+</ul>
+<p><img alt="Identification of Operation Handler in detail" src="../UML_Diagrams/Generic_Workflow/get_operation_handler/get_operation_handler.png" /><em>Identification of Operation Handler in detail</em></p></div>
+        
+    </div>
+
+    <footer class="col-md-12 text-center">
+        <hr>
+        <p>
+        <small>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p></small>
+    </footer>
+
+    <script src="../../../js/jquery-1.10.2.min.js"></script>
+    <script src="../../../js/bootstrap-3.0.3.min.js"></script>
+    <script src="../../../js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script>
+    var base_url = '../../..';
+    </script>
+    <script data-main="../../../mkdocs/js/search.js" src="../../../mkdocs/js/require.js"></script>
+    <script src="../../../js/base.js"></script>
+
+    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        From here you can search these documents. Enter your search terms below.
+                    </p>
+                    <form role="form">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                        </div>
+                    </form>
+                    <div id="mkdocs-search-results"></div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </body>
+
+</html>

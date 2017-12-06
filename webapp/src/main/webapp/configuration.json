@@ -66,7 +66,7 @@
     },
     "serviceProvider.onlineResource" : {
       "type" : "string",
-      "value" : "personal website|http://52north.org/about/52-north-team/27-daniel-nuest"
+      "value" : "team website|https://github.com/orgs/52North/teams/geoprocessing/members"
     },
     "serviceProvider.role.value" : {
       "type" : "string",
@@ -83,18 +83,20 @@
     "serviceIdentification.abstract" : {
       "type" : "multilingual",
       "value" : {
-        "eng" : "52North Test Service"
+        "en" : "52North WPS 2.0 Service",
+        "de" : "52North WPS 2.0 Dienst"
       }
     },
     "serviceIdentification.title" : {
       "type" : "multilingual",
       "value" : {
-        "eng" : "TEST"
+        "en" : "javaPS",
+        "de" : "javaPS"
       }
     },
     "serviceIdentification.keywords" : {
       "type" : "string",
-      "value" : "OGC, iceland, skeleton"
+      "value" : "OGC, WPS 2.0"
     },
     "serviceIdentification.serviceType" : {
       "type" : "string",
@@ -102,7 +104,7 @@
     },
     "i18n.defaultLanguage" : {
       "type" : "string",
-      "value" : "eng"
+      "value" : "en"
     },
     "serviceIdentification.serviceTypeCodeSpace" : {
       "type" : "string",
@@ -143,6 +145,18 @@
     "misc.includeOriginalRequest" : {
       "type" : "boolean",
       "value" : false
+    },
+    "misc.baseDirectory" : {
+      "type" : "file",
+      "value" : "/tmp/wps/outputs/"
+    },
+    "misc.duration" : {
+      "type" : "string",
+      "value" : "PT2H"
+    },
+    "misc.checkInterval" : {
+      "type" : "string",
+      "value" : "PT1H"
     }
   }
 }
