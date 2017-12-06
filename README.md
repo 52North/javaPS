@@ -2,13 +2,14 @@
 
 ## Description
 
-Next generation standardized web-based geo-processing.
+### Next generation standardized web-based geo-processing.
 
-javaPS enables the deployment of geo-processes on the web in a standardized way. It features a pluggable architecture for processes and data encodings.
+**javaPS enables the deployment of geo-processes on the web in a standardized way. It features a pluggable architecture for processes and data encodings.
 
 javaPS implements the [OGC WPS specification, version 2.0](http://docs.opengeospatial.org/is/14-065/14-065.html).
 
 ## Build Status
+* Master: [![Develop Build Status](https://travis-ci.org/52North/javaPS.png?branch=master)](https://travis-ci.org/52North/javaPS)
 * Develop: [![Develop Build Status](https://travis-ci.org/52North/javaPS.png?branch=develop)](https://travis-ci.org/52North/javaPS)
 
 ## Features
@@ -25,14 +26,7 @@ This project is licensed under the Apache Software License, version 2.0.
 ## Changelog
 
   * Changes since last release
-    * New features
-      * N/A
-  
-    * Changes
-      * N/A
-  
-    * Fixed issues
-      * N/A
+    * N/A First release
 
 ## Quick Start
 
@@ -43,6 +37,18 @@ git clone https://github.com/52North/javaPS.git
 ```
 
 Then just run `mvn clean install` on the repositories root directory.
+
+## User guide/tutorial
+
+TBD
+
+## Demo
+
+Try out the latest javaPS alpha-release on on our [Geoprocessing Demo Server](http://geoprocessing.demo.52north.org/).
+
+## References
+
+* [WPS for Coordinate Transformation](http://ows.dev.52north.org:8080/javaps/service?request=GetCapabilities&service=WPS) - WPS service deployed for the Testbed-13 project.
 
 ## Contact
 
