@@ -138,4 +138,9 @@ public class ExecuteHandler extends AbstractEngineHandler
         return Collections.singleton(new OwsDomain(IDENTIFIER, possibleValues));
     }
 
+    @Override
+    public boolean isSupported() {
+        return true;
+    }
+
 }

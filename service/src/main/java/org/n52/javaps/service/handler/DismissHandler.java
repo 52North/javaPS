@@ -73,4 +73,9 @@ public class DismissHandler extends AbstractJobHandler
         return Collections.singleton(KEY);
     }
 
+    @Override
+    public boolean isSupported() {
+        return true;
+    }
+
 }

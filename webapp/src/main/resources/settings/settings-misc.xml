@@ -59,12 +59,36 @@
         <property name="group" ref="miscellaneousSettingDefinitionGroup" />
         <property name="defaultValue" value="false" />
     </bean>
-        <bean class="org.n52.faroe.settings.BooleanSettingDefinition">
+    <bean class="org.n52.faroe.settings.BooleanSettingDefinition">
         <property name="key" value="misc.includeOriginalRequest" />
         <property name="title" value="Include original request" />
         <property name="description" value="Should the full (!) original request be included in the decoded Java classes to be used by handlers and operators?" />
         <property name="order" value="20.0" />
         <property name="group" ref="miscellaneousSettingDefinitionGroup" />
         <property name="defaultValue" value="false" />
+    </bean>
+    <bean class="org.n52.faroe.settings.FileSettingDefinition">
+        <property name="key" value="misc.baseDirectory" />
+        <property name="title" value="Base directory" />
+        <property name="description" value="Directory for storing outputs." />
+        <property name="order" value="20.0" />
+        <property name="group" ref="miscellaneousSettingDefinitionGroup" />
+        <property name="defaultValue" value="/tmp/wps/outputs" />
+    </bean>
+    <bean class="org.n52.faroe.settings.StringSettingDefinition">
+        <property name="key" value="misc.duration" />
+        <property name="title" value="Duration" />
+        <property name="description" value="Duration that outputs are stored." />
+        <property name="order" value="20.0" />
+        <property name="group" ref="miscellaneousSettingDefinitionGroup" />
+        <property name="defaultValue" value="PT2H" />
+    </bean>
+    <bean class="org.n52.faroe.settings.StringSettingDefinition">
+        <property name="key" value="misc.checkInterval" />
+        <property name="title" value="Check interval" />
+        <property name="description" value="Check for outdated outputs within this time interval." />
+        <property name="order" value="20.0" />
+        <property name="group" ref="miscellaneousSettingDefinitionGroup" />
+        <property name="defaultValue" value="PT1H" />
     </bean>
 </beans>

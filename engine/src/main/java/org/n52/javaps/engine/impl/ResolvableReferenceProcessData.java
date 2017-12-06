@@ -16,17 +16,22 @@
  */
 package org.n52.javaps.engine.impl;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
-import org.n52.shetland.util.HTTP;
 import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.shetland.ogc.wps.Format;
 import org.n52.shetland.ogc.wps.data.Body;
 import org.n52.shetland.ogc.wps.data.ReferenceProcessData;
 import org.n52.shetland.ogc.wps.data.ValueProcessData;
 import org.n52.shetland.ogc.wps.data.impl.InMemoryValueProcessData;
+import org.n52.shetland.util.HTTP;
+
+import com.google.common.io.ByteStreams;
 
 
 /**
@@ -66,12 +71,24 @@ public class ResolvableReferenceProcessData extends ReferenceProcessData {
         //TODO save as a file?
         final byte[] bytes;
         if (!getBody().isPresent()) {
-            bytes = HTTP.get(getURI());
+            switch (getURI().getScheme()) {
+            case "file":
+                bytes = getFromLocalDisc();
+                break;
+            default:
+                bytes = HTTP.get(getURI());
+            }
         } else {
             bytes = HTTP.post(getURI(), getBody().get().getBody()
                               .getBytes(StandardCharsets.UTF_8));
         }
         return new InMemoryValueProcessData(getId(), getFormat(), bytes);
+    }
+
+    private byte[] getFromLocalDisc() throws IOException {
+        URL fileURL = getURI().toURL();
+        InputStream is = new FileInputStream(fileURL.getFile());
+        return ByteStreams.toByteArray(is);
     }
 
 }

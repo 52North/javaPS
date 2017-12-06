@@ -16,8 +16,6 @@
  */
 package org.n52.javaps.service.handler;
 
-import static org.n52.javaps.service.handler.AbstractJobHandler.JOB_ID;
-
 import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
@@ -25,21 +23,21 @@ import java.util.concurrent.Future;
 
 import javax.inject.Inject;
 
-import org.n52.shetland.ogc.wps.JobId;
-import org.n52.shetland.ogc.wps.ResponseMode;
-import org.n52.shetland.ogc.wps.Result;
-import org.n52.shetland.ogc.wps.WPSConstants;
 import org.n52.iceland.request.handler.GenericOperationHandler;
 import org.n52.iceland.request.handler.OperationHandlerKey;
 import org.n52.janmayen.http.MediaType;
 import org.n52.javaps.engine.Engine;
 import org.n52.javaps.engine.EngineException;
 import org.n52.javaps.engine.JobNotFoundException;
-import org.n52.shetland.ogc.wps.request.GetResultRequest;
-import org.n52.shetland.ogc.wps.response.GetResultResponse;
 import org.n52.shetland.ogc.ows.exception.InvalidParameterValueException;
 import org.n52.shetland.ogc.ows.exception.NoApplicableCodeException;
 import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
+import org.n52.shetland.ogc.wps.JobId;
+import org.n52.shetland.ogc.wps.ResponseMode;
+import org.n52.shetland.ogc.wps.Result;
+import org.n52.shetland.ogc.wps.WPSConstants;
+import org.n52.shetland.ogc.wps.request.GetResultRequest;
+import org.n52.shetland.ogc.wps.response.GetResultResponse;
 
 /**
  * TODO JavaDoc
@@ -91,6 +89,11 @@ public class GetResultHandler extends AbstractJobHandler
     @Override
     public Set<OperationHandlerKey> getKeys() {
         return Collections.singleton(KEY);
+    }
+
+    @Override
+    public boolean isSupported() {
+        return true;
     }
 
 }

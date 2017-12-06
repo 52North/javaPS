@@ -54,4 +54,9 @@ public class GetCapabilitiesHandler extends AbstractGetCapabilitiesHandler<Proce
     protected OwsCapabilities createCapabilities(OwsCapabilities capabilities, ProcessOfferings processOfferings) {
         return new WPSCapabilities(capabilities, processOfferings);
     }
+
+    @Override
+    public boolean isSupported() {
+        return true;
+    }
 }

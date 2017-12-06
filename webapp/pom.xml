@@ -30,7 +30,7 @@
     <artifactId>webapp</artifactId>
     <packaging>war</packaging>
 
-    <name>52&deg;North Iceland WPS Webapp</name>
+    <name>52&deg;North javaPS Webapp</name>
     
     <licenses>
         <license>
@@ -152,7 +152,7 @@
     </dependencies>
     
     <build>
-        <finalName>${parent.artifactId}-${project.artifactId}-${project.version}</finalName>
+        <finalName>${project.parent.artifactId}-${project.artifactId}-${project.version}</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>

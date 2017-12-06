@@ -19,6 +19,7 @@ package org.n52.javaps.engine.impl;
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -47,9 +48,23 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import org.n52.faroe.annotation.Configurable;
+import org.n52.faroe.annotation.Setting;
+import org.n52.iceland.util.MoreFiles;
+import org.n52.janmayen.Chain;
+import org.n52.janmayen.Json;
+import org.n52.janmayen.lifecycle.Constructable;
+import org.n52.janmayen.lifecycle.Destroyable;
+import org.n52.javaps.engine.EngineException;
+import org.n52.javaps.engine.EngineProcessExecutionContext;
+import org.n52.javaps.engine.JobNotFoundException;
+import org.n52.javaps.engine.OutputNotFoundException;
+import org.n52.javaps.engine.OutputReference;
+import org.n52.javaps.engine.OutputReferencer;
+import org.n52.javaps.engine.ResultPersistence;
+import org.n52.javaps.io.EncodingException;
+import org.n52.javaps.settings.SettingsConstants;
+import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.shetland.ogc.wps.DataTransmissionMode;
 import org.n52.shetland.ogc.wps.Format;
 import org.n52.shetland.ogc.wps.JobId;
@@ -63,20 +78,8 @@ import org.n52.shetland.ogc.wps.data.GroupProcessData;
 import org.n52.shetland.ogc.wps.data.ProcessData;
 import org.n52.shetland.ogc.wps.data.ValueProcessData;
 import org.n52.shetland.ogc.wps.data.impl.FileBasedProcessData;
-import org.n52.janmayen.Json;
-import org.n52.iceland.util.MoreFiles;
-import org.n52.janmayen.Chain;
-import org.n52.janmayen.lifecycle.Constructable;
-import org.n52.janmayen.lifecycle.Destroyable;
-import org.n52.javaps.engine.EngineException;
-import org.n52.javaps.engine.EngineProcessExecutionContext;
-import org.n52.javaps.engine.JobNotFoundException;
-import org.n52.javaps.engine.OutputNotFoundException;
-import org.n52.javaps.engine.OutputReference;
-import org.n52.javaps.engine.OutputReferencer;
-import org.n52.javaps.engine.ResultPersistence;
-import org.n52.javaps.io.EncodingException;
-import org.n52.shetland.ogc.ows.OwsCode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -86,6 +89,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
  *
  * @author Christian Autermann
  */
+@Configurable
 public class FileBasedResultPersistence implements ResultPersistence, Constructable, Destroyable {
     private static final String GROUP_TYPE = "group";
     private static final String REFERENCE_TYPE = "reference";
@@ -98,16 +102,19 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
     private Duration checkInterval = Duration.ofHours(1);
     private Optional<OutputReferencer> referencer;
 
-    public void setBasePath(Path basePath) {
-        this.basePath = Objects.requireNonNull(basePath);
+    @Setting(SettingsConstants.MISC_BASE_DIRECTORY)
+    public void setBasePath(File baseDirectory) {
+        this.basePath = baseDirectory.toPath();
     }
 
-    public void setDuration(Duration duration) {
-        this.duration = Objects.requireNonNull(duration);
+    @Setting(SettingsConstants.MISC_DURATION)
+    public void setDuration(String durationString) {
+        this.duration = Duration.parse(durationString);
     }
 
-    public void setCheckInterval(Duration checkInterval) {
-        this.checkInterval = Objects.requireNonNull(checkInterval);
+    @Setting(SettingsConstants.MISC_CHECK_INTERVAL)
+    public void setCheckInterval(String checkIntervalString) {
+        this.checkInterval = Duration.parse(checkIntervalString);
     }
 
     @Inject

@@ -14,21 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.commons.context;
+package org.n52.javaps.settings;
 
-import java.util.UUID;
+public class SettingsConstants {
 
-@Deprecated
-public class ExecutionContext {
+    public static final String MISC_BASE_DIRECTORY = "misc.baseDirectory";
+    public static final String MISC_DURATION = "misc.duration";
+    public static final String MISC_CHECK_INTERVAL = "misc.checkInterval";
 
-    private final String tempFolderName;
-
-    public ExecutionContext() {
-        this.tempFolderName = UUID.randomUUID().toString();
-    }
-
-    public String getTempDirectoryPath() {
-
-        return System.getProperty("java.io.tmpdir") + this.tempFolderName;
-    }
 }
