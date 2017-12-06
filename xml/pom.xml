@@ -22,10 +22,10 @@
     <parent>
         <groupId>org.n52.wps</groupId>
         <artifactId>javaPS</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
     <artifactId>xml</artifactId>
-    <name>52&#x00B0;North javaPS POX Binding</name>
+    <name>52°North javaPS POX Binding</name>
     <dependencies>
         <dependency>
             <groupId>org.n52.wps</groupId>
