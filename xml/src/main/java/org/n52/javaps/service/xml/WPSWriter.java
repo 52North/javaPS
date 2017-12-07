@@ -22,6 +22,7 @@ import java.io.InputStreamReader;
 import java.math.BigInteger;
 import java.net.URI;
 import java.nio.charset.Charset;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
@@ -29,8 +30,11 @@ import java.util.Set;
 import javax.xml.stream.XMLStreamException;
 
 import org.apache.commons.codec.binary.Base64InputStream;
-
-import org.n52.svalbard.stream.XLinkConstants;
+import org.n52.javaps.io.bbox.BoundingBoxInputOutputHandler;
+import org.n52.javaps.io.literal.LiteralInputOutputHandler;
+import org.n52.shetland.ogc.ows.OwsCRS;
+import org.n52.shetland.ogc.ows.OwsPossibleValues;
+import org.n52.shetland.ogc.ows.OwsValue;
 import org.n52.shetland.ogc.wps.DataTransmissionMode;
 import org.n52.shetland.ogc.wps.Format;
 import org.n52.shetland.ogc.wps.JobControlOption;
@@ -64,12 +68,9 @@ import org.n52.shetland.ogc.wps.description.ProcessInputDescription;
 import org.n52.shetland.ogc.wps.description.ProcessInputDescriptionContainer;
 import org.n52.shetland.ogc.wps.description.ProcessOutputDescription;
 import org.n52.shetland.ogc.wps.description.ProcessOutputDescriptionContainer;
-import org.n52.javaps.io.bbox.BoundingBoxInputOutputHandler;
-import org.n52.javaps.io.literal.LiteralInputOutputHandler;
-import org.n52.shetland.ogc.ows.OwsCRS;
-import org.n52.shetland.ogc.ows.OwsPossibleValues;
-import org.n52.shetland.ogc.ows.OwsValue;
+import org.n52.shetland.w3c.SchemaLocation;
 import org.n52.svalbard.encode.exception.EncodingException;
+import org.n52.svalbard.stream.XLinkConstants;
 
 import com.google.common.io.CharStreams;
 
@@ -120,7 +121,7 @@ public class WPSWriter extends AbstractOWSWriter {
     private void writeWPSCapabilities(WPSCapabilities object)
             throws XMLStreamException {
         element(WPSConstants.Elem.QN_CAPABILITIES, object, (WPSCapabilities capabilities) -> {
-            writeNamespaces();
+            writeNamespacesWithSchemalocation();
 
             attr(OWSConstants.Attr.AN_SERVICE, capabilities.getService());
             attr(OWSConstants.Attr.AN_VERSION, capabilities.getVersion());
@@ -269,7 +270,7 @@ public class WPSWriter extends AbstractOWSWriter {
     private void writeProcessDescription(ProcessDescription object)
             throws XMLStreamException {
         element(WPSConstants.Elem.QN_PROCESS, object, x -> {
-            writeNamespaces();
+            writeNamespacesWithSchemalocation();
             writeDescriptionElements(object);
             writeProcessInputDescriptionContainer((ProcessInputDescriptionContainer) object);
             writeProcessOutputDescriptionContainer((ProcessOutputDescriptionContainer) object);
@@ -301,7 +302,7 @@ public class WPSWriter extends AbstractOWSWriter {
     private void writeStatusInfo(StatusInfo object)
             throws XMLStreamException {
         element(WPSConstants.Elem.QN_STATUS_INFO, () -> {
-            writeNamespaces();
+            writeNamespacesWithSchemalocation();
             element(WPSConstants.Elem.QN_JOB_ID, object.getJobId().getValue());
             element(WPSConstants.Elem.QN_STATUS, object.getStatus().getValue());
             element(WPSConstants.Elem.QN_EXPIRATION_DATE, object.getExpirationDate()
@@ -372,7 +373,7 @@ public class WPSWriter extends AbstractOWSWriter {
             writeRawResult(result);
         } else {
             element(WPSConstants.Elem.QN_RESULT, result, x -> {
-                writeNamespaces();
+                writeNamespacesWithSchemalocation();
                 element(WPSConstants.Elem.QN_JOB_ID, x.getJobId().map(JobId::getValue));
                 element(WPSConstants.Elem.QN_EXPIRATION_DATE, x.getExpirationDate().map(this::format));
                 for (ProcessData data : x.getOutputs()) {
@@ -419,6 +420,12 @@ public class WPSWriter extends AbstractOWSWriter {
         namespace(XLinkConstants.NS_XLINK_PREFIX, XLinkConstants.NS_XLINK);
     }
 
+    private void writeNamespacesWithSchemalocation()
+            throws XMLStreamException {
+        writeNamespaces();
+        schemaLocation(Collections.singleton(new SchemaLocation(WPSConstants.NS_WPS, XMLSchemaConstants.WPS20_SCHEMALOCTION)));
+    }
+
     private void writeGroupData(GroupProcessData x)
             throws XMLStreamException {
         for (ProcessData output : x.getElements()) {
@@ -429,7 +436,7 @@ public class WPSWriter extends AbstractOWSWriter {
     private void writeProcessOfferings(ProcessOfferings offerings)
             throws XMLStreamException {
         element(WPSConstants.Elem.QN_PROCESS_OFFERINGS, () -> {
-            writeNamespaces();
+            writeNamespacesWithSchemalocation();
             for (ProcessOffering processOffering : offerings) {
                 writeProcessOffering(processOffering);
             }

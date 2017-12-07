@@ -18,12 +18,14 @@ package org.n52.javaps.service.xml;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.Collections;
 import java.util.Optional;
 
 import javax.xml.stream.XMLStreamException;
 
 import org.n52.shetland.ogc.ows.exception.CodedException;
 import org.n52.shetland.ogc.ows.exception.OwsExceptionCode;
+import org.n52.shetland.w3c.SchemaLocation;
 import org.n52.svalbard.encode.stream.OwsExceptionReportResponse;
 import org.n52.svalbard.encode.stream.xml.AbstractSingleElementXmlStreamWriter;
 
@@ -47,6 +49,7 @@ public class OwsExceptionReportWriter extends AbstractSingleElementXmlStreamWrit
     public void write(OwsExceptionReportResponse response) throws XMLStreamException {
         element(OWSConstants.Elem.QN_EXCEPTION_REPORT, response.getOwsExceptionReport(), report -> {
             namespace(OWSConstants.NS_OWS_PREFIX, OWSConstants.NS_OWS);
+            schemaLocation(Collections.singleton(new SchemaLocation(OWSConstants.NS_OWS, XMLSchemaConstants.OWS20_SCHEMALOCTION)));
             attr(OWSConstants.Attr.AN_VERSION, report.getVersion());
             for (CodedException exception : report.getExceptions()) {
                 element(OWSConstants.Elem.QN_EXCEPTION, exception, x -> {

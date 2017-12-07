@@ -22,10 +22,10 @@
     <parent>
         <groupId>org.n52.wps</groupId>
         <artifactId>javaPS</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>kvp</artifactId>
-    <name>52&#x00B0;North javaPS KVP Binding</name>
+    <name>52°North javaPS KVP Binding</name>
     <dependencies>
         <dependency>
             <groupId>org.n52.iceland</groupId>
