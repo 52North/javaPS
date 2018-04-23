@@ -134,6 +134,24 @@ public class LocalAlgorithmRepository implements AlgorithmRepository {
         }
     }
 
+    public boolean removeAlgorithm(String identifier) {
+
+        OwsCode owsCode = new OwsCode(identifier);
+
+        return removeAlgorithm(owsCode);
+    }
+
+    public boolean removeAlgorithm(OwsCode identifier) {
+
+        Supplier<IAlgorithm> removedAlgorithm = this.algorithms.remove(identifier);
+
+        if(removedAlgorithm != null) {
+            return true;
+        }
+
+        return false;
+    }
+
     private Optional<IAlgorithm> instantiate(Class<?> clazz) {
         Object instance;
         try {
