@@ -126,11 +126,11 @@ public class AnnotatedAlgorithmMetadata {
     private Map<OwsCode, AbstractInputBinding<?>> getInputBindings(Class<?> algorithmClass, InputHandlerRepository parserRepository, LiteralTypeRepository literalTypeRepository) {
         Stream<AbstractInputBinding<Field>> s1 = parseElements(getFields(algorithmClass), Arrays
                 .asList(new LiteralInputAnnotationParser<>(AbstractInputBinding::field, literalTypeRepository),
-                        new ComplexInputAnnotationParser<>(AbstractInputBinding::field, parserRepository)))
+                        new ComplexInputAnnotationParser<>(AbstractInputBinding::field, parserRepository), new BoundingBoxInputAnnotationParser<>(AbstractInputBinding::field)))
                 .map(x -> (AbstractInputBinding<Field>)x);
         Stream<AbstractInputBinding<Method>> s2 = parseElements(getMethods(algorithmClass), Arrays
                 .asList(new LiteralInputAnnotationParser<>(AbstractInputBinding::method, literalTypeRepository),
-                        new ComplexInputAnnotationParser<>(AbstractInputBinding::method, parserRepository)))
+                        new ComplexInputAnnotationParser<>(AbstractInputBinding::method, parserRepository), new BoundingBoxInputAnnotationParser<>(AbstractInputBinding::method)))
                 .map(x -> (AbstractInputBinding<Method>)x);
         BinaryOperator<AbstractInputBinding<?>> merger = Streams.throwingMerger((a, b) ->
                 new RuntimeException("duplicated identifier: " + a.getDescription().getId()));
