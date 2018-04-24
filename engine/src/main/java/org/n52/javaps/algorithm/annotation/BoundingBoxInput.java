@@ -38,4 +38,6 @@ public @interface BoundingBoxInput {
     long minOccurs() default 1;
     long maxOccurs() default 1;
     String boundingBoxString() default "";
+    String defaultCRSString() default "http://www.opengis.net/def/crs/EPSG/0/4326";
+    String[] supportedCRSStringArray() default {"http://www.opengis.net/def/crs/EPSG/0/4326"};
 }
