@@ -20,6 +20,7 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +42,7 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.n52.shetland.ogc.wps.Format;
 import org.n52.shetland.ogc.wps.JobId;
 import org.n52.shetland.ogc.wps.JobStatus;
 import org.n52.shetland.ogc.wps.OutputDefinition;
@@ -55,6 +56,8 @@ import org.n52.javaps.algorithm.IAlgorithm;
 import org.n52.javaps.algorithm.ProcessInputs;
 import org.n52.javaps.algorithm.ProcessOutputs;
 import org.n52.javaps.algorithm.RepositoryManager;
+import org.n52.javaps.description.TypedBoundingBoxOutputDescription;
+import org.n52.javaps.description.TypedComplexOutputDescription;
 import org.n52.javaps.description.TypedProcessDescription;
 import org.n52.javaps.description.TypedProcessOutputDescription;
 import org.n52.javaps.description.TypedProcessOutputDescriptionContainer;
@@ -217,13 +220,29 @@ public class EngineImpl implements Engine, Destroyable {
         return description.getOutputDescriptions().stream()
                 .map((TypedProcessOutputDescription<?> x) -> {
                     if (!x.isGroup()) {
-                        return new OutputDefinition(x.getId());
+                        return createDefaultOutputDefinition(x);
                     } else {
                         OutputDefinition outputDefinition = new OutputDefinition(x.getId());
                         outputDefinition.setOutputs(createDefaultOutputDefinitions(x.asGroup()));
                         return outputDefinition;
                     }
                 }).collect(toList());
+    }
+
+    private OutputDefinition createDefaultOutputDefinition(TypedProcessOutputDescription<?> processOutputDescription) {
+
+        OutputDefinition outputDefinition = new OutputDefinition(processOutputDescription.getId());
+
+        if(processOutputDescription.isComplex()) {
+            TypedComplexOutputDescription complexOutputDefinition = processOutputDescription.asComplex();
+
+            Format defaultFormat = complexOutputDefinition.getDefaultFormat();
+
+            outputDefinition.setFormat(defaultFormat);
+        }
+
+        return outputDefinition;
+
     }
 
     private static Supplier<JobNotFoundException> jobNotFound(JobId id) {
