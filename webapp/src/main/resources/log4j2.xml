@@ -33,7 +33,7 @@
                 <SizeBasedTriggeringPolicy size="25 MB"/>
             </Policies>
         </RollingFile>
-        
+
     </Appenders>
 
     <Loggers>

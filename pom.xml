@@ -92,17 +92,17 @@
         <maven.build.timestamp.format>yyyyMMdd-HHmm</maven.build.timestamp.format>
         <version.java>1.8</version.java>
         <version.spring>4.2.3.RELEASE</version.spring>
-        <version.slf4j>1.7.21</version.slf4j>
+        <version.slf4j>1.7.25</version.slf4j>
         <version.log4j>2.3</version.log4j>
-        <version.faroe>1.3.0</version.faroe>
+        <version.arctic.sea>5.0.0</version.arctic.sea>
     </properties>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.n52.shetland</groupId>
+                <groupId>org.n52.arctic-sea</groupId>
                 <artifactId>shetland</artifactId>
-                <version>1.0.0</version>
+                <version>${version.arctic.sea}</version>
                 <exclusions>
                     <exclusion>
                         <artifactId>joda-time</artifactId>
@@ -111,9 +111,9 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <groupId>org.n52.janmayen</groupId>
+                <groupId>org.n52.arctic-sea</groupId>
                 <artifactId>janmayen</artifactId>
-                <version>1.2.0</version>
+                <version>${version.arctic.sea}</version>
                 <exclusions>
                     <exclusion>
                         <artifactId>joda-time</artifactId>
@@ -122,14 +122,14 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <groupId>org.n52.svalbard</groupId>
+                <groupId>org.n52.arctic-sea</groupId>
                 <artifactId>svalbard</artifactId>
-                <version>1.0.0</version>
+                <version>${version.arctic.sea}</version>
             </dependency>
             <dependency>
-                <groupId>org.n52.iceland</groupId>
+                <groupId>org.n52.arctic-sea</groupId>
                 <artifactId>iceland</artifactId>
-                <version>2.0.0</version>
+                <version>${version.arctic.sea}</version>
                 <exclusions>
                     <exclusion>
                         <artifactId>jackson-core</artifactId>
@@ -142,19 +142,19 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <groupId>org.n52.faroe</groupId>
+                <groupId>org.n52.arctic-sea</groupId>
                 <artifactId>faroe-annotations</artifactId>
-                <version>${version.faroe}</version>
+                <version>${version.arctic.sea}</version>
             </dependency>
             <dependency>
-                <groupId>org.n52.faroe</groupId>
+                <groupId>org.n52.arctic-sea</groupId>
                 <artifactId>faroe-utils</artifactId>
-                <version>${version.faroe}</version>
+                <version>${version.arctic.sea}</version>
             </dependency>
             <dependency>
-                <groupId>org.n52.faroe</groupId>
+                <groupId>org.n52.arctic-sea</groupId>
                 <artifactId>faroe-json</artifactId>
-                <version>${version.faroe}</version>
+                <version>${version.arctic.sea}</version>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
@@ -304,7 +304,13 @@
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>20.0</version>
+                <version>23.4-jre</version>
+                <exclusions>
+                   <exclusion>
+                       <groupId>com.google.code.findbugs</groupId>
+                       <artifactId>jsr305</artifactId>
+                   </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
