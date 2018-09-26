@@ -142,11 +142,11 @@ public class AnnotatedAlgorithmMetadata {
     private Map<OwsCode, AbstractOutputBinding<?>> getOutputBindings(Class<?> algorithmClass, OutputHandlerRepository generatorRepository, LiteralTypeRepository literalTypeRepository) {
         Stream<AbstractOutputBinding<Field>> s1 = parseElements(getFields(algorithmClass), Arrays
                     .asList(new LiteralOutputAnnotationParser<>(AbstractOutputBinding::field, literalTypeRepository),
-                            new ComplexOutputAnnotationParser<>(AbstractOutputBinding::field, generatorRepository)))
+                            new ComplexOutputAnnotationParser<>(AbstractOutputBinding::field, generatorRepository), new BoundingBoxOutputAnnotationParser<>(AbstractOutputBinding::field)))
                 .map(x -> (AbstractOutputBinding<Field>)x);
         Stream<AbstractOutputBinding<Method>> s2 = parseElements(getMethods(algorithmClass), Arrays
                     .asList(new LiteralOutputAnnotationParser<>(AbstractOutputBinding::method, literalTypeRepository),
-                            new ComplexOutputAnnotationParser<>(AbstractOutputBinding::method, generatorRepository)))
+                            new ComplexOutputAnnotationParser<>(AbstractOutputBinding::method, generatorRepository), new BoundingBoxOutputAnnotationParser<>(AbstractOutputBinding::method)))
                 .map(x -> (AbstractOutputBinding<Method>)x);
 
         BinaryOperator<AbstractOutputBinding<?>> merger = throwingMerger((a, b) ->
