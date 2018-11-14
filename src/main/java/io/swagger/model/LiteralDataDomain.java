@@ -1,24 +1,3 @@
-/*
- * Copyright (C) 2016 by 52 North Initiative for Geospatial Open Source Software GmbH
- *
- * Contact: Andreas Wytzisk
- * 52 North Initiative for Geospatial Open Source Software GmbH
- * Martin-Luther-King-Weg 24
- * 48155 Muenster, Germany
- * info@52north.org
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package io.swagger.model;
 
 import java.util.Objects;
@@ -26,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.model.LiteralDataDomainValueDefinition;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -35,14 +13,17 @@ import javax.validation.constraints.*;
  * LiteralDataDomain
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-08T12:20:58.856+01:00[Europe/Berlin]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-14T13:20:59.832Z[GMT]")
 
 public class LiteralDataDomain   {
   @JsonProperty("dataType")
   private String dataType = null;
 
+  @JsonProperty("defaultValue")
+  private String defaultValue = null;
+
   @JsonProperty("valueDefinition")
-  private LiteralDataDomainValueDefinition valueDefinition = null;
+  private Object valueDefinition = null;
 
   @JsonProperty("uom")
   private String uom = null;
@@ -67,7 +48,27 @@ public class LiteralDataDomain   {
     this.dataType = dataType;
   }
 
-  public LiteralDataDomain valueDefinition(LiteralDataDomainValueDefinition valueDefinition) {
+  public LiteralDataDomain defaultValue(String defaultValue) {
+    this.defaultValue = defaultValue;
+    return this;
+  }
+
+  /**
+   * Get defaultValue
+   * @return defaultValue
+  **/
+  @ApiModelProperty(value = "")
+
+
+  public String getDefaultValue() {
+    return defaultValue;
+  }
+
+  public void setDefaultValue(String defaultValue) {
+    this.defaultValue = defaultValue;
+  }
+
+  public LiteralDataDomain valueDefinition(Object valueDefinition) {
     this.valueDefinition = valueDefinition;
     return this;
   }
@@ -79,13 +80,12 @@ public class LiteralDataDomain   {
   @ApiModelProperty(required = true, value = "")
   @NotNull
 
-  @Valid
 
-  public LiteralDataDomainValueDefinition getValueDefinition() {
+  public Object getValueDefinition() {
     return valueDefinition;
   }
 
-  public void setValueDefinition(LiteralDataDomainValueDefinition valueDefinition) {
+  public void setValueDefinition(Object valueDefinition) {
     this.valueDefinition = valueDefinition;
   }
 
@@ -120,13 +120,14 @@ public class LiteralDataDomain   {
     }
     LiteralDataDomain literalDataDomain = (LiteralDataDomain) o;
     return Objects.equals(this.dataType, literalDataDomain.dataType) &&
+        Objects.equals(this.defaultValue, literalDataDomain.defaultValue) &&
         Objects.equals(this.valueDefinition, literalDataDomain.valueDefinition) &&
         Objects.equals(this.uom, literalDataDomain.uom);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(dataType, valueDefinition, uom);
+    return Objects.hash(dataType, defaultValue, valueDefinition, uom);
   }
 
   @Override
@@ -135,6 +136,7 @@ public class LiteralDataDomain   {
     sb.append("class LiteralDataDomain {\n");
     
     sb.append("    dataType: ").append(toIndentedString(dataType)).append("\n");
+    sb.append("    defaultValue: ").append(toIndentedString(defaultValue)).append("\n");
     sb.append("    valueDefinition: ").append(toIndentedString(valueDefinition)).append("\n");
     sb.append("    uom: ").append(toIndentedString(uom)).append("\n");
     sb.append("}");

@@ -1,29 +1,9 @@
-/*
- * Copyright (C) 2016 by 52 North Initiative for Geospatial Open Source Software GmbH
- *
- * Contact: Andreas Wytzisk
- * 52 North Initiative for Geospatial Open Source Software GmbH
- * Martin-Luther-King-Weg 24
- * 48155 Muenster, Germany
- * info@52north.org
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package io.swagger.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.validation.annotation.Validated;
@@ -34,11 +14,11 @@ import javax.validation.constraints.*;
  * Range
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-08T12:20:58.856+01:00[Europe/Berlin]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-14T13:20:59.832Z[GMT]")
 
 public class Range   {
-  @JsonProperty("mimimumValue")
-  private String mimimumValue = null;
+  @JsonProperty("minimumValue")
+  private String minimumValue = null;
 
   @JsonProperty("maximumValue")
   private String maximumValue = null;
@@ -46,24 +26,62 @@ public class Range   {
   @JsonProperty("spacing")
   private String spacing = null;
 
-  public Range mimimumValue(String mimimumValue) {
-    this.mimimumValue = mimimumValue;
+  /**
+   * Gets or Sets rangeClosure
+   */
+  public enum RangeClosureEnum {
+    CLOSED("closed"),
+    
+    OPEN("open"),
+    
+    OPEN_CLOSED("open-closed"),
+    
+    CLOSED_OPEN("closed-open");
+
+    private String value;
+
+    RangeClosureEnum(String value) {
+      this.value = value;
+    }
+
+    @Override
+    @JsonValue
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    @JsonCreator
+    public static RangeClosureEnum fromValue(String text) {
+      for (RangeClosureEnum b : RangeClosureEnum.values()) {
+        if (String.valueOf(b.value).equals(text)) {
+          return b;
+        }
+      }
+      return null;
+    }
+  }
+
+  @JsonProperty("rangeClosure")
+  private RangeClosureEnum rangeClosure = null;
+
+  public Range minimumValue(String minimumValue) {
+    this.minimumValue = minimumValue;
     return this;
   }
 
   /**
-   * Get mimimumValue
-   * @return mimimumValue
+   * Get minimumValue
+   * @return minimumValue
   **/
   @ApiModelProperty(value = "")
 
 
-  public String getMimimumValue() {
-    return mimimumValue;
+  public String getMinimumValue() {
+    return minimumValue;
   }
 
-  public void setMimimumValue(String mimimumValue) {
-    this.mimimumValue = mimimumValue;
+  public void setMinimumValue(String minimumValue) {
+    this.minimumValue = minimumValue;
   }
 
   public Range maximumValue(String maximumValue) {
@@ -106,6 +124,26 @@ public class Range   {
     this.spacing = spacing;
   }
 
+  public Range rangeClosure(RangeClosureEnum rangeClosure) {
+    this.rangeClosure = rangeClosure;
+    return this;
+  }
+
+  /**
+   * Get rangeClosure
+   * @return rangeClosure
+  **/
+  @ApiModelProperty(value = "")
+
+
+  public RangeClosureEnum getRangeClosure() {
+    return rangeClosure;
+  }
+
+  public void setRangeClosure(RangeClosureEnum rangeClosure) {
+    this.rangeClosure = rangeClosure;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -116,14 +154,15 @@ public class Range   {
       return false;
     }
     Range range = (Range) o;
-    return Objects.equals(this.mimimumValue, range.mimimumValue) &&
+    return Objects.equals(this.minimumValue, range.minimumValue) &&
         Objects.equals(this.maximumValue, range.maximumValue) &&
-        Objects.equals(this.spacing, range.spacing);
+        Objects.equals(this.spacing, range.spacing) &&
+        Objects.equals(this.rangeClosure, range.rangeClosure);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(mimimumValue, maximumValue, spacing);
+    return Objects.hash(minimumValue, maximumValue, spacing, rangeClosure);
   }
 
   @Override
@@ -131,9 +170,10 @@ public class Range   {
     StringBuilder sb = new StringBuilder();
     sb.append("class Range {\n");
     
-    sb.append("    mimimumValue: ").append(toIndentedString(mimimumValue)).append("\n");
+    sb.append("    minimumValue: ").append(toIndentedString(minimumValue)).append("\n");
     sb.append("    maximumValue: ").append(toIndentedString(maximumValue)).append("\n");
     sb.append("    spacing: ").append(toIndentedString(spacing)).append("\n");
+    sb.append("    rangeClosure: ").append(toIndentedString(rangeClosure)).append("\n");
     sb.append("}");
     return sb.toString();
   }

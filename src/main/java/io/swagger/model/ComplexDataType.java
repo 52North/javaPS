@@ -5,39 +5,49 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.model.DataDescriptionType;
+import io.swagger.model.FormatDescription;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * OutputDescription
+ * ComplexDataType
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-14T13:20:59.832Z[GMT]")
 
-public class OutputDescription extends DataDescriptionType  {
-  @JsonProperty("output")
-  private Object output = null;
+public class ComplexDataType   {
+  @JsonProperty("formats")
+  @Valid
+  private List<FormatDescription> formats = new ArrayList<FormatDescription>();
 
-  public OutputDescription output(Object output) {
-    this.output = output;
+  public ComplexDataType formats(List<FormatDescription> formats) {
+    this.formats = formats;
+    return this;
+  }
+
+  public ComplexDataType addFormatsItem(FormatDescription formatsItem) {
+    this.formats.add(formatsItem);
     return this;
   }
 
   /**
-   * Get output
-   * @return output
+   * Get formats
+   * @return formats
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
+  @NotNull
 
+  @Valid
 
-  public Object getOutput() {
-    return output;
+  public List<FormatDescription> getFormats() {
+    return formats;
   }
 
-  public void setOutput(Object output) {
-    this.output = output;
+  public void setFormats(List<FormatDescription> formats) {
+    this.formats = formats;
   }
 
 
@@ -49,22 +59,21 @@ public class OutputDescription extends DataDescriptionType  {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    OutputDescription outputDescription = (OutputDescription) o;
-    return Objects.equals(this.output, outputDescription.output) &&
-        super.equals(o);
+    ComplexDataType complexDataType = (ComplexDataType) o;
+    return Objects.equals(this.formats, complexDataType.formats);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(output, super.hashCode());
+    return Objects.hash(formats);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class OutputDescription {\n");
-    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
-    sb.append("    output: ").append(toIndentedString(output)).append("\n");
+    sb.append("class ComplexDataType {\n");
+    
+    sb.append("    formats: ").append(toIndentedString(formats)).append("\n");
     sb.append("}");
     return sb.toString();
   }

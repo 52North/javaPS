@@ -193,30 +193,31 @@ public class ProcessesApiController implements ProcessesApi {
         
         Set<ProcessOffering> offerings = engine.getProcessDescriptions().stream().map(ProcessOffering::new).collect(toSet());
         
-        ProcessSummary process;
-        
-//        process.setJobControlOptions(jobControlOptions);
-        
-        ProcessCollection collection = new ProcessCollection();
-        
-        List<ProcessSummary> processes = new ArrayList<>();
-        
-        for (ProcessOffering processOffering : offerings) {
-            process = new ProcessSummary();
-            
-            String id = processOffering.getProcessDescription().getId().getValue();
-            
-            process.setId(id);
-            
-            process.setProcessDescriptionURL(serviceURL + id);
-            
-            processes.add(process);
-            
-        }
-        
-        collection.setProcesses(processes);
-        
-        return ResponseEntity.ok(collection);
+//        ProcessSummary process;
+//        
+////        process.setJobControlOptions(jobControlOptions);
+//        
+//        ProcessCollection collection = new ProcessCollection();
+//        
+//        List<ProcessSummary> processes = new ArrayList<>();
+//        
+//        for (ProcessOffering processOffering : offerings) {
+//            process = new ProcessSummary();
+//            
+//            String id = processOffering.getProcessDescription().getId().getValue();
+//            
+//            process.setId(id);
+//            
+//            process.setProcessDescriptionURL(serviceURL + id);
+//            
+//            processes.add(process);
+//            
+//        }
+//        
+//        collection.setProcesses(processes);
+//        
+//        return ResponseEntity.ok(collection);
+        return ResponseEntity.ok(processSerializer.serializeProcessOfferings(offerings));
     }
 
     public ResponseEntity<Result> getResult(@ApiParam(value = "The id of a process",required=true) @PathVariable("id") String id,@ApiParam(value = "The id of a job",required=true) @PathVariable("jobID") String jobID) throws InvalidParameterValueException {

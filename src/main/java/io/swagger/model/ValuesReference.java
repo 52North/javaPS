@@ -1,47 +1,17 @@
 package io.swagger.model;
 
 import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import io.swagger.model.Process;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * ProcessOffering
+ * ValuesReference
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-14T13:20:59.832Z[GMT]")
 
-public class ProcessOffering   {
-  @JsonProperty("process")
-  private Process process = null;
-
-  public ProcessOffering process(Process process) {
-    this.process = process;
-    return this;
-  }
-
-  /**
-   * Get process
-   * @return process
-  **/
-  @ApiModelProperty(required = true, value = "")
-  @NotNull
-
-  @Valid
-
-  public Process getProcess() {
-    return process;
-  }
-
-  public void setProcess(Process process) {
-    this.process = process;
-  }
-
+public class ValuesReference   {
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -51,21 +21,19 @@ public class ProcessOffering   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ProcessOffering processOffering = (ProcessOffering) o;
-    return Objects.equals(this.process, processOffering.process);
+    return true;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(process);
+    return Objects.hash();
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ProcessOffering {\n");
+    sb.append("class ValuesReference {\n");
     
-    sb.append("    process: ").append(toIndentedString(process)).append("\n");
     sb.append("}");
     return sb.toString();
   }

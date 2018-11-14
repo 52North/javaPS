@@ -5,39 +5,61 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.model.DataDescriptionType;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * OutputDescription
+ * SupportedCRS
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-14T13:20:59.832Z[GMT]")
 
-public class OutputDescription extends DataDescriptionType  {
-  @JsonProperty("output")
-  private Object output = null;
+public class SupportedCRS   {
+  @JsonProperty("crs")
+  private String crs = null;
 
-  public OutputDescription output(Object output) {
-    this.output = output;
+  @JsonProperty("default")
+  private Boolean _default = false;
+
+  public SupportedCRS crs(String crs) {
+    this.crs = crs;
     return this;
   }
 
   /**
-   * Get output
-   * @return output
+   * Get crs
+   * @return crs
   **/
   @ApiModelProperty(value = "")
 
 
-  public Object getOutput() {
-    return output;
+  public String getCrs() {
+    return crs;
   }
 
-  public void setOutput(Object output) {
-    this.output = output;
+  public void setCrs(String crs) {
+    this.crs = crs;
+  }
+
+  public SupportedCRS _default(Boolean _default) {
+    this._default = _default;
+    return this;
+  }
+
+  /**
+   * Get _default
+   * @return _default
+  **/
+  @ApiModelProperty(value = "")
+
+
+  public Boolean isDefault() {
+    return _default;
+  }
+
+  public void setDefault(Boolean _default) {
+    this._default = _default;
   }
 
 
@@ -49,22 +71,23 @@ public class OutputDescription extends DataDescriptionType  {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    OutputDescription outputDescription = (OutputDescription) o;
-    return Objects.equals(this.output, outputDescription.output) &&
-        super.equals(o);
+    SupportedCRS supportedCRS = (SupportedCRS) o;
+    return Objects.equals(this.crs, supportedCRS.crs) &&
+        Objects.equals(this._default, supportedCRS._default);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(output, super.hashCode());
+    return Objects.hash(crs, _default);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class OutputDescription {\n");
-    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
-    sb.append("    output: ").append(toIndentedString(output)).append("\n");
+    sb.append("class SupportedCRS {\n");
+    
+    sb.append("    crs: ").append(toIndentedString(crs)).append("\n");
+    sb.append("    _default: ").append(toIndentedString(_default)).append("\n");
     sb.append("}");
     return sb.toString();
   }

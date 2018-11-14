@@ -5,39 +5,49 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.model.DataDescriptionType;
+import io.swagger.model.SupportedCRS;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * OutputDescription
+ * BoundingBoxDataType
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-14T13:20:59.832Z[GMT]")
 
-public class OutputDescription extends DataDescriptionType  {
-  @JsonProperty("output")
-  private Object output = null;
+public class BoundingBoxDataType   {
+  @JsonProperty("supportedCRS")
+  @Valid
+  private List<SupportedCRS> supportedCRS = new ArrayList<SupportedCRS>();
 
-  public OutputDescription output(Object output) {
-    this.output = output;
+  public BoundingBoxDataType supportedCRS(List<SupportedCRS> supportedCRS) {
+    this.supportedCRS = supportedCRS;
+    return this;
+  }
+
+  public BoundingBoxDataType addSupportedCRSItem(SupportedCRS supportedCRSItem) {
+    this.supportedCRS.add(supportedCRSItem);
     return this;
   }
 
   /**
-   * Get output
-   * @return output
+   * Get supportedCRS
+   * @return supportedCRS
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
+  @NotNull
 
+  @Valid
 
-  public Object getOutput() {
-    return output;
+  public List<SupportedCRS> getSupportedCRS() {
+    return supportedCRS;
   }
 
-  public void setOutput(Object output) {
-    this.output = output;
+  public void setSupportedCRS(List<SupportedCRS> supportedCRS) {
+    this.supportedCRS = supportedCRS;
   }
 
 
@@ -49,22 +59,21 @@ public class OutputDescription extends DataDescriptionType  {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    OutputDescription outputDescription = (OutputDescription) o;
-    return Objects.equals(this.output, outputDescription.output) &&
-        super.equals(o);
+    BoundingBoxDataType boundingBoxDataType = (BoundingBoxDataType) o;
+    return Objects.equals(this.supportedCRS, boundingBoxDataType.supportedCRS);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(output, super.hashCode());
+    return Objects.hash(supportedCRS);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class OutputDescription {\n");
-    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
-    sb.append("    output: ").append(toIndentedString(output)).append("\n");
+    sb.append("class BoundingBoxDataType {\n");
+    
+    sb.append("    supportedCRS: ").append(toIndentedString(supportedCRS)).append("\n");
     sb.append("}");
     return sb.toString();
   }

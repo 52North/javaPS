@@ -5,39 +5,38 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.model.DataDescriptionType;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * OutputDescription
+ * AnyValue
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-14T13:20:59.832Z[GMT]")
 
-public class OutputDescription extends DataDescriptionType  {
-  @JsonProperty("output")
-  private Object output = null;
+public class AnyValue   {
+  @JsonProperty("anyValue")
+  private Boolean anyValue = true;
 
-  public OutputDescription output(Object output) {
-    this.output = output;
+  public AnyValue anyValue(Boolean anyValue) {
+    this.anyValue = anyValue;
     return this;
   }
 
   /**
-   * Get output
-   * @return output
+   * Get anyValue
+   * @return anyValue
   **/
   @ApiModelProperty(value = "")
 
 
-  public Object getOutput() {
-    return output;
+  public Boolean isAnyValue() {
+    return anyValue;
   }
 
-  public void setOutput(Object output) {
-    this.output = output;
+  public void setAnyValue(Boolean anyValue) {
+    this.anyValue = anyValue;
   }
 
 
@@ -49,22 +48,21 @@ public class OutputDescription extends DataDescriptionType  {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    OutputDescription outputDescription = (OutputDescription) o;
-    return Objects.equals(this.output, outputDescription.output) &&
-        super.equals(o);
+    AnyValue anyValue = (AnyValue) o;
+    return Objects.equals(this.anyValue, anyValue.anyValue);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(output, super.hashCode());
+    return Objects.hash(anyValue);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class OutputDescription {\n");
-    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
-    sb.append("    output: ").append(toIndentedString(output)).append("\n");
+    sb.append("class AnyValue {\n");
+    
+    sb.append("    anyValue: ").append(toIndentedString(anyValue)).append("\n");
     sb.append("}");
     return sb.toString();
   }

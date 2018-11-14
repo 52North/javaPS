@@ -5,39 +5,41 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.model.DataDescriptionType;
+import io.swagger.model.LiteralDataDomain;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * OutputDescription
+ * LiteralDataType
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-14T13:20:59.832Z[GMT]")
 
-public class OutputDescription extends DataDescriptionType  {
-  @JsonProperty("output")
-  private Object output = null;
+public class LiteralDataType   {
+  @JsonProperty("literalDataDomain")
+  private LiteralDataDomain literalDataDomain = null;
 
-  public OutputDescription output(Object output) {
-    this.output = output;
+  public LiteralDataType literalDataDomain(LiteralDataDomain literalDataDomain) {
+    this.literalDataDomain = literalDataDomain;
     return this;
   }
 
   /**
-   * Get output
-   * @return output
+   * Get literalDataDomain
+   * @return literalDataDomain
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
+  @NotNull
 
+  @Valid
 
-  public Object getOutput() {
-    return output;
+  public LiteralDataDomain getLiteralDataDomain() {
+    return literalDataDomain;
   }
 
-  public void setOutput(Object output) {
-    this.output = output;
+  public void setLiteralDataDomain(LiteralDataDomain literalDataDomain) {
+    this.literalDataDomain = literalDataDomain;
   }
 
 
@@ -49,22 +51,21 @@ public class OutputDescription extends DataDescriptionType  {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    OutputDescription outputDescription = (OutputDescription) o;
-    return Objects.equals(this.output, outputDescription.output) &&
-        super.equals(o);
+    LiteralDataType literalDataType = (LiteralDataType) o;
+    return Objects.equals(this.literalDataDomain, literalDataType.literalDataDomain);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(output, super.hashCode());
+    return Objects.hash(literalDataDomain);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class OutputDescription {\n");
-    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
-    sb.append("    output: ").append(toIndentedString(output)).append("\n");
+    sb.append("class LiteralDataType {\n");
+    
+    sb.append("    literalDataDomain: ").append(toIndentedString(literalDataDomain)).append("\n");
     sb.append("}");
     return sb.toString();
   }
