@@ -22,6 +22,10 @@
 package io.swagger.model;
 
 import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -30,9 +34,32 @@ import javax.validation.constraints.*;
  * ValueReference
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-08T12:20:58.856+01:00[Europe/Berlin]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-13T08:54:43.191Z[GMT]")
 
 public class ValueReference   {
+  @JsonProperty("valueReference")
+  private String valueReference = null;
+
+  public ValueReference valueReference(String valueReference) {
+    this.valueReference = valueReference;
+    return this;
+  }
+
+  /**
+   * Get valueReference
+   * @return valueReference
+  **/
+  @ApiModelProperty(value = "")
+
+
+  public String getValueReference() {
+    return valueReference;
+  }
+
+  public void setValueReference(String valueReference) {
+    this.valueReference = valueReference;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -42,12 +69,13 @@ public class ValueReference   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    return true;
+    ValueReference valueReference = (ValueReference) o;
+    return Objects.equals(this.valueReference, valueReference.valueReference);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash();
+    return Objects.hash(valueReference);
   }
 
   @Override
@@ -55,6 +83,7 @@ public class ValueReference   {
     StringBuilder sb = new StringBuilder();
     sb.append("class ValueReference {\n");
     
+    sb.append("    valueReference: ").append(toIndentedString(valueReference)).append("\n");
     sb.append("}");
     return sb.toString();
   }

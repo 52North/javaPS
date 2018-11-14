@@ -28,6 +28,7 @@ package io.swagger.api;
 
 import javax.validation.Valid;
 
+import org.n52.shetland.ogc.ows.exception.CodedException;
 import org.n52.shetland.ogc.ows.exception.InvalidParameterValueException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -61,7 +62,7 @@ public interface ProcessesApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    ResponseEntity<Void> execute(@ApiParam(value = "Mandatory execute request JSON" ,required=true )  @Valid @RequestBody Execute body,@ApiParam(value = "The id of a process.",required=true) @PathVariable("id") Integer id);
+    ResponseEntity<Void> execute(@ApiParam(value = "Mandatory execute request JSON" ,required=true )  @Valid @RequestBody Execute body,@ApiParam(value = "The id of a process.",required=true) @PathVariable("id") String id) throws CodedException;
 
 
     @ApiOperation(value = "retrieve the list of jobs for a process.", nickname = "getJobList", notes = "", response = JobCollection.class, tags={ "JobList", })
@@ -80,7 +81,7 @@ public interface ProcessesApi {
         @ApiResponse(code = 200, message = "A process description.", response = ProcessOffering.class),
         @ApiResponse(code = 404, message = "The process with id {id} does not exist.", response = Exception.class),
         @ApiResponse(code = 200, message = "An error occured.", response = Exception.class) })
-    @RequestMapping(value = "/processes/{id}",
+    @RequestMapping(value = "/processes/{id:.+}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
     ResponseEntity<ProcessOffering> getProcessDescription(@ApiParam(value = "The id of a process",required=true) @PathVariable("id") String id);

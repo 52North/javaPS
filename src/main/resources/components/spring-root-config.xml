@@ -12,6 +12,8 @@
 
     <context:annotation-config/>
     <context:component-scan base-package="io.swagger"/>
-    <mvc:annotation-driven />
+    <context:component-scan base-package="org.n52.wps.javaps"/>
+    
+    <bean class="org.n52.wps.javaps.rest.serializer.ProcessSerializer" />
     
 </beans>

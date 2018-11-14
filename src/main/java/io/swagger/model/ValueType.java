@@ -22,6 +22,10 @@
 package io.swagger.model;
 
 import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.model.InlineValue;
 import io.swagger.model.ValueReference;
 import org.springframework.validation.annotation.Validated;
@@ -32,9 +36,55 @@ import javax.validation.constraints.*;
  * ValueType
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-08T12:20:58.856+01:00[Europe/Berlin]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-13T08:54:43.191Z[GMT]")
 
 public class ValueType   {
+  @JsonProperty("inlineValue")
+  private String inlineValue = null;
+
+  @JsonProperty("valueReference")
+  private String valueReference = null;
+
+  public ValueType inlineValue(String inlineValue) {
+    this.inlineValue = inlineValue;
+    return this;
+  }
+
+  /**
+   * Get inlineValue
+   * @return inlineValue
+  **/
+  @ApiModelProperty(value = "")
+
+
+  public String getInlineValue() {
+    return inlineValue;
+  }
+
+  public void setInlineValue(String inlineValue) {
+    this.inlineValue = inlineValue;
+  }
+
+  public ValueType valueReference(String valueReference) {
+    this.valueReference = valueReference;
+    return this;
+  }
+
+  /**
+   * Get valueReference
+   * @return valueReference
+  **/
+  @ApiModelProperty(value = "")
+
+
+  public String getValueReference() {
+    return valueReference;
+  }
+
+  public void setValueReference(String valueReference) {
+    this.valueReference = valueReference;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -44,12 +94,14 @@ public class ValueType   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    return true;
+    ValueType valueType = (ValueType) o;
+    return Objects.equals(this.inlineValue, valueType.inlineValue) &&
+        Objects.equals(this.valueReference, valueType.valueReference);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash();
+    return Objects.hash(inlineValue, valueReference);
   }
 
   @Override
@@ -57,6 +109,8 @@ public class ValueType   {
     StringBuilder sb = new StringBuilder();
     sb.append("class ValueType {\n");
     
+    sb.append("    inlineValue: ").append(toIndentedString(inlineValue)).append("\n");
+    sb.append("    valueReference: ").append(toIndentedString(valueReference)).append("\n");
     sb.append("}");
     return sb.toString();
   }
