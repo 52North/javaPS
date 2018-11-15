@@ -105,7 +105,7 @@ public interface ProcessesApi {
     @RequestMapping(value = "/processes/{id}/jobs/{jobID}/result",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<Result> getResult(@ApiParam(value = "The id of a process",required=true) @PathVariable("id") String id,@ApiParam(value = "The id of a job",required=true) @PathVariable("jobID") String jobID) throws InvalidParameterValueException;
+    ResponseEntity<?> getResult(@ApiParam(value = "The id of a process",required=true) @PathVariable("id") String id,@ApiParam(value = "The id of a job",required=true) @PathVariable("jobID") String jobID);
 
 
     @ApiOperation(value = "retrieve the status of a job", nickname = "getStatus", notes = "", response = StatusInfo.class, tags={ "Status", })

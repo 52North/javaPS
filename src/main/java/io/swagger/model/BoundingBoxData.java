@@ -10,19 +10,22 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * SupportedCRS
+ * BoundingBoxData
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-15T08:00:15.505Z[GMT]")
 
-public class SupportedCRS   {
+public class BoundingBoxData   {
   @JsonProperty("crs")
   private String crs = null;
 
-  @JsonProperty("default")
-  private Boolean _default = false;
+  @JsonProperty("lowerCorner")
+  private String lowerCorner = null;
 
-  public SupportedCRS crs(String crs) {
+  @JsonProperty("upperCorner")
+  private String upperCorner = null;
+
+  public BoundingBoxData crs(String crs) {
     this.crs = crs;
     return this;
   }
@@ -42,24 +45,46 @@ public class SupportedCRS   {
     this.crs = crs;
   }
 
-  public SupportedCRS _default(Boolean _default) {
-    this._default = _default;
+  public BoundingBoxData lowerCorner(String lowerCorner) {
+    this.lowerCorner = lowerCorner;
     return this;
   }
 
   /**
-   * Get _default
-   * @return _default
+   * Get lowerCorner
+   * @return lowerCorner
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
+  @NotNull
 
 
-  public Boolean isDefault() {
-    return _default;
+  public String getLowerCorner() {
+    return lowerCorner;
   }
 
-  public void setDefault(Boolean _default) {
-    this._default = _default;
+  public void setLowerCorner(String lowerCorner) {
+    this.lowerCorner = lowerCorner;
+  }
+
+  public BoundingBoxData upperCorner(String upperCorner) {
+    this.upperCorner = upperCorner;
+    return this;
+  }
+
+  /**
+   * Get upperCorner
+   * @return upperCorner
+  **/
+  @ApiModelProperty(required = true, value = "")
+  @NotNull
+
+
+  public String getUpperCorner() {
+    return upperCorner;
+  }
+
+  public void setUpperCorner(String upperCorner) {
+    this.upperCorner = upperCorner;
   }
 
 
@@ -71,23 +96,25 @@ public class SupportedCRS   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    SupportedCRS supportedCRS = (SupportedCRS) o;
-    return Objects.equals(this.crs, supportedCRS.crs) &&
-        Objects.equals(this._default, supportedCRS._default);
+    BoundingBoxData boundingBoxData = (BoundingBoxData) o;
+    return Objects.equals(this.crs, boundingBoxData.crs) &&
+        Objects.equals(this.lowerCorner, boundingBoxData.lowerCorner) &&
+        Objects.equals(this.upperCorner, boundingBoxData.upperCorner);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(crs, _default);
+    return Objects.hash(crs, lowerCorner, upperCorner);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class SupportedCRS {\n");
+    sb.append("class BoundingBoxData {\n");
     
     sb.append("    crs: ").append(toIndentedString(crs)).append("\n");
-    sb.append("    _default: ").append(toIndentedString(_default)).append("\n");
+    sb.append("    lowerCorner: ").append(toIndentedString(lowerCorner)).append("\n");
+    sb.append("    upperCorner: ").append(toIndentedString(upperCorner)).append("\n");
     sb.append("}");
     return sb.toString();
   }

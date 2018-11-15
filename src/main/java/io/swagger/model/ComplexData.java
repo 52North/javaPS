@@ -5,61 +5,43 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.model.DataType;
+import io.swagger.model.Format;
+import io.swagger.model.ValueType;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * Metadata
+ * ComplexData
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-15T08:00:15.505Z[GMT]")
 
-public class Metadata   {
-  @JsonProperty("role")
-  private String role = null;
+public class ComplexData extends DataType  {
+  @JsonProperty("value")
+  private ValueType value = null;
 
-  @JsonProperty("href")
-  private String href = null;
-
-  public Metadata role(String role) {
-    this.role = role;
+  public ComplexData value(ValueType value) {
+    this.value = value;
     return this;
   }
 
   /**
-   * Get role
-   * @return role
+   * Get value
+   * @return value
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
+  @NotNull
 
+  @Valid
 
-  public String getRole() {
-    return role;
+  public ValueType getValue() {
+    return value;
   }
 
-  public void setRole(String role) {
-    this.role = role;
-  }
-
-  public Metadata href(String href) {
-    this.href = href;
-    return this;
-  }
-
-  /**
-   * Get href
-   * @return href
-  **/
-  @ApiModelProperty(value = "")
-
-
-  public String getHref() {
-    return href;
-  }
-
-  public void setHref(String href) {
-    this.href = href;
+  public void setValue(ValueType value) {
+    this.value = value;
   }
 
 
@@ -71,23 +53,22 @@ public class Metadata   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Metadata metadata = (Metadata) o;
-    return Objects.equals(this.role, metadata.role) &&
-        Objects.equals(this.href, metadata.href);
+    ComplexData complexData = (ComplexData) o;
+    return Objects.equals(this.value, complexData.value) &&
+        super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(role, href);
+    return Objects.hash(value, super.hashCode());
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Metadata {\n");
-    
-    sb.append("    role: ").append(toIndentedString(role)).append("\n");
-    sb.append("    href: ").append(toIndentedString(href)).append("\n");
+    sb.append("class ComplexData {\n");
+    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
+    sb.append("    value: ").append(toIndentedString(value)).append("\n");
     sb.append("}");
     return sb.toString();
   }

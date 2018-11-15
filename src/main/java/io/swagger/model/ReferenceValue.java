@@ -10,39 +10,16 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * Metadata
+ * ReferenceValue
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-15T08:00:15.505Z[GMT]")
 
-public class Metadata   {
-  @JsonProperty("role")
-  private String role = null;
-
+public class ReferenceValue   {
   @JsonProperty("href")
   private String href = null;
 
-  public Metadata role(String role) {
-    this.role = role;
-    return this;
-  }
-
-  /**
-   * Get role
-   * @return role
-  **/
-  @ApiModelProperty(value = "")
-
-
-  public String getRole() {
-    return role;
-  }
-
-  public void setRole(String role) {
-    this.role = role;
-  }
-
-  public Metadata href(String href) {
+  public ReferenceValue href(String href) {
     this.href = href;
     return this;
   }
@@ -71,22 +48,20 @@ public class Metadata   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Metadata metadata = (Metadata) o;
-    return Objects.equals(this.role, metadata.role) &&
-        Objects.equals(this.href, metadata.href);
+    ReferenceValue referenceValue = (ReferenceValue) o;
+    return Objects.equals(this.href, referenceValue.href);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(role, href);
+    return Objects.hash(href);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Metadata {\n");
+    sb.append("class ReferenceValue {\n");
     
-    sb.append("    role: ").append(toIndentedString(role)).append("\n");
     sb.append("    href: ").append(toIndentedString(href)).append("\n");
     sb.append("}");
     return sb.toString();

@@ -14,35 +14,11 @@ import javax.validation.constraints.*;
  * DataType
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-14T13:20:59.832Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-15T08:00:15.505Z[GMT]")
 
 public class DataType   {
-  @JsonProperty("id")
-  private String id = null;
-
   @JsonProperty("format")
   private Format format = null;
-
-  public DataType id(String id) {
-    this.id = id;
-    return this;
-  }
-
-  /**
-   * Get id
-   * @return id
-  **/
-  @ApiModelProperty(required = true, value = "")
-  @NotNull
-
-
-  public String getId() {
-    return id;
-  }
-
-  public void setId(String id) {
-    this.id = id;
-  }
 
   public DataType format(Format format) {
     this.format = format;
@@ -75,13 +51,12 @@ public class DataType   {
       return false;
     }
     DataType dataType = (DataType) o;
-    return Objects.equals(this.id, dataType.id) &&
-        Objects.equals(this.format, dataType.format);
+    return Objects.equals(this.format, dataType.format);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, format);
+    return Objects.hash(format);
   }
 
   @Override
@@ -89,7 +64,6 @@ public class DataType   {
     StringBuilder sb = new StringBuilder();
     sb.append("class DataType {\n");
     
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    format: ").append(toIndentedString(format)).append("\n");
     sb.append("}");
     return sb.toString();

@@ -5,26 +5,27 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.model.InlineValue;
-import io.swagger.model.ReferenceValue;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * ValueType
+ * LiteralData
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-15T08:00:15.505Z[GMT]")
 
-public class ValueType   {
+public class LiteralData   {
   @JsonProperty("value")
   private String value = null;
 
-  @JsonProperty("href")
-  private String href = null;
+  @JsonProperty("dataType")
+  private String dataType = null;
 
-  public ValueType value(String value) {
+  @JsonProperty("uom")
+  private String uom = null;
+
+  public LiteralData value(String value) {
     this.value = value;
     return this;
   }
@@ -44,24 +45,44 @@ public class ValueType   {
     this.value = value;
   }
 
-  public ValueType href(String href) {
-    this.href = href;
+  public LiteralData dataType(String dataType) {
+    this.dataType = dataType;
     return this;
   }
 
   /**
-   * Get href
-   * @return href
+   * Get dataType
+   * @return dataType
   **/
   @ApiModelProperty(value = "")
 
 
-  public String getHref() {
-    return href;
+  public String getDataType() {
+    return dataType;
   }
 
-  public void setHref(String href) {
-    this.href = href;
+  public void setDataType(String dataType) {
+    this.dataType = dataType;
+  }
+
+  public LiteralData uom(String uom) {
+    this.uom = uom;
+    return this;
+  }
+
+  /**
+   * Get uom
+   * @return uom
+  **/
+  @ApiModelProperty(value = "")
+
+
+  public String getUom() {
+    return uom;
+  }
+
+  public void setUom(String uom) {
+    this.uom = uom;
   }
 
 
@@ -73,23 +94,25 @@ public class ValueType   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ValueType valueType = (ValueType) o;
-    return Objects.equals(this.value, valueType.value) &&
-        Objects.equals(this.href, valueType.href);
+    LiteralData literalData = (LiteralData) o;
+    return Objects.equals(this.value, literalData.value) &&
+        Objects.equals(this.dataType, literalData.dataType) &&
+        Objects.equals(this.uom, literalData.uom);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(value, href);
+    return Objects.hash(value, dataType, uom);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ValueType {\n");
+    sb.append("class LiteralData {\n");
     
     sb.append("    value: ").append(toIndentedString(value)).append("\n");
-    sb.append("    href: ").append(toIndentedString(href)).append("\n");
+    sb.append("    dataType: ").append(toIndentedString(dataType)).append("\n");
+    sb.append("    uom: ").append(toIndentedString(uom)).append("\n");
     sb.append("}");
     return sb.toString();
   }

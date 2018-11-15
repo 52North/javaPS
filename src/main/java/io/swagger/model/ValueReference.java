@@ -13,7 +13,7 @@ import javax.validation.constraints.*;
  * ValueReference
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-14T13:20:59.832Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-14T14:41:11.502Z[GMT]")
 
 public class ValueReference   {
   @JsonProperty("valueReference")

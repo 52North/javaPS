@@ -23,11 +23,13 @@ package io.swagger.api;
 
 import static java.util.stream.Collectors.toSet;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import javax.inject.Inject;
@@ -54,7 +56,9 @@ import org.n52.shetland.ogc.wps.ProcessOffering;
 import org.n52.shetland.ogc.wps.ResponseMode;
 import org.n52.shetland.ogc.wps.data.ProcessData;
 import org.n52.wps.javaps.rest.deserializer.ExecuteDeserializer;
+import org.n52.wps.javaps.rest.serializer.ExceptionSerializer;
 import org.n52.wps.javaps.rest.serializer.ProcessSerializer;
+import org.n52.wps.javaps.rest.serializer.ResultSerializer;
 import org.n52.wps.javaps.rest.serializer.StatusInfoSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -107,6 +111,9 @@ public class ProcessesApiController implements ProcessesApi {
     
     @Inject
     private ProcessSerializer processSerializer;
+    
+//    @Inject
+//    private ExceptionSerializer exceptionSerializer;
 
     @org.springframework.beans.factory.annotation.Autowired
     public ProcessesApiController(HttpServletRequest request) {
@@ -220,23 +227,28 @@ public class ProcessesApiController implements ProcessesApi {
         return ResponseEntity.ok(processSerializer.serializeProcessOfferings(offerings));
     }
 
-    public ResponseEntity<Result> getResult(@ApiParam(value = "The id of a process",required=true) @PathVariable("id") String id,@ApiParam(value = "The id of a job",required=true) @PathVariable("jobID") String jobID) throws InvalidParameterValueException {
+    public ResponseEntity<?> getResult(@ApiParam(value = "The id of a process",required=true) @PathVariable("id") String id,@ApiParam(value = "The id of a job",required=true) @PathVariable("jobID") String jobID) {
         
         JobId jobId = new JobId(jobID);
         
+        if(!engine.hasJob(jobId)) {
+            
+            return ResponseEntity.badRequest().body(ExceptionSerializer.serializeException("NoSuchJob", String.format("Job with id %s not found.", jobId)));
+        }
+            
         try {
             
             Future<org.n52.shetland.ogc.wps.Result> futureResult = engine.getResult(jobId);
             
             if(!futureResult.isDone()) {
-                throw new InvalidParameterValueException("JobId", jobId.getValue());
+                return ResponseEntity.badRequest().body(ExceptionSerializer.serializeException("ResultNotReady", String.format("Job with id %s not ready.", jobId)));
             }
-                
-        } catch (EngineException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            
+            return ResponseEntity.ok(ResultSerializer.serializeResult(futureResult.get()));
+        } catch (EngineException | InterruptedException | ExecutionException | IOException e) {
+            log.error(e.getMessage());
+            return ResponseEntity.badRequest().body(ExceptionSerializer.serializeException("NoApplicableCode", "Internal server error."));            
         }
-        return new ResponseEntity<Result>(HttpStatus.NOT_IMPLEMENTED);
     }
 
     public ResponseEntity<StatusInfo> getStatus(@ApiParam(value = "The id of a process",required=true) @PathVariable("id") String id,@ApiParam(value = "The id of a job",required=true) @PathVariable("jobID") String jobID) {

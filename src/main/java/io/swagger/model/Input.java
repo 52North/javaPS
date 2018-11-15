@@ -5,9 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.model.DataType;
-import io.swagger.model.Format;
-import io.swagger.model.ValueType;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -16,32 +13,55 @@ import javax.validation.constraints.*;
  * Input
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-14T13:20:59.832Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-15T08:00:15.505Z[GMT]")
 
-public class Input extends DataType  {
-  @JsonProperty("value")
-  private ValueType value = null;
+public class Input   {
+  @JsonProperty("id")
+  private String id = null;
 
-  public Input value(ValueType value) {
-    this.value = value;
+  @JsonProperty("input")
+  private Object input = null;
+
+  public Input id(String id) {
+    this.id = id;
     return this;
   }
 
   /**
-   * Get value
-   * @return value
+   * Get id
+   * @return id
   **/
   @ApiModelProperty(required = true, value = "")
   @NotNull
 
-  @Valid
 
-  public ValueType getValue() {
-    return value;
+  public String getId() {
+    return id;
   }
 
-  public void setValue(ValueType value) {
-    this.value = value;
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  public Input input(Object input) {
+    this.input = input;
+    return this;
+  }
+
+  /**
+   * Get input
+   * @return input
+  **/
+  @ApiModelProperty(required = true, value = "")
+  @NotNull
+
+
+  public Object getInput() {
+    return input;
+  }
+
+  public void setInput(Object input) {
+    this.input = input;
   }
 
 
@@ -54,21 +74,22 @@ public class Input extends DataType  {
       return false;
     }
     Input input = (Input) o;
-    return Objects.equals(this.value, input.value) &&
-        super.equals(o);
+    return Objects.equals(this.id, input.id) &&
+        Objects.equals(this.input, input.input);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(value, super.hashCode());
+    return Objects.hash(id, input);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class Input {\n");
-    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
-    sb.append("    value: ").append(toIndentedString(value)).append("\n");
+    
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    input: ").append(toIndentedString(input)).append("\n");
     sb.append("}");
     return sb.toString();
   }

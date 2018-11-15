@@ -24,6 +24,7 @@ package org.n52.wps.javaps.rest.deserializer;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.n52.shetland.ogc.ows.OwsCode;
@@ -42,6 +43,22 @@ import io.swagger.model.TransmissionMode;
 
 public class ExecuteDeserializer {
 
+    private static final String VALUE_KEY = "value";
+
+    private static final String INLINE_VALUE_KEY = "inlineValue";
+
+    private static final String HREF_KEY = "href";
+
+    private static final String FORMAT_KEY = "format";
+
+    private static final String MIME_TYPE_KEY = "mimeType";
+
+    private static final String ENCODING_KEY = "encoding";
+
+    private static final String SCHEMA_KEY = "schema";
+
+    private static final Format FORMAT_TEXT_PLAIN = new Format("text/plain");
+
     public static List<OutputDefinition> readOutputs(List<Output> outputs) {
 
         List<OutputDefinition> outputDefinitions = new ArrayList<>();
@@ -51,7 +68,7 @@ public class ExecuteDeserializer {
 
             outputDefinition.setId(createId(output.getId()));
 
-            outputDefinition.setFormat(getFormat(output.getFormat()));
+            outputDefinition.setFormat(getFormat((io.swagger.model.Format) output.getFormat()));
 
             outputDefinition.setDataTransmissionMode(getTransmisionMode(output.getTransmissionMode()));
 
@@ -72,8 +89,27 @@ public class ExecuteDeserializer {
         }
     }
 
-    private static Format getFormat(io.swagger.model.Format format) {
-        return new Format(format.getMimeType(), format.getEncoding(), format.getSchema());
+    private static Format getFormat(Object object) {
+
+        String mimeType = "";
+        String encoding = "";
+        String schema = "";
+
+        if (object instanceof LinkedHashMap<?, ?>) {
+
+            LinkedHashMap<?, ?> linkedHashMap = (LinkedHashMap<?, ?>) object;
+
+            mimeType = linkedHashMap.containsKey(MIME_TYPE_KEY) ? linkedHashMap.get(MIME_TYPE_KEY).toString() : "";
+            encoding = linkedHashMap.containsKey(ENCODING_KEY) ? linkedHashMap.get(ENCODING_KEY).toString() : "";
+            schema = linkedHashMap.containsKey(SCHEMA_KEY) ? linkedHashMap.get(SCHEMA_KEY).toString() : "";
+
+        } else if (object instanceof io.swagger.model.Format) {
+            
+            io.swagger.model.Format format = (io.swagger.model.Format)object;
+            
+            return new Format(format.getMimeType(), format.getEncoding(), format.getSchema());
+        }
+        return new Format(mimeType, encoding, schema);
     }
 
     private static OwsCode createId(String id) {
@@ -90,21 +126,64 @@ public class ExecuteDeserializer {
 
             OwsCode id = createId(input.getId());
 
-            if (input.getValue().getInlineValue() != null) {
-                processData =
-                        new StringValueProcessData(id, getFormat(input.getFormat()), input.getValue().getInlineValue());
+            Object object = input.getInput();
 
-            } else if (input.getValue().getValueReference() != null) {
+            if (object instanceof LinkedHashMap<?, ?>) {
 
-                URI uri = new URI(input.getValue().getValueReference());
+                LinkedHashMap<?, ?> linkedHashMap = (LinkedHashMap<?, ?>) object;
 
-                processData = new ReferenceProcessData(id, getFormat(input.getFormat()), uri);
+                processData = readInput(id, processData, linkedHashMap);
+
             }
 
             processDataList.add(processData);
         }
 
         return processDataList;
+    }
+
+    private static ProcessData readInput(OwsCode id,
+            ProcessData processData,
+            LinkedHashMap<?, ?> linkedHashMap) throws URISyntaxException {
+
+        //
+        if (linkedHashMap.containsKey(VALUE_KEY)) {
+
+            Object value = linkedHashMap.get(VALUE_KEY);
+
+            if (value instanceof LinkedHashMap<?, ?>) {
+                // complex data
+                LinkedHashMap<?, ?> complexValueMap = (LinkedHashMap<?, ?>) value;
+
+                if (complexValueMap.containsKey(INLINE_VALUE_KEY)) {
+
+                    Format format = new Format();
+
+                    if (linkedHashMap.containsKey(FORMAT_KEY)) {
+                        format = getFormat(linkedHashMap.get(FORMAT_KEY));
+                    }
+
+                    processData = new StringValueProcessData(id, getFormat(format),
+                            complexValueMap.get(INLINE_VALUE_KEY).toString());
+
+                } else if (complexValueMap.containsKey(HREF_KEY)) {
+
+                    URI uri = new URI(complexValueMap.get(HREF_KEY).toString());
+
+                    Format format = new Format();
+
+                    if (linkedHashMap.containsKey(FORMAT_KEY)) {
+                        format = getFormat(linkedHashMap.get(FORMAT_KEY));
+                    }
+
+                    processData = new ReferenceProcessData(id, format, uri);
+                }
+            } else if (value instanceof String) {
+                processData = new StringValueProcessData(id, FORMAT_TEXT_PLAIN, (String) value);
+            }
+        }
+
+        return processData;
     }
 
 }

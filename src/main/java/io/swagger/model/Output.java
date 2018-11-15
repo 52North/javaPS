@@ -16,11 +16,34 @@ import javax.validation.constraints.*;
  * Output
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-14T13:20:59.832Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-15T08:03:12.143Z[GMT]")
 
 public class Output extends DataType  {
+  @JsonProperty("id")
+  private String id = null;
+
   @JsonProperty("transmissionMode")
   private TransmissionMode transmissionMode = null;
+
+  public Output id(String id) {
+    this.id = id;
+    return this;
+  }
+
+  /**
+   * Get id
+   * @return id
+  **/
+  @ApiModelProperty(value = "")
+
+
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
 
   public Output transmissionMode(TransmissionMode transmissionMode) {
     this.transmissionMode = transmissionMode;
@@ -53,13 +76,14 @@ public class Output extends DataType  {
       return false;
     }
     Output output = (Output) o;
-    return Objects.equals(this.transmissionMode, output.transmissionMode) &&
+    return Objects.equals(this.id, output.id) &&
+        Objects.equals(this.transmissionMode, output.transmissionMode) &&
         super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(transmissionMode, super.hashCode());
+    return Objects.hash(id, transmissionMode, super.hashCode());
   }
 
   @Override
@@ -67,6 +91,7 @@ public class Output extends DataType  {
     StringBuilder sb = new StringBuilder();
     sb.append("class Output {\n");
     sb.append("    ").append(toIndentedString(super.toString())).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    transmissionMode: ").append(toIndentedString(transmissionMode)).append("\n");
     sb.append("}");
     return sb.toString();
