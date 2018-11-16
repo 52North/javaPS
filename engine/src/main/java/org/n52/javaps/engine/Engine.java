@@ -70,4 +70,6 @@ public interface Engine {
 
     Future<Result> getResult(JobId jobId) throws EngineException;
 
+    Set<JobId> getJobIdentifiers(OwsCode identifier);
+
 }

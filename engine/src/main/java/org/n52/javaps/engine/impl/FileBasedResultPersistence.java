@@ -35,6 +35,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -142,12 +143,14 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
     public void save(EngineProcessExecutionContext context) {
         try {
             String jobId = context.getJobId().getValue();
+            String processId = context.getProcessId().getValue();
             Path directory = Files.createDirectories(basePath.resolve(jobId));
             OffsetDateTime expirationDate = getExpirationDate(directory);
 
             ObjectNode rootNode = Json.nodeFactory().objectNode()
                     .put(Keys.STATUS, context.getJobStatus().getValue())
                     .put(Keys.JOB_ID, jobId)
+                    .put(Keys.PROCESS_ID, processId)
                     .put(Keys.EXPIRATION_DATE, expirationDate.toString())
                     .put(Keys.RESPONSE_MODE, context.getResponseMode().toString());
 
@@ -467,6 +470,7 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
     }
 
     private static interface Keys {
+        String PROCESS_ID = "processId";
         String RESPONSE_MODE = "responseMode";
         String ERROR = "error";
         String STATUS = "status";
@@ -487,6 +491,36 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
         String MIME_TYPE = "mimeType";
         String SCHEMA = "schema";
 
+    }
+
+    @Override
+    public Set<JobId> getJobIds(OwsCode processId) {
+
+        Set<JobId> jobIdsforProcess = new HashSet<>();
+
+        try {
+            Set<JobId> allJobIds = Files.list(this.basePath).filter(Files::isDirectory).map(Path::getFileName)
+                    .filter(Objects::nonNull).map(Path::toString).map(JobId::new).collect(toSet());
+
+            for (JobId jobId : allJobIds) {
+                try {
+                    JsonNode jsonMetadata = getJobMetadata(jobId);
+
+                    String processIdFromMetadata = jsonMetadata.path(Keys.PROCESS_ID).textValue();
+
+                    if (processIdFromMetadata.equals(processId.getValue())) {
+                        jobIdsforProcess.add(jobId);
+                    }
+
+                } catch (JobNotFoundException e) {
+                    LOG.error(e.getMessage());
+                }
+            }
+
+        } catch (IOException e) {
+            LOG.error(e.getMessage());
+        }
+        return jobIdsforProcess;
     }
 
 }

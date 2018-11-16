@@ -21,7 +21,9 @@ import static java.util.stream.Collectors.toSet;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -425,5 +427,13 @@ public class EngineImpl implements Engine, Destroyable {
         public ResponseMode getResponseMode() {
             return this.responseMode;
         }
+    }
+
+    @Override
+    public Set<JobId> getJobIdentifiers(OwsCode identifier) {
+
+        Set<JobId> jobIds = resultPersistence.getJobIds(identifier);
+
+        return jobIds;
     }
 }
