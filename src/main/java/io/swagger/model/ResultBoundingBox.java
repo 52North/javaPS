@@ -5,63 +5,41 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.model.BoundingBoxData;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * Input
+ * ResultBoundingBox
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-16T13:43:05.776Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-16T13:20:35.957Z[GMT]")
 
-public class Input   {
-  @JsonProperty("id")
-  private String id = null;
+public class ResultBoundingBox   {
+  @JsonProperty("boundingBox")
+  private BoundingBoxData boundingBox = null;
 
-  @JsonProperty("input")
-  private Object input = null;
-
-  public Input id(String id) {
-    this.id = id;
+  public ResultBoundingBox boundingBox(BoundingBoxData boundingBox) {
+    this.boundingBox = boundingBox;
     return this;
   }
 
   /**
-   * Get id
-   * @return id
+   * Get boundingBox
+   * @return boundingBox
   **/
   @ApiModelProperty(required = true, value = "")
   @NotNull
 
+  @Valid
 
-  public String getId() {
-    return id;
+  public BoundingBoxData getBoundingBox() {
+    return boundingBox;
   }
 
-  public void setId(String id) {
-    this.id = id;
-  }
-
-  public Input input(Object input) {
-    this.input = input;
-    return this;
-  }
-
-  /**
-   * Get input
-   * @return input
-  **/
-  @ApiModelProperty(required = true, value = "")
-  @NotNull
-
-
-  public Object getInput() {
-    return input;
-  }
-
-  public void setInput(Object input) {
-    this.input = input;
+  public void setBoundingBox(BoundingBoxData boundingBox) {
+    this.boundingBox = boundingBox;
   }
 
 
@@ -73,23 +51,21 @@ public class Input   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Input input = (Input) o;
-    return Objects.equals(this.id, input.id) &&
-        Objects.equals(this.input, input.input);
+    ResultBoundingBox resultBoundingBox = (ResultBoundingBox) o;
+    return Objects.equals(this.boundingBox, resultBoundingBox.boundingBox);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, input);
+    return Objects.hash(boundingBox);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Input {\n");
+    sb.append("class ResultBoundingBox {\n");
     
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    input: ").append(toIndentedString(input)).append("\n");
+    sb.append("    boundingBox: ").append(toIndentedString(boundingBox)).append("\n");
     sb.append("}");
     return sb.toString();
   }

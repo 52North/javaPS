@@ -69,6 +69,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import io.swagger.annotations.ApiParam;
 import io.swagger.model.Execute;
 import io.swagger.model.Input;
@@ -133,7 +135,7 @@ public class ProcessesApiController implements ProcessesApi {
         List<ProcessData> inputs;
         try {
             inputs = ExecuteDeserializer.readInputs(body.getInputs());
-        } catch (URISyntaxException e) {
+        } catch (URISyntaxException | JsonProcessingException e) {
             log.error("Could not resolve URI: ", e);
             throw new InvalidParameterValueException("identifier", owsCode.getValue());//TODO
         }

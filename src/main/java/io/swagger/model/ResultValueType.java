@@ -5,26 +5,31 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.model.BoundingBoxData;
 import io.swagger.model.InlineValue;
 import io.swagger.model.ReferenceValue;
+import io.swagger.model.ResultBoundingBox;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * ValueType
+ * ResultValueType
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-16T13:43:05.776Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-16T13:20:35.957Z[GMT]")
 
-public class ValueType   {
+public class ResultValueType   {
   @JsonProperty("inlineValue")
   private Object inlineValue = null;
 
   @JsonProperty("href")
   private String href = null;
 
-  public ValueType inlineValue(Object inlineValue) {
+  @JsonProperty("boundingBox")
+  private BoundingBoxData boundingBox = null;
+
+  public ResultValueType inlineValue(Object inlineValue) {
     this.inlineValue = inlineValue;
     return this;
   }
@@ -44,7 +49,7 @@ public class ValueType   {
     this.inlineValue = inlineValue;
   }
 
-  public ValueType href(String href) {
+  public ResultValueType href(String href) {
     this.href = href;
     return this;
   }
@@ -64,6 +69,28 @@ public class ValueType   {
     this.href = href;
   }
 
+  public ResultValueType boundingBox(BoundingBoxData boundingBox) {
+    this.boundingBox = boundingBox;
+    return this;
+  }
+
+  /**
+   * Get boundingBox
+   * @return boundingBox
+  **/
+  @ApiModelProperty(required = true, value = "")
+  @NotNull
+
+  @Valid
+
+  public BoundingBoxData getBoundingBox() {
+    return boundingBox;
+  }
+
+  public void setBoundingBox(BoundingBoxData boundingBox) {
+    this.boundingBox = boundingBox;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -73,23 +100,25 @@ public class ValueType   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ValueType valueType = (ValueType) o;
-    return Objects.equals(this.inlineValue, valueType.inlineValue) &&
-        Objects.equals(this.href, valueType.href);
+    ResultValueType resultValueType = (ResultValueType) o;
+    return Objects.equals(this.inlineValue, resultValueType.inlineValue) &&
+        Objects.equals(this.href, resultValueType.href) &&
+        Objects.equals(this.boundingBox, resultValueType.boundingBox);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(inlineValue, href);
+    return Objects.hash(inlineValue, href, boundingBox);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ValueType {\n");
+    sb.append("class ResultValueType {\n");
     
     sb.append("    inlineValue: ").append(toIndentedString(inlineValue)).append("\n");
     sb.append("    href: ").append(toIndentedString(href)).append("\n");
+    sb.append("    boundingBox: ").append(toIndentedString(boundingBox)).append("\n");
     sb.append("}");
     return sb.toString();
   }

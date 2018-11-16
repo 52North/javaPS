@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import org.n52.javaps.io.bbox.json.JSONBoundingBoxInputOutputHandler;
 import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.shetland.ogc.wps.DataTransmissionMode;
 import org.n52.shetland.ogc.wps.Format;
@@ -35,6 +36,9 @@ import org.n52.shetland.ogc.wps.data.FormattedProcessData;
 import org.n52.shetland.ogc.wps.data.ProcessData;
 import org.n52.shetland.ogc.wps.data.ReferenceProcessData;
 import org.n52.shetland.ogc.wps.data.impl.StringValueProcessData;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.swagger.model.InlineValue;
 import io.swagger.model.Input;
@@ -116,7 +120,7 @@ public class ExecuteDeserializer {
         return new OwsCode(id);
     }
 
-    public static List<ProcessData> readInputs(List<Input> inputs) throws URISyntaxException {
+    public static List<ProcessData> readInputs(List<Input> inputs) throws URISyntaxException, JsonProcessingException {
 
         List<ProcessData> processDataList = new ArrayList<>();
 
@@ -144,7 +148,7 @@ public class ExecuteDeserializer {
 
     private static ProcessData readInput(OwsCode id,
             ProcessData processData,
-            LinkedHashMap<?, ?> linkedHashMap) throws URISyntaxException {
+            LinkedHashMap<?, ?> linkedHashMap) throws URISyntaxException, JsonProcessingException {
 
         //
         if (linkedHashMap.containsKey(VALUE_KEY)) {
@@ -163,7 +167,7 @@ public class ExecuteDeserializer {
                         format = getFormat(linkedHashMap.get(FORMAT_KEY));
                     }
 
-                    processData = new StringValueProcessData(id, getFormat(format),
+                    processData = new StringValueProcessData(id, format,
                             complexValueMap.get(INLINE_VALUE_KEY).toString());
 
                 } else if (complexValueMap.containsKey(HREF_KEY)) {
@@ -181,6 +185,8 @@ public class ExecuteDeserializer {
             } else if (value instanceof String) {
                 processData = new StringValueProcessData(id, FORMAT_TEXT_PLAIN, (String) value);
             }
+        }else if(linkedHashMap.containsKey(JSONBoundingBoxInputOutputHandler.LOWER_CORNER_KEY)) {
+            processData = new StringValueProcessData(id, JSONBoundingBoxInputOutputHandler.FORMAT_APPLICATION_JSON, new ObjectMapper().writeValueAsString(linkedHashMap));
         }
 
         return processData;

@@ -16,5 +16,6 @@
     
     <bean class="org.n52.wps.javaps.rest.serializer.ProcessSerializer" />
 <!--     <bean class="org.n52.wps.javaps.rest.serializer.ExceptionSerializer" /> -->
+    <bean id="jsonBoundingBoxInputOutputHandler" class="org.n52.javaps.io.bbox.json.JSONBoundingBoxInputOutputHandler"/>
     
 </beans>

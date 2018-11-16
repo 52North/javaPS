@@ -13,30 +13,30 @@ import javax.validation.constraints.*;
  * InlineValue
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-15T08:00:15.505Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-16T13:43:05.776Z[GMT]")
 
 public class InlineValue   {
-  @JsonProperty("value")
-  private String value = null;
+  @JsonProperty("inlineValue")
+  private Object inlineValue = null;
 
-  public InlineValue value(String value) {
-    this.value = value;
+  public InlineValue inlineValue(Object inlineValue) {
+    this.inlineValue = inlineValue;
     return this;
   }
 
   /**
-   * Get value
-   * @return value
+   * Get inlineValue
+   * @return inlineValue
   **/
   @ApiModelProperty(value = "")
 
 
-  public String getValue() {
-    return value;
+  public Object getInlineValue() {
+    return inlineValue;
   }
 
-  public void setValue(String value) {
-    this.value = value;
+  public void setInlineValue(Object inlineValue) {
+    this.inlineValue = inlineValue;
   }
 
 
@@ -49,12 +49,12 @@ public class InlineValue   {
       return false;
     }
     InlineValue inlineValue = (InlineValue) o;
-    return Objects.equals(this.value, inlineValue.value);
+    return Objects.equals(this.inlineValue, inlineValue.inlineValue);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(value);
+    return Objects.hash(inlineValue);
   }
 
   @Override
@@ -62,7 +62,7 @@ public class InlineValue   {
     StringBuilder sb = new StringBuilder();
     sb.append("class InlineValue {\n");
     
-    sb.append("    value: ").append(toIndentedString(value)).append("\n");
+    sb.append("    inlineValue: ").append(toIndentedString(inlineValue)).append("\n");
     sb.append("}");
     return sb.toString();
   }
