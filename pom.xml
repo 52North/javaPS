@@ -91,7 +91,7 @@
         <timestamp>${maven.build.timestamp}</timestamp>
         <maven.build.timestamp.format>yyyyMMdd-HHmm</maven.build.timestamp.format>
         <version.java>1.8</version.java>
-        <version.spring>4.2.3.RELEASE</version.spring>
+        <version.spring>5.0.9.RELEASE</version.spring>
         <version.slf4j>1.7.25</version.slf4j>
         <version.log4j>2.3</version.log4j>
         <version.arctic.sea>5.0.0</version.arctic.sea>
