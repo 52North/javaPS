@@ -27,8 +27,8 @@ import javax.inject.Provider;
 
 import org.n52.shetland.ogc.wps.Format;
 
-public class OutputHandlerRepositoryImpl extends AbstractInputOutputHandlerRepository<OutputHandler>
-        implements OutputHandlerRepository {
+public class OutputHandlerRepositoryImpl extends AbstractInputOutputHandlerRepository<OutputHandler> implements
+        OutputHandlerRepository {
 
     private Set<Provider<OutputHandler>> handlers;
 

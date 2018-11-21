@@ -66,8 +66,8 @@ public class DocumentXmlStreamReader extends XmlFactories implements StreamReade
             if (reader.peek().isStartElement()) {
                 StartElement elem = reader.peek().asStartElement();
                 XmlStreamReaderKey key = new XmlStreamReaderKey(elem.getName());
-                return this.repository.get(key).orElseThrow(() -> new MissingStreamReaderException(key))
-                        .readElement(reader);
+                return this.repository.get(key).orElseThrow(() -> new MissingStreamReaderException(key)).readElement(
+                        reader);
             } else {
                 reader.next();
             }

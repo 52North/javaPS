@@ -62,11 +62,10 @@ import com.google.common.io.CharStreams;
  */
 public class LiteralInputOutputHandler extends XmlFactories implements InputHandler, OutputHandler {
 
-    private static final Set<Class<? extends Data<?>>> BINDINGS = Collections.singleton(LiteralData.class);
+    public static final Set<Format> FORMATS = Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(
+            Format.APPLICATION_XML, Format.TEXT_XML, Format.TEXT_PLAIN, Format.TEXT_PLAIN.withBase64Encoding())));
 
-    public static final Set<Format> FORMATS =
-            Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(Format.APPLICATION_XML, Format.TEXT_XML,
-                    Format.TEXT_PLAIN, Format.TEXT_PLAIN.withBase64Encoding())));
+    private static final Set<Class<? extends Data<?>>> BINDINGS = Collections.singleton(LiteralData.class);
 
     private static final String NS_WPS = "wps";
 
@@ -139,8 +138,8 @@ public class LiteralInputOutputHandler extends XmlFactories implements InputHand
                     // TODO check data type?
                     URI dataType = Optional.ofNullable(start.getAttributeByName(QN_DATA_TYPE)).map(Attribute::getValue)
                             .map(URI::create).orElse(null);
-                    String uom =
-                            Optional.ofNullable(start.getAttributeByName(QN_UOM)).map(Attribute::getValue).orElse(null);
+                    String uom = Optional.ofNullable(start.getAttributeByName(QN_UOM)).map(Attribute::getValue).orElse(
+                            null);
                     return description.getType().parseToBinding(xmlReader.getElementText(), uom);
                 } else {
                     throw unexpectedTag(start);
@@ -187,7 +186,8 @@ public class LiteralInputOutputHandler extends XmlFactories implements InputHand
 
     private String toString(TypedLiteralOutputDescription description,
             LiteralData data) throws EncodingException {
-        @SuppressWarnings("unchecked") LiteralType<Object> type = (LiteralType<Object>) description.getType();
+        @SuppressWarnings("unchecked")
+        LiteralType<Object> type = (LiteralType<Object>) description.getType();
         String value = type.generate(data.getPayload());
         return value;
     }

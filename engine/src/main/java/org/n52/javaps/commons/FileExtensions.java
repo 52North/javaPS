@@ -60,8 +60,8 @@ public class FileExtensions implements FileExtensionProvider {
     }
 
     public void setExtensionsByString(Map<String, String> extensions) {
-        setExtensionsByMediaType(extensions.entrySet().stream()
-                .collect(Collectors.toMap(x -> MediaType.parse(x.getKey()), Entry::getValue)));
+        setExtensionsByMediaType(extensions.entrySet().stream().collect(Collectors.toMap(x -> MediaType.parse(x
+                .getKey()), Entry::getValue)));
     }
 
     public void setExtensionsByMediaType(Map<MediaType, String> extensions) {

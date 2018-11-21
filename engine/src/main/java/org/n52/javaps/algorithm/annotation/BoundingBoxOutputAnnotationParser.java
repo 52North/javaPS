@@ -28,8 +28,8 @@ import org.n52.shetland.ogc.ows.OwsCRS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-class BoundingBoxOutputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractOutputBinding<M>>
-        extends AbstractOutputAnnotationParser<BoundingBoxOutput, M, B> {
+class BoundingBoxOutputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractOutputBinding<M>> extends
+        AbstractOutputAnnotationParser<BoundingBoxOutput, M, B> {
 
     private static final Logger LOG = LoggerFactory.getLogger(BoundingBoxOutputAnnotationParser.class);
 

@@ -38,10 +38,10 @@ import org.n52.shetland.ogc.wps.response.DismissResponse;
  *
  * @author Christian Autermann
  */
-public class DismissHandler extends AbstractJobHandler
-        implements GenericOperationHandler<DismissRequest, DismissResponse> {
-    private static final OperationHandlerKey KEY =
-            new OperationHandlerKey(WPSConstants.SERVICE, WPSConstants.Operations.Dismiss);
+public class DismissHandler extends AbstractJobHandler implements GenericOperationHandler<DismissRequest,
+        DismissResponse> {
+    private static final OperationHandlerKey KEY = new OperationHandlerKey(WPSConstants.SERVICE,
+            WPSConstants.Operations.Dismiss);
 
     @Inject
     public DismissHandler(Engine engine) {

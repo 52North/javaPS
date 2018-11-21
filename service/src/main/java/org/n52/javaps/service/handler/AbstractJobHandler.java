@@ -50,8 +50,8 @@ public abstract class AbstractJobHandler extends AbstractEngineHandler {
             String version) {
         OwsPossibleValues allowedValues;
         if (discloseJobIds) {
-            Set<OwsValue> values =
-                    getEngine().getJobIdentifiers().stream().map(JobId::getValue).map(OwsValue::new).collect(toSet());
+            Set<OwsValue> values = getEngine().getJobIdentifiers().stream().map(JobId::getValue).map(OwsValue::new)
+                    .collect(toSet());
             if (values.isEmpty()) {
                 allowedValues = OwsNoValues.instance();
             } else {

@@ -54,6 +54,8 @@ public class ConfigurableClasses {
 
     private static final Map<Class<?>, Optional<JsonNode>> CONFIGURATIONS = new ConcurrentHashMap<>();
 
+    private static final String COULD_NOT_READ_PROPERTY = "Could not read property file for class ";
+
     public static Optional<JsonNode> get(Class<?> clazz) {
         return CONFIGURATIONS.computeIfAbsent(clazz, ConfigurableClasses::load);
     }
@@ -61,8 +63,8 @@ public class ConfigurableClasses {
     private static Optional<JsonNode> load(Class<?> clazz) {
         Properties annotation = clazz.getAnnotation(Properties.class);
         if (annotation == null) {
-            LOGGER.warn("Class extends {}, but is not annotated with {} annotation.", clazz.getName(),
-                    Properties.class.getName());
+            LOGGER.warn("Class extends {}, but is not annotated with {} annotation.", clazz.getName(), Properties.class
+                    .getName());
         } else {
             Optional<String> fileName = getPropertiesFileName(annotation);
             Optional<String> defaultFileName = getDefaultPropertiesFileName(annotation);
@@ -80,7 +82,7 @@ public class ConfigurableClasses {
                     try {
                         return Optional.of(Json.loadURL(fileURL));
                     } catch (IOException e) {
-                        LOGGER.error("Could not read property file for class " + clazz.getName(), e);
+                        LOGGER.error(COULD_NOT_READ_PROPERTY  + clazz.getName(), e);
                     }
                 }
             }
@@ -89,7 +91,7 @@ public class ConfigurableClasses {
                 try {
                     return Optional.of(Json.loadURL(fileURL));
                 } catch (IOException e) {
-                    LOGGER.error("Could not read property file for class " + clazz.getName(), e);
+                    LOGGER.error(COULD_NOT_READ_PROPERTY + clazz.getName(), e);
                 }
             }
         }
@@ -97,8 +99,8 @@ public class ConfigurableClasses {
     }
 
     private static URL locateFile(String fileName) {
-        FileLocationStrategy strategy = new CombinedLocationStrategy(
-                Arrays.asList(new FileSystemLocationStrategy(), new ClasspathLocationStrategy()));
+        FileLocationStrategy strategy = new CombinedLocationStrategy(Arrays.asList(new FileSystemLocationStrategy(),
+                new ClasspathLocationStrategy()));
         FileSystem fileSystem = new DefaultFileSystem();
         FileLocator locator = FileLocatorUtils.fileLocator().locationStrategy(strategy).fileName(fileName).create();
         return strategy.locate(fileSystem, locator);

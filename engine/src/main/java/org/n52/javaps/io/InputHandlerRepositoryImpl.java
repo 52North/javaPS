@@ -33,8 +33,8 @@ import org.n52.shetland.ogc.wps.Format;
  * @author foerster
  *
  */
-public class InputHandlerRepositoryImpl extends AbstractInputOutputHandlerRepository<InputHandler>
-        implements InputHandlerRepository {
+public class InputHandlerRepositoryImpl extends AbstractInputOutputHandlerRepository<InputHandler> implements
+        InputHandlerRepository {
 
     private Set<Provider<InputHandler>> handlers;
 

@@ -26,6 +26,8 @@ import org.n52.javaps.io.DecodingException;
 public class LiteralBooleanType extends AbstractXSDLiteralType<Boolean> {
 
     private static final long serialVersionUID = -3725729099095551317L;
+    private static final String TRUE = "true";
+    private static final String FALSE = "false";
 
     @Override
     public String getName() {
@@ -35,9 +37,9 @@ public class LiteralBooleanType extends AbstractXSDLiteralType<Boolean> {
     @Override
     public Boolean parse(String value) throws DecodingException {
         switch (value) {
-        case "true":
+        case TRUE:
             return true;
-        case "false":
+        case FALSE:
             return false;
         default:
             throw new DecodingException("value is not a valid boolean");
@@ -51,7 +53,7 @@ public class LiteralBooleanType extends AbstractXSDLiteralType<Boolean> {
 
     @Override
     public String generate(Boolean value) {
-        return value ? "true" : "false";
+        return value ? TRUE : FALSE;
     }
 
 }

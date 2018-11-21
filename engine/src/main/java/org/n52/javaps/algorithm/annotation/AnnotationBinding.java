@@ -35,7 +35,7 @@ abstract class AnnotationBinding<M extends AccessibleObject & Member> {
 
     // for example, a type reprecenting the <? extends Object> for types of
     // List<? extends Object> or List
-    public final Type NOT_PARAMETERIZED_TYPE = new WildcardType() {
+    private final Type NOT_PARAMETERIZED_TYPE = new WildcardType() {
         @Override
         public Type[] getUpperBounds() {
             return new Type[] { Object.class };
@@ -53,6 +53,10 @@ abstract class AnnotationBinding<M extends AccessibleObject & Member> {
 
     public M getMember() {
         return member;
+    }
+
+    public Type getNotParameterizedType() {
+        return NOT_PARAMETERIZED_TYPE;
     }
 
     protected boolean checkModifier() {

@@ -40,10 +40,10 @@ import org.n52.shetland.ogc.wps.response.GetStatusResponse;
  *
  * @author Christian Autermann
  */
-public class GetStatusHandler extends AbstractJobHandler
-        implements GenericOperationHandler<GetStatusRequest, GetStatusResponse> {
-    private static final OperationHandlerKey KEY =
-            new OperationHandlerKey(WPSConstants.SERVICE, WPSConstants.Operations.GetStatus);
+public class GetStatusHandler extends AbstractJobHandler implements GenericOperationHandler<GetStatusRequest,
+        GetStatusResponse> {
+    private static final OperationHandlerKey KEY = new OperationHandlerKey(WPSConstants.SERVICE,
+            WPSConstants.Operations.GetStatus);
 
     @Inject
     public GetStatusHandler(Engine engine) {

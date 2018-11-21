@@ -43,8 +43,8 @@ public abstract class AbstractInputOutputHandlerRepository<T extends InputOutput
 
     @Override
     public Set<Format> getSupportedFormats(Class<? extends Data<?>> binding) {
-        return stream().filter(g -> g.isSupportedBinding(binding)).map(InputOutputHandler::getSupportedFormats)
-                .flatMap(Set::stream).collect(toSet());
+        return stream().filter(g -> g.isSupportedBinding(binding)).map(InputOutputHandler::getSupportedFormats).flatMap(
+                Set::stream).collect(toSet());
     }
 
     protected Optional<T> getHandler(Class<? extends Data<?>> binding,

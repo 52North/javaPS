@@ -62,13 +62,11 @@ import org.n52.svalbard.stream.XLinkConstants;
  */
 public class WPSRequestReader extends AbstractElementXmlStreamReader {
 
-    private static final HashSet<XmlStreamReaderKey> KEYS =
-            new HashSet<>(Arrays.asList(new XmlStreamReaderKey(WPSConstants.Elem.QN_GET_STATUS),
-                    new XmlStreamReaderKey(WPSConstants.Elem.QN_DISMISS),
-                    new XmlStreamReaderKey(WPSConstants.Elem.QN_DESCRIBE_PROCESS),
-                    new XmlStreamReaderKey(WPSConstants.Elem.QN_EXECUTE),
-                    new XmlStreamReaderKey(WPSConstants.Elem.QN_GET_CAPABILITIES),
-                    new XmlStreamReaderKey(WPSConstants.Elem.QN_GET_RESULT)));
+    private static final HashSet<XmlStreamReaderKey> KEYS = new HashSet<>(Arrays.asList(new XmlStreamReaderKey(
+            WPSConstants.Elem.QN_GET_STATUS), new XmlStreamReaderKey(WPSConstants.Elem.QN_DISMISS),
+            new XmlStreamReaderKey(WPSConstants.Elem.QN_DESCRIBE_PROCESS), new XmlStreamReaderKey(
+                    WPSConstants.Elem.QN_EXECUTE), new XmlStreamReaderKey(WPSConstants.Elem.QN_GET_CAPABILITIES),
+            new XmlStreamReaderKey(WPSConstants.Elem.QN_GET_RESULT)));
 
     @Override
     public Set<StreamReaderKey> getKeys() {
@@ -203,10 +201,10 @@ public class WPSRequestReader extends AbstractElementXmlStreamReader {
         ExecuteRequest request = new ExecuteRequest();
         readServiceAndVersion(elem, request);
 
-        getAttribute(elem, WPSConstants.Attr.AN_MODE).flatMap(ExecutionMode::fromString)
-                .ifPresent(request::setExecutionMode);
-        getAttribute(elem, WPSConstants.Attr.AN_RESPONSE).flatMap(ResponseMode::fromString)
-                .ifPresent(request::setResponseMode);
+        getAttribute(elem, WPSConstants.Attr.AN_MODE).flatMap(ExecutionMode::fromString).ifPresent(
+                request::setExecutionMode);
+        getAttribute(elem, WPSConstants.Attr.AN_RESPONSE).flatMap(ResponseMode::fromString).ifPresent(
+                request::setResponseMode);
 
         while (reader.hasNext()) {
             XMLEvent event = reader.nextEvent();

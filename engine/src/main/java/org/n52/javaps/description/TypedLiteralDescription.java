@@ -40,8 +40,8 @@ public interface TypedLiteralDescription extends LiteralDescription, TypedDataDe
 
     }
 
-    interface Builder<T extends TypedLiteralDescription, B extends Builder<T, B>>
-            extends LiteralDescription.Builder<T, B>, TypedDataDescription.Builder<LiteralType<?>, T, B> {
+    interface Builder<T extends TypedLiteralDescription, B extends Builder<T, B>> extends LiteralDescription.Builder<T,
+            B>, TypedDataDescription.Builder<LiteralType<?>, T, B> {
     }
 
 }

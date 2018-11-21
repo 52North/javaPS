@@ -30,8 +30,8 @@ public interface TypedComplexOutputDescription extends ComplexOutputDescription,
         return this;
     }
 
-    interface Builder<T extends TypedComplexOutputDescription, B extends Builder<T, B>>
-            extends ComplexOutputDescription.Builder<T, B>, TypedComplexDescription.Builder<T, B> {
+    interface Builder<T extends TypedComplexOutputDescription, B extends Builder<T, B>> extends
+            ComplexOutputDescription.Builder<T, B>, TypedComplexDescription.Builder<T, B> {
 
     }
 

@@ -16,11 +16,6 @@
  */
 package org.n52.javaps.algorithm.annotation;
 
-import static java.util.function.Function.identity;
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
-import static org.n52.janmayen.stream.Streams.throwingMerger;
-
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -70,6 +65,8 @@ public class AnnotatedAlgorithmMetadata {
 
     private final TypedProcessDescriptionFactory descriptionFactory;
 
+    private final String duplicateIdentifier = "duplicated identifier: " ;
+
     public AnnotatedAlgorithmMetadata(Class<?> algorithmClass, InputHandlerRepository parserRepository,
             OutputHandlerRepository generatorRepository, LiteralTypeRepository literalTypeRepository) {
         this.descriptionFactory = new TypedProcessDescriptionFactory();
@@ -93,24 +90,99 @@ public class AnnotatedAlgorithmMetadata {
         return Collections.unmodifiableMap(this.outputBindings);
     }
 
+    private Map<OwsCode, AbstractOutputBinding<?>> getOutputBindings(Class<?> algorithmClass,
+            OutputHandlerRepository generatorRepository,
+            LiteralTypeRepository literalTypeRepository) {
+        Stream<AbstractOutputBinding<Field>> s1 = parseElements(getFields(algorithmClass), Arrays.asList(
+                new LiteralOutputAnnotationParser<>(AbstractOutputBinding::field, literalTypeRepository),
+                new ComplexOutputAnnotationParser<>(AbstractOutputBinding::field, generatorRepository),
+                new BoundingBoxOutputAnnotationParser<>(AbstractOutputBinding::field))).map(x -> (AbstractOutputBinding<
+                        Field>) x);
+        Stream<AbstractOutputBinding<Method>> s2 = parseElements(getMethods(algorithmClass), Arrays.asList(
+                new LiteralOutputAnnotationParser<>(AbstractOutputBinding::method, literalTypeRepository),
+                new ComplexOutputAnnotationParser<>(AbstractOutputBinding::method, generatorRepository),
+                new BoundingBoxOutputAnnotationParser<>(AbstractOutputBinding::method))).map(
+                        x -> (AbstractOutputBinding<Method>) x);
+
+        BinaryOperator<AbstractOutputBinding<?>> merger = org.n52.janmayen.stream.Streams.throwingMerger((a,
+                b) -> new RuntimeException(duplicateIdentifier  + a.getDescription().getId()));
+        Collector<AbstractOutputBinding<?>, ?, Map<OwsCode, AbstractOutputBinding<?>>> collector =
+                java.util.stream.Collectors.toMap(b -> b.getDescription().getId(), java.util.function.Function
+                        .identity(), merger, LinkedHashMap::new);
+        return Collections.unmodifiableMap(Stream.concat(s1, s2).collect(collector));
+    }
+
     Map<OwsCode, AbstractInputBinding<?>> getInputBindings() {
         return Collections.unmodifiableMap(this.inputBindings);
+    }
+
+    private Map<OwsCode, AbstractInputBinding<?>> getInputBindings(Class<?> algorithmClass,
+            InputHandlerRepository parserRepository,
+            LiteralTypeRepository literalTypeRepository) {
+        Stream<AbstractInputBinding<Field>> s1 = parseElements(getFields(algorithmClass), Arrays.asList(
+                new LiteralInputAnnotationParser<>(AbstractInputBinding::field, literalTypeRepository),
+                new ComplexInputAnnotationParser<>(AbstractInputBinding::field, parserRepository),
+                new BoundingBoxInputAnnotationParser<>(AbstractInputBinding::field))).map(x -> (AbstractInputBinding<
+                        Field>) x);
+        Stream<AbstractInputBinding<Method>> s2 = parseElements(getMethods(algorithmClass), Arrays.asList(
+                new LiteralInputAnnotationParser<>(AbstractInputBinding::method, literalTypeRepository),
+                new ComplexInputAnnotationParser<>(AbstractInputBinding::method, parserRepository),
+                new BoundingBoxInputAnnotationParser<>(AbstractInputBinding::method))).map(x -> (AbstractInputBinding<
+                        Method>) x);
+        BinaryOperator<AbstractInputBinding<?>> merger = Streams.throwingMerger((a,
+                b) -> new RuntimeException(duplicateIdentifier + a.getDescription().getId()));
+        Collector<AbstractInputBinding<?>, ?, LinkedHashMap<OwsCode, AbstractInputBinding<?>>> collector =
+                java.util.stream.Collectors.toMap(b -> b.getDescription().getId(), java.util.function.Function
+                        .identity(), merger, LinkedHashMap::new);
+        return Collections.unmodifiableMap(Stream.concat(s1, s2).collect(collector));
     }
 
     ExecuteBinding getExecuteBinding() {
         return this.executeBinding;
     }
 
+    private ExecuteBinding getExecuteBinding(Class<?> algorithmClass) {
+        ExecuteAnnotationParser parser = new ExecuteAnnotationParser();
+        return getMethods(algorithmClass).filter(method -> method.isAnnotationPresent(parser.getSupportedAnnotation()))
+                .map(method -> parser.parse(method)).filter(Objects::nonNull).collect(MoreCollectors.toSingleResult(
+                        () -> new RuntimeException("Multiple execute method bindings encountered for class "
+                                + algorithmClass.getCanonicalName())));
+    }
+
     public TypedProcessDescription getDescription() {
         return this.description;
     }
 
-    public <M extends AccessibleObject & Member, B extends AbstractDataBinding<? super M, ?>> Stream<? extends B> parseElements(
-            Stream<M> members,
-            List<? extends AnnotationParser<?, M, ? extends B>> outputParser) {
-        return members.flatMap(member -> outputParser.stream()
-                .filter(parser -> member.isAnnotationPresent(parser.getSupportedAnnotation()))
-                .map(parser -> parser.parse(member)).filter(Objects::nonNull));
+    private TypedProcessDescription getDescription(Class<?> algorithmClass,
+            Map<OwsCode, AbstractInputBinding<?>> inputBindings,
+            Map<OwsCode, AbstractOutputBinding<?>> outputBindings) {
+        Function<AbstractInputBinding<?>, TypedProcessInputDescription<?>> getInputDescription =
+                AbstractInputBinding::getDescription;
+        List<ProcessInputDescription> inputs = inputBindings.values().stream().map(getInputDescription).collect(
+                java.util.stream.Collectors.toList());
+        Function<AbstractOutputBinding<?>, TypedProcessOutputDescription<?>> getOutputDescription =
+                AbstractOutputBinding::getDescription;
+        List<ProcessOutputDescription> outputs = outputBindings.values().stream().map(getOutputDescription).collect(
+                java.util.stream.Collectors.toList());
+        return getDescription(algorithmClass, inputs, outputs);
+    }
+
+    private TypedProcessDescription getDescription(Class<?> algorithmClass,
+            List<ProcessInputDescription> inputs,
+            List<ProcessOutputDescription> outputs) {
+        org.n52.javaps.algorithm.annotation.Algorithm annotation = getProcessAnnotation(algorithmClass);
+        String identifier = Strings.emptyToNull(annotation.identifier()) == null ? algorithmClass.getCanonicalName()
+                : annotation.identifier();
+        return descriptionFactory.process().withIdentifier(identifier).withTitle(annotation.title()).withAbstract(
+                annotation.abstrakt()).withVersion(annotation.version()).storeSupported(annotation.storeSupported())
+                .statusSupported(annotation.statusSupported()).withInput(inputs).withOutput(outputs).build();
+    }
+
+    public <M extends AccessibleObject & Member, B extends AbstractDataBinding<? super M, ?>> Stream<
+            ? extends B> parseElements(Stream<M> members,
+                    List<? extends AnnotationParser<?, M, ? extends B>> outputParser) {
+        return members.flatMap(member -> outputParser.stream().filter(parser -> member.isAnnotationPresent(parser
+                .getSupportedAnnotation())).map(parser -> parser.parse(member)).filter(Objects::nonNull));
     }
 
     private void checkDefaultConstructor(Class<?> algorithmClass) throws RuntimeException {
@@ -128,86 +200,10 @@ public class AnnotatedAlgorithmMetadata {
         }
     }
 
-    private Map<OwsCode, AbstractInputBinding<?>> getInputBindings(Class<?> algorithmClass,
-            InputHandlerRepository parserRepository,
-            LiteralTypeRepository literalTypeRepository) {
-        Stream<AbstractInputBinding<Field>> s1 = parseElements(getFields(algorithmClass),
-                Arrays.asList(new LiteralInputAnnotationParser<>(AbstractInputBinding::field, literalTypeRepository),
-                        new ComplexInputAnnotationParser<>(AbstractInputBinding::field, parserRepository),
-                        new BoundingBoxInputAnnotationParser<>(AbstractInputBinding::field)))
-                                .map(x -> (AbstractInputBinding<Field>) x);
-        Stream<AbstractInputBinding<Method>> s2 = parseElements(getMethods(algorithmClass),
-                Arrays.asList(new LiteralInputAnnotationParser<>(AbstractInputBinding::method, literalTypeRepository),
-                        new ComplexInputAnnotationParser<>(AbstractInputBinding::method, parserRepository),
-                        new BoundingBoxInputAnnotationParser<>(AbstractInputBinding::method)))
-                                .map(x -> (AbstractInputBinding<Method>) x);
-        BinaryOperator<AbstractInputBinding<?>> merger = Streams.throwingMerger((a,
-                b) -> new RuntimeException("duplicated identifier: " + a.getDescription().getId()));
-        Collector<AbstractInputBinding<?>, ?, LinkedHashMap<OwsCode, AbstractInputBinding<?>>> collector =
-                toMap(b -> b.getDescription().getId(), identity(), merger, LinkedHashMap::new);
-        return Collections.unmodifiableMap(Stream.concat(s1, s2).collect(collector));
-    }
-
-    private Map<OwsCode, AbstractOutputBinding<?>> getOutputBindings(Class<?> algorithmClass,
-            OutputHandlerRepository generatorRepository,
-            LiteralTypeRepository literalTypeRepository) {
-        Stream<AbstractOutputBinding<Field>> s1 = parseElements(getFields(algorithmClass),
-                Arrays.asList(new LiteralOutputAnnotationParser<>(AbstractOutputBinding::field, literalTypeRepository),
-                        new ComplexOutputAnnotationParser<>(AbstractOutputBinding::field, generatorRepository),
-                        new BoundingBoxOutputAnnotationParser<>(AbstractOutputBinding::field)))
-                                .map(x -> (AbstractOutputBinding<Field>) x);
-        Stream<AbstractOutputBinding<Method>> s2 = parseElements(getMethods(algorithmClass),
-                Arrays.asList(new LiteralOutputAnnotationParser<>(AbstractOutputBinding::method, literalTypeRepository),
-                        new ComplexOutputAnnotationParser<>(AbstractOutputBinding::method, generatorRepository),
-                        new BoundingBoxOutputAnnotationParser<>(AbstractOutputBinding::method)))
-                                .map(x -> (AbstractOutputBinding<Method>) x);
-
-        BinaryOperator<AbstractOutputBinding<?>> merger = throwingMerger((a,
-                b) -> new RuntimeException("duplicated identifier: " + a.getDescription().getId()));
-        Collector<AbstractOutputBinding<?>, ?, Map<OwsCode, AbstractOutputBinding<?>>> collector =
-                toMap(b -> b.getDescription().getId(), identity(), merger, LinkedHashMap::new);
-        return Collections.unmodifiableMap(Stream.concat(s1, s2).collect(collector));
-    }
-
-    private ExecuteBinding getExecuteBinding(Class<?> algorithmClass) {
-        ExecuteAnnotationParser parser = new ExecuteAnnotationParser();
-        return getMethods(algorithmClass).filter(method -> method.isAnnotationPresent(parser.getSupportedAnnotation()))
-                .map(method -> parser.parse(method)).filter(Objects::nonNull)
-                .collect(MoreCollectors.toSingleResult(
-                        () -> new RuntimeException("Multiple execute method bindings encountered for class "
-                                + algorithmClass.getCanonicalName())));
-    }
-
-    private TypedProcessDescription getDescription(Class<?> algorithmClass,
-            Map<OwsCode, AbstractInputBinding<?>> inputBindings,
-            Map<OwsCode, AbstractOutputBinding<?>> outputBindings) {
-        Function<AbstractInputBinding<?>, TypedProcessInputDescription<?>> getInputDescription =
-                AbstractInputBinding::getDescription;
-        List<ProcessInputDescription> inputs =
-                inputBindings.values().stream().map(getInputDescription).collect(toList());
-        Function<AbstractOutputBinding<?>, TypedProcessOutputDescription<?>> getOutputDescription =
-                AbstractOutputBinding::getDescription;
-        List<ProcessOutputDescription> outputs =
-                outputBindings.values().stream().map(getOutputDescription).collect(toList());
-        return getDescription(algorithmClass, inputs, outputs);
-    }
-
-    private TypedProcessDescription getDescription(Class<?> algorithmClass,
-            List<ProcessInputDescription> inputs,
-            List<ProcessOutputDescription> outputs) {
-        org.n52.javaps.algorithm.annotation.Algorithm annotation = getProcessAnnotation(algorithmClass);
-        String identifier = Strings.emptyToNull(annotation.identifier()) == null ? algorithmClass.getCanonicalName()
-                : annotation.identifier();
-        return descriptionFactory.process().withIdentifier(identifier).withTitle(annotation.title())
-                .withAbstract(annotation.abstrakt()).withVersion(annotation.version())
-                .storeSupported(annotation.storeSupported()).statusSupported(annotation.statusSupported())
-                .withInput(inputs).withOutput(outputs).build();
-    }
-
     private org.n52.javaps.algorithm.annotation.Algorithm getProcessAnnotation(Class<?> algorithmClass1)
             throws RuntimeException {
-        org.n52.javaps.algorithm.annotation.Algorithm annotation =
-                algorithmClass1.getAnnotation(org.n52.javaps.algorithm.annotation.Algorithm.class);
+        org.n52.javaps.algorithm.annotation.Algorithm annotation = algorithmClass1.getAnnotation(
+                org.n52.javaps.algorithm.annotation.Algorithm.class);
         if (annotation == null) {
             throw new RuntimeException("Class isn't annotated with an Algorithm annotation");
         }

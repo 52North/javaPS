@@ -27,8 +27,7 @@ import org.n52.javaps.io.literal.LiteralType;
  * @author Christian Autermann
  */
 public abstract class AbstractXSDLiteralType<T> implements LiteralType<T> {
-    private static final long serialVersionUID = -7998164049879893066L;
-
+    
     protected static final String ANY_SIMPLE_TYPE = "anySimpleType";
 
     protected static final String DURATION = "duration";
@@ -100,6 +99,8 @@ public abstract class AbstractXSDLiteralType<T> implements LiteralType<T> {
     protected static final String XML_SCHEMA_NAMESPACE = "http://www.w3.org/2001/XMLSchema";
 
     protected static final String XML_SCHEMA_PREFIX = "xs";
+    
+    private static final long serialVersionUID = -7998164049879893066L;
 
     @Override
     public URI getURI() {

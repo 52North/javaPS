@@ -27,8 +27,8 @@ import org.n52.javaps.description.impl.TypedProcessDescriptionFactory;
 import org.n52.javaps.io.literal.LiteralType;
 import org.n52.javaps.io.literal.LiteralTypeRepository;
 
-class LiteralOutputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractOutputBinding<M>>
-        extends AbstractOutputAnnotationParser<LiteralOutput, M, B> {
+class LiteralOutputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractOutputBinding<M>> extends
+        AbstractOutputAnnotationParser<LiteralOutput, M, B> {
 
     private final LiteralTypeRepository literalTypeRepository;
 
@@ -61,9 +61,8 @@ class LiteralOutputAnnotationParser<M extends AccessibleObject & Member, B exten
         LiteralType<?> bindingType = getLiteralType(annotation, binding);
         TypedProcessDescriptionFactory descriptionFactory = new TypedProcessDescriptionFactory();
         return descriptionFactory.literalOutput().withTitle(annotation.title()).withAbstract(annotation.abstrakt())
-                .withIdentifier(annotation.identifier())
-                .withDefaultLiteralDataDomain(descriptionFactory.literalDataDomain()
-                        .withDataType(bindingType.getDataType()).withUOM(annotation.uom()))
+                .withIdentifier(annotation.identifier()).withDefaultLiteralDataDomain(descriptionFactory
+                        .literalDataDomain().withDataType(bindingType.getDataType()).withUOM(annotation.uom()))
                 .withType(bindingType).build();
 
     }

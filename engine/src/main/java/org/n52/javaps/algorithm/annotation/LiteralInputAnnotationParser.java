@@ -48,10 +48,10 @@ import org.n52.javaps.io.literal.LiteralTypeRepository;
  * @param <B>
  *            the binding type
  */
-class LiteralInputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractInputBinding<M>>
-        extends AbstractInputAnnotationParser<LiteralInput, M, B> {
+class LiteralInputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractInputBinding<M>> extends
+        AbstractInputAnnotationParser<LiteralInput, M, B> {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(AnnotationParser.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AnnotationParser.class);
 
     private final LiteralTypeRepository literalTypeRepository;
 
@@ -78,14 +78,13 @@ class LiteralInputAnnotationParser<M extends AccessibleObject & Member, B extend
         TypedProcessDescriptionFactory descriptionFactory = new TypedProcessDescriptionFactory();
 
         return descriptionFactory.literalInput().withIdentifier(annotation.identifier()).withTitle(annotation.title())
-                .withAbstract(annotation.abstrakt()).withMinimalOccurence(annotation.minOccurs())
-                .withMaximalOccurence(getMaxOccurence(annotation, allowedValues)).withType(bindingType)
-                .withDefaultLiteralDataDomain(descriptionFactory.literalDataDomain()
-                        .withValueDescription(allowedValues.isEmpty() ? OwsAnyValue.instance()
-                                : new OwsAllowedValues(allowedValues.stream().map(OwsValue::new)))
-                        .withDataType(bindingType.getDataType())
-                        .withDefaultValue(getDefaultValue(annotation, allowedValues)).withUOM(annotation.uom()))
-                .build();
+                .withAbstract(annotation.abstrakt()).withMinimalOccurence(annotation.minOccurs()).withMaximalOccurence(
+                        getMaxOccurence(annotation, allowedValues)).withType(bindingType).withDefaultLiteralDataDomain(
+                                descriptionFactory.literalDataDomain().withValueDescription(allowedValues.isEmpty()
+                                        ? OwsAnyValue.instance()
+                                        : new OwsAllowedValues(allowedValues.stream().map(OwsValue::new))).withDataType(
+                                                bindingType.getDataType()).withDefaultValue(getDefaultValue(annotation,
+                                                        allowedValues)).withUOM(annotation.uom())).build();
     }
 
     @Override
@@ -96,8 +95,9 @@ class LiteralInputAnnotationParser<M extends AccessibleObject & Member, B extend
     public LiteralType<?> getLiteralType(LiteralInput annotation,
             B binding) {
         Type payloadType = binding.getPayloadType();
-        @SuppressWarnings("unchecked") Class<? extends LiteralType<?>> bindingType =
-                (Class<? extends LiteralType<?>>) annotation.binding();
+        @SuppressWarnings("unchecked") 
+        Class<? extends LiteralType<?>> bindingType = (Class<? extends LiteralType<
+                ?>>) annotation.binding();
 
         if (payloadType instanceof Class<?>) {
             return this.literalTypeRepository.getLiteralType(bindingType, (Class<?>) payloadType);
@@ -127,10 +127,9 @@ class LiteralInputAnnotationParser<M extends AccessibleObject & Member, B extend
         List<String> allowedValues = new ArrayList<>(Arrays.asList(annotation.allowedValues()));
         if (!enumValues.isEmpty()) {
             if (!allowedValues.isEmpty()) {
-                allowedValues.stream().filter(x -> !enumValues.contains(x))
-                        .peek(x -> LOGGER.warn("Invalid allowed value \"{}\" specified for for enumerated input {}", x,
-                                annotation.identifier()))
-                        .forEach(allowedValues::remove);
+                allowedValues.stream().filter(x -> !enumValues.contains(x)).peek(x -> LOGGER.warn(
+                        "Invalid allowed value \"{}\" specified for for enumerated input {}", x, annotation
+                                .identifier())).forEach(allowedValues::remove);
             } else {
                 allowedValues = enumValues;
             }

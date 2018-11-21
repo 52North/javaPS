@@ -35,11 +35,14 @@ import org.n52.javaps.io.literal.LiteralType;
 @Documented
 @SuppressWarnings("rawtypes")
 public @interface LiteralInput {
-    String identifier(); // identifier
+    
+    // identifier
+    String identifier();
 
     String title() default "";
 
-    String abstrakt() default ""; // 'abstract' is java reserved keyword
+    // 'abstract' is java reserved keyword
+    String abstrakt() default "";
 
     long minOccurs() default 1;
 
@@ -56,5 +59,5 @@ public @interface LiteralInput {
     /**
      * Special maxOccurs flags (set maxOccurs to enum constant count).
      */
-    public final static int ENUM_COUNT = -1;
+    int ENUM_COUNT = -1;
 }

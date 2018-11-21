@@ -35,11 +35,14 @@ import org.n52.javaps.io.literal.LiteralType;
 @Documented
 @SuppressWarnings("rawtypes")
 public @interface LiteralOutput {
-    String identifier(); // identifier
+    
+    // identifier
+    String identifier();
 
     String title() default "";
 
-    String abstrakt() default ""; // 'abstract' is java reserved keyword
+    // 'abstract' is java reserved keyword
+    String abstrakt() default "";
 
     String uom() default "";
 

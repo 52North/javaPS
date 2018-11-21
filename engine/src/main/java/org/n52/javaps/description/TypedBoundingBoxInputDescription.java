@@ -30,7 +30,7 @@ public interface TypedBoundingBoxInputDescription extends BoundingBoxInputDescri
         return this;
     }
 
-    interface Builder<T extends TypedBoundingBoxInputDescription, B extends Builder<T, B>>
-            extends BoundingBoxInputDescription.Builder<T, B>, TypedBoundingBoxDescription.Builder<T, B> {
+    interface Builder<T extends TypedBoundingBoxInputDescription, B extends Builder<T, B>> extends
+            BoundingBoxInputDescription.Builder<T, B>, TypedBoundingBoxDescription.Builder<T, B> {
     }
 }

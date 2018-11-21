@@ -129,8 +129,8 @@ public class OutputReferenceEndpoint {
     private <T> StreamWriter<? super T> getWriter(T output,
             MediaType mediaType) throws InternalServerErrorException {
         StreamWriterKey key = new StreamWriterKey(output.getClass(), mediaType);
-        return this.streamWriterRepository.getWriter(key)
-                .orElseThrow(() -> new InternalServerErrorException(new MissingStreamWriterException(key)));
+        return this.streamWriterRepository.getWriter(key).orElseThrow(() -> new InternalServerErrorException(
+                new MissingStreamWriterException(key)));
     }
 
     private ProcessData getOutput(OutputReference reference) throws InternalServerErrorException, NotFoundException {

@@ -30,8 +30,8 @@ import com.google.common.primitives.Primitives;
  *
  * @author Tom Kunicki, Christian Autermann
  */
-abstract class AbstractDataBinding<M extends AccessibleObject & Member, D extends TypedDataDescription<?>>
-        extends AnnotationBinding<M> {
+abstract class AbstractDataBinding<M extends AccessibleObject & Member, D extends TypedDataDescription<?>> extends
+        AnnotationBinding<M> {
 
     private D description;
 
@@ -79,16 +79,16 @@ abstract class AbstractDataBinding<M extends AccessibleObject & Member, D extend
         return isEnum(getType());
     }
 
+    public static boolean isEnum(Type type) {
+        return (type instanceof Class<?>) && ((Class<?>) type).isEnum();
+    }
+
     public void setDescription(D description) {
         this.description = Objects.requireNonNull(description);
     }
 
     public D getDescription() {
         return description;
-    }
-
-    public static boolean isEnum(Type type) {
-        return (type instanceof Class<?>) && ((Class<?>) type).isEnum();
     }
 
 }

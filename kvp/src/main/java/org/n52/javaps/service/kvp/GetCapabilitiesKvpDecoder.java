@@ -28,13 +28,11 @@ import org.n52.svalbard.decode.OperationDecoderKey;
 public class GetCapabilitiesKvpDecoder extends AbstractKvpDecoder<GetCapabilitiesRequest> {
 
     public GetCapabilitiesKvpDecoder() {
-        super(GetCapabilitiesRequest::new,
-                new OperationDecoderKey(WPSConstants.SERVICE, null, OWSConstants.Operations.GetCapabilities.name(),
-                        MediaTypes.APPLICATION_KVP),
-                new OperationDecoderKey(WPSConstants.SERVICE, WPS200Constants.VERSION,
-                        OWSConstants.Operations.GetCapabilities.name(), MediaTypes.APPLICATION_KVP),
-                new OperationDecoderKey(null, WPS200Constants.VERSION, OWSConstants.Operations.GetCapabilities.name(),
-                        MediaTypes.APPLICATION_KVP),
+        super(GetCapabilitiesRequest::new, new OperationDecoderKey(WPSConstants.SERVICE, null,
+                OWSConstants.Operations.GetCapabilities.name(), MediaTypes.APPLICATION_KVP), new OperationDecoderKey(
+                        WPSConstants.SERVICE, WPS200Constants.VERSION, OWSConstants.Operations.GetCapabilities.name(),
+                        MediaTypes.APPLICATION_KVP), new OperationDecoderKey(null, WPS200Constants.VERSION,
+                                OWSConstants.Operations.GetCapabilities.name(), MediaTypes.APPLICATION_KVP),
                 // FIXME isn't this the only one needed?
                 new OperationDecoderKey(null, null, OWSConstants.Operations.GetCapabilities.name(),
                         MediaTypes.APPLICATION_KVP));

@@ -88,8 +88,8 @@ public abstract class AbstractElementXmlStreamReader extends XmlFactories implem
                 // check if the current element's namespace is declared
                 // this has to be done before the START_ELEMENT event is emitted
                 // as this would put the namespace into the writer's context
-                boolean writeElementNamespace = !elementPrefix.isEmpty() && !elementPrefix.equals("xml")
-                        && Strings.isNullOrEmpty(writer.getNamespaceContext().getNamespaceURI(elementPrefix));
+                boolean writeElementNamespace = !elementPrefix.isEmpty() && !elementPrefix.equals("xml") && Strings
+                        .isNullOrEmpty(writer.getNamespaceContext().getNamespaceURI(elementPrefix));
 
                 // emit the element without any attributes or namespaces
                 writer.add(eventFactory().createStartElement(elementName, null, null));
@@ -102,13 +102,13 @@ public abstract class AbstractElementXmlStreamReader extends XmlFactories implem
                     Namespace namespace = namespaces.next();
                     // checks if the namespace declaration matches the current
                     // element
-                    if (elementPrefix.equals(namespace.getPrefix())
-                            && elementNamespace.equals(namespace.getNamespaceURI())) {
+                    if (elementPrefix.equals(namespace.getPrefix()) && elementNamespace.equals(namespace
+                            .getNamespaceURI())) {
                         writeElementNamespace = false;
                     }
                     // declare the namespace
-                    writer.add(eventFactory().createNamespace(Strings.nullToEmpty(namespace.getPrefix()),
-                            namespace.getNamespaceURI()));
+                    writer.add(eventFactory().createNamespace(Strings.nullToEmpty(namespace.getPrefix()), namespace
+                            .getNamespaceURI()));
                 }
 
                 // if the there is no namespace declaration for the current
@@ -125,8 +125,8 @@ public abstract class AbstractElementXmlStreamReader extends XmlFactories implem
                     String attributePrefix = attribute.getName().getPrefix();
                     String attributeNamespace = attribute.getName().getNamespaceURI();
 
-                    if (!attributePrefix.isEmpty() && !attributePrefix.equals("xml")
-                            && Strings.isNullOrEmpty(writer.getNamespaceContext().getNamespaceURI(attributePrefix))) {
+                    if (!attributePrefix.isEmpty() && !attributePrefix.equals("xml") && Strings.isNullOrEmpty(writer
+                            .getNamespaceContext().getNamespaceURI(attributePrefix))) {
                         writer.add(eventFactory().createNamespace(attributePrefix, attributeNamespace));
                     }
                     writer.add(eventFactory().createAttribute(attribute.getName(), attribute.getValue()));

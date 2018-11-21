@@ -40,8 +40,8 @@ public class ContextAlgorithmRegistrator implements Constructable {
 
     @Override
     public void init() {
-        Stream.concat(interfaceImplementations(), annotatedInstances())
-                .peek(algorithm -> LOG.info("Registering {}", algorithm)).forEach(this.repository::addAlgorithm);
+        Stream.concat(interfaceImplementations(), annotatedInstances()).peek(algorithm -> LOG.info("Registering {}",
+                algorithm)).forEach(this.repository::addAlgorithm);
     }
 
     @Inject

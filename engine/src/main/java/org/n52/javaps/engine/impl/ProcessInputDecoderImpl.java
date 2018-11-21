@@ -61,17 +61,6 @@ public class ProcessInputDecoderImpl implements ProcessInputDecoder {
         return decodeContainer(description, processInputs);
     }
 
-    private ProcessInputs decodeContainer(TypedProcessInputDescriptionContainer description,
-            List<ProcessData> processInputs) throws InputDecodingException {
-
-        Map<OwsCode, List<Data<?>>> data = new HashMap<>(processInputs.size());
-        for (ProcessData input : processInputs) {
-            Data<?> decodedInput = decode(description.getInput(input.getId()), input);
-            data.computeIfAbsent(input.getId(), id -> new LinkedList<>()).add(decodedInput);
-        }
-        return new ProcessInputs(data);
-    }
-
     private Data<?> decode(TypedProcessInputDescription<?> description,
             ProcessData input) throws InputDecodingException {
         if (input.isGroup()) {
@@ -83,6 +72,17 @@ public class ProcessInputDecoderImpl implements ProcessInputDecoder {
         } else {
             throw new AssertionError("Unsupported input type: " + input);
         }
+    }
+
+    private ProcessInputs decodeContainer(TypedProcessInputDescriptionContainer description,
+            List<ProcessData> processInputs) throws InputDecodingException {
+
+        Map<OwsCode, List<Data<?>>> data = new HashMap<>(processInputs.size());
+        for (ProcessData input : processInputs) {
+            Data<?> decodedInput = decode(description.getInput(input.getId()), input);
+            data.computeIfAbsent(input.getId(), id -> new LinkedList<>()).add(decodedInput);
+        }
+        return new ProcessInputs(data);
     }
 
     private Data<?> decodeGroup(TypedGroupInputDescription description,
@@ -106,8 +106,8 @@ public class ProcessInputDecoderImpl implements ProcessInputDecoder {
         Format format = input.getFormat();
         Class<? extends Data<?>> bindingType = description.getBindingType();
 
-        InputHandler handler = this.inputHandlerRepository.getInputHandler(format, bindingType)
-                .orElseThrow(noHandlerFound(input.getId()));
+        InputHandler handler = this.inputHandlerRepository.getInputHandler(format, bindingType).orElseThrow(
+                noHandlerFound(input.getId()));
 
         try (InputStream data = input.getData()) {
             return handler.parse(description, data, format);

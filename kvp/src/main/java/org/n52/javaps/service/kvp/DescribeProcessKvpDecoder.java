@@ -37,8 +37,8 @@ public class DescribeProcessKvpDecoder extends AbstractKvpDecoder<DescribeProces
         builder.add(IDENTIFIER, asList(DescribeProcessRequest::addProcessIdentifiers));
     }
 
-    protected <T> ThrowingBiConsumer<T, String, DecodingException> asOwsCode(
-            ThrowingBiConsumer<T, OwsCode, DecodingException> delegate) {
+    protected <T> ThrowingBiConsumer<T, String, DecodingException> asOwsCode(ThrowingBiConsumer<T, OwsCode,
+            DecodingException> delegate) {
         return (t,
                 u) -> delegate.accept(t, new OwsCode(u));
     }

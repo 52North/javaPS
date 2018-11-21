@@ -37,8 +37,8 @@ import org.slf4j.LoggerFactory;
  * @param <B>
  *            the binding type
  */
-class BoundingBoxInputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractInputBinding<M>>
-        extends AbstractInputAnnotationParser<BoundingBoxInput, M, B> {
+class BoundingBoxInputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractInputBinding<M>> extends
+        AbstractInputAnnotationParser<BoundingBoxInput, M, B> {
 
     private static final Logger LOG = LoggerFactory.getLogger(BoundingBoxInputAnnotationParser.class);
 
@@ -62,9 +62,9 @@ class BoundingBoxInputAnnotationParser<M extends AccessibleObject & Member, B ex
         // TODO add supported CRSs
 
         return new TypedProcessDescriptionFactory().boundingBoxInput().withIdentifier(annotation.identifier())
-                .withAbstract(annotation.abstrakt()).withTitle(annotation.title())
-                .withMinimalOccurence(annotation.minOccurs()).withMaximalOccurence(annotation.maxOccurs())
-                .withDefaultCRS(new OwsCRS(defaultCRSURI)).build();
+                .withAbstract(annotation.abstrakt()).withTitle(annotation.title()).withMinimalOccurence(annotation
+                        .minOccurs()).withMaximalOccurence(annotation.maxOccurs()).withDefaultCRS(new OwsCRS(
+                                defaultCRSURI)).build();
     }
 
     @Override

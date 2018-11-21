@@ -31,7 +31,7 @@ class ExecuteBinding extends AnnotationBinding<Method> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExecuteBinding.class);
 
-    public ExecuteBinding(Method method) {
+    ExecuteBinding(Method method) {
         super(method);
     }
 

@@ -43,8 +43,8 @@ public class ServiceLoaderAlgorithmRepository implements AlgorithmRepository {
         ServiceLoader<IAlgorithm> loader = ServiceLoader.load(IAlgorithm.class);
 
         for (IAlgorithm ia : loader) {
-            LOG.debug("Adding algorithm with identifier {} and class {}", ia.getDescription().getId(),
-                    ia.getClass().getCanonicalName());
+            LOG.debug("Adding algorithm with identifier {} and class {}", ia.getDescription().getId(), ia.getClass()
+                    .getCanonicalName());
             result.put(ia.getDescription().getId(), ia.getClass());
         }
 

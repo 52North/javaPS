@@ -59,8 +59,8 @@ import org.n52.javaps.io.OutputHandler;
  */
 public class BoundingBoxInputOutputHandler extends XmlFactories implements InputHandler, OutputHandler {
 
-    public static final Set<Format> FORMATS =
-            Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(Format.APPLICATION_XML, Format.TEXT_XML)));
+    public static final Set<Format> FORMATS = Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(
+            Format.APPLICATION_XML, Format.TEXT_XML)));
 
     private static final Set<Class<? extends Data<?>>> BINDINGS = Collections.singleton(BoundingBoxData.class);
 
@@ -134,10 +134,10 @@ public class BoundingBoxInputOutputHandler extends XmlFactories implements Input
     private OwsBoundingBox parseBoundingBox(StartElement elem,
             XMLEventReader xmlReader) throws XMLStreamException {
 
-        URI crs = Optional.ofNullable(elem.getAttributeByName(QN_CRS)).map(Attribute::getValue).map(URI::create)
-                .orElse(null);
-        Integer dimension = Optional.ofNullable(elem.getAttributeByName(QN_DIMENSION)).map(Attribute::getValue)
-                .filter(s -> !s.isEmpty()).map(Integer::valueOf).filter(x -> x > 0).orElse(null);
+        URI crs = Optional.ofNullable(elem.getAttributeByName(QN_CRS)).map(Attribute::getValue).map(URI::create).orElse(
+                null);
+        Integer dimension = Optional.ofNullable(elem.getAttributeByName(QN_DIMENSION)).map(Attribute::getValue).filter(
+                s -> !s.isEmpty()).map(Integer::valueOf).filter(x -> x > 0).orElse(null);
 
         double[] lowerCorner = null;
         double[] upperCorner = null;

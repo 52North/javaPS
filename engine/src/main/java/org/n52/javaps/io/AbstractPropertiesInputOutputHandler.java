@@ -56,8 +56,8 @@ public class AbstractPropertiesInputOutputHandler extends AbstractInputOutputHan
 
     private Set<Format> getFormatsFromProperties() {
         JsonNode node = getProperties().path("formats");
-        return StreamSupport.stream(node.spliterator(), false).map(this::parseFormat).filter(x -> !x.isEmpty())
-                .collect(toCollection(LinkedHashSet::new));
+        return StreamSupport.stream(node.spliterator(), false).map(this::parseFormat).filter(x -> !x.isEmpty()).collect(
+                toCollection(LinkedHashSet::new));
     }
 
     private Format parseFormat(JsonNode node) {

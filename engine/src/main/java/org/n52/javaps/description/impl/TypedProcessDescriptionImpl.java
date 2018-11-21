@@ -36,9 +36,9 @@ public class TypedProcessDescriptionImpl extends ProcessDescriptionImpl implemen
         super(builder);
     }
 
-    public TypedProcessDescriptionImpl(OwsCode id, OwsLanguageString title, OwsLanguageString abstrakt,
-            Set<OwsKeyword> keywords, Set<OwsMetadata> metadata, Set<TypedProcessInputDescription<?>> inputs,
-            Set<TypedProcessOutputDescription<?>> outputs, String version, boolean storeSupported,
+    public TypedProcessDescriptionImpl(OwsCode id, OwsLanguageString title, OwsLanguageString abstrakt, Set<
+            OwsKeyword> keywords, Set<OwsMetadata> metadata, Set<TypedProcessInputDescription<?>> inputs, Set<
+                    TypedProcessOutputDescription<?>> outputs, String version, boolean storeSupported,
             boolean statusSupported) {
         super(id, title, abstrakt, keywords, metadata, inputs, outputs, version, storeSupported, statusSupported);
     }

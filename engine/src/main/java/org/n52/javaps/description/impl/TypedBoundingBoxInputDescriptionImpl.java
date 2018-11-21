@@ -28,19 +28,19 @@ import org.n52.shetland.ogc.wps.description.impl.BoundingBoxInputDescriptionImpl
 import org.n52.shetland.ogc.wps.description.impl.BoundingBoxInputDescriptionImpl.AbstractBuilder;
 import org.n52.javaps.description.TypedBoundingBoxInputDescription;
 
-public class TypedBoundingBoxInputDescriptionImpl extends BoundingBoxInputDescriptionImpl
-        implements TypedBoundingBoxInputDescription {
+public class TypedBoundingBoxInputDescriptionImpl extends BoundingBoxInputDescriptionImpl implements
+        TypedBoundingBoxInputDescription {
 
-    public TypedBoundingBoxInputDescriptionImpl(OwsCode id, OwsLanguageString title, OwsLanguageString abstrakt,
-            Set<OwsKeyword> keywords, Set<OwsMetadata> metadata, InputOccurence occurence, OwsCRS defaultCRS,
-            Set<OwsCRS> supportedCRS) {
+    public TypedBoundingBoxInputDescriptionImpl(OwsCode id, OwsLanguageString title, OwsLanguageString abstrakt, Set<
+            OwsKeyword> keywords, Set<OwsMetadata> metadata, InputOccurence occurence, OwsCRS defaultCRS, Set<
+                    OwsCRS> supportedCRS) {
         super(id, title, abstrakt, keywords, metadata, occurence, defaultCRS, supportedCRS);
     }
 
     protected TypedBoundingBoxInputDescriptionImpl(AbstractBuilder<?, ?> builder) {
         this(builder.getId(), builder.getTitle(), builder.getAbstract(), builder.getKeywords(), builder.getMetadata(),
-                new InputOccurence(builder.getMinimalOccurence(), builder.getMaximalOccurence()),
-                builder.getDefaultCRS(), builder.getSupportedCRS());
+                new InputOccurence(builder.getMinimalOccurence(), builder.getMaximalOccurence()), builder
+                        .getDefaultCRS(), builder.getSupportedCRS());
     }
 
     public static class Builder extends AbstractBuilder<TypedBoundingBoxInputDescription, Builder> {

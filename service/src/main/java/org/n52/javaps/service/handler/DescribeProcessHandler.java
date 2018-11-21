@@ -44,12 +44,12 @@ import org.n52.shetland.ogc.wps.response.DescribeProcessResponse;
  *
  * @author Christian Autermann
  */
-public class DescribeProcessHandler extends AbstractEngineHandler
-        implements GenericOperationHandler<DescribeProcessRequest, DescribeProcessResponse> {
+public class DescribeProcessHandler extends AbstractEngineHandler implements GenericOperationHandler<
+        DescribeProcessRequest, DescribeProcessResponse> {
     private static final String IDENTIFIER = "Identifier";
 
-    private static final OperationHandlerKey KEY =
-            new OperationHandlerKey(WPSConstants.SERVICE, WPSConstants.Operations.DescribeProcess);
+    private static final OperationHandlerKey KEY = new OperationHandlerKey(WPSConstants.SERVICE,
+            WPSConstants.Operations.DescribeProcess);
 
     @Inject
     public DescribeProcessHandler(Engine engine) {
@@ -79,10 +79,10 @@ public class DescribeProcessHandler extends AbstractEngineHandler
     protected Set<OwsDomain> getOperationParameters(String service,
             String version) {
         Stream<OwsValue> specialIdentifiers = Stream.of(new OwsValue(DescribeProcessRequest.ALL_KEYWORD));
-        Stream<OwsValue> algorithmIdentifiers =
-                getEngine().getProcessIdentifiers().stream().map(OwsCode::getValue).map(OwsValue::new);
-        OwsDomain identifierDomain = new OwsDomain(IDENTIFIER,
-                new OwsAllowedValues(Stream.concat(specialIdentifiers, algorithmIdentifiers).collect(toSet())));
+        Stream<OwsValue> algorithmIdentifiers = getEngine().getProcessIdentifiers().stream().map(OwsCode::getValue).map(
+                OwsValue::new);
+        OwsDomain identifierDomain = new OwsDomain(IDENTIFIER, new OwsAllowedValues(Stream.concat(specialIdentifiers,
+                algorithmIdentifiers).collect(toSet())));
         return Collections.singleton(identifierDomain);
     }
 

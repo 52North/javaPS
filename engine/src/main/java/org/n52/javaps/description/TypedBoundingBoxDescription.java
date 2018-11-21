@@ -25,8 +25,8 @@ import org.n52.javaps.io.bbox.BoundingBoxData;
  *
  * @author Christian Autermann
  */
-public interface TypedBoundingBoxDescription
-        extends BoundingBoxDescription, TypedDataDescription<Class<? extends BoundingBoxData>> {
+public interface TypedBoundingBoxDescription extends BoundingBoxDescription, TypedDataDescription<Class<
+        ? extends BoundingBoxData>> {
 
     @Override
     default Class<?> getPayloadType() {
@@ -39,12 +39,12 @@ public interface TypedBoundingBoxDescription
     }
 
     @Override
-    public default Class<? extends BoundingBoxData> getType() {
+    default Class<? extends BoundingBoxData> getType() {
         return BoundingBoxData.class;
     }
 
-    interface Builder<T extends TypedBoundingBoxDescription, B extends Builder<T, B>>
-            extends BoundingBoxDescription.Builder<T, B> {
+    interface Builder<T extends TypedBoundingBoxDescription, B extends Builder<T, B>> extends
+            BoundingBoxDescription.Builder<T, B> {
 
     }
 

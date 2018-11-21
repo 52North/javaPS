@@ -82,8 +82,8 @@ public class DocumentXmlStreamWriter extends XmlFactories implements StreamWrite
 
     @SuppressWarnings("unchecked")
     private <X extends Exception> void writeIndenting(OutputStream stream,
-            ThrowingConsumer<OutputStream, X> writer)
-            throws X, TransformerException, IOException, InterruptedException {
+            ThrowingConsumer<OutputStream, X> writer) throws X, TransformerException, IOException,
+            InterruptedException {
         try {
             PipedOutputStream pos = new PipedOutputStream();
             PipedInputStream pis = new PipedInputStream(pos);

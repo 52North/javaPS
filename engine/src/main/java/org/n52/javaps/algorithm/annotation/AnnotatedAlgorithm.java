@@ -45,8 +45,8 @@ public class AnnotatedAlgorithm extends AbstractAlgorithm {
     public AnnotatedAlgorithm(InputHandlerRepository parserRepository, OutputHandlerRepository generatorRepository,
             LiteralTypeRepository literalDataManager, Object algorithmInstance) {
         this.algorithmInstance = algorithmInstance == null ? this : algorithmInstance;
-        this.metadata = CACHE.computeIfAbsent(this.algorithmInstance.getClass(),
-                c -> new AnnotatedAlgorithmMetadata(c, parserRepository, generatorRepository, literalDataManager));
+        this.metadata = CACHE.computeIfAbsent(this.algorithmInstance.getClass(), c -> new AnnotatedAlgorithmMetadata(c,
+                parserRepository, generatorRepository, literalDataManager));
     }
 
     @Override

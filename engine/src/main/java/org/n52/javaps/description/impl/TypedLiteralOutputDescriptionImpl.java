@@ -28,13 +28,13 @@ import org.n52.shetland.ogc.wps.description.impl.LiteralOutputDescriptionImpl;
 import org.n52.javaps.description.TypedLiteralOutputDescription;
 import org.n52.javaps.io.literal.LiteralType;
 
-public class TypedLiteralOutputDescriptionImpl extends LiteralOutputDescriptionImpl
-        implements TypedLiteralOutputDescription {
+public class TypedLiteralOutputDescriptionImpl extends LiteralOutputDescriptionImpl implements
+        TypedLiteralOutputDescription {
     private final LiteralType<?> type;
 
-    public TypedLiteralOutputDescriptionImpl(OwsCode id, OwsLanguageString title, OwsLanguageString abstrakt,
-            Set<OwsKeyword> keywords, Set<OwsMetadata> metadata, LiteralDataDomain defaultLiteralDataDomain,
-            Set<LiteralDataDomain> supportedLiteralDataDomain, LiteralType<?> type) {
+    public TypedLiteralOutputDescriptionImpl(OwsCode id, OwsLanguageString title, OwsLanguageString abstrakt, Set<
+            OwsKeyword> keywords, Set<OwsMetadata> metadata, LiteralDataDomain defaultLiteralDataDomain, Set<
+                    LiteralDataDomain> supportedLiteralDataDomain, LiteralType<?> type) {
         super(id, title, abstrakt, keywords, metadata, defaultLiteralDataDomain, supportedLiteralDataDomain);
         this.type = Objects.requireNonNull(type, "type");
     }
@@ -49,9 +49,9 @@ public class TypedLiteralOutputDescriptionImpl extends LiteralOutputDescriptionI
         return this.type;
     }
 
-    public static abstract class AbstractBuilder<T extends TypedLiteralOutputDescription, B extends AbstractBuilder<T, B>>
-            extends LiteralOutputDescriptionImpl.AbstractBuilder<T, B>
-            implements TypedLiteralOutputDescription.Builder<T, B> {
+    public abstract static class AbstractBuilder<T extends TypedLiteralOutputDescription, B extends AbstractBuilder<T,
+            B>> extends LiteralOutputDescriptionImpl.AbstractBuilder<T, B> implements
+            TypedLiteralOutputDescription.Builder<T, B> {
         private LiteralType<?> type;
 
         @Override

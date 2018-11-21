@@ -34,8 +34,9 @@ import org.n52.javaps.description.TypedProcessInputDescription;
  * @param <B>
  *            the binding type
  */
-abstract class AbstractInputAnnotationParser<A extends Annotation, M extends AccessibleObject & Member, B extends AbstractInputBinding<M>>
-        extends AbstractDataAnnotationParser<A, M, TypedProcessInputDescription<?>, B> {
+abstract class AbstractInputAnnotationParser<A extends Annotation, M extends AccessibleObject & Member,
+        B extends AbstractInputBinding<M>> extends AbstractDataAnnotationParser<A, M, TypedProcessInputDescription<?>,
+                B> {
 
     AbstractInputAnnotationParser(Function<M, B> bindingFunction) {
         super(bindingFunction);

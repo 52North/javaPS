@@ -34,9 +34,6 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
-import org.n52.javaps.io.literal.LiteralType;
-import org.n52.javaps.io.literal.LiteralTypeRepository;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

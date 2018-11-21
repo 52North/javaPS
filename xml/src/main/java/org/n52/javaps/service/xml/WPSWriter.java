@@ -147,8 +147,8 @@ public class WPSWriter extends AbstractOWSWriter {
     private void writeProcessInputDescription(ProcessInputDescription input) throws XMLStreamException {
         element(WPSConstants.Elem.QN_INPUT, input, x -> {
             attr(XMLSchemaConstants.Attr.AN_MIN_OCCURS, x.getOccurence().getMin().toString());
-            attr(XMLSchemaConstants.Attr.AN_MAX_OCCURS,
-                    x.getOccurence().getMax().map(Object::toString).orElse(UNBOUNDED));
+            attr(XMLSchemaConstants.Attr.AN_MAX_OCCURS, x.getOccurence().getMax().map(Object::toString).orElse(
+                    UNBOUNDED));
             writeDescriptionElements(x);
             x.visit(this.concreteInputWriter);
         });
@@ -268,8 +268,8 @@ public class WPSWriter extends AbstractOWSWriter {
                 if (body.isInline()) {
                     element(WPSConstants.Elem.QN_BODY, body.asInline(), b -> cdata(b.getBody()));
                 } else if (body.isReferenced()) {
-                    element(WPSConstants.Elem.QN_BODY_REFERENCE, body.asReferenced(),
-                            b -> attr(XLinkConstants.Attr.QN_HREF, b.getHref().toString()));
+                    element(WPSConstants.Elem.QN_BODY_REFERENCE, body.asReferenced(), b -> attr(
+                            XLinkConstants.Attr.QN_HREF, b.getHref().toString()));
                 } else {
                     throw new AssertionError();
                 }
@@ -386,8 +386,8 @@ public class WPSWriter extends AbstractOWSWriter {
 
     private void writeNamespacesWithSchemalocation() throws XMLStreamException {
         writeNamespaces();
-        schemaLocation(
-                Collections.singleton(new SchemaLocation(WPSConstants.NS_WPS, XMLSchemaConstants.WPS20_SCHEMALOCTION)));
+        schemaLocation(Collections.singleton(new SchemaLocation(WPSConstants.NS_WPS,
+                XMLSchemaConstants.WPS20_SCHEMALOCTION)));
     }
 
     private void writeGroupData(GroupProcessData x) throws XMLStreamException {

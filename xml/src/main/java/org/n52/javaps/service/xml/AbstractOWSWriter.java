@@ -77,21 +77,20 @@ public abstract class AbstractOWSWriter extends AbstractMultiElementXmlStreamWri
     }
 
     protected void writeOperationsMetadata(OwsCapabilities capabilities) throws XMLStreamException {
-        element(OWSConstants.Elem.QN_OPERATIONS_METADATA, capabilities.getOperationsMetadata(),
-                (OwsOperationsMetadata operationsMetadata) -> {
-                    writeOperations(operationsMetadata);
-                    writeParameters(operationsMetadata.getParameters());
-                    writeConstraints(operationsMetadata.getConstraints());
-                });
+        element(OWSConstants.Elem.QN_OPERATIONS_METADATA, capabilities.getOperationsMetadata(), (
+                OwsOperationsMetadata operationsMetadata) -> {
+            writeOperations(operationsMetadata);
+            writeParameters(operationsMetadata.getParameters());
+            writeConstraints(operationsMetadata.getConstraints());
+        });
     }
 
     protected void writeKeywords(Set<OwsKeyword> set) throws XMLStreamException {
         if (!set.isEmpty()) {
             element(OWSConstants.Elem.QN_KEYWORDS, set, x -> {
-                Map<Optional<OwsCode>, Set<OwsLanguageString>> keywords = x.stream()
-                        .collect(groupingBy(OwsKeyword::getType,
-                                () -> new TreeMap<Optional<OwsCode>, Set<OwsLanguageString>>(Optionals.nullsLast()),
-                                mapping(OwsKeyword::getKeyword, toCollection(TreeSet::new))));
+                Map<Optional<OwsCode>, Set<OwsLanguageString>> keywords = x.stream().collect(groupingBy(
+                        OwsKeyword::getType, () -> new TreeMap<Optional<OwsCode>, Set<OwsLanguageString>>(Optionals
+                                .nullsLast()), mapping(OwsKeyword::getKeyword, toCollection(TreeSet::new))));
                 for (Entry<Optional<OwsCode>, Set<OwsLanguageString>> entry : keywords.entrySet()) {
                     Optional<OwsCode> type = entry.getKey();
                     for (OwsLanguageString keyword : entry.getValue()) {
@@ -256,25 +255,25 @@ public abstract class AbstractOWSWriter extends AbstractMultiElementXmlStreamWri
     }
 
     protected void writeServiceIdentification(OwsCapabilities capabilities) throws XMLStreamException {
-        element(OWSConstants.Elem.QN_SERVICE_IDENTIFICATION, capabilities.getServiceIdentification(),
-                (OwsServiceIdentification si) -> {
-                    writeMultilingualString(OWSConstants.Elem.QN_TITLE, si.getTitle().orElse(null));
-                    writeMultilingualString(OWSConstants.Elem.QN_ABSTRACT, si.getAbstract().orElse(null));
-                    writeKeywords(si.getKeywords());
-                    writeCode(OWSConstants.Elem.QN_SERVICE_TYPE, si.getServiceType());
-                    for (String version : si.getServiceTypeVersion()) {
-                        element(OWSConstants.Elem.QN_SERVICE_TYPE_VERSION, version);
-                    }
-                    for (URI profile : si.getProfiles()) {
-                        element(OWSConstants.Elem.QN_PROFILE, profile.toString());
-                    }
-                    for (String fee : si.getFees()) {
-                        element(OWSConstants.Elem.QN_FEES, fee);
-                    }
-                    for (String accessConstraints : si.getAccessConstraints()) {
-                        element(OWSConstants.Elem.QN_ACCESS_CONSTRAINTS, accessConstraints);
-                    }
-                });
+        element(OWSConstants.Elem.QN_SERVICE_IDENTIFICATION, capabilities.getServiceIdentification(), (
+                OwsServiceIdentification si) -> {
+            writeMultilingualString(OWSConstants.Elem.QN_TITLE, si.getTitle().orElse(null));
+            writeMultilingualString(OWSConstants.Elem.QN_ABSTRACT, si.getAbstract().orElse(null));
+            writeKeywords(si.getKeywords());
+            writeCode(OWSConstants.Elem.QN_SERVICE_TYPE, si.getServiceType());
+            for (String version : si.getServiceTypeVersion()) {
+                element(OWSConstants.Elem.QN_SERVICE_TYPE_VERSION, version);
+            }
+            for (URI profile : si.getProfiles()) {
+                element(OWSConstants.Elem.QN_PROFILE, profile.toString());
+            }
+            for (String fee : si.getFees()) {
+                element(OWSConstants.Elem.QN_FEES, fee);
+            }
+            for (String accessConstraints : si.getAccessConstraints()) {
+                element(OWSConstants.Elem.QN_ACCESS_CONSTRAINTS, accessConstraints);
+            }
+        });
     }
 
     protected void writeValueRestriction(OwsValueRestriction restriction) throws XMLStreamException {
@@ -362,10 +361,10 @@ public abstract class AbstractOWSWriter extends AbstractMultiElementXmlStreamWri
             element(OWSConstants.Elem.QN_DEFAULT_VALUE, domain.getDefaultValue().map(OwsValue::getValue));
             writeDomainMetadata(OWSConstants.Elem.QN_MEANING, domain.getMeaning());
             writeDomainMetadata(OWSConstants.Elem.QN_DATA_TYPE, domain.getDataType());
-            writeDomainMetadata(OWSConstants.Elem.QN_REFERENCE_SYSTEM, domain.getValuesUnit()
-                    .filter(OwsValuesUnit::isReferenceSystem).map(OwsValuesUnit::asReferenceSystem));
-            writeDomainMetadata(OWSConstants.Elem.QN_UOM,
-                    domain.getValuesUnit().filter(OwsValuesUnit::isUOM).map(OwsValuesUnit::asUOM));
+            writeDomainMetadata(OWSConstants.Elem.QN_REFERENCE_SYSTEM, domain.getValuesUnit().filter(
+                    OwsValuesUnit::isReferenceSystem).map(OwsValuesUnit::asReferenceSystem));
+            writeDomainMetadata(OWSConstants.Elem.QN_UOM, domain.getValuesUnit().filter(OwsValuesUnit::isUOM).map(
+                    OwsValuesUnit::asUOM));
             writeMetadata(domain.getMetadata());
         });
     }

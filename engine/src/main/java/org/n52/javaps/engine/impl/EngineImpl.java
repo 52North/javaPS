@@ -20,10 +20,7 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -42,23 +39,11 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.n52.shetland.ogc.wps.Format;
-import org.n52.shetland.ogc.wps.JobId;
-import org.n52.shetland.ogc.wps.JobStatus;
-import org.n52.shetland.ogc.wps.OutputDefinition;
-import org.n52.shetland.ogc.wps.ResponseMode;
-import org.n52.shetland.ogc.wps.Result;
-import org.n52.shetland.ogc.wps.StatusInfo;
-import org.n52.shetland.ogc.wps.data.ProcessData;
-import org.n52.shetland.ogc.wps.description.ProcessDescription;
 import org.n52.janmayen.lifecycle.Destroyable;
 import org.n52.javaps.algorithm.IAlgorithm;
 import org.n52.javaps.algorithm.ProcessInputs;
 import org.n52.javaps.algorithm.ProcessOutputs;
 import org.n52.javaps.algorithm.RepositoryManager;
-import org.n52.javaps.description.TypedBoundingBoxOutputDescription;
 import org.n52.javaps.description.TypedComplexOutputDescription;
 import org.n52.javaps.description.TypedProcessDescription;
 import org.n52.javaps.description.TypedProcessOutputDescription;
@@ -76,6 +61,17 @@ import org.n52.javaps.engine.ProcessNotFoundException;
 import org.n52.javaps.engine.ProcessOutputEncoder;
 import org.n52.javaps.engine.ResultPersistence;
 import org.n52.shetland.ogc.ows.OwsCode;
+import org.n52.shetland.ogc.wps.Format;
+import org.n52.shetland.ogc.wps.JobId;
+import org.n52.shetland.ogc.wps.JobStatus;
+import org.n52.shetland.ogc.wps.OutputDefinition;
+import org.n52.shetland.ogc.wps.ResponseMode;
+import org.n52.shetland.ogc.wps.Result;
+import org.n52.shetland.ogc.wps.StatusInfo;
+import org.n52.shetland.ogc.wps.data.ProcessData;
+import org.n52.shetland.ogc.wps.description.ProcessDescription;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.util.concurrent.AbstractFuture;
 import com.google.common.util.concurrent.Futures;
@@ -83,6 +79,8 @@ import com.google.common.util.concurrent.SettableFuture;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 public class EngineImpl implements Engine, Destroyable {
+    private static final String EXECUTING = "Executing {}";
+
     private final Logger LOG = LoggerFactory.getLogger(EngineImpl.class);
 
     private final ExecutorService executor;
@@ -119,6 +117,12 @@ public class EngineImpl implements Engine, Destroyable {
     }
 
     @Override
+    public Set<JobId> getJobIdentifiers(OwsCode identifier) {
+        Set<JobId> jobIds = resultPersistence.getJobIds(identifier);
+        return jobIds;
+    }
+
+    @Override
     public Set<OwsCode> getProcessIdentifiers() {
         return this.repositoryManager.getAlgorithms();
     }
@@ -152,25 +156,25 @@ public class EngineImpl implements Engine, Destroyable {
             List<ProcessData> inputs,
             List<OutputDefinition> outputDefinitions,
             ResponseMode responseMode) throws ProcessNotFoundException, InputDecodingException {
-        LOG.info("Executing {}", identifier);
+        LOG.info(EXECUTING, identifier);
         IAlgorithm algorithm = getProcess(identifier);
         TypedProcessDescription description = algorithm.getDescription();
 
         ProcessInputs processInputs = this.processInputDecoder.decode(description, inputs);
 
-        if (outputDefinitions == null || outputDefinitions.isEmpty()) {
-            outputDefinitions = createDefaultOutputDefinitions(description);
+        List<OutputDefinition> outputDefinitionsOrDefault = outputDefinitions;
+        
+        if (outputDefinitionsOrDefault == null || outputDefinitionsOrDefault.isEmpty()) {
+            outputDefinitionsOrDefault = createDefaultOutputDefinitions(description);
         } else {
-            outputDefinitions.stream()
-                    .filter(definition -> description.getOutput(definition.getId()).isGroup()
-                            && definition.getOutputs().isEmpty())
-                    .forEach(definition -> definition
-                            .setOutputs(createDefaultOutputDefinitions(description.getOutput(identifier).asGroup())));
+            outputDefinitionsOrDefault.stream().filter(definition -> description.getOutput(definition.getId()).isGroup()
+                    && definition.getOutputs().isEmpty()).forEach(definition -> definition.setOutputs(
+                            createDefaultOutputDefinitions(description.getOutput(identifier).asGroup())));
         }
 
-        JobId jobId = jobIdGenerator.create(algorithm, processInputs, outputDefinitions);
+        JobId jobId = jobIdGenerator.create(algorithm, processInputs, outputDefinitionsOrDefault);
 
-        Job job = new Job(algorithm, jobId, processInputs, OutputDefinition.getOutputsById(outputDefinitions),
+        Job job = new Job(algorithm, jobId, processInputs, OutputDefinition.getOutputsById(outputDefinitionsOrDefault),
                 responseMode);
         LOG.info("Submitting {}", job.getJobId());
         Future<?> submit = this.executor.submit(job);
@@ -267,8 +271,8 @@ public class EngineImpl implements Engine, Destroyable {
         void cancel();
     }
 
-    private final class Job extends AbstractFuture<Result>
-            implements Runnable, ProcessExecutionContext, EngineProcessExecutionContext, Future<Result> {
+    private final class Job extends AbstractFuture<Result> implements Runnable, ProcessExecutionContext,
+            EngineProcessExecutionContext, Future<Result> {
 
         private final ReadWriteLock lock = new ReentrantReadWriteLock();
 
@@ -350,7 +354,9 @@ public class EngineImpl implements Engine, Destroyable {
                     statusInfo.setPercentCompleted(percentCompleted);
                     statusInfo.setNextPoll(nextPoll);
                 } else if (jobStatus.equals(JobStatus.succeeded()) || jobStatus.equals(JobStatus.failed())) {
-                    // TODO statusInfo.setExpirationDate(expirationDate);
+                    //TODO use value from configuration
+                    OffsetDateTime expirationDate = OffsetDateTime.now().plusDays(30);
+                    statusInfo.setExpirationDate(expirationDate);
                 }
 
             } finally {
@@ -376,7 +382,7 @@ public class EngineImpl implements Engine, Destroyable {
         @Override
         public void run() {
             setJobStatus(JobStatus.running());
-            LOG.info("Executing {}", this.jobId);
+            LOG.info(EXECUTING, this.jobId);
             try {
                 this.algorithm.execute(this);
                 LOG.info("Executed {}, creating result", this.jobId);
@@ -445,13 +451,5 @@ public class EngineImpl implements Engine, Destroyable {
         public ResponseMode getResponseMode() {
             return this.responseMode;
         }
-    }
-
-    @Override
-    public Set<JobId> getJobIdentifiers(OwsCode identifier) {
-
-        Set<JobId> jobIds = resultPersistence.getJobIds(identifier);
-
-        return jobIds;
     }
 }

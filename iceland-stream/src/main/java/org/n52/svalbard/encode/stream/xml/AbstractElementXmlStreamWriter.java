@@ -118,8 +118,8 @@ public abstract class AbstractElementXmlStreamWriter extends XmlFactories implem
     }
 
     protected void start(QName name) throws XMLStreamException {
-        context().dispatch(
-                eventFactory().createStartElement(name.getPrefix(), name.getNamespaceURI(), name.getLocalPart()));
+        context().dispatch(eventFactory().createStartElement(name.getPrefix(), name.getNamespaceURI(), name
+                .getLocalPart()));
     }
 
     protected void empty(QName name) throws XMLStreamException {
@@ -138,8 +138,8 @@ public abstract class AbstractElementXmlStreamWriter extends XmlFactories implem
     }
 
     protected void end(QName name) throws XMLStreamException {
-        context().dispatch(
-                eventFactory().createEndElement(name.getPrefix(), name.getNamespaceURI(), name.getLocalPart()));
+        context().dispatch(eventFactory().createEndElement(name.getPrefix(), name.getNamespaceURI(), name
+                .getLocalPart()));
     }
 
     protected void write(Reader in) throws XMLStreamException {

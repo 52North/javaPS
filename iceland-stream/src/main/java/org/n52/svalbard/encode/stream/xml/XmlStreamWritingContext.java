@@ -49,13 +49,13 @@ public class XmlStreamWritingContext extends XmlFactories implements AutoCloseab
 
     private final XMLEventWriter writer;
 
-    private final BiFunction<XmlStreamWriterKey, XmlStreamWritingContext, Optional<ElementXmlStreamWriter>> writerProvider;
+    private final BiFunction<XmlStreamWriterKey, XmlStreamWritingContext, Optional<
+            ElementXmlStreamWriter>> writerProvider;
 
     private final OutputStream stream;
 
-    public XmlStreamWritingContext(OutputStream stream,
-            BiFunction<XmlStreamWriterKey, XmlStreamWritingContext, Optional<ElementXmlStreamWriter>> writerProvider)
-            throws XMLStreamException {
+    public XmlStreamWritingContext(OutputStream stream, BiFunction<XmlStreamWriterKey, XmlStreamWritingContext,
+            Optional<ElementXmlStreamWriter>> writerProvider) throws XMLStreamException {
         this.stream = Objects.requireNonNull(stream);
         this.writer = outputFactory().createXMLEventWriter(stream, documentEncoding().name());
         this.writerProvider = Objects.requireNonNull(writerProvider);
@@ -64,8 +64,8 @@ public class XmlStreamWritingContext extends XmlFactories implements AutoCloseab
     public <T> void write(T object) throws XMLStreamException, EncodingException {
         if (object != null) {
             XmlStreamWriterKey key = new XmlStreamWriterKey(object.getClass());
-            ElementXmlStreamWriter delegate =
-                    this.writerProvider.apply(key, this).orElseThrow(() -> new MissingStreamWriterException(key));
+            ElementXmlStreamWriter delegate = this.writerProvider.apply(key, this).orElseThrow(
+                    () -> new MissingStreamWriterException(key));
             delegate.writeElement(object);
         }
     }
@@ -122,8 +122,8 @@ public class XmlStreamWritingContext extends XmlFactories implements AutoCloseab
     }
 
     public void write(XMLEventReader reader) throws XMLStreamException {
-        EventFilter filter = (event) -> !event.isStartDocument() && !event.isEndDocument()
-                && !(event.isCharacters() && event.asCharacters().isIgnorableWhiteSpace());
+        EventFilter filter = (event) -> !event.isStartDocument() && !event.isEndDocument() && !(event.isCharacters()
+                && event.asCharacters().isIgnorableWhiteSpace());
         this.writer.add(inputFactory().createFilteredReader(reader, filter));
     }
 

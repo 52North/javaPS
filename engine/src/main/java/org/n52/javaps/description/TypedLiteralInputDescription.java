@@ -23,15 +23,15 @@ import org.n52.javaps.io.literal.LiteralType;
  *
  * @author Christian Autermann
  */
-public interface TypedLiteralInputDescription
-        extends LiteralInputDescription, TypedLiteralDescription, TypedProcessInputDescription<LiteralType<?>> {
+public interface TypedLiteralInputDescription extends LiteralInputDescription, TypedLiteralDescription,
+        TypedProcessInputDescription<LiteralType<?>> {
     @Override
     default TypedLiteralInputDescription asLiteral() {
         return this;
     }
 
-    interface Builder<T extends TypedLiteralInputDescription, B extends Builder<T, B>>
-            extends LiteralInputDescription.Builder<T, B>, TypedLiteralDescription.Builder<T, B> {
+    interface Builder<T extends TypedLiteralInputDescription, B extends Builder<T, B>> extends
+            LiteralInputDescription.Builder<T, B>, TypedLiteralDescription.Builder<T, B> {
 
     }
 

@@ -31,18 +31,21 @@ import org.n52.shetland.ogc.ows.OwsCode;
  */
 public class OutputReference implements Iterable<OwsCode> {
 
+    private static final String JOB_ID_STRING = "jobId";
+    private static final String OUTPUT_ID_STRING = "outputId";
+
     private final JobId jobId;
 
     private final Chain<OwsCode> outputId;
 
     public OutputReference(JobId jobId, Chain<OwsCode> outputId) {
-        this.jobId = Objects.requireNonNull(jobId, "jobId");
-        this.outputId = Objects.requireNonNull(outputId, "outputId");
+        this.jobId = Objects.requireNonNull(jobId, JOB_ID_STRING);
+        this.outputId = Objects.requireNonNull(outputId, OUTPUT_ID_STRING);
     }
 
     public OutputReference(JobId jobId, OwsCode outputId) {
-        this.jobId = Objects.requireNonNull(jobId, "jobId");
-        this.outputId = new Chain<>(Objects.requireNonNull(outputId, "outputId"));
+        this.jobId = Objects.requireNonNull(jobId, JOB_ID_STRING);
+        this.outputId = new Chain<>(Objects.requireNonNull(outputId, OUTPUT_ID_STRING));
     }
 
     public JobId getJobId() {

@@ -56,12 +56,12 @@ import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
  *
  * @author Christian Autermann
  */
-public class ExecuteHandler extends AbstractEngineHandler
-        implements GenericOperationHandler<ExecuteRequest, ExecuteResponse> {
+public class ExecuteHandler extends AbstractEngineHandler implements GenericOperationHandler<ExecuteRequest,
+        ExecuteResponse> {
     private static final String IDENTIFIER = "Identifier";
 
-    private static final OperationHandlerKey KEY =
-            new OperationHandlerKey(WPSConstants.SERVICE, WPSConstants.Operations.Execute);
+    private static final OperationHandlerKey KEY = new OperationHandlerKey(WPSConstants.SERVICE,
+            WPSConstants.Operations.Execute);
 
     @Inject
     public ExecuteHandler(Engine engine) {
@@ -75,8 +75,8 @@ public class ExecuteHandler extends AbstractEngineHandler
         String version = request.getVersion();
         JobId jobId;
         try {
-            jobId = getEngine().execute(request.getId(), request.getInputs(), request.getOutputs(),
-                    request.getResponseMode());
+            jobId = getEngine().execute(request.getId(), request.getInputs(), request.getOutputs(), request
+                    .getResponseMode());
         } catch (ProcessNotFoundException ex) {
             throw new InvalidParameterValueException(IDENTIFIER, request.getId().getValue());
         } catch (InputDecodingException ex) {
@@ -128,8 +128,8 @@ public class ExecuteHandler extends AbstractEngineHandler
     @Override
     protected Set<OwsDomain> getOperationParameters(String service,
             String version) {
-        Set<OwsValue> algorithmIdentifiers =
-                getEngine().getProcessIdentifiers().stream().map(OwsCode::getValue).map(OwsValue::new).collect(toSet());
+        Set<OwsValue> algorithmIdentifiers = getEngine().getProcessIdentifiers().stream().map(OwsCode::getValue).map(
+                OwsValue::new).collect(toSet());
         OwsPossibleValues possibleValues;
         if (algorithmIdentifiers.isEmpty()) {
             possibleValues = OwsNoValues.instance();

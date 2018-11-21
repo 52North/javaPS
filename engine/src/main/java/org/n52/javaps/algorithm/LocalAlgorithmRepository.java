@@ -62,6 +62,8 @@ public class LocalAlgorithmRepository implements AlgorithmRepository {
 
     private final AutowireCapableBeanFactory beanFactory;
 
+    private final String duplicateAlgorithmId = "Duplicate algorithm identifier: {}";
+
     @Inject
     public LocalAlgorithmRepository(InputHandlerRepository parserRepository,
             OutputHandlerRepository generatorRepository, LiteralTypeRepository literalTypeRepository,
@@ -106,7 +108,7 @@ public class LocalAlgorithmRepository implements AlgorithmRepository {
         instantiate(clazz).ifPresent(instance -> {
             TypedProcessDescription description = instance.getDescription();
             if (this.descriptions.put(description.getId(), description) != null) {
-                LOG.warn("Duplicate algorithm identifier: {}", description.getId());
+                LOG.warn(duplicateAlgorithmId, description.getId());
             }
             Supplier<Error> error = () -> new Error("Could not instantiate algorithm " + description.getId());
             this.algorithms.put(description.getId(), () -> instantiate(clazz).orElseThrow(error));
@@ -119,7 +121,7 @@ public class LocalAlgorithmRepository implements AlgorithmRepository {
         Objects.requireNonNull(instance, "instance");
         TypedProcessDescription description = instance.getDescription();
         if (this.descriptions.put(description.getId(), description) != null) {
-            LOG.warn("Duplicate algorithm identifier: {}", description.getId());
+            LOG.warn(duplicateAlgorithmId, description.getId());
         }
         this.algorithms.put(description.getId(), () -> instance);
         LOG.info("Algorithm {} with id {} registered", instance, description.getId());
@@ -166,8 +168,8 @@ public class LocalAlgorithmRepository implements AlgorithmRepository {
         }
 
         if (clazz.isAnnotationPresent(Algorithm.class) && !(instance instanceof AnnotatedAlgorithm)) {
-            return Optional
-                    .of(new AnnotatedAlgorithm(parserRepository, generatorRepository, literalTypeRepository, instance));
+            return Optional.of(new AnnotatedAlgorithm(parserRepository, generatorRepository, literalTypeRepository,
+                    instance));
         } else if (instance instanceof IAlgorithm) {
             return Optional.of((IAlgorithm) instance);
         } else {

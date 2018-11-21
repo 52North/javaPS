@@ -32,13 +32,17 @@ import java.lang.annotation.Target;
 @Inherited
 @Documented
 public @interface BoundingBoxOutput {
-    String identifier(); // identifier
+    String CRS_EPSG_4326 = "http://www.opengis.net/def/crs/EPSG/0/4326";
+    
+    // identifier
+    String identifier();
 
     String title() default "";
 
-    String abstrakt() default ""; // 'abstract' is java reserved keyword
+    // 'abstract' is java reserved keyword
+    String abstrakt() default "";
 
-    String defaultCRSString() default "http://www.opengis.net/def/crs/EPSG/0/4326";
+    String defaultCRSString() default CRS_EPSG_4326;
 
-    String[] supportedCRSStringArray() default { "http://www.opengis.net/def/crs/EPSG/0/4326" };
+    String[] supportedCRSStringArray() default { CRS_EPSG_4326 };
 }

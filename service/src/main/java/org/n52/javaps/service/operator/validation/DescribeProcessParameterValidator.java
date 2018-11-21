@@ -46,8 +46,8 @@ public class DescribeProcessParameterValidator extends EngineParameterValidator<
 
     private void checkIdentifiers(List<OwsCode> identifiers) throws OwsExceptionReport {
         CompositeOwsException exception = new CompositeOwsException();
-        identifiers.stream().map(this::checkIdentifier).filter(Optional::isPresent).map(Optional::get)
-                .forEach(exception::add);
+        identifiers.stream().map(this::checkIdentifier).filter(Optional::isPresent).map(Optional::get).forEach(
+                exception::add);
         exception.throwIfNotEmpty();
     }
 

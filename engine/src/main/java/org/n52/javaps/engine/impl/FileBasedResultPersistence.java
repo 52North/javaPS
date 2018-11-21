@@ -102,6 +102,8 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
 
     private static final Logger LOG = LoggerFactory.getLogger(FileBasedResultPersistence.class);
 
+    private static final String COULD_NOT_LIST = "Could not list ";
+
     private Timer timer;
 
     private Path basePath;
@@ -157,13 +159,12 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
             OffsetDateTime expirationDate = getExpirationDate(directory);
 
             ObjectNode rootNode = Json.nodeFactory().objectNode().put(Keys.STATUS, context.getJobStatus().getValue())
-                    .put(Keys.JOB_ID, jobId).put(Keys.PROCESS_ID, processId)
-                    .put(Keys.EXPIRATION_DATE, expirationDate.toString())
-                    .put(Keys.RESPONSE_MODE, context.getResponseMode().toString());
+                    .put(Keys.JOB_ID, jobId).put(Keys.PROCESS_ID, processId).put(Keys.EXPIRATION_DATE, expirationDate
+                            .toString()).put(Keys.RESPONSE_MODE, context.getResponseMode().toString());
 
             try {
-                persist(directory, context.getEncodedOutputs(), context.getOutputDefinitions(),
-                        rootNode.putArray(Keys.OUTPUTS));
+                persist(directory, context.getEncodedOutputs(), context.getOutputDefinitions(), rootNode.putArray(
+                        Keys.OUTPUTS));
 
             } catch (Throwable ex) {
                 LOG.error("Error executing job " + context.getJobId(), ex);
@@ -232,20 +233,23 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
         return getLastModifiedTimeChecked(directory).plus(this.duration);
     }
 
+    private OffsetDateTime getExpirationDate(JobId jobId) throws JobNotFoundException, IOException {
+        return getExpirationDate(getJobDirectory(jobId));
+    }
+
     private Map<OwsCode, OutputDefinition> byId(Collection<OutputDefinition> definitions) {
         return definitions.stream().collect(toMap(OutputDefinition::getId, Function.identity()));
     }
 
     private void encodeFormat(Format format,
             ObjectNode formatNode) {
-        formatNode.put(Keys.MIME_TYPE, format.getMimeType().orElse(null))
-                .put(Keys.SCHEMA, format.getSchema().orElse(null))
-                .put(Keys.ENCODING, format.getEncoding().orElse(null));
+        formatNode.put(Keys.MIME_TYPE, format.getMimeType().orElse(null)).put(Keys.SCHEMA, format.getSchema().orElse(
+                null)).put(Keys.ENCODING, format.getEncoding().orElse(null));
     }
 
     private Format decodeFormat(JsonNode node) {
-        return new Format(node.path(Keys.MIME_TYPE).textValue(), node.path(Keys.ENCODING).textValue(),
-                node.path(Keys.SCHEMA).textValue());
+        return new Format(node.path(Keys.MIME_TYPE).textValue(), node.path(Keys.ENCODING).textValue(), node.path(
+                Keys.SCHEMA).textValue());
     }
 
     private void persist(Path directory,
@@ -257,12 +261,12 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
             OutputDefinition definition = outputDefinitions.get(data.getId());
 
             ObjectNode outputNode = outputsNode.addObject();
-            outputNode.putObject(Keys.ID).put(Keys.VALUE, data.getId().getValue()).put(Keys.CODE_SPACE,
-                    data.getId().getCodeSpace().map(URI::toString).orElse(null));
+            outputNode.putObject(Keys.ID).put(Keys.VALUE, data.getId().getValue()).put(Keys.CODE_SPACE, data.getId()
+                    .getCodeSpace().map(URI::toString).orElse(null));
             if (data.isGroup()) {
                 outputNode.put(Keys.TYPE, GROUP_TYPE);
-                persist(directory, data.asGroup().getElements(), definition.getOutputsById(),
-                        outputNode.putArray(Keys.OUTPUTS));
+                persist(directory, data.asGroup().getElements(), definition.getOutputsById(), outputNode.putArray(
+                        Keys.OUTPUTS));
             } else if (data.isReference()) {
                 outputNode.put(Keys.TYPE, REFERENCE_TYPE);
                 encodeFormat(data.asReference().getFormat(), outputNode.putObject(Keys.FORMAT));
@@ -289,10 +293,6 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
         }
     }
 
-    private OffsetDateTime getExpirationDate(JobId jobId) throws JobNotFoundException, IOException {
-        return getExpirationDate(getJobDirectory(jobId));
-    }
-
     private Path getJobDirectory(JobId jobId) throws JobNotFoundException {
         Path directory = basePath.resolve(jobId.getValue());
 
@@ -309,8 +309,8 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
     @Override
     public ProcessData getOutput(OutputReference reference) throws EngineException {
         try {
-            return getOutput(reference, reference.getOutputId(),
-                    getJobMetadata(reference.getJobId()).path(Keys.OUTPUTS));
+            return getOutput(reference, reference.getOutputId(), getJobMetadata(reference.getJobId()).path(
+                    Keys.OUTPUTS));
         } catch (IOException ex) {
             throw new EngineException(ex);
         }
@@ -351,8 +351,8 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
     }
 
     private OwsCode decodeIdentifier(JsonNode node) {
-        URI codeSpace =
-                Optional.ofNullable(node.path(Keys.ID).path(Keys.CODE_SPACE).textValue()).map(URI::create).orElse(null);
+        URI codeSpace = Optional.ofNullable(node.path(Keys.ID).path(Keys.CODE_SPACE).textValue()).map(URI::create)
+                .orElse(null);
         String value = node.path(Keys.ID).path(Keys.VALUE).textValue();
         OwsCode id = new OwsCode(value, codeSpace);
         return id;
@@ -360,8 +360,8 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
 
     private ProcessData decodeReferenceData(OutputReference reference,
             JsonNode node) {
-        ResolvableReferenceProcessData referenceProcessData =
-                new ResolvableReferenceProcessData(reference.getOutputId().last());
+        ResolvableReferenceProcessData referenceProcessData = new ResolvableReferenceProcessData(reference.getOutputId()
+                .last());
         referenceProcessData.setURI(URI.create(node.path(Keys.HREF).textValue()));
         referenceProcessData.setFormat(decodeFormat(node.path(Keys.FORMAT)));
         if (!node.path(Keys.BODY).isMissingNode()) {
@@ -413,9 +413,39 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
             return Files.list(this.basePath).filter(Files::isDirectory).map(Path::getFileName).filter(Objects::nonNull)
                     .map(Path::toString).map(JobId::new).collect(toSet());
         } catch (IOException ex) {
-            LOG.error("Could not list " + basePath, ex);
+            LOG.error(COULD_NOT_LIST + basePath, ex);
             return Collections.emptySet();
         }
+    }
+
+    @Override
+    public Set<JobId> getJobIds(OwsCode processId) {
+
+        Set<JobId> jobIdsforProcess = new HashSet<>();
+
+        try {
+            Set<JobId> allJobIds = Files.list(this.basePath).filter(Files::isDirectory).map(Path::getFileName).filter(
+                    Objects::nonNull).map(Path::toString).map(JobId::new).collect(toSet());
+
+            for (JobId jobId : allJobIds) {
+                try {
+                    JsonNode jsonMetadata = getJobMetadata(jobId);
+
+                    String processIdFromMetadata = jsonMetadata.path(Keys.PROCESS_ID).textValue();
+
+                    if (processIdFromMetadata.equals(processId.getValue())) {
+                        jobIdsforProcess.add(jobId);
+                    }
+
+                } catch (JobNotFoundException e) {
+                    LOG.error(e.getMessage());
+                }
+            }
+
+        } catch (IOException e) {
+            LOG.error(e.getMessage());
+        }
+        return jobIdsforProcess;
     }
 
     private static Optional<OffsetDateTime> getLastModifiedTime(Path directory) {
@@ -447,8 +477,8 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
         }
 
         private Predicate<Path> shouldBeDeleted(OffsetDateTime threshold) {
-            return path -> Files.isDirectory(path)
-                    && getLastModifiedTime(path).filter(dt -> dt.compareTo(threshold) <= 0).isPresent();
+            return path -> Files.isDirectory(path) && getLastModifiedTime(path).filter(dt -> dt.compareTo(
+                    threshold) <= 0).isPresent();
 
         }
 
@@ -464,14 +494,14 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
             try {
                 return Files.list(path);
             } catch (IOException ex) {
-                LOG.warn("Could not list " + path, ex);
+                LOG.warn(COULD_NOT_LIST + path, ex);
                 return Stream.empty();
             }
         }
 
     }
 
-    private static interface Keys {
+    private interface Keys {
         String PROCESS_ID = "processId";
 
         String RESPONSE_MODE = "responseMode";
@@ -502,7 +532,7 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
 
         String DATA_TRANSMISSION_MODE = "dataTransmissionMode";
 
-        String VALUE = "value";
+        String VALUE = VALUE_TYPE;
 
         String BODY = "body";
 
@@ -512,36 +542,6 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
 
         String SCHEMA = "schema";
 
-    }
-
-    @Override
-    public Set<JobId> getJobIds(OwsCode processId) {
-
-        Set<JobId> jobIdsforProcess = new HashSet<>();
-
-        try {
-            Set<JobId> allJobIds = Files.list(this.basePath).filter(Files::isDirectory).map(Path::getFileName)
-                    .filter(Objects::nonNull).map(Path::toString).map(JobId::new).collect(toSet());
-
-            for (JobId jobId : allJobIds) {
-                try {
-                    JsonNode jsonMetadata = getJobMetadata(jobId);
-
-                    String processIdFromMetadata = jsonMetadata.path(Keys.PROCESS_ID).textValue();
-
-                    if (processIdFromMetadata.equals(processId.getValue())) {
-                        jobIdsforProcess.add(jobId);
-                    }
-
-                } catch (JobNotFoundException e) {
-                    LOG.error(e.getMessage());
-                }
-            }
-
-        } catch (IOException e) {
-            LOG.error(e.getMessage());
-        }
-        return jobIdsforProcess;
     }
 
 }

@@ -34,8 +34,8 @@ import org.n52.svalbard.decode.stream.StreamReaderKey;
  *
  * @author Christian Autermann
  */
-public class ElementXmlStreamReaderRepository
-        extends AbstractSimilarityKeyRepository<StreamReaderKey, ElementXmlStreamReader> implements Constructable {
+public class ElementXmlStreamReaderRepository extends AbstractSimilarityKeyRepository<StreamReaderKey,
+        ElementXmlStreamReader> implements Constructable {
 
     private Collection<Provider<ElementXmlStreamReader>> readers;
 

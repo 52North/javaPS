@@ -41,6 +41,8 @@ public interface Engine {
 
     Set<JobId> getJobIdentifiers();
 
+    Set<JobId> getJobIdentifiers(OwsCode identifier);
+
     default boolean hasJob(JobId jobId) {
         return getJobIdentifiers().contains(jobId);
     }
@@ -67,7 +69,5 @@ public interface Engine {
     StatusInfo getStatus(JobId jobId) throws EngineException;
 
     Future<Result> getResult(JobId jobId) throws EngineException;
-
-    Set<JobId> getJobIdentifiers(OwsCode identifier);
 
 }

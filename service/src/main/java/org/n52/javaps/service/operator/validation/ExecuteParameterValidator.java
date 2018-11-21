@@ -111,18 +111,18 @@ public class ExecuteParameterValidator implements ParameterValidator<ExecuteRequ
 
         InputOccurenceCollector collector = new InputOccurenceCollector();
 
-        Map<Chain<OwsCode>, BigInteger> cardinalities = inputs.stream().collect(
-                MoreCollectors.toCardinalities(ProcessData::getId, ProcessData::isGroup, x -> x.asGroup().stream()));
+        Map<Chain<OwsCode>, BigInteger> cardinalities = inputs.stream().collect(MoreCollectors.toCardinalities(
+                ProcessData::getId, ProcessData::isGroup, x -> x.asGroup().stream()));
 
-        Map<Chain<OwsCode>, InputOccurence> occurences = description.getInputDescriptions().stream()
-                .map(input -> input.visit(collector)).collect(HashMap::new, Map::putAll, Map::putAll);
+        Map<Chain<OwsCode>, InputOccurence> occurences = description.getInputDescriptions().stream().map(input -> input
+                .visit(collector)).collect(HashMap::new, Map::putAll, Map::putAll);
 
         // check the cardinalities of existing inputs
         cardinalities.forEach((chain,
                 cardinality) -> // ignore if there is no cardinality, as this
                                 // will be catched by another method
-        Optional.ofNullable(occurences.get(chain)).filter(occurence -> !occurence.isInBounds(cardinality))
-                .ifPresent(occurence -> exception.add(new InvalidParameterValueException().at(INPUT).withMessage(
+        Optional.ofNullable(occurences.get(chain)).filter(occurence -> !occurence.isInBounds(cardinality)).ifPresent(
+                occurence -> exception.add(new InvalidParameterValueException().at(INPUT).withMessage(
                         "The input %s has an invalid cardinality of %s; should be in %s.", chain.toString(),
                         cardinality, occurence))));
 
@@ -155,8 +155,8 @@ public class ExecuteParameterValidator implements ParameterValidator<ExecuteRequ
             ProcessOutputDescriptionContainer processDescription) throws OwsExceptionReport {
         CompositeOwsException exception = new CompositeOwsException();
 
-        outputs.stream().map(OutputDefinition::getId).collect(MoreCollectors.toDuplicateStream())
-                .map(ExecuteParameterValidator::duplicateOutput).forEach(exception::add);
+        outputs.stream().map(OutputDefinition::getId).collect(MoreCollectors.toDuplicateStream()).map(
+                ExecuteParameterValidator::duplicateOutput).forEach(exception::add);
 
         for (OutputDefinition output : outputs) {
             ProcessOutputDescription description = processDescription.getOutput(output.getId());
@@ -232,8 +232,8 @@ public class ExecuteParameterValidator implements ParameterValidator<ExecuteRequ
             ProcessDescription description) throws OwsExceptionReport {
         CompositeOwsException exception = new CompositeOwsException();
 
-        if (request.getResponseMode() == ResponseMode.RAW && (request.getOutputs().size() > 1
-                || (request.getOutputs().isEmpty() && description.getOutputs().size() > 1))) {
+        if (request.getResponseMode() == ResponseMode.RAW && (request.getOutputs().size() > 1 || (request.getOutputs()
+                .isEmpty() && description.getOutputs().size() > 1))) {
             exception.add(new InvalidParameterValueException().at("responseMode").withMessage(
                     "The value 'raw' of the parameter 'responseMode' is invalid. Single output is required."));
         }
@@ -307,8 +307,8 @@ public class ExecuteParameterValidator implements ParameterValidator<ExecuteRequ
 
         @Override
         public void visit(ComplexOutputDescription description) throws OwsExceptionReport {
-            checkCompatibility(Stream.concat(Stream.of(description.getDefaultFormat()),
-                    description.getSupportedFormats().stream()));
+            checkCompatibility(Stream.concat(Stream.of(description.getDefaultFormat()), description
+                    .getSupportedFormats().stream()));
         }
 
         @Override
@@ -347,8 +347,8 @@ public class ExecuteParameterValidator implements ParameterValidator<ExecuteRequ
 
         @Override
         public void visit(ComplexInputDescription description) throws OwsExceptionReport {
-            checkCompatibility(Stream.concat(Stream.of(description.getDefaultFormat()),
-                    description.getSupportedFormats().stream()));
+            checkCompatibility(Stream.concat(Stream.of(description.getDefaultFormat()), description
+                    .getSupportedFormats().stream()));
         }
 
         @Override
@@ -372,8 +372,8 @@ public class ExecuteParameterValidator implements ParameterValidator<ExecuteRequ
         }
     }
 
-    private static class InputOccurenceCollector
-            implements ProcessInputDescription.ReturningVisitor<Map<Chain<OwsCode>, InputOccurence>> {
+    private static class InputOccurenceCollector implements ProcessInputDescription.ReturningVisitor<Map<Chain<OwsCode>,
+            InputOccurence>> {
         private final Optional<Chain<OwsCode>> parent;
 
         InputOccurenceCollector(Chain<OwsCode> parent) {

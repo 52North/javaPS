@@ -108,8 +108,8 @@ public class InfoEndpoint {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public String info() {
 
-        return Json.print(Json.nodeFactory().objectNode().put(ENDPOINT, this.serviceURL).put(BRANCH, this.branch)
-                .put(COMMIT, this.commit).put(TIME, this.time).put(VERSION, this.version));
+        return Json.print(Json.nodeFactory().objectNode().put(ENDPOINT, this.serviceURL).put(BRANCH, this.branch).put(
+                COMMIT, this.commit).put(TIME, this.time).put(VERSION, this.version));
     }
 
     private static Properties loadProperties(String path) {

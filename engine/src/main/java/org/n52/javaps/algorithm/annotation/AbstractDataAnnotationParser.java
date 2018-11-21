@@ -36,8 +36,8 @@ import org.n52.javaps.description.TypedDataDescription;
  * @param <B>
  *            the binding type
  */
-abstract class AbstractDataAnnotationParser<A extends Annotation, M extends AccessibleObject & Member, D extends TypedDataDescription<?>, B extends AbstractDataBinding<M, D>>
-        implements AnnotationParser<A, M, B> {
+abstract class AbstractDataAnnotationParser<A extends Annotation, M extends AccessibleObject & Member,
+        D extends TypedDataDescription<?>, B extends AbstractDataBinding<M, D>> implements AnnotationParser<A, M, B> {
     private final Function<M, B> bindingFunction;
 
     AbstractDataAnnotationParser(Function<M, B> bindingFunction) {
