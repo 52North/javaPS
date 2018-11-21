@@ -23,7 +23,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Collections;
@@ -40,7 +39,6 @@ import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
 import org.apache.commons.codec.binary.Base64InputStream;
-
 import org.n52.iceland.util.XmlFactories;
 import org.n52.javaps.description.TypedLiteralInputDescription;
 import org.n52.javaps.description.TypedLiteralOutputDescription;
@@ -136,8 +134,9 @@ public class LiteralInputOutputHandler extends XmlFactories implements InputHand
                 StartElement start = event.asStartElement();
                 if (start.getName().equals(QN_LITERAL_VALUE)) {
                     // TODO check data type?
-                    URI dataType = Optional.ofNullable(start.getAttributeByName(QN_DATA_TYPE)).map(Attribute::getValue)
-                            .map(URI::create).orElse(null);
+//                    URI dataType = Optional.ofNullable(start.getAttributeByName(QN_DATA_TYPE))
+//                            .map(Attribute::getValue)
+//                            .map(URI::create).orElse(null);
                     String uom = Optional.ofNullable(start.getAttributeByName(QN_UOM)).map(Attribute::getValue).orElse(
                             null);
                     return description.getType().parseToBinding(xmlReader.getElementText(), uom);

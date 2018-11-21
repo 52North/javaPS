@@ -133,7 +133,7 @@ public class LocalAlgorithmRepository implements AlgorithmRepository {
             addAlgorithm((IAlgorithm) object);
         } else if (object instanceof Class<?>) {
             addAlgorithm((Class<?>) object);
-        } else if (object != null && object.getClass().isAnnotationPresent(Algorithm.class)) {
+        } else if (object.getClass().isAnnotationPresent(Algorithm.class)) {
             addAlgorithm(new AnnotatedAlgorithm(parserRepository, generatorRepository, literalTypeRepository, object));
         } else {
             LOG.error("Could not add algorithm {}", object);

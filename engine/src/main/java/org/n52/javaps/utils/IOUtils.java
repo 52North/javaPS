@@ -178,7 +178,11 @@ public final class IOUtils {
         try (ZipInputStream zipInputStream = new ZipInputStream(new BufferedInputStream(new FileInputStream(file)))) {
             while ((entry = zipInputStream.getNextEntry()) != null) {
                 entryFile = new File(tempDir, entry.getName());
-                entryFile.createNewFile();
+                boolean created = entryFile.createNewFile();
+                if (!created) {
+                    LOGGER.info("File already exists: " + entryFile.getAbsolutePath());
+                    continue;
+                }
                 try (BufferedOutputStream dest = new BufferedOutputStream(new FileOutputStream(entryFile),
                         buffer.length)) {
                     while ((count = zipInputStream.read(buffer)) != -1) {
@@ -231,10 +235,11 @@ public final class IOUtils {
                 final String baseName = file.getName().substring(0, file.getName().lastIndexOf('.'));
                 File[] list = file.getAbsoluteFile().getParentFile().listFiles(pathname -> pathname.getName()
                         .startsWith(baseName));
-                for (File f : list) {
-                    f.deleteOnExit();
+                if (list != null) {
+                    for (File f : list) {
+                        f.deleteOnExit();
+                    }
                 }
-
                 file.deleteOnExit();
             }
         }

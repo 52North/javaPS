@@ -34,7 +34,7 @@ interface AnnotationParser<A extends Annotation, M extends AccessibleObject & Me
 
     default B parse(M member) {
         A annotation = member.getAnnotation(getSupportedAnnotation());
-        return annotation == null ? null : parse(annotation, member);
+        return parse(annotation, member);
     }
 
     B parse(A annotation,

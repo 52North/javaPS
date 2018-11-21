@@ -53,6 +53,9 @@ import com.google.common.base.Strings;
  * @author Tom Kunicki, Christian Autermann
  */
 public class AnnotatedAlgorithmMetadata {
+
+    private static final String DUPLICATE_IDENTIFIER = "duplicated identifier: ";
+
     private final Class<?> algorithmClass;
 
     private final Map<OwsCode, AbstractOutputBinding<?>> outputBindings;
@@ -64,8 +67,6 @@ public class AnnotatedAlgorithmMetadata {
     private final TypedProcessDescription description;
 
     private final TypedProcessDescriptionFactory descriptionFactory;
-
-    private final String duplicateIdentifier = "duplicated identifier: " ;
 
     public AnnotatedAlgorithmMetadata(Class<?> algorithmClass, InputHandlerRepository parserRepository,
             OutputHandlerRepository generatorRepository, LiteralTypeRepository literalTypeRepository) {
@@ -105,7 +106,7 @@ public class AnnotatedAlgorithmMetadata {
                         x -> (AbstractOutputBinding<Method>) x);
 
         BinaryOperator<AbstractOutputBinding<?>> merger = org.n52.janmayen.stream.Streams.throwingMerger((a,
-                b) -> new RuntimeException(duplicateIdentifier  + a.getDescription().getId()));
+                b) -> new RuntimeException(DUPLICATE_IDENTIFIER  + a.getDescription().getId()));
         Collector<AbstractOutputBinding<?>, ?, Map<OwsCode, AbstractOutputBinding<?>>> collector =
                 java.util.stream.Collectors.toMap(b -> b.getDescription().getId(), java.util.function.Function
                         .identity(), merger, LinkedHashMap::new);
@@ -130,7 +131,7 @@ public class AnnotatedAlgorithmMetadata {
                 new BoundingBoxInputAnnotationParser<>(AbstractInputBinding::method))).map(x -> (AbstractInputBinding<
                         Method>) x);
         BinaryOperator<AbstractInputBinding<?>> merger = Streams.throwingMerger((a,
-                b) -> new RuntimeException(duplicateIdentifier + a.getDescription().getId()));
+                b) -> new RuntimeException(DUPLICATE_IDENTIFIER + a.getDescription().getId()));
         Collector<AbstractInputBinding<?>, ?, LinkedHashMap<OwsCode, AbstractInputBinding<?>>> collector =
                 java.util.stream.Collectors.toMap(b -> b.getDescription().getId(), java.util.function.Function
                         .identity(), merger, LinkedHashMap::new);
