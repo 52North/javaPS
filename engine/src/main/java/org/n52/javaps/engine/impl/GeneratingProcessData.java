@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,14 +35,15 @@ import org.n52.javaps.io.OutputHandler;
 public class GeneratingProcessData extends ValueProcessData {
 
     private final OutputHandler outputHandler;
+
     private final TypedProcessOutputDescription<?> outputDescription;
+
     private final Data<?> data;
+
     private final OutputDefinition outputDefinition;
 
-    GeneratingProcessData(
-            TypedProcessOutputDescription<?> outputDescription, OutputDefinition outputDefinition,
-            OutputHandler outputHandler,
-            Data<?> data) {
+    GeneratingProcessData(TypedProcessOutputDescription<?> outputDescription, OutputDefinition outputDefinition,
+            OutputHandler outputHandler, Data<?> data) {
         super(outputDescription.getId(), outputDefinition.getFormat());
         this.outputHandler = Objects.requireNonNull(outputHandler);
         this.outputDescription = Objects.requireNonNull(outputDescription);

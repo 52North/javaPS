@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,11 +38,15 @@ import org.n52.javaps.io.Data;
  * TODO JavaDoc
  *
  * @author Tom Kunicki, Christian Autermann
- * @param <M> the accessible member type
+ * @param <M>
+ *            the accessible member type
  */
-abstract class AbstractInputBinding<M extends AccessibleObject & Member> extends AbstractDataBinding<M, TypedProcessInputDescription<?>> {
+abstract class AbstractInputBinding<M extends AccessibleObject & Member> extends AbstractDataBinding<M,
+        TypedProcessInputDescription<?>> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractInputBinding.class);
+    private static final String INTERNAL_ERROR_PROCESSING_INPUTS = "Internal error processing inputs";
+    private final String unableToInferConcreteType = "Unable to infer concrete type information for {}";
 
     AbstractInputBinding(M member) {
         super(member);
@@ -56,7 +60,7 @@ abstract class AbstractInputBinding<M extends AccessibleObject & Member> extends
             Class<?> memberClass = (Class<?>) memberType;
             if (List.class.isAssignableFrom(memberClass)) {
                 // We treat List as List<? extends Object>
-                inputType = NOT_PARAMETERIZED_TYPE;
+                inputType = getNotParameterizedType();
             }
         } else if (memberType instanceof ParameterizedType) {
             ParameterizedType parameterizedMemberType = (ParameterizedType) memberType;
@@ -65,7 +69,7 @@ abstract class AbstractInputBinding<M extends AccessibleObject & Member> extends
                 inputType = parameterizedMemberType.getActualTypeArguments()[0];
             }
         } else {
-            LOGGER.error("Unable to infer concrete type information for {}", getMember());
+            LOGGER.error(unableToInferConcreteType , getMember());
         }
         return inputType;
     }
@@ -78,7 +82,7 @@ abstract class AbstractInputBinding<M extends AccessibleObject & Member> extends
             Class<?> rawClass = (Class<?>) ((ParameterizedType) memberType).getRawType();
             return List.class.isAssignableFrom(rawClass);
         } else {
-            LOGGER.error("Unable to infer concrete type information for {}", getMember());
+            LOGGER.error(unableToInferConcreteType, getMember());
         }
         return false;
     }
@@ -87,14 +91,13 @@ abstract class AbstractInputBinding<M extends AccessibleObject & Member> extends
         Type inputPayloadType = getPayloadType();
         Class<?> bindingPayloadClass = getDescription().getPayloadType();
 
-
         if (inputPayloadType instanceof Class<?>) {
             return ((Class<?>) inputPayloadType).isAssignableFrom(bindingPayloadClass);
         } else if (inputPayloadType instanceof ParameterizedType) {
             ParameterizedType parameterizedType = (ParameterizedType) inputPayloadType;
             // i.e.
             // List<FeatureCollection<SimpleFeatureType,SimpleFeature>>
-            return ((Class<?>) (parameterizedType).getRawType()).isAssignableFrom(bindingPayloadClass);
+            return ((Class<?>) parameterizedType.getRawType()).isAssignableFrom(bindingPayloadClass);
         } else if (inputPayloadType instanceof WildcardType) {
             // i.e. List<? extends String> or List<? super String>
             WildcardType inputTypeWildcardType = (WildcardType) inputPayloadType;
@@ -128,9 +131,7 @@ abstract class AbstractInputBinding<M extends AccessibleObject & Member> extends
     public Object unbindInput(List<Data<?>> inputs) {
         if (inputs != null && inputs.size() > 0) {
             if (isMemberTypeList()) {
-                return inputs.stream()
-                        .map(bound -> payloadToInput(bound.getPayload()))
-                        .collect(toList());
+                return inputs.stream().map(bound -> payloadToInput(bound.getPayload())).collect(toList());
             } else if (inputs.size() == 1) {
                 return payloadToInput(inputs.get(0).getPayload());
             } else {
@@ -141,24 +142,29 @@ abstract class AbstractInputBinding<M extends AccessibleObject & Member> extends
         }
     }
 
-     @Override
+    @Override
     public boolean validate() {
         if (!checkModifier()) {
             LOGGER.error("Field {} with input annotation can't be used, not public.", getMember());
             return false;
         }
         if (getDescription().getOccurence().isMultiple() && !isMemberTypeList()) {
-            LOGGER.error("Field {} with input annotation can't be used, occurence is {} and field is not of type List", getMember(), getDescription().getOccurence());
+            LOGGER.error("Field {} with input annotation can't be used, occurence is {} and field is not of type List",
+                    getMember(), getDescription().getOccurence());
             return false;
         }
         if (!checkType()) {
-            LOGGER.error("Field {} with input annotation can't be used, unable to safely assign field using binding payload type", getMember());
+            LOGGER.error(
+                    "Field {} with input annotation can't be used, "
+                    + "unable to safely assign field using binding payload type",
+                    getMember());
             return false;
         }
         return true;
     }
 
-    public abstract void set(Object annotatedObject, List<Data<?>> boundInputList);
+    public abstract void set(Object annotatedObject,
+            List<Data<?>> boundInputList);
 
     public static AbstractInputBinding<Field> field(Field field) {
         return new InputFieldBinding(field);
@@ -170,6 +176,7 @@ abstract class AbstractInputBinding<M extends AccessibleObject & Member> extends
 
     private static class InputFieldBinding extends AbstractInputBinding<Field> {
 
+
         InputFieldBinding(Field field) {
             super(field);
         }
@@ -180,11 +187,12 @@ abstract class AbstractInputBinding<M extends AccessibleObject & Member> extends
         }
 
         @Override
-        public void set(Object instance, List<Data<?>> inputs) {
+        public void set(Object instance,
+                List<Data<?>> inputs) {
             try {
                 getMember().set(instance, unbindInput(inputs));
             } catch (IllegalArgumentException | IllegalAccessException ex) {
-                throw new RuntimeException("Internal error processing inputs", ex);
+                throw new RuntimeException(INTERNAL_ERROR_PROCESSING_INPUTS , ex);
             }
         }
 
@@ -203,11 +211,12 @@ abstract class AbstractInputBinding<M extends AccessibleObject & Member> extends
         }
 
         @Override
-        public void set(Object instance, List<Data<?>> inputs) {
+        public void set(Object instance,
+                List<Data<?>> inputs) {
             try {
                 getMember().invoke(instance, unbindInput(inputs));
             } catch (IllegalAccessException | IllegalArgumentException ex) {
-                throw new RuntimeException("Internal error processing inputs", ex);
+                throw new RuntimeException(INTERNAL_ERROR_PROCESSING_INPUTS, ex);
             } catch (InvocationTargetException ex) {
                 Throwable cause = ex.getCause() == null ? ex : ex.getCause();
                 throw new RuntimeException(cause.getMessage(), cause);

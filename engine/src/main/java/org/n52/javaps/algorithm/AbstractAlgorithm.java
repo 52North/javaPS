@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,11 +22,10 @@ import java.util.List;
 
 import org.n52.javaps.description.TypedProcessDescription;
 
-public abstract class AbstractAlgorithm
-        extends AbstractObservable implements IAlgorithm {
+public abstract class AbstractAlgorithm extends AbstractObservable implements IAlgorithm {
 
-    private final List<String> errorList = Collections
-            .synchronizedList(new LinkedList<>());
+    private final List<String> errorList = Collections.synchronizedList(new LinkedList<>());
+
     private TypedProcessDescription description;
 
     @Override

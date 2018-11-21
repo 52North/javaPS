@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,9 +33,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import javax.inject.Inject;
-
-import org.n52.javaps.io.literal.LiteralType;
-import org.n52.javaps.io.literal.LiteralTypeRepository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,12 +75,15 @@ public class LiteralTypeRepositoryImpl implements LiteralTypeRepository {
     public LiteralTypeRepositoryImpl(Context context) {
         this.context = context;
 
-        // register the default types to avoid ambiguity (and to speed things up...)
+        // register the default types to avoid ambiguity (and to speed things
+        // up...)
         registerMapping(BigDecimal.class, LiteralDecimalType.class);
         registerMapping(BigInteger.class, LiteralIntegerType.class);
         // registerMapping(BigInteger.class, LiteralNegativeIntegerType.class);
-        // registerMapping(BigInteger.class, LiteralNonNegativeIntegerType.class);
-        // registerMapping(BigInteger.class, LiteralNonPositiveIntegerType.class);
+        // registerMapping(BigInteger.class,
+        // LiteralNonNegativeIntegerType.class);
+        // registerMapping(BigInteger.class,
+        // LiteralNonPositiveIntegerType.class);
         // registerMapping(BigInteger.class, LiteralPositiveIntegerType.class);
         // registerMapping(BigInteger.class, LiteralUnsignedLongType.class);
         registerMapping(Boolean.class, LiteralBooleanType.class);
@@ -114,12 +114,14 @@ public class LiteralTypeRepositoryImpl implements LiteralTypeRepository {
         registerMapping(YearMonth.class, LiteralYearMonthType.class);
     }
 
-    public final <T> void registerMapping(Class<T> bindingPayloadType, Class<? extends LiteralType<T>> literalType) {
+    public final <T> void registerMapping(Class<T> bindingPayloadType,
+            Class<? extends LiteralType<T>> literalType) {
         this.mappings.put(bindingPayloadType, literalType);
     }
 
     @Override
-    public <T> LiteralType<T> getLiteralType(Class<? extends LiteralType<?>> literalType, Class<?> payloadType) {
+    public <T> LiteralType<T> getLiteralType(Class<? extends LiteralType<?>> literalType,
+            Class<?> payloadType) {
         Optional<LiteralType> type;
         if (literalType != null && !literalType.equals(LiteralType.class)) {
             type = getLiteralTypeForLiteralType(literalType);
@@ -137,14 +139,15 @@ public class LiteralTypeRepositoryImpl implements LiteralTypeRepository {
     private Optional<LiteralType> getLiteralTypeForPayloadType(Class<?> payloadType) {
         if (this.mappings.containsKey(payloadType)) {
             Class<?> typeClass = this.mappings.get(payloadType);
-            return (Optional<LiteralType>)context.getInstance(typeClass);
+            return (Optional<LiteralType>) context.getInstance(typeClass);
         } else {
-            return context.getInstances(LiteralType.class).stream().filter(i -> i.getPayloadType().equals(payloadType)).findFirst();
+            return context.getInstances(LiteralType.class).stream().filter(i -> i.getPayloadType().equals(payloadType))
+                    .findFirst();
         }
     }
 
     private Optional<LiteralType> getLiteralTypeForLiteralType(Class<?> literalType) {
-        return (Optional<LiteralType>)context.getInstance(literalType);
+        return (Optional<LiteralType>) context.getInstance(literalType);
     }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,6 @@
  */
 package org.n52.javaps.service.kvp;
 
-
 import org.n52.iceland.binding.kvp.AbstractKvpDecoder;
 import org.n52.shetland.ogc.wps.WPS200Constants;
 import org.n52.shetland.ogc.wps.WPSConstants;
@@ -26,16 +25,17 @@ import org.n52.shetland.ogc.ows.OWSConstants;
 import org.n52.shetland.ogc.ows.OWSConstants.GetCapabilitiesParams;
 import org.n52.svalbard.decode.OperationDecoderKey;
 
-
 public class GetCapabilitiesKvpDecoder extends AbstractKvpDecoder<GetCapabilitiesRequest> {
 
     public GetCapabilitiesKvpDecoder() {
-        super(GetCapabilitiesRequest::new,
-            new OperationDecoderKey(WPSConstants.SERVICE, null,                    OWSConstants.Operations.GetCapabilities.name(), MediaTypes.APPLICATION_KVP),
-            new OperationDecoderKey(WPSConstants.SERVICE, WPS200Constants.VERSION, OWSConstants.Operations.GetCapabilities.name(), MediaTypes.APPLICATION_KVP),
-            new OperationDecoderKey(null,                 WPS200Constants.VERSION, OWSConstants.Operations.GetCapabilities.name(), MediaTypes.APPLICATION_KVP),
-            // FIXME isn't this the only one needed?
-            new OperationDecoderKey(null,             null,                        OWSConstants.Operations.GetCapabilities.name(), MediaTypes.APPLICATION_KVP));
+        super(GetCapabilitiesRequest::new, new OperationDecoderKey(WPSConstants.SERVICE, null,
+                OWSConstants.Operations.GetCapabilities.name(), MediaTypes.APPLICATION_KVP), new OperationDecoderKey(
+                        WPSConstants.SERVICE, WPS200Constants.VERSION, OWSConstants.Operations.GetCapabilities.name(),
+                        MediaTypes.APPLICATION_KVP), new OperationDecoderKey(null, WPS200Constants.VERSION,
+                                OWSConstants.Operations.GetCapabilities.name(), MediaTypes.APPLICATION_KVP),
+                // FIXME isn't this the only one needed?
+                new OperationDecoderKey(null, null, OWSConstants.Operations.GetCapabilities.name(),
+                        MediaTypes.APPLICATION_KVP));
     }
 
     @Override

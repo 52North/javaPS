@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,12 +46,15 @@ public class GetCapabilitiesHandler extends AbstractGetCapabilitiesHandler<Proce
     }
 
     @Override
-    protected ProcessOfferings createContents(String service, String version) {
-        return new ProcessOfferings(engine.getProcessDescriptions().stream().map(ProcessOffering::new).collect(toSet()));
+    protected ProcessOfferings createContents(String service,
+            String version) {
+        return new ProcessOfferings(engine.getProcessDescriptions().stream().map(ProcessOffering::new).collect(
+                toSet()));
     }
 
     @Override
-    protected OwsCapabilities createCapabilities(OwsCapabilities capabilities, ProcessOfferings processOfferings) {
+    protected OwsCapabilities createCapabilities(OwsCapabilities capabilities,
+            ProcessOfferings processOfferings) {
         return new WPSCapabilities(capabilities, processOfferings);
     }
 

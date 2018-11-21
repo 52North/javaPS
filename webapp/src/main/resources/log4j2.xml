@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+    Copyright 2016-2018 52°North Initiative for Geospatial Open Source
     Software GmbH
 
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,15 +17,14 @@
     limitations under the License.
 
 -->
-<Configuration status="info" monitorInterval="10" name="iceland-skeleton-log">
+<Configuration status="info" monitorInterval="10" name="javaps-log">
     <Appenders>
         <Console name="console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </Console>
 
-        <!--
-        <RollingFile name="skeletonrollingfile" fileName="logs/iceland-skeleton.log" immediateFlush="false"
-                     filePattern="logs/$${date:yyyy-MM}/iceland-skeleton-%d{MM-dd-yyyy}-%i.log.gz">
+        <RollingFile name="javapsfile" fileName="logs/javaps.log" immediateFlush="false"
+                     filePattern="logs/$${date:yyyy-MM}/javaps-%d{MM-dd-yyyy}-%i.log.gz">
             <PatternLayout>
                 <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
             </PatternLayout>
@@ -34,22 +33,22 @@
                 <SizeBasedTriggeringPolicy size="25 MB"/>
             </Policies>
         </RollingFile>
-        -->
+
     </Appenders>
 
     <Loggers>
         <Logger name="org.n52" level="trace" additivity="false">
             <AppenderRef ref="console"/>
-            <!--<AppenderRef ref="skeletonrollingfile"/>-->
+            <AppenderRef ref="javapsfile"/>
         </Logger>
         <Logger name="org.springframework" level="info" additivity="false">
             <AppenderRef ref="console"/>
-            <!--<AppenderRef ref="skeletonrollingfile"/>-->
+            <AppenderRef ref="javapsfile"/>
         </Logger>
 
         <Root level="warn">
             <AppenderRef ref="console"/>
-            <!--<AppenderRef ref="skeletonrollingfile"/>-->
+            <AppenderRef ref="javapsfile"/>
         </Root>
     </Loggers>
 </Configuration>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,6 +30,7 @@ import org.n52.javaps.io.DecodingException;
 public class LiteralDayType extends AbstractXSDLiteralType<Day> {
 
     private static final long serialVersionUID = -8426376970434674190L;
+
     private static final DateTimeFormatter PARSER = DateTimeFormatter.ofPattern("---dd");
 
     @Override

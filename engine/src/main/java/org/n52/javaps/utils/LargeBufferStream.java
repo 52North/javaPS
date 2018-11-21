@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -90,8 +90,12 @@ public class LargeBufferStream extends OutputStream {
     public void write(final byte[] b,
             int off,
             int len) throws IOException {
+
+        int offCopy = off;
+        int lenCopy = len;
+
         if (blocks != null) {
-            while (len > 0) {
+            while (lenCopy > 0) {
                 Block s = last();
                 if (s.isFull()) {
                     if (reachedInCoreLimit()) {
@@ -102,16 +106,16 @@ public class LargeBufferStream extends OutputStream {
                     blocks.add(s);
                 }
 
-                final int n = Math.min(Block.SZ - s.count, len);
-                System.arraycopy(b, off, s.buffer, s.count, n);
+                final int n = Math.min(Block.SZ - s.count, lenCopy);
+                System.arraycopy(b, offCopy, s.buffer, s.count, n);
                 s.count += n;
-                len -= n;
-                off += n;
+                lenCopy -= n;
+                offCopy += n;
             }
         }
 
-        if (len > 0) {
-            diskOut.write(b, off, len);
+        if (lenCopy > 0) {
+            diskOut.write(b, offCopy, lenCopy);
         }
     }
 
@@ -228,9 +232,9 @@ public class LargeBufferStream extends OutputStream {
     private static class Block {
         static final int SZ = 8 * 1024 * 1024;
 
-        final byte[] buffer = new byte[SZ];
+        private final byte[] buffer = new byte[SZ];
 
-        int count;
+        private int count;
 
         boolean isFull() {
             return count == SZ;

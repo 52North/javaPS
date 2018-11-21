@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,6 +28,7 @@ import org.n52.javaps.algorithm.ProcessInputs;
 public class GroupInputData implements Data<ProcessInputs> {
 
     private static final long serialVersionUID = -8747518748439185542L;
+
     private final ProcessInputs payload;
 
     public GroupInputData(ProcessInputs payload) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,13 +24,14 @@ import org.slf4j.LoggerFactory;
 
 /**
  * TODO JavaDoc
+ *
  * @author Christian Autermann
  */
 class ExecuteBinding extends AnnotationBinding<Method> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExecuteBinding.class);
 
-    public ExecuteBinding(Method method) {
+    ExecuteBinding(Method method) {
         super(method);
     }
 
@@ -46,7 +47,8 @@ class ExecuteBinding extends AnnotationBinding<Method> {
             return false;
         }
         if (getMember().getParameterTypes().length != 0) {
-            LOGGER.error("Method {} with Execute annotation can't be used, method parameter count is > 0.", getMember());
+            LOGGER.error("Method {} with Execute annotation can't be used, method parameter count is > 0.",
+                    getMember());
             return false;
         }
         return true;

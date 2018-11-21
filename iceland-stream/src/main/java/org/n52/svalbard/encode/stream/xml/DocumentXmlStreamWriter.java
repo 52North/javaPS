@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -51,39 +51,39 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
  */
 public class DocumentXmlStreamWriter extends XmlFactories implements StreamWriter<Object> {
 
-
     private final ElementXmlStreamWriterRepository repository;
+
     private final ExecutorService executor;
 
     @Inject
     public DocumentXmlStreamWriter(ElementXmlStreamWriterRepository repository) {
-        ThreadFactory threadFactory = new ThreadFactoryBuilder()
-                .setNameFormat("xml-transformer-%d").build();
+        ThreadFactory threadFactory = new ThreadFactoryBuilder().setNameFormat("xml-transformer-%d").build();
         this.executor = Executors.newCachedThreadPool(threadFactory);
         this.repository = Objects.requireNonNull(repository);
     }
 
     @Override
-    public void write(Object object, OutputStream stream)
-            throws EncodingException {
+    public void write(Object object,
+            OutputStream stream) throws EncodingException {
         try {
-            writeIndenting(stream, (out) -> {
-                       try (XmlStreamWritingContext context = createContext(out)) {
-                           context.startDocument();
-                           context.write(object);
-                           context.endDocument();
-                       } catch (XMLStreamException ex) {
-                           throw new EncodingException(ex);
-                       }
-                   });
+            writeIndenting(stream, out -> {
+                try (XmlStreamWritingContext context = createContext(out)) {
+                    context.startDocument();
+                    context.write(object);
+                    context.endDocument();
+                } catch (XMLStreamException ex) {
+                    throw new EncodingException(ex);
+                }
+            });
         } catch (TransformerException | IOException | InterruptedException ex) {
             throw new EncodingException(ex);
         }
     }
 
     @SuppressWarnings("unchecked")
-    private <X extends Exception> void writeIndenting(OutputStream stream, ThrowingConsumer<OutputStream, X> writer)
-            throws X, TransformerException, IOException, InterruptedException {
+    private <X extends Exception> void writeIndenting(OutputStream stream,
+            ThrowingConsumer<OutputStream, X> writer) throws X, TransformerException, IOException,
+            InterruptedException {
         try {
             PipedOutputStream pos = new PipedOutputStream();
             PipedInputStream pis = new PipedInputStream(pos);
@@ -97,7 +97,8 @@ public class DocumentXmlStreamWriter extends XmlFactories implements StreamWrite
                 } finally {
                     pis.close();
                 }
-                return null; // use a callable to allow exception throwing
+                // use a callable to allow exception throwing
+                return null;
             });
 
             try {
@@ -107,7 +108,8 @@ public class DocumentXmlStreamWriter extends XmlFactories implements StreamWrite
                 throw (X) e;
             }
 
-            t.get(); // wait for the transformer to finish
+            // wait for the transformer to finish
+            t.get();
 
         } catch (ExecutionException ex) {
             Throwables.throwIfInstanceOf(ex.getCause(), TransformerException.class);
@@ -117,17 +119,13 @@ public class DocumentXmlStreamWriter extends XmlFactories implements StreamWrite
         }
     }
 
-
-
     @Override
     public Set<StreamWriterKey> getKeys() {
         return this.repository.keys();
     }
 
-    private XmlStreamWritingContext createContext(OutputStream pos)
-            throws XMLStreamException {
+    private XmlStreamWritingContext createContext(OutputStream pos) throws XMLStreamException {
         return new XmlStreamWritingContext(pos, this.repository::get);
     }
-
 
 }

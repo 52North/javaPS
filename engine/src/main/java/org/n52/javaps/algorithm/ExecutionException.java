@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +18,7 @@ package org.n52.javaps.algorithm;
 
 /**
  * TODO JavaDoc
+ *
  * @author Christian Autermann
  */
 public class ExecutionException extends Exception {
@@ -38,9 +39,8 @@ public class ExecutionException extends Exception {
         super(cause);
     }
 
-    protected ExecutionException(String message, Throwable cause,
-                              boolean enableSuppression,
-                              boolean writableStackTrace) {
+    protected ExecutionException(String message, Throwable cause, boolean enableSuppression,
+            boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

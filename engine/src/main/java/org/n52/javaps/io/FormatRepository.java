@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,10 +34,6 @@ public interface FormatRepository {
 
     Set<Format> getSupportedFormats(Class<? extends Data<?>> binding);
 
-    default Optional<Format> getDefaultFormat(Class<? extends Data<?>> binding) {
-        return getSupportedFormats(binding).stream().min(Comparator.naturalOrder());
-    }
-
     @SuppressWarnings("unchecked")
     default Set<Format> getSupportedFormats(Data<?> binding) {
         if (binding == null) {
@@ -45,5 +41,9 @@ public interface FormatRepository {
         } else {
             return getSupportedFormats((Class<? extends Data<?>>) binding.getClass());
         }
+    }
+
+    default Optional<Format> getDefaultFormat(Class<? extends Data<?>> binding) {
+        return getSupportedFormats(binding).stream().min(Comparator.naturalOrder());
     }
 }

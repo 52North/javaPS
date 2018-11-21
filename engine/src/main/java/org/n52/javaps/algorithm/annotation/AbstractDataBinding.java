@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,7 +30,8 @@ import com.google.common.primitives.Primitives;
  *
  * @author Tom Kunicki, Christian Autermann
  */
-abstract class AbstractDataBinding<M extends AccessibleObject & Member, D extends TypedDataDescription<?>> extends AnnotationBinding<M> {
+abstract class AbstractDataBinding<M extends AccessibleObject & Member, D extends TypedDataDescription<?>> extends
+        AnnotationBinding<M> {
 
     private D description;
 
@@ -64,7 +65,7 @@ abstract class AbstractDataBinding<M extends AccessibleObject & Member, D extend
         }
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     protected Object payloadToInput(Object payload) {
         Type type = getType();
         if (isEnum(type)) {
@@ -78,16 +79,16 @@ abstract class AbstractDataBinding<M extends AccessibleObject & Member, D extend
         return isEnum(getType());
     }
 
+    public static boolean isEnum(Type type) {
+        return (type instanceof Class<?>) && ((Class<?>) type).isEnum();
+    }
+
     public void setDescription(D description) {
         this.description = Objects.requireNonNull(description);
     }
 
     public D getDescription() {
         return description;
-    }
-
-    public static boolean isEnum(Type type) {
-        return (type instanceof Class<?>) && ((Class<?>) type).isEnum();
     }
 
 }

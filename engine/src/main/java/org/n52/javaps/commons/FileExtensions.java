@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,9 +38,8 @@ public class FileExtensions implements FileExtensionProvider {
         if (this.extensions.containsKey(mediaType)) {
             return this.extensions.get(mediaType);
         }
-        Optional<String> extension
-                = this.extensions.keySet().stream()
-                        .filter(x -> x.isCompatible(mediaType)).findAny().map(this.extensions::get);
+        Optional<String> extension = this.extensions.keySet().stream().filter(x -> x.isCompatible(mediaType)).findAny()
+                .map(this.extensions::get);
 
         if (extension.isPresent()) {
             return extension.get();
@@ -61,12 +60,11 @@ public class FileExtensions implements FileExtensionProvider {
     }
 
     public void setExtensionsByString(Map<String, String> extensions) {
-        setExtensionsByMediaType(extensions.entrySet().stream()
-                .collect(Collectors.toMap(x -> MediaType.parse(x.getKey()), Entry::getValue)));
+        setExtensionsByMediaType(extensions.entrySet().stream().collect(Collectors.toMap(x -> MediaType.parse(x
+                .getKey()), Entry::getValue)));
     }
 
     public void setExtensionsByMediaType(Map<MediaType, String> extensions) {
         this.extensions = Objects.requireNonNull(extensions);
     }
 }
-

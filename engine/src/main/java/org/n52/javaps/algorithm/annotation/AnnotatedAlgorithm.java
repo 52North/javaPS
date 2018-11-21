@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,22 +31,22 @@ import org.n52.javaps.io.literal.LiteralTypeRepository;
 
 public class AnnotatedAlgorithm extends AbstractAlgorithm {
     private static final Map<Class<?>, AnnotatedAlgorithmMetadata> CACHE = new ConcurrentHashMap<>();
+
     private final AnnotatedAlgorithmMetadata metadata;
+
     private final Object algorithmInstance;
 
     @Inject
-    public AnnotatedAlgorithm(InputHandlerRepository parserRepository,
-                              OutputHandlerRepository generatorRepository,
-                              LiteralTypeRepository literalTypeRepository) {
+    public AnnotatedAlgorithm(InputHandlerRepository parserRepository, OutputHandlerRepository generatorRepository,
+            LiteralTypeRepository literalTypeRepository) {
         this(parserRepository, generatorRepository, literalTypeRepository, null);
     }
 
     public AnnotatedAlgorithm(InputHandlerRepository parserRepository, OutputHandlerRepository generatorRepository,
-                              LiteralTypeRepository literalDataManager, Object algorithmInstance) {
+            LiteralTypeRepository literalDataManager, Object algorithmInstance) {
         this.algorithmInstance = algorithmInstance == null ? this : algorithmInstance;
-        this.metadata = CACHE
-                .computeIfAbsent(this.algorithmInstance.getClass(), c ->
-                        new AnnotatedAlgorithmMetadata(c, parserRepository, generatorRepository, literalDataManager));
+        this.metadata = CACHE.computeIfAbsent(this.algorithmInstance.getClass(), c -> new AnnotatedAlgorithmMetadata(c,
+                parserRepository, generatorRepository, literalDataManager));
     }
 
     @Override
@@ -56,8 +56,10 @@ public class AnnotatedAlgorithm extends AbstractAlgorithm {
 
     @Override
     public void execute(ProcessExecutionContext context) throws ExecutionException {
-        this.metadata.getInputBindings().forEach((id, binding) -> binding.set(this.algorithmInstance, context.getInputs().get(id)));
+        this.metadata.getInputBindings().forEach((id,
+                binding) -> binding.set(this.algorithmInstance, context.getInputs().get(id)));
         this.metadata.getExecuteBinding().execute(this.algorithmInstance);
-        this.metadata.getOutputBindings().forEach((id, binding) -> context.getOutputs().put(id, binding.get(this.algorithmInstance)));
+        this.metadata.getOutputBindings().forEach((id,
+                binding) -> context.getOutputs().put(id, binding.get(this.algorithmInstance)));
     }
 }

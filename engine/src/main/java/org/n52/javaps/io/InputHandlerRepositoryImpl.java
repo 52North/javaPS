@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,14 +33,14 @@ import org.n52.shetland.ogc.wps.Format;
  * @author foerster
  *
  */
-public class InputHandlerRepositoryImpl
-        extends AbstractInputOutputHandlerRepository<InputHandler>
-        implements InputHandlerRepository {
+public class InputHandlerRepositoryImpl extends AbstractInputOutputHandlerRepository<InputHandler> implements
+        InputHandlerRepository {
 
     private Set<Provider<InputHandler>> handlers;
 
     @Override
-    public Optional<InputHandler> getInputHandler(Format format, Class<? extends Data<?>> binding) {
+    public Optional<InputHandler> getInputHandler(Format format,
+            Class<? extends Data<?>> binding) {
         return getHandler(binding, format);
     }
 

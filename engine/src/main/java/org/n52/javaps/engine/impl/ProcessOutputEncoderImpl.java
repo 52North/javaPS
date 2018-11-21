@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +15,6 @@
  * limitations under the License.
  */
 package org.n52.javaps.engine.impl;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,17 +53,14 @@ public class ProcessOutputEncoderImpl implements ProcessOutputEncoder {
     @Override
     public List<ProcessData> create(EngineProcessExecutionContext context) throws OutputEncodingException {
         List<ProcessData> list = new ArrayList<>(context.getOutputs().size());
-        createData(context.getDescription(),
-                   context.getOutputDefinitions(),
-                   context.getOutputs(),
-                   list::add);
+        createData(context.getDescription(), context.getOutputDefinitions(), context.getOutputs(), list::add);
         return list;
     }
 
     private void createData(TypedProcessOutputDescriptionContainer description,
-                            Map<OwsCode, OutputDefinition> outputDefinitions,
-                            ProcessOutputs outputs,
-                            Consumer<ProcessData> sink) throws OutputEncodingException {
+            Map<OwsCode, OutputDefinition> outputDefinitions,
+            ProcessOutputs outputs,
+            Consumer<ProcessData> sink) throws OutputEncodingException {
         for (Entry<OwsCode, Data<?>> output : outputs.entrySet()) {
             OwsCode id = output.getKey();
             TypedProcessOutputDescription<?> outputDescription = description.getOutput(id);
@@ -80,27 +76,22 @@ public class ProcessOutputEncoderImpl implements ProcessOutputEncoder {
         }
     }
 
-
-
     private ProcessData createValueData(TypedProcessOutputDescription<?> outputDescription,
-                                        OutputDefinition outputDefinition, Data<?> data)
-            throws OutputEncodingException {
-        OutputHandler outputHandler = this.outputHandlerRepository
-                .getOutputHandler(outputDefinition.getFormat(), data)
+            OutputDefinition outputDefinition,
+            Data<?> data) throws OutputEncodingException {
+        OutputHandler outputHandler = this.outputHandlerRepository.getOutputHandler(outputDefinition.getFormat(), data)
                 .orElseThrow(noHandlerFound(outputDescription.getId()));
         return new GeneratingProcessData(outputDescription, outputDefinition, outputHandler, data);
     }
 
     private ProcessData createGroupData(TypedProcessOutputDescription<?> outputDescription,
-                                        OutputDefinition outputDefinition, Data<?> data)
-            throws OutputEncodingException {
+            OutputDefinition outputDefinition,
+            Data<?> data) throws OutputEncodingException {
         GroupProcessData groupProcessData = new GroupProcessData(outputDescription.getId());
         ProcessOutputs groupProcessOutputs = ((GroupOutputData) data).getPayload();
 
-        createData(outputDescription.asGroup(),
-                   outputDefinition.getOutputsById(),
-                   groupProcessOutputs,
-                   groupProcessData::addElement);
+        createData(outputDescription.asGroup(), outputDefinition.getOutputsById(), groupProcessOutputs,
+                groupProcessData::addElement);
 
         return groupProcessData;
     }

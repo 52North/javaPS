@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,11 +25,12 @@ import org.n52.javaps.engine.JobIdGenerator;
 import org.n52.javaps.algorithm.IAlgorithm;
 import org.n52.javaps.algorithm.ProcessInputs;
 
-
 public class UUIDJobIdGenerator implements JobIdGenerator {
 
     @Override
-    public JobId create(IAlgorithm algorithm, ProcessInputs inputs, List<OutputDefinition> outputs) {
+    public JobId create(IAlgorithm algorithm,
+            ProcessInputs inputs,
+            List<OutputDefinition> outputs) {
         return new JobId(UUID.randomUUID().toString());
     }
 

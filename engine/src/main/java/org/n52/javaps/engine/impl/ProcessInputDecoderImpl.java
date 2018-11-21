@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -56,23 +56,13 @@ public class ProcessInputDecoderImpl implements ProcessInputDecoder {
     }
 
     @Override
-    public ProcessInputs decode(TypedProcessDescription description, List<ProcessData> processInputs)
-            throws InputDecodingException {
+    public ProcessInputs decode(TypedProcessDescription description,
+            List<ProcessData> processInputs) throws InputDecodingException {
         return decodeContainer(description, processInputs);
     }
 
-    private ProcessInputs decodeContainer(TypedProcessInputDescriptionContainer description,
-                                          List<ProcessData> processInputs) throws InputDecodingException {
-
-        Map<OwsCode, List<Data<?>>> data = new HashMap<>(processInputs.size());
-        for (ProcessData input : processInputs) {
-            Data<?> decodedInput = decode(description.getInput(input.getId()), input);
-            data.computeIfAbsent(input.getId(), id -> new LinkedList<>()).add(decodedInput);
-        }
-        return new ProcessInputs(data);
-    }
-
-    private Data<?> decode(TypedProcessInputDescription<?> description, ProcessData input) throws InputDecodingException {
+    private Data<?> decode(TypedProcessInputDescription<?> description,
+            ProcessData input) throws InputDecodingException {
         if (input.isGroup()) {
             return decodeGroup(description.asGroup(), input.asGroup());
         } else if (input.isReference()) {
@@ -84,13 +74,24 @@ public class ProcessInputDecoderImpl implements ProcessInputDecoder {
         }
     }
 
-    private Data<?> decodeGroup(TypedGroupInputDescription description, GroupProcessData input)
-            throws InputDecodingException {
+    private ProcessInputs decodeContainer(TypedProcessInputDescriptionContainer description,
+            List<ProcessData> processInputs) throws InputDecodingException {
+
+        Map<OwsCode, List<Data<?>>> data = new HashMap<>(processInputs.size());
+        for (ProcessData input : processInputs) {
+            Data<?> decodedInput = decode(description.getInput(input.getId()), input);
+            data.computeIfAbsent(input.getId(), id -> new LinkedList<>()).add(decodedInput);
+        }
+        return new ProcessInputs(data);
+    }
+
+    private Data<?> decodeGroup(TypedGroupInputDescription description,
+            GroupProcessData input) throws InputDecodingException {
         return new GroupInputData(decodeContainer(description, input.getElements()));
     }
 
-    private Data<?> decodeReference(TypedProcessInputDescription<?> description, ReferenceProcessData input)
-            throws InputDecodingException {
+    private Data<?> decodeReference(TypedProcessInputDescription<?> description,
+            ReferenceProcessData input) throws InputDecodingException {
         ValueProcessData resolve;
         try {
             resolve = new ResolvableReferenceProcessData(input).resolve();
@@ -100,14 +101,13 @@ public class ProcessInputDecoderImpl implements ProcessInputDecoder {
         return decode(description, resolve);
     }
 
-    private Data<?> decodeValueInput(TypedProcessInputDescription<?> description, ValueProcessData input)
-            throws InputDecodingException {
+    private Data<?> decodeValueInput(TypedProcessInputDescription<?> description,
+            ValueProcessData input) throws InputDecodingException {
         Format format = input.getFormat();
         Class<? extends Data<?>> bindingType = description.getBindingType();
 
-        InputHandler handler = this.inputHandlerRepository
-                .getInputHandler(format, bindingType)
-                .orElseThrow(noHandlerFound(input.getId()));
+        InputHandler handler = this.inputHandlerRepository.getInputHandler(format, bindingType).orElseThrow(
+                noHandlerFound(input.getId()));
 
         try (InputStream data = input.getData()) {
             return handler.parse(description, data, format);

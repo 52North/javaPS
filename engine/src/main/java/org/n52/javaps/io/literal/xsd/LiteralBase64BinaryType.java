@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -39,7 +39,7 @@ public class LiteralBase64BinaryType extends AbstractXSDLiteralType<byte[]> {
         try {
             return BaseEncoding.base64().decode(value);
         } catch (IllegalArgumentException ex) {
-            throw  new DecodingException(ex);
+            throw new DecodingException(ex);
         }
     }
 

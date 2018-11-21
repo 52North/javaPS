@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,6 +26,8 @@ import org.n52.javaps.io.DecodingException;
 public class LiteralBooleanType extends AbstractXSDLiteralType<Boolean> {
 
     private static final long serialVersionUID = -3725729099095551317L;
+    private static final String TRUE = "true";
+    private static final String FALSE = "false";
 
     @Override
     public String getName() {
@@ -35,12 +37,12 @@ public class LiteralBooleanType extends AbstractXSDLiteralType<Boolean> {
     @Override
     public Boolean parse(String value) throws DecodingException {
         switch (value) {
-            case "true":
-                return true;
-            case "false":
-                return false;
-            default:
-                throw new DecodingException("value is not a valid boolean");
+        case TRUE:
+            return true;
+        case FALSE:
+            return false;
+        default:
+            throw new DecodingException("value is not a valid boolean");
         }
     }
 
@@ -51,7 +53,7 @@ public class LiteralBooleanType extends AbstractXSDLiteralType<Boolean> {
 
     @Override
     public String generate(Boolean value) {
-        return value ? "true" : "false";
+        return value ? TRUE : FALSE;
     }
 
 }

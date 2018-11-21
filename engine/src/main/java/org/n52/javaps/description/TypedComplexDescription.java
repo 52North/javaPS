@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,7 +24,8 @@ import org.n52.javaps.io.complex.ComplexData;
  *
  * @author Christian Autermann
  */
-public interface TypedComplexDescription extends ComplexDescription, TypedDataDescription<Class<? extends ComplexData<?>>> {
+public interface TypedComplexDescription extends ComplexDescription, TypedDataDescription<Class<? extends ComplexData<
+        ?>>> {
 
     @Override
     default Class<?> getPayloadType() {
@@ -36,13 +37,12 @@ public interface TypedComplexDescription extends ComplexDescription, TypedDataDe
     }
 
     @Override
-    public default Class<? extends Data<?>> getBindingType() {
+    default Class<? extends Data<?>> getBindingType() {
         return getType();
     }
 
-    interface Builder<T extends TypedComplexDescription, B extends Builder<T, B>>
-            extends ComplexDescription.Builder<T, B>,
-                    TypedDataDescription.Builder<Class<? extends ComplexData<?>>, T, B> {
+    interface Builder<T extends TypedComplexDescription, B extends Builder<T, B>> extends ComplexDescription.Builder<T,
+            B>, TypedDataDescription.Builder<Class<? extends ComplexData<?>>, T, B> {
     }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,12 +27,16 @@ import org.n52.javaps.description.TypedProcessInputDescription;
  * TODO JavaDoc
  *
  * @author Tom Kunicki, Christian Autermann
- * @param <A> the annotation type
- * @param <M> the accessible member type
- * @param <B> the binding type
+ * @param <A>
+ *            the annotation type
+ * @param <M>
+ *            the accessible member type
+ * @param <B>
+ *            the binding type
  */
-abstract class AbstractInputAnnotationParser<A extends Annotation, M extends AccessibleObject & Member, B extends AbstractInputBinding<M>>
-        extends AbstractDataAnnotationParser<A, M, TypedProcessInputDescription<?>, B> {
+abstract class AbstractInputAnnotationParser<A extends Annotation, M extends AccessibleObject & Member,
+        B extends AbstractInputBinding<M>> extends AbstractDataAnnotationParser<A, M, TypedProcessInputDescription<?>,
+                B> {
 
     AbstractInputAnnotationParser(Function<M, B> bindingFunction) {
         super(bindingFunction);

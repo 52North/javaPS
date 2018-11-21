@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,6 +29,7 @@ import org.n52.javaps.io.DecodingException;
 public class LiteralNormalizedStringType extends AbstractXSDLiteralType<String> {
 
     private static final long serialVersionUID = 4819263087679540611L;
+
     private static final Predicate<String> PATTERN = Pattern.compile("^[^\n\r\t]*$").asPredicate();
 
     @Override
@@ -50,7 +51,7 @@ public class LiteralNormalizedStringType extends AbstractXSDLiteralType<String> 
     }
 
     @Override
-    public String generate(String value)  {
+    public String generate(String value) {
         return value;
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +23,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Collections;
@@ -40,7 +39,6 @@ import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
 import org.apache.commons.codec.binary.Base64InputStream;
-
 import org.n52.iceland.util.XmlFactories;
 import org.n52.javaps.description.TypedLiteralInputDescription;
 import org.n52.javaps.description.TypedLiteralOutputDescription;
@@ -62,17 +60,25 @@ import com.google.common.io.CharStreams;
  */
 public class LiteralInputOutputHandler extends XmlFactories implements InputHandler, OutputHandler {
 
+    public static final Set<Format> FORMATS = Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(
+            Format.APPLICATION_XML, Format.TEXT_XML, Format.TEXT_PLAIN, Format.TEXT_PLAIN.withBase64Encoding())));
+
     private static final Set<Class<? extends Data<?>>> BINDINGS = Collections.singleton(LiteralData.class);
-    public static final Set<Format> FORMATS = Collections.unmodifiableSet(new LinkedHashSet<>(Arrays
-            .asList(Format.APPLICATION_XML, Format.TEXT_XML, Format.TEXT_PLAIN, Format.TEXT_PLAIN.withBase64Encoding())));
 
     private static final String NS_WPS = "wps";
+
     private static final String NS_WPS_URI = "http://www.opengis.net/wps/2.0";
+
     private static final String EN_LITERAL_VALUE = "LiteralValue";
+
     private static final String AN_UOM = "uom";
+
     private static final String AN_DATA_TYPE = "dataType";
+
     private static final QName QN_DATA_TYPE = new QName(AN_DATA_TYPE);
+
     private static final QName QN_UOM = new QName(AN_UOM);
+
     private static final QName QN_LITERAL_VALUE = new QName(NS_WPS_URI, EN_LITERAL_VALUE);
 
     @Override
@@ -86,8 +92,9 @@ public class LiteralInputOutputHandler extends XmlFactories implements InputHand
     }
 
     @Override
-    public Data<?> parse(TypedProcessInputDescription<?> description, InputStream input, Format format)
-            throws IOException, DecodingException {
+    public Data<?> parse(TypedProcessInputDescription<?> description,
+            InputStream input,
+            Format format) throws IOException, DecodingException {
         if (format.isXML()) {
             return parseXML(description.asLiteral(), input, format);
         } else if (format.isBase64()) {
@@ -97,8 +104,9 @@ public class LiteralInputOutputHandler extends XmlFactories implements InputHand
         }
     }
 
-    private LiteralData parsePlain(TypedLiteralInputDescription description, InputStream input, Format format)
-            throws IOException, DecodingException {
+    private LiteralData parsePlain(TypedLiteralInputDescription description,
+            InputStream input,
+            Format format) throws IOException, DecodingException {
         Charset charset = format.getEncodingAsCharsetOrDefault();
         try (InputStreamReader reader = new InputStreamReader(input, charset)) {
             String string = CharStreams.toString(reader);
@@ -106,8 +114,9 @@ public class LiteralInputOutputHandler extends XmlFactories implements InputHand
         }
     }
 
-    private LiteralData parseXML(TypedLiteralInputDescription description, InputStream input, Format format)
-            throws IOException, DecodingException {
+    private LiteralData parseXML(TypedLiteralInputDescription description,
+            InputStream input,
+            Format format) throws IOException, DecodingException {
         Charset charset = format.getEncodingAsCharsetOrDefault();
         try (Reader reader = new InputStreamReader(input, charset)) {
             return parseData(description, reader);
@@ -116,8 +125,8 @@ public class LiteralInputOutputHandler extends XmlFactories implements InputHand
         }
     }
 
-    private LiteralData parseData(TypedLiteralInputDescription description, Reader reader)
-            throws XMLStreamException, DecodingException {
+    private LiteralData parseData(TypedLiteralInputDescription description,
+            Reader reader) throws XMLStreamException, DecodingException {
         XMLEventReader xmlReader = inputFactory().createXMLEventReader(reader);
         while (xmlReader.hasNext()) {
             XMLEvent event = xmlReader.nextEvent();
@@ -125,10 +134,11 @@ public class LiteralInputOutputHandler extends XmlFactories implements InputHand
                 StartElement start = event.asStartElement();
                 if (start.getName().equals(QN_LITERAL_VALUE)) {
                     // TODO check data type?
-                    URI dataType = Optional.ofNullable(start.getAttributeByName(QN_DATA_TYPE)).map(Attribute::getValue)
-                            .map(URI::create).orElse(null);
-                    String uom = Optional.ofNullable(start.getAttributeByName(QN_UOM)).map(Attribute::getValue)
-                            .orElse(null);
+//                    URI dataType = Optional.ofNullable(start.getAttributeByName(QN_DATA_TYPE))
+//                            .map(Attribute::getValue)
+//                            .map(URI::create).orElse(null);
+                    String uom = Optional.ofNullable(start.getAttributeByName(QN_UOM)).map(Attribute::getValue).orElse(
+                            null);
                     return description.getType().parseToBinding(xmlReader.getElementText(), uom);
                 } else {
                     throw unexpectedTag(start);
@@ -139,8 +149,9 @@ public class LiteralInputOutputHandler extends XmlFactories implements InputHand
     }
 
     @Override
-    public InputStream generate(TypedProcessOutputDescription<?> description, Data<?> data, Format format)
-            throws IOException, EncodingException {
+    public InputStream generate(TypedProcessOutputDescription<?> description,
+            Data<?> data,
+            Format format) throws IOException, EncodingException {
         LiteralData literalData = (LiteralData) data;
         TypedLiteralOutputDescription literalDescription = description.asLiteral();
 
@@ -154,13 +165,15 @@ public class LiteralInputOutputHandler extends XmlFactories implements InputHand
         }
     }
 
-    private InputStream generatePlain(TypedLiteralOutputDescription description, LiteralData data, Format format)
-            throws EncodingException {
+    private InputStream generatePlain(TypedLiteralOutputDescription description,
+            LiteralData data,
+            Format format) throws EncodingException {
         return toStream(toString(description, data), format);
     }
 
-    private InputStream generateXML(TypedLiteralOutputDescription description, LiteralData data, Format format)
-            throws IOException, EncodingException {
+    private InputStream generateXML(TypedLiteralOutputDescription description,
+            LiteralData data,
+            Format format) throws IOException, EncodingException {
         try {
             StringWriter writer = new StringWriter();
             writeData(description, writer, data);
@@ -170,16 +183,17 @@ public class LiteralInputOutputHandler extends XmlFactories implements InputHand
         }
     }
 
-    private String toString(TypedLiteralOutputDescription description, LiteralData data)
-            throws EncodingException {
+    private String toString(TypedLiteralOutputDescription description,
+            LiteralData data) throws EncodingException {
         @SuppressWarnings("unchecked")
         LiteralType<Object> type = (LiteralType<Object>) description.getType();
         String value = type.generate(data.getPayload());
         return value;
     }
 
-    private void writeData(TypedLiteralOutputDescription description, Writer writer, LiteralData data)
-            throws XMLStreamException, EncodingException {
+    private void writeData(TypedLiteralOutputDescription description,
+            Writer writer,
+            LiteralData data) throws XMLStreamException, EncodingException {
         XMLStreamWriter xmlWriter = outputFactory().createXMLStreamWriter(writer);
         try {
             writeData(description, xmlWriter, data);
@@ -188,8 +202,9 @@ public class LiteralInputOutputHandler extends XmlFactories implements InputHand
         }
     }
 
-    private void writeData(TypedLiteralOutputDescription description, XMLStreamWriter writer, LiteralData data)
-            throws XMLStreamException, EncodingException {
+    private void writeData(TypedLiteralOutputDescription description,
+            XMLStreamWriter writer,
+            LiteralData data) throws XMLStreamException, EncodingException {
         writer.writeStartElement(NS_WPS, EN_LITERAL_VALUE, NS_WPS_URI);
         writer.writeNamespace(NS_WPS, NS_WPS_URI);
         writer.writeAttribute(AN_DATA_TYPE, description.getType().getURI().toString());
@@ -200,7 +215,8 @@ public class LiteralInputOutputHandler extends XmlFactories implements InputHand
         writer.writeEndElement();
     }
 
-    private static InputStream toStream(String value, Format format) {
+    private static InputStream toStream(String value,
+            Format format) {
         Charset charset = format.getEncodingAsCharsetOrDefault();
         return new ByteArrayInputStream(value.getBytes(charset));
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,8 +34,8 @@ import org.n52.svalbard.encode.stream.StreamWriterKey;
  *
  * @author Christian Autermann
  */
-public class ElementXmlStreamWriterRepository extends AbstractSimilarityKeyRepository<StreamWriterKey, ElementXmlStreamWriter>
-        implements Constructable {
+public class ElementXmlStreamWriterRepository extends AbstractSimilarityKeyRepository<StreamWriterKey,
+        ElementXmlStreamWriter> implements Constructable {
 
     private Collection<Provider<ElementXmlStreamWriter>> writers;
 
@@ -61,7 +61,8 @@ public class ElementXmlStreamWriterRepository extends AbstractSimilarityKeyRepos
         setProducers(this.writers);
     }
 
-    public Optional<ElementXmlStreamWriter> get(StreamWriterKey key, XmlStreamWritingContext ctx) {
+    public Optional<ElementXmlStreamWriter> get(StreamWriterKey key,
+            XmlStreamWritingContext ctx) {
         Optional<ElementXmlStreamWriter> writer = get(key);
         writer.ifPresent(x -> x.setContext(ctx));
         return writer;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,7 +24,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Christian Autermann
  */
-@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+@ResponseStatus(
+        value = HttpStatus.INTERNAL_SERVER_ERROR)
 public class InternalServerErrorException extends Exception {
     private static final long serialVersionUID = -7415058046118378940L;
 

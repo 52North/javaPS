@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -66,11 +66,16 @@ import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
 /**
  * @author Christian Autermann
  */
-public class ExecuteParameterValidator
-        implements ParameterValidator<ExecuteRequest> {
+public class ExecuteParameterValidator implements ParameterValidator<ExecuteRequest> {
     private static final String INPUT = "Input";
+
     private static final String IDENTIFIER = "Identifier";
+
     private static final String OUTPUT = "Output";
+
+    private static final String VALUE_INVALID = "The value '%s' of the parameter '%s' is invalid: %s";
+
+    private static final String UNSUPPORTED_FORMAT = "unsupported format";
 
     private final Engine engine;
 
@@ -103,8 +108,39 @@ public class ExecuteParameterValidator
         exception.throwIfNotEmpty();
     }
 
-    private void validateCardinalities(List<ProcessData> inputs, ProcessDescription description)
-            throws OwsExceptionReport {
+    private void validate(ExecuteRequest request,
+            ProcessDescription description) throws OwsExceptionReport {
+        CompositeOwsException exception = new CompositeOwsException();
+
+        if (request.getResponseMode() == ResponseMode.RAW && (request.getOutputs().size() > 1 || (request.getOutputs()
+                .isEmpty() && description.getOutputs().size() > 1))) {
+            exception.add(new InvalidParameterValueException().at("responseMode").withMessage(
+                    "The value 'raw' of the parameter 'responseMode' is invalid. Single output is required."));
+        }
+
+        try {
+            validateInputs(request.getInputs(), description);
+        } catch (OwsExceptionReport ex) {
+            exception.add(ex);
+        }
+
+        try {
+            validateOutputs(request.getOutputs(), description);
+        } catch (OwsExceptionReport ex) {
+            exception.add(ex);
+        }
+
+        try {
+            validateCardinalities(request.getInputs(), description);
+        } catch (OwsExceptionReport ex) {
+            exception.add(ex);
+        }
+
+        exception.throwIfNotEmpty();
+    }
+
+    private void validateCardinalities(List<ProcessData> inputs,
+            ProcessDescription description) throws OwsExceptionReport {
 
         CompositeOwsException exception = new CompositeOwsException();
 
@@ -113,30 +149,33 @@ public class ExecuteParameterValidator
         Map<Chain<OwsCode>, BigInteger> cardinalities = inputs.stream().collect(MoreCollectors.toCardinalities(
                 ProcessData::getId, ProcessData::isGroup, x -> x.asGroup().stream()));
 
-        Map<Chain<OwsCode>, InputOccurence> occurences = description.getInputDescriptions().stream()
-                .map(input -> input.visit(collector)).collect(HashMap::new, Map::putAll, Map::putAll);
+        Map<Chain<OwsCode>, InputOccurence> occurences = description.getInputDescriptions().stream().map(input -> input
+                .visit(collector)).collect(HashMap::new, Map::putAll, Map::putAll);
 
         // check the cardinalities of existing inputs
-        cardinalities.forEach((chain, cardinality)
-                -> // ignore if there is no cardinality, as this will be catched by another method
-                Optional.ofNullable(occurences.get(chain)).filter(occurence -> !occurence.isInBounds(cardinality))
-                .ifPresent(occurence -> exception.add(new InvalidParameterValueException().at(INPUT)
-                        .withMessage("The input %s has an invalid cardinality of %s; should be in %s.",
-                                     chain.toString(), cardinality, occurence))));
+        // ignore if there is no cardinality, as this
+        // will be catched by another method
+        cardinalities.forEach((chain,
+                cardinality) ->
+        Optional.ofNullable(occurences.get(chain)).filter(occurence -> !occurence.isInBounds(cardinality)).ifPresent(
+                occurence -> exception.add(new InvalidParameterValueException().at(INPUT).withMessage(
+                        "The input %s has an invalid cardinality of %s; should be in %s.", chain.toString(),
+                        cardinality, occurence))));
 
         // check for missing inputs
-        occurences.forEach((chain, occurence) -> {
+        occurences.forEach((chain,
+                occurence) -> {
             if (occurence.isRequired() && !cardinalities.containsKey(chain)) {
-                exception.add(new MissingParameterValueException().at(INPUT)
-                        .withMessage("The input %s is required", chain.toString()));
+                exception.add(new MissingParameterValueException().at(INPUT).withMessage("The input %s is required",
+                        chain.toString()));
             }
         });
 
         exception.throwIfNotEmpty();
     }
 
-    private void validateInputs(List<ProcessData> inputs, ProcessInputDescriptionContainer descriptions)
-            throws OwsExceptionReport {
+    private void validateInputs(List<ProcessData> inputs,
+            ProcessInputDescriptionContainer descriptions) throws OwsExceptionReport {
         CompositeOwsException exception = new CompositeOwsException();
         inputs.stream().forEach(input -> {
             try {
@@ -148,12 +187,12 @@ public class ExecuteParameterValidator
         exception.throwIfNotEmpty();
     }
 
-    private void validateOutputs(Collection<OutputDefinition> outputs, ProcessOutputDescriptionContainer processDescription)
-            throws OwsExceptionReport {
+    private void validateOutputs(Collection<OutputDefinition> outputs,
+            ProcessOutputDescriptionContainer processDescription) throws OwsExceptionReport {
         CompositeOwsException exception = new CompositeOwsException();
 
-        outputs.stream().map(OutputDefinition::getId).collect(MoreCollectors.toDuplicateStream())
-                .map(ExecuteParameterValidator::duplicateOutput).forEach(exception::add);
+        outputs.stream().map(OutputDefinition::getId).collect(MoreCollectors.toDuplicateStream()).map(
+                ExecuteParameterValidator::duplicateOutput).forEach(exception::add);
 
         for (OutputDefinition output : outputs) {
             ProcessOutputDescription description = processDescription.getOutput(output.getId());
@@ -183,16 +222,16 @@ public class ExecuteParameterValidator
         exception.throwIfNotEmpty();
     }
 
-    private void validateFormat(FormattedProcessData input, ProcessInputDescription inputDescription)
-            throws OwsExceptionReport {
+    private void validateFormat(FormattedProcessData input,
+            ProcessInputDescription inputDescription) throws OwsExceptionReport {
         if (!input.getFormat().isEmpty()) {
             inputDescription.visit(new InputFormatValidator(input));
         }
 
     }
 
-    private void validateInput(ReferenceProcessData input, ProcessInputDescription inputDescription)
-            throws OwsExceptionReport {
+    private void validateInput(ReferenceProcessData input,
+            ProcessInputDescription inputDescription) throws OwsExceptionReport {
         CompositeOwsException exception = new CompositeOwsException();
         if (input.getURI() == null) {
             exception.add(invalidInput(input, "missing input reference uri"));
@@ -205,13 +244,13 @@ public class ExecuteParameterValidator
         exception.throwIfNotEmpty();
     }
 
-    private void validateInput(ValueProcessData input, ProcessInputDescription inputDescription)
-            throws OwsExceptionReport {
+    private void validateInput(ValueProcessData input,
+            ProcessInputDescription inputDescription) throws OwsExceptionReport {
         validateFormat(input, inputDescription);
     }
 
-    private void validateInput(GroupProcessData input, ProcessInputDescription inputDescription)
-            throws OwsExceptionReport {
+    private void validateInput(GroupProcessData input,
+            ProcessInputDescription inputDescription) throws OwsExceptionReport {
         CompositeOwsException exception = new CompositeOwsException();
         if (!inputDescription.isGroup()) {
             exception.add(invalidInput(input, "input does not allow nested inputs"));
@@ -225,39 +264,8 @@ public class ExecuteParameterValidator
         exception.throwIfNotEmpty();
     }
 
-    private void validate(ExecuteRequest request, ProcessDescription description) throws OwsExceptionReport {
-        CompositeOwsException exception = new CompositeOwsException();
-
-        if (request.getResponseMode() == ResponseMode.RAW &&
-            (request.getOutputs().size() > 1 ||
-             (request.getOutputs().isEmpty() && description.getOutputs().size() > 1))) {
-            exception.add(new InvalidParameterValueException().at("responseMode")
-                    .withMessage("The value 'raw' of the parameter 'responseMode' is invalid. Single output is required."));
-        }
-
-        try {
-            validateInputs(request.getInputs(), description);
-        } catch (OwsExceptionReport ex) {
-            exception.add(ex);
-        }
-
-        try {
-            validateOutputs(request.getOutputs(), description);
-        } catch (OwsExceptionReport ex) {
-            exception.add(ex);
-        }
-
-        try {
-            validateCardinalities(request.getInputs(), description);
-        } catch (OwsExceptionReport ex) {
-            exception.add(ex);
-        }
-
-        exception.throwIfNotEmpty();
-    }
-
-    private void validateInput(ProcessData input, ProcessInputDescriptionContainer descriptions)
-            throws OwsExceptionReport {
+    private void validateInput(ProcessData input,
+            ProcessInputDescriptionContainer descriptions) throws OwsExceptionReport {
         ProcessInputDescription description = descriptions.getInput(input.getId());
         if (description == null) {
             throw invalidInput(input, "no input with the specified identifier");
@@ -270,23 +278,21 @@ public class ExecuteParameterValidator
         }
     }
 
-    private static OwsExceptionReport invalidInput(ProcessData input, String messageDetail) {
+    private static OwsExceptionReport invalidInput(ProcessData input,
+            String messageDetail) {
         String id = input.getId().getValue();
-        String message = "The value '%s' of the parameter '%s' is invalid: %s";
-        return new InvalidParameterValueException().at(INPUT)
-                .withMessage(message, id, INPUT, messageDetail);
+        return new InvalidParameterValueException().at(INPUT).withMessage(VALUE_INVALID, id, INPUT, messageDetail);
     }
 
-    private static OwsExceptionReport invalidOutput(OutputDefinition output, String messageDetail) {
+    private static OwsExceptionReport invalidOutput(OutputDefinition output,
+            String messageDetail) {
         String id = output.getId().getValue();
-        String message = "The value '%s' of the parameter '%s' is invalid: %s";
-        return new InvalidParameterValueException().at(OUTPUT)
-                .withMessage(message, id, OUTPUT, messageDetail);
+        return new InvalidParameterValueException().at(OUTPUT).withMessage(VALUE_INVALID, id, OUTPUT, messageDetail);
     }
 
     private static OwsExceptionReport duplicateOutput(OwsCode id) {
-        return new InvalidParameterValueException().at(OUTPUT)
-                .withMessage("Duplicate output definition for output %s", id);
+        return new InvalidParameterValueException().at(OUTPUT).withMessage("Duplicate output definition for output %s",
+                id);
     }
 
     private static class OutputFormatValidator implements ProcessOutputDescription.ThrowingVisitor<OwsExceptionReport> {
@@ -304,8 +310,8 @@ public class ExecuteParameterValidator
 
         @Override
         public void visit(ComplexOutputDescription description) throws OwsExceptionReport {
-            checkCompatibility(Stream.concat(Stream.of(description.getDefaultFormat()),
-                                             description.getSupportedFormats().stream()));
+            checkCompatibility(Stream.concat(Stream.of(description.getDefaultFormat()), description
+                    .getSupportedFormats().stream()));
         }
 
         @Override
@@ -319,7 +325,7 @@ public class ExecuteParameterValidator
         }
 
         private OwsExceptionReport unsupportedFormat() {
-            return invalidOutput(output, "unsupported format");
+            return invalidOutput(output, UNSUPPORTED_FORMAT);
         }
 
         private void checkCompatibility(Stream<Format> formats) throws OwsExceptionReport {
@@ -344,8 +350,8 @@ public class ExecuteParameterValidator
 
         @Override
         public void visit(ComplexInputDescription description) throws OwsExceptionReport {
-            checkCompatibility(Stream.concat(Stream.of(description.getDefaultFormat()),
-                                             description.getSupportedFormats().stream()));
+            checkCompatibility(Stream.concat(Stream.of(description.getDefaultFormat()), description
+                    .getSupportedFormats().stream()));
         }
 
         @Override
@@ -359,7 +365,7 @@ public class ExecuteParameterValidator
         }
 
         private OwsExceptionReport unsupportedFormat() {
-            return invalidInput(input, "unsupported format");
+            return invalidInput(input, UNSUPPORTED_FORMAT);
         }
 
         private void checkCompatibility(Stream<Format> formats) throws OwsExceptionReport {
@@ -369,8 +375,8 @@ public class ExecuteParameterValidator
         }
     }
 
-    private static class InputOccurenceCollector
-            implements ProcessInputDescription.ReturningVisitor<Map<Chain<OwsCode>, InputOccurence>> {
+    private static class InputOccurenceCollector implements ProcessInputDescription.ReturningVisitor<Map<Chain<OwsCode>,
+            InputOccurence>> {
         private final Optional<Chain<OwsCode>> parent;
 
         InputOccurenceCollector(Chain<OwsCode> parent) {
@@ -407,8 +413,7 @@ public class ExecuteParameterValidator
         }
 
         private Chain<OwsCode> getChain(ProcessInputDescription input) {
-            return this.parent.map(c -> c.child(input.getId()))
-                    .orElseGet(() -> new Chain<>(input.getId()));
+            return this.parent.map(c -> c.child(input.getId())).orElseGet(() -> new Chain<>(input.getId()));
         }
 
         private Map<Chain<OwsCode>, InputOccurence> visitNonGroup(ProcessInputDescription input) {

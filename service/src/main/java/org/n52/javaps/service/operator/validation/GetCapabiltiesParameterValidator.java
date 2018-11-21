@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,13 +23,15 @@ import org.n52.shetland.ogc.ows.service.GetCapabilitiesRequest;
 /**
  * @author Christian Autermann
  */
-public class GetCapabiltiesParameterValidator
-        implements ParameterValidator<GetCapabilitiesRequest> {
+public class GetCapabiltiesParameterValidator implements ParameterValidator<GetCapabilitiesRequest> {
 
     @Override
-    public void validate(GetCapabilitiesRequest request)
-            throws OwsExceptionReport {
-        /* TODO implement org.n52.javaps.operator.validation.GetCapabiltiesParameterValidator.validate() */
+    public void validate(GetCapabilitiesRequest request) throws OwsExceptionReport {
+        /*
+         * TODO implement
+         * org.n52.javaps.operator.validation.GetCapabiltiesParameterValidator.
+         * validate()
+         */
     }
 
 }

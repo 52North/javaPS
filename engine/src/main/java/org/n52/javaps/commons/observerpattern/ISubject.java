@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,11 +17,11 @@
 package org.n52.javaps.commons.observerpattern;
 
 public interface ISubject {
-    public void addObserver(IObserver o);
+    void addObserver(IObserver o);
 
-    public void removeObserver(IObserver o);
+    void removeObserver(IObserver o);
 
-    public Object getState();
+    Object getState();
 
-    public void update(Object state);
+    void update(Object state);
 }

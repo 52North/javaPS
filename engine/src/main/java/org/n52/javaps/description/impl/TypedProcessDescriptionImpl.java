@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,19 +30,16 @@ import org.n52.javaps.description.TypedProcessDescription;
 import org.n52.javaps.description.TypedProcessInputDescription;
 import org.n52.javaps.description.TypedProcessOutputDescription;
 
-public class TypedProcessDescriptionImpl
-        extends ProcessDescriptionImpl
-        implements TypedProcessDescription {
+public class TypedProcessDescriptionImpl extends ProcessDescriptionImpl implements TypedProcessDescription {
 
     public TypedProcessDescriptionImpl(AbstractBuilder<?, ?> builder) {
         super(builder);
     }
 
-    public TypedProcessDescriptionImpl(OwsCode id, OwsLanguageString title, OwsLanguageString abstrakt,
-                                       Set<OwsKeyword> keywords, Set<OwsMetadata> metadata,
-                                       Set<TypedProcessInputDescription<?>> inputs,
-                                       Set<TypedProcessOutputDescription<?>> outputs,
-                                       String version, boolean storeSupported, boolean statusSupported) {
+    public TypedProcessDescriptionImpl(OwsCode id, OwsLanguageString title, OwsLanguageString abstrakt, Set<
+            OwsKeyword> keywords, Set<OwsMetadata> metadata, Set<TypedProcessInputDescription<?>> inputs, Set<
+                    TypedProcessOutputDescription<?>> outputs, String version, boolean storeSupported,
+            boolean statusSupported) {
         super(id, title, abstrakt, keywords, metadata, inputs, outputs, version, storeSupported, statusSupported);
     }
 

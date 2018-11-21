@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,19 +26,25 @@ import org.n52.javaps.algorithm.annotation.LiteralOutput;
  *
  * @author Christian Autermann
  */
-@Algorithm(version = "1.0.0")
+@Algorithm(
+        version = "1.0.0")
 public class TestAlgorithm {
     private String input1;
+
     private String input2;
+
     private String output1;
+
     private String output2;
 
-    @LiteralInput(identifier = "input1")
+    @LiteralInput(
+            identifier = "input1")
     public void setInput1(String value) {
         this.input1 = value;
     }
 
-    @LiteralInput(identifier = "input2")
+    @LiteralInput(
+            identifier = "input2")
     public void setInput2(String value) {
         this.input2 = value;
     }
@@ -49,12 +55,14 @@ public class TestAlgorithm {
         this.output2 = input2;
     }
 
-    @LiteralOutput(identifier = "output1")
+    @LiteralOutput(
+            identifier = "output1")
     public String getOutput1() {
         return this.output1;
     }
 
-    @LiteralOutput(identifier = "output2")
+    @LiteralOutput(
+            identifier = "output2")
     public String getOutput2() {
         return this.output2;
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -51,17 +51,23 @@ public class LocalAlgorithmRepository implements AlgorithmRepository {
     private static final Logger LOG = LoggerFactory.getLogger(LocalAlgorithmRepository.class);
 
     private final Map<OwsCode, TypedProcessDescription> descriptions = new HashMap<>();
+
     private final Map<OwsCode, Supplier<IAlgorithm>> algorithms = new HashMap<>();
+
     private final InputHandlerRepository parserRepository;
+
     private final OutputHandlerRepository generatorRepository;
+
     private final LiteralTypeRepository literalTypeRepository;
+
     private final AutowireCapableBeanFactory beanFactory;
+
+    private final String duplicateAlgorithmId = "Duplicate algorithm identifier: {}";
 
     @Inject
     public LocalAlgorithmRepository(InputHandlerRepository parserRepository,
-                                    OutputHandlerRepository generatorRepository,
-                                    LiteralTypeRepository literalTypeRepository,
-                                    ApplicationContext applicationContext) {
+            OutputHandlerRepository generatorRepository, LiteralTypeRepository literalTypeRepository,
+            ApplicationContext applicationContext) {
         this.parserRepository = Objects.requireNonNull(parserRepository);
         this.generatorRepository = Objects.requireNonNull(generatorRepository);
         this.literalTypeRepository = Objects.requireNonNull(literalTypeRepository);
@@ -102,7 +108,7 @@ public class LocalAlgorithmRepository implements AlgorithmRepository {
         instantiate(clazz).ifPresent(instance -> {
             TypedProcessDescription description = instance.getDescription();
             if (this.descriptions.put(description.getId(), description) != null) {
-                LOG.warn("Duplicate algorithm identifier: {}", description.getId());
+                LOG.warn(duplicateAlgorithmId, description.getId());
             }
             Supplier<Error> error = () -> new Error("Could not instantiate algorithm " + description.getId());
             this.algorithms.put(description.getId(), () -> instantiate(clazz).orElseThrow(error));
@@ -115,7 +121,7 @@ public class LocalAlgorithmRepository implements AlgorithmRepository {
         Objects.requireNonNull(instance, "instance");
         TypedProcessDescription description = instance.getDescription();
         if (this.descriptions.put(description.getId(), description) != null) {
-            LOG.warn("Duplicate algorithm identifier: {}", description.getId());
+            LOG.warn(duplicateAlgorithmId, description.getId());
         }
         this.algorithms.put(description.getId(), () -> instance);
         LOG.info("Algorithm {} with id {} registered", instance, description.getId());
@@ -127,11 +133,29 @@ public class LocalAlgorithmRepository implements AlgorithmRepository {
             addAlgorithm((IAlgorithm) object);
         } else if (object instanceof Class<?>) {
             addAlgorithm((Class<?>) object);
-        } else if (object!=null && object.getClass().isAnnotationPresent(Algorithm.class)) {
+        } else if (object.getClass().isAnnotationPresent(Algorithm.class)) {
             addAlgorithm(new AnnotatedAlgorithm(parserRepository, generatorRepository, literalTypeRepository, object));
         } else {
             LOG.error("Could not add algorithm {}", object);
         }
+    }
+
+    public boolean removeAlgorithm(String identifier) {
+
+        OwsCode owsCode = new OwsCode(identifier);
+
+        return removeAlgorithm(owsCode);
+    }
+
+    public boolean removeAlgorithm(OwsCode identifier) {
+
+        Supplier<IAlgorithm> removedAlgorithm = this.algorithms.remove(identifier);
+
+        if (removedAlgorithm != null) {
+            return true;
+        }
+
+        return false;
     }
 
     private Optional<IAlgorithm> instantiate(Class<?> clazz) {
@@ -144,7 +168,8 @@ public class LocalAlgorithmRepository implements AlgorithmRepository {
         }
 
         if (clazz.isAnnotationPresent(Algorithm.class) && !(instance instanceof AnnotatedAlgorithm)) {
-            return Optional.of(new AnnotatedAlgorithm(parserRepository, generatorRepository, literalTypeRepository, instance));
+            return Optional.of(new AnnotatedAlgorithm(parserRepository, generatorRepository, literalTypeRepository,
+                    instance));
         } else if (instance instanceof IAlgorithm) {
             return Optional.of((IAlgorithm) instance);
         } else {

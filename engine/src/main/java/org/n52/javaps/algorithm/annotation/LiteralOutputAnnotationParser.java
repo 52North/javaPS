@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,8 +27,8 @@ import org.n52.javaps.description.impl.TypedProcessDescriptionFactory;
 import org.n52.javaps.io.literal.LiteralType;
 import org.n52.javaps.io.literal.LiteralTypeRepository;
 
-class LiteralOutputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractOutputBinding<M>>
-        extends AbstractOutputAnnotationParser<LiteralOutput, M, B> {
+class LiteralOutputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractOutputBinding<M>> extends
+        AbstractOutputAnnotationParser<LiteralOutput, M, B> {
 
     private final LiteralTypeRepository literalTypeRepository;
 
@@ -43,7 +43,8 @@ class LiteralOutputAnnotationParser<M extends AccessibleObject & Member, B exten
     }
 
     @SuppressWarnings("unchecked")
-    public LiteralType<?> getLiteralType(LiteralOutput annotation, B binding) {
+    public LiteralType<?> getLiteralType(LiteralOutput annotation,
+            B binding) {
         Type payloadType = binding.getPayloadType();
         Class<? extends LiteralType<?>> bindingType = (Class<? extends LiteralType<?>>) annotation.binding();
         if (payloadType instanceof Class<?>) {
@@ -55,18 +56,14 @@ class LiteralOutputAnnotationParser<M extends AccessibleObject & Member, B exten
 
     @Override
     @SuppressWarnings("unchecked")
-    public TypedLiteralOutputDescription createDescription(LiteralOutput annotation, B binding) {
+    public TypedLiteralOutputDescription createDescription(LiteralOutput annotation,
+            B binding) {
         LiteralType<?> bindingType = getLiteralType(annotation, binding);
         TypedProcessDescriptionFactory descriptionFactory = new TypedProcessDescriptionFactory();
-        return descriptionFactory.literalOutput()
-                .withTitle(annotation.title())
-                .withAbstract(annotation.abstrakt())
-                .withIdentifier(annotation.identifier())
-                .withDefaultLiteralDataDomain(descriptionFactory.literalDataDomain()
-                        .withDataType(bindingType.getDataType())
-                        .withUOM(annotation.uom()))
-                .withType(bindingType)
-                .build();
+        return descriptionFactory.literalOutput().withTitle(annotation.title()).withAbstract(annotation.abstrakt())
+                .withIdentifier(annotation.identifier()).withDefaultLiteralDataDomain(descriptionFactory
+                        .literalDataDomain().withDataType(bindingType.getDataType()).withUOM(annotation.uom()))
+                .withType(bindingType).build();
 
     }
 }

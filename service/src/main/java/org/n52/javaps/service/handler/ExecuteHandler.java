@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -56,11 +56,12 @@ import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
  *
  * @author Christian Autermann
  */
-public class ExecuteHandler extends AbstractEngineHandler
-        implements GenericOperationHandler<ExecuteRequest, ExecuteResponse> {
+public class ExecuteHandler extends AbstractEngineHandler implements GenericOperationHandler<ExecuteRequest,
+        ExecuteResponse> {
     private static final String IDENTIFIER = "Identifier";
-    private static final OperationHandlerKey KEY
-            = new OperationHandlerKey(WPSConstants.SERVICE, WPSConstants.Operations.Execute);
+
+    private static final OperationHandlerKey KEY = new OperationHandlerKey(WPSConstants.SERVICE,
+            WPSConstants.Operations.Execute);
 
     @Inject
     public ExecuteHandler(Engine engine) {
@@ -68,14 +69,14 @@ public class ExecuteHandler extends AbstractEngineHandler
     }
 
     @Override
-    public ExecuteResponse handle(ExecuteRequest request)
-            throws OwsExceptionReport {
+    public ExecuteResponse handle(ExecuteRequest request) throws OwsExceptionReport {
 
         String service = request.getService();
         String version = request.getVersion();
         JobId jobId;
         try {
-            jobId = getEngine().execute(request.getId(), request.getInputs(), request.getOutputs(), request.getResponseMode());
+            jobId = getEngine().execute(request.getId(), request.getInputs(), request.getOutputs(), request
+                    .getResponseMode());
         } catch (ProcessNotFoundException ex) {
             throw new InvalidParameterValueException(IDENTIFIER, request.getId().getValue());
         } catch (InputDecodingException ex) {
@@ -90,8 +91,7 @@ public class ExecuteHandler extends AbstractEngineHandler
                 if (request.getResponseMode() == ResponseMode.RAW) {
                     ProcessData data = response.getResult().get().getOutputs().iterator().next();
                     if (data.isValue()) {
-                        response.setContentType(data.asValue().getFormat()
-                                .getMimeType().map(MediaType::parse)
+                        response.setContentType(data.asValue().getFormat().getMimeType().map(MediaType::parse)
                                 .orElseGet(MediaType::new));
                     }
                 }
@@ -126,9 +126,10 @@ public class ExecuteHandler extends AbstractEngineHandler
     }
 
     @Override
-    protected Set<OwsDomain> getOperationParameters(String service, String version) {
-        Set<OwsValue> algorithmIdentifiers = getEngine().getProcessIdentifiers().stream()
-                .map(OwsCode::getValue).map(OwsValue::new).collect(toSet());
+    protected Set<OwsDomain> getOperationParameters(String service,
+            String version) {
+        Set<OwsValue> algorithmIdentifiers = getEngine().getProcessIdentifiers().stream().map(OwsCode::getValue).map(
+                OwsValue::new).collect(toSet());
         OwsPossibleValues possibleValues;
         if (algorithmIdentifiers.isEmpty()) {
             possibleValues = OwsNoValues.instance();

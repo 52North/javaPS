@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,7 +35,7 @@ import org.n52.svalbard.encode.stream.xml.AbstractSingleElementXmlStreamWriter;
  * @author Christian Autermann
  */
 public class OwsExceptionReportWriter extends AbstractSingleElementXmlStreamWriter<OwsExceptionReportResponse> {
-    private boolean includeStackTraceInExceptionReport = false;
+    private boolean includeStackTraceInExceptionReport;
 
     public OwsExceptionReportWriter() {
         super(OwsExceptionReportResponse.class);
@@ -49,17 +49,18 @@ public class OwsExceptionReportWriter extends AbstractSingleElementXmlStreamWrit
     public void write(OwsExceptionReportResponse response) throws XMLStreamException {
         element(OWSConstants.Elem.QN_EXCEPTION_REPORT, response.getOwsExceptionReport(), report -> {
             namespace(OWSConstants.NS_OWS_PREFIX, OWSConstants.NS_OWS);
-            schemaLocation(Collections.singleton(new SchemaLocation(OWSConstants.NS_OWS, XMLSchemaConstants.OWS20_SCHEMALOCTION)));
+            schemaLocation(Collections.singleton(new SchemaLocation(OWSConstants.NS_OWS,
+                    XMLSchemaConstants.OWS20_SCHEMALOCTION)));
             attr(OWSConstants.Attr.AN_VERSION, report.getVersion());
             for (CodedException exception : report.getExceptions()) {
                 element(OWSConstants.Elem.QN_EXCEPTION, exception, x -> {
                     attr(OWSConstants.Attr.AN_LOCATOR, Optional.ofNullable(x.getLocator()));
-                    attr(OWSConstants.Attr.AN_EXCEPTION_CODE, Optional.ofNullable(x.getCode())
-                         .orElse(OwsExceptionCode.NoApplicableCode).toString());
+                    attr(OWSConstants.Attr.AN_EXCEPTION_CODE, Optional.ofNullable(x.getCode()).orElse(
+                            OwsExceptionCode.NoApplicableCode).toString());
                     element(OWSConstants.Elem.QN_EXCEPTION_TEXT, Optional.ofNullable(x.getMessage()));
                     if (includeStackTraceInExceptionReport) {
                         element(OWSConstants.Elem.QN_EXCEPTION_TEXT, x, ex -> {
-                            chars("[EXEPTION]: \n");
+                            chars("[EXCEPTION]: \n");
                             ByteArrayOutputStream os = new ByteArrayOutputStream();
                             ex.printStackTrace(new PrintStream(os));
                             chars(os.toString());

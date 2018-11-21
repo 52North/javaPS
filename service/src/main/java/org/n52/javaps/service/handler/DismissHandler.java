@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,10 +38,10 @@ import org.n52.shetland.ogc.wps.response.DismissResponse;
  *
  * @author Christian Autermann
  */
-public class DismissHandler extends AbstractJobHandler
-        implements GenericOperationHandler<DismissRequest, DismissResponse> {
-    private static final OperationHandlerKey KEY
-            = new OperationHandlerKey(WPSConstants.SERVICE, WPSConstants.Operations.Dismiss);
+public class DismissHandler extends AbstractJobHandler implements GenericOperationHandler<DismissRequest,
+        DismissResponse> {
+    private static final OperationHandlerKey KEY = new OperationHandlerKey(WPSConstants.SERVICE,
+            WPSConstants.Operations.Dismiss);
 
     @Inject
     public DismissHandler(Engine engine) {
@@ -49,8 +49,7 @@ public class DismissHandler extends AbstractJobHandler
     }
 
     @Override
-    public DismissResponse handle(DismissRequest request)
-            throws OwsExceptionReport {
+    public DismissResponse handle(DismissRequest request) throws OwsExceptionReport {
         JobId jobId = request.getJobId();
         StatusInfo status;
         try {

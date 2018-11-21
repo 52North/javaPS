@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,6 +31,7 @@ import org.n52.javaps.io.DecodingException;
 public class LiteralLanguageType extends AbstractXSDLiteralType<Locale> {
 
     private static final long serialVersionUID = 2579631917686921792L;
+
     private static final Predicate<String> PATTERN = Pattern.compile("[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*").asPredicate();
 
     @Override

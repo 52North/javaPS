@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,10 +46,12 @@ public abstract class AbstractJobHandler extends AbstractEngineHandler {
     }
 
     @Override
-    protected Set<OwsDomain> getOperationParameters(String service, String version) {
+    protected Set<OwsDomain> getOperationParameters(String service,
+            String version) {
         OwsPossibleValues allowedValues;
         if (discloseJobIds) {
-            Set<OwsValue> values = getEngine().getJobIdentifiers().stream().map(JobId::getValue).map(OwsValue::new).collect(toSet());
+            Set<OwsValue> values = getEngine().getJobIdentifiers().stream().map(JobId::getValue).map(OwsValue::new)
+                    .collect(toSet());
             if (values.isEmpty()) {
                 allowedValues = OwsNoValues.instance();
             } else {

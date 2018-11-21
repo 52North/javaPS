@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,6 @@
  */
 package org.n52.javaps.io;
 
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -28,8 +27,8 @@ import javax.inject.Provider;
 
 import org.n52.shetland.ogc.wps.Format;
 
-public class OutputHandlerRepositoryImpl extends AbstractInputOutputHandlerRepository<OutputHandler>
-        implements OutputHandlerRepository {
+public class OutputHandlerRepositoryImpl extends AbstractInputOutputHandlerRepository<OutputHandler> implements
+        OutputHandlerRepository {
 
     private Set<Provider<OutputHandler>> handlers;
 
@@ -39,7 +38,8 @@ public class OutputHandlerRepositoryImpl extends AbstractInputOutputHandlerRepos
     }
 
     @Override
-    public Optional<OutputHandler> getOutputHandler(Format format, Class<? extends Data<?>> binding) {
+    public Optional<OutputHandler> getOutputHandler(Format format,
+            Class<? extends Data<?>> binding) {
         return getHandler(binding, format);
     }
 

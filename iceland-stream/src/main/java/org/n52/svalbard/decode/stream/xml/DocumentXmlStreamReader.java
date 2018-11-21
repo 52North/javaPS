@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +15,6 @@
  * limitations under the License.
  */
 package org.n52.svalbard.decode.stream.xml;
-
 
 import java.io.InputStream;
 import java.util.Set;
@@ -34,7 +33,6 @@ import org.n52.svalbard.decode.stream.MissingStreamReaderException;
 import org.n52.svalbard.decode.stream.StreamReader;
 import org.n52.svalbard.decode.stream.StreamReaderKey;
 
-
 /**
  * TODO JavaDoc
  *
@@ -49,8 +47,7 @@ public class DocumentXmlStreamReader extends XmlFactories implements StreamReade
         this.repository = delegate;
     }
 
-    private Object read(XMLEventReader reader)
-            throws XMLStreamException {
+    private Object read(XMLEventReader reader) throws XMLStreamException {
         Object object = null;
 
         while (reader.hasNext()) {
@@ -64,14 +61,22 @@ public class DocumentXmlStreamReader extends XmlFactories implements StreamReade
         throw eof();
     }
 
-    private Object readDocumentElement(XMLEventReader reader)
-            throws XMLStreamException {
+    @Override
+    public Object read(InputStream stream) throws OwsExceptionReport {
+        try {
+            return read(inputFactory().createXMLEventReader(stream));
+        } catch (XMLStreamException ex) {
+            throw new NoApplicableCodeException().causedBy(ex);
+        }
+    }
+
+    private Object readDocumentElement(XMLEventReader reader) throws XMLStreamException {
         while (reader.hasNext()) {
             if (reader.peek().isStartElement()) {
                 StartElement elem = reader.peek().asStartElement();
                 XmlStreamReaderKey key = new XmlStreamReaderKey(elem.getName());
-                return this.repository.get(key).orElseThrow(() -> new MissingStreamReaderException(key))
-                        .readElement(reader);
+                return this.repository.get(key).orElseThrow(() -> new MissingStreamReaderException(key)).readElement(
+                        reader);
             } else {
                 reader.next();
             }
@@ -82,15 +87,5 @@ public class DocumentXmlStreamReader extends XmlFactories implements StreamReade
     @Override
     public Set<StreamReaderKey> getKeys() {
         return repository.keys();
-    }
-
-    @Override
-    public Object read(InputStream stream)
-            throws OwsExceptionReport {
-        try {
-            return read(inputFactory().createXMLEventReader(stream));
-        } catch (XMLStreamException ex) {
-            throw new NoApplicableCodeException().causedBy(ex);
-        }
     }
 }

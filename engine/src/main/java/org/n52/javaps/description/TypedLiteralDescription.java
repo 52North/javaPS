@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,9 +40,8 @@ public interface TypedLiteralDescription extends LiteralDescription, TypedDataDe
 
     }
 
-    interface Builder<T extends TypedLiteralDescription, B extends Builder<T, B>>
-            extends LiteralDescription.Builder<T, B>,
-                    TypedDataDescription.Builder<LiteralType<?>, T, B> {
+    interface Builder<T extends TypedLiteralDescription, B extends Builder<T, B>> extends LiteralDescription.Builder<T,
+            B>, TypedDataDescription.Builder<LiteralType<?>, T, B> {
     }
 
 }

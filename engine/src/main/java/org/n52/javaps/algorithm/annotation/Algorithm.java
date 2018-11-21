@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,9 +32,14 @@ import java.lang.annotation.Target;
 @Documented
 public @interface Algorithm {
     String identifier() default "";
+
     String title() default "";
+
     String abstrakt() default "";
+
     String version();
+
     boolean storeSupported() default true;
+
     boolean statusSupported() default true;
 }

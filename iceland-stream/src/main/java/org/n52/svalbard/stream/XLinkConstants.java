@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,25 +26,37 @@ import javax.xml.namespace.QName;
 // TODO merge into W3CConstants
 public interface XLinkConstants {
     String NS_XLINK = "http://www.w3.org/1999/xlink";
-    String NS_XLINK_PREFIX = "xlink";
 
-    interface Attr {
-        String AN_HREF = "href";
-        QName QN_HREF = xlink(AN_HREF);
-        String AN_ROLE = "role";
-        QName QN_ROLE = xlink(AN_ROLE);
-        String AN_ARCROLE = "arcrole";
-        QName QN_ARCROLE = xlink(AN_ARCROLE);
-        String AN_TITLE = "title";
-        QName QN_TITLE = xlink(AN_TITLE);
-        String AN_SHOW = "show";
-        QName QN_SHOW = xlink(AN_SHOW);
-        String AN_ACTUATE = "actuate";
-        QName QN_ACTUATE = xlink(AN_ACTUATE);
-    }
+    String NS_XLINK_PREFIX = "xlink";
 
     static QName xlink(String element) {
         return new QName(NS_XLINK, element, NS_XLINK_PREFIX);
+    }
+
+    interface Attr {
+        String AN_HREF = "href";
+
+        QName QN_HREF = xlink(AN_HREF);
+
+        String AN_ROLE = "role";
+
+        QName QN_ROLE = xlink(AN_ROLE);
+
+        String AN_ARCROLE = "arcrole";
+
+        QName QN_ARCROLE = xlink(AN_ARCROLE);
+
+        String AN_TITLE = "title";
+
+        QName QN_TITLE = xlink(AN_TITLE);
+
+        String AN_SHOW = "show";
+
+        QName QN_SHOW = xlink(AN_SHOW);
+
+        String AN_ACTUATE = "actuate";
+
+        QName QN_ACTUATE = xlink(AN_ACTUATE);
     }
 
 }

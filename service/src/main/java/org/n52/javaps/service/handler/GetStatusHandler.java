@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,11 +40,10 @@ import org.n52.shetland.ogc.wps.response.GetStatusResponse;
  *
  * @author Christian Autermann
  */
-public class GetStatusHandler extends AbstractJobHandler
-        implements GenericOperationHandler<GetStatusRequest, GetStatusResponse> {
-    private static final OperationHandlerKey KEY
-            = new OperationHandlerKey(WPSConstants.SERVICE,
-                                      WPSConstants.Operations.GetStatus);
+public class GetStatusHandler extends AbstractJobHandler implements GenericOperationHandler<GetStatusRequest,
+        GetStatusResponse> {
+    private static final OperationHandlerKey KEY = new OperationHandlerKey(WPSConstants.SERVICE,
+            WPSConstants.Operations.GetStatus);
 
     @Inject
     public GetStatusHandler(Engine engine) {
@@ -52,8 +51,7 @@ public class GetStatusHandler extends AbstractJobHandler
     }
 
     @Override
-    public GetStatusResponse handle(GetStatusRequest request)
-            throws OwsExceptionReport {
+    public GetStatusResponse handle(GetStatusRequest request) throws OwsExceptionReport {
         String service = request.getService();
         String version = request.getVersion();
         JobId jobId = request.getJobId();

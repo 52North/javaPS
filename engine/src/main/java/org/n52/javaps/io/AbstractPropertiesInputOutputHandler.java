@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -56,9 +56,8 @@ public class AbstractPropertiesInputOutputHandler extends AbstractInputOutputHan
 
     private Set<Format> getFormatsFromProperties() {
         JsonNode node = getProperties().path("formats");
-        return StreamSupport.stream(node.spliterator(), false).map(this::parseFormat)
-                .filter(x -> !x.isEmpty())
-                .collect(toCollection(LinkedHashSet::new));
+        return StreamSupport.stream(node.spliterator(), false).map(this::parseFormat).filter(x -> !x.isEmpty()).collect(
+                toCollection(LinkedHashSet::new));
     }
 
     private Format parseFormat(JsonNode node) {

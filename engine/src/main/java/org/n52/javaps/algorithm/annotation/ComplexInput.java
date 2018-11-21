@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,11 +35,20 @@ import org.n52.javaps.io.complex.ComplexData;
 @Documented
 @SuppressWarnings("rawtypes")
 public @interface ComplexInput {
-    String identifier(); // identifier
+
+    // identifier
+    String identifier();
+
     String title() default "";
-    String abstrakt() default ""; // 'abstract' is java reserved keyword
+
+    // 'abstract' is java reserved keyword
+    String abstrakt() default "";
+
     long minOccurs() default 1;
+
     long maxOccurs() default 1;
+
     long maximumMegaBytes() default 0;
+
     Class<? extends ComplexData> binding();
 }

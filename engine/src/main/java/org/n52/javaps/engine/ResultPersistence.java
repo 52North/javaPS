@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +18,7 @@ package org.n52.javaps.engine;
 
 import java.util.Set;
 
+import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.shetland.ogc.wps.JobId;
 import org.n52.shetland.ogc.wps.Result;
 import org.n52.shetland.ogc.wps.StatusInfo;
@@ -38,4 +39,6 @@ public interface ResultPersistence {
     void save(EngineProcessExecutionContext context);
 
     Set<JobId> getJobIds();
+
+    Set<JobId> getJobIds(OwsCode processId);
 }

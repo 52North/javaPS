@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,10 +29,12 @@ import org.n52.shetland.ogc.wps.Format;
 public interface OutputHandlerRepository extends FormatRepository {
     Set<OutputHandler> getOutputHandlers();
 
-    Optional<OutputHandler> getOutputHandler(Format format, Class<? extends Data<?>> binding);
+    Optional<OutputHandler> getOutputHandler(Format format,
+            Class<? extends Data<?>> binding);
 
     @SuppressWarnings("unchecked")
-    default Optional<OutputHandler> getOutputHandler(Format format, Data<?> binding) {
+    default Optional<OutputHandler> getOutputHandler(Format format,
+            Data<?> binding) {
         return getOutputHandler(format, (Class<? extends Data<?>>) binding.getClass());
     }
 

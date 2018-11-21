@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,8 +31,8 @@ public interface TypedDataDescription<X> extends DataDescription {
 
     Class<? extends Data<?>> getBindingType();
 
-    interface Builder<X, T extends TypedDataDescription<X>, B extends Builder<X, T, B>>
-            extends DataDescription.Builder<T, B> {
+    interface Builder<X, T extends TypedDataDescription<X>, B extends Builder<X, T, B>> extends DataDescription.Builder<
+            T, B> {
         B withType(X type);
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,6 +25,7 @@ public interface Data<T> extends Serializable {
      * Inheriting classes shall indicate which class they support. For special
      * cases like Grass, it is recommended to Create your own wrapper class, for
      * e.g. a File in the file system.
+     *
      * @return the supported class
      */
     Class<?> getSupportedClass();

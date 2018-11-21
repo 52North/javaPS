@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,12 +44,12 @@ import org.n52.shetland.ogc.wps.response.DescribeProcessResponse;
  *
  * @author Christian Autermann
  */
-public class DescribeProcessHandler extends AbstractEngineHandler
-        implements GenericOperationHandler<DescribeProcessRequest, DescribeProcessResponse> {
+public class DescribeProcessHandler extends AbstractEngineHandler implements GenericOperationHandler<
+        DescribeProcessRequest, DescribeProcessResponse> {
     private static final String IDENTIFIER = "Identifier";
-    private static final OperationHandlerKey KEY
-            = new OperationHandlerKey(WPSConstants.SERVICE,
-                                      WPSConstants.Operations.DescribeProcess);
+
+    private static final OperationHandlerKey KEY = new OperationHandlerKey(WPSConstants.SERVICE,
+            WPSConstants.Operations.DescribeProcess);
 
     @Inject
     public DescribeProcessHandler(Engine engine) {
@@ -57,18 +57,12 @@ public class DescribeProcessHandler extends AbstractEngineHandler
     }
 
     @Override
-    public DescribeProcessResponse handle(DescribeProcessRequest request)
-            throws OwsExceptionReport {
+    public DescribeProcessResponse handle(DescribeProcessRequest request) throws OwsExceptionReport {
 
-        Set<ProcessOffering> offerings = request.getProcessIdentifier().stream()
-                        .map(getEngine()::getProcessDescription)
-                        .filter(Optional::isPresent).map(Optional::get)
-                        .map(ProcessOffering::new).collect(toSet());
+        Set<ProcessOffering> offerings = request.getProcessIdentifier().stream().map(getEngine()::getProcessDescription)
+                .filter(Optional::isPresent).map(Optional::get).map(ProcessOffering::new).collect(toSet());
 
-        return new DescribeProcessResponse(
-                request.getService(),
-                request.getVersion(),
-                new ProcessOfferings(offerings));
+        return new DescribeProcessResponse(request.getService(), request.getVersion(), new ProcessOfferings(offerings));
     }
 
     @Override
@@ -82,11 +76,14 @@ public class DescribeProcessHandler extends AbstractEngineHandler
     }
 
     @Override
-    protected Set<OwsDomain> getOperationParameters(String service, String version) {
+    protected Set<OwsDomain> getOperationParameters(String service,
+            String version) {
         Stream<OwsValue> specialIdentifiers = Stream.of(new OwsValue(DescribeProcessRequest.ALL_KEYWORD));
-        Stream<OwsValue> algorithmIdentifiers = getEngine().getProcessIdentifiers().stream().map(OwsCode::getValue).map(OwsValue::new);
-        OwsDomain identifierDomain = new OwsDomain(IDENTIFIER, new OwsAllowedValues(Stream.concat(specialIdentifiers, algorithmIdentifiers).collect(toSet())));
-        return Collections .singleton(identifierDomain);
+        Stream<OwsValue> algorithmIdentifiers = getEngine().getProcessIdentifiers().stream().map(OwsCode::getValue).map(
+                OwsValue::new);
+        OwsDomain identifierDomain = new OwsDomain(IDENTIFIER, new OwsAllowedValues(Stream.concat(specialIdentifiers,
+                algorithmIdentifiers).collect(toSet())));
+        return Collections.singleton(identifierDomain);
     }
 
     @Override

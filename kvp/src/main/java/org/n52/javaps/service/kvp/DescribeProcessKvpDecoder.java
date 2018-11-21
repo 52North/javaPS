@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,10 +28,8 @@ public class DescribeProcessKvpDecoder extends AbstractKvpDecoder<DescribeProces
     private static final String IDENTIFIER = "identifier";
 
     public DescribeProcessKvpDecoder() {
-        super(DescribeProcessRequest::new,
-              WPSConstants.SERVICE,
-              WPS200Constants.VERSION,
-              WPSConstants.Operations.DescribeProcess);
+        super(DescribeProcessRequest::new, WPSConstants.SERVICE, WPS200Constants.VERSION,
+                WPSConstants.Operations.DescribeProcess);
     }
 
     @Override
@@ -39,9 +37,10 @@ public class DescribeProcessKvpDecoder extends AbstractKvpDecoder<DescribeProces
         builder.add(IDENTIFIER, asList(DescribeProcessRequest::addProcessIdentifiers));
     }
 
-    protected <T> ThrowingBiConsumer<T, String, DecodingException> asOwsCode(
-            ThrowingBiConsumer<T, OwsCode, DecodingException> delegate) {
-        return (t, u) -> delegate.accept(t, new OwsCode(u));
+    protected <T> ThrowingBiConsumer<T, String, DecodingException> asOwsCode(ThrowingBiConsumer<T, OwsCode,
+            DecodingException> delegate) {
+        return (t,
+                u) -> delegate.accept(t, new OwsCode(u));
     }
 
 }

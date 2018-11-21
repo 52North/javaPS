@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,7 +31,8 @@ import org.n52.shetland.ogc.wps.Format;
  * TODO JavaDoc
  *
  * @author Christian Autermann
- * @param <T> the input output handler type
+ * @param <T>
+ *            the input output handler type
  */
 public abstract class AbstractInputOutputHandlerRepository<T extends InputOutputHandler> implements FormatRepository {
 
@@ -42,15 +43,14 @@ public abstract class AbstractInputOutputHandlerRepository<T extends InputOutput
 
     @Override
     public Set<Format> getSupportedFormats(Class<? extends Data<?>> binding) {
-        return stream()
-                .filter(g -> g.isSupportedBinding(binding))
-                .map(InputOutputHandler::getSupportedFormats)
-                .flatMap(Set::stream)
-                .collect(toSet());
+        return stream().filter(g -> g.isSupportedBinding(binding)).map(InputOutputHandler::getSupportedFormats).flatMap(
+                Set::stream).collect(toSet());
     }
 
-    protected Optional<T> getHandler(Class<? extends Data<?>> binding, Format format) {
-        // TODO: try a chaining approach, by calculation all permutations and look for matches.
+    protected Optional<T> getHandler(Class<? extends Data<?>> binding,
+            Format format) {
+        // TODO: try a chaining approach, by calculation all permutations and
+        // look for matches.
         return stream().filter(g -> g.isSupportedBinding(binding)).filter(g -> g.isSupportedFormat(format)).findFirst();
     }
 

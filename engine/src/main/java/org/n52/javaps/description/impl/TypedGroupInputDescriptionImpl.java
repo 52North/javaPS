@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,9 +34,9 @@ public class TypedGroupInputDescriptionImpl extends GroupInputDescriptionImpl im
         super(builder);
     }
 
-    public TypedGroupInputDescriptionImpl(OwsCode id, OwsLanguageString title, OwsLanguageString abstrakt,
-                                          Set<OwsKeyword> keywords, Set<OwsMetadata> metadata, InputOccurence occurence,
-                                          Set<TypedProcessInputDescription<?>> inputs) {
+    public TypedGroupInputDescriptionImpl(OwsCode id, OwsLanguageString title, OwsLanguageString abstrakt, Set<
+            OwsKeyword> keywords, Set<OwsMetadata> metadata, InputOccurence occurence, Set<TypedProcessInputDescription<
+                    ?>> inputs) {
         super(id, title, abstrakt, keywords, metadata, occurence, inputs);
     }
 

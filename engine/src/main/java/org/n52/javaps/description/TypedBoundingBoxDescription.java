@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,8 +25,8 @@ import org.n52.javaps.io.bbox.BoundingBoxData;
  *
  * @author Christian Autermann
  */
-public interface TypedBoundingBoxDescription extends BoundingBoxDescription,
-                                                     TypedDataDescription<Class<? extends BoundingBoxData>> {
+public interface TypedBoundingBoxDescription extends BoundingBoxDescription, TypedDataDescription<Class<
+        ? extends BoundingBoxData>> {
 
     @Override
     default Class<?> getPayloadType() {
@@ -39,12 +39,12 @@ public interface TypedBoundingBoxDescription extends BoundingBoxDescription,
     }
 
     @Override
-    public default Class<? extends BoundingBoxData> getType() {
+    default Class<? extends BoundingBoxData> getType() {
         return BoundingBoxData.class;
     }
 
-    interface Builder<T extends TypedBoundingBoxDescription, B extends Builder<T, B>>
-            extends BoundingBoxDescription.Builder<T, B> {
+    interface Builder<T extends TypedBoundingBoxDescription, B extends Builder<T, B>> extends
+            BoundingBoxDescription.Builder<T, B> {
 
     }
 

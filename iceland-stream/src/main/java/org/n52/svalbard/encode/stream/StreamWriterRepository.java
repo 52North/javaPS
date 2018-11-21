@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,9 +33,8 @@ import org.n52.janmayen.lifecycle.Constructable;
  *
  * @author Christian Autermann
  */
-public class StreamWriterRepository
-        extends AbstractSimilarityKeyRepository<StreamWriterKey, StreamWriter<?>>
-        implements Constructable {
+public class StreamWriterRepository extends AbstractSimilarityKeyRepository<StreamWriterKey, StreamWriter<?>> implements
+        Constructable {
 
     private Collection<Provider<StreamWriter<?>>> writers;
 
@@ -45,7 +44,8 @@ public class StreamWriterRepository
         setProducers(this.writers);
     }
 
-    public <T> Optional<StreamWriter<? super T>> getWriter(MediaType mediaType, Class<? extends T> type) {
+    public <T> Optional<StreamWriter<? super T>> getWriter(MediaType mediaType,
+            Class<? extends T> type) {
         return getWriter(new StreamWriterKey(type, mediaType));
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -48,21 +48,37 @@ import com.google.common.io.Resources;
 @RequestMapping("/info")
 public class InfoEndpoint {
     private static final Logger LOG = LoggerFactory.getLogger(InfoEndpoint.class);
+
     private static final String GIT_PROPERTIES_FILE = "/git.properties";
+
     private static final String VERSION_PROPERTIES_FILE = "/version.properties";
+
     private static final String TIME_PROPERTY = "git.build.time";
+
     private static final String COMMIT_PROPERTY = "git.commit.id";
+
     private static final String BRANCH_PROPERTY = "git.branch";
+
     private static final String VERSION_PROPERTY = "build.version";
+
     private static final String ENDPOINT = "endpoint";
+
     private static final String BRANCH = "branch";
+
     private static final String COMMIT = "commit";
+
     private static final String TIME = "time";
+
     private static final String VERSION = "version";
+
     private final String branch;
+
     private final String commit;
+
     private final String time;
+
     private final String version;
+
     private String serviceURL;
 
     public InfoEndpoint() {
@@ -87,15 +103,13 @@ public class InfoEndpoint {
     }
 
     @ResponseBody
-    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public String info() {
 
-        return Json.print(Json.nodeFactory().objectNode()
-                .put(ENDPOINT, this.serviceURL)
-                .put(BRANCH, this.branch)
-                .put(COMMIT, this.commit)
-                .put(TIME, this.time)
-                .put(VERSION, this.version));
+        return Json.print(Json.nodeFactory().objectNode().put(ENDPOINT, this.serviceURL).put(BRANCH, this.branch).put(
+                COMMIT, this.commit).put(TIME, this.time).put(VERSION, this.version));
     }
 
     private static Properties loadProperties(String path) {

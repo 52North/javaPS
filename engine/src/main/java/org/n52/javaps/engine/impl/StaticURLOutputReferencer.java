@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,7 +40,9 @@ import org.n52.shetland.ogc.ows.OwsCode;
 
 public class StaticURLOutputReferencer implements OutputReferencer {
     private final Logger LOG = LoggerFactory.getLogger(StaticURLOutputReferencer.class);
+
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
+
     private URI baseURI;
 
     @Override
@@ -54,8 +56,7 @@ public class StaticURLOutputReferencer implements OutputReferencer {
         }
 
         builder.pathSegment(identifier.getJobId().getValue());
-        identifier.getOutputId().stream().map(OwsCode::getValue)
-                .forEach(builder::pathSegment);
+        identifier.getOutputId().stream().map(OwsCode::getValue).forEach(builder::pathSegment);
         return builder.build().toUri();
     }
 

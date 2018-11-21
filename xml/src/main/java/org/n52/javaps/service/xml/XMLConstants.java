@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,8 +24,7 @@ package org.n52.javaps.service.xml;
 public interface XMLConstants {
 
     String XML_VERSION = "1.0";
+
     String XML_ENCODING = "UTF-8";
-
-
 
 }

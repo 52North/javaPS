@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,13 +31,13 @@ import org.n52.javaps.description.TypedProcessDescription;
 import org.n52.javaps.description.TypedProcessInputDescription;
 import org.n52.javaps.description.TypedProcessOutputDescription;
 
-
 /**
  * @author Bastian Schaeffer, University of Muenster
  *
  */
 public class RepositoryManager {
     private final Set<OwsCode> globalProcessIDs = Collections.synchronizedSet(new HashSet<>());
+
     private Set<AlgorithmRepository> repositories;
 
     private Stream<AlgorithmRepository> getRepositories() {
@@ -73,16 +73,19 @@ public class RepositoryManager {
         return getRepositories().filter(repo -> repo.containsAlgorithm(id)).findFirst();
     }
 
-    public Optional<TypedProcessInputDescription<?>> getInputForAlgorithm(OwsCode process, OwsCode input) {
+    public Optional<TypedProcessInputDescription<?>> getInputForAlgorithm(OwsCode process,
+            OwsCode input) {
         return getProcessDescription(process).map(x -> x.getInput(input));
 
     }
 
-    public Optional<TypedProcessOutputDescription<?>> getOutputForAlgorithm(OwsCode process, OwsCode output) {
+    public Optional<TypedProcessOutputDescription<?>> getOutputForAlgorithm(OwsCode process,
+            OwsCode output) {
         return getProcessDescription(process).map(x -> x.getOutput(output));
     }
 
-    public boolean registerAlgorithm(OwsCode id, AlgorithmRepository repository) {
+    public boolean registerAlgorithm(OwsCode id,
+            AlgorithmRepository repository) {
         return globalProcessIDs.add(id);
     }
 
