@@ -82,6 +82,7 @@ import com.google.common.io.CharStreams;
 public class WPSWriter extends AbstractOWSWriter {
 
     private static final String UNBOUNDED = "unbounded";
+    private static final String TRUE = "true";
 
     private final ConcreteOutputWriter concreteOutputWriter = new ConcreteOutputWriter();
 
@@ -176,7 +177,7 @@ public class WPSWriter extends AbstractOWSWriter {
             writeDataEncodingAttributes(format);
             attr(WPSConstants.Attr.AN_MAXIMUM_MEGABYTES, maximumMegabytes.map(BigInteger::toString));
             if (isDefaultFormat) {
-                attr(WPSConstants.Attr.AN_DEFAULT, "true");
+                attr(WPSConstants.Attr.AN_DEFAULT, TRUE);
             }
         });
     }
@@ -185,7 +186,7 @@ public class WPSWriter extends AbstractOWSWriter {
             boolean defaultDomain) throws XMLStreamException {
         element(WPSConstants.Elem.QN_LITERAL_DATA_DOMAIN, literalDataDomain, ldd -> {
             if (defaultDomain) {
-                attr(WPSConstants.Attr.AN_DEFAULT, "true");
+                attr(WPSConstants.Attr.AN_DEFAULT, TRUE);
             }
 
             OwsPossibleValues vd = ldd.getPossibleValues();
@@ -209,7 +210,7 @@ public class WPSWriter extends AbstractOWSWriter {
             writeFormats(BoundingBoxInputOutputHandler.FORMATS);
 
             element(WPSConstants.Elem.QN_SUPPORTED_CRS, x.getDefaultCRS(), crs -> {
-                attr(WPSConstants.Attr.AN_DEFAULT, "true");
+                attr(WPSConstants.Attr.AN_DEFAULT, TRUE);
                 chars(crs.getValue().toString());
             });
             for (OwsCRS crs : x.getSupportedCRS()) {

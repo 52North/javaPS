@@ -72,6 +72,10 @@ public class ExecuteParameterValidator implements ParameterValidator<ExecuteRequ
     private static final String IDENTIFIER = "Identifier";
 
     private static final String OUTPUT = "Output";
+    
+    private static final String VALUE_INVALID = "The value '%s' of the parameter '%s' is invalid: %s";
+    
+    private static final String UNSUPPORTED_FORMAT = "unsupported format";
 
     private final Engine engine;
 
@@ -104,6 +108,37 @@ public class ExecuteParameterValidator implements ParameterValidator<ExecuteRequ
         exception.throwIfNotEmpty();
     }
 
+    private void validate(ExecuteRequest request,
+            ProcessDescription description) throws OwsExceptionReport {
+        CompositeOwsException exception = new CompositeOwsException();
+
+        if (request.getResponseMode() == ResponseMode.RAW && (request.getOutputs().size() > 1 || (request.getOutputs()
+                .isEmpty() && description.getOutputs().size() > 1))) {
+            exception.add(new InvalidParameterValueException().at("responseMode").withMessage(
+                    "The value 'raw' of the parameter 'responseMode' is invalid. Single output is required."));
+        }
+
+        try {
+            validateInputs(request.getInputs(), description);
+        } catch (OwsExceptionReport ex) {
+            exception.add(ex);
+        }
+
+        try {
+            validateOutputs(request.getOutputs(), description);
+        } catch (OwsExceptionReport ex) {
+            exception.add(ex);
+        }
+
+        try {
+            validateCardinalities(request.getInputs(), description);
+        } catch (OwsExceptionReport ex) {
+            exception.add(ex);
+        }
+
+        exception.throwIfNotEmpty();
+    }
+
     private void validateCardinalities(List<ProcessData> inputs,
             ProcessDescription description) throws OwsExceptionReport {
 
@@ -118,9 +153,10 @@ public class ExecuteParameterValidator implements ParameterValidator<ExecuteRequ
                 .visit(collector)).collect(HashMap::new, Map::putAll, Map::putAll);
 
         // check the cardinalities of existing inputs
+        // ignore if there is no cardinality, as this
+        // will be catched by another method
         cardinalities.forEach((chain,
-                cardinality) -> // ignore if there is no cardinality, as this
-                                // will be catched by another method
+                cardinality) -> 
         Optional.ofNullable(occurences.get(chain)).filter(occurence -> !occurence.isInBounds(cardinality)).ifPresent(
                 occurence -> exception.add(new InvalidParameterValueException().at(INPUT).withMessage(
                         "The input %s has an invalid cardinality of %s; should be in %s.", chain.toString(),
@@ -228,37 +264,6 @@ public class ExecuteParameterValidator implements ParameterValidator<ExecuteRequ
         exception.throwIfNotEmpty();
     }
 
-    private void validate(ExecuteRequest request,
-            ProcessDescription description) throws OwsExceptionReport {
-        CompositeOwsException exception = new CompositeOwsException();
-
-        if (request.getResponseMode() == ResponseMode.RAW && (request.getOutputs().size() > 1 || (request.getOutputs()
-                .isEmpty() && description.getOutputs().size() > 1))) {
-            exception.add(new InvalidParameterValueException().at("responseMode").withMessage(
-                    "The value 'raw' of the parameter 'responseMode' is invalid. Single output is required."));
-        }
-
-        try {
-            validateInputs(request.getInputs(), description);
-        } catch (OwsExceptionReport ex) {
-            exception.add(ex);
-        }
-
-        try {
-            validateOutputs(request.getOutputs(), description);
-        } catch (OwsExceptionReport ex) {
-            exception.add(ex);
-        }
-
-        try {
-            validateCardinalities(request.getInputs(), description);
-        } catch (OwsExceptionReport ex) {
-            exception.add(ex);
-        }
-
-        exception.throwIfNotEmpty();
-    }
-
     private void validateInput(ProcessData input,
             ProcessInputDescriptionContainer descriptions) throws OwsExceptionReport {
         ProcessInputDescription description = descriptions.getInput(input.getId());
@@ -276,15 +281,13 @@ public class ExecuteParameterValidator implements ParameterValidator<ExecuteRequ
     private static OwsExceptionReport invalidInput(ProcessData input,
             String messageDetail) {
         String id = input.getId().getValue();
-        String message = "The value '%s' of the parameter '%s' is invalid: %s";
-        return new InvalidParameterValueException().at(INPUT).withMessage(message, id, INPUT, messageDetail);
+        return new InvalidParameterValueException().at(INPUT).withMessage(VALUE_INVALID, id, INPUT, messageDetail);
     }
 
     private static OwsExceptionReport invalidOutput(OutputDefinition output,
             String messageDetail) {
         String id = output.getId().getValue();
-        String message = "The value '%s' of the parameter '%s' is invalid: %s";
-        return new InvalidParameterValueException().at(OUTPUT).withMessage(message, id, OUTPUT, messageDetail);
+        return new InvalidParameterValueException().at(OUTPUT).withMessage(VALUE_INVALID, id, OUTPUT, messageDetail);
     }
 
     private static OwsExceptionReport duplicateOutput(OwsCode id) {
@@ -322,7 +325,7 @@ public class ExecuteParameterValidator implements ParameterValidator<ExecuteRequ
         }
 
         private OwsExceptionReport unsupportedFormat() {
-            return invalidOutput(output, "unsupported format");
+            return invalidOutput(output, UNSUPPORTED_FORMAT);
         }
 
         private void checkCompatibility(Stream<Format> formats) throws OwsExceptionReport {
@@ -362,7 +365,7 @@ public class ExecuteParameterValidator implements ParameterValidator<ExecuteRequ
         }
 
         private OwsExceptionReport unsupportedFormat() {
-            return invalidInput(input, "unsupported format");
+            return invalidInput(input, UNSUPPORTED_FORMAT);
         }
 
         private void checkCompatibility(Stream<Format> formats) throws OwsExceptionReport {

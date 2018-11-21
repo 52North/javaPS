@@ -35,7 +35,7 @@ import org.n52.svalbard.encode.stream.xml.AbstractSingleElementXmlStreamWriter;
  * @author Christian Autermann
  */
 public class OwsExceptionReportWriter extends AbstractSingleElementXmlStreamWriter<OwsExceptionReportResponse> {
-    private boolean includeStackTraceInExceptionReport = false;
+    private boolean includeStackTraceInExceptionReport;
 
     public OwsExceptionReportWriter() {
         super(OwsExceptionReportResponse.class);
@@ -60,7 +60,7 @@ public class OwsExceptionReportWriter extends AbstractSingleElementXmlStreamWrit
                     element(OWSConstants.Elem.QN_EXCEPTION_TEXT, Optional.ofNullable(x.getMessage()));
                     if (includeStackTraceInExceptionReport) {
                         element(OWSConstants.Elem.QN_EXCEPTION_TEXT, x, ex -> {
-                            chars("[EXEPTION]: \n");
+                            chars("[EXCEPTION]: \n");
                             ByteArrayOutputStream os = new ByteArrayOutputStream();
                             ex.printStackTrace(new PrintStream(os));
                             chars(os.toString());

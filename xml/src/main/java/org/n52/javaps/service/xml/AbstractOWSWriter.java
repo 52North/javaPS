@@ -72,6 +72,8 @@ import com.google.common.base.Strings;
  */
 public abstract class AbstractOWSWriter extends AbstractMultiElementXmlStreamWriter {
 
+    private static final String XML_LANG = "xml:lang";
+    
     public AbstractOWSWriter(Class<?>... supportedClasses) {
         super(supportedClasses);
     }
@@ -108,10 +110,17 @@ public abstract class AbstractOWSWriter extends AbstractMultiElementXmlStreamWri
             OwsLanguageString value) throws XMLStreamException {
         element(name, value, x -> {
             if (x.getLang().isPresent()) {
-                attr("xml:lang", x.getLang().get());
+                attr(XML_LANG, x.getLang().get());
             }
             chars(x.getValue());
         });
+    }
+
+    protected void writeLanguageString(QName name,
+            Optional<OwsLanguageString> value) throws XMLStreamException {
+        if (value.isPresent()) {
+            writeLanguageString(name, value.get());
+        }
     }
 
     protected void writeDomainMetadata(QName name,
@@ -136,13 +145,6 @@ public abstract class AbstractOWSWriter extends AbstractMultiElementXmlStreamWri
         }
     }
 
-    protected void writeLanguageString(QName name,
-            Optional<OwsLanguageString> value) throws XMLStreamException {
-        if (value.isPresent()) {
-            writeLanguageString(name, value.get());
-        }
-    }
-
     protected void writeMultilingualString(QName name,
             MultilingualString ms) throws XMLStreamException {
         forEach(name, ms, ls -> {
@@ -152,7 +154,7 @@ public abstract class AbstractOWSWriter extends AbstractMultiElementXmlStreamWri
     }
 
     protected void langAttr(Locale lang) throws XMLStreamException {
-        attr("xml:lang", Optional.of(Strings.emptyToNull(LocaleHelper.encode(lang))));
+        attr(XML_LANG, Optional.of(Strings.emptyToNull(LocaleHelper.encode(lang))));
     }
 
     protected void writeCode(QName name,

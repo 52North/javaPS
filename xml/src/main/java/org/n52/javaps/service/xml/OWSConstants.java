@@ -28,7 +28,11 @@ public interface OWSConstants {
 
     String NS_OWS_PREFIX = "ows";
 
-    public static interface Attr {
+    static QName ows(String element) {
+        return new QName(NS_OWS, element, NS_OWS_PREFIX);
+    }
+
+    public interface Attr {
         String AN_ABOUT = "about";
 
         QName QN_ABOUT = ows(AN_ABOUT);
@@ -86,7 +90,7 @@ public interface OWSConstants {
         QName QN_VERSION = ows(AN_VERSION);
     }
 
-    public static interface Elem {
+    public interface Elem {
         String EN_ABSTRACT = "Abstract";
 
         QName QN_ABSTRACT = ows(EN_ABSTRACT);
@@ -478,10 +482,6 @@ public interface OWSConstants {
         String EN_WGS84_BOUNDING_BOX = "WGS84BoundingBox";
 
         QName QN_WGS84_BOUNDING_BOX = ows(EN_WGS84_BOUNDING_BOX);
-    }
-
-    static QName ows(String element) {
-        return new QName(NS_OWS, element, NS_OWS_PREFIX);
     }
 
 }

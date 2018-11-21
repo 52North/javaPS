@@ -28,7 +28,11 @@ public interface WPSConstants {
 
     String NS_WPS_PREFIX = "wps";
 
-    public static interface Attr {
+    static QName wps(String element) {
+        return new QName(NS_WPS, element, NS_WPS_PREFIX);
+    }
+
+    public interface Attr {
         String AN_DATA_TYPE = "dataType";
 
         QName QN_DATA_TYPE = wps(AN_DATA_TYPE);
@@ -98,7 +102,7 @@ public interface WPSConstants {
         QName QN_VERSION = wps(AN_VERSION);
     }
 
-    public static interface Elem {
+    public interface Elem {
         String EN_BODY = "Body";
 
         QName QN_BODY = wps(EN_BODY);
@@ -242,10 +246,6 @@ public interface WPSConstants {
         String EN_SUPPORTED_CRS = "SupportedCRS";
 
         QName QN_SUPPORTED_CRS = wps(EN_SUPPORTED_CRS);
-    }
-
-    static QName wps(String element) {
-        return new QName(NS_WPS, element, NS_WPS_PREFIX);
     }
 
 }
