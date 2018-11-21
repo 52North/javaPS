@@ -29,19 +29,10 @@ import org.n52.javaps.description.TypedLiteralInputDescription;
 import org.n52.javaps.description.TypedLiteralOutputDescription;
 import org.n52.javaps.description.TypedProcessDescription;
 
-public class TypedProcessDescriptionFactory implements ProcessDescriptionBuilderFactory
-        <
-            TypedProcessDescription,
-            TypedGroupInputDescription,
-            TypedGroupOutputDescription,
-            TypedLiteralInputDescription,
-            TypedLiteralOutputDescription,
-            TypedComplexInputDescription,
-            TypedComplexOutputDescription,
-            TypedBoundingBoxInputDescription,
-            TypedBoundingBoxOutputDescription,
-            LiteralDataDomain
-        > {
+public class TypedProcessDescriptionFactory implements ProcessDescriptionBuilderFactory<TypedProcessDescription,
+        TypedGroupInputDescription, TypedGroupOutputDescription, TypedLiteralInputDescription,
+        TypedLiteralOutputDescription, TypedComplexInputDescription, TypedComplexOutputDescription,
+        TypedBoundingBoxInputDescription, TypedBoundingBoxOutputDescription, LiteralDataDomain> {
 
     @Override
     public TypedProcessDescriptionImpl.Builder process() {
@@ -79,7 +70,7 @@ public class TypedProcessDescriptionFactory implements ProcessDescriptionBuilder
     }
 
     @Override
-    public  TypedBoundingBoxInputDescriptionImpl.Builder boundingBoxInput() {
+    public TypedBoundingBoxInputDescriptionImpl.Builder boundingBoxInput() {
         return new TypedBoundingBoxInputDescriptionImpl.Builder();
     }
 

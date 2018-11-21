@@ -44,10 +44,10 @@ import org.n52.shetland.ogc.wps.response.GetResultResponse;
  *
  * @author Christian Autermann
  */
-public class GetResultHandler extends AbstractJobHandler
-        implements GenericOperationHandler<GetResultRequest, GetResultResponse> {
-    private static final OperationHandlerKey KEY
-            = new OperationHandlerKey(WPSConstants.SERVICE, WPSConstants.Operations.GetResult);
+public class GetResultHandler extends AbstractJobHandler implements GenericOperationHandler<GetResultRequest,
+        GetResultResponse> {
+    private static final OperationHandlerKey KEY = new OperationHandlerKey(WPSConstants.SERVICE,
+            WPSConstants.Operations.GetResult);
 
     @Inject
     public GetResultHandler(Engine engine) {
@@ -55,8 +55,7 @@ public class GetResultHandler extends AbstractJobHandler
     }
 
     @Override
-    public GetResultResponse handle(GetResultRequest request)
-            throws OwsExceptionReport {
+    public GetResultResponse handle(GetResultRequest request) throws OwsExceptionReport {
 
         String service = request.getService();
         String version = request.getVersion();

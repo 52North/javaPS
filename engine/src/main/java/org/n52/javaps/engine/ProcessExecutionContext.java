@@ -40,15 +40,15 @@ public interface ProcessExecutionContext {
 
     Optional<OutputDefinition> getOutputDefinition(OwsCode output);
 
+    default Optional<OutputDefinition> getOutputDefinition(String output) {
+        return getOutputDefinition(new OwsCode(output));
+    }
+
     void setPercentCompleted(Short percentCompleted);
 
     void setEstimatedCompletion(OffsetDateTime estimatedCompletion);
 
     void setNextPoll(OffsetDateTime nextPoll);
-
-    default Optional<OutputDefinition> getOutputDefinition(String output) {
-        return getOutputDefinition(new OwsCode(output));
-    }
 
     default boolean hasOutputDefinition(String output) {
         return hasOutputDefinition(new OwsCode(output));

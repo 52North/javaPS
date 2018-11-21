@@ -40,7 +40,9 @@ import org.n52.shetland.ogc.ows.OwsCode;
 
 public class StaticURLOutputReferencer implements OutputReferencer {
     private final Logger LOG = LoggerFactory.getLogger(StaticURLOutputReferencer.class);
+
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
+
     private URI baseURI;
 
     @Override
@@ -54,8 +56,7 @@ public class StaticURLOutputReferencer implements OutputReferencer {
         }
 
         builder.pathSegment(identifier.getJobId().getValue());
-        identifier.getOutputId().stream().map(OwsCode::getValue)
-                .forEach(builder::pathSegment);
+        identifier.getOutputId().stream().map(OwsCode::getValue).forEach(builder::pathSegment);
         return builder.build().toUri();
     }
 

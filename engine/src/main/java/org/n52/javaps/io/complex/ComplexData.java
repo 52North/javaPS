@@ -21,5 +21,6 @@ import org.n52.javaps.io.Data;
 
 public interface ComplexData<T> extends Data<T>, Destroyable {
     @Override
-    default void destroy() { }
+    default void destroy() {
+    }
 }

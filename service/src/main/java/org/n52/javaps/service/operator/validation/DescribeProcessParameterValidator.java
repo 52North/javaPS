@@ -46,8 +46,8 @@ public class DescribeProcessParameterValidator extends EngineParameterValidator<
 
     private void checkIdentifiers(List<OwsCode> identifiers) throws OwsExceptionReport {
         CompositeOwsException exception = new CompositeOwsException();
-        identifiers.stream().map(this::checkIdentifier).filter(Optional::isPresent).map(Optional::get)
-                .forEach(exception::add);
+        identifiers.stream().map(this::checkIdentifier).filter(Optional::isPresent).map(Optional::get).forEach(
+                exception::add);
         exception.throwIfNotEmpty();
     }
 
@@ -62,8 +62,7 @@ public class DescribeProcessParameterValidator extends EngineParameterValidator<
     }
 
     private boolean isAll(OwsCode id) {
-        return !id.getCodeSpace().isPresent() &&
-               id.getValue().equals(DescribeProcessRequest.ALL_KEYWORD);
+        return !id.getCodeSpace().isPresent() && id.getValue().equals(DescribeProcessRequest.ALL_KEYWORD);
     }
 
 }

@@ -27,6 +27,5 @@ import org.n52.shetland.ogc.wps.data.ProcessData;
  */
 public interface ProcessOutputEncoder {
 
-    List<ProcessData> create(EngineProcessExecutionContext context)
-            throws OutputEncodingException;
+    List<ProcessData> create(EngineProcessExecutionContext context) throws OutputEncodingException;
 }

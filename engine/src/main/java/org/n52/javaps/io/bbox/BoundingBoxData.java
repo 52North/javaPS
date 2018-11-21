@@ -22,7 +22,7 @@ import org.n52.javaps.io.Data;
 public final class BoundingBoxData implements Data<OwsBoundingBox> {
     private static final long serialVersionUID = -3219612972795621553L;
 
-    private final OwsBoundingBox boundingBox;
+    private transient OwsBoundingBox boundingBox;
 
     public BoundingBoxData(OwsBoundingBox boundingBox) {
         this.boundingBox = boundingBox;

@@ -23,7 +23,9 @@ import org.n52.javaps.io.Data;
 
 public final class LiteralData implements Data<Object> {
     private static final long serialVersionUID = -7088293056427203440L;
-    private Optional<String> unitOfMeasurement;
+
+    private transient Optional<String> unitOfMeasurement;
+
     private final Object payload;
 
     public LiteralData(Object payload) {

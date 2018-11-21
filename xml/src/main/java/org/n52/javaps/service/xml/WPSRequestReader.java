@@ -62,13 +62,11 @@ import org.n52.svalbard.stream.XLinkConstants;
  */
 public class WPSRequestReader extends AbstractElementXmlStreamReader {
 
-    private static final HashSet<XmlStreamReaderKey> KEYS
-            = new HashSet<>(Arrays.asList(new XmlStreamReaderKey(WPSConstants.Elem.QN_GET_STATUS),
-                    new XmlStreamReaderKey(WPSConstants.Elem.QN_DISMISS),
-                    new XmlStreamReaderKey(WPSConstants.Elem.QN_DESCRIBE_PROCESS),
-                    new XmlStreamReaderKey(WPSConstants.Elem.QN_EXECUTE),
-                    new XmlStreamReaderKey(WPSConstants.Elem.QN_GET_CAPABILITIES),
-                    new XmlStreamReaderKey(WPSConstants.Elem.QN_GET_RESULT)));
+    private static final HashSet<XmlStreamReaderKey> KEYS = new HashSet<>(Arrays.asList(new XmlStreamReaderKey(
+            WPSConstants.Elem.QN_GET_STATUS), new XmlStreamReaderKey(WPSConstants.Elem.QN_DISMISS),
+            new XmlStreamReaderKey(WPSConstants.Elem.QN_DESCRIBE_PROCESS), new XmlStreamReaderKey(
+                    WPSConstants.Elem.QN_EXECUTE), new XmlStreamReaderKey(WPSConstants.Elem.QN_GET_CAPABILITIES),
+            new XmlStreamReaderKey(WPSConstants.Elem.QN_GET_RESULT)));
 
     @Override
     public Set<StreamReaderKey> getKeys() {
@@ -76,8 +74,7 @@ public class WPSRequestReader extends AbstractElementXmlStreamReader {
     }
 
     @Override
-    public OwsServiceRequest readElement(XMLEventReader reader)
-            throws XMLStreamException {
+    public OwsServiceRequest readElement(XMLEventReader reader) throws XMLStreamException {
         while (reader.hasNext()) {
             XMLEvent event = reader.nextEvent();
             if (event.isStartElement()) {
@@ -103,8 +100,7 @@ public class WPSRequestReader extends AbstractElementXmlStreamReader {
     }
 
     private GetStatusRequest readGetStatusRequest(StartElement elem,
-                                                  XMLEventReader reader)
-            throws XMLStreamException {
+            XMLEventReader reader) throws XMLStreamException {
         GetStatusRequest request = new GetStatusRequest();
 
         readServiceAndVersion(elem, request);
@@ -125,20 +121,19 @@ public class WPSRequestReader extends AbstractElementXmlStreamReader {
         throw eof();
     }
 
-    private JobId readJobId(StartElement elem, XMLEventReader reader)
-            throws XMLStreamException {
+    private JobId readJobId(StartElement elem,
+            XMLEventReader reader) throws XMLStreamException {
         return new JobId(reader.getElementText());
     }
 
     private void readServiceAndVersion(StartElement elem,
-                                       OwsServiceRequest request) {
+            OwsServiceRequest request) {
         getAttribute(elem, WPSConstants.Attr.AN_SERVICE).ifPresent(request::setService);
         getAttribute(elem, WPSConstants.Attr.AN_VERSION).ifPresent(request::setVersion);
     }
 
     private DismissRequest readDismissRequest(StartElement elem,
-                                              XMLEventReader reader)
-            throws XMLStreamException {
+            XMLEventReader reader) throws XMLStreamException {
         DismissRequest request = new DismissRequest();
         readServiceAndVersion(elem, request);
 
@@ -159,8 +154,7 @@ public class WPSRequestReader extends AbstractElementXmlStreamReader {
     }
 
     private DescribeProcessRequest readDescribeProcessRequest(StartElement elem,
-                                                              XMLEventReader reader)
-            throws XMLStreamException {
+            XMLEventReader reader) throws XMLStreamException {
         DescribeProcessRequest request = new DescribeProcessRequest();
         readServiceAndVersion(elem, request);
 
@@ -181,8 +175,7 @@ public class WPSRequestReader extends AbstractElementXmlStreamReader {
     }
 
     private GetResultRequest readGetResultRequest(StartElement elem,
-                                                  XMLEventReader reader)
-            throws XMLStreamException {
+            XMLEventReader reader) throws XMLStreamException {
         GetResultRequest request = new GetResultRequest();
         readServiceAndVersion(elem, request);
 
@@ -204,16 +197,14 @@ public class WPSRequestReader extends AbstractElementXmlStreamReader {
     }
 
     private ExecuteRequest readExecuteRequest(StartElement elem,
-                                              XMLEventReader reader)
-            throws XMLStreamException {
+            XMLEventReader reader) throws XMLStreamException {
         ExecuteRequest request = new ExecuteRequest();
         readServiceAndVersion(elem, request);
 
-        getAttribute(elem, WPSConstants.Attr.AN_MODE).flatMap(ExecutionMode::fromString)
-                .ifPresent(request::setExecutionMode);
-        getAttribute(elem, WPSConstants.Attr.AN_RESPONSE)
-                .flatMap(ResponseMode::fromString)
-                .ifPresent(request::setResponseMode);
+        getAttribute(elem, WPSConstants.Attr.AN_MODE).flatMap(ExecutionMode::fromString).ifPresent(
+                request::setExecutionMode);
+        getAttribute(elem, WPSConstants.Attr.AN_RESPONSE).flatMap(ResponseMode::fromString).ifPresent(
+                request::setResponseMode);
 
         while (reader.hasNext()) {
             XMLEvent event = reader.nextEvent();
@@ -236,12 +227,10 @@ public class WPSRequestReader extends AbstractElementXmlStreamReader {
     }
 
     private GetCapabilitiesRequest readGetCapabilitiesRequest(StartElement elem,
-                                                              XMLEventReader reader)
-            throws XMLStreamException {
+            XMLEventReader reader) throws XMLStreamException {
         String service = getAttribute(elem, WPSConstants.Attr.AN_SERVICE).orElse(null);
         GetCapabilitiesRequest request = new GetCapabilitiesRequest(service);
-        getAttribute(elem, OWSConstants.Attr.AN_UPDATE_SEQUENCE)
-                .ifPresent(request::setUpdateSequence);
+        getAttribute(elem, OWSConstants.Attr.AN_UPDATE_SEQUENCE).ifPresent(request::setUpdateSequence);
 
         while (reader.hasNext()) {
             XMLEvent event = reader.nextEvent();
@@ -266,21 +255,19 @@ public class WPSRequestReader extends AbstractElementXmlStreamReader {
         throw eof();
     }
 
-    private OwsCode readIdentifier(StartElement elem, XMLEventReader reader)
-            throws XMLStreamException {
+    private OwsCode readIdentifier(StartElement elem,
+            XMLEventReader reader) throws XMLStreamException {
         return readOwsCode(elem, reader);
     }
 
-    private OwsCode readOwsCode(StartElement elem, XMLEventReader reader)
-            throws XMLStreamException {
-        URI codeSpace = getAttribute(elem, OWSConstants.Attr.AN_CODE_SPACE)
-                .map(URI::create).orElse(null);
+    private OwsCode readOwsCode(StartElement elem,
+            XMLEventReader reader) throws XMLStreamException {
+        URI codeSpace = getAttribute(elem, OWSConstants.Attr.AN_CODE_SPACE).map(URI::create).orElse(null);
         return new OwsCode(reader.getElementText(), codeSpace);
     }
 
     private List<String> readAcceptVersions(StartElement elem,
-                                            XMLEventReader reader)
-            throws XMLStreamException {
+            XMLEventReader reader) throws XMLStreamException {
         List<String> list = new LinkedList<>();
         while (reader.hasNext()) {
             XMLEvent event = reader.nextEvent();
@@ -298,8 +285,8 @@ public class WPSRequestReader extends AbstractElementXmlStreamReader {
         throw eof();
     }
 
-    private List<String> readSections(StartElement elem, XMLEventReader reader)
-            throws XMLStreamException {
+    private List<String> readSections(StartElement elem,
+            XMLEventReader reader) throws XMLStreamException {
         List<String> list = new LinkedList<>();
         while (reader.hasNext()) {
             XMLEvent event = reader.nextEvent();
@@ -318,8 +305,7 @@ public class WPSRequestReader extends AbstractElementXmlStreamReader {
     }
 
     private List<String> readAcceptFormats(StartElement elem,
-                                           XMLEventReader reader)
-            throws XMLStreamException {
+            XMLEventReader reader) throws XMLStreamException {
         List<String> list = new LinkedList<>();
         while (reader.hasNext()) {
             XMLEvent event = reader.nextEvent();
@@ -338,8 +324,7 @@ public class WPSRequestReader extends AbstractElementXmlStreamReader {
     }
 
     private List<String> readAcceptLanguages(StartElement elem,
-                                             XMLEventReader reader)
-            throws XMLStreamException {
+            XMLEventReader reader) throws XMLStreamException {
         List<String> list = new LinkedList<>();
         while (reader.hasNext()) {
             XMLEvent event = reader.nextEvent();
@@ -357,16 +342,13 @@ public class WPSRequestReader extends AbstractElementXmlStreamReader {
         throw eof();
     }
 
-    private OutputDefinition readOutput(StartElement elem, XMLEventReader reader)
-            throws XMLStreamException {
+    private OutputDefinition readOutput(StartElement elem,
+            XMLEventReader reader) throws XMLStreamException {
         OutputDefinition outputDefinition = new OutputDefinition();
-        Optional<String> attribute
-                = getAttribute(elem, WPSConstants.Attr.AN_TRANSMISSION);
-        Optional<DataTransmissionMode> flatMap
-                = attribute.flatMap(DataTransmissionMode::fromString);
+        Optional<String> attribute = getAttribute(elem, WPSConstants.Attr.AN_TRANSMISSION);
+        Optional<DataTransmissionMode> flatMap = attribute.flatMap(DataTransmissionMode::fromString);
         flatMap.ifPresent(outputDefinition::setDataTransmissionMode);
-        getAttribute(elem, WPSConstants.Attr.AN_ID).map(OwsCode::new)
-                .ifPresent(outputDefinition::setId);
+        getAttribute(elem, WPSConstants.Attr.AN_ID).map(OwsCode::new).ifPresent(outputDefinition::setId);
         outputDefinition.setFormat(readFormat(elem));
         List<OutputDefinition> outputs = new LinkedList<>();
         while (reader.hasNext()) {
@@ -393,12 +375,13 @@ public class WPSRequestReader extends AbstractElementXmlStreamReader {
         return new Format(mimeType, encoding, schema);
     }
 
-    private ProcessData readInput(StartElement elem, XMLEventReader reader) throws XMLStreamException {
+    private ProcessData readInput(StartElement elem,
+            XMLEventReader reader) throws XMLStreamException {
 
         OwsCode id = getAttribute(elem, WPSConstants.Attr.AN_ID).map(OwsCode::new).orElse(null);
         List<ProcessData> inputs = new LinkedList<>();
         ProcessData data = null;
-        while(reader.hasNext()) {
+        while (reader.hasNext()) {
             XMLEvent event = reader.nextEvent();
             if (event.isStartElement()) {
                 StartElement start = event.asStartElement();
@@ -425,8 +408,9 @@ public class WPSRequestReader extends AbstractElementXmlStreamReader {
         throw eof();
     }
 
-    private ReferenceProcessData readReference(StartElement elem, XMLEventReader reader,
-                               OwsCode id) throws XMLStreamException {
+    private ReferenceProcessData readReference(StartElement elem,
+            XMLEventReader reader,
+            OwsCode id) throws XMLStreamException {
         ReferenceProcessData data = new ReferenceProcessData(id);
         data.setFormat(readFormat(elem));
         data.setURI(getAttribute(elem, XLinkConstants.Attr.QN_HREF).map(URI::create).orElse(null));
@@ -450,10 +434,11 @@ public class WPSRequestReader extends AbstractElementXmlStreamReader {
         throw eof();
     }
 
-    private Body parseBodyReference(StartElement elem, XMLEventReader reader) throws XMLStreamException {
+    private Body parseBodyReference(StartElement elem,
+            XMLEventReader reader) throws XMLStreamException {
         URI href = getAttribute(elem, XLinkConstants.Attr.QN_HREF).map(URI::create).orElse(null);
 
-        while(reader.hasNext()) {
+        while (reader.hasNext()) {
             XMLEvent event = reader.nextEvent();
             if (event.isStartElement()) {
                 throw unexpectedTag(event.asStartElement());
@@ -465,13 +450,14 @@ public class WPSRequestReader extends AbstractElementXmlStreamReader {
         throw eof();
     }
 
-    private Body parseBody(StartElement start, XMLEventReader reader) throws XMLStreamException {
+    private Body parseBody(StartElement start,
+            XMLEventReader reader) throws XMLStreamException {
         return Body.inline(asString(start, reader));
     }
 
-
-     private ValueProcessData readData(StartElement start, XMLEventReader reader,
-                               OwsCode id) throws XMLStreamException {
+    private ValueProcessData readData(StartElement start,
+            XMLEventReader reader,
+            OwsCode id) throws XMLStreamException {
         Format format = readFormat(start);
         // TODO persist the inputs to disk?
         String string = asString(start, reader);

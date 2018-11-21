@@ -34,9 +34,8 @@ public class TypedGroupOutputDescriptionImpl extends GroupOutputDescriptionImpl 
         super(builder);
     }
 
-    public TypedGroupOutputDescriptionImpl(OwsCode id, OwsLanguageString title, OwsLanguageString abstrakt,
-                                           Set<OwsKeyword> keywords, Set<OwsMetadata> metadata,
-                                           Set<TypedProcessOutputDescription<?>> outputs) {
+    public TypedGroupOutputDescriptionImpl(OwsCode id, OwsLanguageString title, OwsLanguageString abstrakt, Set<
+            OwsKeyword> keywords, Set<OwsMetadata> metadata, Set<TypedProcessOutputDescription<?>> outputs) {
         super(id, title, abstrakt, keywords, metadata, outputs);
     }
 

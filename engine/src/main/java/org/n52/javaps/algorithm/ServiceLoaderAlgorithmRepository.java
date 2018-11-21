@@ -31,6 +31,7 @@ import org.n52.javaps.description.TypedProcessDescription;
 public class ServiceLoaderAlgorithmRepository implements AlgorithmRepository {
 
     private static final Logger LOG = LoggerFactory.getLogger(ServiceLoaderAlgorithmRepository.class);
+
     private final Map<OwsCode, Class<? extends IAlgorithm>> currentAlgorithms;
 
     public ServiceLoaderAlgorithmRepository() {
@@ -42,8 +43,8 @@ public class ServiceLoaderAlgorithmRepository implements AlgorithmRepository {
         ServiceLoader<IAlgorithm> loader = ServiceLoader.load(IAlgorithm.class);
 
         for (IAlgorithm ia : loader) {
-            LOG.debug("Adding algorithm with identifier {} and class {}", ia
-                    .getDescription().getId(), ia.getClass().getCanonicalName());
+            LOG.debug("Adding algorithm with identifier {} and class {}", ia.getDescription().getId(), ia.getClass()
+                    .getCanonicalName());
             result.put(ia.getDescription().getId(), ia.getClass());
         }
 
@@ -57,8 +58,7 @@ public class ServiceLoaderAlgorithmRepository implements AlgorithmRepository {
 
     @Override
     public Optional<IAlgorithm> getAlgorithm(OwsCode processID) {
-        Class<? extends IAlgorithm> clazz = this.currentAlgorithms
-                .get(processID);
+        Class<? extends IAlgorithm> clazz = this.currentAlgorithms.get(processID);
         if (clazz != null) {
             try {
                 return Optional.of(clazz.newInstance());

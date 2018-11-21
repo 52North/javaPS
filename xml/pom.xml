@@ -32,15 +32,15 @@
             <artifactId>engine</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.n52.shetland</groupId>
+            <groupId>org.n52.arctic-sea</groupId>
             <artifactId>shetland</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.n52.svalbard</groupId>
+            <groupId>org.n52.arctic-sea</groupId>
             <artifactId>svalbard</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.n52.janmayen</groupId>
+            <groupId>org.n52.arctic-sea</groupId>
             <artifactId>janmayen</artifactId>
         </dependency>
         <dependency>

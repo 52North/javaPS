@@ -44,7 +44,8 @@ public interface LiteralType<T> extends Serializable {
         return parseToBinding(value, null);
     }
 
-    default LiteralData parseToBinding(String value, String uom) throws DecodingException {
+    default LiteralData parseToBinding(String value,
+            String uom) throws DecodingException {
         return new LiteralData(parse(value), uom);
     }
 

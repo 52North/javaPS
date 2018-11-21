@@ -24,7 +24,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Christian Autermann
  */
-@ResponseStatus(value = HttpStatus.NOT_FOUND)
+@ResponseStatus(
+        value = HttpStatus.NOT_FOUND)
 public class NotFoundException extends Exception {
     private static final long serialVersionUID = -2280408324031032864L;
 

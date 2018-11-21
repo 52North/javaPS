@@ -32,11 +32,13 @@ import org.n52.javaps.io.complex.ComplexData;
  * TODO JavaDoc
  *
  * @author Christian Autermann
- * @param <M> the accessible member type
- * @param <B> the binding type
+ * @param <M>
+ *            the accessible member type
+ * @param <B>
+ *            the binding type
  */
-class ComplexInputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractInputBinding<M>>
-        extends AbstractInputAnnotationParser<ComplexInput, M, B> {
+class ComplexInputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractInputBinding<M>> extends
+        AbstractInputAnnotationParser<ComplexInput, M, B> {
 
     private final InputHandlerRepository parserRepository;
 
@@ -46,22 +48,17 @@ class ComplexInputAnnotationParser<M extends AccessibleObject & Member, B extend
     }
 
     @Override
-    protected TypedComplexInputDescription createDescription(ComplexInput annotation, B binding) {
+    protected TypedComplexInputDescription createDescription(ComplexInput annotation,
+            B binding) {
         @SuppressWarnings("unchecked")
-        Class<? extends ComplexData<?>> bindingClass = (Class<? extends ComplexData<?>>) annotation.binding();
+        Class<? extends ComplexData<?>> bindingClass = (Class<? extends ComplexData<
+                ?>>) annotation.binding();
         Set<Format> supportedFormats = this.parserRepository.getSupportedFormats(bindingClass);
         Format defaultFormat = this.parserRepository.getDefaultFormat(bindingClass).orElse(null);
-        return new TypedProcessDescriptionFactory().complexInput()
-                .withIdentifier(annotation.identifier())
-                .withAbstract(annotation.abstrakt())
-                .withTitle(annotation.title())
-                .withMinimalOccurence(annotation.minOccurs())
-                .withMaximalOccurence(annotation.maxOccurs())
-                .withMaximumMegabytes(annotation.maximumMegaBytes())
-                .withDefaultFormat(defaultFormat)
-                .withSupportedFormat(supportedFormats)
-                .withType(bindingClass)
-                .build();
+        return new TypedProcessDescriptionFactory().complexInput().withIdentifier(annotation.identifier()).withAbstract(
+                annotation.abstrakt()).withTitle(annotation.title()).withMinimalOccurence(annotation.minOccurs())
+                .withMaximalOccurence(annotation.maxOccurs()).withMaximumMegabytes(annotation.maximumMegaBytes())
+                .withDefaultFormat(defaultFormat).withSupportedFormat(supportedFormats).withType(bindingClass).build();
     }
 
     @Override

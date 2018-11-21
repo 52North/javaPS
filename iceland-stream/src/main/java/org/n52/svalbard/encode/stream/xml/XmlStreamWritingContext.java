@@ -46,48 +46,61 @@ import org.n52.svalbard.encode.stream.MissingStreamWriterException;
 public class XmlStreamWritingContext extends XmlFactories implements AutoCloseable {
 
     private final Deque<Map<String, String>> prefixes = new ArrayDeque<>();
+
     private final XMLEventWriter writer;
-    private final BiFunction<XmlStreamWriterKey, XmlStreamWritingContext, Optional<ElementXmlStreamWriter>> writerProvider;
+
+    private final BiFunction<XmlStreamWriterKey, XmlStreamWritingContext, Optional<
+            ElementXmlStreamWriter>> writerProvider;
+
     private final OutputStream stream;
 
-    public XmlStreamWritingContext(OutputStream stream,
-                                   BiFunction<XmlStreamWriterKey, XmlStreamWritingContext, Optional<ElementXmlStreamWriter>> writerProvider)
-            throws XMLStreamException {
+    public XmlStreamWritingContext(OutputStream stream, BiFunction<XmlStreamWriterKey, XmlStreamWritingContext,
+            Optional<ElementXmlStreamWriter>> writerProvider) throws XMLStreamException {
         this.stream = Objects.requireNonNull(stream);
         this.writer = outputFactory().createXMLEventWriter(stream, documentEncoding().name());
         this.writerProvider = Objects.requireNonNull(writerProvider);
     }
 
-    public <T> void write(T object)
-            throws XMLStreamException, EncodingException {
+    public <T> void write(T object) throws XMLStreamException, EncodingException {
         if (object != null) {
             XmlStreamWriterKey key = new XmlStreamWriterKey(object.getClass());
-            ElementXmlStreamWriter delegate = this.writerProvider
-                    .apply(key, this).orElseThrow(() -> new MissingStreamWriterException(key));
+            ElementXmlStreamWriter delegate = this.writerProvider.apply(key, this).orElseThrow(
+                    () -> new MissingStreamWriterException(key));
             delegate.writeElement(object);
         }
+    }
+
+    public void write(Reader in) throws XMLStreamException {
+        XMLEventReader reader = inputFactory().createXMLEventReader(in);
+        try {
+            write(reader);
+        } finally {
+            reader.close();
+        }
+    }
+
+    public void write(XMLEventReader reader) throws XMLStreamException {
+        EventFilter filter = event -> !event.isStartDocument() && !event.isEndDocument() && !(event.isCharacters()
+                && event.asCharacters().isIgnorableWhiteSpace());
+        this.writer.add(inputFactory().createFilteredReader(reader, filter));
     }
 
     public <X, Y> Function<X, Y> identity(Function<X, Y> t) {
         return t;
     }
 
-    public boolean declareNamespace(String prefix, String namespace)
-            throws XMLStreamException {
+    public boolean declareNamespace(String prefix,
+            String namespace) throws XMLStreamException {
         if (this.prefixes.isEmpty()) {
             throw new IllegalStateException();
         }
         // check if the prefix is already declared
-        String ns = this.prefixes.stream()
-                .map(m -> m.get(prefix))
-                .filter(Objects::nonNull)
-                .findFirst().orElse(null);
+        String ns = this.prefixes.stream().map(m -> m.get(prefix)).filter(Objects::nonNull).findFirst().orElse(null);
 
         if (ns != null) {
             // if it is declared for another namespace throw an exception
             if (!ns.equals(namespace)) {
-                throw new XMLStreamException(String
-                        .format("Prefix <%s> is already bound to <%s>", namespace, ns));
+                throw new XMLStreamException(String.format("Prefix <%s> is already bound to <%s>", namespace, ns));
             }
             return false;
         }
@@ -105,31 +118,13 @@ public class XmlStreamWritingContext extends XmlFactories implements AutoCloseab
         dispatch(eventFactory().createEndDocument());
     }
 
-    public void dispatch(XMLEvent event)
-            throws XMLStreamException {
+    public void dispatch(XMLEvent event) throws XMLStreamException {
         if (event.isStartElement()) {
             this.prefixes.push(new HashMap<>(0));
         } else if (event.isEndElement()) {
             this.prefixes.pop();
         }
         this.writer.add(event);
-    }
-
-    public void write(Reader in) throws XMLStreamException {
-        XMLEventReader reader = inputFactory().createXMLEventReader(in);
-        try {
-            write(reader);
-        } finally {
-            reader.close();
-        }
-    }
-
-    public void write(XMLEventReader reader) throws XMLStreamException {
-        EventFilter filter = (event)
-                -> !event.isStartDocument() &&
-                   !event.isEndDocument() &&
-                   !(event.isCharacters() && event.asCharacters().isIgnorableWhiteSpace());
-        this.writer.add(inputFactory().createFilteredReader(reader, filter));
     }
 
     @Override

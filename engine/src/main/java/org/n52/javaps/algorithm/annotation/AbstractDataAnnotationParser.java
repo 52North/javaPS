@@ -27,13 +27,17 @@ import org.n52.javaps.description.TypedDataDescription;
  * TODO JavaDoc
  *
  * @author Tom Kunicki, Christian Autermann
- * @param <A> the annotation type
- * @param <M> the accessible member type
- * @param <D> the description type
- * @param <B> the binding type
+ * @param <A>
+ *            the annotation type
+ * @param <M>
+ *            the accessible member type
+ * @param <D>
+ *            the description type
+ * @param <B>
+ *            the binding type
  */
-abstract class AbstractDataAnnotationParser<A extends Annotation, M extends AccessibleObject & Member, D extends TypedDataDescription<?>, B extends AbstractDataBinding<M, D>>
-        implements AnnotationParser<A, M, B> {
+abstract class AbstractDataAnnotationParser<A extends Annotation, M extends AccessibleObject & Member,
+        D extends TypedDataDescription<?>, B extends AbstractDataBinding<M, D>> implements AnnotationParser<A, M, B> {
     private final Function<M, B> bindingFunction;
 
     AbstractDataAnnotationParser(Function<M, B> bindingFunction) {
@@ -41,12 +45,14 @@ abstract class AbstractDataAnnotationParser<A extends Annotation, M extends Acce
     }
 
     @Override
-    public B parse(A annotation, M member) {
+    public B parse(A annotation,
+            M member) {
         B binding = this.bindingFunction.apply(member);
         binding.setDescription(createDescription(annotation, binding));
         return binding.validate() ? binding : null;
     }
 
-    protected abstract D createDescription(A annotation, B binding);
+    protected abstract D createDescription(A annotation,
+            B binding);
 
 }

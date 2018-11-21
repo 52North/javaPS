@@ -31,8 +31,8 @@ public interface TypedDataDescription<X> extends DataDescription {
 
     Class<? extends Data<?>> getBindingType();
 
-    interface Builder<X, T extends TypedDataDescription<X>, B extends Builder<X, T, B>>
-            extends DataDescription.Builder<T, B> {
+    interface Builder<X, T extends TypedDataDescription<X>, B extends Builder<X, T, B>> extends DataDescription.Builder<
+            T, B> {
         B withType(X type);
     }
 

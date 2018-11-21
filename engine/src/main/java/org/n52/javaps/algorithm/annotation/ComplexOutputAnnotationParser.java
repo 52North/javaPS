@@ -32,11 +32,13 @@ import org.n52.javaps.io.complex.ComplexData;
  * TODO JavaDoc
  *
  * @author Christian Autermann
- * @param <M> the accessible member type
- * @param <B> the binding type
+ * @param <M>
+ *            the accessible member type
+ * @param <B>
+ *            the binding type
  */
-class ComplexOutputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractOutputBinding<M>>
-        extends AbstractOutputAnnotationParser<ComplexOutput, M, B> {
+class ComplexOutputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractOutputBinding<M>> extends
+        AbstractOutputAnnotationParser<ComplexOutput, M, B> {
 
     private final OutputHandlerRepository generatorRepository;
 
@@ -46,18 +48,14 @@ class ComplexOutputAnnotationParser<M extends AccessibleObject & Member, B exten
     }
 
     @Override
-    protected TypedComplexOutputDescription createDescription(ComplexOutput annotation, B binding) {
+    protected TypedComplexOutputDescription createDescription(ComplexOutput annotation,
+            B binding) {
         Class<? extends ComplexData<?>> bindingClass = annotation.binding();
         Set<Format> supportedFormats = this.generatorRepository.getSupportedFormats(bindingClass);
         Format defaultFormat = this.generatorRepository.getDefaultFormat(bindingClass).orElse(null);
-        return new TypedProcessDescriptionFactory().complexOutput()
-                .withType(bindingClass)
-                .withDefaultFormat(defaultFormat)
-                .withSupportedFormat(supportedFormats)
-                .withIdentifier(annotation.identifier())
-                .withAbstract(annotation.abstrakt())
-                .withTitle(annotation.title())
-                .build();
+        return new TypedProcessDescriptionFactory().complexOutput().withType(bindingClass).withDefaultFormat(
+                defaultFormat).withSupportedFormat(supportedFormats).withIdentifier(annotation.identifier())
+                .withAbstract(annotation.abstrakt()).withTitle(annotation.title()).build();
     }
 
     @Override

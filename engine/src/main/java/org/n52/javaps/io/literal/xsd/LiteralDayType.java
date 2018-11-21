@@ -30,6 +30,7 @@ import org.n52.javaps.io.DecodingException;
 public class LiteralDayType extends AbstractXSDLiteralType<Day> {
 
     private static final long serialVersionUID = -8426376970434674190L;
+
     private static final DateTimeFormatter PARSER = DateTimeFormatter.ofPattern("---dd");
 
     @Override

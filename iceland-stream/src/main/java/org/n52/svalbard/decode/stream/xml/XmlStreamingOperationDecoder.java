@@ -41,26 +41,29 @@ import org.n52.svalbard.decode.stream.StreamReaderRepository;
 
 /**
  * TODO JavaDoc
+ *
  * @author Christian Autermann
  */
 public class XmlStreamingOperationDecoder implements Decoder<Object, String> {
     private final QName name;
+
     private final OwsOperationKey operation;
+
     private final StreamReaderRepository streamReaderRepository;
 
     @Inject
-    public XmlStreamingOperationDecoder(OwsOperationKey operation, QName name, StreamReaderRepository streamReaderRepository) {
+    public XmlStreamingOperationDecoder(OwsOperationKey operation, QName name,
+            StreamReaderRepository streamReaderRepository) {
         this.name = Objects.requireNonNull(name);
         this.operation = Objects.requireNonNull(operation);
         this.streamReaderRepository = Objects.requireNonNull(streamReaderRepository);
     }
 
     @Override
-    public Object decode(String string)
-            throws DecodingException {
+    public Object decode(String string) throws DecodingException {
         XmlStreamReaderKey key = new XmlStreamReaderKey(this.name);
-        StreamReader<Object> reader = streamReaderRepository.getReader(key)
-                        .orElseThrow(() -> new MissingStreamReaderException(key));
+        StreamReader<Object> reader = streamReaderRepository.getReader(key).orElseThrow(
+                () -> new MissingStreamReaderException(key));
         byte[] bytes = string.getBytes(StandardCharsets.UTF_8);
         try {
             return reader.read(new ByteArrayInputStream(bytes));
@@ -71,11 +74,10 @@ public class XmlStreamingOperationDecoder implements Decoder<Object, String> {
 
     @Override
     public Set<DecoderKey> getKeys() {
-        return new HashSet<>(Arrays
-                .asList(new OperationDecoderKey(operation, MediaTypes.TEXT_XML),
-                        new OperationDecoderKey(operation, MediaTypes.APPLICATION_XML),
-                        new XmlStringOperationDecoderKey(operation, MediaTypes.APPLICATION_XML),
-                        new XmlStringOperationDecoderKey(operation, MediaTypes.TEXT_XML)));
+        return new HashSet<>(Arrays.asList(new OperationDecoderKey(operation, MediaTypes.TEXT_XML),
+                new OperationDecoderKey(operation, MediaTypes.APPLICATION_XML), new XmlStringOperationDecoderKey(
+                        operation, MediaTypes.APPLICATION_XML), new XmlStringOperationDecoderKey(operation,
+                                MediaTypes.TEXT_XML)));
 
     }
 

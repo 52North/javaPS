@@ -31,4 +31,5 @@ import java.lang.annotation.Target;
 @Target({ ElementType.METHOD })
 @Inherited
 @Documented
-public @interface Execute {}
+public @interface Execute {
+}

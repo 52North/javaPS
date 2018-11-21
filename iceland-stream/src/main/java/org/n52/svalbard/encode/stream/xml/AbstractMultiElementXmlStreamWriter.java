@@ -27,6 +27,7 @@ import org.n52.svalbard.encode.stream.UnsupportedStreamWriterInputException;
 
 /**
  * TODO JavaDoc
+ *
  * @author Christian Autermann
  */
 public abstract class AbstractMultiElementXmlStreamWriter extends AbstractElementXmlStreamWriter {

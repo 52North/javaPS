@@ -17,5 +17,5 @@
 package org.n52.javaps.commons.observerpattern;
 
 public interface IObserver {
-    public void update(ISubject o);
+    void update(ISubject o);
 }

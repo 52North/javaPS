@@ -28,5 +28,6 @@ import org.n52.shetland.ogc.wps.Format;
 public interface InputHandlerRepository extends FormatRepository {
     Set<InputHandler> getInputHandlers();
 
-    Optional<InputHandler> getInputHandler(Format format, Class<? extends Data<?>> binding);
+    Optional<InputHandler> getInputHandler(Format format,
+            Class<? extends Data<?>> binding);
 }
