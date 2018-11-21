@@ -84,11 +84,11 @@ public final class GenericFileDataConstants {
     public static final String MIME_TYPE_GML321 = "text/xml; subtype=gml/3.2.1";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GenericFileDataConstants.class);
-    
+
     private static final String[] ADDITIONAL_SHP_FILE_ITEMS = { "shx", "dbf", "prj", "sbn", "sbx", "shp.xml" };
 
-    private static final String[] ADDITIONAL_DBF_FILE_ITEMS = { "dbf.xml" }; 
-    
+    private static final String[] ADDITIONAL_DBF_FILE_ITEMS = { "dbf.xml" };
+
     private static HashMap<String, String> lut;
 
     public static HashMap<String, String> mimeTypeFileTypeLUT() {

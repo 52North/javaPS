@@ -27,7 +27,7 @@ import org.n52.iceland.coding.encode.ResponseWriterKey;
 
 /**
  * TODO JavaDoc
- * 
+ *
  * @author Christian Autermann
  */
 public class ServiceResponseWriterFactory implements ResponseWriterFactory {

@@ -33,7 +33,7 @@ import java.lang.annotation.Target;
 @Documented
 public @interface BoundingBoxOutput {
     String CRS_EPSG_4326 = "http://www.opengis.net/def/crs/EPSG/0/4326";
-    
+
     // identifier
     String identifier();
 

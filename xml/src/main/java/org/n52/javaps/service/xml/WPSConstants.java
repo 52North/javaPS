@@ -20,7 +20,7 @@ import javax.xml.namespace.QName;
 
 /**
  * TODO JavaDoc
- * 
+ *
  * @author Christian Autermann
  */
 public interface WPSConstants {

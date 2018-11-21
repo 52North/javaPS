@@ -35,7 +35,7 @@ import org.n52.javaps.io.complex.ComplexData;
 @Documented
 @SuppressWarnings("rawtypes")
 public @interface ComplexInput {
-    
+
     // identifier
     String identifier();
 

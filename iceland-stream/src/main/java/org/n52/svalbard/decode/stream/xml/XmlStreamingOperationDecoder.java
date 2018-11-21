@@ -41,7 +41,7 @@ import org.n52.svalbard.decode.stream.StreamReaderRepository;
 
 /**
  * TODO JavaDoc
- * 
+ *
  * @author Christian Autermann
  */
 public class XmlStreamingOperationDecoder implements Decoder<Object, String> {

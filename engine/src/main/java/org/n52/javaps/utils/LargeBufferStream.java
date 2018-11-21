@@ -90,10 +90,10 @@ public class LargeBufferStream extends OutputStream {
     public void write(final byte[] b,
             int off,
             int len) throws IOException {
-        
+
         int offCopy = off;
         int lenCopy = len;
-        
+
         if (blocks != null) {
             while (lenCopy > 0) {
                 Block s = last();

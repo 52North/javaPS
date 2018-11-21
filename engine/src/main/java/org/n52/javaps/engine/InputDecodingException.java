@@ -20,7 +20,7 @@ import org.n52.shetland.ogc.ows.OwsCode;
 
 /**
  * TODO JavaDoc
- * 
+ *
  * @author Christian Autermann
  */
 public class InputDecodingException extends EngineException {

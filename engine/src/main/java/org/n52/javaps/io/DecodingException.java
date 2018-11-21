@@ -18,7 +18,7 @@ package org.n52.javaps.io;
 
 /**
  * TODO JavaDoc
- * 
+ *
  * @author Christian Autermann
  */
 public class DecodingException extends Exception {

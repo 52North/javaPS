@@ -35,7 +35,7 @@ import org.n52.javaps.io.literal.LiteralType;
 @Documented
 @SuppressWarnings("rawtypes")
 public @interface LiteralInput {
-    
+
     // identifier
     String identifier();
 

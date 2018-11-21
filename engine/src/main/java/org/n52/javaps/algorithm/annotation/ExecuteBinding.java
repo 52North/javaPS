@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * TODO JavaDoc
- * 
+ *
  * @author Christian Autermann
  */
 class ExecuteBinding extends AnnotationBinding<Method> {

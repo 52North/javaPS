@@ -73,7 +73,7 @@ import com.google.common.base.Strings;
 public abstract class AbstractOWSWriter extends AbstractMultiElementXmlStreamWriter {
 
     private static final String XML_LANG = "xml:lang";
-    
+
     public AbstractOWSWriter(Class<?>... supportedClasses) {
         super(supportedClasses);
     }

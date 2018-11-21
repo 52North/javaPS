@@ -72,9 +72,9 @@ public class ExecuteParameterValidator implements ParameterValidator<ExecuteRequ
     private static final String IDENTIFIER = "Identifier";
 
     private static final String OUTPUT = "Output";
-    
+
     private static final String VALUE_INVALID = "The value '%s' of the parameter '%s' is invalid: %s";
-    
+
     private static final String UNSUPPORTED_FORMAT = "unsupported format";
 
     private final Engine engine;
@@ -156,7 +156,7 @@ public class ExecuteParameterValidator implements ParameterValidator<ExecuteRequ
         // ignore if there is no cardinality, as this
         // will be catched by another method
         cardinalities.forEach((chain,
-                cardinality) -> 
+                cardinality) ->
         Optional.ofNullable(occurences.get(chain)).filter(occurence -> !occurence.isInBounds(cardinality)).ifPresent(
                 occurence -> exception.add(new InvalidParameterValueException().at(INPUT).withMessage(
                         "The input %s has an invalid cardinality of %s; should be in %s.", chain.toString(),

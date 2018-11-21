@@ -163,7 +163,7 @@ public class EngineImpl implements Engine, Destroyable {
         ProcessInputs processInputs = this.processInputDecoder.decode(description, inputs);
 
         List<OutputDefinition> outputDefinitionsOrDefault = outputDefinitions;
-        
+
         if (outputDefinitionsOrDefault == null || outputDefinitionsOrDefault.isEmpty()) {
             outputDefinitionsOrDefault = createDefaultOutputDefinitions(description);
         } else {

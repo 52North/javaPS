@@ -99,7 +99,7 @@ public final class IOUtils {
         Files.copy(inputStream, file.toPath());
         return file;
     }
-    
+
     /**
      * Zip the files. Returns a zipped file and delete the specified files
      *

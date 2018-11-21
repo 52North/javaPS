@@ -95,7 +95,7 @@ class LiteralInputAnnotationParser<M extends AccessibleObject & Member, B extend
     public LiteralType<?> getLiteralType(LiteralInput annotation,
             B binding) {
         Type payloadType = binding.getPayloadType();
-        @SuppressWarnings("unchecked") 
+        @SuppressWarnings("unchecked")
         Class<? extends LiteralType<?>> bindingType = (Class<? extends LiteralType<
                 ?>>) annotation.binding();
 

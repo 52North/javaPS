@@ -50,7 +50,7 @@ class ComplexInputAnnotationParser<M extends AccessibleObject & Member, B extend
     @Override
     protected TypedComplexInputDescription createDescription(ComplexInput annotation,
             B binding) {
-        @SuppressWarnings("unchecked") 
+        @SuppressWarnings("unchecked")
         Class<? extends ComplexData<?>> bindingClass = (Class<? extends ComplexData<
                 ?>>) annotation.binding();
         Set<Format> supportedFormats = this.parserRepository.getSupportedFormats(bindingClass);

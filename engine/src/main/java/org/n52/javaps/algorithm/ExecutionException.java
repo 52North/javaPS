@@ -18,7 +18,7 @@ package org.n52.javaps.algorithm;
 
 /**
  * TODO JavaDoc
- * 
+ *
  * @author Christian Autermann
  */
 public class ExecutionException extends Exception {
