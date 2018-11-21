@@ -24,8 +24,6 @@ import org.n52.shetland.ogc.wps.description.ProcessDescription;
  * @author Christian Autermann
  */
 public interface TypedProcessDescription
-        extends ProcessDescription,
-                TypedProcessInputDescriptionContainer,
-                TypedProcessOutputDescriptionContainer {
+        extends ProcessDescription, TypedProcessInputDescriptionContainer, TypedProcessOutputDescriptionContainer {
 
 }

@@ -34,8 +34,8 @@ import org.n52.svalbard.decode.stream.StreamReaderKey;
  *
  * @author Christian Autermann
  */
-public class ElementXmlStreamReaderRepository extends AbstractSimilarityKeyRepository<StreamReaderKey, ElementXmlStreamReader>
-        implements Constructable {
+public class ElementXmlStreamReaderRepository
+        extends AbstractSimilarityKeyRepository<StreamReaderKey, ElementXmlStreamReader> implements Constructable {
 
     private Collection<Provider<ElementXmlStreamReader>> readers;
 
@@ -63,7 +63,7 @@ public class ElementXmlStreamReaderRepository extends AbstractSimilarityKeyRepos
 
     public Optional<ElementXmlStreamReader> get(XmlStreamReaderKey key) {
         Optional<ElementXmlStreamReader> reader = super.get(key);
-        //writer.ifPresent(x -> x.setContext(ctx));
+        // writer.ifPresent(x -> x.setContext(ctx));
         return reader;
     }
 

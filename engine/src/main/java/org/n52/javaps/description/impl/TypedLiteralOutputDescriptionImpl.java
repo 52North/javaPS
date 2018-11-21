@@ -28,32 +28,20 @@ import org.n52.shetland.ogc.wps.description.impl.LiteralOutputDescriptionImpl;
 import org.n52.javaps.description.TypedLiteralOutputDescription;
 import org.n52.javaps.io.literal.LiteralType;
 
-public class TypedLiteralOutputDescriptionImpl
-        extends LiteralOutputDescriptionImpl
+public class TypedLiteralOutputDescriptionImpl extends LiteralOutputDescriptionImpl
         implements TypedLiteralOutputDescription {
     private final LiteralType<?> type;
 
-    public TypedLiteralOutputDescriptionImpl(OwsCode id,
-                                             OwsLanguageString title,
-                                             OwsLanguageString abstrakt,
-                                             Set<OwsKeyword> keywords,
-                                             Set<OwsMetadata> metadata,
-                                             LiteralDataDomain defaultLiteralDataDomain,
-                                             Set<LiteralDataDomain> supportedLiteralDataDomain,
-                                             LiteralType<?> type) {
+    public TypedLiteralOutputDescriptionImpl(OwsCode id, OwsLanguageString title, OwsLanguageString abstrakt,
+            Set<OwsKeyword> keywords, Set<OwsMetadata> metadata, LiteralDataDomain defaultLiteralDataDomain,
+            Set<LiteralDataDomain> supportedLiteralDataDomain, LiteralType<?> type) {
         super(id, title, abstrakt, keywords, metadata, defaultLiteralDataDomain, supportedLiteralDataDomain);
         this.type = Objects.requireNonNull(type, "type");
     }
 
     protected TypedLiteralOutputDescriptionImpl(AbstractBuilder<?, ?> builder) {
-        this(builder.getId(),
-             builder.getTitle(),
-             builder.getAbstract(),
-             builder.getKeywords(),
-             builder.getMetadata(),
-             builder.getDefaultLiteralDataDomain(),
-             builder.getSupportedLiteralDataDomains(),
-             builder.getType());
+        this(builder.getId(), builder.getTitle(), builder.getAbstract(), builder.getKeywords(), builder.getMetadata(),
+                builder.getDefaultLiteralDataDomain(), builder.getSupportedLiteralDataDomains(), builder.getType());
     }
 
     @Override

@@ -51,38 +51,38 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
  */
 public class DocumentXmlStreamWriter extends XmlFactories implements StreamWriter<Object> {
 
-
     private final ElementXmlStreamWriterRepository repository;
+
     private final ExecutorService executor;
 
     @Inject
     public DocumentXmlStreamWriter(ElementXmlStreamWriterRepository repository) {
-        ThreadFactory threadFactory = new ThreadFactoryBuilder()
-                .setNameFormat("xml-transformer-%d").build();
+        ThreadFactory threadFactory = new ThreadFactoryBuilder().setNameFormat("xml-transformer-%d").build();
         this.executor = Executors.newCachedThreadPool(threadFactory);
         this.repository = Objects.requireNonNull(repository);
     }
 
     @Override
-    public void write(Object object, OutputStream stream)
-            throws EncodingException {
+    public void write(Object object,
+            OutputStream stream) throws EncodingException {
         try {
             writeIndenting(stream, (out) -> {
-                       try (XmlStreamWritingContext context = createContext(out)) {
-                           context.startDocument();
-                           context.write(object);
-                           context.endDocument();
-                       } catch (XMLStreamException ex) {
-                           throw new EncodingException(ex);
-                       }
-                   });
+                try (XmlStreamWritingContext context = createContext(out)) {
+                    context.startDocument();
+                    context.write(object);
+                    context.endDocument();
+                } catch (XMLStreamException ex) {
+                    throw new EncodingException(ex);
+                }
+            });
         } catch (TransformerException | IOException | InterruptedException ex) {
             throw new EncodingException(ex);
         }
     }
 
     @SuppressWarnings("unchecked")
-    private <X extends Exception> void writeIndenting(OutputStream stream, ThrowingConsumer<OutputStream, X> writer)
+    private <X extends Exception> void writeIndenting(OutputStream stream,
+            ThrowingConsumer<OutputStream, X> writer)
             throws X, TransformerException, IOException, InterruptedException {
         try {
             PipedOutputStream pos = new PipedOutputStream();
@@ -117,17 +117,13 @@ public class DocumentXmlStreamWriter extends XmlFactories implements StreamWrite
         }
     }
 
-
-
     @Override
     public Set<StreamWriterKey> getKeys() {
         return this.repository.keys();
     }
 
-    private XmlStreamWritingContext createContext(OutputStream pos)
-            throws XMLStreamException {
+    private XmlStreamWritingContext createContext(OutputStream pos) throws XMLStreamException {
         return new XmlStreamWritingContext(pos, this.repository::get);
     }
-
 
 }

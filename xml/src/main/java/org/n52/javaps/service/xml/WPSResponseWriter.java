@@ -35,17 +35,12 @@ import org.n52.svalbard.encode.stream.xml.AbstractMultiElementXmlStreamWriter;
 public class WPSResponseWriter extends AbstractMultiElementXmlStreamWriter {
 
     public WPSResponseWriter() {
-        super(DescribeProcessResponse.class,
-              DismissResponse.class,
-              ExecuteResponse.class,
-              GetResultResponse.class,
-              GetStatusResponse.class,
-              GetCapabilitiesResponse.class);
+        super(DescribeProcessResponse.class, DismissResponse.class, ExecuteResponse.class, GetResultResponse.class,
+                GetStatusResponse.class, GetCapabilitiesResponse.class);
     }
 
     @Override
-    public void writeElement(Object object)
-            throws XMLStreamException, EncodingException {
+    public void writeElement(Object object) throws XMLStreamException, EncodingException {
         if (object instanceof DescribeProcessResponse) {
             DescribeProcessResponse response = (DescribeProcessResponse) object;
             delegate(response.getProcessOfferings());

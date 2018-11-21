@@ -35,13 +35,13 @@ public class ContextAlgorithmRegistrator implements Constructable {
     private static final Logger LOG = LoggerFactory.getLogger(ContextAlgorithmRegistrator.class);
 
     private LocalAlgorithmRepository repository;
+
     private Context context;
 
     @Override
     public void init() {
         Stream.concat(interfaceImplementations(), annotatedInstances())
-                .peek(algorithm -> LOG.info("Registering {}", algorithm))
-                .forEach(this.repository::addAlgorithm);
+                .peek(algorithm -> LOG.info("Registering {}", algorithm)).forEach(this.repository::addAlgorithm);
     }
 
     @Inject
@@ -61,7 +61,5 @@ public class ContextAlgorithmRegistrator implements Constructable {
     private Stream<Object> annotatedInstances() {
         return this.context.getAnnotatedInstances(Algorithm.class).stream();
     }
-
-
 
 }

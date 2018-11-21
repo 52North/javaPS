@@ -16,13 +16,10 @@
  */
 package org.n52.javaps.io;
 
-
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
-
-
 
 /**
  * Extending subclasses of AbstractGenerator shall provide functionality to

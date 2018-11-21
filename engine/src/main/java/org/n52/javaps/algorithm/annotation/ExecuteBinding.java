@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * TODO JavaDoc
+ * 
  * @author Christian Autermann
  */
 class ExecuteBinding extends AnnotationBinding<Method> {
@@ -46,7 +47,8 @@ class ExecuteBinding extends AnnotationBinding<Method> {
             return false;
         }
         if (getMember().getParameterTypes().length != 0) {
-            LOGGER.error("Method {} with Execute annotation can't be used, method parameter count is > 0.", getMember());
+            LOGGER.error("Method {} with Execute annotation can't be used, method parameter count is > 0.",
+                    getMember());
             return false;
         }
         return true;

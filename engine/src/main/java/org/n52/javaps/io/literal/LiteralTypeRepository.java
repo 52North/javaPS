@@ -27,5 +27,6 @@ public interface LiteralTypeRepository {
         return getLiteralType(literalType, null);
     }
 
-    <T> LiteralType<T> getLiteralType(Class<? extends LiteralType<?>> literalType, Class<?> payloadType);
+    <T> LiteralType<T> getLiteralType(Class<? extends LiteralType<?>> literalType,
+            Class<?> payloadType);
 }

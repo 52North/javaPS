@@ -36,14 +36,23 @@ import org.n52.javaps.io.literal.LiteralType;
 @SuppressWarnings("rawtypes")
 public @interface LiteralInput {
     String identifier(); // identifier
+
     String title() default "";
+
     String abstrakt() default ""; // 'abstract' is java reserved keyword
+
     long minOccurs() default 1;
+
     long maxOccurs() default 1;
+
     String defaultValue() default "";
+
     String[] allowedValues() default {};
+
     String uom() default "";
+
     Class<? extends LiteralType> binding() default LiteralType.class;
+
     /**
      * Special maxOccurs flags (set maxOccurs to enum constant count).
      */

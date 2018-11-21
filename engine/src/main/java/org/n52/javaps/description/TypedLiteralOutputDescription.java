@@ -23,15 +23,15 @@ import org.n52.javaps.io.literal.LiteralType;
  *
  * @author Christian Autermann
  */
-public interface TypedLiteralOutputDescription extends LiteralOutputDescription, TypedLiteralDescription, TypedProcessOutputDescription<LiteralType<?>> {
+public interface TypedLiteralOutputDescription
+        extends LiteralOutputDescription, TypedLiteralDescription, TypedProcessOutputDescription<LiteralType<?>> {
     @Override
     default TypedLiteralOutputDescription asLiteral() {
         return this;
     }
 
     interface Builder<T extends TypedLiteralOutputDescription, B extends Builder<T, B>>
-            extends LiteralOutputDescription.Builder<T, B>,
-                    TypedLiteralDescription.Builder<T, B> {
+            extends LiteralOutputDescription.Builder<T, B>, TypedLiteralDescription.Builder<T, B> {
 
     }
 

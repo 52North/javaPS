@@ -42,9 +42,8 @@ import org.n52.shetland.ogc.wps.response.GetStatusResponse;
  */
 public class GetStatusHandler extends AbstractJobHandler
         implements GenericOperationHandler<GetStatusRequest, GetStatusResponse> {
-    private static final OperationHandlerKey KEY
-            = new OperationHandlerKey(WPSConstants.SERVICE,
-                                      WPSConstants.Operations.GetStatus);
+    private static final OperationHandlerKey KEY =
+            new OperationHandlerKey(WPSConstants.SERVICE, WPSConstants.Operations.GetStatus);
 
     @Inject
     public GetStatusHandler(Engine engine) {
@@ -52,8 +51,7 @@ public class GetStatusHandler extends AbstractJobHandler
     }
 
     @Override
-    public GetStatusResponse handle(GetStatusRequest request)
-            throws OwsExceptionReport {
+    public GetStatusResponse handle(GetStatusRequest request) throws OwsExceptionReport {
         String service = request.getService();
         String version = request.getVersion();
         JobId jobId = request.getJobId();

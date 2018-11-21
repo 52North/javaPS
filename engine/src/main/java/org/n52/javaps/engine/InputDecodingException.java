@@ -16,16 +16,17 @@
  */
 package org.n52.javaps.engine;
 
-
 import org.n52.shetland.ogc.ows.OwsCode;
 
 /**
  * TODO JavaDoc
+ * 
  * @author Christian Autermann
  */
 public class InputDecodingException extends EngineException {
 
     private static final long serialVersionUID = -1065731367786870799L;
+
     private final OwsCode id;
 
     public InputDecodingException(OwsCode id, Throwable cause) {

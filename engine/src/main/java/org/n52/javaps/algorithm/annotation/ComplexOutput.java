@@ -35,7 +35,10 @@ import org.n52.javaps.io.complex.ComplexData;
 @Documented
 public @interface ComplexOutput {
     String identifier(); // identifier
+
     String title() default "";
+
     String abstrakt() default ""; // 'abstract' is java reserved keyword
+
     Class<? extends ComplexData<?>> binding();
 }

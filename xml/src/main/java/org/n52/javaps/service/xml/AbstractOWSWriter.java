@@ -76,22 +76,22 @@ public abstract class AbstractOWSWriter extends AbstractMultiElementXmlStreamWri
         super(supportedClasses);
     }
 
-    protected void writeOperationsMetadata(OwsCapabilities capabilities)
-            throws XMLStreamException {
-        element(OWSConstants.Elem.QN_OPERATIONS_METADATA, capabilities
-                .getOperationsMetadata(), (OwsOperationsMetadata operationsMetadata) -> {
+    protected void writeOperationsMetadata(OwsCapabilities capabilities) throws XMLStreamException {
+        element(OWSConstants.Elem.QN_OPERATIONS_METADATA, capabilities.getOperationsMetadata(),
+                (OwsOperationsMetadata operationsMetadata) -> {
                     writeOperations(operationsMetadata);
                     writeParameters(operationsMetadata.getParameters());
                     writeConstraints(operationsMetadata.getConstraints());
                 });
     }
 
-    protected void writeKeywords(Set<OwsKeyword> set)
-            throws XMLStreamException {
+    protected void writeKeywords(Set<OwsKeyword> set) throws XMLStreamException {
         if (!set.isEmpty()) {
             element(OWSConstants.Elem.QN_KEYWORDS, set, x -> {
                 Map<Optional<OwsCode>, Set<OwsLanguageString>> keywords = x.stream()
-                        .collect(groupingBy(OwsKeyword::getType, () -> new TreeMap<Optional<OwsCode>, Set<OwsLanguageString>>(Optionals.nullsLast()), mapping(OwsKeyword::getKeyword, toCollection(TreeSet::new))));
+                        .collect(groupingBy(OwsKeyword::getType,
+                                () -> new TreeMap<Optional<OwsCode>, Set<OwsLanguageString>>(Optionals.nullsLast()),
+                                mapping(OwsKeyword::getKeyword, toCollection(TreeSet::new))));
                 for (Entry<Optional<OwsCode>, Set<OwsLanguageString>> entry : keywords.entrySet()) {
                     Optional<OwsCode> type = entry.getKey();
                     for (OwsLanguageString keyword : entry.getValue()) {
@@ -105,8 +105,8 @@ public abstract class AbstractOWSWriter extends AbstractMultiElementXmlStreamWri
         }
     }
 
-     protected void writeLanguageString(QName name, OwsLanguageString value)
-            throws XMLStreamException {
+    protected void writeLanguageString(QName name,
+            OwsLanguageString value) throws XMLStreamException {
         element(name, value, x -> {
             if (x.getLang().isPresent()) {
                 attr("xml:lang", x.getLang().get());
@@ -115,13 +115,13 @@ public abstract class AbstractOWSWriter extends AbstractMultiElementXmlStreamWri
         });
     }
 
-    protected void writeDomainMetadata(QName name, OwsDomainMetadata dmd)
-                throws XMLStreamException {
+    protected void writeDomainMetadata(QName name,
+            OwsDomainMetadata dmd) throws XMLStreamException {
         writeDomainMetadata(name, Optional.ofNullable(dmd));
     }
 
-    protected void writeDomainMetadata(QName name, Optional<OwsDomainMetadata> metadata)
-            throws XMLStreamException {
+    protected void writeDomainMetadata(QName name,
+            Optional<OwsDomainMetadata> metadata) throws XMLStreamException {
         if (metadata.isPresent()) {
             OwsDomainMetadata m = metadata.get();
             if (Optionals.any(m.getValue(), metadata.get().getReference())) {
@@ -137,15 +137,16 @@ public abstract class AbstractOWSWriter extends AbstractMultiElementXmlStreamWri
         }
     }
 
-    protected void writeLanguageString(QName name, Optional<OwsLanguageString> value)
-            throws XMLStreamException {
+    protected void writeLanguageString(QName name,
+            Optional<OwsLanguageString> value) throws XMLStreamException {
         if (value.isPresent()) {
             writeLanguageString(name, value.get());
         }
     }
 
-    protected void writeMultilingualString(QName name, MultilingualString ms) throws XMLStreamException {
-        forEach(name, ms, ls-> {
+    protected void writeMultilingualString(QName name,
+            MultilingualString ms) throws XMLStreamException {
+        forEach(name, ms, ls -> {
             langAttr(ls.getLang());
             chars(ls.getText());
         });
@@ -155,21 +156,20 @@ public abstract class AbstractOWSWriter extends AbstractMultiElementXmlStreamWri
         attr("xml:lang", Optional.of(Strings.emptyToNull(LocaleHelper.encode(lang))));
     }
 
-    protected void writeCode(QName name, Optional<OwsCode> id)
-            throws XMLStreamException {
+    protected void writeCode(QName name,
+            Optional<OwsCode> id) throws XMLStreamException {
         element(name, id, (OwsCode x) -> {
             attr(OWSConstants.Attr.AN_CODE_SPACE, x.getCodeSpace().map(URI::toString));
             chars(x.getValue());
         });
     }
-    protected void writeCode(QName name, OwsCode id)
-            throws XMLStreamException {
+
+    protected void writeCode(QName name,
+            OwsCode id) throws XMLStreamException {
         writeCode(name, Optional.ofNullable(id));
     }
 
-
-    protected void writeHTTP(OwsDCP dcp)
-            throws XMLStreamException {
+    protected void writeHTTP(OwsDCP dcp) throws XMLStreamException {
         element(OWSConstants.Elem.QN_HTTP, dcp.asHTTP(), http -> {
             for (OwsRequestMethod method : http.getRequestMethods()) {
                 writeRequestMethod(method);
@@ -177,8 +177,7 @@ public abstract class AbstractOWSWriter extends AbstractMultiElementXmlStreamWri
         });
     }
 
-    protected void writeDCP(OwsOperation operation)
-            throws XMLStreamException {
+    protected void writeDCP(OwsOperation operation) throws XMLStreamException {
         forEach(OWSConstants.Elem.QN_DCP, operation.getDCP(), dcp -> {
             if (dcp.isHTTP()) {
                 writeHTTP(dcp);
@@ -186,51 +185,42 @@ public abstract class AbstractOWSWriter extends AbstractMultiElementXmlStreamWri
         });
     }
 
-    protected void writeParameters(Iterable<OwsDomain> parameters)
-            throws XMLStreamException {
+    protected void writeParameters(Iterable<OwsDomain> parameters) throws XMLStreamException {
         writeDomains(OWSConstants.Elem.QN_PARAMETER, parameters);
     }
 
-    protected void writeLanguages(OwsCapabilities capabilities)
-            throws XMLStreamException {
+    protected void writeLanguages(OwsCapabilities capabilities) throws XMLStreamException {
         element(OWSConstants.Elem.QN_LANGUAGES, capabilities.getLanguages(), (Iterable<String> languages) -> {
             forEach(OWSConstants.Elem.QN_LANGUAGE, languages, this::chars);
         });
     }
 
-    protected void writeAnyValue(OwsAnyValue anyValue)
-            throws XMLStreamException {
+    protected void writeAnyValue(OwsAnyValue anyValue) throws XMLStreamException {
         empty(OWSConstants.Elem.QN_ANY_VALUE);
     }
 
-    protected void writeNoValues(OwsNoValues noValues)
-            throws XMLStreamException {
+    protected void writeNoValues(OwsNoValues noValues) throws XMLStreamException {
         empty(OWSConstants.Elem.QN_NO_VALUES);
     }
 
-    protected void writeValuesReference(OwsValuesReference valuesReference)
-            throws XMLStreamException {
+    protected void writeValuesReference(OwsValuesReference valuesReference) throws XMLStreamException {
         element(OWSConstants.Elem.QN_VALUES_REFERENCE, () -> {
             attr(OWSConstants.Attr.AN_REFERENCE, valuesReference.getReference().toString());
             chars(valuesReference.getValue());
         });
     }
 
-    protected void writeContactInfo(OwsResponsibleParty serviceContact)
-            throws XMLStreamException {
+    protected void writeContactInfo(OwsResponsibleParty serviceContact) throws XMLStreamException {
         element(OWSConstants.Elem.QN_CONTACT_INFO, serviceContact.getContactInfo(), (OwsContact contactInfo) -> {
             writePhone(contactInfo);
             writeAddress(contactInfo);
             element(OWSConstants.Elem.QN_ONLINE_RESOURCE, contactInfo.getOnlineResource(), this::writeXLinkAttrs);
-            element(OWSConstants.Elem.QN_HOURS_OF_SERVICE, contactInfo
-                    .getHoursOfService());
-            element(OWSConstants.Elem.QN_CONTACT_INSTRUCTIONS, contactInfo
-                    .getContactInstructions());
+            element(OWSConstants.Elem.QN_HOURS_OF_SERVICE, contactInfo.getHoursOfService());
+            element(OWSConstants.Elem.QN_CONTACT_INSTRUCTIONS, contactInfo.getContactInstructions());
         });
     }
 
-    protected void writeAddress(OwsContact contactInfo)
-            throws XMLStreamException {
+    protected void writeAddress(OwsContact contactInfo) throws XMLStreamException {
         element(OWSConstants.Elem.QN_ADDRESS, contactInfo.getAddress(), (OwsAddress address) -> {
             forEach(OWSConstants.Elem.QN_DELIVERY_POINT, address.getDeliveryPoint(), this::chars);
             element(OWSConstants.Elem.QN_CITY, address.getCity());
@@ -241,27 +231,23 @@ public abstract class AbstractOWSWriter extends AbstractMultiElementXmlStreamWri
         });
     }
 
-    protected void writePhone(OwsContact contactInfo)
-            throws XMLStreamException {
+    protected void writePhone(OwsContact contactInfo) throws XMLStreamException {
         element(OWSConstants.Elem.QN_PHONE, contactInfo.getPhone(), (OwsPhone phone) -> {
             forEach(OWSConstants.Elem.QN_VOICE, phone.getVoice(), this::chars);
             forEach(OWSConstants.Elem.QN_FACSIMILE, phone.getFacsimile(), this::chars);
         });
     }
 
-    protected void writeServiceContact(OwsServiceProvider sp)
-            throws XMLStreamException {
+    protected void writeServiceContact(OwsServiceProvider sp) throws XMLStreamException {
         element(OWSConstants.Elem.QN_SERVICE_CONTACT, sp.getServiceContact(), serviceContact -> {
-            element(OWSConstants.Elem.QN_INDIVIDUAL_NAME, serviceContact
-                    .getIndividualName());
+            element(OWSConstants.Elem.QN_INDIVIDUAL_NAME, serviceContact.getIndividualName());
             element(OWSConstants.Elem.QN_POSITION_NAME, serviceContact.getPositionName());
             writeContactInfo(serviceContact);
             writeCode(OWSConstants.Elem.QN_ROLE, serviceContact.getRole());
         });
     }
 
-    protected void writeServiceProvider(OwsCapabilities capabilities)
-            throws XMLStreamException {
+    protected void writeServiceProvider(OwsCapabilities capabilities) throws XMLStreamException {
         element(OWSConstants.Elem.QN_SERVICE_PROVIDER, capabilities.getServiceProvider(), (OwsServiceProvider sp) -> {
             element(OWSConstants.Elem.QN_PROVIDER_NAME, sp.getProviderName());
             element(OWSConstants.Elem.QN_PROVIDER_SITE, sp.getProviderSite(), this::writeXLinkAttrs);
@@ -269,10 +255,9 @@ public abstract class AbstractOWSWriter extends AbstractMultiElementXmlStreamWri
         });
     }
 
-    protected void writeServiceIdentification(OwsCapabilities capabilities)
-            throws XMLStreamException {
-        element(OWSConstants.Elem.QN_SERVICE_IDENTIFICATION, capabilities
-                .getServiceIdentification(), (OwsServiceIdentification si) -> {
+    protected void writeServiceIdentification(OwsCapabilities capabilities) throws XMLStreamException {
+        element(OWSConstants.Elem.QN_SERVICE_IDENTIFICATION, capabilities.getServiceIdentification(),
+                (OwsServiceIdentification si) -> {
                     writeMultilingualString(OWSConstants.Elem.QN_TITLE, si.getTitle().orElse(null));
                     writeMultilingualString(OWSConstants.Elem.QN_ABSTRACT, si.getAbstract().orElse(null));
                     writeKeywords(si.getKeywords());
@@ -292,8 +277,7 @@ public abstract class AbstractOWSWriter extends AbstractMultiElementXmlStreamWri
                 });
     }
 
-    protected void writeValueRestriction(OwsValueRestriction restriction)
-            throws XMLStreamException {
+    protected void writeValueRestriction(OwsValueRestriction restriction) throws XMLStreamException {
         if (restriction.isRange()) {
             writeRange(restriction);
         } else if (restriction.isValue()) {
@@ -301,8 +285,7 @@ public abstract class AbstractOWSWriter extends AbstractMultiElementXmlStreamWri
         }
     }
 
-    protected void writeAllowedValues(OwsAllowedValues allowedValues)
-            throws XMLStreamException {
+    protected void writeAllowedValues(OwsAllowedValues allowedValues) throws XMLStreamException {
         element(OWSConstants.Elem.QN_ALLOWED_VALUES, () -> {
             for (OwsValueRestriction restriction : allowedValues) {
                 writeValueRestriction(restriction);
@@ -310,26 +293,20 @@ public abstract class AbstractOWSWriter extends AbstractMultiElementXmlStreamWri
         });
     }
 
-    protected void writeRange(OwsValueRestriction restriction)
-            throws XMLStreamException {
+    protected void writeRange(OwsValueRestriction restriction) throws XMLStreamException {
         element(OWSConstants.Elem.QN_RANGE, restriction.asRange(), range -> {
             attr(OWSConstants.Attr.AN_RANGE_CLOSURE, range.getType());
-            element(OWSConstants.Elem.QN_MINIMUM_VALUE, range.getLowerBound()
-                    .map(OwsValue::getValue));
-            element(OWSConstants.Elem.QN_MAXIMUM_VALUE, range.getUpperBound()
-                    .map(OwsValue::getValue));
-            element(OWSConstants.Elem.QN_SPACING, range.getSpacing()
-                    .map(OwsValue::getValue));
+            element(OWSConstants.Elem.QN_MINIMUM_VALUE, range.getLowerBound().map(OwsValue::getValue));
+            element(OWSConstants.Elem.QN_MAXIMUM_VALUE, range.getUpperBound().map(OwsValue::getValue));
+            element(OWSConstants.Elem.QN_SPACING, range.getSpacing().map(OwsValue::getValue));
         });
     }
 
-    protected void writeValue(OwsValueRestriction restriction)
-            throws XMLStreamException {
+    protected void writeValue(OwsValueRestriction restriction) throws XMLStreamException {
         element(OWSConstants.Elem.QN_VALUE, restriction.asValue().getValue());
     }
 
-    protected void writePossibleValues(OwsPossibleValues possibleValues)
-            throws XMLStreamException {
+    protected void writePossibleValues(OwsPossibleValues possibleValues) throws XMLStreamException {
         if (possibleValues.isAllowedValues()) {
             writeAllowedValues(possibleValues.asAllowedValues());
         } else if (possibleValues.isAnyValue()) {
@@ -341,21 +318,18 @@ public abstract class AbstractOWSWriter extends AbstractMultiElementXmlStreamWri
         }
     }
 
-    protected void writeMetadata(Iterable<OwsMetadata> m)
-            throws XMLStreamException {
+    protected void writeMetadata(Iterable<OwsMetadata> m) throws XMLStreamException {
         forEach(OWSConstants.Elem.QN_METADATA, m, metadata -> {
             writeXLinkAttrs(metadata);
             attr(OWSConstants.Attr.AN_ABOUT, metadata.getAbout().map(URI::toString));
         });
     }
 
-    protected void writeConstraints(Iterable<OwsDomain> constraints)
-            throws XMLStreamException {
+    protected void writeConstraints(Iterable<OwsDomain> constraints) throws XMLStreamException {
         writeDomains(OWSConstants.Elem.QN_CONSTRAINT, constraints);
     }
 
-    protected void writeRequestMethod(OwsRequestMethod method)
-            throws XMLStreamException {
+    protected void writeRequestMethod(OwsRequestMethod method) throws XMLStreamException {
         QName name = null;
         if (method.getHttpMethod().equals(HTTPMethods.GET)) {
             name = OWSConstants.Elem.QN_GET;
@@ -370,8 +344,7 @@ public abstract class AbstractOWSWriter extends AbstractMultiElementXmlStreamWri
         }
     }
 
-    protected void writeOperations(OwsOperationsMetadata operationsMetadata)
-            throws XMLStreamException {
+    protected void writeOperations(OwsOperationsMetadata operationsMetadata) throws XMLStreamException {
         forEach(OWSConstants.Elem.QN_OPERATION, operationsMetadata.getOperations(), operation -> {
             attr(OWSConstants.Attr.AN_NAME, operation.getName());
             writeDCP(operation);
@@ -381,22 +354,18 @@ public abstract class AbstractOWSWriter extends AbstractMultiElementXmlStreamWri
         });
     }
 
-    protected void writeDomains(QName name, Iterable<OwsDomain> domains)
-            throws XMLStreamException {
+    protected void writeDomains(QName name,
+            Iterable<OwsDomain> domains) throws XMLStreamException {
         forEach(name, domains, domain -> {
             attr(OWSConstants.Attr.AN_NAME, domain.getName());
             writePossibleValues(domain.getPossibleValues());
-            element(OWSConstants.Elem.QN_DEFAULT_VALUE, domain.getDefaultValue()
-                    .map(OwsValue::getValue));
+            element(OWSConstants.Elem.QN_DEFAULT_VALUE, domain.getDefaultValue().map(OwsValue::getValue));
             writeDomainMetadata(OWSConstants.Elem.QN_MEANING, domain.getMeaning());
             writeDomainMetadata(OWSConstants.Elem.QN_DATA_TYPE, domain.getDataType());
-            writeDomainMetadata(OWSConstants.Elem.QN_REFERENCE_SYSTEM, domain
-                                .getValuesUnit()
-                                .filter(OwsValuesUnit::isReferenceSystem)
-                                .map(OwsValuesUnit::asReferenceSystem));
-            writeDomainMetadata(OWSConstants.Elem.QN_UOM, domain.getValuesUnit()
-                                .filter(OwsValuesUnit::isUOM)
-                                .map(OwsValuesUnit::asUOM));
+            writeDomainMetadata(OWSConstants.Elem.QN_REFERENCE_SYSTEM, domain.getValuesUnit()
+                    .filter(OwsValuesUnit::isReferenceSystem).map(OwsValuesUnit::asReferenceSystem));
+            writeDomainMetadata(OWSConstants.Elem.QN_UOM,
+                    domain.getValuesUnit().filter(OwsValuesUnit::isUOM).map(OwsValuesUnit::asUOM));
             writeMetadata(domain.getMetadata());
         });
     }

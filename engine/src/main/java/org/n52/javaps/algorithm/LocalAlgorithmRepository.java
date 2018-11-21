@@ -51,17 +51,21 @@ public class LocalAlgorithmRepository implements AlgorithmRepository {
     private static final Logger LOG = LoggerFactory.getLogger(LocalAlgorithmRepository.class);
 
     private final Map<OwsCode, TypedProcessDescription> descriptions = new HashMap<>();
+
     private final Map<OwsCode, Supplier<IAlgorithm>> algorithms = new HashMap<>();
+
     private final InputHandlerRepository parserRepository;
+
     private final OutputHandlerRepository generatorRepository;
+
     private final LiteralTypeRepository literalTypeRepository;
+
     private final AutowireCapableBeanFactory beanFactory;
 
     @Inject
     public LocalAlgorithmRepository(InputHandlerRepository parserRepository,
-                                    OutputHandlerRepository generatorRepository,
-                                    LiteralTypeRepository literalTypeRepository,
-                                    ApplicationContext applicationContext) {
+            OutputHandlerRepository generatorRepository, LiteralTypeRepository literalTypeRepository,
+            ApplicationContext applicationContext) {
         this.parserRepository = Objects.requireNonNull(parserRepository);
         this.generatorRepository = Objects.requireNonNull(generatorRepository);
         this.literalTypeRepository = Objects.requireNonNull(literalTypeRepository);
@@ -127,7 +131,7 @@ public class LocalAlgorithmRepository implements AlgorithmRepository {
             addAlgorithm((IAlgorithm) object);
         } else if (object instanceof Class<?>) {
             addAlgorithm((Class<?>) object);
-        } else if (object!=null && object.getClass().isAnnotationPresent(Algorithm.class)) {
+        } else if (object != null && object.getClass().isAnnotationPresent(Algorithm.class)) {
             addAlgorithm(new AnnotatedAlgorithm(parserRepository, generatorRepository, literalTypeRepository, object));
         } else {
             LOG.error("Could not add algorithm {}", object);
@@ -145,7 +149,7 @@ public class LocalAlgorithmRepository implements AlgorithmRepository {
 
         Supplier<IAlgorithm> removedAlgorithm = this.algorithms.remove(identifier);
 
-        if(removedAlgorithm != null) {
+        if (removedAlgorithm != null) {
             return true;
         }
 
@@ -162,7 +166,8 @@ public class LocalAlgorithmRepository implements AlgorithmRepository {
         }
 
         if (clazz.isAnnotationPresent(Algorithm.class) && !(instance instanceof AnnotatedAlgorithm)) {
-            return Optional.of(new AnnotatedAlgorithm(parserRepository, generatorRepository, literalTypeRepository, instance));
+            return Optional
+                    .of(new AnnotatedAlgorithm(parserRepository, generatorRepository, literalTypeRepository, instance));
         } else if (instance instanceof IAlgorithm) {
             return Optional.of((IAlgorithm) instance);
         } else {

@@ -16,7 +16,6 @@
  */
 package org.n52.svalbard.encode.stream.xml;
 
-
 import static java.util.stream.Collectors.joining;
 
 import java.io.IOException;
@@ -57,11 +56,10 @@ import com.google.common.io.BaseEncoding;
 import com.google.common.io.ByteStreams;
 import com.google.common.xml.XmlEscapers;
 
-
-public abstract class AbstractElementXmlStreamWriter extends XmlFactories
-        implements ElementXmlStreamWriter {
+public abstract class AbstractElementXmlStreamWriter extends XmlFactories implements ElementXmlStreamWriter {
 
     private static final Escaper ESCAPER = XmlEscapers.xmlContentEscaper();
+
     private XmlStreamWritingContext context;
 
     @Override
@@ -73,45 +71,55 @@ public abstract class AbstractElementXmlStreamWriter extends XmlFactories
         return this.context;
     }
 
-    protected void attr(QName name, String value) throws XMLStreamException {
+    protected void attr(QName name,
+            String value) throws XMLStreamException {
         context().dispatch(eventFactory().createAttribute(name, value));
     }
 
-    protected void attr(QName name, Optional<String> value) throws XMLStreamException {
+    protected void attr(QName name,
+            Optional<String> value) throws XMLStreamException {
         if (value.isPresent()) {
             attr(name, value.get());
         }
     }
 
-    protected void attr(String name, Optional<String> value) throws XMLStreamException {
+    protected void attr(String name,
+            Optional<String> value) throws XMLStreamException {
         attr(new QName(name), value);
     }
 
-    protected void attr(String name, String value) throws XMLStreamException {
+    protected void attr(String name,
+            String value) throws XMLStreamException {
         attr(new QName(name), value);
     }
 
-    protected void attr(String namespace, String localName, String value) throws XMLStreamException {
+    protected void attr(String namespace,
+            String localName,
+            String value) throws XMLStreamException {
         attr(new QName(namespace, localName), value);
     }
 
-    protected void namespace(String prefix, String namespace) throws XMLStreamException {
+    protected void namespace(String prefix,
+            String namespace) throws XMLStreamException {
         if (context().declareNamespace(prefix, namespace)) {
             context().dispatch(eventFactory().createNamespace(prefix, namespace));
         }
     }
 
-    protected void start(String namespace, String localName) throws XMLStreamException {
+    protected void start(String namespace,
+            String localName) throws XMLStreamException {
         start(new QName(namespace, localName));
     }
 
-    protected void start(String namespace, String localName, String prefix) throws XMLStreamException {
+    protected void start(String namespace,
+            String localName,
+            String prefix) throws XMLStreamException {
         start(new QName(namespace, localName, prefix));
     }
 
-    protected void start(QName name)
-            throws XMLStreamException {
-        context().dispatch(eventFactory().createStartElement(name.getPrefix(), name.getNamespaceURI(), name.getLocalPart()));
+    protected void start(QName name) throws XMLStreamException {
+        context().dispatch(
+                eventFactory().createStartElement(name.getPrefix(), name.getNamespaceURI(), name.getLocalPart()));
     }
 
     protected void empty(QName name) throws XMLStreamException {
@@ -123,13 +131,15 @@ public abstract class AbstractElementXmlStreamWriter extends XmlFactories
         context().dispatch(eventFactory().createCharacters(chars));
     }
 
-    protected void chars(String chars, boolean escape) throws XMLStreamException {
+    protected void chars(String chars,
+            boolean escape) throws XMLStreamException {
         // TODO escape by default
         context().dispatch(eventFactory().createCharacters(escape ? escaper().escape(chars) : chars));
     }
 
     protected void end(QName name) throws XMLStreamException {
-        context().dispatch(eventFactory().createEndElement(name.getPrefix(), name.getNamespaceURI(), name.getLocalPart()));
+        context().dispatch(
+                eventFactory().createEndElement(name.getPrefix(), name.getNamespaceURI(), name.getLocalPart()));
     }
 
     protected void write(Reader in) throws XMLStreamException {
@@ -150,7 +160,7 @@ public abstract class AbstractElementXmlStreamWriter extends XmlFactories
 
     protected void writeBase64(InputStream data) throws IOException {
         try (CharacterEmittingWriter writer = new CharacterEmittingWriter();
-             OutputStream encodingStream = base64().encodingStream(writer)) {
+                OutputStream encodingStream = base64().encodingStream(writer)) {
             ByteStreams.copy(data, encodingStream);
         }
     }
@@ -159,10 +169,10 @@ public abstract class AbstractElementXmlStreamWriter extends XmlFactories
      * Write {@link TimeInstant} to stream
      *
      * @param time
-     *             {@link TimeInstant} to write to stream
+     *            {@link TimeInstant} to write to stream
      *
      * @throws XMLStreamException
-     *                            If an error occurs when writing to {@link OutputStream}
+     *             If an error occurs when writing to {@link OutputStream}
      */
     protected void time(TimeInstant time) throws XMLStreamException {
         time(time.getTimePosition());
@@ -171,10 +181,11 @@ public abstract class AbstractElementXmlStreamWriter extends XmlFactories
     /**
      * Write {@link TimePosition} as ISO 8601 to stream
      *
-     * @param time {@link TimePosition} to write as ISO 8601 to stream
+     * @param time
+     *            {@link TimePosition} to write as ISO 8601 to stream
      *
-     * @throws XMLStreamException If an error occurs when writing to
-     *                            {@link OutputStream}
+     * @throws XMLStreamException
+     *             If an error occurs when writing to {@link OutputStream}
      */
     protected void time(TimePosition time) throws XMLStreamException {
         chars(DateTimeHelper.formatDateTime2IsoString(time.getTime()));
@@ -184,10 +195,10 @@ public abstract class AbstractElementXmlStreamWriter extends XmlFactories
      * Write {@link SchemaLocation}s as xsi:schemaLocations attribute to stream
      *
      * @param schemaLocations
-     *                        {@link SchemaLocation}s to write
+     *            {@link SchemaLocation}s to write
      *
      * @throws XMLStreamException
-     *                            If an error occurs when writing to {@link OutputStream}
+     *             If an error occurs when writing to {@link OutputStream}
      */
     protected void schemaLocation(Set<SchemaLocation> schemaLocations) throws XMLStreamException {
         String merged = mergeSchemaLocationsToString(schemaLocations);
@@ -207,33 +218,41 @@ public abstract class AbstractElementXmlStreamWriter extends XmlFactories
         attr(XLinkConstants.Attr.QN_ACTUATE, link.getActuate().map(Actuate::toString));
     }
 
-    protected void writeLink(QName name, Link link) throws XMLStreamException {
+    protected void writeLink(QName name,
+            Link link) throws XMLStreamException {
         element(name, link, this::writeXLinkAttrs);
     }
 
-    protected void element(QName name, String value) throws XMLStreamException {
+    protected void element(QName name,
+            String value) throws XMLStreamException {
         start(name);
         chars(value);
         end(name);
     }
 
-    protected void element(QName name, Optional<String> value) throws XMLStreamException {
+    protected void element(QName name,
+            Optional<String> value) throws XMLStreamException {
         if (value.isPresent()) {
             element(name, value.get());
         }
     }
 
-    protected void element(QName name, OffsetDateTime time) throws XMLStreamException {
+    protected void element(QName name,
+            OffsetDateTime time) throws XMLStreamException {
         element(name, format(time));
     }
 
-    protected <T> void attr(QName name, Collection<? extends T> coll, Function<T, String> mapper) throws XMLStreamException {
+    protected <T> void attr(QName name,
+            Collection<? extends T> coll,
+            Function<T, String> mapper) throws XMLStreamException {
         if (coll != null && !coll.isEmpty()) {
             attr(name, coll.stream().map(mapper).collect(joining(" ")));
         }
     }
 
-    protected <T> void attr(String name, Collection<? extends T> coll, Function<T, String> mapper) throws XMLStreamException {
+    protected <T> void attr(String name,
+            Collection<? extends T> coll,
+            Function<T, String> mapper) throws XMLStreamException {
         attr(new QName(name), coll, mapper);
     }
 
@@ -245,9 +264,9 @@ public abstract class AbstractElementXmlStreamWriter extends XmlFactories
         return DateTimeFormatter.ISO_DATE_TIME.format(time);
     }
 
-
-
-    protected <T> void element(QName name, Optional<? extends T> elem, ElementWriter<? super T> writer) throws XMLStreamException {
+    protected <T> void element(QName name,
+            Optional<? extends T> elem,
+            ElementWriter<? super T> writer) throws XMLStreamException {
         if (elem.isPresent()) {
             start(name);
             writer.write(elem.get());
@@ -255,7 +274,9 @@ public abstract class AbstractElementXmlStreamWriter extends XmlFactories
         }
     }
 
-    protected <T> void element(QName name, T elem, ElementWriter<? super T> writer) throws XMLStreamException {
+    protected <T> void element(QName name,
+            T elem,
+            ElementWriter<? super T> writer) throws XMLStreamException {
         if (elem != null) {
             start(name);
             writer.write(elem);
@@ -263,7 +284,9 @@ public abstract class AbstractElementXmlStreamWriter extends XmlFactories
         }
     }
 
-    protected <T> void forEach(QName name, Iterable<? extends T> elements, ElementWriter<? super T> writer) throws XMLStreamException {
+    protected <T> void forEach(QName name,
+            Iterable<? extends T> elements,
+            ElementWriter<? super T> writer) throws XMLStreamException {
         if (elements != null) {
             for (T elem : elements) {
                 start(name);
@@ -273,14 +296,14 @@ public abstract class AbstractElementXmlStreamWriter extends XmlFactories
         }
     }
 
-    protected <T> void element(QName name, ContentWriter writer) throws XMLStreamException {
+    protected <T> void element(QName name,
+            ContentWriter writer) throws XMLStreamException {
         start(name);
         writer.write();
         end(name);
     }
 
-    protected void writeXML(String xml)
-            throws XMLStreamException {
+    protected void writeXML(String xml) throws XMLStreamException {
         try (StringReader reader = new StringReader(xml)) {
             write(reader);
         }
@@ -304,6 +327,7 @@ public abstract class AbstractElementXmlStreamWriter extends XmlFactories
         }
         return builder.toString();
     }
+
     /**
      * @return the xmlContentEscaper
      */
@@ -325,7 +349,9 @@ public abstract class AbstractElementXmlStreamWriter extends XmlFactories
         private boolean closed;
 
         @Override
-        public void write(char[] cbuf, int off, int len) throws IOException {
+        public void write(char[] cbuf,
+                int off,
+                int len) throws IOException {
             checkNotClosed();
             write(new String(cbuf, off, len));
         }
@@ -356,7 +382,9 @@ public abstract class AbstractElementXmlStreamWriter extends XmlFactories
         }
 
         @Override
-        public void write(String str, int off, int len) throws IOException {
+        public void write(String str,
+                int off,
+                int len) throws IOException {
             checkNotClosed();
             write(str.substring(off, len));
         }
@@ -367,6 +395,5 @@ public abstract class AbstractElementXmlStreamWriter extends XmlFactories
             }
         }
     }
-
 
 }

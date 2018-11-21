@@ -28,6 +28,7 @@ import org.n52.javaps.algorithm.ProcessInputs;
 public class GroupInputData implements Data<ProcessInputs> {
 
     private static final long serialVersionUID = -8747518748439185542L;
+
     private final ProcessInputs payload;
 
     public GroupInputData(ProcessInputs payload) {

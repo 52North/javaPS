@@ -21,6 +21,7 @@ import org.n52.svalbard.encode.stream.StreamWriterKey;
 
 /**
  * TODO JavaDoc
+ * 
  * @author Christian Autermann
  */
 public class XmlStreamWriterKey extends StreamWriterKey {

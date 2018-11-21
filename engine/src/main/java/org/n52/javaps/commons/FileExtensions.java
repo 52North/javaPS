@@ -38,9 +38,8 @@ public class FileExtensions implements FileExtensionProvider {
         if (this.extensions.containsKey(mediaType)) {
             return this.extensions.get(mediaType);
         }
-        Optional<String> extension
-                = this.extensions.keySet().stream()
-                        .filter(x -> x.isCompatible(mediaType)).findAny().map(this.extensions::get);
+        Optional<String> extension = this.extensions.keySet().stream().filter(x -> x.isCompatible(mediaType)).findAny()
+                .map(this.extensions::get);
 
         if (extension.isPresent()) {
             return extension.get();
@@ -69,4 +68,3 @@ public class FileExtensions implements FileExtensionProvider {
         this.extensions = Objects.requireNonNull(extensions);
     }
 }
-

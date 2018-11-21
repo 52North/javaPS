@@ -33,11 +33,18 @@ import java.lang.annotation.Target;
 @Documented
 public @interface BoundingBoxInput {
     String identifier(); // identifier
+
     String title() default "";
+
     String abstrakt() default ""; // 'abstract' is java reserved keyword
+
     long minOccurs() default 1;
+
     long maxOccurs() default 1;
+
     String boundingBoxString() default "";
+
     String defaultCRSString() default "http://www.opengis.net/def/crs/EPSG/0/4326";
-    String[] supportedCRSStringArray() default {"http://www.opengis.net/def/crs/EPSG/0/4326"};
+
+    String[] supportedCRSStringArray() default { "http://www.opengis.net/def/crs/EPSG/0/4326" };
 }

@@ -82,23 +82,18 @@ import com.google.common.io.CharStreams;
 public class WPSWriter extends AbstractOWSWriter {
 
     private static final String UNBOUNDED = "unbounded";
-    private final ConcreteOutputWriter concreteOutputWriter
-            = new ConcreteOutputWriter();
-    private final ConcreteInputWriter concreteInputWriter
-            = new ConcreteInputWriter();
+
+    private final ConcreteOutputWriter concreteOutputWriter = new ConcreteOutputWriter();
+
+    private final ConcreteInputWriter concreteInputWriter = new ConcreteInputWriter();
 
     public WPSWriter() {
-        super(ProcessOfferings.class,
-              Result.class,
-              StatusInfo.class,
-              ProcessDescription.class,
-              WPSCapabilities.class,
-              ProcessData.class);
+        super(ProcessOfferings.class, Result.class, StatusInfo.class, ProcessDescription.class, WPSCapabilities.class,
+                ProcessData.class);
     }
 
     @Override
-    public void writeElement(Object object)
-            throws XMLStreamException, EncodingException {
+    public void writeElement(Object object) throws XMLStreamException, EncodingException {
         if (object instanceof ProcessOffering) {
             writeProcessOffering((ProcessOffering) object);
         } else if (object instanceof Result) {
@@ -118,8 +113,7 @@ public class WPSWriter extends AbstractOWSWriter {
         }
     }
 
-    private void writeWPSCapabilities(WPSCapabilities object)
-            throws XMLStreamException {
+    private void writeWPSCapabilities(WPSCapabilities object) throws XMLStreamException {
         element(WPSConstants.Elem.QN_CAPABILITIES, object, (WPSCapabilities capabilities) -> {
             writeNamespacesWithSchemalocation();
 
@@ -135,14 +129,13 @@ public class WPSWriter extends AbstractOWSWriter {
         });
     }
 
-    private void writeContents(WPSCapabilities capabilities)
-            throws XMLStreamException {
+    private void writeContents(WPSCapabilities capabilities) throws XMLStreamException {
         element(WPSConstants.Elem.QN_CONTENTS, capabilities.getProcessOfferings(), (ProcessOfferings offerings) -> {
             forEach(WPSConstants.Elem.QN_PROCESS_SUMMARY, offerings, offering -> {
-                attr(WPSConstants.Attr.AN_JOB_CONTROL_OPTIONS, offering
-                     .getJobControlOptions(), JobControlOption::getValue);
-                attr(WPSConstants.Attr.AN_OUTPUT_TRANSMISSION, offering
-                     .getOutputTransmissionModes(), DataTransmissionMode::getValue);
+                attr(WPSConstants.Attr.AN_JOB_CONTROL_OPTIONS, offering.getJobControlOptions(),
+                        JobControlOption::getValue);
+                attr(WPSConstants.Attr.AN_OUTPUT_TRANSMISSION, offering.getOutputTransmissionModes(),
+                        DataTransmissionMode::getValue);
                 attr(WPSConstants.Attr.AN_PROCESS_VERSION, offering.getProcessVersion());
                 attr(WPSConstants.Attr.AN_PROCESS_MODEL, offering.getProcessModel());
 
@@ -151,28 +144,24 @@ public class WPSWriter extends AbstractOWSWriter {
         });
     }
 
-    private void writeProcessInputDescription(ProcessInputDescription input)
-            throws XMLStreamException {
+    private void writeProcessInputDescription(ProcessInputDescription input) throws XMLStreamException {
         element(WPSConstants.Elem.QN_INPUT, input, x -> {
-            attr(XMLSchemaConstants.Attr.AN_MIN_OCCURS, x.getOccurence().getMin()
-                 .toString());
-            attr(XMLSchemaConstants.Attr.AN_MAX_OCCURS, x.getOccurence().getMax()
-                 .map(Object::toString).orElse(UNBOUNDED));
+            attr(XMLSchemaConstants.Attr.AN_MIN_OCCURS, x.getOccurence().getMin().toString());
+            attr(XMLSchemaConstants.Attr.AN_MAX_OCCURS,
+                    x.getOccurence().getMax().map(Object::toString).orElse(UNBOUNDED));
             writeDescriptionElements(x);
             x.visit(this.concreteInputWriter);
         });
     }
 
-    private void writeProcessOutputDescription(ProcessOutputDescription output)
-            throws XMLStreamException {
+    private void writeProcessOutputDescription(ProcessOutputDescription output) throws XMLStreamException {
         element(WPSConstants.Elem.QN_OUTPUT, () -> {
             writeDescriptionElements(output);
             output.visit(this.concreteOutputWriter);
         });
     }
 
-    private void writeDescriptionElements(Description description)
-            throws XMLStreamException {
+    private void writeDescriptionElements(Description description) throws XMLStreamException {
         writeLanguageString(OWSConstants.Elem.QN_TITLE, description.getTitle());
         writeLanguageString(OWSConstants.Elem.QN_ABSTRACT, description.getAbstract());
         writeKeywords(description.getKeywords());
@@ -181,13 +170,11 @@ public class WPSWriter extends AbstractOWSWriter {
     }
 
     private void writeFormat(Format format,
-                             Optional<BigInteger> maximumMegabytes,
-                             boolean isDefaultFormat)
-            throws XMLStreamException {
+            Optional<BigInteger> maximumMegabytes,
+            boolean isDefaultFormat) throws XMLStreamException {
         element(WPSConstants.Elem.QN_FORMAT, () -> {
             writeDataEncodingAttributes(format);
-            attr(WPSConstants.Attr.AN_MAXIMUM_MEGABYTES, maximumMegabytes
-                 .map(BigInteger::toString));
+            attr(WPSConstants.Attr.AN_MAXIMUM_MEGABYTES, maximumMegabytes.map(BigInteger::toString));
             if (isDefaultFormat) {
                 attr(WPSConstants.Attr.AN_DEFAULT, "true");
             }
@@ -195,8 +182,7 @@ public class WPSWriter extends AbstractOWSWriter {
     }
 
     private void writeLiteralDataDomain(LiteralDataDomain literalDataDomain,
-                                        boolean defaultDomain)
-            throws XMLStreamException {
+            boolean defaultDomain) throws XMLStreamException {
         element(WPSConstants.Elem.QN_LITERAL_DATA_DOMAIN, literalDataDomain, ldd -> {
             if (defaultDomain) {
                 attr(WPSConstants.Attr.AN_DEFAULT, "true");
@@ -218,8 +204,7 @@ public class WPSWriter extends AbstractOWSWriter {
         });
     }
 
-    private void writeBoundingBoxDescription(BoundingBoxDescription input)
-            throws XMLStreamException {
+    private void writeBoundingBoxDescription(BoundingBoxDescription input) throws XMLStreamException {
         element(WPSConstants.Elem.QN_BOUNDING_BOX_DATA, input, x -> {
             writeFormats(BoundingBoxInputOutputHandler.FORMATS);
 
@@ -234,13 +219,11 @@ public class WPSWriter extends AbstractOWSWriter {
         });
     }
 
-    private void writeComplexDescription(ComplexDescription input)
-            throws XMLStreamException {
+    private void writeComplexDescription(ComplexDescription input) throws XMLStreamException {
         element(WPSConstants.Elem.QN_COMPLEX_DATA, input, x -> writeFormats(x));
     }
 
-    private void writeLiteralDescription(LiteralDescription input)
-            throws XMLStreamException {
+    private void writeLiteralDescription(LiteralDescription input) throws XMLStreamException {
         element(WPSConstants.Elem.QN_LITERAL_DATA, input, x -> {
             writeFormats(LiteralInputOutputHandler.FORMATS);
 
@@ -253,22 +236,19 @@ public class WPSWriter extends AbstractOWSWriter {
 
     private void writeProcessInputDescriptionContainer(ProcessInputDescriptionContainer container)
             throws XMLStreamException {
-        for (ProcessInputDescription description : container
-                .getInputDescriptions()) {
+        for (ProcessInputDescription description : container.getInputDescriptions()) {
             writeProcessInputDescription(description);
         }
     }
 
     private void writeProcessOutputDescriptionContainer(ProcessOutputDescriptionContainer container)
             throws XMLStreamException {
-        for (ProcessOutputDescription description : container
-                .getOutputDescriptions()) {
+        for (ProcessOutputDescription description : container.getOutputDescriptions()) {
             writeProcessOutputDescription(description);
         }
     }
 
-    private void writeProcessDescription(ProcessDescription object)
-            throws XMLStreamException {
+    private void writeProcessDescription(ProcessDescription object) throws XMLStreamException {
         element(WPSConstants.Elem.QN_PROCESS, object, x -> {
             writeNamespacesWithSchemalocation();
             writeDescriptionElements(object);
@@ -277,8 +257,7 @@ public class WPSWriter extends AbstractOWSWriter {
         });
     }
 
-    private void writeReferenceData(ReferenceProcessData reference)
-            throws XMLStreamException {
+    private void writeReferenceData(ReferenceProcessData reference) throws XMLStreamException {
         element(WPSConstants.Elem.QN_REFERENCE, () -> {
             writeNamespaces();
 
@@ -287,11 +266,10 @@ public class WPSWriter extends AbstractOWSWriter {
             if (reference.getBody().isPresent()) {
                 Body body = reference.getBody().get();
                 if (body.isInline()) {
-                    element(WPSConstants.Elem.QN_BODY, body.asInline(), b -> cdata(b
-                            .getBody()));
+                    element(WPSConstants.Elem.QN_BODY, body.asInline(), b -> cdata(b.getBody()));
                 } else if (body.isReferenced()) {
-                    element(WPSConstants.Elem.QN_BODY_REFERENCE, body.asReferenced(), b
-                            -> attr(XLinkConstants.Attr.QN_HREF, b.getHref().toString()));
+                    element(WPSConstants.Elem.QN_BODY_REFERENCE, body.asReferenced(),
+                            b -> attr(XLinkConstants.Attr.QN_HREF, b.getHref().toString()));
                 } else {
                     throw new AssertionError();
                 }
@@ -299,48 +277,38 @@ public class WPSWriter extends AbstractOWSWriter {
         });
     }
 
-    private void writeStatusInfo(StatusInfo object)
-            throws XMLStreamException {
+    private void writeStatusInfo(StatusInfo object) throws XMLStreamException {
         element(WPSConstants.Elem.QN_STATUS_INFO, () -> {
             writeNamespacesWithSchemalocation();
             element(WPSConstants.Elem.QN_JOB_ID, object.getJobId().getValue());
             element(WPSConstants.Elem.QN_STATUS, object.getStatus().getValue());
-            element(WPSConstants.Elem.QN_EXPIRATION_DATE, object.getExpirationDate()
-                    .map(this::format));
-            element(WPSConstants.Elem.QN_ESTIMATED_COMPLETION, object
-                    .getEstimatedCompletion().map(this::format));
-            element(WPSConstants.Elem.QN_NEXT_POLL, object.getNextPoll()
-                    .map(this::format));
-            element(WPSConstants.Elem.QN_PERCENT_COMPLETED, object.getPercentCompleted()
-                    .map(String::valueOf));
+            element(WPSConstants.Elem.QN_EXPIRATION_DATE, object.getExpirationDate().map(this::format));
+            element(WPSConstants.Elem.QN_ESTIMATED_COMPLETION, object.getEstimatedCompletion().map(this::format));
+            element(WPSConstants.Elem.QN_NEXT_POLL, object.getNextPoll().map(this::format));
+            element(WPSConstants.Elem.QN_PERCENT_COMPLETED, object.getPercentCompleted().map(String::valueOf));
         });
     }
 
-    private void writeDataEncodingAttributes(Format format)
-            throws XMLStreamException {
+    private void writeDataEncodingAttributes(Format format) throws XMLStreamException {
         attr(WPSConstants.Attr.AN_MIME_TYPE, format.getMimeType());
         attr(WPSConstants.Attr.AN_ENCODING, format.getEncoding());
         attr(WPSConstants.Attr.AN_SCHEMA, format.getSchema());
     }
 
-    private void writeValueData(ValueProcessData value)
-            throws XMLStreamException {
+    private void writeValueData(ValueProcessData value) throws XMLStreamException {
         element(WPSConstants.Elem.QN_DATA, value, x -> {
             writeNamespaces();
 
             Format format = x.getFormat();
             try (InputStream data = x.getData()) {
 
-                if (!x.getFormat().hasEncoding() || x.getFormat()
-                    .isCharacterEncoding()) {
+                if (!x.getFormat().hasEncoding() || x.getFormat().isCharacterEncoding()) {
 
-                    writeDataEncodingAttributes(format
-                            .withEncoding(documentEncoding()));
+                    writeDataEncodingAttributes(format.withEncoding(documentEncoding()));
 
                     Charset charset = format.getEncodingAsCharsetOrDefault();
 
-                    try (InputStreamReader reader
-                            = new InputStreamReader(data, charset)) {
+                    try (InputStreamReader reader = new InputStreamReader(data, charset)) {
                         if (format.isXML()) {
                             write(reader);
                         } else {
@@ -367,8 +335,7 @@ public class WPSWriter extends AbstractOWSWriter {
         });
     }
 
-    private void writeResult(Result result)
-            throws XMLStreamException {
+    private void writeResult(Result result) throws XMLStreamException {
         if (result.getResponseMode() == ResponseMode.RAW) {
             writeRawResult(result);
         } else {
@@ -383,14 +350,12 @@ public class WPSWriter extends AbstractOWSWriter {
         }
     }
 
-    private void writeOutput(ProcessData data)
-            throws XMLStreamException {
+    private void writeOutput(ProcessData data) throws XMLStreamException {
         element(WPSConstants.Elem.QN_OUTPUT, data, x -> {
             writeNamespaces();
             attr(WPSConstants.Attr.AN_ID, x.getId().getValue());
             // FIXME codeSpace is not allowed here...
-            attr(OWSConstants.Attr.AN_CODE_SPACE, x.getId().getCodeSpace()
-                 .map(URI::toString));
+            attr(OWSConstants.Attr.AN_CODE_SPACE, x.getId().getCodeSpace().map(URI::toString));
 
             if (x.isGroup()) {
                 writeGroupData(x.asGroup());
@@ -402,39 +367,36 @@ public class WPSWriter extends AbstractOWSWriter {
         });
     }
 
-    private void writeProcessOffering(ProcessOffering offering)
-            throws XMLStreamException {
+    private void writeProcessOffering(ProcessOffering offering) throws XMLStreamException {
         element(WPSConstants.Elem.QN_PROCESS_OFFERING, offering, x -> {
             attr(WPSConstants.Attr.AN_JOB_CONTROL_OPTIONS, x.getJobControlOptions(), JobControlOption::getValue);
-            attr(WPSConstants.Attr.AN_OUTPUT_TRANSMISSION, x.getOutputTransmissionModes(), DataTransmissionMode::getValue);
+            attr(WPSConstants.Attr.AN_OUTPUT_TRANSMISSION, x.getOutputTransmissionModes(),
+                    DataTransmissionMode::getValue);
             attr(WPSConstants.Attr.AN_PROCESS_VERSION, x.getProcessVersion());
             attr(WPSConstants.Attr.AN_PROCESS_MODEL, x.getProcessModel());
             writeProcessDescription(offering.getProcessDescription());
         });
     }
 
-    private void writeNamespaces()
-            throws XMLStreamException {
+    private void writeNamespaces() throws XMLStreamException {
         namespace(WPSConstants.NS_WPS_PREFIX, WPSConstants.NS_WPS);
         namespace(OWSConstants.NS_OWS_PREFIX, OWSConstants.NS_OWS);
         namespace(XLinkConstants.NS_XLINK_PREFIX, XLinkConstants.NS_XLINK);
     }
 
-    private void writeNamespacesWithSchemalocation()
-            throws XMLStreamException {
+    private void writeNamespacesWithSchemalocation() throws XMLStreamException {
         writeNamespaces();
-        schemaLocation(Collections.singleton(new SchemaLocation(WPSConstants.NS_WPS, XMLSchemaConstants.WPS20_SCHEMALOCTION)));
+        schemaLocation(
+                Collections.singleton(new SchemaLocation(WPSConstants.NS_WPS, XMLSchemaConstants.WPS20_SCHEMALOCTION)));
     }
 
-    private void writeGroupData(GroupProcessData x)
-            throws XMLStreamException {
+    private void writeGroupData(GroupProcessData x) throws XMLStreamException {
         for (ProcessData output : x.getElements()) {
             writeOutput(output);
         }
     }
 
-    private void writeProcessOfferings(ProcessOfferings offerings)
-            throws XMLStreamException {
+    private void writeProcessOfferings(ProcessOfferings offerings) throws XMLStreamException {
         element(WPSConstants.Elem.QN_PROCESS_OFFERINGS, () -> {
             writeNamespacesWithSchemalocation();
             for (ProcessOffering processOffering : offerings) {
@@ -468,7 +430,7 @@ public class WPSWriter extends AbstractOWSWriter {
             // if we end up here the output is guaranteed to be XML
             Charset charset = output.asValue().getFormat().getEncodingAsCharsetOrDefault();
             try (InputStream in = output.asValue().getData();
-                 InputStreamReader reader = new InputStreamReader(in, charset)) {
+                    InputStreamReader reader = new InputStreamReader(in, charset)) {
                 write(reader);
             } catch (IOException ex) {
                 throw new XMLStreamException(ex);
@@ -476,56 +438,46 @@ public class WPSWriter extends AbstractOWSWriter {
         }
     }
 
-    private class ConcreteInputWriter implements
-            ProcessInputDescription.ThrowingVisitor<XMLStreamException> {
+    private class ConcreteInputWriter implements ProcessInputDescription.ThrowingVisitor<XMLStreamException> {
         @Override
-        public void visit(BoundingBoxInputDescription input)
-                throws XMLStreamException {
+        public void visit(BoundingBoxInputDescription input) throws XMLStreamException {
             writeBoundingBoxDescription((BoundingBoxDescription) input);
         }
 
         @Override
-        public void visit(ComplexInputDescription input)
-                throws XMLStreamException {
+        public void visit(ComplexInputDescription input) throws XMLStreamException {
             writeComplexDescription((ComplexDescription) input);
         }
 
         @Override
-        public void visit(LiteralInputDescription input)
-                throws XMLStreamException {
+        public void visit(LiteralInputDescription input) throws XMLStreamException {
             writeLiteralDescription((LiteralDescription) input);
         }
 
         @Override
-        public void visit(GroupInputDescription input)
-                throws XMLStreamException {
+        public void visit(GroupInputDescription input) throws XMLStreamException {
             writeProcessInputDescriptionContainer((ProcessInputDescriptionContainer) input);
         }
     }
 
-    private class ConcreteOutputWriter
-            implements ProcessOutputDescription.ThrowingVisitor<XMLStreamException> {
+    private class ConcreteOutputWriter implements ProcessOutputDescription.ThrowingVisitor<XMLStreamException> {
         @Override
-        public void visit(BoundingBoxOutputDescription output)
-                throws XMLStreamException {
+        public void visit(BoundingBoxOutputDescription output) throws XMLStreamException {
             writeBoundingBoxDescription((BoundingBoxDescription) output);
         }
 
         @Override
-        public void visit(ComplexOutputDescription output)
-                throws XMLStreamException {
+        public void visit(ComplexOutputDescription output) throws XMLStreamException {
             writeComplexDescription((ComplexDescription) output);
         }
 
         @Override
-        public void visit(LiteralOutputDescription output)
-                throws XMLStreamException {
+        public void visit(LiteralOutputDescription output) throws XMLStreamException {
             writeLiteralDescription((LiteralDescription) output);
         }
 
         @Override
-        public void visit(GroupOutputDescription output)
-                throws XMLStreamException {
+        public void visit(GroupOutputDescription output) throws XMLStreamException {
             writeProcessOutputDescriptionContainer((ProcessOutputDescriptionContainer) output);
         }
     }

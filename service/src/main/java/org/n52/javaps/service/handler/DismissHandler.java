@@ -40,8 +40,8 @@ import org.n52.shetland.ogc.wps.response.DismissResponse;
  */
 public class DismissHandler extends AbstractJobHandler
         implements GenericOperationHandler<DismissRequest, DismissResponse> {
-    private static final OperationHandlerKey KEY
-            = new OperationHandlerKey(WPSConstants.SERVICE, WPSConstants.Operations.Dismiss);
+    private static final OperationHandlerKey KEY =
+            new OperationHandlerKey(WPSConstants.SERVICE, WPSConstants.Operations.Dismiss);
 
     @Inject
     public DismissHandler(Engine engine) {
@@ -49,8 +49,7 @@ public class DismissHandler extends AbstractJobHandler
     }
 
     @Override
-    public DismissResponse handle(DismissRequest request)
-            throws OwsExceptionReport {
+    public DismissResponse handle(DismissRequest request) throws OwsExceptionReport {
         JobId jobId = request.getJobId();
         StatusInfo status;
         try {

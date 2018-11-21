@@ -32,13 +32,13 @@ import org.n52.shetland.ogc.ows.OwsCode;
 public class OutputReference implements Iterable<OwsCode> {
 
     private final JobId jobId;
+
     private final Chain<OwsCode> outputId;
 
     public OutputReference(JobId jobId, Chain<OwsCode> outputId) {
         this.jobId = Objects.requireNonNull(jobId, "jobId");
         this.outputId = Objects.requireNonNull(outputId, "outputId");
     }
-
 
     public OutputReference(JobId jobId, OwsCode outputId) {
         this.jobId = Objects.requireNonNull(jobId, "jobId");
@@ -94,8 +94,7 @@ public class OutputReference implements Iterable<OwsCode> {
             return false;
         }
         final OutputReference other = (OutputReference) obj;
-        return Objects.equals(this.jobId, other.getJobId()) &&
-               Objects.equals(this.outputId, other.getOutputId());
+        return Objects.equals(this.jobId, other.getJobId()) && Objects.equals(this.outputId, other.getOutputId());
     }
 
     @Override

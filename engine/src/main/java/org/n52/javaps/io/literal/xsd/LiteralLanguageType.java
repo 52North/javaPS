@@ -31,6 +31,7 @@ import org.n52.javaps.io.DecodingException;
 public class LiteralLanguageType extends AbstractXSDLiteralType<Locale> {
 
     private static final long serialVersionUID = 2579631917686921792L;
+
     private static final Predicate<String> PATTERN = Pattern.compile("[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*").asPredicate();
 
     @Override

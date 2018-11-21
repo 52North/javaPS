@@ -35,8 +35,8 @@ public class TypedGroupInputDescriptionImpl extends GroupInputDescriptionImpl im
     }
 
     public TypedGroupInputDescriptionImpl(OwsCode id, OwsLanguageString title, OwsLanguageString abstrakt,
-                                          Set<OwsKeyword> keywords, Set<OwsMetadata> metadata, InputOccurence occurence,
-                                          Set<TypedProcessInputDescription<?>> inputs) {
+            Set<OwsKeyword> keywords, Set<OwsMetadata> metadata, InputOccurence occurence,
+            Set<TypedProcessInputDescription<?>> inputs) {
         super(id, title, abstrakt, keywords, metadata, occurence, inputs);
     }
 

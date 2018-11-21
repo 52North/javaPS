@@ -32,8 +32,10 @@ import org.slf4j.LoggerFactory;
  * TODO JavaDoc
  *
  * @author Christian Autermann
- * @param <M> the accessible member type
- * @param <B> the binding type
+ * @param <M>
+ *            the accessible member type
+ * @param <B>
+ *            the binding type
  */
 class BoundingBoxInputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractInputBinding<M>>
         extends AbstractInputAnnotationParser<BoundingBoxInput, M, B> {
@@ -45,7 +47,8 @@ class BoundingBoxInputAnnotationParser<M extends AccessibleObject & Member, B ex
     }
 
     @Override
-    protected TypedBoundingBoxInputDescription createDescription(BoundingBoxInput annotation, B binding) {
+    protected TypedBoundingBoxInputDescription createDescription(BoundingBoxInput annotation,
+            B binding) {
 
         URI defaultCRSURI = null;
 
@@ -56,15 +59,12 @@ class BoundingBoxInputAnnotationParser<M extends AccessibleObject & Member, B ex
             defaultCRSURI = URI.create("http://www.opengis.net/def/crs/EPSG/0/4326");
         }
 
-        //TODO add supported CRSs
+        // TODO add supported CRSs
 
-        return new TypedProcessDescriptionFactory().boundingBoxInput()
-                .withIdentifier(annotation.identifier())
-                .withAbstract(annotation.abstrakt())
-                .withTitle(annotation.title())
-                .withMinimalOccurence(annotation.minOccurs())
-                .withMaximalOccurence(annotation.maxOccurs()).withDefaultCRS(new OwsCRS(defaultCRSURI))
-                .build();
+        return new TypedProcessDescriptionFactory().boundingBoxInput().withIdentifier(annotation.identifier())
+                .withAbstract(annotation.abstrakt()).withTitle(annotation.title())
+                .withMinimalOccurence(annotation.minOccurs()).withMaximalOccurence(annotation.maxOccurs())
+                .withDefaultCRS(new OwsCRS(defaultCRSURI)).build();
     }
 
     @Override

@@ -20,6 +20,7 @@ import org.n52.svalbard.encode.exception.EncodingException;
 
 /**
  * TODO JavaDoc
+ * 
  * @author Christian Autermann
  */
 public class UnsupportedStreamWriterInputException extends EncodingException {

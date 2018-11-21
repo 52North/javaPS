@@ -36,8 +36,12 @@ import org.n52.javaps.io.literal.LiteralType;
 @SuppressWarnings("rawtypes")
 public @interface LiteralOutput {
     String identifier(); // identifier
+
     String title() default "";
+
     String abstrakt() default ""; // 'abstract' is java reserved keyword
+
     String uom() default "";
+
     Class<? extends LiteralType> binding() default LiteralType.class;
 }

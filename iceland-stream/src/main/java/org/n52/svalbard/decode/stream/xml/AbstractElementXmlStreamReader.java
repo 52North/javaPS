@@ -41,16 +41,15 @@ import com.google.common.base.Strings;
  */
 public abstract class AbstractElementXmlStreamReader extends XmlFactories implements ElementXmlStreamReader {
 
-    protected byte[] asBytes(StartElement start, XMLEventReader reader)
-            throws XMLStreamException {
+    protected byte[] asBytes(StartElement start,
+            XMLEventReader reader) throws XMLStreamException {
         return asString(start, reader).getBytes(StandardCharsets.UTF_8);
     }
 
-    protected String asString(StartElement start, XMLEventReader reader)
-            throws XMLStreamException {
+    protected String asString(StartElement start,
+            XMLEventReader reader) throws XMLStreamException {
         StringWriter stringWriter = new StringWriter();
-        XMLEventWriter writer = outputFactory()
-                .createXMLEventWriter(stringWriter);
+        XMLEventWriter writer = outputFactory().createXMLEventWriter(stringWriter);
 
         // writer.add(eventFactory().createStartDocument());
         copy(reader, writer);
@@ -65,13 +64,16 @@ public abstract class AbstractElementXmlStreamReader extends XmlFactories implem
      * Assumes that the current event is a START_ELEMENT and will proceed until
      * the corresponding END_ELEMENT is consumed.
      *
-     * @param reader the reader
-     * @param writer the writer
+     * @param reader
+     *            the reader
+     * @param writer
+     *            the writer
      *
-     * @throws XMLStreamException if the copy operation fails
+     * @throws XMLStreamException
+     *             if the copy operation fails
      */
-    protected void copy(XMLEventReader reader, XMLEventWriter writer)
-            throws XMLStreamException {
+    protected void copy(XMLEventReader reader,
+            XMLEventWriter writer) throws XMLStreamException {
         int depth = 0;
 
         while (reader.hasNext()) {
@@ -86,62 +88,48 @@ public abstract class AbstractElementXmlStreamReader extends XmlFactories implem
                 // check if the current element's namespace is declared
                 // this has to be done before the START_ELEMENT event is emitted
                 // as this would put the namespace into the writer's context
-                boolean writeElementNamespace = !elementPrefix.isEmpty() &&
-                                                !elementPrefix.equals("xml") &&
-                                                Strings.isNullOrEmpty(writer
-                                                        .getNamespaceContext()
-                                                        .getNamespaceURI(elementPrefix));
+                boolean writeElementNamespace = !elementPrefix.isEmpty() && !elementPrefix.equals("xml")
+                        && Strings.isNullOrEmpty(writer.getNamespaceContext().getNamespaceURI(elementPrefix));
 
                 // emit the element without any attributes or namespaces
-                writer.add(eventFactory()
-                        .createStartElement(elementName, null, null));
+                writer.add(eventFactory().createStartElement(elementName, null, null));
 
-                // iterate over all namespace declaration to check if the element namespace
+                // iterate over all namespace declaration to check if the
+                // element namespace
                 // is declared
-                @SuppressWarnings("unchecked")
-                Iterator<Namespace> namespaces = elem.getNamespaces();
+                @SuppressWarnings("unchecked") Iterator<Namespace> namespaces = elem.getNamespaces();
                 while (namespaces.hasNext()) {
                     Namespace namespace = namespaces.next();
-                    // checks if the namespace declaration matches the current element
-                    if (elementPrefix.equals(namespace.getPrefix()) &&
-                        elementNamespace.equals(namespace.getNamespaceURI())) {
+                    // checks if the namespace declaration matches the current
+                    // element
+                    if (elementPrefix.equals(namespace.getPrefix())
+                            && elementNamespace.equals(namespace.getNamespaceURI())) {
                         writeElementNamespace = false;
                     }
                     // declare the namespace
-                    writer.add(eventFactory()
-                            .createNamespace(Strings.nullToEmpty(namespace
-                                    .getPrefix()),
-                                             namespace.getNamespaceURI()));
+                    writer.add(eventFactory().createNamespace(Strings.nullToEmpty(namespace.getPrefix()),
+                            namespace.getNamespaceURI()));
                 }
 
-                // if the there is no namespace declaration for the current element, create one
+                // if the there is no namespace declaration for the current
+                // element, create one
                 if (writeElementNamespace) {
-                    writer.add(eventFactory()
-                            .createNamespace(Strings.nullToEmpty(elementPrefix),
-                                             elementNamespace));
+                    writer.add(eventFactory().createNamespace(Strings.nullToEmpty(elementPrefix), elementNamespace));
                 }
 
                 // iterate over the attributes and check if there namespace is
                 // declared, prior to emitting to ATTRIBUTE event
-                @SuppressWarnings("unchecked")
-                Iterator<Attribute> attributes = elem.getAttributes();
+                @SuppressWarnings("unchecked") Iterator<Attribute> attributes = elem.getAttributes();
                 while (attributes.hasNext()) {
                     Attribute attribute = attributes.next();
                     String attributePrefix = attribute.getName().getPrefix();
-                    String attributeNamespace = attribute.getName()
-                            .getNamespaceURI();
+                    String attributeNamespace = attribute.getName().getNamespaceURI();
 
-                    if (!attributePrefix.isEmpty() && !attributePrefix
-                        .equals("xml") &&
-                        Strings.isNullOrEmpty(writer.getNamespaceContext()
-                                .getNamespaceURI(attributePrefix))) {
-                        writer.add(eventFactory()
-                                .createNamespace(attributePrefix,
-                                                 attributeNamespace));
+                    if (!attributePrefix.isEmpty() && !attributePrefix.equals("xml")
+                            && Strings.isNullOrEmpty(writer.getNamespaceContext().getNamespaceURI(attributePrefix))) {
+                        writer.add(eventFactory().createNamespace(attributePrefix, attributeNamespace));
                     }
-                    writer.add(eventFactory()
-                            .createAttribute(attribute.getName(),
-                                             attribute.getValue()));
+                    writer.add(eventFactory().createAttribute(attribute.getName(), attribute.getValue()));
                 }
                 ++depth;
             } else if (event.isEndElement()) {
@@ -160,13 +148,13 @@ public abstract class AbstractElementXmlStreamReader extends XmlFactories implem
     }
 
     protected static Optional<String> getAttribute(StartElement event,
-                                                   QName name) {
+            QName name) {
         Attribute attr = event.getAttributeByName(name);
         return Optional.ofNullable(attr).map(Attribute::getValue);
     }
 
     protected static Optional<String> getAttribute(StartElement event,
-                                                   String name) {
+            String name) {
         return getAttribute(event, new QName(name));
     }
 

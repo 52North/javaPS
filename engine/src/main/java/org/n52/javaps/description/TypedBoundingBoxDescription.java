@@ -25,8 +25,8 @@ import org.n52.javaps.io.bbox.BoundingBoxData;
  *
  * @author Christian Autermann
  */
-public interface TypedBoundingBoxDescription extends BoundingBoxDescription,
-                                                     TypedDataDescription<Class<? extends BoundingBoxData>> {
+public interface TypedBoundingBoxDescription
+        extends BoundingBoxDescription, TypedDataDescription<Class<? extends BoundingBoxData>> {
 
     @Override
     default Class<?> getPayloadType() {

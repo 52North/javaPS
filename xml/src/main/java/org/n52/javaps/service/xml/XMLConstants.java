@@ -24,8 +24,7 @@ package org.n52.javaps.service.xml;
 public interface XMLConstants {
 
     String XML_VERSION = "1.0";
+
     String XML_ENCODING = "UTF-8";
-
-
 
 }

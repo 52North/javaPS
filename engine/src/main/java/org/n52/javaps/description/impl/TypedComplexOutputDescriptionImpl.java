@@ -29,34 +29,21 @@ import org.n52.shetland.ogc.wps.description.impl.ComplexOutputDescriptionImpl;
 import org.n52.javaps.description.TypedComplexOutputDescription;
 import org.n52.javaps.io.complex.ComplexData;
 
-public class TypedComplexOutputDescriptionImpl
-        extends ComplexOutputDescriptionImpl
+public class TypedComplexOutputDescriptionImpl extends ComplexOutputDescriptionImpl
         implements TypedComplexOutputDescription {
     private final Class<? extends ComplexData<?>> type;
 
-    public TypedComplexOutputDescriptionImpl(OwsCode id,
-                                             OwsLanguageString title,
-                                             OwsLanguageString abstrakt,
-                                             Set<OwsKeyword> keywords,
-                                             Set<OwsMetadata> metadata,
-                                             Format defaultFormat,
-                                             Set<Format> supportedFormat,
-                                             BigInteger maximumMegabytes,
-                                             Class<? extends ComplexData<?>> type) {
+    public TypedComplexOutputDescriptionImpl(OwsCode id, OwsLanguageString title, OwsLanguageString abstrakt,
+            Set<OwsKeyword> keywords, Set<OwsMetadata> metadata, Format defaultFormat, Set<Format> supportedFormat,
+            BigInteger maximumMegabytes, Class<? extends ComplexData<?>> type) {
         super(id, title, abstrakt, keywords, metadata, defaultFormat, supportedFormat, maximumMegabytes);
         this.type = Objects.requireNonNull(type, "type");
     }
 
     protected TypedComplexOutputDescriptionImpl(AbstractBuilder<?, ?> builder) {
-        this(builder.getId(),
-             builder.getTitle(),
-             builder.getAbstract(),
-             builder.getKeywords(),
-             builder.getMetadata(),
-             builder.getDefaultFormat(),
-             builder.getSupportedFormats(),
-             builder.getMaximumMegabytes(),
-             builder.getType());
+        this(builder.getId(), builder.getTitle(), builder.getAbstract(), builder.getKeywords(), builder.getMetadata(),
+                builder.getDefaultFormat(), builder.getSupportedFormats(), builder.getMaximumMegabytes(),
+                builder.getType());
     }
 
     @Override

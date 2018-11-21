@@ -62,8 +62,7 @@ public class DescribeProcessParameterValidator extends EngineParameterValidator<
     }
 
     private boolean isAll(OwsCode id) {
-        return !id.getCodeSpace().isPresent() &&
-               id.getValue().equals(DescribeProcessRequest.ALL_KEYWORD);
+        return !id.getCodeSpace().isPresent() && id.getValue().equals(DescribeProcessRequest.ALL_KEYWORD);
     }
 
 }

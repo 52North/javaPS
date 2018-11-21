@@ -43,7 +43,8 @@ class LiteralOutputAnnotationParser<M extends AccessibleObject & Member, B exten
     }
 
     @SuppressWarnings("unchecked")
-    public LiteralType<?> getLiteralType(LiteralOutput annotation, B binding) {
+    public LiteralType<?> getLiteralType(LiteralOutput annotation,
+            B binding) {
         Type payloadType = binding.getPayloadType();
         Class<? extends LiteralType<?>> bindingType = (Class<? extends LiteralType<?>>) annotation.binding();
         if (payloadType instanceof Class<?>) {
@@ -55,18 +56,15 @@ class LiteralOutputAnnotationParser<M extends AccessibleObject & Member, B exten
 
     @Override
     @SuppressWarnings("unchecked")
-    public TypedLiteralOutputDescription createDescription(LiteralOutput annotation, B binding) {
+    public TypedLiteralOutputDescription createDescription(LiteralOutput annotation,
+            B binding) {
         LiteralType<?> bindingType = getLiteralType(annotation, binding);
         TypedProcessDescriptionFactory descriptionFactory = new TypedProcessDescriptionFactory();
-        return descriptionFactory.literalOutput()
-                .withTitle(annotation.title())
-                .withAbstract(annotation.abstrakt())
+        return descriptionFactory.literalOutput().withTitle(annotation.title()).withAbstract(annotation.abstrakt())
                 .withIdentifier(annotation.identifier())
                 .withDefaultLiteralDataDomain(descriptionFactory.literalDataDomain()
-                        .withDataType(bindingType.getDataType())
-                        .withUOM(annotation.uom()))
-                .withType(bindingType)
-                .build();
+                        .withDataType(bindingType.getDataType()).withUOM(annotation.uom()))
+                .withType(bindingType).build();
 
     }
 }

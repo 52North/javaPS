@@ -32,9 +32,14 @@ import java.lang.annotation.Target;
 @Documented
 public @interface Algorithm {
     String identifier() default "";
+
     String title() default "";
+
     String abstrakt() default "";
+
     String version();
+
     boolean storeSupported() default true;
+
     boolean statusSupported() default true;
 }

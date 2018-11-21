@@ -29,6 +29,5 @@ import org.n52.svalbard.decode.stream.StreamReaderKey;
  */
 public interface ElementXmlStreamReader extends Component<StreamReaderKey> {
 
-    Object readElement(XMLEventReader reader)
-            throws XMLStreamException;
+    Object readElement(XMLEventReader reader) throws XMLStreamException;
 }

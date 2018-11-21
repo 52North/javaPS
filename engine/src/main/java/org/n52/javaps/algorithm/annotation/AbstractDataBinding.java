@@ -30,7 +30,8 @@ import com.google.common.primitives.Primitives;
  *
  * @author Tom Kunicki, Christian Autermann
  */
-abstract class AbstractDataBinding<M extends AccessibleObject & Member, D extends TypedDataDescription<?>> extends AnnotationBinding<M> {
+abstract class AbstractDataBinding<M extends AccessibleObject & Member, D extends TypedDataDescription<?>>
+        extends AnnotationBinding<M> {
 
     private D description;
 
@@ -64,7 +65,7 @@ abstract class AbstractDataBinding<M extends AccessibleObject & Member, D extend
         }
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     protected Object payloadToInput(Object payload) {
         Type type = getType();
         if (isEnum(type)) {

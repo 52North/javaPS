@@ -28,10 +28,8 @@ public class DescribeProcessKvpDecoder extends AbstractKvpDecoder<DescribeProces
     private static final String IDENTIFIER = "identifier";
 
     public DescribeProcessKvpDecoder() {
-        super(DescribeProcessRequest::new,
-              WPSConstants.SERVICE,
-              WPS200Constants.VERSION,
-              WPSConstants.Operations.DescribeProcess);
+        super(DescribeProcessRequest::new, WPSConstants.SERVICE, WPS200Constants.VERSION,
+                WPSConstants.Operations.DescribeProcess);
     }
 
     @Override
@@ -41,7 +39,8 @@ public class DescribeProcessKvpDecoder extends AbstractKvpDecoder<DescribeProces
 
     protected <T> ThrowingBiConsumer<T, String, DecodingException> asOwsCode(
             ThrowingBiConsumer<T, OwsCode, DecodingException> delegate) {
-        return (t, u) -> delegate.accept(t, new OwsCode(u));
+        return (t,
+                u) -> delegate.accept(t, new OwsCode(u));
     }
 
 }

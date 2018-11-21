@@ -59,25 +59,39 @@ import org.n52.javaps.io.OutputHandler;
  */
 public class BoundingBoxInputOutputHandler extends XmlFactories implements InputHandler, OutputHandler {
 
-    public static final Set<Format> FORMATS = Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(Format.APPLICATION_XML, Format.TEXT_XML)));
+    public static final Set<Format> FORMATS =
+            Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(Format.APPLICATION_XML, Format.TEXT_XML)));
+
     private static final Set<Class<? extends Data<?>>> BINDINGS = Collections.singleton(BoundingBoxData.class);
 
-        private static final String NS_URI = "http://www.opengis.net/ows/2.0";
-        private static final String NS_PREFIX = "ows";
-        private static final String EN_UPPER_CORNER = "UpperCorner";
-        private static final String EN_LOWER_CORNER = "LowerCorner";
-        private static final String EN_BOUNDING_BOX = "BoundingBox";
-        private static final String AN_DIMENSION = "dimension";
-        private static final String AN_CRS = "crs";
-        private static final QName QN_BOUNDING_BOX = new QName(NS_URI, EN_BOUNDING_BOX);
-        private static final QName QN_CRS = new QName(AN_CRS);
-        private static final QName QN_DIMENSION = new QName(AN_DIMENSION);
-        private static final QName QN_LOWER_CORNER = new QName(NS_URI, EN_LOWER_CORNER);
-        private static final QName QN_UPPER_CORNER = new QName(NS_URI, EN_UPPER_CORNER);
+    private static final String NS_URI = "http://www.opengis.net/ows/2.0";
+
+    private static final String NS_PREFIX = "ows";
+
+    private static final String EN_UPPER_CORNER = "UpperCorner";
+
+    private static final String EN_LOWER_CORNER = "LowerCorner";
+
+    private static final String EN_BOUNDING_BOX = "BoundingBox";
+
+    private static final String AN_DIMENSION = "dimension";
+
+    private static final String AN_CRS = "crs";
+
+    private static final QName QN_BOUNDING_BOX = new QName(NS_URI, EN_BOUNDING_BOX);
+
+    private static final QName QN_CRS = new QName(AN_CRS);
+
+    private static final QName QN_DIMENSION = new QName(AN_DIMENSION);
+
+    private static final QName QN_LOWER_CORNER = new QName(NS_URI, EN_LOWER_CORNER);
+
+    private static final QName QN_UPPER_CORNER = new QName(NS_URI, EN_UPPER_CORNER);
 
     @Override
-    public Data<?> parse(TypedProcessInputDescription<?> description, InputStream input, Format format)
-            throws IOException {
+    public Data<?> parse(TypedProcessInputDescription<?> description,
+            InputStream input,
+            Format format) throws IOException {
         Charset charset = format.getEncodingAsCharsetOrDefault();
         try (Reader reader = new InputStreamReader(input, charset)) {
             return parseBoundingBoxData(reader);
@@ -117,18 +131,13 @@ public class BoundingBoxInputOutputHandler extends XmlFactories implements Input
         throw eof();
     }
 
-    private OwsBoundingBox parseBoundingBox(StartElement elem, XMLEventReader xmlReader) throws XMLStreamException {
+    private OwsBoundingBox parseBoundingBox(StartElement elem,
+            XMLEventReader xmlReader) throws XMLStreamException {
 
-        URI crs = Optional.ofNullable(elem.getAttributeByName(QN_CRS))
-                .map(Attribute::getValue)
-                .map(URI::create)
+        URI crs = Optional.ofNullable(elem.getAttributeByName(QN_CRS)).map(Attribute::getValue).map(URI::create)
                 .orElse(null);
-        Integer dimension = Optional.ofNullable(elem.getAttributeByName(QN_DIMENSION))
-                .map(Attribute::getValue)
-                .filter(s -> !s.isEmpty())
-                .map(Integer::valueOf)
-                .filter(x -> x > 0)
-                .orElse(null);
+        Integer dimension = Optional.ofNullable(elem.getAttributeByName(QN_DIMENSION)).map(Attribute::getValue)
+                .filter(s -> !s.isEmpty()).map(Integer::valueOf).filter(x -> x > 0).orElse(null);
 
         double[] lowerCorner = null;
         double[] upperCorner = null;
@@ -139,11 +148,11 @@ public class BoundingBoxInputOutputHandler extends XmlFactories implements Input
                 StartElement start = event.asStartElement();
                 QName name = start.getName();
                 if (name.equals(QN_LOWER_CORNER)) {
-                    lowerCorner = Arrays.stream(xmlReader.getElementText().split(" "))
-                            .mapToDouble(Double::parseDouble).toArray();
+                    lowerCorner = Arrays.stream(xmlReader.getElementText().split(" ")).mapToDouble(Double::parseDouble)
+                            .toArray();
                 } else if (name.equals(QN_UPPER_CORNER)) {
-                    upperCorner = Arrays.stream(xmlReader.getElementText().split(" "))
-                            .mapToDouble(Double::parseDouble).toArray();
+                    upperCorner = Arrays.stream(xmlReader.getElementText().split(" ")).mapToDouble(Double::parseDouble)
+                            .toArray();
                 } else {
                     throw unexpectedTag(start);
                 }
@@ -159,10 +168,10 @@ public class BoundingBoxInputOutputHandler extends XmlFactories implements Input
         throw eof();
     }
 
-
     @Override
-    public InputStream generate(TypedProcessOutputDescription<?> description, Data<?> data, Format format)
-            throws IOException {
+    public InputStream generate(TypedProcessOutputDescription<?> description,
+            Data<?> data,
+            Format format) throws IOException {
         try {
             Charset charset = format.getEncodingAsCharsetOrDefault();
 
@@ -186,7 +195,8 @@ public class BoundingBoxInputOutputHandler extends XmlFactories implements Input
         return writer.toString();
     }
 
-    private void writeBoundingBox(Writer writer, OwsBoundingBox bbox) throws XMLStreamException {
+    private void writeBoundingBox(Writer writer,
+            OwsBoundingBox bbox) throws XMLStreamException {
         XMLStreamWriter xmlWriter = outputFactory().createXMLStreamWriter(writer);
         try {
             writeBoundingBox(xmlWriter, bbox);
@@ -195,7 +205,8 @@ public class BoundingBoxInputOutputHandler extends XmlFactories implements Input
         }
     }
 
-    private void writeBoundingBox(XMLStreamWriter writer, OwsBoundingBox bbox) throws XMLStreamException {
+    private void writeBoundingBox(XMLStreamWriter writer,
+            OwsBoundingBox bbox) throws XMLStreamException {
         writer.writeStartElement(NS_PREFIX, EN_BOUNDING_BOX, NS_URI);
         writer.writeNamespace(NS_PREFIX, NS_URI);
         if (bbox.getCRS().isPresent()) {
@@ -207,21 +218,23 @@ public class BoundingBoxInputOutputHandler extends XmlFactories implements Input
         writer.writeEndElement();
     }
 
-    private void writeLowerCorner(XMLStreamWriter writer, double[] lowerCorner) throws XMLStreamException {
+    private void writeLowerCorner(XMLStreamWriter writer,
+            double[] lowerCorner) throws XMLStreamException {
         writer.writeStartElement(NS_PREFIX, EN_LOWER_CORNER, NS_URI);
         writerPositionType(writer, lowerCorner);
         writer.writeEndElement();
     }
 
-    private void writeUpperCorner(XMLStreamWriter writer, double[] upperCorner) throws XMLStreamException {
+    private void writeUpperCorner(XMLStreamWriter writer,
+            double[] upperCorner) throws XMLStreamException {
         writer.writeStartElement(NS_PREFIX, EN_UPPER_CORNER, NS_URI);
         writerPositionType(writer, upperCorner);
         writer.writeEndElement();
     }
 
-    private void writerPositionType(XMLStreamWriter writer, double[] coordinates) throws XMLStreamException {
+    private void writerPositionType(XMLStreamWriter writer,
+            double[] coordinates) throws XMLStreamException {
         writer.writeCharacters(Arrays.stream(coordinates).mapToObj(String::valueOf).collect(joining(" ")));
     }
-
 
 }

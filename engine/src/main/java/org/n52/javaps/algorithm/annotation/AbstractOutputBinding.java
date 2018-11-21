@@ -33,7 +33,8 @@ import org.n52.javaps.description.TypedProcessOutputDescription;
 import org.n52.javaps.io.Data;
 import org.n52.javaps.io.literal.LiteralData;
 
-abstract class AbstractOutputBinding<M extends AccessibleObject & Member> extends AbstractDataBinding<M, TypedProcessOutputDescription<?>> {
+abstract class AbstractOutputBinding<M extends AccessibleObject & Member>
+        extends AbstractDataBinding<M, TypedProcessOutputDescription<?>> {
 
     private Function<Object, ? extends Data<?>> bindingConstructor;
 
@@ -72,7 +73,7 @@ abstract class AbstractOutputBinding<M extends AccessibleObject & Member> extend
         }
         Class<?> bindingPayloadClass = (Class<?>) bindingPayloadType;
         if (!bindingPayloadClass.isAssignableFrom(outputPayloadClass)
-            || Modifier.isAbstract(bindingClass.getModifiers())) {
+                || Modifier.isAbstract(bindingClass.getModifiers())) {
             return null;
         }
         try {
@@ -129,7 +130,9 @@ abstract class AbstractOutputBinding<M extends AccessibleObject & Member> extend
                 return false;
             }
             if (!checkType()) {
-                LOGGER.error("Method {} with output annotation can't be used, unable to safely construct binding using method return type", getMember());
+                LOGGER.error(
+                        "Method {} with output annotation can't be used, unable to safely construct binding using method return type",
+                        getMember());
                 return false;
             }
             return true;
@@ -171,7 +174,9 @@ abstract class AbstractOutputBinding<M extends AccessibleObject & Member> extend
                 return false;
             }
             if (!checkType()) {
-                LOGGER.error("Field {} with output annotation can't be used, unable to safely construct binding using field type", getMember());
+                LOGGER.error(
+                        "Field {} with output annotation can't be used, unable to safely construct binding using field type",
+                        getMember());
                 return false;
             }
             return true;

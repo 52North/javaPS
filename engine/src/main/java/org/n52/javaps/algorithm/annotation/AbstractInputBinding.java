@@ -38,9 +38,11 @@ import org.n52.javaps.io.Data;
  * TODO JavaDoc
  *
  * @author Tom Kunicki, Christian Autermann
- * @param <M> the accessible member type
+ * @param <M>
+ *            the accessible member type
  */
-abstract class AbstractInputBinding<M extends AccessibleObject & Member> extends AbstractDataBinding<M, TypedProcessInputDescription<?>> {
+abstract class AbstractInputBinding<M extends AccessibleObject & Member>
+        extends AbstractDataBinding<M, TypedProcessInputDescription<?>> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractInputBinding.class);
 
@@ -87,7 +89,6 @@ abstract class AbstractInputBinding<M extends AccessibleObject & Member> extends
         Type inputPayloadType = getPayloadType();
         Class<?> bindingPayloadClass = getDescription().getPayloadType();
 
-
         if (inputPayloadType instanceof Class<?>) {
             return ((Class<?>) inputPayloadType).isAssignableFrom(bindingPayloadClass);
         } else if (inputPayloadType instanceof ParameterizedType) {
@@ -128,9 +129,7 @@ abstract class AbstractInputBinding<M extends AccessibleObject & Member> extends
     public Object unbindInput(List<Data<?>> inputs) {
         if (inputs != null && inputs.size() > 0) {
             if (isMemberTypeList()) {
-                return inputs.stream()
-                        .map(bound -> payloadToInput(bound.getPayload()))
-                        .collect(toList());
+                return inputs.stream().map(bound -> payloadToInput(bound.getPayload())).collect(toList());
             } else if (inputs.size() == 1) {
                 return payloadToInput(inputs.get(0).getPayload());
             } else {
@@ -141,24 +140,28 @@ abstract class AbstractInputBinding<M extends AccessibleObject & Member> extends
         }
     }
 
-     @Override
+    @Override
     public boolean validate() {
         if (!checkModifier()) {
             LOGGER.error("Field {} with input annotation can't be used, not public.", getMember());
             return false;
         }
         if (getDescription().getOccurence().isMultiple() && !isMemberTypeList()) {
-            LOGGER.error("Field {} with input annotation can't be used, occurence is {} and field is not of type List", getMember(), getDescription().getOccurence());
+            LOGGER.error("Field {} with input annotation can't be used, occurence is {} and field is not of type List",
+                    getMember(), getDescription().getOccurence());
             return false;
         }
         if (!checkType()) {
-            LOGGER.error("Field {} with input annotation can't be used, unable to safely assign field using binding payload type", getMember());
+            LOGGER.error(
+                    "Field {} with input annotation can't be used, unable to safely assign field using binding payload type",
+                    getMember());
             return false;
         }
         return true;
     }
 
-    public abstract void set(Object annotatedObject, List<Data<?>> boundInputList);
+    public abstract void set(Object annotatedObject,
+            List<Data<?>> boundInputList);
 
     public static AbstractInputBinding<Field> field(Field field) {
         return new InputFieldBinding(field);
@@ -180,7 +183,8 @@ abstract class AbstractInputBinding<M extends AccessibleObject & Member> extends
         }
 
         @Override
-        public void set(Object instance, List<Data<?>> inputs) {
+        public void set(Object instance,
+                List<Data<?>> inputs) {
             try {
                 getMember().set(instance, unbindInput(inputs));
             } catch (IllegalArgumentException | IllegalAccessException ex) {
@@ -203,7 +207,8 @@ abstract class AbstractInputBinding<M extends AccessibleObject & Member> extends
         }
 
         @Override
-        public void set(Object instance, List<Data<?>> inputs) {
+        public void set(Object instance,
+                List<Data<?>> inputs) {
             try {
                 getMember().invoke(instance, unbindInput(inputs));
             } catch (IllegalAccessException | IllegalArgumentException ex) {

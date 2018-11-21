@@ -30,38 +30,23 @@ import org.n52.shetland.ogc.wps.description.impl.ComplexInputDescriptionImpl;
 import org.n52.javaps.description.TypedComplexInputDescription;
 import org.n52.javaps.io.complex.ComplexData;
 
-public class TypedComplexInputDescriptionImpl
-        extends ComplexInputDescriptionImpl
+public class TypedComplexInputDescriptionImpl extends ComplexInputDescriptionImpl
         implements TypedComplexInputDescription {
 
     private final Class<? extends ComplexData<?>> type;
 
-    public TypedComplexInputDescriptionImpl(OwsCode id,
-                                            OwsLanguageString title,
-                                            OwsLanguageString abstrakt,
-                                            Set<OwsKeyword> keywords,
-                                            Set<OwsMetadata> metadata,
-                                            InputOccurence occurence,
-                                            Format defaultFormat,
-                                            Set<Format> supportedFormat,
-                                            BigInteger maximumMegabytes,
-                                            Class<? extends ComplexData<?>> type) {
+    public TypedComplexInputDescriptionImpl(OwsCode id, OwsLanguageString title, OwsLanguageString abstrakt,
+            Set<OwsKeyword> keywords, Set<OwsMetadata> metadata, InputOccurence occurence, Format defaultFormat,
+            Set<Format> supportedFormat, BigInteger maximumMegabytes, Class<? extends ComplexData<?>> type) {
         super(id, title, abstrakt, keywords, metadata, occurence, defaultFormat, supportedFormat, maximumMegabytes);
         this.type = Objects.requireNonNull(type, "type");
     }
 
     protected TypedComplexInputDescriptionImpl(AbstractBuilder<?, ?> builder) {
-        this(builder.getId(),
-             builder.getTitle(),
-             builder.getAbstract(),
-             builder.getKeywords(),
-             builder.getMetadata(),
-             new InputOccurence(builder.getMinimalOccurence(),
-                                builder.getMaximalOccurence()),
-             builder.getDefaultFormat(),
-             builder.getSupportedFormats(),
-             builder.getMaximumMegabytes(),
-             builder.getType());
+        this(builder.getId(), builder.getTitle(), builder.getAbstract(), builder.getKeywords(), builder.getMetadata(),
+                new InputOccurence(builder.getMinimalOccurence(), builder.getMaximalOccurence()),
+                builder.getDefaultFormat(), builder.getSupportedFormats(), builder.getMaximumMegabytes(),
+                builder.getType());
     }
 
     @Override

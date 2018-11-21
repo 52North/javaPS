@@ -33,14 +33,12 @@ import org.n52.shetland.util.HTTP;
 
 import com.google.common.io.ByteStreams;
 
-
 /**
  * TODO JavaDoc
  *
  * @author Christian Autermann
  */
 public class ResolvableReferenceProcessData extends ReferenceProcessData {
-
 
     public ResolvableReferenceProcessData(OwsCode id) {
         this(id, null, null, null);
@@ -66,9 +64,8 @@ public class ResolvableReferenceProcessData extends ReferenceProcessData {
         this(data.getId(), data.getFormat(), data.getURI(), data.getBody().orElse(null));
     }
 
-    public ValueProcessData resolve()
-            throws IOException {
-        //TODO save as a file?
+    public ValueProcessData resolve() throws IOException {
+        // TODO save as a file?
         final byte[] bytes;
         if (!getBody().isPresent()) {
             switch (getURI().getScheme()) {
@@ -79,8 +76,7 @@ public class ResolvableReferenceProcessData extends ReferenceProcessData {
                 bytes = HTTP.get(getURI());
             }
         } else {
-            bytes = HTTP.post(getURI(), getBody().get().getBody()
-                              .getBytes(StandardCharsets.UTF_8));
+            bytes = HTTP.post(getURI(), getBody().get().getBody().getBytes(StandardCharsets.UTF_8));
         }
         return new InMemoryValueProcessData(getId(), getFormat(), bytes);
     }

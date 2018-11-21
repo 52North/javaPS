@@ -27,8 +27,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 public interface ConfigurableClass {
 
     default JsonNode getProperties() {
-        return ConfigurableClasses.get(getClass())
-                .orElseGet(Json.nodeFactory()::objectNode);
+        return ConfigurableClasses.get(getClass()).orElseGet(Json.nodeFactory()::objectNode);
     }
 
 }

@@ -34,8 +34,8 @@ import org.n52.svalbard.encode.stream.StreamWriterKey;
  *
  * @author Christian Autermann
  */
-public class ElementXmlStreamWriterRepository extends AbstractSimilarityKeyRepository<StreamWriterKey, ElementXmlStreamWriter>
-        implements Constructable {
+public class ElementXmlStreamWriterRepository
+        extends AbstractSimilarityKeyRepository<StreamWriterKey, ElementXmlStreamWriter> implements Constructable {
 
     private Collection<Provider<ElementXmlStreamWriter>> writers;
 
@@ -61,7 +61,8 @@ public class ElementXmlStreamWriterRepository extends AbstractSimilarityKeyRepos
         setProducers(this.writers);
     }
 
-    public Optional<ElementXmlStreamWriter> get(StreamWriterKey key, XmlStreamWritingContext ctx) {
+    public Optional<ElementXmlStreamWriter> get(StreamWriterKey key,
+            XmlStreamWritingContext ctx) {
         Optional<ElementXmlStreamWriter> writer = get(key);
         writer.ifPresent(x -> x.setContext(ctx));
         return writer;

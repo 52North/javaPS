@@ -28,7 +28,8 @@ import org.n52.javaps.description.TypedProcessInputDescription;
  */
 public interface InputHandler extends InputOutputHandler {
 
-    Data<?> parse(TypedProcessInputDescription<?> description, InputStream input, Format format)
-            throws IOException, DecodingException;
+    Data<?> parse(TypedProcessInputDescription<?> description,
+            InputStream input,
+            Format format) throws IOException, DecodingException;
 
 }

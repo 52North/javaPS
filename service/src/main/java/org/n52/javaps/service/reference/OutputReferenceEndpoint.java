@@ -66,21 +66,24 @@ public class OutputReferenceEndpoint {
     private static final Logger LOG = LoggerFactory.getLogger(OutputReferenceEndpoint.class);
 
     private final OutputReferencer outputReferencer;
+
     private final ResultPersistence resultManager;
+
     private final StreamWriterRepository streamWriterRepository;
 
     @Inject
-    public OutputReferenceEndpoint(OutputReferencer outputReferencer,
-                                  ResultPersistence resultManager,
-                                  StreamWriterRepository streamWriterRepository) {
+    public OutputReferenceEndpoint(OutputReferencer outputReferencer, ResultPersistence resultManager,
+            StreamWriterRepository streamWriterRepository) {
         this.outputReferencer = Objects.requireNonNull(outputReferencer);
         this.resultManager = Objects.requireNonNull(resultManager);
         this.streamWriterRepository = Objects.requireNonNull(streamWriterRepository);
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    public void get(@PathVariable String jobId, HttpServletRequest request, HttpServletResponse response)
-            throws NotFoundException, InternalServerErrorException {
+    @RequestMapping(
+            method = RequestMethod.GET)
+    public void get(@PathVariable String jobId,
+            HttpServletRequest request,
+            HttpServletResponse response) throws NotFoundException, InternalServerErrorException {
         OutputReference reference = toOutputReference(request);
         LOG.info("Getting output {}", reference);
         ProcessData output = getOutput(reference);
@@ -91,8 +94,8 @@ public class OutputReferenceEndpoint {
         }
     }
 
-    private void writeWrapper(ProcessData output, HttpServletResponse response)
-            throws InternalServerErrorException {
+    private void writeWrapper(ProcessData output,
+            HttpServletResponse response) throws InternalServerErrorException {
         try {
             MediaType mediaType = MediaTypes.APPLICATION_XML;
             StreamWriter<? super ProcessData> writer = getWriter(output, mediaType);
@@ -103,8 +106,8 @@ public class OutputReferenceEndpoint {
         }
     }
 
-    private void writeRawValue(ProcessData output, HttpServletResponse response)
-            throws InternalServerErrorException {
+    private void writeRawValue(ProcessData output,
+            HttpServletResponse response) throws InternalServerErrorException {
         ValueProcessData valueOutput = output.asValue();
         Format format = valueOutput.getFormat();
 
@@ -123,15 +126,14 @@ public class OutputReferenceEndpoint {
         return this.outputReferencer.dereference(toUri);
     }
 
-    private <T> StreamWriter<? super T> getWriter(T output, MediaType mediaType)
-            throws InternalServerErrorException {
+    private <T> StreamWriter<? super T> getWriter(T output,
+            MediaType mediaType) throws InternalServerErrorException {
         StreamWriterKey key = new StreamWriterKey(output.getClass(), mediaType);
         return this.streamWriterRepository.getWriter(key)
                 .orElseThrow(() -> new InternalServerErrorException(new MissingStreamWriterException(key)));
     }
 
-    private ProcessData getOutput(OutputReference reference)
-            throws InternalServerErrorException, NotFoundException {
+    private ProcessData getOutput(OutputReference reference) throws InternalServerErrorException, NotFoundException {
         try {
             return this.resultManager.getOutput(reference);
         } catch (JobNotFoundException | OutputNotFoundException ex) {

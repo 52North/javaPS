@@ -25,7 +25,8 @@ import java.lang.reflect.Method;
  */
 class ExecuteAnnotationParser implements AnnotationParser<Execute, Method, ExecuteBinding> {
     @Override
-    public ExecuteBinding parse(Execute annotation, Method member) {
+    public ExecuteBinding parse(Execute annotation,
+            Method member) {
         ExecuteBinding annotationBinding = new ExecuteBinding(member);
         return annotationBinding.validate() ? annotationBinding : null;
     }

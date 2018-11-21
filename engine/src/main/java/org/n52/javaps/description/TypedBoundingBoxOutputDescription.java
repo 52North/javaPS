@@ -24,7 +24,7 @@ import org.n52.javaps.io.bbox.BoundingBoxData;
  * @author Christian Autermann
  */
 public interface TypedBoundingBoxOutputDescription extends BoundingBoxOutputDescription, TypedBoundingBoxDescription,
-                                                           TypedProcessOutputDescription<Class<? extends BoundingBoxData>> {
+        TypedProcessOutputDescription<Class<? extends BoundingBoxData>> {
     @Override
     default TypedBoundingBoxOutputDescription asBoundingBox() {
         return this;

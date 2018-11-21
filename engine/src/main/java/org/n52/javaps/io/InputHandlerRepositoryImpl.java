@@ -33,14 +33,14 @@ import org.n52.shetland.ogc.wps.Format;
  * @author foerster
  *
  */
-public class InputHandlerRepositoryImpl
-        extends AbstractInputOutputHandlerRepository<InputHandler>
+public class InputHandlerRepositoryImpl extends AbstractInputOutputHandlerRepository<InputHandler>
         implements InputHandlerRepository {
 
     private Set<Provider<InputHandler>> handlers;
 
     @Override
-    public Optional<InputHandler> getInputHandler(Format format, Class<? extends Data<?>> binding) {
+    public Optional<InputHandler> getInputHandler(Format format,
+            Class<? extends Data<?>> binding) {
         return getHandler(binding, format);
     }
 

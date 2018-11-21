@@ -29,36 +29,23 @@ import org.n52.shetland.ogc.wps.description.impl.LiteralInputDescriptionImpl;
 import org.n52.javaps.description.TypedLiteralInputDescription;
 import org.n52.javaps.io.literal.LiteralType;
 
-public class TypedLiteralInputDescriptionImpl
-        extends LiteralInputDescriptionImpl
+public class TypedLiteralInputDescriptionImpl extends LiteralInputDescriptionImpl
         implements TypedLiteralInputDescription {
 
     private final LiteralType<?> type;
 
-    public TypedLiteralInputDescriptionImpl(OwsCode id,
-                                            OwsLanguageString title,
-                                            OwsLanguageString abstrakt,
-                                            Set<OwsKeyword> keywords,
-                                            Set<OwsMetadata> metadata,
-                                            InputOccurence occurence,
-                                            LiteralDataDomain defaultLiteralDataDomain,
-                                            Set<LiteralDataDomain> supportedLiteralDataDomain,
-                                            LiteralType<?> type) {
+    public TypedLiteralInputDescriptionImpl(OwsCode id, OwsLanguageString title, OwsLanguageString abstrakt,
+            Set<OwsKeyword> keywords, Set<OwsMetadata> metadata, InputOccurence occurence,
+            LiteralDataDomain defaultLiteralDataDomain, Set<LiteralDataDomain> supportedLiteralDataDomain,
+            LiteralType<?> type) {
         super(id, title, abstrakt, keywords, metadata, occurence, defaultLiteralDataDomain, supportedLiteralDataDomain);
         this.type = Objects.requireNonNull(type, "type");
     }
 
     protected TypedLiteralInputDescriptionImpl(AbstractBuilder<?, ?> builder) {
-        this(builder.getId(),
-             builder.getTitle(),
-             builder.getAbstract(),
-             builder.getKeywords(),
-             builder.getMetadata(),
-             new InputOccurence(builder.getMinimalOccurence(),
-                                builder.getMaximalOccurence()),
-             builder.getDefaultLiteralDataDomain(),
-             builder.getSupportedLiteralDataDomains(),
-             builder.getType());
+        this(builder.getId(), builder.getTitle(), builder.getAbstract(), builder.getKeywords(), builder.getMetadata(),
+                new InputOccurence(builder.getMinimalOccurence(), builder.getMaximalOccurence()),
+                builder.getDefaultLiteralDataDomain(), builder.getSupportedLiteralDataDomains(), builder.getType());
     }
 
     @Override

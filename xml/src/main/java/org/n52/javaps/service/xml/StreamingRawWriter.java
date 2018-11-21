@@ -57,7 +57,8 @@ public class StreamingRawWriter implements StreamWriter<ExecuteResponse> {
     }
 
     @Override
-    public void write(ExecuteResponse object, OutputStream outputStream) throws EncodingException {
+    public void write(ExecuteResponse object,
+            OutputStream outputStream) throws EncodingException {
         Result result = object.getResult().filter(r -> r.getResponseMode() == ResponseMode.RAW)
                 .orElseThrow(() -> new UnsupportedStreamWriterInputException(object));
 
@@ -77,8 +78,7 @@ public class StreamingRawWriter implements StreamWriter<ExecuteResponse> {
 
     private <T> StreamWriter<? super T> getStreamWriter(T data) {
         StreamWriterKey key = new XmlStreamWriterKey(data.getClass());
-        return streamWriterRepository.getWriter(key)
-                .orElseThrow(() -> new MissingStreamWriterException(key));
+        return streamWriterRepository.getWriter(key).orElseThrow(() -> new MissingStreamWriterException(key));
     }
 
     @Override

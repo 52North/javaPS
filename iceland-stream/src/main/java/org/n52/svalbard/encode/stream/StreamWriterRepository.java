@@ -33,8 +33,7 @@ import org.n52.janmayen.lifecycle.Constructable;
  *
  * @author Christian Autermann
  */
-public class StreamWriterRepository
-        extends AbstractSimilarityKeyRepository<StreamWriterKey, StreamWriter<?>>
+public class StreamWriterRepository extends AbstractSimilarityKeyRepository<StreamWriterKey, StreamWriter<?>>
         implements Constructable {
 
     private Collection<Provider<StreamWriter<?>>> writers;
@@ -45,7 +44,8 @@ public class StreamWriterRepository
         setProducers(this.writers);
     }
 
-    public <T> Optional<StreamWriter<? super T>> getWriter(MediaType mediaType, Class<? extends T> type) {
+    public <T> Optional<StreamWriter<? super T>> getWriter(MediaType mediaType,
+            Class<? extends T> type) {
         return getWriter(new StreamWriterKey(type, mediaType));
     }
 

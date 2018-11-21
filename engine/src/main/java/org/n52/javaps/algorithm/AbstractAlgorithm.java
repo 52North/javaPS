@@ -22,11 +22,10 @@ import java.util.List;
 
 import org.n52.javaps.description.TypedProcessDescription;
 
-public abstract class AbstractAlgorithm
-        extends AbstractObservable implements IAlgorithm {
+public abstract class AbstractAlgorithm extends AbstractObservable implements IAlgorithm {
 
-    private final List<String> errorList = Collections
-            .synchronizedList(new LinkedList<>());
+    private final List<String> errorList = Collections.synchronizedList(new LinkedList<>());
+
     private TypedProcessDescription description;
 
     @Override

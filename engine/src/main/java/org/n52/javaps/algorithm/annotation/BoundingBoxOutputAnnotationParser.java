@@ -43,7 +43,8 @@ class BoundingBoxOutputAnnotationParser<M extends AccessibleObject & Member, B e
     }
 
     @Override
-    public TypedBoundingBoxOutputDescription createDescription(BoundingBoxOutput annotation, B binding) {
+    public TypedBoundingBoxOutputDescription createDescription(BoundingBoxOutput annotation,
+            B binding) {
         URI defaultCRSURI = null;
 
         try {
@@ -54,10 +55,7 @@ class BoundingBoxOutputAnnotationParser<M extends AccessibleObject & Member, B e
         }
 
         TypedProcessDescriptionFactory descriptionFactory = new TypedProcessDescriptionFactory();
-        return descriptionFactory.boundingBoxOutput()
-                .withTitle(annotation.title())
-                .withAbstract(annotation.abstrakt())
-                .withIdentifier(annotation.identifier()).withDefaultCRS(new OwsCRS(defaultCRSURI))
-                .build();
+        return descriptionFactory.boundingBoxOutput().withTitle(annotation.title()).withAbstract(annotation.abstrakt())
+                .withIdentifier(annotation.identifier()).withDefaultCRS(new OwsCRS(defaultCRSURI)).build();
     }
 }

@@ -22,7 +22,6 @@ import org.n52.janmayen.component.ClassBasedComponentKey;
 import org.n52.janmayen.http.MediaType;
 import org.n52.janmayen.similar.Similar;
 
-
 /**
  * TODO JavaDoc
  *
@@ -43,8 +42,7 @@ public class StreamWriterKey extends ClassBasedComponentKey<Object> implements S
         if (mediaTypeSimilarity < 0) {
             return mediaTypeSimilarity;
         }
-        int typeSimilarity = getSimiliarity(
-                this.getType() != null ? this.getType() : Object.class,
+        int typeSimilarity = getSimiliarity(this.getType() != null ? this.getType() : Object.class,
                 that.getType() != null ? that.getType() : Object.class);
 
         if (typeSimilarity < 0) {
@@ -64,8 +62,8 @@ public class StreamWriterKey extends ClassBasedComponentKey<Object> implements S
             return false;
         }
         StreamWriterKey that = (StreamWriterKey) other;
-        return Objects.equals(this.getMediaType(), that.getMediaType()) &&
-               Objects.equals(this.getType(), that.getType());
+        return Objects.equals(this.getMediaType(), that.getMediaType())
+                && Objects.equals(this.getType(), that.getType());
     }
 
     @Override
@@ -73,7 +71,8 @@ public class StreamWriterKey extends ClassBasedComponentKey<Object> implements S
         return Objects.hash(getMediaType(), getType());
     }
 
-    public static int getSimiliarity(Class<?> superClass, Class<?> clazz) {
+    public static int getSimiliarity(Class<?> superClass,
+            Class<?> clazz) {
         if (clazz.isArray()) {
             if (!superClass.isArray()) {
                 return -1;
@@ -101,7 +100,9 @@ public class StreamWriterKey extends ClassBasedComponentKey<Object> implements S
         }
     }
 
-    private static int getSimiliarity1(Class<?> superClass, Class<?> clazz, int difference) {
+    private static int getSimiliarity1(Class<?> superClass,
+            Class<?> clazz,
+            int difference) {
         if (superClass.isAssignableFrom(clazz)) {
             int cd = getSimiliarity(superClass, clazz);
             return (cd >= 0) ? ((difference < 0) ? cd : Math.min(difference, cd)) : difference;

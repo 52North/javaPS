@@ -30,6 +30,7 @@ import org.n52.javaps.commons.observerpattern.ISubject;
 public abstract class AbstractObservable implements ISubject {
 
     private final List<IObserver> observers = Collections.synchronizedList(new LinkedList<>());
+
     private Object state = null;
 
     @Override
