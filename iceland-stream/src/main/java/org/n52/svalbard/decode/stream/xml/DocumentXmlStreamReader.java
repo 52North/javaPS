@@ -61,6 +61,15 @@ public class DocumentXmlStreamReader extends XmlFactories implements StreamReade
         throw eof();
     }
 
+    @Override
+    public Object read(InputStream stream) throws OwsExceptionReport {
+        try {
+            return read(inputFactory().createXMLEventReader(stream));
+        } catch (XMLStreamException ex) {
+            throw new NoApplicableCodeException().causedBy(ex);
+        }
+    }
+
     private Object readDocumentElement(XMLEventReader reader) throws XMLStreamException {
         while (reader.hasNext()) {
             if (reader.peek().isStartElement()) {
@@ -78,14 +87,5 @@ public class DocumentXmlStreamReader extends XmlFactories implements StreamReade
     @Override
     public Set<StreamReaderKey> getKeys() {
         return repository.keys();
-    }
-
-    @Override
-    public Object read(InputStream stream) throws OwsExceptionReport {
-        try {
-            return read(inputFactory().createXMLEventReader(stream));
-        } catch (XMLStreamException ex) {
-            throw new NoApplicableCodeException().causedBy(ex);
-        }
     }
 }

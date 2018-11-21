@@ -66,7 +66,7 @@ public class DocumentXmlStreamWriter extends XmlFactories implements StreamWrite
     public void write(Object object,
             OutputStream stream) throws EncodingException {
         try {
-            writeIndenting(stream, (out) -> {
+            writeIndenting(stream, out -> {
                 try (XmlStreamWritingContext context = createContext(out)) {
                     context.startDocument();
                     context.write(object);
@@ -97,7 +97,8 @@ public class DocumentXmlStreamWriter extends XmlFactories implements StreamWrite
                 } finally {
                     pis.close();
                 }
-                return null; // use a callable to allow exception throwing
+                // use a callable to allow exception throwing
+                return null;
             });
 
             try {
@@ -107,7 +108,8 @@ public class DocumentXmlStreamWriter extends XmlFactories implements StreamWrite
                 throw (X) e;
             }
 
-            t.get(); // wait for the transformer to finish
+            // wait for the transformer to finish
+            t.get();
 
         } catch (ExecutionException ex) {
             Throwables.throwIfInstanceOf(ex.getCause(), TransformerException.class);

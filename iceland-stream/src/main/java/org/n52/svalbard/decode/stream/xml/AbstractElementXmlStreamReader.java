@@ -41,6 +41,8 @@ import com.google.common.base.Strings;
  */
 public abstract class AbstractElementXmlStreamReader extends XmlFactories implements ElementXmlStreamReader {
 
+    private static final String PREFIX_XML = "xml";
+
     protected byte[] asBytes(StartElement start,
             XMLEventReader reader) throws XMLStreamException {
         return asString(start, reader).getBytes(StandardCharsets.UTF_8);
@@ -72,6 +74,7 @@ public abstract class AbstractElementXmlStreamReader extends XmlFactories implem
      * @throws XMLStreamException
      *             if the copy operation fails
      */
+    @SuppressWarnings("unchecked")
     protected void copy(XMLEventReader reader,
             XMLEventWriter writer) throws XMLStreamException {
         int depth = 0;
@@ -88,7 +91,7 @@ public abstract class AbstractElementXmlStreamReader extends XmlFactories implem
                 // check if the current element's namespace is declared
                 // this has to be done before the START_ELEMENT event is emitted
                 // as this would put the namespace into the writer's context
-                boolean writeElementNamespace = !elementPrefix.isEmpty() && !elementPrefix.equals("xml") && Strings
+                boolean writeElementNamespace = !elementPrefix.isEmpty() && !elementPrefix.equals(PREFIX_XML) && Strings
                         .isNullOrEmpty(writer.getNamespaceContext().getNamespaceURI(elementPrefix));
 
                 // emit the element without any attributes or namespaces
@@ -97,7 +100,7 @@ public abstract class AbstractElementXmlStreamReader extends XmlFactories implem
                 // iterate over all namespace declaration to check if the
                 // element namespace
                 // is declared
-                @SuppressWarnings("unchecked") Iterator<Namespace> namespaces = elem.getNamespaces();
+                Iterator<Namespace> namespaces = elem.getNamespaces();
                 while (namespaces.hasNext()) {
                     Namespace namespace = namespaces.next();
                     // checks if the namespace declaration matches the current
@@ -119,14 +122,14 @@ public abstract class AbstractElementXmlStreamReader extends XmlFactories implem
 
                 // iterate over the attributes and check if there namespace is
                 // declared, prior to emitting to ATTRIBUTE event
-                @SuppressWarnings("unchecked") Iterator<Attribute> attributes = elem.getAttributes();
+                Iterator<Attribute> attributes = elem.getAttributes();
                 while (attributes.hasNext()) {
                     Attribute attribute = attributes.next();
                     String attributePrefix = attribute.getName().getPrefix();
                     String attributeNamespace = attribute.getName().getNamespaceURI();
 
-                    if (!attributePrefix.isEmpty() && !attributePrefix.equals("xml") && Strings.isNullOrEmpty(writer
-                            .getNamespaceContext().getNamespaceURI(attributePrefix))) {
+                    if (!attributePrefix.isEmpty() && !attributePrefix.equals(PREFIX_XML) && Strings.isNullOrEmpty(
+                            writer.getNamespaceContext().getNamespaceURI(attributePrefix))) {
                         writer.add(eventFactory().createNamespace(attributePrefix, attributeNamespace));
                     }
                     writer.add(eventFactory().createAttribute(attribute.getName(), attribute.getValue()));
@@ -137,7 +140,8 @@ public abstract class AbstractElementXmlStreamReader extends XmlFactories implem
                 if (depth >= 0) {
                     writer.add(event);
                 } else {
-                    return; // we hit last closing tag
+                    // we hit last closing tag
+                    return;
                 }
             } else {
                 writer.add(event);

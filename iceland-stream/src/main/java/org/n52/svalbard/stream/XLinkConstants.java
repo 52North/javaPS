@@ -29,6 +29,10 @@ public interface XLinkConstants {
 
     String NS_XLINK_PREFIX = "xlink";
 
+    static QName xlink(String element) {
+        return new QName(NS_XLINK, element, NS_XLINK_PREFIX);
+    }
+
     interface Attr {
         String AN_HREF = "href";
 
@@ -53,10 +57,6 @@ public interface XLinkConstants {
         String AN_ACTUATE = "actuate";
 
         QName QN_ACTUATE = xlink(AN_ACTUATE);
-    }
-
-    static QName xlink(String element) {
-        return new QName(NS_XLINK, element, NS_XLINK_PREFIX);
     }
 
 }

@@ -70,6 +70,21 @@ public class XmlStreamWritingContext extends XmlFactories implements AutoCloseab
         }
     }
 
+    public void write(Reader in) throws XMLStreamException {
+        XMLEventReader reader = inputFactory().createXMLEventReader(in);
+        try {
+            write(reader);
+        } finally {
+            reader.close();
+        }
+    }
+
+    public void write(XMLEventReader reader) throws XMLStreamException {
+        EventFilter filter = event -> !event.isStartDocument() && !event.isEndDocument() && !(event.isCharacters()
+                && event.asCharacters().isIgnorableWhiteSpace());
+        this.writer.add(inputFactory().createFilteredReader(reader, filter));
+    }
+
     public <X, Y> Function<X, Y> identity(Function<X, Y> t) {
         return t;
     }
@@ -110,21 +125,6 @@ public class XmlStreamWritingContext extends XmlFactories implements AutoCloseab
             this.prefixes.pop();
         }
         this.writer.add(event);
-    }
-
-    public void write(Reader in) throws XMLStreamException {
-        XMLEventReader reader = inputFactory().createXMLEventReader(in);
-        try {
-            write(reader);
-        } finally {
-            reader.close();
-        }
-    }
-
-    public void write(XMLEventReader reader) throws XMLStreamException {
-        EventFilter filter = (event) -> !event.isStartDocument() && !event.isEndDocument() && !(event.isCharacters()
-                && event.asCharacters().isIgnorableWhiteSpace());
-        this.writer.add(inputFactory().createFilteredReader(reader, filter));
     }
 
     @Override

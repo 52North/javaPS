@@ -93,10 +93,24 @@ public abstract class AbstractElementXmlStreamWriter extends XmlFactories implem
         attr(new QName(name), value);
     }
 
+    protected <T> void attr(QName name,
+            Collection<? extends T> coll,
+            Function<T, String> mapper) throws XMLStreamException {
+        if (coll != null && !coll.isEmpty()) {
+            attr(name, coll.stream().map(mapper).collect(joining(" ")));
+        }
+    }
+
     protected void attr(String namespace,
             String localName,
             String value) throws XMLStreamException {
         attr(new QName(namespace, localName), value);
+    }
+
+    protected <T> void attr(String name,
+            Collection<? extends T> coll,
+            Function<T, String> mapper) throws XMLStreamException {
+        attr(new QName(name), coll, mapper);
     }
 
     protected void namespace(String prefix,
@@ -242,28 +256,6 @@ public abstract class AbstractElementXmlStreamWriter extends XmlFactories implem
         element(name, format(time));
     }
 
-    protected <T> void attr(QName name,
-            Collection<? extends T> coll,
-            Function<T, String> mapper) throws XMLStreamException {
-        if (coll != null && !coll.isEmpty()) {
-            attr(name, coll.stream().map(mapper).collect(joining(" ")));
-        }
-    }
-
-    protected <T> void attr(String name,
-            Collection<? extends T> coll,
-            Function<T, String> mapper) throws XMLStreamException {
-        attr(new QName(name), coll, mapper);
-    }
-
-    protected <T> void delegate(T object) throws XMLStreamException, EncodingException {
-        context().write(object);
-    }
-
-    protected String format(OffsetDateTime time) {
-        return DateTimeFormatter.ISO_DATE_TIME.format(time);
-    }
-
     protected <T> void element(QName name,
             Optional<? extends T> elem,
             ElementWriter<? super T> writer) throws XMLStreamException {
@@ -284,6 +276,21 @@ public abstract class AbstractElementXmlStreamWriter extends XmlFactories implem
         }
     }
 
+    protected <T> void element(QName name,
+            ContentWriter writer) throws XMLStreamException {
+        start(name);
+        writer.write();
+        end(name);
+    }
+
+    protected <T> void delegate(T object) throws XMLStreamException, EncodingException {
+        context().write(object);
+    }
+
+    protected String format(OffsetDateTime time) {
+        return DateTimeFormatter.ISO_DATE_TIME.format(time);
+    }
+
     protected <T> void forEach(QName name,
             Iterable<? extends T> elements,
             ElementWriter<? super T> writer) throws XMLStreamException {
@@ -294,13 +301,6 @@ public abstract class AbstractElementXmlStreamWriter extends XmlFactories implem
                 end(name);
             }
         }
-    }
-
-    protected <T> void element(QName name,
-            ContentWriter writer) throws XMLStreamException {
-        start(name);
-        writer.write();
-        end(name);
     }
 
     protected void writeXML(String xml) throws XMLStreamException {
@@ -357,21 +357,6 @@ public abstract class AbstractElementXmlStreamWriter extends XmlFactories implem
         }
 
         @Override
-        public void flush() throws IOException {
-            checkNotClosed();
-            try {
-                AbstractElementXmlStreamWriter.this.flush();
-            } catch (XMLStreamException ex) {
-                throw new IOException(ex);
-            }
-        }
-
-        @Override
-        public void close() {
-            this.closed = true;
-        }
-
-        @Override
         public void write(String str) throws IOException {
             checkNotClosed();
             try {
@@ -387,6 +372,21 @@ public abstract class AbstractElementXmlStreamWriter extends XmlFactories implem
                 int len) throws IOException {
             checkNotClosed();
             write(str.substring(off, len));
+        }
+
+        @Override
+        public void flush() throws IOException {
+            checkNotClosed();
+            try {
+                AbstractElementXmlStreamWriter.this.flush();
+            } catch (XMLStreamException ex) {
+                throw new IOException(ex);
+            }
+        }
+
+        @Override
+        public void close() {
+            this.closed = true;
         }
 
         private void checkNotClosed() throws IOException {
