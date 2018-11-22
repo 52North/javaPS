@@ -18,6 +18,7 @@ package org.n52.javaps.algorithm;
 
 /**
  * TODO JavaDoc
+ *
  * @author Christian Autermann
  */
 public class ExecutionException extends Exception {
@@ -38,9 +39,8 @@ public class ExecutionException extends Exception {
         super(cause);
     }
 
-    protected ExecutionException(String message, Throwable cause,
-                              boolean enableSuppression,
-                              boolean writableStackTrace) {
+    protected ExecutionException(String message, Throwable cause, boolean enableSuppression,
+            boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

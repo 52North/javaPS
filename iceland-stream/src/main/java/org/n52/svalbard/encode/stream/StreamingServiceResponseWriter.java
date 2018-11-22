@@ -38,6 +38,7 @@ public class StreamingServiceResponseWriter implements ResponseWriter<OwsService
     public static final ResponseWriterKey KEY = new ResponseWriterKey(OwsServiceResponse.class);
 
     private MediaType contentType;
+
     private final StreamWriterRepository repository;
 
     public StreamingServiceResponseWriter(StreamWriterRepository streamWriterRepository) {
@@ -55,8 +56,9 @@ public class StreamingServiceResponseWriter implements ResponseWriter<OwsService
     }
 
     @Override
-    public void write(OwsServiceResponse t, OutputStream out, ResponseProxy responseProxy)
-            throws IOException, EncodingException {
+    public void write(OwsServiceResponse t,
+            OutputStream out,
+            ResponseProxy responseProxy) throws IOException, EncodingException {
         StreamWriterKey key = new StreamWriterKey(t.getClass(), t.getContentType());
         StreamWriter<Object> writer = repository.getWriter(key).orElseThrow(() -> new NoEncoderForKeyException(key));
         writer.write(t, out);

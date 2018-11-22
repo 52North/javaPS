@@ -43,23 +43,24 @@ import org.n52.javaps.io.literal.LiteralTypeRepository;
  * TODO JavaDoc
  *
  * @author Christian Autermann
- * @param <M> the accessible member type
- * @param <B> the binding type
+ * @param <M>
+ *            the accessible member type
+ * @param <B>
+ *            the binding type
  */
-class LiteralInputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractInputBinding<M>>
-       extends AbstractInputAnnotationParser<LiteralInput, M, B> {
+class LiteralInputAnnotationParser<M extends AccessibleObject & Member, B extends AbstractInputBinding<M>> extends
+        AbstractInputAnnotationParser<LiteralInput, M, B> {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(AnnotationParser.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AnnotationParser.class);
 
     private final LiteralTypeRepository literalTypeRepository;
-
 
     LiteralInputAnnotationParser(Function<M, B> bindingFunction, LiteralTypeRepository literalTypeRepository) {
         super(bindingFunction);
         this.literalTypeRepository = Objects.requireNonNull(literalTypeRepository, "literalDataManager");
     }
 
-    @SuppressWarnings({"unchecked" })
+    @SuppressWarnings({ "unchecked" })
     private List<String> getEnumValues(B binding) {
         if (!binding.isEnum()) {
             return Collections.emptyList();
@@ -69,25 +70,21 @@ class LiteralInputAnnotationParser<M extends AccessibleObject & Member, B extend
     }
 
     @Override
-    public TypedLiteralInputDescription createDescription(LiteralInput annotation, B binding) {
+    public TypedLiteralInputDescription createDescription(LiteralInput annotation,
+            B binding) {
         // auto generate binding if it's not explicitly declared
         LiteralType<?> bindingType = getLiteralType(annotation, binding);
         List<String> allowedValues = getAllowedValues(annotation, binding);
         TypedProcessDescriptionFactory descriptionFactory = new TypedProcessDescriptionFactory();
 
-        return descriptionFactory.literalInput()
-                .withIdentifier(annotation.identifier())
-                .withTitle(annotation.title())
-                .withAbstract(annotation.abstrakt())
-                .withMinimalOccurence(annotation.minOccurs())
-                .withMaximalOccurence(getMaxOccurence(annotation, allowedValues))
-                .withType(bindingType)
-                .withDefaultLiteralDataDomain(descriptionFactory.literalDataDomain()
-                    .withValueDescription(allowedValues.isEmpty()? OwsAnyValue.instance() : new OwsAllowedValues(allowedValues.stream().map(OwsValue::new)))
-                    .withDataType(bindingType.getDataType())
-                    .withDefaultValue(getDefaultValue(annotation, allowedValues))
-                    .withUOM(annotation.uom()))
-                .build();
+        return descriptionFactory.literalInput().withIdentifier(annotation.identifier()).withTitle(annotation.title())
+                .withAbstract(annotation.abstrakt()).withMinimalOccurence(annotation.minOccurs()).withMaximalOccurence(
+                        getMaxOccurence(annotation, allowedValues)).withType(bindingType).withDefaultLiteralDataDomain(
+                                descriptionFactory.literalDataDomain().withValueDescription(allowedValues.isEmpty()
+                                        ? OwsAnyValue.instance()
+                                        : new OwsAllowedValues(allowedValues.stream().map(OwsValue::new))).withDataType(
+                                                bindingType.getDataType()).withDefaultValue(getDefaultValue(annotation,
+                                                        allowedValues)).withUOM(annotation.uom())).build();
     }
 
     @Override
@@ -95,22 +92,26 @@ class LiteralInputAnnotationParser<M extends AccessibleObject & Member, B extend
         return LiteralInput.class;
     }
 
-    public LiteralType<?> getLiteralType(LiteralInput annotation, B binding) {
+    public LiteralType<?> getLiteralType(LiteralInput annotation,
+            B binding) {
         Type payloadType = binding.getPayloadType();
         @SuppressWarnings("unchecked")
-        Class<? extends LiteralType<?>> bindingType = (Class<? extends LiteralType<?>>) annotation.binding();
+        Class<? extends LiteralType<?>> bindingType = (Class<? extends LiteralType<
+                ?>>) annotation.binding();
 
         if (payloadType instanceof Class<?>) {
-            return this.literalTypeRepository.getLiteralType(bindingType, (Class<?>)payloadType);
+            return this.literalTypeRepository.getLiteralType(bindingType, (Class<?>) payloadType);
         } else {
             return this.literalTypeRepository.getLiteralType(bindingType);
         }
     }
 
-    private long getMaxOccurence(LiteralInput annotation, List<String> allowedValues) {
+    private long getMaxOccurence(LiteralInput annotation,
+            List<String> allowedValues) {
         if (annotation.maxOccurs() == LiteralInput.ENUM_COUNT) {
             if (allowedValues.isEmpty()) {
-                LOGGER.warn("Invalid maxOccurs \"ENUM_COUNT\" specified for for input {}, setting maxOccurs to {}", annotation.identifier(), annotation.minOccurs());
+                LOGGER.warn("Invalid maxOccurs \"ENUM_COUNT\" specified for for input {}, setting maxOccurs to {}",
+                        annotation.identifier(), annotation.minOccurs());
                 return annotation.minOccurs() > 0 ? annotation.minOccurs() : 1;
             } else {
                 return allowedValues.size();
@@ -120,15 +121,15 @@ class LiteralInputAnnotationParser<M extends AccessibleObject & Member, B extend
         }
     }
 
-    private List<String> getAllowedValues(LiteralInput annotation, B binding) {
+    private List<String> getAllowedValues(LiteralInput annotation,
+            B binding) {
         List<String> enumValues = getEnumValues(binding);
         List<String> allowedValues = new ArrayList<>(Arrays.asList(annotation.allowedValues()));
         if (!enumValues.isEmpty()) {
             if (!allowedValues.isEmpty()) {
-                allowedValues.stream()
-                        .filter(x -> !enumValues.contains(x))
-                        .peek(x -> LOGGER.warn("Invalid allowed value \"{}\" specified for for enumerated input {}", x, annotation.identifier()))
-                        .forEach(allowedValues::remove);
+                allowedValues.stream().filter(x -> !enumValues.contains(x)).peek(x -> LOGGER.warn(
+                        "Invalid allowed value \"{}\" specified for for enumerated input {}", x, annotation
+                                .identifier())).forEach(allowedValues::remove);
             } else {
                 allowedValues = enumValues;
             }
@@ -136,11 +137,13 @@ class LiteralInputAnnotationParser<M extends AccessibleObject & Member, B extend
         return allowedValues;
     }
 
-    private String getDefaultValue(LiteralInput annotation, List<String> allowedValues) {
+    private String getDefaultValue(LiteralInput annotation,
+            List<String> allowedValues) {
         String defaultValue = annotation.defaultValue();
         if (!allowedValues.isEmpty() && !annotation.defaultValue().isEmpty()) {
             if (!allowedValues.contains(annotation.defaultValue())) {
-                LOGGER.warn("Invalid default value \"{}\" specified for for enumerated input {}, ignoring.", defaultValue, annotation.identifier());
+                LOGGER.warn("Invalid default value \"{}\" specified for for enumerated input {}, ignoring.",
+                        defaultValue, annotation.identifier());
                 defaultValue = null;
             }
         }

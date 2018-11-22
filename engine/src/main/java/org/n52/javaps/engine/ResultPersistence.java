@@ -18,6 +18,7 @@ package org.n52.javaps.engine;
 
 import java.util.Set;
 
+import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.shetland.ogc.wps.JobId;
 import org.n52.shetland.ogc.wps.Result;
 import org.n52.shetland.ogc.wps.StatusInfo;
@@ -38,4 +39,6 @@ public interface ResultPersistence {
     void save(EngineProcessExecutionContext context);
 
     Set<JobId> getJobIds();
+
+    Set<JobId> getJobIds(OwsCode processId);
 }

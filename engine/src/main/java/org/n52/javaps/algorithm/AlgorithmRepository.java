@@ -30,7 +30,7 @@ import org.n52.shetland.ogc.ows.OwsCode;
  */
 public interface AlgorithmRepository extends Constructable, Destroyable {
 
-    public Set<OwsCode> getAlgorithmNames();
+    Set<OwsCode> getAlgorithmNames();
 
     Optional<IAlgorithm> getAlgorithm(OwsCode id);
 

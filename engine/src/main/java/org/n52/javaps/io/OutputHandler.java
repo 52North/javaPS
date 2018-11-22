@@ -30,7 +30,8 @@ import org.n52.javaps.description.TypedProcessOutputDescription;
  */
 public interface OutputHandler extends InputOutputHandler {
 
-    InputStream generate(TypedProcessOutputDescription<?> description, Data<?> data, Format format)
-            throws IOException, EncodingException;
+    InputStream generate(TypedProcessOutputDescription<?> description,
+            Data<?> data,
+            Format format) throws IOException, EncodingException;
 
 }

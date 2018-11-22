@@ -24,22 +24,25 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @author tkunicki
+ *
+ * @author bpross-52n
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.TYPE })
+@Target({ ElementType.METHOD, ElementType.FIELD })
 @Inherited
 @Documented
-public @interface Algorithm {
-    String identifier() default "";
+public @interface BoundingBoxOutput {
+    String CRS_EPSG_4326 = "http://www.opengis.net/def/crs/EPSG/0/4326";
+
+    // identifier
+    String identifier();
 
     String title() default "";
 
+    // 'abstract' is java reserved keyword
     String abstrakt() default "";
 
-    String version();
+    String defaultCRSString() default CRS_EPSG_4326;
 
-    boolean storeSupported() default true;
-
-    boolean statusSupported() default true;
+    String[] supportedCRSStringArray() default { CRS_EPSG_4326 };
 }

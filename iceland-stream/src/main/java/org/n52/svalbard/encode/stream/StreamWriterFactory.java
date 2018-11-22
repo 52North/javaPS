@@ -23,4 +23,5 @@ import org.n52.janmayen.component.ComponentFactory;
  *
  * @author Christian Autermann
  */
-public interface StreamWriterFactory extends ComponentFactory<StreamWriterKey, StreamWriter<?>> {}
+public interface StreamWriterFactory extends ComponentFactory<StreamWriterKey, StreamWriter<?>> {
+}

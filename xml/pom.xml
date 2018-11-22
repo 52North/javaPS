@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.n52.wps</groupId>
         <artifactId>javaPS</artifactId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>1.1.2-SNAPSHOT</version>
     </parent>
     <artifactId>xml</artifactId>
     <name>52°North javaPS POX Binding</name>
@@ -32,15 +32,15 @@
             <artifactId>engine</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.n52.shetland</groupId>
+            <groupId>org.n52.arctic-sea</groupId>
             <artifactId>shetland</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.n52.svalbard</groupId>
+            <groupId>org.n52.arctic-sea</groupId>
             <artifactId>svalbard</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.n52.janmayen</groupId>
+            <groupId>org.n52.arctic-sea</groupId>
             <artifactId>janmayen</artifactId>
         </dependency>
         <dependency>

@@ -30,6 +30,7 @@ import org.n52.javaps.io.DecodingException;
 public class LiteralMonthType extends AbstractXSDLiteralType<Month> {
 
     private static final long serialVersionUID = -3702726667847500719L;
+
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("--MM");
 
     @Override

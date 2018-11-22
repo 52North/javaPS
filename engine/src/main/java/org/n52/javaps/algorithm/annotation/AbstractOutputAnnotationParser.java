@@ -22,15 +22,20 @@ import java.lang.reflect.Member;
 import java.util.function.Function;
 
 import org.n52.javaps.description.TypedProcessOutputDescription;
+
 /**
  *
  * @author Tom Kunicki, Christian Autermann
- * @param <A> the annotation type
- * @param <M> the accessible member type
- * @param <B> the binding type
+ * @param <A>
+ *            the annotation type
+ * @param <M>
+ *            the accessible member type
+ * @param <B>
+ *            the binding type
  */
-abstract class AbstractOutputAnnotationParser<A extends Annotation, M extends AccessibleObject & Member, B extends AbstractOutputBinding<M>>
-        extends AbstractDataAnnotationParser<A, M, TypedProcessOutputDescription<?>, B> {
+abstract class AbstractOutputAnnotationParser<A extends Annotation, M extends AccessibleObject & Member,
+        B extends AbstractOutputBinding<M>> extends AbstractDataAnnotationParser<A, M, TypedProcessOutputDescription<?>,
+                B> {
 
     AbstractOutputAnnotationParser(Function<M, B> bindingFunction) {
         super(bindingFunction);

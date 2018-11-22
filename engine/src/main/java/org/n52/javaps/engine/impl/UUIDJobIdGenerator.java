@@ -25,11 +25,12 @@ import org.n52.javaps.engine.JobIdGenerator;
 import org.n52.javaps.algorithm.IAlgorithm;
 import org.n52.javaps.algorithm.ProcessInputs;
 
-
 public class UUIDJobIdGenerator implements JobIdGenerator {
 
     @Override
-    public JobId create(IAlgorithm algorithm, ProcessInputs inputs, List<OutputDefinition> outputs) {
+    public JobId create(IAlgorithm algorithm,
+            ProcessInputs inputs,
+            List<OutputDefinition> outputs) {
         return new JobId(UUID.randomUUID().toString());
     }
 

@@ -37,8 +37,7 @@ public abstract class AbstractSingleElementXmlStreamWriter<S> extends AbstractMu
 
     @Override
     @SuppressWarnings("unchecked")
-    public void writeElement(Object object)
-            throws XMLStreamException, EncodingException {
+    public void writeElement(Object object) throws XMLStreamException, EncodingException {
         if (context() == null) {
             throw new IllegalStateException();
         }
@@ -49,6 +48,5 @@ public abstract class AbstractSingleElementXmlStreamWriter<S> extends AbstractMu
         write((S) object);
     }
 
-    protected abstract void write(S object)
-            throws XMLStreamException;
+    protected abstract void write(S object) throws XMLStreamException;
 }

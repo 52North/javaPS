@@ -28,6 +28,6 @@ import org.n52.javaps.description.TypedProcessDescription;
  * @author Christian Autermann
  */
 public interface ProcessInputDecoder {
-    ProcessInputs decode(TypedProcessDescription description, List<ProcessData> processInputs)
-            throws InputDecodingException;
+    ProcessInputs decode(TypedProcessDescription description,
+            List<ProcessData> processInputs) throws InputDecodingException;
 }

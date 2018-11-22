@@ -29,5 +29,7 @@ import org.n52.javaps.algorithm.ProcessInputs;
  * @author Christian Autermann
  */
 public interface JobIdGenerator {
-    JobId create(IAlgorithm algorithm, ProcessInputs inputs, List<OutputDefinition> outputs);
+    JobId create(IAlgorithm algorithm,
+            ProcessInputs inputs,
+            List<OutputDefinition> outputs);
 }

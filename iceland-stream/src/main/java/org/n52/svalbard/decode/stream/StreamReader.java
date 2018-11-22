@@ -27,8 +27,6 @@ import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
  * @author Christian Autermann
  */
 public interface StreamReader<T> extends Component<StreamReaderKey> {
-    T read(InputStream stream)
-            throws OwsExceptionReport;
-
+    T read(InputStream stream) throws OwsExceptionReport;
 
 }

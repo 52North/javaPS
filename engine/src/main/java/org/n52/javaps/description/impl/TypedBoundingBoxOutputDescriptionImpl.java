@@ -26,33 +26,22 @@ import org.n52.shetland.ogc.ows.OwsMetadata;
 import org.n52.shetland.ogc.wps.description.impl.BoundingBoxOutputDescriptionImpl;
 import org.n52.javaps.description.TypedBoundingBoxOutputDescription;
 
-public class TypedBoundingBoxOutputDescriptionImpl
-        extends BoundingBoxOutputDescriptionImpl
-        implements TypedBoundingBoxOutputDescription {
+public class TypedBoundingBoxOutputDescriptionImpl extends BoundingBoxOutputDescriptionImpl implements
+        TypedBoundingBoxOutputDescription {
 
-    public TypedBoundingBoxOutputDescriptionImpl(OwsCode id,
-                                                 OwsLanguageString title,
-                                                 OwsLanguageString abstrakt,
-                                                 Set<OwsKeyword> keywords,
-                                                 Set<OwsMetadata> metadata,
-                                                 OwsCRS defaultCRS,
-                                                 Set<OwsCRS> supportedCRS) {
+    public TypedBoundingBoxOutputDescriptionImpl(OwsCode id, OwsLanguageString title, OwsLanguageString abstrakt, Set<
+            OwsKeyword> keywords, Set<OwsMetadata> metadata, OwsCRS defaultCRS, Set<OwsCRS> supportedCRS) {
         super(id, title, abstrakt, keywords, metadata, defaultCRS, supportedCRS);
     }
 
     protected TypedBoundingBoxOutputDescriptionImpl(AbstractBuilder<?, ?> builder) {
-        this(builder.getId(),
-             builder.getTitle(),
-             builder.getAbstract(),
-             builder.getKeywords(),
-             builder.getMetadata(),
-             builder.getDefaultCRS(),
-             builder.getSupportedCRS());
+        this(builder.getId(), builder.getTitle(), builder.getAbstract(), builder.getKeywords(), builder.getMetadata(),
+                builder.getDefaultCRS(), builder.getSupportedCRS());
     }
 
-    public static abstract class AbstractBuilder<T extends TypedBoundingBoxOutputDescription, B extends AbstractBuilder<T, B>>
-            extends BoundingBoxOutputDescriptionImpl.AbstractBuilder<T, B>
-            implements TypedBoundingBoxOutputDescription.Builder<T, B> {
+    public abstract static class AbstractBuilder<T extends TypedBoundingBoxOutputDescription, B extends AbstractBuilder<
+            T, B>> extends BoundingBoxOutputDescriptionImpl.AbstractBuilder<T, B> implements
+            TypedBoundingBoxOutputDescription.Builder<T, B> {
     }
 
     public static class Builder extends AbstractBuilder<TypedBoundingBoxOutputDescription, Builder> {

@@ -39,7 +39,7 @@ public class LiteralBase64BinaryType extends AbstractXSDLiteralType<byte[]> {
         try {
             return BaseEncoding.base64().decode(value);
         } catch (IllegalArgumentException ex) {
-            throw  new DecodingException(ex);
+            throw new DecodingException(ex);
         }
     }
 

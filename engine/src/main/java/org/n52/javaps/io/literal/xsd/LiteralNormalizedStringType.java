@@ -29,6 +29,7 @@ import org.n52.javaps.io.DecodingException;
 public class LiteralNormalizedStringType extends AbstractXSDLiteralType<String> {
 
     private static final long serialVersionUID = 4819263087679540611L;
+
     private static final Predicate<String> PATTERN = Pattern.compile("^[^\n\r\t]*$").asPredicate();
 
     @Override
@@ -50,7 +51,7 @@ public class LiteralNormalizedStringType extends AbstractXSDLiteralType<String> 
     }
 
     @Override
-    public String generate(String value)  {
+    public String generate(String value) {
         return value;
     }
 

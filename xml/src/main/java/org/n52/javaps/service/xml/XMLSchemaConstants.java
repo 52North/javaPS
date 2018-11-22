@@ -24,10 +24,12 @@ package org.n52.javaps.service.xml;
 public interface XMLSchemaConstants {
 
     String WPS20_SCHEMALOCTION = "http://schemas.opengis.net/wps/2.0/wps.xsd";
+
     String OWS20_SCHEMALOCTION = "http://schemas.opengis.net/ows/2.0/owsAll.xsd";
 
-    public static interface Attr {
+    public interface Attr {
         String AN_MAX_OCCURS = "maxOccurs";
+
         String AN_MIN_OCCURS = "minOccurs";
     }
 

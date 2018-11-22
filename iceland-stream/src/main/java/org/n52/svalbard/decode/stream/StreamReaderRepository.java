@@ -32,9 +32,8 @@ import org.n52.janmayen.lifecycle.Constructable;
  *
  * @author Christian Autermann
  */
-public class StreamReaderRepository
-        extends AbstractSimilarityKeyRepository<StreamReaderKey, StreamReader<?>>
-        implements Constructable {
+public class StreamReaderRepository extends AbstractSimilarityKeyRepository<StreamReaderKey, StreamReader<?>> implements
+        Constructable {
 
     private Collection<Provider<StreamReader<?>>> readers;
 

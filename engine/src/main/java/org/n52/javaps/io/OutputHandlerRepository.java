@@ -29,10 +29,12 @@ import org.n52.shetland.ogc.wps.Format;
 public interface OutputHandlerRepository extends FormatRepository {
     Set<OutputHandler> getOutputHandlers();
 
-    Optional<OutputHandler> getOutputHandler(Format format, Class<? extends Data<?>> binding);
+    Optional<OutputHandler> getOutputHandler(Format format,
+            Class<? extends Data<?>> binding);
 
     @SuppressWarnings("unchecked")
-    default Optional<OutputHandler> getOutputHandler(Format format, Data<?> binding) {
+    default Optional<OutputHandler> getOutputHandler(Format format,
+            Data<?> binding) {
         return getOutputHandler(format, (Class<? extends Data<?>>) binding.getClass());
     }
 

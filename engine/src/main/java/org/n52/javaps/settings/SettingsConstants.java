@@ -19,7 +19,9 @@ package org.n52.javaps.settings;
 public class SettingsConstants {
 
     public static final String MISC_BASE_DIRECTORY = "misc.baseDirectory";
+
     public static final String MISC_DURATION = "misc.duration";
+
     public static final String MISC_CHECK_INTERVAL = "misc.checkInterval";
 
 }

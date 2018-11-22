@@ -41,6 +41,8 @@ public interface Engine {
 
     Set<JobId> getJobIdentifiers();
 
+    Set<JobId> getJobIdentifiers(OwsCode identifier);
+
     default boolean hasJob(JobId jobId) {
         return getJobIdentifiers().contains(jobId);
     }
@@ -54,17 +56,15 @@ public interface Engine {
     }
 
     default Set<ProcessDescription> getProcessDescriptions() {
-        return getProcessIdentifiers().stream()
-                .map(this::getProcessDescription)
-                .map(Optional::get)
-                .collect(toSet());
+        return getProcessIdentifiers().stream().map(this::getProcessDescription).map(Optional::get).collect(toSet());
     }
 
     StatusInfo dismiss(JobId identifier) throws JobNotFoundException;
 
-    JobId execute(OwsCode identifier, List<ProcessData> inputs, List<OutputDefinition> outputs,
-                  ResponseMode responseMode)
-            throws ProcessNotFoundException, InputDecodingException;
+    JobId execute(OwsCode identifier,
+            List<ProcessData> inputs,
+            List<OutputDefinition> outputs,
+            ResponseMode responseMode) throws ProcessNotFoundException, InputDecodingException;
 
     StatusInfo getStatus(JobId jobId) throws EngineException;
 

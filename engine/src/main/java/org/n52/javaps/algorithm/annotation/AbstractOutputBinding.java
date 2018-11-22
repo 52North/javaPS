@@ -33,11 +33,13 @@ import org.n52.javaps.description.TypedProcessOutputDescription;
 import org.n52.javaps.io.Data;
 import org.n52.javaps.io.literal.LiteralData;
 
-abstract class AbstractOutputBinding<M extends AccessibleObject & Member> extends AbstractDataBinding<M, TypedProcessOutputDescription<?>> {
+abstract class AbstractOutputBinding<M extends AccessibleObject & Member> extends AbstractDataBinding<M,
+        TypedProcessOutputDescription<?>> {
 
+    private static final String INTERNAL_ERROR_PROCESSING_OUTPUTS = "Internal error processing outputs";
     private Function<Object, ? extends Data<?>> bindingConstructor;
 
-    public AbstractOutputBinding(M member) {
+    AbstractOutputBinding(M member) {
         super(member);
     }
 
@@ -71,8 +73,8 @@ abstract class AbstractOutputBinding<M extends AccessibleObject & Member> extend
             return null;
         }
         Class<?> bindingPayloadClass = (Class<?>) bindingPayloadType;
-        if (!bindingPayloadClass.isAssignableFrom(outputPayloadClass)
-            || Modifier.isAbstract(bindingClass.getModifiers())) {
+        if (!bindingPayloadClass.isAssignableFrom(outputPayloadClass) || Modifier.isAbstract(bindingClass
+                .getModifiers())) {
             return null;
         }
         try {
@@ -86,7 +88,7 @@ abstract class AbstractOutputBinding<M extends AccessibleObject & Member> extend
                 try {
                     return (Data<?>) constructor.newInstance(arg);
                 } catch (InstantiationException | SecurityException | IllegalAccessException ex) {
-                    throw new RuntimeException("Internal error processing outputs", ex);
+                    throw new RuntimeException(INTERNAL_ERROR_PROCESSING_OUTPUTS, ex);
                 } catch (InvocationTargetException ex) {
                     Throwable cause = ex.getCause() == null ? ex : ex.getCause();
                     throw new RuntimeException(cause.getMessage(), cause);
@@ -129,7 +131,10 @@ abstract class AbstractOutputBinding<M extends AccessibleObject & Member> extend
                 return false;
             }
             if (!checkType()) {
-                LOGGER.error("Method {} with output annotation can't be used, unable to safely construct binding using method return type", getMember());
+                LOGGER.error(
+                        "Method {} with output annotation can't be used, "
+                        + "unable to safely construct binding using method return type",
+                        getMember());
                 return false;
             }
             return true;
@@ -141,7 +146,7 @@ abstract class AbstractOutputBinding<M extends AccessibleObject & Member> extend
             try {
                 value = getMember().invoke(instance);
             } catch (IllegalAccessException | IllegalArgumentException ex) {
-                throw new RuntimeException("Internal error processing inputs", ex);
+                throw new RuntimeException(INTERNAL_ERROR_PROCESSING_OUTPUTS, ex);
             } catch (InvocationTargetException ex) {
                 Throwable cause = ex.getCause() == null ? ex : ex.getCause();
                 throw new RuntimeException(cause.getMessage(), cause);
@@ -171,7 +176,10 @@ abstract class AbstractOutputBinding<M extends AccessibleObject & Member> extend
                 return false;
             }
             if (!checkType()) {
-                LOGGER.error("Field {} with output annotation can't be used, unable to safely construct binding using field type", getMember());
+                LOGGER.error(
+                        "Field {} with output annotation can't be used, "
+                        + "unable to safely construct binding using field type",
+                        getMember());
                 return false;
             }
             return true;
@@ -183,7 +191,7 @@ abstract class AbstractOutputBinding<M extends AccessibleObject & Member> extend
             try {
                 value = getMember().get(instance);
             } catch (IllegalArgumentException | IllegalAccessException ex) {
-                throw new RuntimeException("Internal error processing inputs", ex);
+                throw new RuntimeException(INTERNAL_ERROR_PROCESSING_OUTPUTS, ex);
             }
             return value == null ? null : bindOutputValue(value);
         }

@@ -35,14 +35,15 @@ import org.n52.javaps.io.OutputHandler;
 public class GeneratingProcessData extends ValueProcessData {
 
     private final OutputHandler outputHandler;
+
     private final TypedProcessOutputDescription<?> outputDescription;
+
     private final Data<?> data;
+
     private final OutputDefinition outputDefinition;
 
-    GeneratingProcessData(
-            TypedProcessOutputDescription<?> outputDescription, OutputDefinition outputDefinition,
-            OutputHandler outputHandler,
-            Data<?> data) {
+    GeneratingProcessData(TypedProcessOutputDescription<?> outputDescription, OutputDefinition outputDefinition,
+            OutputHandler outputHandler, Data<?> data) {
         super(outputDescription.getId(), outputDefinition.getFormat());
         this.outputHandler = Objects.requireNonNull(outputHandler);
         this.outputDescription = Objects.requireNonNull(outputDescription);

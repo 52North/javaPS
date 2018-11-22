@@ -29,36 +29,24 @@ import org.n52.shetland.ogc.wps.description.impl.LiteralInputDescriptionImpl;
 import org.n52.javaps.description.TypedLiteralInputDescription;
 import org.n52.javaps.io.literal.LiteralType;
 
-public class TypedLiteralInputDescriptionImpl
-        extends LiteralInputDescriptionImpl
-        implements TypedLiteralInputDescription {
+public class TypedLiteralInputDescriptionImpl extends LiteralInputDescriptionImpl implements
+        TypedLiteralInputDescription {
 
+    private static final String TYPE_STRING = "type";
     private final LiteralType<?> type;
 
-    public TypedLiteralInputDescriptionImpl(OwsCode id,
-                                            OwsLanguageString title,
-                                            OwsLanguageString abstrakt,
-                                            Set<OwsKeyword> keywords,
-                                            Set<OwsMetadata> metadata,
-                                            InputOccurence occurence,
-                                            LiteralDataDomain defaultLiteralDataDomain,
-                                            Set<LiteralDataDomain> supportedLiteralDataDomain,
-                                            LiteralType<?> type) {
+    public TypedLiteralInputDescriptionImpl(OwsCode id, OwsLanguageString title, OwsLanguageString abstrakt, Set<
+            OwsKeyword> keywords, Set<OwsMetadata> metadata, InputOccurence occurence,
+            LiteralDataDomain defaultLiteralDataDomain, Set<LiteralDataDomain> supportedLiteralDataDomain, LiteralType<
+                    ?> type) {
         super(id, title, abstrakt, keywords, metadata, occurence, defaultLiteralDataDomain, supportedLiteralDataDomain);
-        this.type = Objects.requireNonNull(type, "type");
+        this.type = Objects.requireNonNull(type, TYPE_STRING);
     }
 
     protected TypedLiteralInputDescriptionImpl(AbstractBuilder<?, ?> builder) {
-        this(builder.getId(),
-             builder.getTitle(),
-             builder.getAbstract(),
-             builder.getKeywords(),
-             builder.getMetadata(),
-             new InputOccurence(builder.getMinimalOccurence(),
-                                builder.getMaximalOccurence()),
-             builder.getDefaultLiteralDataDomain(),
-             builder.getSupportedLiteralDataDomains(),
-             builder.getType());
+        this(builder.getId(), builder.getTitle(), builder.getAbstract(), builder.getKeywords(), builder.getMetadata(),
+                new InputOccurence(builder.getMinimalOccurence(), builder.getMaximalOccurence()), builder
+                        .getDefaultLiteralDataDomain(), builder.getSupportedLiteralDataDomains(), builder.getType());
     }
 
     @Override
@@ -66,16 +54,16 @@ public class TypedLiteralInputDescriptionImpl
         return this.type;
     }
 
-    public static abstract class AbstractBuilder<T extends TypedLiteralInputDescription, B extends AbstractBuilder<T, B>>
-            extends LiteralInputDescriptionImpl.AbstractBuilder<T, B>
-            implements TypedLiteralInputDescription.Builder<T, B> {
+    public abstract static class AbstractBuilder<T extends TypedLiteralInputDescription, B extends AbstractBuilder<T,
+            B>> extends LiteralInputDescriptionImpl.AbstractBuilder<T, B> implements
+            TypedLiteralInputDescription.Builder<T, B> {
 
         private LiteralType<?> type;
 
         @Override
         @SuppressWarnings("unchecked")
         public B withType(LiteralType<?> type) {
-            this.type = Objects.requireNonNull(type, "type");
+            this.type = Objects.requireNonNull(type, TYPE_STRING);
             return (B) this;
         }
 

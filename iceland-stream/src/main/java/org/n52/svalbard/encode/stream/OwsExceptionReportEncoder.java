@@ -37,7 +37,9 @@ import org.n52.svalbard.encode.exception.EncodingException;
  */
 public class OwsExceptionReportEncoder implements Encoder<OwsExceptionReportResponse, OwsExceptionReport> {
     private static final ExceptionEncoderKey KEY = new ExceptionEncoderKey(MediaTypes.APPLICATION_XML);
+
     private static final Set<EncoderKey> KEYS = Collections.singleton(KEY);
+
     private final MediaType contentType = MediaTypes.APPLICATION_XML;
 
     @Override
@@ -48,8 +50,8 @@ public class OwsExceptionReportEncoder implements Encoder<OwsExceptionReportResp
     }
 
     @Override
-    public OwsExceptionReportResponse encode(OwsExceptionReport objectToEncode, EncodingContext additionalValues)
-            throws EncodingException {
+    public OwsExceptionReportResponse encode(OwsExceptionReport objectToEncode,
+            EncodingContext additionalValues) throws EncodingException {
         return encode(objectToEncode);
     }
 

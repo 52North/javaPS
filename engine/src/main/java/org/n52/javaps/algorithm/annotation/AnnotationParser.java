@@ -23,18 +23,22 @@ import java.lang.reflect.Member;
 /**
  *
  * @author tkunicki
- * @param <A> the annotation type
- * @param <M> the accessible member
- * @param <B> the binding type
+ * @param <A>
+ *            the annotation type
+ * @param <M>
+ *            the accessible member
+ * @param <B>
+ *            the binding type
  */
 interface AnnotationParser<A extends Annotation, M extends AccessibleObject & Member, B extends AnnotationBinding<M>> {
 
     default B parse(M member) {
         A annotation = member.getAnnotation(getSupportedAnnotation());
-        return annotation == null ? null : parse(annotation, member);
+        return parse(annotation, member);
     }
 
-    B parse(A annotation, M member);
+    B parse(A annotation,
+            M member);
 
     Class<? extends A> getSupportedAnnotation();
 }

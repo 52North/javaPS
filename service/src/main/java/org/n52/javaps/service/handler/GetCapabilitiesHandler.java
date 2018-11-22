@@ -46,12 +46,15 @@ public class GetCapabilitiesHandler extends AbstractGetCapabilitiesHandler<Proce
     }
 
     @Override
-    protected ProcessOfferings createContents(String service, String version) {
-        return new ProcessOfferings(engine.getProcessDescriptions().stream().map(ProcessOffering::new).collect(toSet()));
+    protected ProcessOfferings createContents(String service,
+            String version) {
+        return new ProcessOfferings(engine.getProcessDescriptions().stream().map(ProcessOffering::new).collect(
+                toSet()));
     }
 
     @Override
-    protected OwsCapabilities createCapabilities(OwsCapabilities capabilities, ProcessOfferings processOfferings) {
+    protected OwsCapabilities createCapabilities(OwsCapabilities capabilities,
+            ProcessOfferings processOfferings) {
         return new WPSCapabilities(capabilities, processOfferings);
     }
 

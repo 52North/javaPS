@@ -34,10 +34,6 @@ public interface FormatRepository {
 
     Set<Format> getSupportedFormats(Class<? extends Data<?>> binding);
 
-    default Optional<Format> getDefaultFormat(Class<? extends Data<?>> binding) {
-        return getSupportedFormats(binding).stream().min(Comparator.naturalOrder());
-    }
-
     @SuppressWarnings("unchecked")
     default Set<Format> getSupportedFormats(Data<?> binding) {
         if (binding == null) {
@@ -45,5 +41,9 @@ public interface FormatRepository {
         } else {
             return getSupportedFormats((Class<? extends Data<?>>) binding.getClass());
         }
+    }
+
+    default Optional<Format> getDefaultFormat(Class<? extends Data<?>> binding) {
+        return getSupportedFormats(binding).stream().min(Comparator.naturalOrder());
     }
 }
