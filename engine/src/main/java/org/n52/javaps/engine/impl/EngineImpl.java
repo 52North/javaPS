@@ -160,7 +160,7 @@ public class EngineImpl implements Engine, Destroyable {
         IAlgorithm algorithm = getProcess(identifier);
         TypedProcessDescription description = algorithm.getDescription();
 
-        ProcessInputs processInputs = this.processInputDecoder.decode(description, inputs);
+//        ProcessInputs processInputs = this.processInputDecoder.decode(description, inputs);
 
         List<OutputDefinition> outputDefinitionsOrDefault = outputDefinitions;
 
@@ -172,9 +172,9 @@ public class EngineImpl implements Engine, Destroyable {
                             createDefaultOutputDefinitions(description.getOutput(identifier).asGroup())));
         }
 
-        JobId jobId = jobIdGenerator.create(algorithm, processInputs, outputDefinitionsOrDefault);
+        JobId jobId = jobIdGenerator.create(algorithm);
 
-        Job job = new Job(algorithm, jobId, processInputs, OutputDefinition.getOutputsById(outputDefinitionsOrDefault),
+        Job job = new Job(algorithm, jobId, inputs, OutputDefinition.getOutputsById(outputDefinitionsOrDefault),
                 responseMode);
         LOG.info("Submitting {}", job.getJobId());
         Future<?> submit = this.executor.submit(job);
@@ -278,8 +278,6 @@ public class EngineImpl implements Engine, Destroyable {
 
         private final JobId jobId;
 
-        private final ProcessInputs inputs;
-
         private final ProcessOutputs outputs;
 
         private final TypedProcessDescription description;
@@ -300,12 +298,17 @@ public class EngineImpl implements Engine, Destroyable {
 
         private final ResponseMode responseMode;
 
-        Job(IAlgorithm algorithm, JobId jobId, ProcessInputs inputs, Map<OwsCode, OutputDefinition> outputDefinitions,
-                ResponseMode responseMode) {
+        private final List<ProcessData> inputData;
+
+        private ProcessInputs inputs;
+
+        Job(IAlgorithm algorithm, JobId jobId, List<ProcessData> inputData,
+                Map<OwsCode, OutputDefinition> outputDefinitions, ResponseMode responseMode) {
+
             this.jobStatus = JobStatus.accepted();
             this.jobId = Objects.requireNonNull(jobId, "jobId");
-            this.inputs = Objects.requireNonNull(inputs, "inputs");
             this.algorithm = Objects.requireNonNull(algorithm, "algorithm");
+            this.inputData = inputData;
             this.description = algorithm.getDescription();
             this.outputDefinitions = Objects.requireNonNull(outputDefinitions, "outputDefinitions");
             this.responseMode = Objects.requireNonNull(responseMode, "responseMode");
@@ -384,6 +387,7 @@ public class EngineImpl implements Engine, Destroyable {
             setJobStatus(JobStatus.running());
             LOG.info(EXECUTING, this.jobId);
             try {
+                this.inputs = processInputDecoder.decode(description, inputData);
                 this.algorithm.execute(this);
                 LOG.info("Executed {}, creating result", this.jobId);
                 try {

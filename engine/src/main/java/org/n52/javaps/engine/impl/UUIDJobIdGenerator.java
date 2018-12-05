@@ -16,21 +16,16 @@
  */
 package org.n52.javaps.engine.impl;
 
-import java.util.List;
 import java.util.UUID;
 
-import org.n52.shetland.ogc.wps.JobId;
-import org.n52.shetland.ogc.wps.OutputDefinition;
-import org.n52.javaps.engine.JobIdGenerator;
 import org.n52.javaps.algorithm.IAlgorithm;
-import org.n52.javaps.algorithm.ProcessInputs;
+import org.n52.javaps.engine.JobIdGenerator;
+import org.n52.shetland.ogc.wps.JobId;
 
 public class UUIDJobIdGenerator implements JobIdGenerator {
 
     @Override
-    public JobId create(IAlgorithm algorithm,
-            ProcessInputs inputs,
-            List<OutputDefinition> outputs) {
+    public JobId create(IAlgorithm algorithm) {
         return new JobId(UUID.randomUUID().toString());
     }
 
