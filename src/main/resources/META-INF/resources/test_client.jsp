@@ -92,49 +92,14 @@
 <p></p>
 <div>
 <h2>Response location</h2>
-<input type="text" id="locationText" ></input>
+<input type="text" id="locationText" style="width : 800px"></input><button id="openButton">Open</button>
 </div>
-
-<!-- <form id="requestForm" method="post" class="form-horizontal" action=""> -->
-<!-- 	<div class="form-group"> -->
-<!-- 		<label class="col-lg-2 control-label">Service URL</label> -->
-<!-- 		<div class="col-lg-10"> -->
-<%-- 			<input class="form-control" name="url" id="serviceUrlField" value="<%= processid %>" type="text" /> --%>
-<!-- 		</div> -->
-<!-- 	</div> -->
-<!-- 	<div class="form-group"> -->
-<!-- 		<label class="col-lg-2 control-label">Request Examples</label> -->
-<!-- 		<div class="col-lg-10"> -->
-<!-- 			<select id="selRequest" class="form-control"> -->
-<!-- 				<option value=" "></option> -->
-<!-- 			</select> -->
-<!-- 		</div> -->
-<!-- 	</div> -->
-<!-- 	<div class="form-group"> -->
-<!-- 		<pre class="editor"><textarea name="request" id="requestTextarea" class="form-control"></textarea></pre> -->
-<!-- 	</div> -->
-<!-- 	<div class="form-group"> -->
-<!-- 		<button type="submit" class="btn btn-primary">Send</button> -->
-<!-- 		<button id="clearBtn" type="reset" class="btn btn-primary">Clear</button> -->
-<!-- 	</div> -->
-<!-- </form> -->
-<!-- <div class="form-horizontal"> -->
-<!-- 	<div class="form-group"> -->
-<!-- 		<pre><textarea name="request" id="responseTextarea"></textarea></pre> -->
-<!-- 	</div> -->
-<!-- </div> -->
-
 <script src="<c:url value="/js/vendor/jquery-1.11.3.min.js" />"></script>
 <script type="text/javascript">
 $(document).ready(
 		function() {
 				
-				$('#sendButton').click(function(event){
-					xhttp = new XMLHttpRequest();
-					xhttp.open("POST", "./jobs", true);
-					xhttp.setRequestHeader("Content-type", "application/json");
-					xhttp.send($('#requestTextarea').val());
-					
+				$('#sendButton').click(function(event){					
 					  $.ajax({
 						   type: 'POST',
 						   contentType: "application/json",
@@ -146,8 +111,22 @@ $(document).ready(
 						   error: function (request, textStatus, errorThrown) {
 						        alert("Error");
 						   }
-					  });
-					
+					  });					
+				});
+				$('#openButton').click(function(event){
+					window.open($('#locationText').val(), '_blank');
+// 					  $.ajax({
+// 						   type: 'GET',
+// 						   //contentType: "application/json",
+// 						   url:'./',
+// 						   data: $('#locationText').val(),
+// 						   success: function(data, textStatus, request){
+// 							   $('#locationText').val(request.getResponseHeader('location'));
+// 						   },
+// 						   error: function (request, textStatus, errorThrown) {
+// 						        alert("Error");
+// 						   }
+// 					  });					
 				});
 			});
 </script>
