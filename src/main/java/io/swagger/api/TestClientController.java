@@ -19,45 +19,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.swagger.model;
+package io.swagger.api;
 
-import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonValue;
-import org.springframework.validation.annotation.Validated;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
- * Gets or Sets transmissionMode
+ * Handles the test client URI requests and mapping.
  */
-public enum TransmissionMode {
-  
-  VALUE("value"),
-  
-  REFERENCE("reference");
+@Controller
+@RequestMapping("rest/test_client")
+public class TestClientController {
 
-  private String value;
-
-  TransmissionMode(String value) {
-    this.value = value;
-  }
-
-  @Override
-  @JsonValue
-  public String toString() {
-    return String.valueOf(value);
-  }
-
-  @JsonCreator
-  public static TransmissionMode fromValue(String text) {
-    for (TransmissionMode b : TransmissionMode.values()) {
-      if (String.valueOf(b.value).equals(text)) {
-        return b;
-      }
+    /**
+     * Display the test client.
+     *
+     * @return The test client view
+     */
+    @RequestMapping(method = RequestMethod.GET)
+    public String display() {
+        return "../test_client";
     }
-    return null;
-  }
 }
-

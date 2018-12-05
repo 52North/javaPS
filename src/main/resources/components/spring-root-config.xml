@@ -18,4 +18,27 @@
 <!--     <bean class="org.n52.wps.javaps.rest.serializer.ExceptionSerializer" /> -->
     <bean id="jsonBoundingBoxInputOutputHandler" class="org.n52.javaps.io.bbox.json.JSONBoundingBoxInputOutputHandler"/>
     
+    <bean id="viewResolver"
+		class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />		
+<!-- 		<property name="prefix" value="WEB-INF/jsp/" /> -->
+		<property name="suffix" value=".jsp" />
+	</bean>
+	
+	<bean id="cnManager"
+		class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+		<property name="favorPathExtension" value="true"/>
+		<property name="defaultContentType" value="text/html" />
+
+		<property name="mediaTypes">
+			<map>
+				<entry key="html" value="text/html" />
+				<entry key="json" value="application/json" />
+				<entry key="xml" value="application/xml" />
+				<entry key="js" value="application/javascript" />
+			</map>
+		</property>
+	</bean>
+    
 </beans>

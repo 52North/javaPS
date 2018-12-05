@@ -26,14 +26,13 @@ import static java.util.stream.Collectors.toSet;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import javax.inject.Inject;
-import javax.print.attribute.standard.JobImpressionsCompleted;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -46,7 +45,6 @@ import org.n52.javaps.engine.EngineException;
 import org.n52.javaps.engine.InputDecodingException;
 import org.n52.javaps.engine.ProcessNotFoundException;
 import org.n52.shetland.ogc.ows.OwsCode;
-import org.n52.shetland.ogc.ows.OwsValue;
 import org.n52.shetland.ogc.ows.exception.CodedException;
 import org.n52.shetland.ogc.ows.exception.InvalidParameterValueException;
 import org.n52.shetland.ogc.ows.exception.NoApplicableCodeException;
@@ -62,10 +60,12 @@ import org.n52.wps.javaps.rest.serializer.ResultSerializer;
 import org.n52.wps.javaps.rest.serializer.StatusInfoSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -73,13 +73,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import io.swagger.annotations.ApiParam;
 import io.swagger.model.Execute;
-import io.swagger.model.Input;
 import io.swagger.model.JobCollection;
-import io.swagger.model.Output;
-import io.swagger.model.Process;
 import io.swagger.model.ProcessCollection;
-import io.swagger.model.ProcessSummary;
-import io.swagger.model.Result;
 import io.swagger.model.StatusInfo;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-08T09:36:12.450Z[GMT]")
 
@@ -92,6 +87,9 @@ public class ProcessesApiController implements ProcessesApi {
 
 //    private final ObjectMapper objectMapper;
 
+    @Autowired
+    ServletContext context;
+    
     @Inject
     public void setEngine(Engine engine) {
         this.engine = engine;
@@ -106,7 +104,7 @@ public class ProcessesApiController implements ProcessesApi {
         if (url.contains("?")) {
             url = url.split("[?]")[0];
         }
-        this.serviceURL = url.replace("/service", "/processes/");
+        this.serviceURL = url.replace("/service", baseURL + "/processes/");
     }
     
     private final HttpServletRequest request;
@@ -125,7 +123,7 @@ public class ProcessesApiController implements ProcessesApi {
     }
 
     public ResponseEntity<Void> execute(@ApiParam(value = "Mandatory execute request JSON" ,required=true )  @Valid @RequestBody Execute body,@ApiParam(value = "The id of a process.",required=true) @PathVariable("id") String id) throws CodedException {
-        String accept = request.getHeader("Accept");
+        String accept = request.getHeader("Accept");        
         
         OwsCode owsCode = new OwsCode(id);
         
@@ -161,7 +159,7 @@ public class ProcessesApiController implements ProcessesApi {
         return responseEntity;
     }
 
-    public ResponseEntity<JobCollection> getJobList(@ApiParam(value = "The id of a process.",required=true) @PathVariable("id") String id) {
+    public ResponseEntity<?> getJobList(@ApiParam(value = "The id of a process.",required=true) @PathVariable("id") String id) {
         String accept = request.getHeader("Accept");
         
         OwsCode owsCode = new OwsCode(id);
@@ -175,6 +173,18 @@ public class ProcessesApiController implements ProcessesApi {
         }
         
         return ResponseEntity.ok(jobCollection);
+    }
+    
+    public String getExecuteForm(@ApiParam(value = "The id of a process.",required=true) @PathVariable("id") String id, Model model) {
+        String accept = request.getHeader("Accept");    
+        
+        OwsCode owsCode = new OwsCode(id);    
+
+        context.setAttribute("processId", id);
+        
+        context.setAttribute("jobSet", engine.getJobIdentifiers(owsCode).stream().map(JobId::getValue).collect(toSet()));
+        
+        return "../../../test_client";
     }
 
     public ResponseEntity<io.swagger.model.ProcessOffering> getProcessDescription(@ApiParam(value = "The id of a process",required=true) @PathVariable("id") String id) {

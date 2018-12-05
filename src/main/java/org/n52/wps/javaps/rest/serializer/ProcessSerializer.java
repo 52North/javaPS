@@ -89,7 +89,7 @@ public class ProcessSerializer {
         if (url.contains("?")) {
             url = url.split("[?]")[0];
         }
-        this.serviceURL = url.replace("/service", "/processes/");
+        this.serviceURL = url.replace("/service", "/rest/processes/");
     }
     
     public ProcessSerializer() {}
@@ -523,6 +523,8 @@ public class ProcessSerializer {
           process = new ProcessSummary();
            
           addProcessSummary(process, processOffering);
+          
+          process.setProcessDescriptionURL(serviceURL + process.getId());
           
           processes.add(process);
           
