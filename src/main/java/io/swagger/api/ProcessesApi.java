@@ -66,7 +66,7 @@ public interface ProcessesApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    ResponseEntity<Void> execute(@ApiParam(value = "Mandatory execute request JSON" ,required=true )  @Valid @RequestBody Execute body,@ApiParam(value = "The id of a process.",required=true) @PathVariable("id") String id) throws CodedException;
+    ResponseEntity<?> execute(@ApiParam(value = "Mandatory execute request JSON" ,required=true )  @Valid @RequestBody Execute body,@ApiParam(value = "The id of a process.",required=true) @PathVariable("id") String id) throws CodedException;
 
 
     @ApiOperation(value = "retrieve the list of jobs for a process.", nickname = "getJobList", notes = "", response = JobCollection.class, tags={ "JobList", })

@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -52,6 +53,7 @@ import org.n52.shetland.ogc.wps.JobId;
 import org.n52.shetland.ogc.wps.OutputDefinition;
 import org.n52.shetland.ogc.wps.ProcessOffering;
 import org.n52.shetland.ogc.wps.ResponseMode;
+import org.n52.shetland.ogc.wps.Result;
 import org.n52.shetland.ogc.wps.data.ProcessData;
 import org.n52.wps.javaps.rest.deserializer.ExecuteDeserializer;
 import org.n52.wps.javaps.rest.serializer.ExceptionSerializer;
@@ -117,18 +119,35 @@ public class ProcessesApiController implements ProcessesApi {
 
     @org.springframework.beans.factory.annotation.Autowired
     public ProcessesApiController(HttpServletRequest request) {
-//    	public ProcessesApiController(ObjectMapper objectMapper, HttpServletRequest request) {
-//        this.objectMapper = objectMapper;
         this.request = request;
     }
 
-    public ResponseEntity<Void> execute(@ApiParam(value = "Mandatory execute request JSON" ,required=true )  @Valid @RequestBody Execute body,@ApiParam(value = "The id of a process.",required=true) @PathVariable("id") String id) throws CodedException {
+    public ResponseEntity<?> execute(@ApiParam(value = "Mandatory execute request JSON" ,required=true )  @Valid @RequestBody Execute body,@ApiParam(value = "The id of a process.",required=true) @PathVariable("id") String id) throws CodedException {
         String accept = request.getHeader("Accept");        
         
-        OwsCode owsCode = new OwsCode(id);
+        Map<String, String[]> parameterMap = request.getParameterMap();
         
-        //read execute JSON
-//        body.getInputs().g
+        boolean syncExecute = false;
+        
+        for (String parameterName : parameterMap.keySet()) {
+            if(parameterName.equalsIgnoreCase("sync-execute")) {
+                String[] syncExecuteValues = parameterMap.get(parameterName);
+                
+                if(syncExecuteValues.length > 0) {
+                    try {
+                        syncExecute = Boolean.parseBoolean(syncExecuteValues[0]);
+                    } catch (Exception e) {
+                        //ignore
+                        //TODO log 
+                    }                    
+                    break;
+                }else {
+                    break;
+                }
+            }
+        }
+        
+        OwsCode owsCode = new OwsCode(id);
         
         List<ProcessData> inputs;
         try {
@@ -150,13 +169,28 @@ public class ProcessesApiController implements ProcessesApi {
             throw new NoApplicableCodeException().causedBy(ex);
         }
         
-        HttpHeaders httpHeaders = new HttpHeaders();
-        
-        httpHeaders.add("location", serviceURL + id + "/jobs/" + jobId.getValue());
-        
-        ResponseEntity<Void> responseEntity = new ResponseEntity<>(httpHeaders, HttpStatus.CREATED);
-        
-        return responseEntity;
+        if (!syncExecute) {
+            HttpHeaders httpHeaders = new HttpHeaders();
+
+            httpHeaders.add("location", serviceURL + id + "/jobs/" + jobId.getValue());
+
+            ResponseEntity<Void> responseEntity = new ResponseEntity<>(httpHeaders, HttpStatus.CREATED);
+
+            return responseEntity;
+        }else {
+            
+            try {
+                Future<Result> futureResult = engine.getResult(jobId);
+                
+                Result result = futureResult.get();
+                
+                return ResponseEntity.ok(ResultSerializer.serializeResult(result));
+                
+            } catch (EngineException | InterruptedException | ExecutionException | IOException e) {
+                throw new RuntimeException(e.getMessage());//TODO
+            }
+            
+        }
     }
 
     public ResponseEntity<?> getJobList(@ApiParam(value = "The id of a process.",required=true) @PathVariable("id") String id) {
@@ -184,7 +218,7 @@ public class ProcessesApiController implements ProcessesApi {
         
         context.setAttribute("jobSet", engine.getJobIdentifiers(owsCode).stream().map(JobId::getValue).collect(toSet()));
         
-        return "../../../test_client";
+        return "../../../jsp/test_client";
     }
 
     public ResponseEntity<io.swagger.model.ProcessOffering> getProcessDescription(@ApiParam(value = "The id of a process",required=true) @PathVariable("id") String id) {

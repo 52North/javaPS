@@ -36,10 +36,10 @@ public class StatusInfoSerializer {
         
         serializedStatusInfo.setStatus(mapStatus(statusInfo.getStatus()));
         
-        Optional<Short> percenCompleted = statusInfo.getPercentCompleted();
+        Optional<Short> percentCompleted = statusInfo.getPercentCompleted();
         
-        if(percenCompleted.isPresent()) {
-            serializedStatusInfo.setProgress(Integer.valueOf(percenCompleted.get()));
+        if(percentCompleted.isPresent()) {
+            serializedStatusInfo.setProgress(Integer.valueOf(percentCompleted.get()));
         }
         
         return serializedStatusInfo;
@@ -52,9 +52,9 @@ public class StatusInfoSerializer {
             return StatusEnum.SUCCESSFUL;
         } else if(status.equals(JobStatus.failed())) {
             return StatusEnum.FAILED;
-        } else if(status.equals(JobStatus.accepted())) {
+        } else if(status.equals(JobStatus.accepted()) || status.equals(JobStatus.running())) {
             return StatusEnum.RUNNING;
-        } 
+        }
         
         throw new IllegalArgumentException("Status not valid: " + status);
     }

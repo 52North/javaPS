@@ -50,83 +50,74 @@
 
 <div>
 
-<textarea name="request" id="requestTextarea" style="width : 800px; height : 485px">
-{
-	"inputs": [{
-		"id": "data",
-		"input": {
-			"format": {
-				"mimeType": "text/xml",
-				"schema": "http://schemas.opengis.net/gml/3.1.1/base/feature.xsd"
-			},
-			"value": {
-				"href": "http://geoprocessing.demo.52north.org:8080/geoserver/wfs?SERVICE=WFS&VERSION=1.0.0&REQUEST=GetFeature&TYPENAME=topp:tasmania_roads&SRS=EPSG:4326&OUTPUTFORMAT=GML3"
-			}
-		}
-	},
-	{
-		"id": "width",
-		"input": {
-			"format": {
-				"mimeType": "text/plain"
-			},
-			"value": {
-				"inlineValue": "0.05"
-			}
-		}
-	}],
-	"outputs": [{
-		"id": "result",
-		"format": {
-			"mimeType": "text/xml",
-			"schema": "http://schemas.opengis.net/gml/3.1.1/base/feature.xsd"
-		},
-		"transmissionMode": "reference"
-	}]
-}
-</textarea>
+<button id="loadButton">Load example request</button>
 <p></p>
-<button id="sendButton">Create job</button>
+<textarea name="request" id="requestTextarea" style="width : 800px; height : 485px"></textarea>
+<p></p>
+<button id="sendButton">Create job</button><input type="checkBox" id="syncChkBox">synchronous execution
 
 </div>
 <p></p>
-<div>
+<div id="responseLocationDiv" style="display: none">
 <h2>Response location</h2>
 <input type="text" id="locationText" style="width : 800px"></input><button id="openButton">Open</button>
+</div>
+<div id="responseDiv" style="display: none">
+<h2>Response</h2>
+<textarea name="request" id="responseTextarea" style="width : 800px; height : 485px"></textarea>
 </div>
 <script src="<c:url value="/js/vendor/jquery-1.11.3.min.js" />"></script>
 <script type="text/javascript">
 $(document).ready(
 		function() {
 				
-				$('#sendButton').click(function(event){					
-					  $.ajax({
-						   type: 'POST',
-						   contentType: "application/json",
-						   url:'./jobs',
-						   data: $('#requestTextarea').val(),
-						   success: function(data, textStatus, request){
-							   $('#locationText').val(request.getResponseHeader('location'));
-						   },
-						   error: function (request, textStatus, errorThrown) {
-						        alert("Error");
-						   }
-					  });					
+				$('#sendButton').click(function(event){
+					$('#responseDiv').hide();
+					$('#responseLocationDiv').hide();
+					
+					if($('#syncChkBox').prop('checked')){
+						//sync execute
+						
+						  $.ajax({
+							   type: 'POST',
+							   contentType: "application/json",
+							   url:'./jobs?sync-execute=true',
+							   data: $('#requestTextarea').val(),
+							   success: function(data, textStatus, request){
+								   $('#responseTextarea').val(JSON.stringify(data,null,4));
+								   $('#responseDiv').show();
+							   },
+							   error: function (request, textStatus, errorThrown) {
+							        alert("Error");
+							   }
+						  });
+						
+					} else {
+						
+						  $.ajax({
+							   type: 'POST',
+							   contentType: "application/json",
+							   url:'./jobs',
+							   data: $('#requestTextarea').val(),
+							   success: function(data, textStatus, request){
+								   $('#locationText').val(request.getResponseHeader('location'));
+								   $('#responseLocationDiv').show();
+							   },
+							   error: function (request, textStatus, errorThrown) {
+							        alert("Error");
+							   }
+						  });
+						
+					}
 				});
 				$('#openButton').click(function(event){
-					window.open($('#locationText').val(), '_blank');
-// 					  $.ajax({
-// 						   type: 'GET',
-// 						   //contentType: "application/json",
-// 						   url:'./',
-// 						   data: $('#locationText').val(),
-// 						   success: function(data, textStatus, request){
-// 							   $('#locationText').val(request.getResponseHeader('location'));
-// 						   },
-// 						   error: function (request, textStatus, errorThrown) {
-// 						        alert("Error");
-// 						   }
-// 					  });					
+					window.open($('#locationText').val(), '_blank');			
+				});
+				$('#loadButton').click(function(event){
+					
+					$.getJSON("../../../requests/<%= processid %>.json", function(json) {
+						$('#requestTextarea').val(JSON.stringify(json,null,4))
+					});			
 				});
 			});
 </script>
