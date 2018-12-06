@@ -124,9 +124,9 @@ public class LocalAlgorithmRepository implements AlgorithmRepository {
             LOG.warn(duplicateAlgorithmId, description.getId());
         }
         this.algorithms.put(description.getId(), () -> instance);
-        if(instance instanceof AbstractSelfDescribingAlgorithm) {
-            ((AbstractSelfDescribingAlgorithm)instance).setParserRepository(parserRepository);
-            ((AbstractSelfDescribingAlgorithm)instance).setGeneratorRepository(generatorRepository);
+        if (instance instanceof AbstractSelfDescribingAlgorithm) {
+            ((AbstractSelfDescribingAlgorithm) instance).setParserRepository(parserRepository);
+            ((AbstractSelfDescribingAlgorithm) instance).setGeneratorRepository(generatorRepository);
         }
         LOG.info("Algorithm {} with id {} registered", instance, description.getId());
     }
