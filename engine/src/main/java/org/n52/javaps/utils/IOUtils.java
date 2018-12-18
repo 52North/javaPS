@@ -26,8 +26,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -96,7 +98,7 @@ public final class IOUtils {
     public static File writeStreamToFile(InputStream inputStream,
             String extension,
             File file) throws IOException {
-        Files.copy(inputStream, file.toPath());
+        Files.copy(inputStream, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
         return file;
     }
 
