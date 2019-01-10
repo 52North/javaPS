@@ -136,7 +136,6 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpcore</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -147,6 +146,12 @@
             <groupId>org.slf4j</groupId>
             <artifactId>jcl-over-slf4j</artifactId>
             <scope>runtime</scope>
+        </dependency>
+        <dependency>
+        	<groupId>org.n52.geoprocessing</groupId>
+        	<artifactId>javaps-geotools-backend</artifactId>
+        	<version>0.0.1-SNAPSHOT</version>
+        	<scope>runtime</scope>
         </dependency>
     </dependencies>
     
