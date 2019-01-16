@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2019 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -61,6 +61,7 @@ import org.n52.shetland.ogc.ows.OwsValue;
 import org.n52.shetland.ogc.ows.OwsValueRestriction;
 import org.n52.shetland.ogc.ows.OwsValuesReference;
 import org.n52.shetland.ogc.ows.OwsValuesUnit;
+import org.n52.shetland.w3c.xlink.Link;
 import org.n52.svalbard.encode.stream.xml.AbstractMultiElementXmlStreamWriter;
 
 import com.google.common.base.Strings;
@@ -215,7 +216,7 @@ public abstract class AbstractOWSWriter extends AbstractMultiElementXmlStreamWri
         element(OWSConstants.Elem.QN_CONTACT_INFO, serviceContact.getContactInfo(), (OwsContact contactInfo) -> {
             writePhone(contactInfo);
             writeAddress(contactInfo);
-            element(OWSConstants.Elem.QN_ONLINE_RESOURCE, contactInfo.getOnlineResource(), this::writeXLinkAttrs);
+            element(OWSConstants.Elem.QN_ONLINE_RESOURCE, contactInfo.getOnlineResource(), (ElementWriter<Link>)this::writeXLinkAttrs);
             element(OWSConstants.Elem.QN_HOURS_OF_SERVICE, contactInfo.getHoursOfService());
             element(OWSConstants.Elem.QN_CONTACT_INSTRUCTIONS, contactInfo.getContactInstructions());
         });
@@ -251,7 +252,7 @@ public abstract class AbstractOWSWriter extends AbstractMultiElementXmlStreamWri
     protected void writeServiceProvider(OwsCapabilities capabilities) throws XMLStreamException {
         element(OWSConstants.Elem.QN_SERVICE_PROVIDER, capabilities.getServiceProvider(), (OwsServiceProvider sp) -> {
             element(OWSConstants.Elem.QN_PROVIDER_NAME, sp.getProviderName());
-            element(OWSConstants.Elem.QN_PROVIDER_SITE, sp.getProviderSite(), this::writeXLinkAttrs);
+            element(OWSConstants.Elem.QN_PROVIDER_SITE, sp.getProviderSite(), (ElementWriter<Link>)this::writeXLinkAttrs);
             writeServiceContact(sp);
         });
     }
