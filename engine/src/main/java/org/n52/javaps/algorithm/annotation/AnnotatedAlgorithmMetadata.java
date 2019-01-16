@@ -94,12 +94,11 @@ public class AnnotatedAlgorithmMetadata {
     private Map<OwsCode, AbstractOutputBinding<?>> getOutputBindings(Class<?> algorithmClass,
             OutputHandlerRepository generatorRepository,
             LiteralTypeRepository literalTypeRepository) {
-        Stream<AbstractOutputBinding<Field>> s1 = parseElements(getFields(algorithmClass), Arrays.asList(
+        Stream<AbstractOutputBinding<Field>> s1 = this.parseElements(getFields(algorithmClass), Arrays.<AbstractOutputAnnotationParser<?, Field, AbstractOutputBinding<Field>>>asList(
                 new LiteralOutputAnnotationParser<>(AbstractOutputBinding::field, literalTypeRepository),
                 new ComplexOutputAnnotationParser<>(AbstractOutputBinding::field, generatorRepository),
-                new BoundingBoxOutputAnnotationParser<>(AbstractOutputBinding::field))).map(x -> (AbstractOutputBinding<
-                        Field>) x);
-        Stream<AbstractOutputBinding<Method>> s2 = parseElements(getMethods(algorithmClass), Arrays.asList(
+                new BoundingBoxOutputAnnotationParser<>(AbstractOutputBinding::field))).map(x -> (AbstractOutputBinding<Field>) x);
+        Stream<AbstractOutputBinding<Method>> s2 = parseElements(getMethods(algorithmClass), Arrays.<AbstractOutputAnnotationParser<?, Method, AbstractOutputBinding<Method>>>asList(
                 new LiteralOutputAnnotationParser<>(AbstractOutputBinding::method, literalTypeRepository),
                 new ComplexOutputAnnotationParser<>(AbstractOutputBinding::method, generatorRepository),
                 new BoundingBoxOutputAnnotationParser<>(AbstractOutputBinding::method))).map(
@@ -120,12 +119,12 @@ public class AnnotatedAlgorithmMetadata {
     private Map<OwsCode, AbstractInputBinding<?>> getInputBindings(Class<?> algorithmClass,
             InputHandlerRepository parserRepository,
             LiteralTypeRepository literalTypeRepository) {
-        Stream<AbstractInputBinding<Field>> s1 = parseElements(getFields(algorithmClass), Arrays.asList(
+        Stream<AbstractInputBinding<Field>> s1 = parseElements(getFields(algorithmClass), Arrays.<AbstractInputAnnotationParser<?, Field, AbstractInputBinding<Field>>>asList(
                 new LiteralInputAnnotationParser<>(AbstractInputBinding::field, literalTypeRepository),
                 new ComplexInputAnnotationParser<>(AbstractInputBinding::field, parserRepository),
                 new BoundingBoxInputAnnotationParser<>(AbstractInputBinding::field))).map(x -> (AbstractInputBinding<
                         Field>) x);
-        Stream<AbstractInputBinding<Method>> s2 = parseElements(getMethods(algorithmClass), Arrays.asList(
+        Stream<AbstractInputBinding<Method>> s2 = parseElements(getMethods(algorithmClass), Arrays.<AbstractInputAnnotationParser<?, Method, AbstractInputBinding<Method>>>asList(
                 new LiteralInputAnnotationParser<>(AbstractInputBinding::method, literalTypeRepository),
                 new ComplexInputAnnotationParser<>(AbstractInputBinding::method, parserRepository),
                 new BoundingBoxInputAnnotationParser<>(AbstractInputBinding::method))).map(x -> (AbstractInputBinding<
