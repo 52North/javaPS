@@ -10,44 +10,81 @@ How to add custom Processes/Algorithms to JavaPS
 
 As described in the [Architectural Details Page](../architecture/architecture.markdown), processes are implementations of the interface ***IAlgorithm***, which prescribes an *execute()* method and a ***TypedProcessDescription***, the Java representation of a process description. The abstract component ***AbstractAlgorithm*** implements the interface and thus provides the rudimentary skeleton for any ***Algorithm*** implementation. However, algorithm developers do not have to extend ***AbstractAlgorithm*** themselves. Instead, **JavaPS** offers a more elegant and simple way of implementing custom ***Algorithms***. Through suitable *Java annotations*, any Java class may become an ***Algorithm*** that is found at application start-up by **JavaPS**. This functionality is provided by component ***AnnotatedAlgorithm***, which extends ***AbstractAlgorithm*** and thus provides a full implementation of the requirements (*process description* and *execute()* method). The necessary information is automatically parsed and derived from the *annotations*.
 
-The following example demonstrates the definition of an *annotated algorithm*. The exemplar *"TestAlgorithm"* is marked as an implementation of ***IAlgorithm*** by annotating certain methods with key annotation, such as **@Algorithm**, **@LiteralInput**, **@LiteralOutput** and **@Execute**.
+The following example demonstrates the definition of an *annotated algorithm*. The exemplar *"EchoProcess"* is marked as an implementation of ***IAlgorithm*** by annotating certain methods with key annotation, such as **@Algorithm**, **@LiteralInput**, **@LiteralOutput** and **@Execute**.
 
 ```
-package org.n52.javaps.service;
+package org.n52.wps.echoprocess;
 
 //import statements omitted
 
 @Algorithm(version = "1.0.0")
-public class TestAlgorithm {
-    private String input1;
-    private String input2;
-    private String output1;
-    private String output2;
+public class EchoProcess {
 
-    @LiteralInput(identifier = "input1")
-    public void setInput1(String value) {
-         this.input1 = value;
-    }
+    private static final Logger log = LoggerFactory.getLogger(EchoProcess.class);
 
-    @LiteralInput(identifier = "input2")
-    public void setInput2(String value) {
-         this.input2 = value;
-    }
+    private List<XmlObject> complexInput;
+    private List<String> literalInput;
+
+    private XmlObject complexOutput;
+    private String literalOutput;
+
+    private OwsBoundingBox boundingboxInput;
+    private OwsBoundingBox boundingboxOutput;
 
     @Execute
-    public void execute() {
-         this.output1 = input1;
-         this.output2 = input2;
+    public void echo() {
+        
+        log.debug("Running echo process");
+
+        if (literalInput != null && literalInput.size() > 0){
+            literalOutput = literalInput.get(0);
+        } else{
+            log.debug("No literal input");
+        }
+
+        if (complexInput != null && complexInput.size() > 0){
+            complexOutput = complexInput.get(0);
+        } else{
+            log.debug("No complex input");
+        }
+        
+        if (boundingboxInput != null){
+            boundingboxOutput = boundingboxInput;
+        } else{
+            log.debug("No bounding box input");
+        }
+
+        log.debug("Finished echo process, literal output is '{}', complex output is : {}", literalOutput, complexOutput);
     }
 
-    @LiteralOutput(identifier = "output1")
-    public String getOutput1() {
-         return this.output1;
+    @LiteralOutput(identifier = "literalOutput")
+    public String getLiteralOutput() {
+        return literalOutput;
     }
 
-    @LiteralOutput(identifier = "output2")
-    public String getOutput2() {
-         return this.output2;
+    @LiteralInput(identifier = "literalInput", maxOccurs = 1)
+    public void setLiteralInput(List<String> literalInput) {
+        this.literalInput = literalInput;
+    }
+
+    @BoundingBoxInput(defaultCRSString="EPSG:4326", identifier = "boundingboxInput")
+    public void setBoundingBox(OwsBoundingBox data){
+        this.boundingboxInput = data;
+    }
+
+    @BoundingBoxOutput(defaultCRSString="EPSG:4326", identifier = "boundingboxOutput")
+    public OwsBoundingBox getBoundingBox(){
+        return this.boundingboxOutput;
+    }
+
+    @ComplexOutput(identifier="complexOutput", binding=GenericXMLDataBinding.class)
+    public XmlObject getComplexOutput() {
+        return complexOutput;
+    }
+
+    @ComplexInput(identifier="complexInput", binding=GenericXMLDataBinding.class)
+    public void setComplexInput(List<XmlObject> complexInput) {
+        this.complexInput = complexInput;
     }
 
 }
@@ -96,6 +133,18 @@ Annotation `@ComplexInput` Properties
 -	long **maximumMegaBytes**: a limitation of the maximum size of the complex input's payload
 -	Class **binding**: reference to a *binding* class that implements/extends *ComplexData.class* and thus is able to parse the complex input from an *Execute* request correctly; basically this *binding* component acts as a wrapper for the input; more information about *binding* is provided in section [The Role of the Binding Implementations](#the-role-of-the-binding-implementations)
 
+#### Setter Annotation **@BoundingBoxInput**
+
+Annotation `@ComplexInput` Properties
+
+-	String **identifier**: specifies the unique *input identifier* of the input
+-	String **title**: the title of the input; can be chosen arbitrarily
+-	String **abstrakt**: a description of the input
+-	long **minOccurs**: the minimum number of occurrences within an *Execute* request; default value is "1"
+-	long **maxOccurs**: the maximum number of occurrences within an *Execute* request; default value is "1"
+-   String **defaultCRSString**: the default CRS as String; default value is "http://www.opengis.net/def/crs/EPSG/0/4326"
+-   String[] **supportedCRSStringArray**: String array of supported CRS; default value is {"http://www.opengis.net/def/crs/EPSG/0/4326"}
+
 ### Annotations for the Definition of *Process Outputs*
 
 #### Setter Annotation **@LiteralOutput**
@@ -116,6 +165,16 @@ Annotation `@ComplexOutput` Properties
 -	String **title**: the title of the output; can be chosen arbitrarily
 -	String **abstrakt**: a description of the output
 -	Class **binding**: reference to a *binding* class that implements/extends *ComplexData.class* and thus is able to encode the output correctly; basically this *binding* component acts as a wrapper for the output; more information about *binding* is provided in section [The Role of the Binding Implementations](#the-role-of-the-binding-implementations)
+
+#### Setter Annotation **@BoundingBoxOutput**
+
+Annotation `@BoundingBoxOutput` Properties
+
+-	String **identifier**: specifies the unique *output identifier* of the output
+-	String **title**: the title of the output; can be chosen arbitrarily
+-	String **abstrakt**: a description of the output
+-   String **defaultCRSString**: the default CRS as String; default value is "http://www.opengis.net/def/crs/EPSG/0/4326"
+-   String[] **supportedCRSStringArray**: String array of supported CRS; default value is {"http://www.opengis.net/def/crs/EPSG/0/4326"}
 
 ### The Role of the Binding Implementations
 
