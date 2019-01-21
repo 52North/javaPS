@@ -46,8 +46,6 @@ public @interface BoundingBoxInput {
 
     long maxOccurs() default 1;
 
-    String boundingBoxString() default "";
-
     String defaultCRSString() default CRS_EPSG_4326;
 
     String[] supportedCRSStringArray() default { CRS_EPSG_4326 };

@@ -41,66 +41,29 @@ This project includes:
   Apache Log4j Core under The Apache Software License, Version 2.0
   Apache Log4j SLF4J Binding under The Apache Software License, Version 2.0
   Apache Log4j Web under The Apache Software License, Version 2.0
-  API interfaces under Lesser General Public License (LGPL)
   ClassLoader Leak Prevention library under Apache 2
-  common under Eclipse Public License (EPL)
-  Commons IO under The Apache Software License, Version 2.0
-  Commons JXPath under The Apache Software License, Version 2.0
   Commons Lang under The Apache Software License, Version 2.0
-  Commons Pool under The Apache Software License, Version 2.0
-  commons-collections under The Apache Software License, Version 2.0
   Cross-Origin Resource Sharing (CORS) Filter under The Apache Software License, Version 2.0
-  DataStore Support under Lesser General Public License (LGPL)
-  ecore under Eclipse Public License (EPL)
-  EJML under The Apache Software License, Version 2.0
-  EPSG Authority Service using HSQL database under Lesser General Public License (LGPL) or EPSG database distribution license or BSD License for HSQL
   error-prone annotations under Apache 2.0
   EXIficient under MIT License
   EXIficient-Core under MIT License
   EXIficient-Grammars under MIT License
-  Feature Based Graphs and Networks under Lesser General Public License (LGPL)
   FindBugs-jsr305 under The Apache Software License, Version 2.0
-  GeoJSON Support under Lesser General Public License (LGPL)
-  GeoTIFF grid coverage exchange module under Lesser General Public License (LGPL)
-  GML2 XML Support under Lesser General Public License (LGPL)
-  GML3 XML Support under Lesser General Public License (LGPL)
-  Grid Coverage module under Lesser General Public License (LGPL)
   Guava: Google Core Libraries for Java under The Apache Software License, Version 2.0
-  HyperSQL Database under HSQLDB License, a BSD open source license
-  Image I/O-Extensions - utilities classes and methods under Lesser General Public License (LGPL)
-  Improved TIFF Plugin under Lesser General Public License (LGPL)
   J2ObjC Annotations under The Apache Software License, Version 2.0
   Jackson-annotations under The Apache Software License, Version 2.0
   Jackson-core under The Apache Software License, Version 2.0
   jackson-databind under The Apache Software License, Version 2.0
-  jai_codec under Java Advanced Imaging Distribution License, http://download.java.net/media/jai/builds/release/1_1_3/LICENSE-jai.txt
-  jai_core under Java Advanced Imaging Distribution License, http://download.java.net/media/jai/builds/release/1_1_3/LICENSE-jai.txt
-  jai_imageio under Java Advanced Imaging Distribution License, http://download.java.net/media/jai/builds/release/1_1_3/LICENSE-jai.txt
   Java Architecture for XML Binding under CDDL 1.1 or GPL2 w/ CPE
   Java Property Utility under The Apache Software License, Version 2.0
   JavaBeans(TM) Activation Framework under COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
-  javaPS GenericFileData handler under The Apache Software License, Version 2.0
-  javaPS GEOTools process repository under The Apache Software License, Version 2.0
-  javaPS Input-/Outputhandler with GeoTools under The Apache Software License, Version 2.0
   javax.inject under The Apache Software License, Version 2.0
   JCL 1.2 implemented over SLF4J under MIT License
-  JDOM under Similar to Apache License but with the acknowledgment clause removed
-  jgridshift under GNU Lesser General Public License, version 2.0 (LGPLv2)
   Joda-Time under Apache 2
-  JSON.simple under The Apache Software License, Version 2.0
-  jsr-275 under BSD License
-  JTS Topology Suite under Lesser General Public License (LGPL)
-  KML XML Support under Lesser General Public License (LGPL)
-  Main module under Lesser General Public License (LGPL)
-  Metadata under Lesser General Public License (LGPL)
   Old JAXB Core under CDDL+GPL License
   Old JAXB Runtime under CDDL+GPL License
-  Open GIS Interfaces under OGC copyright or Lesser General Public License (LGPL)
   org.locationtech.jts:jts-core under Eclipse Publish License, Version 1.0 or Eclipse Distribution License - v 1.0
-  PicoContainer Core under BSD License
   PJL Compressing Filter under Apache Software License V2.0
-  Referencing services under Lesser General Public License (LGPL)
-  Shapefile module under Lesser General Public License (LGPL)
   SLF4J API Module under MIT License
   SLF4J Simple Binding under MIT License
   Spring AOP under Apache License, Version 2.0
@@ -112,13 +75,8 @@ This project includes:
   Spring Web under Apache License, Version 2.0
   Spring Web MVC under Apache License, Version 2.0
   StAX API under The Apache Software License, Version 2.0
-  Support and utility classes under Simplified BSD
-  vecmath under Sun Binary Code License Agreement
   Xerces2-j under The Apache Software License, Version 2.0
   XML Commons External Components XML APIs under The Apache Software License, Version 2.0 or The SAX License or The W3C License
-  XML Parsing under Lesser General Public License (LGPL)
   XML Pull Parsing API under Public Domain
   XmlBeans under The Apache Software License, Version 2.0
-  xsd under Eclipse Public License (EPL)
-  ZonalStats operator under Simplified BSD
 

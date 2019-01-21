@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2019 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,8 +23,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import javax.inject.Inject;
-
 import org.n52.javaps.commons.observerpattern.IObserver;
 import org.n52.javaps.commons.observerpattern.ISubject;
 import org.n52.javaps.description.TypedBoundingBoxInputDescription;
@@ -34,8 +32,6 @@ import org.n52.javaps.description.TypedLiteralInputDescription;
 import org.n52.javaps.description.TypedProcessDescription;
 import org.n52.javaps.description.impl.TypedComplexOutputDescriptionImpl;
 import org.n52.javaps.description.impl.TypedProcessDescriptionFactory;
-import org.n52.javaps.io.InputHandlerRepository;
-import org.n52.javaps.io.OutputHandlerRepository;
 import org.n52.javaps.io.complex.ComplexData;
 import org.n52.javaps.io.literal.LiteralType;
 import org.n52.shetland.ogc.ows.OwsAllowedValues;
@@ -72,11 +68,11 @@ public abstract class AbstractSelfDescribingAlgorithm extends AbstractAlgorithm 
 
     private Object state;
 
-//    @Inject
-//    private OutputHandlerRepository generatorRepository;
-//
-//    @Inject
-//    private InputHandlerRepository parserRepository;
+    // @Inject
+    // private OutputHandlerRepository generatorRepository;
+    //
+    // @Inject
+    // private InputHandlerRepository parserRepository;
 
     private OwsMetadata metadata;
 
@@ -109,7 +105,7 @@ public abstract class AbstractSelfDescribingAlgorithm extends AbstractAlgorithm 
 
         TypedProcessDescription description = new TypedProcessDescriptionFactory().process().withIdentifier(this
                 .getClass().getName()).withTitle(getTitle()).withAbstract(getAbstract())
-//                .withMetadata(getMetadata())
+                // .withMetadata(getMetadata())
                 // TODO process could have no inputs
                 .withInput(getInputs()).withOutput(getOutputs()).withVersion(getVersion()).statusSupported(
                         getStatusSupported()).storeSupported(getStoreSupported()).build();
@@ -140,9 +136,9 @@ public abstract class AbstractSelfDescribingAlgorithm extends AbstractAlgorithm 
                 .withIdentifier(id).withAbstract(_abstract).withTitle(title).withMinimalOccurence(minOccurs)
                 .withKeywords(keywords).
                 // FIXME
-                withMetadata(metadata.iterator().next())
-                .withMaximalOccurence(maxOccurs).withMaximumMegabytes(maximumMegaBytes).withDefaultFormat(defaultFormat)
-                .withSupportedFormat(supportedFormats).withType(dataBinding).build();
+                withMetadata(metadata.iterator().next()).withMaximalOccurence(maxOccurs).withMaximumMegabytes(
+                        maximumMegaBytes).withDefaultFormat(defaultFormat).withSupportedFormat(supportedFormats)
+                .withType(dataBinding).build();
 
         inputs.add(inputDescription);
     }
@@ -161,9 +157,9 @@ public abstract class AbstractSelfDescribingAlgorithm extends AbstractAlgorithm 
         TypedComplexInputDescription inputDescription = new TypedProcessDescriptionFactory().complexInput()
                 .withIdentifier(id).withAbstract(_abstract).withTitle(title).withMinimalOccurence(minOccurs)
                 // FIXME
-                .withMetadata(metadata.iterator().next())
-                .withMaximalOccurence(maxOccurs).withMaximumMegabytes(maximumMegaBytes).withDefaultFormat(defaultFormat)
-                .withSupportedFormat(supportedFormats).withType(dataBinding).build();
+                .withMetadata(metadata.iterator().next()).withMaximalOccurence(maxOccurs).withMaximumMegabytes(
+                        maximumMegaBytes).withDefaultFormat(defaultFormat).withSupportedFormat(supportedFormats)
+                .withType(dataBinding).build();
 
         inputs.add(inputDescription);
     }
@@ -180,9 +176,8 @@ public abstract class AbstractSelfDescribingAlgorithm extends AbstractAlgorithm 
         TypedComplexInputDescription inputDescription = new TypedProcessDescriptionFactory().complexInput()
                 .withIdentifier(id).withAbstract(_abstract).withTitle(title).
                 // FIXME
-                withMetadata(metadata.iterator().next())
-                .withMaximalOccurence(maxOccurs).withDefaultFormat(defaultFormat).withSupportedFormat(supportedFormats)
-                .withType(dataBinding).build();
+                withMetadata(metadata.iterator().next()).withMaximalOccurence(maxOccurs).withDefaultFormat(
+                        defaultFormat).withSupportedFormat(supportedFormats).withType(dataBinding).build();
 
         inputs.add(inputDescription);
     }
@@ -199,8 +194,8 @@ public abstract class AbstractSelfDescribingAlgorithm extends AbstractAlgorithm 
 
         TypedComplexInputDescription inputDescription = new TypedProcessDescriptionFactory().complexInput()
                 .withIdentifier(id).withAbstract(_abstract).withTitle(title).withMinimalOccurence(minOccurs)
-                .withMaximalOccurence(maxOccurs).withMaximumMegabytes(maximumMegaBytes).withDefaultFormat(defaultFormat)
-                .withSupportedFormat(supportedFormats).withType(dataBinding).build();
+                .withMaximalOccurence(maxOccurs).withMaximumMegabytes(maximumMegaBytes)
+                .withDefaultFormat(defaultFormat).withSupportedFormat(supportedFormats).withType(dataBinding).build();
 
         inputs.add(inputDescription);
     }
@@ -258,8 +253,8 @@ public abstract class AbstractSelfDescribingAlgorithm extends AbstractAlgorithm 
             Class<? extends ComplexData<?>> dataBinding) {
 
         TypedComplexInputDescription inputDescription = new TypedProcessDescriptionFactory().complexInput()
-                .withIdentifier(id).withAbstract(_abstract).withTitle(title)
-                .withSupportedFormat(supportedFormats).withType(dataBinding).build();
+                .withIdentifier(id).withAbstract(_abstract).withTitle(title).withSupportedFormat(supportedFormats)
+                .withType(dataBinding).build();
 
         inputs.add(inputDescription);
     }
@@ -270,8 +265,8 @@ public abstract class AbstractSelfDescribingAlgorithm extends AbstractAlgorithm 
             Class<? extends ComplexData<?>> dataBinding) {
 
         TypedComplexInputDescription inputDescription = new TypedProcessDescriptionFactory().complexInput()
-                .withIdentifier(id).withDefaultFormat(defaultFormat)
-                .withSupportedFormat(supportedFormats).withType(dataBinding).build();
+                .withIdentifier(id).withDefaultFormat(defaultFormat).withSupportedFormat(supportedFormats).withType(
+                        dataBinding).build();
 
         inputs.add(inputDescription);
     }
@@ -281,24 +276,27 @@ public abstract class AbstractSelfDescribingAlgorithm extends AbstractAlgorithm 
             Class<? extends ComplexData<?>> dataBinding) {
 
         TypedComplexInputDescription inputDescription = new TypedProcessDescriptionFactory().complexInput()
-                .withIdentifier(id).withDefaultFormat(supportedFormats.iterator().next())
-                .withSupportedFormat(supportedFormats).withType(dataBinding).build();
+                .withIdentifier(id).withDefaultFormat(supportedFormats.iterator().next()).withSupportedFormat(
+                        supportedFormats).withType(dataBinding).build();
 
         inputs.add(inputDescription);
     }
 
-//    protected void addComplexInputDescription(String id,
-//            Class<? extends ComplexData<?>> dataBinding) {
-//
-//        Set<Format> supportedFormats = this.parserRepository.getSupportedFormats(dataBinding);
-//        Format defaultFormat = this.parserRepository.getDefaultFormat(dataBinding).orElse(null);
-//
-//        TypedComplexInputDescription inputDescription = new TypedProcessDescriptionFactory().complexInput()
-//                .withIdentifier(id).withAbstract(_abstract).withTitle(title).withDefaultFormat(defaultFormat)
-//                .withSupportedFormat(supportedFormats).withType(dataBinding).build();
-//
-//        inputs.add(inputDescription);
-//    }
+    // protected void addComplexInputDescription(String id,
+    // Class<? extends ComplexData<?>> dataBinding) {
+    //
+    // Set<Format> supportedFormats =
+    // this.parserRepository.getSupportedFormats(dataBinding);
+    // Format defaultFormat =
+    // this.parserRepository.getDefaultFormat(dataBinding).orElse(null);
+    //
+    // TypedComplexInputDescription inputDescription = new
+    // TypedProcessDescriptionFactory().complexInput()
+    // .withIdentifier(id).withAbstract(_abstract).withTitle(title).withDefaultFormat(defaultFormat)
+    // .withSupportedFormat(supportedFormats).withType(dataBinding).build();
+    //
+    // inputs.add(inputDescription);
+    // }
 
     protected void addLiteralInputDescription(String id,
             List<String> allowedValues,
@@ -391,26 +389,29 @@ public abstract class AbstractSelfDescribingAlgorithm extends AbstractAlgorithm 
             Class<? extends ComplexData<?>> dataBinding) {
 
         TypedComplexOutputDescription outputDescription = descriptionFactory.complexOutput().withIdentifier(id)
-                .withAbstract(_abstract).withTitle(title).withDefaultFormat(supportedFormats.iterator().next()).withSupportedFormat(
-                        supportedFormats).withType(dataBinding).build();
+                .withAbstract(_abstract).withTitle(title).withDefaultFormat(supportedFormats.iterator().next())
+                .withSupportedFormat(supportedFormats).withType(dataBinding).build();
 
         outputs.add(outputDescription);
     }
 
-//    protected void addComplexOutputDescription(String id,
-//            String title,
-//            String _abstract,
-//            Class<? extends ComplexData<?>> dataBinding) {
-//
-//        Set<Format> supportedFormats = this.generatorRepository.getSupportedFormats(dataBinding);
-//        Format defaultFormat = this.generatorRepository.getDefaultFormat(dataBinding).orElse(null);
-//
-//        TypedComplexOutputDescription outputDescription = descriptionFactory.complexOutput().withIdentifier(id)
-//                .withAbstract(_abstract).withTitle(title).withDefaultFormat(defaultFormat).withSupportedFormat(
-//                        supportedFormats).withType(dataBinding).build();
-//
-//        outputs.add(outputDescription);
-//    }
+    // protected void addComplexOutputDescription(String id,
+    // String title,
+    // String _abstract,
+    // Class<? extends ComplexData<?>> dataBinding) {
+    //
+    // Set<Format> supportedFormats =
+    // this.generatorRepository.getSupportedFormats(dataBinding);
+    // Format defaultFormat =
+    // this.generatorRepository.getDefaultFormat(dataBinding).orElse(null);
+    //
+    // TypedComplexOutputDescription outputDescription =
+    // descriptionFactory.complexOutput().withIdentifier(id)
+    // .withAbstract(_abstract).withTitle(title).withDefaultFormat(defaultFormat).withSupportedFormat(
+    // supportedFormats).withType(dataBinding).build();
+    //
+    // outputs.add(outputDescription);
+    // }
 
     private Collection<ProcessOutputDescription> getOutputs() {
         return outputs;
@@ -513,13 +514,15 @@ public abstract class AbstractSelfDescribingAlgorithm extends AbstractAlgorithm 
         return errors;
     }
 
-//    public void setParserRepository(InputHandlerRepository parserRepository) {
-//        this.parserRepository = parserRepository;
-//
-//    }
-//
-//    public void setGeneratorRepository(OutputHandlerRepository generatorRepository) {
-//        this.generatorRepository = generatorRepository;
-//    }
+    // public void setParserRepository(InputHandlerRepository parserRepository)
+    // {
+    // this.parserRepository = parserRepository;
+    //
+    // }
+    //
+    // public void setGeneratorRepository(OutputHandlerRepository
+    // generatorRepository) {
+    // this.generatorRepository = generatorRepository;
+    // }
 
 }

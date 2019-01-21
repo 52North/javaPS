@@ -20,6 +20,8 @@ import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Member;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 
 import org.n52.javaps.description.TypedBoundingBoxInputDescription;
@@ -41,6 +43,7 @@ class BoundingBoxInputAnnotationParser<M extends AccessibleObject & Member, B ex
         AbstractInputAnnotationParser<BoundingBoxInput, M, B> {
 
     private static final Logger LOG = LoggerFactory.getLogger(BoundingBoxInputAnnotationParser.class);
+    private static final String COULD_NOT_CREATE_URI_STRING = "Could not create URI from String: ";
 
     BoundingBoxInputAnnotationParser(Function<M, B> bindingFunction) {
         super(bindingFunction);
@@ -55,16 +58,25 @@ class BoundingBoxInputAnnotationParser<M extends AccessibleObject & Member, B ex
         try {
             defaultCRSURI = new URI(annotation.defaultCRSString());
         } catch (URISyntaxException e) {
-            LOG.error("Could not create URI from String: " + annotation.defaultCRSString());
+            LOG.error(COULD_NOT_CREATE_URI_STRING + annotation.defaultCRSString());
             defaultCRSURI = URI.create("http://www.opengis.net/def/crs/EPSG/0/4326");
         }
 
-        // TODO add supported CRSs
+        List<OwsCRS> supportedCRSList = new ArrayList<>();
 
+        String [] supportedCRSArray = annotation.supportedCRSStringArray();
+
+        for (String crsString : supportedCRSArray) {
+            try {
+                supportedCRSList.add(new OwsCRS(new URI(crsString)));
+            } catch (URISyntaxException e) {
+                LOG.error(COULD_NOT_CREATE_URI_STRING + crsString);
+            }
+        }
         return new TypedProcessDescriptionFactory().boundingBoxInput().withIdentifier(annotation.identifier())
                 .withAbstract(annotation.abstrakt()).withTitle(annotation.title()).withMinimalOccurence(annotation
                         .minOccurs()).withMaximalOccurence(annotation.maxOccurs()).withDefaultCRS(new OwsCRS(
-                                defaultCRSURI)).build();
+                                defaultCRSURI)).withSupportedCRS(supportedCRSList).build();
     }
 
     @Override
