@@ -20,6 +20,8 @@ import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Member;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 
 import org.n52.javaps.description.TypedBoundingBoxInputDescription;
@@ -59,12 +61,23 @@ class BoundingBoxInputAnnotationParser<M extends AccessibleObject & Member, B ex
             defaultCRSURI = URI.create("http://www.opengis.net/def/crs/EPSG/0/4326");
         }
 
+        List<OwsCRS> supportedCRSList = new ArrayList<>();
+        
+        String [] supportedCRSArray = annotation.supportedCRSStringArray();
+        
+        for (String crsString : supportedCRSArray) {
+            try {
+                supportedCRSList.add(new OwsCRS(new URI(crsString)));
+            } catch (URISyntaxException e) {
+                LOG.error("Could not create URI from String: " + crsString);
+            }
+        }
         // TODO add supported CRSs
 
         return new TypedProcessDescriptionFactory().boundingBoxInput().withIdentifier(annotation.identifier())
                 .withAbstract(annotation.abstrakt()).withTitle(annotation.title()).withMinimalOccurence(annotation
                         .minOccurs()).withMaximalOccurence(annotation.maxOccurs()).withDefaultCRS(new OwsCRS(
-                                defaultCRSURI)).build();
+                                defaultCRSURI)).withSupportedCRS(supportedCRSList).build();
     }
 
     @Override

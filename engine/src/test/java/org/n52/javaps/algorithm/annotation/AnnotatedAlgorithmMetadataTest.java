@@ -17,8 +17,11 @@
 package org.n52.javaps.algorithm.annotation;
 
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.fail;
 
 import java.math.BigInteger;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -29,7 +32,7 @@ import java.util.Set;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
-
+import org.n52.shetland.ogc.ows.OwsBoundingBox;
 import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.shetland.ogc.ows.OwsLanguageString;
 import org.n52.shetland.ogc.wps.Format;
@@ -60,6 +63,8 @@ public class AnnotatedAlgorithmMetadataTest {
             new Format("text/xml", "UTF-8"),
             new Format("text/xml", "UTF-16")));
 
+    public static final String epsg4328String = "EPSG:4328";
+
     @Rule
     public final ErrorCollector errors = new ErrorCollector();
 
@@ -73,10 +78,19 @@ public class AnnotatedAlgorithmMetadataTest {
         errors.checkThat(processDescription.getTitle().getValue(), is("Test Process"));
         errors.checkThat(processDescription.getAbstract().map(OwsLanguageString::getValue).orElse(null), is("Test Abstract"));
         errors.checkThat(processDescription.getId(), is(new OwsCode(TestProcess.class.getCanonicalName())));
-        errors.checkThat(processDescription.getInputDescriptions().size(), is(8));
-        errors.checkThat(processDescription.getOutputDescriptions().size(), is(7));
+        errors.checkThat(processDescription.getInputDescriptions().size(), is(9));
+        errors.checkThat(processDescription.getOutputDescriptions().size(), is(8));
 
         errors.checkThat(processDescription.getInput("input8").getOccurence().getMax().get(),is(BigInteger.TEN));
+        
+        URI epsg4328URI = null;
+        try {
+            epsg4328URI = new URI(epsg4328String);
+        } catch (URISyntaxException e) {
+            fail(e.getMessage());
+        }
+        
+        errors.checkThat(processDescription.getInput("bboxInput").asBoundingBox().getSupportedCRS().iterator().next().getValue(), is(epsg4328URI));
     }
 
     public static enum TestEnum {
@@ -109,6 +123,9 @@ public class AnnotatedAlgorithmMetadataTest {
                version = "1.0.0")
     public static class TestProcess {
 
+        @BoundingBoxInput(identifier= "bboxInput", supportedCRSStringArray = {epsg4328String})
+        public OwsBoundingBox bboxInput1;
+        
         @LiteralInput(identifier = "input5",
                       abstrakt = "input5 abstract",
                       title = "input5 title",
@@ -232,6 +249,11 @@ public class AnnotatedAlgorithmMetadataTest {
                        title = "output4 title",
                        uom = "m")
         public TestEnum getOutput4() {
+            return null;
+        }
+        
+        @BoundingBoxOutput(identifier="bboxOutput1")
+        public OwsBoundingBox getBBoxOutput1() {
             return null;
         }
     }
