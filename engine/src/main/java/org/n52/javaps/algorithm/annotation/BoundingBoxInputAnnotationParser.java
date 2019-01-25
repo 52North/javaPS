@@ -43,6 +43,7 @@ class BoundingBoxInputAnnotationParser<M extends AccessibleObject & Member, B ex
         AbstractInputAnnotationParser<BoundingBoxInput, M, B> {
 
     private static final Logger LOG = LoggerFactory.getLogger(BoundingBoxInputAnnotationParser.class);
+    private static final String COULD_NOT_CREATE_URI_FROM_STRING = "Could not create URI from String: ";
 
     BoundingBoxInputAnnotationParser(Function<M, B> bindingFunction) {
         super(bindingFunction);
@@ -57,19 +58,19 @@ class BoundingBoxInputAnnotationParser<M extends AccessibleObject & Member, B ex
         try {
             defaultCRSURI = new URI(annotation.defaultCRSString());
         } catch (URISyntaxException e) {
-            LOG.error("Could not create URI from String: " + annotation.defaultCRSString());
+            LOG.error(COULD_NOT_CREATE_URI_FROM_STRING + annotation.defaultCRSString());
             defaultCRSURI = URI.create("http://www.opengis.net/def/crs/EPSG/0/4326");
         }
 
         List<OwsCRS> supportedCRSList = new ArrayList<>();
-        
+
         String [] supportedCRSArray = annotation.supportedCRSStringArray();
-        
+
         for (String crsString : supportedCRSArray) {
             try {
                 supportedCRSList.add(new OwsCRS(new URI(crsString)));
             } catch (URISyntaxException e) {
-                LOG.error("Could not create URI from String: " + crsString);
+                LOG.error(COULD_NOT_CREATE_URI_FROM_STRING + crsString);
             }
         }
         // TODO add supported CRSs

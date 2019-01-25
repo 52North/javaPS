@@ -82,14 +82,14 @@ public class AnnotatedAlgorithmMetadataTest {
         errors.checkThat(processDescription.getOutputDescriptions().size(), is(8));
 
         errors.checkThat(processDescription.getInput("input8").getOccurence().getMax().get(),is(BigInteger.TEN));
-        
+
         URI epsg4328URI = null;
         try {
             epsg4328URI = new URI(epsg4328String);
         } catch (URISyntaxException e) {
             fail(e.getMessage());
         }
-        
+
         errors.checkThat(processDescription.getInput("bboxInput").asBoundingBox().getSupportedCRS().iterator().next().getValue(), is(epsg4328URI));
     }
 
@@ -125,7 +125,7 @@ public class AnnotatedAlgorithmMetadataTest {
 
         @BoundingBoxInput(identifier= "bboxInput", supportedCRSStringArray = {epsg4328String})
         public OwsBoundingBox bboxInput1;
-        
+
         @LiteralInput(identifier = "input5",
                       abstrakt = "input5 abstract",
                       title = "input5 title",
@@ -251,7 +251,7 @@ public class AnnotatedAlgorithmMetadataTest {
         public TestEnum getOutput4() {
             return null;
         }
-        
+
         @BoundingBoxOutput(identifier="bboxOutput1")
         public OwsBoundingBox getBBoxOutput1() {
             return null;
