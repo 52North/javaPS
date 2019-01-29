@@ -62,6 +62,7 @@ public class StaticURLOutputReferencer implements OutputReferencer {
 
     @Override
     public OutputReference dereference(URI uri) throws IllegalArgumentException {
+        LOG.info("Dereferencing URI: " + uri);
         UriComponents build;
         this.lock.readLock().lock();
         try {

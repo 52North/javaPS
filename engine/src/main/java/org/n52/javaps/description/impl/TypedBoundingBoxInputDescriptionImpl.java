@@ -18,6 +18,7 @@ package org.n52.javaps.description.impl;
 
 import java.util.Set;
 
+import org.n52.javaps.description.TypedBoundingBoxInputDescription;
 import org.n52.shetland.ogc.ows.OwsCRS;
 import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.shetland.ogc.ows.OwsKeyword;
@@ -25,8 +26,6 @@ import org.n52.shetland.ogc.ows.OwsLanguageString;
 import org.n52.shetland.ogc.ows.OwsMetadata;
 import org.n52.shetland.ogc.wps.InputOccurence;
 import org.n52.shetland.ogc.wps.description.impl.BoundingBoxInputDescriptionImpl;
-import org.n52.shetland.ogc.wps.description.impl.BoundingBoxInputDescriptionImpl.AbstractBuilder;
-import org.n52.javaps.description.TypedBoundingBoxInputDescription;
 
 public class TypedBoundingBoxInputDescriptionImpl extends BoundingBoxInputDescriptionImpl implements
         TypedBoundingBoxInputDescription {

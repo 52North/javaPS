@@ -55,7 +55,6 @@ class LiteralOutputAnnotationParser<M extends AccessibleObject & Member, B exten
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public TypedLiteralOutputDescription createDescription(LiteralOutput annotation,
             B binding) {
         LiteralType<?> bindingType = getLiteralType(annotation, binding);
