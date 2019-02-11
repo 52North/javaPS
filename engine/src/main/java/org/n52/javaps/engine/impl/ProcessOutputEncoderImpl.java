@@ -26,6 +26,7 @@ import java.util.function.Supplier;
 import javax.inject.Inject;
 
 import org.n52.shetland.ogc.ows.OwsCode;
+import org.n52.shetland.ogc.wps.Format;
 import org.n52.shetland.ogc.wps.OutputDefinition;
 import org.n52.shetland.ogc.wps.data.GroupProcessData;
 import org.n52.shetland.ogc.wps.data.ProcessData;
@@ -79,7 +80,18 @@ public class ProcessOutputEncoderImpl implements ProcessOutputEncoder {
     private ProcessData createValueData(TypedProcessOutputDescription<?> outputDescription,
             OutputDefinition outputDefinition,
             Data<?> data) throws OutputEncodingException {
-        OutputHandler outputHandler = this.outputHandlerRepository.getOutputHandler(outputDefinition.getFormat(), data)
+        
+        Format format = outputDefinition.getFormat();
+        
+        if (format.isEmpty()) {
+            if (outputDescription.isComplex()) {
+                format = outputDescription.asComplex().getDefaultFormat();
+            } else {
+                format = Format.TEXT_XML;
+            }
+        }
+        
+        OutputHandler outputHandler = this.outputHandlerRepository.getOutputHandler(format, data)
                 .orElseThrow(noHandlerFound(outputDescription.getId()));
         return new GeneratingProcessData(outputDescription, outputDefinition, outputHandler, data);
     }

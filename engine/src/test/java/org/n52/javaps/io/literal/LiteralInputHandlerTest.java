@@ -95,6 +95,18 @@ public class LiteralInputHandlerTest {
         errors.checkThat(((LiteralData)decode).getUnitOfMeasurement(), is(Optional.of("m")));
     }
 
+    @Test
+    public void testDecodingStringEmptyFormat() throws IOException, DecodingException {
+        String value = "<wps:LiteralValue xmlns:wps=\"http://www.opengis.net/wps/2.0\" uom=\"m\">läöaaslödfr2</wps:LiteralValue>";
+        Charset charset = StandardCharsets.UTF_8;
+        ByteArrayInputStream input = new ByteArrayInputStream(value.getBytes(charset));
+        Data<?> decode = this.handler.parse(input(new LiteralStringType()), input, new Format());
+        errors.checkThat(decode, is(notNullValue()));
+        errors.checkThat(decode, is(instanceOf(LiteralData.class)));
+        errors.checkThat(decode.getPayload(), is(instanceOf(String.class)));
+        errors.checkThat((String) decode.getPayload(), is("läöaaslödfr2"));
+    }
+
     private TypedLiteralInputDescription input(LiteralType<?> dataType) {
         LiteralDataDomain literalDataDomain = descriptionFactory.literalDataDomain()
                 .withDataType(dataType.getDataType())

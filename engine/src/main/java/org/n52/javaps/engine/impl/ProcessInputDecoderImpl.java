@@ -104,6 +104,15 @@ public class ProcessInputDecoderImpl implements ProcessInputDecoder {
     private Data<?> decodeValueInput(TypedProcessInputDescription<?> description,
             ValueProcessData input) throws InputDecodingException {
         Format format = input.getFormat();
+
+        if (format.isEmpty()) {
+            if (description.isComplex()) {
+                format = description.asComplex().getDefaultFormat();
+            } else {
+                format = Format.TEXT_XML;
+            }
+        }
+
         Class<? extends Data<?>> bindingType = description.getBindingType();
 
         InputHandler handler = this.inputHandlerRepository.getInputHandler(format, bindingType).orElseThrow(

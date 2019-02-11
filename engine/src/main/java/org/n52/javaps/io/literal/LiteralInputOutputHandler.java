@@ -95,7 +95,7 @@ public class LiteralInputOutputHandler extends XmlFactories implements InputHand
     public Data<?> parse(TypedProcessInputDescription<?> description,
             InputStream input,
             Format format) throws IOException, DecodingException {
-        if (format.isXML()) {
+        if (format.isEmpty() || format.isXML()) {
             return parseXML(description.asLiteral(), input, format);
         } else if (format.isBase64()) {
             return parsePlain(description.asLiteral(), new Base64InputStream(input, false), format.withoutEncoding());
@@ -155,7 +155,7 @@ public class LiteralInputOutputHandler extends XmlFactories implements InputHand
         LiteralData literalData = (LiteralData) data;
         TypedLiteralOutputDescription literalDescription = description.asLiteral();
 
-        if (format.isXML()) {
+        if (format.isEmpty() || format.isXML()) {
             return generateXML(literalDescription, literalData, format);
         } else if (format.isBase64()) {
             InputStream stream = generatePlain(literalDescription, literalData, format.withoutEncoding());
