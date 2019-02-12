@@ -49,11 +49,13 @@ public class Base {
     }
 
     public String getContext() {
-        return System.getProperty("test.context", "/elastic-csw");
+        return System.getProperty("test.context", "/javaps");
     }
 
     public String getURL() {
-        return "http://" + getHost() + ":" + getPort() + getContext();
+        String url = "http://" + getHost() + ":" + getPort() + getContext();
+        System.out.println(url);
+        return url;
     }
 
     public String getEndpointURL() {
