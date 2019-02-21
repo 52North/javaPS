@@ -57,4 +57,64 @@
         <constructor-arg name="operation" ref="getStatusOperation"/>
         <constructor-arg name="name" ref="getStatusQName" />
     </bean>
+    <bean class="org.n52.svalbard.decode.stream.xml.XmlStreamingOperationDecoder">
+        <constructor-arg name="operation">
+            <bean class="org.n52.shetland.ogc.ows.service.OwsOperationKey">
+                <constructor-arg name="service" value="WPS" />
+                <constructor-arg name="version"><null/></constructor-arg>
+                <constructor-arg name="operation" value="DescribeProcess" />
+            </bean>
+        </constructor-arg>
+        <constructor-arg name="name" ref="describeProcessQName" />
+    </bean>
+    <bean class="org.n52.svalbard.decode.stream.xml.XmlStreamingOperationDecoder">
+        <constructor-arg name="operation">
+            <bean class="org.n52.shetland.ogc.ows.service.OwsOperationKey">
+                <constructor-arg name="service"><null/></constructor-arg>
+                <constructor-arg name="version"><null/></constructor-arg>
+                <constructor-arg name="operation" value="DescribeProcess" />
+            </bean>
+        </constructor-arg>
+        <constructor-arg name="name" ref="describeProcessQName" />
+    </bean>
+    <bean class="org.n52.svalbard.decode.stream.xml.XmlStreamingOperationDecoder">
+        <constructor-arg name="operation">
+            <bean class="org.n52.shetland.ogc.ows.service.OwsOperationKey">
+                <constructor-arg name="service" value="WPS" />
+                <constructor-arg name="version"><null/></constructor-arg>
+                <constructor-arg name="operation" value="Execute" />
+            </bean>
+        </constructor-arg>
+        <constructor-arg name="name" ref="executeQName" />
+    </bean>
+    <bean class="org.n52.svalbard.decode.stream.xml.XmlStreamingOperationDecoder">
+        <constructor-arg name="operation">
+            <bean class="org.n52.shetland.ogc.ows.service.OwsOperationKey">
+                <constructor-arg name="service" value="WPS" />
+                <constructor-arg name="version"><null/></constructor-arg>
+                <constructor-arg name="operation" value="GetResult" />
+            </bean>
+        </constructor-arg>
+        <constructor-arg name="name" ref="getResultQName" />
+    </bean>
+    <bean class="org.n52.svalbard.decode.stream.xml.XmlStreamingOperationDecoder">
+        <constructor-arg name="operation">
+            <bean class="org.n52.shetland.ogc.ows.service.OwsOperationKey">
+                <constructor-arg name="service" value="WPS" />
+                <constructor-arg name="version"><null/></constructor-arg>
+                <constructor-arg name="operation" value="Dismiss" />
+            </bean>
+        </constructor-arg>
+        <constructor-arg name="name" ref="dismissQName" />
+    </bean>
+    <bean class="org.n52.svalbard.decode.stream.xml.XmlStreamingOperationDecoder">
+        <constructor-arg name="operation">
+            <bean class="org.n52.shetland.ogc.ows.service.OwsOperationKey">
+                <constructor-arg name="service" value="WPS" />
+                <constructor-arg name="version"><null/></constructor-arg>
+                <constructor-arg name="operation" value="GetStatus" />
+            </bean>
+        </constructor-arg>
+        <constructor-arg name="name" ref="getStatusQName" />
+    </bean>
 </beans>
