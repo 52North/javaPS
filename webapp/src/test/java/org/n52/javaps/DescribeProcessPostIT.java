@@ -52,7 +52,7 @@ public class DescribeProcessPostIT extends Base {
 
         String response = "";
         try {
-            response = PostClient.sendRequest(url, payload.toString());
+            response = postClient.sendRequest(url, payload.toString());
             // parseXML(response);
         } catch (Exception e) {
             fail(e.getMessage());
@@ -62,21 +62,6 @@ public class DescribeProcessPostIT extends Base {
         assertTrue(response.contains(testProcessID));
     }
 
-    // @Test
-    // public void testDescribeProcessCompleteSingleWrongLanguage() throws
-    // XmlException, IOException {
-    // URL resource =
-    // getClass().getClassLoader().getResource("requests/DescribeProcess/DescribeProcessSingleWrongLanguage.xml");
-    // XmlObject payload = XmlObject.Factory.parse(resource);
-    //
-    // try {
-    // PostClient.checkForExceptionReport(url, payload.toString(),
-    // HttpServletResponse.SC_BAD_REQUEST, "language");
-    // } catch (IOException e) {
-    // fail(e.getMessage());
-    // }
-    // }
-
     @Test
     public void testDescribeProcessCompleteMultiple() throws XmlException, IOException {
         URL resource = getClass().getClassLoader().getResource("requests/DescribeProcess/DescribeProcessMultiple.xml");
@@ -84,7 +69,7 @@ public class DescribeProcessPostIT extends Base {
 
         String response = "";
         try {
-            response = PostClient.sendRequest(url, payload.toString());
+            response = postClient.sendRequest(url, payload.toString());
             // parseXML(response);
         } catch (Exception e) {
             fail(e.getMessage());
@@ -102,7 +87,7 @@ public class DescribeProcessPostIT extends Base {
 
         String response = "";
         try {
-            response = PostClient.sendRequest(url, payload.toString());
+            response = postClient.sendRequest(url, payload.toString());
             // parseXML(response);
         } catch (Exception e) {
             fail(e.getMessage());
@@ -121,8 +106,22 @@ public class DescribeProcessPostIT extends Base {
         XmlObject payload = XmlObject.Factory.parse(resource);
 
         try {
-            PostClient.checkForExceptionReport(url, payload.toString(), HttpServletResponse.SC_BAD_REQUEST,
+            postClient.checkForExceptionReport(url, payload.toString(), HttpServletResponse.SC_BAD_REQUEST,
                     "MissingParameterValue", "version");
+        } catch (IOException e) {
+            fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void testDescribeProcessWrongVersionParameter() throws XmlException, IOException {
+        URL resource = getClass().getClassLoader().getResource(
+                "requests/DescribeProcess/DescribeProcessWrongVersion.xml");
+        XmlObject payload = XmlObject.Factory.parse(resource);
+
+        try {
+            postClient.checkForExceptionReport(url, payload.toString(), HttpServletResponse.SC_BAD_REQUEST,
+                    "InvalidParameterValue", "version");
         } catch (IOException e) {
             fail(e.getMessage());
         }
@@ -135,7 +134,7 @@ public class DescribeProcessPostIT extends Base {
         XmlObject payload = XmlObject.Factory.parse(resource);
 
         try {
-            PostClient.checkForExceptionReport(url, payload.toString(), HttpServletResponse.SC_BAD_REQUEST,
+            postClient.checkForExceptionReport(url, payload.toString(), HttpServletResponse.SC_BAD_REQUEST,
                     "MissingParameterValue", "service");
         } catch (IOException e) {
             fail(e.getMessage());
@@ -149,7 +148,7 @@ public class DescribeProcessPostIT extends Base {
         XmlObject payload = XmlObject.Factory.parse(resource);
 
         try {
-            PostClient.checkForExceptionReport(url, payload.toString(), HttpServletResponse.SC_BAD_REQUEST,
+            postClient.checkForExceptionReport(url, payload.toString(), HttpServletResponse.SC_BAD_REQUEST,
                     "MissingParameterValue", "Identifier");
         } catch (IOException e) {
             fail(e.getMessage());
@@ -163,7 +162,7 @@ public class DescribeProcessPostIT extends Base {
         XmlObject payload = XmlObject.Factory.parse(resource);
 
         try {
-            PostClient.checkForExceptionReport(url, payload.toString(), HttpServletResponse.SC_BAD_REQUEST,
+            postClient.checkForExceptionReport(url, payload.toString(), HttpServletResponse.SC_BAD_REQUEST,
                     "MissingParameterValue", "Identifier");
         } catch (IOException e) {
             fail(e.getMessage());
@@ -177,7 +176,7 @@ public class DescribeProcessPostIT extends Base {
         XmlObject payload = XmlObject.Factory.parse(resource);
 
         try {
-            PostClient.checkForExceptionReport(url, payload.toString(), HttpServletResponse.SC_BAD_REQUEST,
+            postClient.checkForExceptionReport(url, payload.toString(), HttpServletResponse.SC_BAD_REQUEST,
                     "InvalidParameterValue", "Identifier");
         } catch (IOException e) {
             fail(e.getMessage());

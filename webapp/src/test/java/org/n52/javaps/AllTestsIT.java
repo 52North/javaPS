@@ -55,7 +55,7 @@ public class AllTestsIT extends Base {
         return documentBuilder.parse(inSource);
     }
 
-    public static void validateBinaryBase64Async(String response) throws IOException, ParserConfigurationException,
+    public void validateBinaryBase64Async(String response) throws IOException, ParserConfigurationException,
             SAXException, URISyntaxException {
         String referencedDocument = getAsyncDoc(response);
         assertThat(referencedDocument, referencedDocument, not(containsString("ExceptionReport")));
@@ -64,7 +64,7 @@ public class AllTestsIT extends Base {
                 containsString("Tk9SVEg6IDIyOD"), containsString("SUkqAAgAAAASAAABAwABAAAAIwAA")));
     }
 
-    public static String getRefAsString(String response) throws ParserConfigurationException, SAXException,
+    public String getRefAsString(String response) throws ParserConfigurationException, SAXException,
             IOException, URISyntaxException {
         assertThat(response, response, not(containsString("ExceptionReport")));
         assertThat(response, response, containsString("ProcessSucceeded"));
@@ -81,12 +81,12 @@ public class AllTestsIT extends Base {
 
         assertThat(splittedURL.length, equalTo(2));
 
-        String referencedDocument = GetClient.sendRequest(splittedURL[0] + "RetrieveResultServlet", splittedURL[1]);
+        String referencedDocument = getClient.sendRequest(splittedURL[0] + "RetrieveResultServlet", splittedURL[1]);
 
         return referencedDocument;
     }
 
-    public static InputStream getRefAsStream(String response) throws ParserConfigurationException, SAXException,
+    public InputStream getRefAsStream(String response) throws ParserConfigurationException, SAXException,
             IOException, URISyntaxException {
         assertThat(response, response, not(containsString("ExceptionReport")));
         assertThat(response, response, containsString("ProcessSucceeded"));
@@ -103,10 +103,10 @@ public class AllTestsIT extends Base {
 
         assertThat(splittedURL.length, equalTo(2));
 
-        return GetClient.sendRequestForInputStream(splittedURL[0] + "RetrieveResultServlet", splittedURL[1]);
+        return getClient.sendRequestForInputStream(splittedURL[0] + "RetrieveResultServlet", splittedURL[1]);
     }
 
-    public static String getAsyncDoc(String response) throws IOException, ParserConfigurationException, SAXException, URISyntaxException {
+    public String getAsyncDoc(String response) throws IOException, ParserConfigurationException, SAXException, URISyntaxException {
         assertThat(response, response, not(containsString("ExceptionReport")));
         assertThat(response, response, containsString("statusLocation"));
 
@@ -122,7 +122,7 @@ public class AllTestsIT extends Base {
 
         assertThat(splittedURL.length, equalTo(2));
 
-        String referencedDocument = GetClient.sendRequest(splittedURL[0] + "RetrieveResultServlet", splittedURL[1]);
+        String referencedDocument = getClient.sendRequest(splittedURL[0] + "RetrieveResultServlet", splittedURL[1]);
 
         assertThat(referencedDocument, referencedDocument, not(containsString("ExceptionReport")));
         assertThat(referencedDocument, referencedDocument, containsString("Status"));
@@ -132,7 +132,7 @@ public class AllTestsIT extends Base {
                 try {
                     System.out.println("WPS process still processing. Waiting...");
                     Thread.sleep(1000 * 3);
-                    referencedDocument = GetClient.sendRequest(splittedURL[0] + "RetrieveResultServlet",
+                    referencedDocument = getClient.sendRequest(splittedURL[0] + "RetrieveResultServlet",
                             splittedURL[1]);
                 } catch (InterruptedException ignore) {
                     // do nothing
@@ -144,7 +144,7 @@ public class AllTestsIT extends Base {
         throw new IOException("Test did not complete in allotted time");
     }
 
-    public static void checkReferenceXMLResult(String response,
+    public void checkReferenceXMLResult(String response,
             String stringThatShouldBeContained) throws ParserConfigurationException, SAXException, IOException, URISyntaxException {
         String referencedDocument = getRefAsString(response);
         assertThat(referencedDocument, referencedDocument, not(containsString("ExceptionReport")));
@@ -152,7 +152,7 @@ public class AllTestsIT extends Base {
         assertThat(AllTestsIT.parseXML(response), is(not(nullValue())));
     }
 
-    public static void checkReferenceBinaryResultBase64(String response) throws ParserConfigurationException,
+    public void checkReferenceBinaryResultBase64(String response) throws ParserConfigurationException,
             SAXException, IOException, URISyntaxException {
         assertThat(response, response, not(containsString("ExceptionReport")));
         assertThat(response, response, containsString("ProcessSucceeded"));
@@ -163,7 +163,7 @@ public class AllTestsIT extends Base {
         assertTrue(Base64.isBase64(responseAsString));
     }
 
-    public static void checkReferenceBinaryResultDefault(String response) throws ParserConfigurationException,
+    public void checkReferenceBinaryResultDefault(String response) throws ParserConfigurationException,
             SAXException, IOException, URISyntaxException {
         assertThat(response, response, not(containsString("ExceptionReport")));
         assertThat(response, response, containsString("ProcessSucceeded"));

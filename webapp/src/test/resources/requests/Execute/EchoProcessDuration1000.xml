@@ -35,7 +35,7 @@
 	</wps:Input>
 	<wps:Input id="duration">
 		<wps:Data mimeType="text/xml">
-			<wps:LiteralValue>5000</wps:LiteralValue>
+			<wps:LiteralValue>1000</wps:LiteralValue>
 		</wps:Data>
 	</wps:Input>
 	<wps:Input id="boundingboxInput">

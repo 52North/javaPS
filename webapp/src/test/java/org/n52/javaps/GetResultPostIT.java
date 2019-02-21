@@ -16,83 +16,80 @@
  */
 package org.n52.javaps;
 
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.xmlbeans.XmlError;
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlObject;
-import org.apache.xmlbeans.XmlOptions;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
-import net.opengis.wps.x20.CapabilitiesDocument;
+import net.opengis.wps.x20.StatusInfoDocument;
 
-public class GetCapabilitiesPostIT extends Base {
+public class GetResultPostIT extends Base {
 
     private String url = getEndpointURL();
 
     @Test
-    public void complete() throws XmlException, IOException {
+    public void resultNotReady() throws ParserConfigurationException, SAXException, IOException, XmlException {
 
-        URL resource = getClass().getClassLoader().getResource("requests/GetCapabilities/GetCapabilities.xml");
+        URL resource = getClass().getClassLoader().getResource("requests/Execute/EchoProcessDuration1000.xml");
         XmlObject payload = XmlObject.Factory.parse(resource);
 
-        String response = "";
+        String response = postClient.sendRequest(url, payload.toString());
+        assertThat(response, response, not(containsString("ExceptionReport")));
+        assertThat(response, response, containsString("Status"));
+        assertThat(AllTestsIT.parseXML(response), is(not(nullValue())));
+
+        String jobId = "";
+
         try {
-            response = postClient.sendRequest(url, payload.toString());
-        } catch (IOException e) {
+            StatusInfoDocument statusInfoDocument = StatusInfoDocument.Factory.parse(response);
+
+            jobId = statusInfoDocument.getStatusInfo().getJobID();
+        } catch (XmlException e) {
             fail(e.getMessage());
         }
 
-        CapabilitiesDocument capsDoc = CapabilitiesDocument.Factory.parse(response);
+        URL getResultResource = getClass().getClassLoader().getResource("requests/GetResult/GetResult.xml");
+        String getResultPayload = XmlObject.Factory.parse(getResultResource).toString();
 
-        XmlOptions opts = new XmlOptions();
-        ArrayList<XmlError> errors = new ArrayList<XmlError>();
-        opts.setErrorListener(errors);
-        boolean valid = capsDoc.validate(opts);
+        getResultPayload =getResultPayload.replace("{job-id}", jobId.trim());
 
-        assertTrue(Arrays.deepToString(errors.toArray()), valid);
-    }
-
-    @Test
-    public void validateCapabilities() throws XmlException, IOException {
-        URL resource = getClass().getClassLoader().getResource("requests/GetCapabilities/GetCapabilities.xml");
-        XmlObject payload = XmlObject.Factory.parse(resource);
-
-        String response = "";
-        try {
-            response = postClient.sendRequest(url, payload.toString());
-        } catch (IOException e) {
-            fail(e.getMessage());
-        }
-
-        CapabilitiesDocument capsDoc = CapabilitiesDocument.Factory.parse(response);
-
-        XmlOptions opts = new XmlOptions();
-        ArrayList<XmlError> errors = new ArrayList<XmlError>();
-        opts.setErrorListener(errors);
-        boolean valid = capsDoc.validate(opts);
-
-        assertTrue(Arrays.deepToString(errors.toArray()), valid);
+        postClient.checkForExceptionReport(url, getResultPayload, HttpServletResponse.SC_BAD_REQUEST, "ResultNotReady", jobId);
     }
 
     @Test
     public void wrongVersion() throws XmlException, IOException {
-        URL resource = getClass().getClassLoader().getResource("requests/GetCapabilities/WrongVersion.xml");
+        URL resource = getClass().getClassLoader().getResource("requests/GetResult/WrongVersion.xml");
         XmlObject payload = XmlObject.Factory.parse(resource);
 
         try {
             postClient.checkForExceptionReport(url, payload.toString(), HttpServletResponse.SC_BAD_REQUEST,
-                    "VersionNegotiationFailed");
+                    "InvalidParameterValue", "locator=\"version\"");
+        } catch (IOException e) {
+            fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void missingVersion() throws XmlException, IOException {
+        URL resource = getClass().getClassLoader().getResource("requests/GetResult/MissingVersion.xml");
+        XmlObject payload = XmlObject.Factory.parse(resource);
+
+        try {
+            postClient.checkForExceptionReport(url, payload.toString(), HttpServletResponse.SC_BAD_REQUEST,
+                    "MissingParameterValue", "locator=\"version\"");
         } catch (IOException e) {
             fail(e.getMessage());
         }
@@ -100,12 +97,12 @@ public class GetCapabilitiesPostIT extends Base {
 
     @Test
     public void wrongServiceParameter() throws ParserConfigurationException, SAXException, IOException, XmlException {
-        URL resource = getClass().getClassLoader().getResource("requests/GetCapabilities/WrongService.xml");
+        URL resource = getClass().getClassLoader().getResource("requests/GetResult/WrongService.xml");
         XmlObject payload = XmlObject.Factory.parse(resource);
 
         try {
             postClient.checkForExceptionReport(url, payload.toString(), HttpServletResponse.SC_BAD_REQUEST,
-                    "InvalidParameterValue");
+                    "InvalidParameterValue", "locator=\"service\"");
         } catch (IOException e) {
             fail(e.getMessage());
         }
@@ -113,12 +110,12 @@ public class GetCapabilitiesPostIT extends Base {
 
     @Test
     public void missingServiceParameter() throws ParserConfigurationException, SAXException, IOException, XmlException {
-        URL resource = getClass().getClassLoader().getResource("requests/GetCapabilities/MissingService.xml");
+        URL resource = getClass().getClassLoader().getResource("requests/GetResult/MissingService.xml");
         XmlObject payload = XmlObject.Factory.parse(resource);
 
         try {
             postClient.checkForExceptionReport(url, payload.toString(), HttpServletResponse.SC_BAD_REQUEST,
-                    "MissingParameterValue");
+                    "MissingParameterValue", "locator=\"service\"");
         } catch (IOException e) {
             fail(e.getMessage());
         }

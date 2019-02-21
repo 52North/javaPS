@@ -24,7 +24,6 @@ import static org.xmlmatchers.xpath.XpathReturnType.returningAString;
 
 import java.io.IOException;
 
-import org.junit.Test;
 import org.xmlmatchers.xpath.XpathReturnType;
 
 /**

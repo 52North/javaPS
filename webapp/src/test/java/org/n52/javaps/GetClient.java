@@ -22,14 +22,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -39,11 +37,17 @@ import com.google.common.base.Joiner;
 
 public class GetClient {
 
-    public static String sendRequest(String targetURL) throws IOException, URISyntaxException {
+    CloseableHttpClient httpClient;
+
+    public GetClient() {
+        httpClient = HttpClientBuilder.create().build();
+    }
+
+    public String sendRequest(String targetURL) throws IOException, URISyntaxException {
         return sendRequest(targetURL, null);
     }
 
-    public static String sendRequest(String targetURL,
+    public String sendRequest(String targetURL,
             String payload) throws IOException, URISyntaxException {
         // Send data
         InputStream in = sendRequestForInputStream(targetURL, payload);
@@ -59,46 +63,19 @@ public class GetClient {
         return Joiner.on('\n').join(lines);
     }
 
-    public static InputStream sendRequestForInputStream(String targetURL,
+    public InputStream sendRequestForInputStream(String targetURL,
             String payload) throws IOException, URISyntaxException {
-
-        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
-
-        // Send data
-        URI url = null;
-        if (payload == null || payload.equalsIgnoreCase("")) {
-            url = new URI(targetURL);
-        } else {
-            String payloadClean = payload.replace("?", "");
-            url = new URI(targetURL + "?" + payloadClean);
-        }
-
-        HttpGet get = new HttpGet(url);
-
-        CloseableHttpResponse response = httpClient.execute(get);
-
-        return response.getEntity().getContent();
+        return getResponse(targetURL, payload).getEntity().getContent();
     }
 
-    public static void checkForExceptionReport(String targetURL,
+    public void checkForExceptionReport(String targetURL,
             String payload,
             int expectedHTTPStatusCode,
-            String... expectedExceptionParameters) throws IOException {
-        // Send data
-        String payloadClean = payload.replace("?", "");
-        URL url = new URL(targetURL + "?" + payloadClean);
+            String... expectedExceptionParameters) throws IOException, URISyntaxException {
 
-        URLConnection conn = url.openConnection();
+        CloseableHttpResponse response = getResponse(targetURL, payload);
 
-        try {
-            conn.getInputStream();
-        } catch (IOException e) {
-            /*
-             * expected, ignore
-             */
-        }
-
-        InputStream error = ((HttpURLConnection) conn).getErrorStream();
+        InputStream error =  response.getEntity().getContent();
 
         String exceptionReport = "";
 
@@ -108,7 +85,7 @@ public class GetClient {
             data = error.read();
         }
         error.close();
-        assertTrue(((HttpURLConnection) conn).getResponseCode() == expectedHTTPStatusCode);
+        assertTrue(response.getStatusLine().getStatusCode() == expectedHTTPStatusCode);
 
         System.out.println(exceptionReport);
 
@@ -117,5 +94,19 @@ public class GetClient {
             assertTrue(exceptionReport.contains(expectedExceptionParameter));
 
         }
+    }
+
+    private CloseableHttpResponse getResponse(String targetURL, String payload) throws ClientProtocolException, IOException, URISyntaxException {
+        URI uri = null;
+        if (payload == null || payload.equalsIgnoreCase("")) {
+            uri = new URI(targetURL);
+        } else {
+            String payloadClean = payload.replace("?", "");
+            uri = new URI(targetURL + "?" + payloadClean);
+        }
+
+        HttpGet get = new HttpGet(uri);
+
+        return httpClient.execute(get);
     }
 }

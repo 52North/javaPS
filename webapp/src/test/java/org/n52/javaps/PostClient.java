@@ -22,15 +22,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -41,6 +38,12 @@ import com.google.common.base.Joiner;
 
 public class PostClient {
 
+    CloseableHttpClient httpClient;
+
+    public PostClient() {
+        httpClient = HttpClientBuilder.create().build();
+    }
+
     public String buildRequest(String value) throws UnsupportedEncodingException {
 
         String data = URLEncoder.encode("operation", "UTF-8") + "=" + URLEncoder.encode("process", "UTF-8");
@@ -49,7 +52,7 @@ public class PostClient {
         return data;
     }
 
-    public static String sendRequest(String targetURL,
+    public String sendRequest(String targetURL,
             String payload) throws IOException {
         // Construct data
         InputStream in = sendRequestForInputStream(targetURL, payload);
@@ -65,38 +68,17 @@ public class PostClient {
         return Joiner.on('\n').join(lines);
     }
 
-    public static InputStream sendRequestForInputStream(String targetURL,
+    public InputStream sendRequestForInputStream(String targetURL,
             String payload) throws IOException {
-
-        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
-
-        HttpPost post = new HttpPost(targetURL);
-
-        post.addHeader("Accept-Encoding", "gzip");
-        post.addHeader("Content-Type", "text/xml");
-
-        post.setEntity(new StringEntity(payload));
-
-        CloseableHttpResponse response = httpClient.execute(post);
-
-        return response.getEntity().getContent();
+        return getResponse(targetURL, payload).getEntity().getContent();
     }
 
-    public static void checkForExceptionReport(String targetURL,
+    public void checkForExceptionReport(String targetURL,
             String payload,
             int expectedHTTPStatusCode,
             String... expectedExceptionParameters) throws IOException {
         // Send data
-        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
-
-        HttpPost post = new HttpPost(targetURL);
-
-        post.addHeader("Accept-Encoding", "gzip");
-        post.addHeader("Content-Type", "text/xml");
-
-        post.setEntity(new StringEntity(payload));
-
-        CloseableHttpResponse response = httpClient.execute(post);
+        CloseableHttpResponse response = getResponse(targetURL, payload);
 
         InputStream error = response.getEntity().getContent();
 
@@ -108,6 +90,9 @@ public class PostClient {
             data = error.read();
         }
         error.close();
+
+        System.out.println(exceptionReport);
+
         assertTrue(response.getStatusLine().getStatusCode() == expectedHTTPStatusCode);
 
         for (String expectedExceptionParameter : expectedExceptionParameters) {
@@ -115,5 +100,18 @@ public class PostClient {
             assertTrue(exceptionReport.contains(expectedExceptionParameter));
 
         }
+    }
+
+    private CloseableHttpResponse getResponse(String targetURL,
+            String payload) throws ClientProtocolException, IOException {
+
+        HttpPost post = new HttpPost(targetURL);
+
+        post.addHeader("Accept-Encoding", "gzip");
+        post.addHeader("Content-Type", "text/xml");
+
+        post.setEntity(new StringEntity(payload));
+
+        return httpClient.execute(post);
     }
 }

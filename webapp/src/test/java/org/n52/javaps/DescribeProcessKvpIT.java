@@ -43,7 +43,7 @@ public class DescribeProcessKvpIT extends Base {
     public void testDescribeProcessCompleteSingle() throws IOException, ParserConfigurationException, SAXException, URISyntaxException {
         System.out.println("\nRunning testDescribeProcessCompleteSingle");
 
-        String response = GetClient.sendRequest(url, "Service=WPS&Request=DescribeProcess&Version=2.0.0&Identifier="
+        String response = getClient.sendRequest(url, "Service=WPS&Request=DescribeProcess&Version=2.0.0&Identifier="
                 + testProcessID);
 
         assertThat(AllTestsIT.parseXML(response), is(not(nullValue())));
@@ -55,7 +55,7 @@ public class DescribeProcessKvpIT extends Base {
     public void testDescribeProcessCompleteMultiple() throws IOException, ParserConfigurationException, SAXException, URISyntaxException {
         System.out.println("\nRunning testDescribeProcessCompleteMultiple");
 
-        String response = GetClient.sendRequest(url, "Service=WPS&Request=DescribeProcess&Version=2.0.0&Identifier="
+        String response = getClient.sendRequest(url, "Service=WPS&Request=DescribeProcess&Version=2.0.0&Identifier="
                 + testProcessID + "," + testProcessID2);
 
         assertThat(AllTestsIT.parseXML(response), is(not(nullValue())));
@@ -69,7 +69,7 @@ public class DescribeProcessKvpIT extends Base {
     public void testDescribeProcessCompleteAll() throws IOException, ParserConfigurationException, SAXException, URISyntaxException {
         System.out.println("\nRunning testDescribeProcessCompleteAll");
 
-        String response = GetClient.sendRequest(url,
+        String response = getClient.sendRequest(url,
                 "Service=WPS&Request=DescribeProcess&Version=2.0.0&Identifier=ALL");
 
         assertThat(AllTestsIT.parseXML(response), is(not(nullValue())));
@@ -81,46 +81,46 @@ public class DescribeProcessKvpIT extends Base {
 
     @Test
     public void testDescribeProcessMissingVersionParameter() throws IOException, ParserConfigurationException,
-            SAXException {
+            SAXException, URISyntaxException {
         System.out.println("\nRunning testDescribeProcessMissingVersionParameter");
 
-        GetClient.checkForExceptionReport(url, "Service=WPS&Request=DescribeProcess&Identifier=" + testProcessID,
+        getClient.checkForExceptionReport(url, "Service=WPS&Request=DescribeProcess&Identifier=" + testProcessID,
                 HttpServletResponse.SC_BAD_REQUEST, "version");
     }
 
     @Test
     public void testDescribeProcessMissingServiceParameter() throws IOException, ParserConfigurationException,
-            SAXException {
+            SAXException, URISyntaxException {
         System.out.println("\nRunning testDescribeProcessMissingServiceParameter");
 
-        GetClient.checkForExceptionReport(url, "Request=DescribeProcess&Version=2.0.0&Identifier=" + testProcessID,
+        getClient.checkForExceptionReport(url, "Request=DescribeProcess&Version=2.0.0&Identifier=" + testProcessID,
                 HttpServletResponse.SC_BAD_REQUEST, "service");
     }
 
     @Test
     public void testDescribeProcessMissingIdentifierParameter() throws IOException, ParserConfigurationException,
-            SAXException {
+            SAXException, URISyntaxException {
         System.out.println("\nRunning testDescribeProcessMissingIdentifierParameter");
 
-        GetClient.checkForExceptionReport(url, "Request=DescribeProcess&service=WPS&Version=2.0.0",
+        getClient.checkForExceptionReport(url, "Request=DescribeProcess&service=WPS&Version=2.0.0",
                 HttpServletResponse.SC_BAD_REQUEST, "MissingParameterValue", "Identifier");
     }
 
     @Test
     public void testDescribeProcessWrongIdentifierParameter() throws IOException, ParserConfigurationException,
-            SAXException {
+            SAXException, URISyntaxException {
         System.out.println("\nRunning testDescribeProcessWrongIdentifierParameter");
 
-        GetClient.checkForExceptionReport(url, "Request=DescribeProcess&service=WPS&Version=2.0.0&Identifier=XXX",
+        getClient.checkForExceptionReport(url, "Request=DescribeProcess&service=WPS&Version=2.0.0&Identifier=XXX",
                 HttpServletResponse.SC_BAD_REQUEST, "InvalidParameterValue", "Identifier");
     }
 
     @Test
     public void testDescribeProcessMissingIdentifierValue() throws IOException, ParserConfigurationException,
-            SAXException {
+            SAXException, URISyntaxException {
         System.out.println("\nRunning testDescribeProcessMissingIdentifierValue");
 
-        GetClient.checkForExceptionReport(url, "Request=DescribeProcess&service=WPS&Version=2.0.0&Identifier=",
+        getClient.checkForExceptionReport(url, "Request=DescribeProcess&service=WPS&Version=2.0.0&Identifier=",
                 HttpServletResponse.SC_BAD_REQUEST, "InvalidParameterValue", "Identifier");
     }
 }

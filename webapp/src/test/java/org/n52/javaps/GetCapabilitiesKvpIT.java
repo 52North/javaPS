@@ -37,7 +37,7 @@ public class GetCapabilitiesKvpIT extends Base {
 
     @Test
     public void complete() throws ParserConfigurationException, SAXException, IOException, URISyntaxException {
-        String response = GetClient.sendRequest(url, "Service=WPS&Request=GetCapabilities");
+        String response = getClient.sendRequest(url, "Service=WPS&Request=GetCapabilities");
 
         assertThat(AllTestsIT.parseXML(response), is(not(nullValue())));
         assertThat(response, response, not(containsString("ExceptionReport")));
@@ -49,20 +49,23 @@ public class GetCapabilitiesKvpIT extends Base {
     }
 
     @Test
-    public void missingRequestParameter() throws IOException, ParserConfigurationException, SAXException {
-        GetClient.checkForExceptionReport(url, "Service=WPS", HttpServletResponse.SC_BAD_REQUEST,
+    public void missingRequestParameter() throws IOException, ParserConfigurationException, SAXException,
+            URISyntaxException {
+        getClient.checkForExceptionReport(url, "Service=WPS", HttpServletResponse.SC_BAD_REQUEST,
                 "MissingParameterValue");
     }
 
     @Test
-    public void missingServiceParameter() throws IOException, ParserConfigurationException, SAXException {
-        GetClient.checkForExceptionReport(url, "Request=GetCapabilities", HttpServletResponse.SC_BAD_REQUEST,
+    public void missingServiceParameter() throws IOException, ParserConfigurationException, SAXException,
+            URISyntaxException {
+        getClient.checkForExceptionReport(url, "Request=GetCapabilities", HttpServletResponse.SC_BAD_REQUEST,
                 "MissingParameterValue");
     }
 
     @Test
-    public void noVersionParameter() throws ParserConfigurationException, SAXException, IOException, URISyntaxException {
-        String response = GetClient.sendRequest(url, "Service=WPS&Request=GetCapabilities");
+    public void noVersionParameter() throws ParserConfigurationException, SAXException, IOException,
+            URISyntaxException {
+        String response = getClient.sendRequest(url, "Service=WPS&Request=GetCapabilities");
 
         assertThat(AllTestsIT.parseXML(response), is(not(nullValue())));
         assertThat(response, response, not(containsString("ExceptionReport")));
@@ -73,14 +76,15 @@ public class GetCapabilitiesKvpIT extends Base {
     }
 
     @Test
-    public void wrongVersion() throws ParserConfigurationException, SAXException, IOException {
-        GetClient.checkForExceptionReport(url, "Service=WPS&Request=GetCapabilities&acceptVersions=42.17",
+    public void wrongVersion() throws ParserConfigurationException, SAXException, IOException, URISyntaxException {
+        getClient.checkForExceptionReport(url, "Service=WPS&Request=GetCapabilities&acceptVersions=42.17",
                 HttpServletResponse.SC_BAD_REQUEST, "VersionNegotiationFailed");
     }
 
     @Test
-    public void wrongServiceParameter() throws ParserConfigurationException, SAXException, IOException {
-        GetClient.checkForExceptionReport(url, "Service=HotDogStand&Request=GetCapabilities",
+    public void wrongServiceParameter() throws ParserConfigurationException, SAXException, IOException,
+            URISyntaxException {
+        getClient.checkForExceptionReport(url, "Service=HotDogStand&Request=GetCapabilities",
                 HttpServletResponse.SC_BAD_REQUEST, "InvalidParameterValue");
     }
 }

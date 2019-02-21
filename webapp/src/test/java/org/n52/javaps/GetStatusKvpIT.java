@@ -17,10 +17,12 @@
 package org.n52.javaps;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.xmlbeans.XmlException;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
@@ -29,12 +31,44 @@ public class GetStatusKvpIT extends Base {
     private String url = getEndpointURL();
 
     @Test
-    public void noSuchJob() throws IOException, ParserConfigurationException, SAXException {
+    public void noSuchJob() throws IOException, ParserConfigurationException, SAXException, URISyntaxException {
 
         String nonExistingJobID = "this-id-doesnt-exist";
 
-        GetClient.checkForExceptionReport(url, "Service=WPS&version=2.0.0&Request=GetStatus&jobID=" + nonExistingJobID,
+        getClient.checkForExceptionReport(url, "Service=WPS&version=2.0.0&Request=GetStatus&jobID=" + nonExistingJobID,
                 HttpServletResponse.SC_BAD_REQUEST, "NoSuchJob", nonExistingJobID);
+    }
+
+    @Test
+    public void missingVersionParameter() throws ParserConfigurationException, SAXException, IOException, XmlException,
+            URISyntaxException {
+
+        getClient.checkForExceptionReport(url, "Service=WPS&Request=GetStatus&jobID=",
+                HttpServletResponse.SC_BAD_REQUEST, "MissingParameter", "locator=\"version\"");
+    }
+
+    @Test
+    public void wrongVersionParameter() throws ParserConfigurationException, SAXException, IOException, XmlException,
+            URISyntaxException {
+
+        getClient.checkForExceptionReport(url, "Service=WPS&Request=GetStatus&version=42.0.0&&jobID=",
+                HttpServletResponse.SC_BAD_REQUEST, "InvalidParameterValue", "locator=\"version\"");
+    }
+
+    @Test
+    public void missingServiceParameter() throws ParserConfigurationException, SAXException, IOException, XmlException,
+            URISyntaxException {
+
+        getClient.checkForExceptionReport(url, "Request=GetStatus&version=2.0.0&jobID=",
+                HttpServletResponse.SC_BAD_REQUEST, "MissingParameter", "locator=\"service\"");
+    }
+
+    @Test
+    public void wrongServiceParameter() throws ParserConfigurationException, SAXException, IOException, XmlException,
+            URISyntaxException {
+
+        getClient.checkForExceptionReport(url, "Service=my-service&Request=GetStatus&version=2.0.0&&jobID=",
+                HttpServletResponse.SC_BAD_REQUEST, "InvalidParameterValue", "locator=\"service\"");
     }
 
 }
