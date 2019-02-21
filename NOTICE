@@ -33,6 +33,7 @@ This project includes:
   Animal Sniffer Annotations under MIT license
   Apache Commons Codec under Apache License, Version 2.0
   Apache Commons Configuration under Apache License, Version 2.0
+  Apache Commons IO under Apache License, Version 2.0
   Apache Commons Lang under Apache License, Version 2.0
   Apache Commons Logging under The Apache Software License, Version 2.0
   Apache HttpClient under Apache License, Version 2.0
@@ -49,6 +50,7 @@ This project includes:
   EXIficient-Core under MIT License
   EXIficient-Grammars under MIT License
   FindBugs-jsr305 under The Apache Software License, Version 2.0
+  geolatte-geom under LGPL 3.0
   Guava InternalFutureFailureAccess and InternalFutures under The Apache Software License, Version 2.0
   Guava ListenableFuture only under The Apache Software License, Version 2.0
   Guava: Google Core Libraries for Java under The Apache Software License, Version 2.0
@@ -59,6 +61,8 @@ This project includes:
   Java Architecture for XML Binding under CDDL 1.1 or GPL2 w/ CPE
   Java Property Utility under The Apache Software License, Version 2.0
   JavaBeans(TM) Activation Framework under COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
+  javaPS input/output handler under The Apache Software License, Version 2.0
+  javaps-test-processes under The Apache Software License, Version 2.0
   javax.inject under The Apache Software License, Version 2.0
   JCL 1.2 implemented over SLF4J under MIT License
   Joda-Time under Apache 2

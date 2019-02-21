@@ -22,30 +22,36 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 
 import com.google.common.base.Joiner;
 
-public class GetClient {
+public class PostClient {
 
-    public static String sendRequest(String targetURL) throws IOException, URISyntaxException {
-        return sendRequest(targetURL, null);
+    public String buildRequest(String value) throws UnsupportedEncodingException {
+
+        String data = URLEncoder.encode("operation", "UTF-8") + "=" + URLEncoder.encode("process", "UTF-8");
+        data += "&" + URLEncoder.encode("payload", "UTF-8") + "=" + URLEncoder.encode(value, "UTF-8");
+
+        return data;
     }
 
     public static String sendRequest(String targetURL,
-            String payload) throws IOException, URISyntaxException {
-        // Send data
+            String payload) throws IOException {
+        // Construct data
         InputStream in = sendRequestForInputStream(targetURL, payload);
 
         // Get the response
@@ -60,22 +66,18 @@ public class GetClient {
     }
 
     public static InputStream sendRequestForInputStream(String targetURL,
-            String payload) throws IOException, URISyntaxException {
+            String payload) throws IOException {
 
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
 
-        // Send data
-        URI url = null;
-        if (payload == null || payload.equalsIgnoreCase("")) {
-            url = new URI(targetURL);
-        } else {
-            String payloadClean = payload.replace("?", "");
-            url = new URI(targetURL + "?" + payloadClean);
-        }
+        HttpPost post = new HttpPost(targetURL);
 
-        HttpGet get = new HttpGet(url);
+        post.addHeader("Accept-Encoding", "gzip");
+        post.addHeader("Content-Type", "text/xml");
 
-        CloseableHttpResponse response = httpClient.execute(get);
+        post.setEntity(new StringEntity(payload));
+
+        CloseableHttpResponse response = httpClient.execute(post);
 
         return response.getEntity().getContent();
     }
@@ -85,20 +87,18 @@ public class GetClient {
             int expectedHTTPStatusCode,
             String... expectedExceptionParameters) throws IOException {
         // Send data
-        String payloadClean = payload.replace("?", "");
-        URL url = new URL(targetURL + "?" + payloadClean);
+        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
 
-        URLConnection conn = url.openConnection();
+        HttpPost post = new HttpPost(targetURL);
 
-        try {
-            conn.getInputStream();
-        } catch (IOException e) {
-            /*
-             * expected, ignore
-             */
-        }
+        post.addHeader("Accept-Encoding", "gzip");
+        post.addHeader("Content-Type", "text/xml");
 
-        InputStream error = ((HttpURLConnection) conn).getErrorStream();
+        post.setEntity(new StringEntity(payload));
+
+        CloseableHttpResponse response = httpClient.execute(post);
+
+        InputStream error = response.getEntity().getContent();
 
         String exceptionReport = "";
 
@@ -108,9 +108,7 @@ public class GetClient {
             data = error.read();
         }
         error.close();
-        assertTrue(((HttpURLConnection) conn).getResponseCode() == expectedHTTPStatusCode);
-
-        System.out.println(exceptionReport);
+        assertTrue(response.getStatusLine().getStatusCode() == expectedHTTPStatusCode);
 
         for (String expectedExceptionParameter : expectedExceptionParameters) {
 

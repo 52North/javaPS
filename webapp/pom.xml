@@ -117,6 +117,35 @@
             <scope>test</scope>
             <type>jar</type>
         </dependency>
+		<dependency>
+            <groupId>org.n52.wps</groupId>
+			<artifactId>52n-xml-wps-v20</artifactId>
+			<version>2.6.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+            <groupId>org.n52.sensorweb</groupId>
+			<artifactId>52n-xml-ows-v20</artifactId>
+			<version>2.6.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+            <groupId>org.n52.geoprocessing</groupId>
+			<artifactId>wps-client-lib</artifactId>
+			<version>1.0.2-SNAPSHOT</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+            <groupId>org.apache.xmlbeans</groupId>
+			<artifactId>xmlbeans</artifactId>
+			<version>3.0.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<scope>test</scope>
+		</dependency>
         <dependency>
             <groupId>org.xmlmatchers</groupId>
             <artifactId>xml-matchers</artifactId>
@@ -198,20 +227,7 @@
                         </resource>
                     </webResources>
                 </configuration>
-            </plugin>
-            
-            <plugin>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
-                <version>9.3.2.v20150730</version>
-                <configuration>
-                    <webApp>
-                        <contextPath>/wps</contextPath>
-                    </webApp>
-                    <dumpOnStart>false</dumpOnStart>
-                </configuration>
-            </plugin>
-            
+            </plugin>            
         </plugins>                
     </build>
     <profiles>
@@ -316,6 +332,14 @@
 					</plugin>
 				</plugins>
 			</build>
+			<dependencies>
+		        <dependency>
+			       <groupId>org.n52.wps</groupId>
+			       <artifactId>javaps-test-processes</artifactId>
+			       <version>1.1.2-SNAPSHOT</version>
+			       <scope>runtime</scope>
+		         </dependency>
+			</dependencies>
 		</profile>
     </profiles>    
 </project>
