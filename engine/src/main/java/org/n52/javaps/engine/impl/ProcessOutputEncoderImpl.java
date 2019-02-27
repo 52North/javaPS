@@ -80,9 +80,9 @@ public class ProcessOutputEncoderImpl implements ProcessOutputEncoder {
     private ProcessData createValueData(TypedProcessOutputDescription<?> outputDescription,
             OutputDefinition outputDefinition,
             Data<?> data) throws OutputEncodingException {
-        
+
         Format format = outputDefinition.getFormat();
-        
+
         if (format.isEmpty()) {
             if (outputDescription.isComplex()) {
                 format = outputDescription.asComplex().getDefaultFormat();
@@ -90,7 +90,7 @@ public class ProcessOutputEncoderImpl implements ProcessOutputEncoder {
                 format = Format.TEXT_XML;
             }
         }
-        
+
         OutputHandler outputHandler = this.outputHandlerRepository.getOutputHandler(format, data)
                 .orElseThrow(noHandlerFound(outputDescription.getId()));
         return new GeneratingProcessData(outputDescription, outputDefinition, outputHandler, data);
