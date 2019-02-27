@@ -471,37 +471,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <plugin>
-                <groupId>org.jasig.maven</groupId>
-                <artifactId>maven-notice-plugin</artifactId>
-                <inherited>false</inherited>
-                <configuration>
-                    <noticeTemplate>etc/notice-template.txt</noticeTemplate>
-                    <licenseMapping>
-                        <param>http://52north.github.io/cdn/licenses/license-mappings.xml</param>
-                    </licenseMapping>
-                    <generateChildNotices>false</generateChildNotices>
-                </configuration>
-                <executions>
-                    <!--
-                    <execution>
-                        <id>check-notice</id>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                    -->
-                    <execution>
-                        <id>generate-notice</id>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
     
