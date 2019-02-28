@@ -389,6 +389,11 @@
                 <artifactId>commons-codec</artifactId>
                 <version>1.11</version>
             </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>2.6</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.apache.commons</groupId>
