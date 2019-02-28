@@ -4,8 +4,8 @@ install: true
 script: mvn -fae -U -B clean install
 jdk:
   - openjdk8
+  - openjdk9
   - openjdk10
-  - openjdk11
 cache:
   directories:
     - $HOME/.m2
