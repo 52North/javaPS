@@ -14,222 +14,222 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.List;
-
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.n52.geoprocessing.wps.client.ExecuteRequestBuilder;
-import org.n52.geoprocessing.wps.client.WPSClientException;
-import org.n52.geoprocessing.wps.client.WPSClientSession;
-import org.n52.geoprocessing.wps.client.model.Process;
-import org.n52.geoprocessing.wps.client.model.Result;
-import org.n52.geoprocessing.wps.client.model.execution.Data;
-import org.xml.sax.SAXException;
-
-import net.opengis.ows.x20.ExceptionReportDocument;
-
-public class ExecutePostIT extends Base {
-
-    private final static String TIFF_MAGIC = "<![CDATA[II";
-    private String url = getEndpointURL();
-
-    public final String referenceComplexBinaryInputURL = getURL() +
-            "static/testData/elev_srtm_30m21.tif";
-    public final String referenceComplexXMLInputURL = getURL() +
-         "static/testData/test-data.xml";
-
-    private ExecuteRequestBuilder echoProcessExecuteRequestBuilder;
-    private final String echoProcessIdentifier = "org.n52.javaps.test.EchoProcess";
-    private final String echoProcessInlineComplexXMLInput = "<TestData><this><is><xml><Data>Test</Data></xml></is></this></TestData>";
-    private final String testDataNodeName = "TestData";
-    private final String echoProcessLiteralInputID = "literalInput";
-    private final String echoProcessLiteralInputString = "testData";
-    private final String echoProcessComplexInputID = "complexInput";
-    private final String echoProcessComplexMimeTypeTextXML = "text/xml";
-    private final String echoProcessComplexOutputID = "complexOutput";
-    private final String echoProcessLiteralOutputID = "literalOutput";
-
-    private ExecuteRequestBuilder multiReferenceBinaryInputAlgorithmExecuteRequestBuilder;
-    private final String multiReferenceBinaryInputAlgorithmIdentifier = "org.n52.wps.server.algorithm.test.MultiReferenceBinaryInputAlgorithm";
-    private final String multiReferenceBinaryInputAlgorithmComplexInputID = "data";
-    private final String multiReferenceBinaryInputAlgorithmComplexOutputID = "result";
-    private final String multiReferenceBinaryInputAlgorithmComplexMimeTypeImageTiff= "image/tiff";
-    private final String base64TiffStart= "SUkqAAgAAAASAAA";
-
-    private String tiffImageBinaryInputAsBase64String;
-
-    private String version200 = "2.0.0";
-
-    @Before
-    public void before(){
-
-        WPSClientSession wpsClient = WPSClientSession.getInstance();
-
-        try {
-            wpsClient.connect(url, version200);
-        } catch (WPSClientException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        Process echoProcessDescription;
-
-            echoProcessDescription = wpsClient
-                    .getProcessDescription(url, echoProcessIdentifier, version200);
-
-            echoProcessExecuteRequestBuilder = new ExecuteRequestBuilder(echoProcessDescription);
-
-
-        assertThat(echoProcessExecuteRequestBuilder, is(not(nullValue())));
-
-//        Process multiReferenceBinaryInputAlgorithmDescription;
+//package org.n52.javaps;
 //
-//            multiReferenceBinaryInputAlgorithmDescription = wpsClient
-//                    .getProcessDescription(url, multiReferenceBinaryInputAlgorithmIdentifier, version200);
+//import static org.hamcrest.MatcherAssert.assertThat;
+//import static org.hamcrest.Matchers.equalTo;
+//import static org.hamcrest.Matchers.instanceOf;
+//import static org.hamcrest.Matchers.is;
+//import static org.hamcrest.Matchers.not;
+//import static org.hamcrest.Matchers.nullValue;
+//import static org.junit.Assert.assertTrue;
+//import static org.junit.Assert.fail;
 //
-//            multiReferenceBinaryInputAlgorithmExecuteRequestBuilder = new ExecuteRequestBuilder(multiReferenceBinaryInputAlgorithmDescription);
+//import java.io.BufferedReader;
+//import java.io.IOException;
+//import java.io.InputStream;
+//import java.io.InputStreamReader;
+//import java.util.List;
 //
+//import javax.xml.parsers.ParserConfigurationException;
 //
-//        assertThat(multiReferenceBinaryInputAlgorithmExecuteRequestBuilder, is(not(nullValue())));
+//import org.junit.Before;
+//import org.junit.Test;
+//import org.n52.geoprocessing.wps.client.ExecuteRequestBuilder;
+//import org.n52.geoprocessing.wps.client.WPSClientException;
+//import org.n52.geoprocessing.wps.client.WPSClientSession;
+//import org.n52.geoprocessing.wps.client.model.Process;
+//import org.n52.geoprocessing.wps.client.model.Result;
+//import org.n52.geoprocessing.wps.client.model.execution.Data;
+//import org.xml.sax.SAXException;
 //
-//        InputStream tiffImageInputStream = getClass().getResourceAsStream("/Execute/image.tiff.base64");
+//import net.opengis.ows.x20.ExceptionReportDocument;
 //
-//        BufferedReader tiffImageInputStreamReader = new BufferedReader(new InputStreamReader(tiffImageInputStream));
+//public class ExecutePostIT extends Base {
 //
-//        StringBuilder tiffImageInputStringBuilder = new StringBuilder();
+//    private final static String TIFF_MAGIC = "<![CDATA[II";
+//    private String url = getEndpointURL();
 //
-//        String line = "";
+//    public final String referenceComplexBinaryInputURL = getURL() +
+//            "static/testData/elev_srtm_30m21.tif";
+//    public final String referenceComplexXMLInputURL = getURL() +
+//         "static/testData/test-data.xml";
+//
+//    private ExecuteRequestBuilder echoProcessExecuteRequestBuilder;
+//    private final String echoProcessIdentifier = "org.n52.javaps.test.EchoProcess";
+//    private final String echoProcessInlineComplexXMLInput = "<TestData><this><is><xml><Data>Test</Data></xml></is></this></TestData>";
+//    private final String testDataNodeName = "TestData";
+//    private final String echoProcessLiteralInputID = "literalInput";
+//    private final String echoProcessLiteralInputString = "testData";
+//    private final String echoProcessComplexInputID = "complexInput";
+//    private final String echoProcessComplexMimeTypeTextXML = "text/xml";
+//    private final String echoProcessComplexOutputID = "complexOutput";
+//    private final String echoProcessLiteralOutputID = "literalOutput";
+//
+//    private ExecuteRequestBuilder multiReferenceBinaryInputAlgorithmExecuteRequestBuilder;
+//    private final String multiReferenceBinaryInputAlgorithmIdentifier = "org.n52.wps.server.algorithm.test.MultiReferenceBinaryInputAlgorithm";
+//    private final String multiReferenceBinaryInputAlgorithmComplexInputID = "data";
+//    private final String multiReferenceBinaryInputAlgorithmComplexOutputID = "result";
+//    private final String multiReferenceBinaryInputAlgorithmComplexMimeTypeImageTiff= "image/tiff";
+//    private final String base64TiffStart= "SUkqAAgAAAASAAA";
+//
+//    private String tiffImageBinaryInputAsBase64String;
+//
+//    private String version200 = "2.0.0";
+//
+//    @Before
+//    public void before(){
+//
+//        WPSClientSession wpsClient = WPSClientSession.getInstance();
 //
 //        try {
-//            while ((line = tiffImageInputStreamReader.readLine()) != null) {
-//                tiffImageInputStringBuilder.append(line);
-//            }
-//        } catch (IOException e) {
+//            wpsClient.connect(url, version200);
+//        } catch (WPSClientException e) {
+//            // TODO Auto-generated catch block
 //            e.printStackTrace();
 //        }
 //
-//        tiffImageBinaryInputAsBase64String = tiffImageInputStringBuilder.toString();
+//        Process echoProcessDescription;
 //
-//        assertThat(tiffImageBinaryInputAsBase64String, is(not(nullValue())));
-//        assertThat(tiffImageBinaryInputAsBase64String, is(not(equalTo(""))));
-
-    }
-
-    /*Complex inline XML input */
-    @Test
-    public void testExecutePOSTInlineComplexXMLSynchronousXMLOutput() throws IOException, ParserConfigurationException, SAXException {
-        System.out.println("\nRunning testExecutePOSTInlineComplexXMLSynchronousXMLOutput");
-
-        try {
-            echoProcessExecuteRequestBuilder.addComplexData(echoProcessComplexInputID, echoProcessInlineComplexXMLInput, null, null, echoProcessComplexMimeTypeTextXML);
-
-            echoProcessExecuteRequestBuilder.setResponseDocument(echoProcessComplexOutputID, null, null, echoProcessComplexMimeTypeTextXML);
-
-            Object responseObject =  WPSClientSession.getInstance().execute(url, echoProcessExecuteRequestBuilder.getExecute(), version200);
-
-            assertThat(responseObject, is(not(nullValue())));
-            assertThat(responseObject, is(not(instanceOf(ExceptionReportDocument.class))));
-
-            if (responseObject instanceof Result) {
-
-                Result result = (Result)responseObject;
-
-                List<Data> outputs = result.getOutputs();
-
-                assertTrue(outputs.size() == 1);
-                assertTrue(outputs.get(0).getId().equals(echoProcessComplexOutputID));
-//                checkIdentifier(executeResponseDocument, echoProcessComplexOutputID);
+//            echoProcessDescription = wpsClient
+//                    .getProcessDescription(url, echoProcessIdentifier, version200);
 //
-//                checkIfResultContainsTestXMLData(executeResponseDocument);
-
-            }
-        } catch (WPSClientException e) {
-            fail(e.getMessage());
-        }
-    }
-
-    // cannot test anything else but getting no exception report right now
-    @Test
-    public void testExecutePOSTMultipleInlineComplexXMLSynchronousXMLOutput() throws IOException, ParserConfigurationException, SAXException {
-        System.out.println("\nRunning testExecutePOSTInlineComplexXMLSynchronousXMLOutput");
-
-        try {
-            echoProcessExecuteRequestBuilder.addComplexData(echoProcessComplexInputID, echoProcessInlineComplexXMLInput, null, null, echoProcessComplexMimeTypeTextXML);
-            echoProcessExecuteRequestBuilder.addComplexData(echoProcessComplexInputID, echoProcessInlineComplexXMLInput, null, null, echoProcessComplexMimeTypeTextXML);
-
-            echoProcessExecuteRequestBuilder.setResponseDocument(echoProcessComplexOutputID, null, null, echoProcessComplexMimeTypeTextXML);
-
-            Object responseObject =  WPSClientSession.getInstance().execute(url, echoProcessExecuteRequestBuilder.getExecute(), version200);
-
-            assertThat(responseObject, is(not(nullValue())));
-            assertThat(responseObject, is(not(instanceOf(ExceptionReportDocument.class))));
-
-            if (responseObject instanceof Result) {
-
-                Result result = (Result)responseObject;
-
-                List<Data> outputs = result.getOutputs();
-
-                assertTrue(outputs.size() == 1);
-                assertTrue(outputs.get(0).getId().equals(echoProcessComplexOutputID));
-//                checkIdentifier(executeResponseDocument, echoProcessComplexOutputID);
+//            echoProcessExecuteRequestBuilder = new ExecuteRequestBuilder(echoProcessDescription);
 //
-//                checkIfResultContainsTestXMLData(executeResponseDocument);
-
-            }
-        } catch (WPSClientException e) {
-            fail(e.getMessage());
-        }
-    }
-
-    @Test
-    public void testExecutePOSTMultipleInlineLiteralSynchronousXMLOutput() throws IOException, ParserConfigurationException, SAXException {
-        System.out.println("\nRunning testExecutePOSTInlineComplexXMLSynchronousXMLOutput");
-
-        try {
-            echoProcessExecuteRequestBuilder.addComplexData(echoProcessComplexInputID, echoProcessInlineComplexXMLInput, null, null, echoProcessComplexMimeTypeTextXML);
-
-            echoProcessExecuteRequestBuilder.setResponseDocument(echoProcessComplexOutputID, null, null, echoProcessComplexMimeTypeTextXML);
-
-            Object responseObject =  WPSClientSession.getInstance().execute(url, echoProcessExecuteRequestBuilder.getExecute(), version200);
-
-            assertThat(responseObject, is(not(nullValue())));
-            assertThat(responseObject, is(not(instanceOf(ExceptionReportDocument.class))));
-
-            if (responseObject instanceof Result) {
-
-                Result result = (Result)responseObject;
-
-                List<Data> outputs = result.getOutputs();
-
-                assertTrue(outputs.size() == 1);
-                assertTrue(outputs.get(0).getId().equals(echoProcessComplexOutputID));
-//                checkIdentifier(executeResponseDocument, echoProcessComplexOutputID);
 //
-//                checkIfResultContainsTestXMLData(executeResponseDocument);
-
-            }
-        } catch (WPSClientException e) {
-            fail(e.getMessage());
-        }
-    }
+//        assertThat(echoProcessExecuteRequestBuilder, is(not(nullValue())));
+//
+////        Process multiReferenceBinaryInputAlgorithmDescription;
+////
+////            multiReferenceBinaryInputAlgorithmDescription = wpsClient
+////                    .getProcessDescription(url, multiReferenceBinaryInputAlgorithmIdentifier, version200);
+////
+////            multiReferenceBinaryInputAlgorithmExecuteRequestBuilder = new ExecuteRequestBuilder(multiReferenceBinaryInputAlgorithmDescription);
+////
+////
+////        assertThat(multiReferenceBinaryInputAlgorithmExecuteRequestBuilder, is(not(nullValue())));
+////
+////        InputStream tiffImageInputStream = getClass().getResourceAsStream("/Execute/image.tiff.base64");
+////
+////        BufferedReader tiffImageInputStreamReader = new BufferedReader(new InputStreamReader(tiffImageInputStream));
+////
+////        StringBuilder tiffImageInputStringBuilder = new StringBuilder();
+////
+////        String line = "";
+////
+////        try {
+////            while ((line = tiffImageInputStreamReader.readLine()) != null) {
+////                tiffImageInputStringBuilder.append(line);
+////            }
+////        } catch (IOException e) {
+////            e.printStackTrace();
+////        }
+////
+////        tiffImageBinaryInputAsBase64String = tiffImageInputStringBuilder.toString();
+////
+////        assertThat(tiffImageBinaryInputAsBase64String, is(not(nullValue())));
+////        assertThat(tiffImageBinaryInputAsBase64String, is(not(equalTo(""))));
+//
+//    }
+//
+//    /*Complex inline XML input */
+//    @Test
+//    public void testExecutePOSTInlineComplexXMLSynchronousXMLOutput() throws IOException, ParserConfigurationException, SAXException {
+//        System.out.println("\nRunning testExecutePOSTInlineComplexXMLSynchronousXMLOutput");
+//
+//        try {
+//            echoProcessExecuteRequestBuilder.addComplexData(echoProcessComplexInputID, echoProcessInlineComplexXMLInput, null, null, echoProcessComplexMimeTypeTextXML);
+//
+//            echoProcessExecuteRequestBuilder.setResponseDocument(echoProcessComplexOutputID, null, null, echoProcessComplexMimeTypeTextXML);
+//
+//            Object responseObject =  WPSClientSession.getInstance().execute(url, echoProcessExecuteRequestBuilder.getExecute(), version200);
+//
+//            assertThat(responseObject, is(not(nullValue())));
+//            assertThat(responseObject, is(not(instanceOf(ExceptionReportDocument.class))));
+//
+//            if (responseObject instanceof Result) {
+//
+//                Result result = (Result)responseObject;
+//
+//                List<Data> outputs = result.getOutputs();
+//
+//                assertTrue(outputs.size() == 1);
+//                assertTrue(outputs.get(0).getId().equals(echoProcessComplexOutputID));
+////                checkIdentifier(executeResponseDocument, echoProcessComplexOutputID);
+////
+////                checkIfResultContainsTestXMLData(executeResponseDocument);
+//
+//            }
+//        } catch (WPSClientException e) {
+//            fail(e.getMessage());
+//        }
+//    }
+//
+//    // cannot test anything else but getting no exception report right now
+//    @Test
+//    public void testExecutePOSTMultipleInlineComplexXMLSynchronousXMLOutput() throws IOException, ParserConfigurationException, SAXException {
+//        System.out.println("\nRunning testExecutePOSTInlineComplexXMLSynchronousXMLOutput");
+//
+//        try {
+//            echoProcessExecuteRequestBuilder.addComplexData(echoProcessComplexInputID, echoProcessInlineComplexXMLInput, null, null, echoProcessComplexMimeTypeTextXML);
+//            echoProcessExecuteRequestBuilder.addComplexData(echoProcessComplexInputID, echoProcessInlineComplexXMLInput, null, null, echoProcessComplexMimeTypeTextXML);
+//
+//            echoProcessExecuteRequestBuilder.setResponseDocument(echoProcessComplexOutputID, null, null, echoProcessComplexMimeTypeTextXML);
+//
+//            Object responseObject =  WPSClientSession.getInstance().execute(url, echoProcessExecuteRequestBuilder.getExecute(), version200);
+//
+//            assertThat(responseObject, is(not(nullValue())));
+//            assertThat(responseObject, is(not(instanceOf(ExceptionReportDocument.class))));
+//
+//            if (responseObject instanceof Result) {
+//
+//                Result result = (Result)responseObject;
+//
+//                List<Data> outputs = result.getOutputs();
+//
+//                assertTrue(outputs.size() == 1);
+//                assertTrue(outputs.get(0).getId().equals(echoProcessComplexOutputID));
+////                checkIdentifier(executeResponseDocument, echoProcessComplexOutputID);
+////
+////                checkIfResultContainsTestXMLData(executeResponseDocument);
+//
+//            }
+//        } catch (WPSClientException e) {
+//            fail(e.getMessage());
+//        }
+//    }
+//
+//    @Test
+//    public void testExecutePOSTMultipleInlineLiteralSynchronousXMLOutput() throws IOException, ParserConfigurationException, SAXException {
+//        System.out.println("\nRunning testExecutePOSTInlineComplexXMLSynchronousXMLOutput");
+//
+//        try {
+//            echoProcessExecuteRequestBuilder.addComplexData(echoProcessComplexInputID, echoProcessInlineComplexXMLInput, null, null, echoProcessComplexMimeTypeTextXML);
+//
+//            echoProcessExecuteRequestBuilder.setResponseDocument(echoProcessComplexOutputID, null, null, echoProcessComplexMimeTypeTextXML);
+//
+//            Object responseObject =  WPSClientSession.getInstance().execute(url, echoProcessExecuteRequestBuilder.getExecute(), version200);
+//
+//            assertThat(responseObject, is(not(nullValue())));
+//            assertThat(responseObject, is(not(instanceOf(ExceptionReportDocument.class))));
+//
+//            if (responseObject instanceof Result) {
+//
+//                Result result = (Result)responseObject;
+//
+//                List<Data> outputs = result.getOutputs();
+//
+//                assertTrue(outputs.size() == 1);
+//                assertTrue(outputs.get(0).getId().equals(echoProcessComplexOutputID));
+////                checkIdentifier(executeResponseDocument, echoProcessComplexOutputID);
+////
+////                checkIfResultContainsTestXMLData(executeResponseDocument);
+//
+//            }
+//        } catch (WPSClientException e) {
+//            fail(e.getMessage());
+//        }
+//    }
 
 //    /*Complex XML input by reference */
 //    @Test
@@ -1339,91 +1339,91 @@ public class ExecutePostIT extends Base {
 //        }
 //    }
 
-    private Object createAndSubmitMultiReferenceBinaryInputAlgorithmExecuteWithResponseDocument(boolean status, boolean storeSupport, boolean asReference, String outputEncoding) throws WPSClientException, IOException{
-
-        multiReferenceBinaryInputAlgorithmExecuteRequestBuilder.addComplexDataReference(multiReferenceBinaryInputAlgorithmComplexInputID,
-                                                                                        referenceComplexBinaryInputURL,
-                                                                                        null,
-                                                                                        null,
-                                                                                        multiReferenceBinaryInputAlgorithmComplexMimeTypeImageTiff);
-
-        multiReferenceBinaryInputAlgorithmExecuteRequestBuilder.addComplexDataReference(multiReferenceBinaryInputAlgorithmComplexInputID,
-                                                                                        referenceComplexBinaryInputURL,
-                                                                                        null,
-                                                                                        null,
-                                                                                        multiReferenceBinaryInputAlgorithmComplexMimeTypeImageTiff);
-
-        multiReferenceBinaryInputAlgorithmExecuteRequestBuilder.setResponseDocument(multiReferenceBinaryInputAlgorithmComplexOutputID, null, outputEncoding, multiReferenceBinaryInputAlgorithmComplexMimeTypeImageTiff);
-
-//        multiReferenceBinaryInputAlgorithmExecuteRequestBuilder.setStoreSupport(multiReferenceBinaryInputAlgorithmComplexOutputID, storeSupport);
-//        multiReferenceBinaryInputAlgorithmExecuteRequestBuilder.setStatus(multiReferenceBinaryInputAlgorithmComplexOutputID, status);
-        multiReferenceBinaryInputAlgorithmExecuteRequestBuilder.setAsReference(multiReferenceBinaryInputAlgorithmComplexOutputID, asReference);
-
-        Object responseObject =  WPSClientSession.getInstance().execute(url, multiReferenceBinaryInputAlgorithmExecuteRequestBuilder.getExecute(), version200);
-
-        return responseObject;
-    }
-
-    private Object createAndSubmitMultiReferenceBinaryInputAlgorithmExecuteWithResponseDocument(boolean status, boolean storeSupport, boolean asReference) throws WPSClientException, IOException{
-
-        multiReferenceBinaryInputAlgorithmExecuteRequestBuilder.addComplexDataReference(multiReferenceBinaryInputAlgorithmComplexInputID,
-                                                                                        referenceComplexBinaryInputURL,
-                                                                                        null,
-                                                                                        null,
-                                                                                        multiReferenceBinaryInputAlgorithmComplexMimeTypeImageTiff);
-
-        multiReferenceBinaryInputAlgorithmExecuteRequestBuilder.addComplexDataReference(multiReferenceBinaryInputAlgorithmComplexInputID,
-                                                                                        referenceComplexBinaryInputURL,
-                                                                                        null,
-                                                                                        null,
-                                                                                        multiReferenceBinaryInputAlgorithmComplexMimeTypeImageTiff);
-
-        multiReferenceBinaryInputAlgorithmExecuteRequestBuilder.setResponseDocument(multiReferenceBinaryInputAlgorithmComplexOutputID, null, "base64", multiReferenceBinaryInputAlgorithmComplexMimeTypeImageTiff);
-
-//        multiReferenceBinaryInputAlgorithmExecuteRequestBuilder.setStoreSupport(multiReferenceBinaryInputAlgorithmComplexOutputID, storeSupport);
-//        multiReferenceBinaryInputAlgorithmExecuteRequestBuilder.setStatus(multiReferenceBinaryInputAlgorithmComplexOutputID, status);
-        multiReferenceBinaryInputAlgorithmExecuteRequestBuilder.setAsReference(multiReferenceBinaryInputAlgorithmComplexOutputID, asReference);
-
-        Object responseObject =  WPSClientSession.getInstance().execute(url, multiReferenceBinaryInputAlgorithmExecuteRequestBuilder.getExecute(), version200);
-
-        return responseObject;
-    }
-
-    private Object createAndSubmitMultiReferenceBinaryInputAlgorithmExecuteWithRawData(boolean status, boolean storeSupport, boolean asReference, String encoding) throws WPSClientException, IOException{
-
-        multiReferenceBinaryInputAlgorithmExecuteRequestBuilder.addComplexDataReference(multiReferenceBinaryInputAlgorithmComplexInputID,
-                                                                                        referenceComplexBinaryInputURL,
-                                                                                        null,
-                                                                                        null,
-                                                                                        multiReferenceBinaryInputAlgorithmComplexMimeTypeImageTiff);
-
-        multiReferenceBinaryInputAlgorithmExecuteRequestBuilder.addComplexDataReference(multiReferenceBinaryInputAlgorithmComplexInputID,
-                                                                                        referenceComplexBinaryInputURL,
-                                                                                        null,
-                                                                                        null,
-                                                                                        multiReferenceBinaryInputAlgorithmComplexMimeTypeImageTiff);
-
-        multiReferenceBinaryInputAlgorithmExecuteRequestBuilder.setRawData(multiReferenceBinaryInputAlgorithmComplexOutputID, null, encoding, multiReferenceBinaryInputAlgorithmComplexMimeTypeImageTiff);
-
-        Object responseObject =  WPSClientSession.getInstance().execute(url, multiReferenceBinaryInputAlgorithmExecuteRequestBuilder.getExecute(), version200);
-
-        return responseObject;
-    }
-
-    private Object createAndSubmitEchoProcessExecuteWithResponseDocument(boolean status, boolean storeSupport, boolean asReference) throws WPSClientException, IOException {
-
-        echoProcessExecuteRequestBuilder.addComplexData(echoProcessComplexInputID, echoProcessInlineComplexXMLInput, null, null, echoProcessComplexMimeTypeTextXML);
-
-        echoProcessExecuteRequestBuilder.setResponseDocument(echoProcessComplexOutputID, null, null, echoProcessComplexMimeTypeTextXML);
-
-//        echoProcessExecuteRequestBuilder.setStoreSupport(echoProcessComplexOutputID, storeSupport);
-//        echoProcessExecuteRequestBuilder.setStatus(echoProcessComplexOutputID, status);
-        echoProcessExecuteRequestBuilder.setAsReference(echoProcessComplexOutputID, asReference);
-
-
-        Object responseObject =  WPSClientSession.getInstance().execute(url, echoProcessExecuteRequestBuilder.getExecute(), version200);
-
-        return responseObject;
-    }
-
-}
+//    private Object createAndSubmitMultiReferenceBinaryInputAlgorithmExecuteWithResponseDocument(boolean status, boolean storeSupport, boolean asReference, String outputEncoding) throws WPSClientException, IOException{
+//
+//        multiReferenceBinaryInputAlgorithmExecuteRequestBuilder.addComplexDataReference(multiReferenceBinaryInputAlgorithmComplexInputID,
+//                                                                                        referenceComplexBinaryInputURL,
+//                                                                                        null,
+//                                                                                        null,
+//                                                                                        multiReferenceBinaryInputAlgorithmComplexMimeTypeImageTiff);
+//
+//        multiReferenceBinaryInputAlgorithmExecuteRequestBuilder.addComplexDataReference(multiReferenceBinaryInputAlgorithmComplexInputID,
+//                                                                                        referenceComplexBinaryInputURL,
+//                                                                                        null,
+//                                                                                        null,
+//                                                                                        multiReferenceBinaryInputAlgorithmComplexMimeTypeImageTiff);
+//
+//        multiReferenceBinaryInputAlgorithmExecuteRequestBuilder.setResponseDocument(multiReferenceBinaryInputAlgorithmComplexOutputID, null, outputEncoding, multiReferenceBinaryInputAlgorithmComplexMimeTypeImageTiff);
+//
+////        multiReferenceBinaryInputAlgorithmExecuteRequestBuilder.setStoreSupport(multiReferenceBinaryInputAlgorithmComplexOutputID, storeSupport);
+////        multiReferenceBinaryInputAlgorithmExecuteRequestBuilder.setStatus(multiReferenceBinaryInputAlgorithmComplexOutputID, status);
+//        multiReferenceBinaryInputAlgorithmExecuteRequestBuilder.setAsReference(multiReferenceBinaryInputAlgorithmComplexOutputID, asReference);
+//
+//        Object responseObject =  WPSClientSession.getInstance().execute(url, multiReferenceBinaryInputAlgorithmExecuteRequestBuilder.getExecute(), version200);
+//
+//        return responseObject;
+//    }
+//
+//    private Object createAndSubmitMultiReferenceBinaryInputAlgorithmExecuteWithResponseDocument(boolean status, boolean storeSupport, boolean asReference) throws WPSClientException, IOException{
+//
+//        multiReferenceBinaryInputAlgorithmExecuteRequestBuilder.addComplexDataReference(multiReferenceBinaryInputAlgorithmComplexInputID,
+//                                                                                        referenceComplexBinaryInputURL,
+//                                                                                        null,
+//                                                                                        null,
+//                                                                                        multiReferenceBinaryInputAlgorithmComplexMimeTypeImageTiff);
+//
+//        multiReferenceBinaryInputAlgorithmExecuteRequestBuilder.addComplexDataReference(multiReferenceBinaryInputAlgorithmComplexInputID,
+//                                                                                        referenceComplexBinaryInputURL,
+//                                                                                        null,
+//                                                                                        null,
+//                                                                                        multiReferenceBinaryInputAlgorithmComplexMimeTypeImageTiff);
+//
+//        multiReferenceBinaryInputAlgorithmExecuteRequestBuilder.setResponseDocument(multiReferenceBinaryInputAlgorithmComplexOutputID, null, "base64", multiReferenceBinaryInputAlgorithmComplexMimeTypeImageTiff);
+//
+////        multiReferenceBinaryInputAlgorithmExecuteRequestBuilder.setStoreSupport(multiReferenceBinaryInputAlgorithmComplexOutputID, storeSupport);
+////        multiReferenceBinaryInputAlgorithmExecuteRequestBuilder.setStatus(multiReferenceBinaryInputAlgorithmComplexOutputID, status);
+//        multiReferenceBinaryInputAlgorithmExecuteRequestBuilder.setAsReference(multiReferenceBinaryInputAlgorithmComplexOutputID, asReference);
+//
+//        Object responseObject =  WPSClientSession.getInstance().execute(url, multiReferenceBinaryInputAlgorithmExecuteRequestBuilder.getExecute(), version200);
+//
+//        return responseObject;
+//    }
+//
+//    private Object createAndSubmitMultiReferenceBinaryInputAlgorithmExecuteWithRawData(boolean status, boolean storeSupport, boolean asReference, String encoding) throws WPSClientException, IOException{
+//
+//        multiReferenceBinaryInputAlgorithmExecuteRequestBuilder.addComplexDataReference(multiReferenceBinaryInputAlgorithmComplexInputID,
+//                                                                                        referenceComplexBinaryInputURL,
+//                                                                                        null,
+//                                                                                        null,
+//                                                                                        multiReferenceBinaryInputAlgorithmComplexMimeTypeImageTiff);
+//
+//        multiReferenceBinaryInputAlgorithmExecuteRequestBuilder.addComplexDataReference(multiReferenceBinaryInputAlgorithmComplexInputID,
+//                                                                                        referenceComplexBinaryInputURL,
+//                                                                                        null,
+//                                                                                        null,
+//                                                                                        multiReferenceBinaryInputAlgorithmComplexMimeTypeImageTiff);
+//
+//        multiReferenceBinaryInputAlgorithmExecuteRequestBuilder.setRawData(multiReferenceBinaryInputAlgorithmComplexOutputID, null, encoding, multiReferenceBinaryInputAlgorithmComplexMimeTypeImageTiff);
+//
+//        Object responseObject =  WPSClientSession.getInstance().execute(url, multiReferenceBinaryInputAlgorithmExecuteRequestBuilder.getExecute(), version200);
+//
+//        return responseObject;
+//    }
+//
+//    private Object createAndSubmitEchoProcessExecuteWithResponseDocument(boolean status, boolean storeSupport, boolean asReference) throws WPSClientException, IOException {
+//
+//        echoProcessExecuteRequestBuilder.addComplexData(echoProcessComplexInputID, echoProcessInlineComplexXMLInput, null, null, echoProcessComplexMimeTypeTextXML);
+//
+//        echoProcessExecuteRequestBuilder.setResponseDocument(echoProcessComplexOutputID, null, null, echoProcessComplexMimeTypeTextXML);
+//
+////        echoProcessExecuteRequestBuilder.setStoreSupport(echoProcessComplexOutputID, storeSupport);
+////        echoProcessExecuteRequestBuilder.setStatus(echoProcessComplexOutputID, status);
+//        echoProcessExecuteRequestBuilder.setAsReference(echoProcessComplexOutputID, asReference);
+//
+//
+//        Object responseObject =  WPSClientSession.getInstance().execute(url, echoProcessExecuteRequestBuilder.getExecute(), version200);
+//
+//        return responseObject;
+//    }
+//
+//}
