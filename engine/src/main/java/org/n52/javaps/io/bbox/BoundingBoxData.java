@@ -16,8 +16,15 @@
  */
 package org.n52.javaps.io.bbox;
 
-import org.n52.shetland.ogc.ows.OwsBoundingBox;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import org.apache.commons.io.IOUtils;
 import org.n52.javaps.io.Data;
+import org.n52.javaps.io.DecodingException;
+import org.n52.shetland.ogc.ows.OwsBoundingBox;
+import org.n52.shetland.ogc.wps.Format;
 
 public final class BoundingBoxData implements Data<OwsBoundingBox> {
     private static final long serialVersionUID = -3219612972795621553L;
@@ -36,5 +43,19 @@ public final class BoundingBoxData implements Data<OwsBoundingBox> {
     @Override
     public Class<?> getSupportedClass() {
         return OwsBoundingBox.class;
+    }
+
+    private synchronized void writeObject(java.io.ObjectOutputStream oos) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        BoundingBoxInputOutputHandler generator = new BoundingBoxInputOutputHandler();
+        InputStream in = generator.generate(null, this, new Format());
+        IOUtils.copy(in, out);
+    }
+
+    private void readObject(java.io.ObjectInputStream oos) throws IOException, ClassNotFoundException,
+            DecodingException {
+        BoundingBoxInputOutputHandler parser  = new BoundingBoxInputOutputHandler();
+        BoundingBoxData data = (BoundingBoxData) parser.parse(null, oos, new Format());
+        this.boundingBox = data.boundingBox;
     }
 }
