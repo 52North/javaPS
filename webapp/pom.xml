@@ -226,6 +226,9 @@
                             </includes>
                         </resource>
                     </webResources>
+                    <packagingExcludes>WEB-INF/lib/javaps-iohandler-1.1.2-SNAPSHOT.jar, 
+                    WEB-INF/lib/javaps-test-processes-1.1.2-SNAPSHOT.jar, 
+                    WEB-INF/lib/xmlbeans-3.0.2.jar</packagingExcludes>
                 </configuration>
             </plugin>            
         </plugins>                
