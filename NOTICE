@@ -49,6 +49,7 @@ This project includes:
   EXIficient-Core under MIT License
   EXIficient-Grammars under MIT License
   FindBugs-jsr305 under The Apache Software License, Version 2.0
+  geolatte-geom under LGPL 3.0
   Guava InternalFutureFailureAccess and InternalFutures under The Apache Software License, Version 2.0
   Guava ListenableFuture only under The Apache Software License, Version 2.0
   Guava: Google Core Libraries for Java under The Apache Software License, Version 2.0
