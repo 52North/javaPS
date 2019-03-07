@@ -98,6 +98,18 @@ public class LiteralOutputHandlerTest {
         }
     }
 
+    @Test
+    public void testXmlEncodingEmptyFormat() throws IOException, EncodingException {
+        LiteralData data = new LiteralData("läöaaslödfr2", "m");
+        Charset charset = StandardCharsets.UTF_8;
+        InputStream stream = this.handler.generate(output(new LiteralStringType()), data, new Format());
+        errors.checkThat(stream, is(notNullValue()));
+        try (InputStreamReader reader = new InputStreamReader(stream, charset)) {
+            String encodedValue = CharStreams.toString(reader);
+            errors.checkThat(encodedValue, is("<wps:LiteralValue xmlns:wps=\"http://www.opengis.net/wps/2.0\" dataType=\"https://www.w3.org/2001/XMLSchema-datatypes#string\" uom=\"m\">läöaaslödfr2</wps:LiteralValue>"));
+        }
+    }
+
     private TypedLiteralOutputDescription output(LiteralType<?> dataType) {
         LiteralDataDomain literalDataDomain = descriptionFactory.literalDataDomain()
                 .withDataType(dataType.getDataType())

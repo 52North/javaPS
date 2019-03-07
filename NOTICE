@@ -33,14 +33,14 @@ This project includes:
   Animal Sniffer Annotations under MIT license
   Apache Commons Codec under Apache License, Version 2.0
   Apache Commons Configuration under Apache License, Version 2.0
-  Apache Commons Lang under The Apache Software License, Version 2.0
+  Apache Commons Lang under Apache License, Version 2.0
   Apache Commons Logging under The Apache Software License, Version 2.0
   Apache HttpClient under Apache License, Version 2.0
-  Apache HttpCore under Apache License, Version 2.0
   Apache Log4j API under The Apache Software License, Version 2.0
   Apache Log4j Core under The Apache Software License, Version 2.0
   Apache Log4j SLF4J Binding under The Apache Software License, Version 2.0
   Apache Log4j Web under The Apache Software License, Version 2.0
+  Checker Qual under The MIT License
   ClassLoader Leak Prevention library under Apache 2
   Commons Lang under The Apache Software License, Version 2.0
   Cross-Origin Resource Sharing (CORS) Filter under The Apache Software License, Version 2.0
@@ -49,15 +49,22 @@ This project includes:
   EXIficient-Core under MIT License
   EXIficient-Grammars under MIT License
   FindBugs-jsr305 under The Apache Software License, Version 2.0
+  geolatte-geom under LGPL 3.0
+  Guava InternalFutureFailureAccess and InternalFutures under The Apache Software License, Version 2.0
+  Guava ListenableFuture only under The Apache Software License, Version 2.0
   Guava: Google Core Libraries for Java under The Apache Software License, Version 2.0
   J2ObjC Annotations under The Apache Software License, Version 2.0
   Jackson-annotations under The Apache Software License, Version 2.0
   Jackson-core under The Apache Software License, Version 2.0
   jackson-databind under The Apache Software License, Version 2.0
+  Java Architecture for XML Binding under CDDL 1.1 or GPL2 w/ CPE
   Java Property Utility under The Apache Software License, Version 2.0
+  JavaBeans(TM) Activation Framework under COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
   javax.inject under The Apache Software License, Version 2.0
   JCL 1.2 implemented over SLF4J under MIT License
   Joda-Time under Apache 2
+  Old JAXB Core under CDDL+GPL License
+  Old JAXB Runtime under CDDL+GPL License
   org.locationtech.jts:jts-core under Eclipse Publish License, Version 1.0 or Eclipse Distribution License - v 1.0
   PJL Compressing Filter under Apache Software License V2.0
   SLF4J API Module under MIT License
@@ -73,5 +80,6 @@ This project includes:
   StAX API under The Apache Software License, Version 2.0
   Xerces2-j under The Apache Software License, Version 2.0
   XML Commons External Components XML APIs under The Apache Software License, Version 2.0 or The SAX License or The W3C License
+  XML Pull Parsing API under Public Domain
   XmlBeans under The Apache Software License, Version 2.0
 

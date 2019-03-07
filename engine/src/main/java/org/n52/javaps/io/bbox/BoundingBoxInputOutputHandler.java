@@ -179,9 +179,8 @@ public class BoundingBoxInputOutputHandler extends XmlFactories implements Input
             InputStream stream = new ByteArrayInputStream(bytes);
 
             if (format.isBase64()) {
-                stream = new Base64InputStream(stream, true);
+                return new Base64InputStream(stream, true);
             }
-
             return stream;
         } catch (XMLStreamException ex) {
             throw new IOException(ex);

@@ -18,6 +18,7 @@ package org.n52.javaps.service.xml;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -28,6 +29,8 @@ import org.n52.shetland.ogc.ows.exception.OwsExceptionCode;
 import org.n52.shetland.w3c.SchemaLocation;
 import org.n52.svalbard.encode.stream.OwsExceptionReportResponse;
 import org.n52.svalbard.encode.stream.xml.AbstractSingleElementXmlStreamWriter;
+
+import com.google.common.base.Charsets;
 
 /**
  * TODO JavaDoc
@@ -62,8 +65,12 @@ public class OwsExceptionReportWriter extends AbstractSingleElementXmlStreamWrit
                         element(OWSConstants.Elem.QN_EXCEPTION_TEXT, x, ex -> {
                             chars("[EXCEPTION]: \n");
                             ByteArrayOutputStream os = new ByteArrayOutputStream();
-                            ex.printStackTrace(new PrintStream(os));
-                            chars(os.toString());
+                            try {
+                            ex.printStackTrace(new PrintStream(os, false, Charsets.UTF_8.name()));
+                                chars(os.toString(Charsets.UTF_8.name()));
+                            } catch (UnsupportedEncodingException e) {
+                                // do nothing
+                            }
                         });
                     }
                 });
