@@ -3,7 +3,9 @@ sudo: false
 install: true
 script: mvn -fae -U -B clean install
 jdk:
-  - oraclejdk8
+  - openjdk8
+  - openjdk9
+  - openjdk10
 cache:
   directories:
     - $HOME/.m2

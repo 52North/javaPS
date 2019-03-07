@@ -83,8 +83,9 @@ public class ResolvableReferenceProcessData extends ReferenceProcessData {
 
     private byte[] getFromLocalDisc() throws IOException {
         URL fileURL = getURI().toURL();
-        InputStream is = new FileInputStream(fileURL.getFile());
-        return ByteStreams.toByteArray(is);
+        try (InputStream is = new FileInputStream(fileURL.getFile())) {
+           return ByteStreams.toByteArray(is);
+        }
     }
 
 }

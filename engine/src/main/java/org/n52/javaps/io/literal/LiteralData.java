@@ -16,9 +16,15 @@
  */
 package org.n52.javaps.io.literal;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.apache.commons.io.IOUtils;
 import org.n52.javaps.io.Data;
 
 public final class LiteralData implements Data<Object> {
@@ -53,5 +59,18 @@ public final class LiteralData implements Data<Object> {
     @Override
     public Class<?> getSupportedClass() {
         return Object.class;
+    }
+
+    private synchronized void writeObject(java.io.ObjectOutputStream oos) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        if (unitOfMeasurement.isPresent()) {
+            out.write(unitOfMeasurement.get().getBytes(StandardCharsets.UTF_8));
+        }
+    }
+
+    private void readObject(java.io.ObjectInputStream oos) throws IOException {
+        StringWriter writer = new StringWriter();
+        IOUtils.copy(new InputStreamReader(oos, StandardCharsets.UTF_8), writer);
+        setUnitOfMeasurement(writer.toString());
     }
 }
