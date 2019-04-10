@@ -214,7 +214,9 @@ abstract class AbstractInputBinding<M extends AccessibleObject & Member> extends
         public void set(Object instance,
                 List<Data<?>> inputs) {
             try {
-                getMember().invoke(instance, unbindInput(inputs));
+                if (inputs != null) {
+                    getMember().invoke(instance, unbindInput(inputs));
+                }
             } catch (IllegalAccessException | IllegalArgumentException ex) {
                 throw new RuntimeException(INTERNAL_ERROR_PROCESSING_INPUTS, ex);
             } catch (InvocationTargetException ex) {
