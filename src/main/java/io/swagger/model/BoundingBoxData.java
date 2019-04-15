@@ -26,6 +26,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -34,17 +37,14 @@ import javax.validation.constraints.*;
  * BoundingBoxData
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-16T13:43:05.776Z[GMT]")
-
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-03-28T09:55:34.783Z[GMT]")
 public class BoundingBoxData   {
   @JsonProperty("crs")
   private String crs = null;
 
-  @JsonProperty("lowerCorner")
-  private String lowerCorner = null;
-
-  @JsonProperty("upperCorner")
-  private String upperCorner = null;
+  @JsonProperty("bbox")
+  @Valid
+  private List<BigDecimal> bbox = new ArrayList<BigDecimal>();
 
   public BoundingBoxData crs(String crs) {
     this.crs = crs;
@@ -57,7 +57,6 @@ public class BoundingBoxData   {
   **/
   @ApiModelProperty(value = "")
 
-
   public String getCrs() {
     return crs;
   }
@@ -66,46 +65,29 @@ public class BoundingBoxData   {
     this.crs = crs;
   }
 
-  public BoundingBoxData lowerCorner(String lowerCorner) {
-    this.lowerCorner = lowerCorner;
+  public BoundingBoxData bbox(List<BigDecimal> bbox) {
+    this.bbox = bbox;
+    return this;
+  }
+
+  public BoundingBoxData addBboxItem(BigDecimal bboxItem) {
+    this.bbox.add(bboxItem);
     return this;
   }
 
   /**
-   * Get lowerCorner
-   * @return lowerCorner
+   * Get bbox
+   * @return bbox
   **/
   @ApiModelProperty(required = true, value = "")
   @NotNull
-
-
-  public String getLowerCorner() {
-    return lowerCorner;
+  @Valid
+@Size(min=4,max=6)   public List<BigDecimal> getBbox() {
+    return bbox;
   }
 
-  public void setLowerCorner(String lowerCorner) {
-    this.lowerCorner = lowerCorner;
-  }
-
-  public BoundingBoxData upperCorner(String upperCorner) {
-    this.upperCorner = upperCorner;
-    return this;
-  }
-
-  /**
-   * Get upperCorner
-   * @return upperCorner
-  **/
-  @ApiModelProperty(required = true, value = "")
-  @NotNull
-
-
-  public String getUpperCorner() {
-    return upperCorner;
-  }
-
-  public void setUpperCorner(String upperCorner) {
-    this.upperCorner = upperCorner;
+  public void setBbox(List<BigDecimal> bbox) {
+    this.bbox = bbox;
   }
 
 
@@ -119,13 +101,12 @@ public class BoundingBoxData   {
     }
     BoundingBoxData boundingBoxData = (BoundingBoxData) o;
     return Objects.equals(this.crs, boundingBoxData.crs) &&
-        Objects.equals(this.lowerCorner, boundingBoxData.lowerCorner) &&
-        Objects.equals(this.upperCorner, boundingBoxData.upperCorner);
+        Objects.equals(this.bbox, boundingBoxData.bbox);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(crs, lowerCorner, upperCorner);
+    return Objects.hash(crs, bbox);
   }
 
   @Override
@@ -134,8 +115,7 @@ public class BoundingBoxData   {
     sb.append("class BoundingBoxData {\n");
     
     sb.append("    crs: ").append(toIndentedString(crs)).append("\n");
-    sb.append("    lowerCorner: ").append(toIndentedString(lowerCorner)).append("\n");
-    sb.append("    upperCorner: ").append(toIndentedString(upperCorner)).append("\n");
+    sb.append("    bbox: ").append(toIndentedString(bbox)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -151,4 +131,3 @@ public class BoundingBoxData   {
     return o.toString().replace("\n", "\n    ");
   }
 }
-

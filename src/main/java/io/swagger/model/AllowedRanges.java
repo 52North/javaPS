@@ -26,8 +26,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.model.Input;
-import io.swagger.model.Output;
+import io.swagger.model.Range;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.validation.annotation.Validated;
@@ -35,69 +34,38 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * Execute
+ * AllowedRanges
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-03-28T09:55:34.783Z[GMT]")
-public class Execute   {
-  @JsonProperty("inputs")
+public class AllowedRanges   {
+  @JsonProperty("allowedRanges")
   @Valid
-  private List<Input> inputs = null;
+  private List<Range> allowedRanges = new ArrayList<Range>();
 
-  @JsonProperty("outputs")
-  @Valid
-  private List<Output> outputs = new ArrayList<Output>();
-
-  public Execute inputs(List<Input> inputs) {
-    this.inputs = inputs;
+  public AllowedRanges allowedRanges(List<Range> allowedRanges) {
+    this.allowedRanges = allowedRanges;
     return this;
   }
 
-  public Execute addInputsItem(Input inputsItem) {
-    if (this.inputs == null) {
-      this.inputs = new ArrayList<Input>();
-    }
-    this.inputs.add(inputsItem);
+  public AllowedRanges addAllowedRangesItem(Range allowedRangesItem) {
+    this.allowedRanges.add(allowedRangesItem);
     return this;
   }
 
   /**
-   * Get inputs
-   * @return inputs
-  **/
-  @ApiModelProperty(value = "")
-  @Valid
-  public List<Input> getInputs() {
-    return inputs;
-  }
-
-  public void setInputs(List<Input> inputs) {
-    this.inputs = inputs;
-  }
-
-  public Execute outputs(List<Output> outputs) {
-    this.outputs = outputs;
-    return this;
-  }
-
-  public Execute addOutputsItem(Output outputsItem) {
-    this.outputs.add(outputsItem);
-    return this;
-  }
-
-  /**
-   * Get outputs
-   * @return outputs
+   * Get allowedRanges
+   * @return allowedRanges
   **/
   @ApiModelProperty(required = true, value = "")
   @NotNull
   @Valid
-  public List<Output> getOutputs() {
-    return outputs;
+  public List<Range> getAllowedRanges() {
+    return allowedRanges;
   }
 
-  public void setOutputs(List<Output> outputs) {
-    this.outputs = outputs;
+  public void setAllowedRanges(List<Range> allowedRanges) {
+    this.allowedRanges = allowedRanges;
   }
 
 
@@ -109,23 +77,21 @@ public class Execute   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Execute execute = (Execute) o;
-    return Objects.equals(this.inputs, execute.inputs) &&
-        Objects.equals(this.outputs, execute.outputs);
+    AllowedRanges allowedRanges = (AllowedRanges) o;
+    return Objects.equals(this.allowedRanges, allowedRanges.allowedRanges);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(inputs, outputs);
+    return Objects.hash(allowedRanges);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Execute {\n");
+    sb.append("class AllowedRanges {\n");
     
-    sb.append("    inputs: ").append(toIndentedString(inputs)).append("\n");
-    sb.append("    outputs: ").append(toIndentedString(outputs)).append("\n");
+    sb.append("    allowedRanges: ").append(toIndentedString(allowedRanges)).append("\n");
     sb.append("}");
     return sb.toString();
   }

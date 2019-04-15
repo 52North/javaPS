@@ -32,8 +32,7 @@ import javax.validation.constraints.*;
  * AllowedValues
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-16T13:43:05.776Z[GMT]")
-
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-03-28T09:55:34.783Z[GMT]")
 public class AllowedValues extends ArrayList<Object>  {
 
   @Override
@@ -72,4 +71,3 @@ public class AllowedValues extends ArrayList<Object>  {
     return o.toString().replace("\n", "\n    ");
   }
 }
-

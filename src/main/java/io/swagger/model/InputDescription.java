@@ -35,8 +35,7 @@ import javax.validation.constraints.*;
  * InputDescription
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-16T13:43:05.776Z[GMT]")
-
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-03-28T09:55:34.783Z[GMT]")
 public class InputDescription extends DataDescriptionType  {
   @JsonProperty("input")
   private Object input = null;
@@ -58,7 +57,6 @@ public class InputDescription extends DataDescriptionType  {
   **/
   @ApiModelProperty(value = "")
 
-
   public Object getInput() {
     return input;
   }
@@ -78,7 +76,6 @@ public class InputDescription extends DataDescriptionType  {
   **/
   @ApiModelProperty(value = "")
 
-
   public Integer getMinOccurs() {
     return minOccurs;
   }
@@ -97,7 +94,6 @@ public class InputDescription extends DataDescriptionType  {
    * @return maxOccurs
   **/
   @ApiModelProperty(value = "")
-
 
   public Integer getMaxOccurs() {
     return maxOccurs;
@@ -151,4 +147,3 @@ public class InputDescription extends DataDescriptionType  {
     return o.toString().replace("\n", "\n    ");
   }
 }
-

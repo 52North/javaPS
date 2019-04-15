@@ -34,8 +34,7 @@ import javax.validation.constraints.*;
  * Metadata
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-16T13:43:05.776Z[GMT]")
-
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-03-28T09:55:34.783Z[GMT]")
 public class Metadata   {
   @JsonProperty("role")
   private String role = null;
@@ -53,7 +52,6 @@ public class Metadata   {
    * @return role
   **/
   @ApiModelProperty(value = "")
-
 
   public String getRole() {
     return role;
@@ -73,7 +71,6 @@ public class Metadata   {
    * @return href
   **/
   @ApiModelProperty(value = "")
-
 
   public String getHref() {
     return href;
@@ -124,4 +121,3 @@ public class Metadata   {
     return o.toString().replace("\n", "\n    ");
   }
 }
-

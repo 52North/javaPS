@@ -34,8 +34,7 @@ import javax.validation.constraints.*;
  * Exception
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-16T13:43:05.776Z[GMT]")
-
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-03-28T09:55:34.783Z[GMT]")
 public class Exception   {
   @JsonProperty("code")
   private String code = null;
@@ -55,7 +54,6 @@ public class Exception   {
   @ApiModelProperty(required = true, value = "")
   @NotNull
 
-
   public String getCode() {
     return code;
   }
@@ -74,7 +72,6 @@ public class Exception   {
    * @return description
   **/
   @ApiModelProperty(value = "")
-
 
   public String getDescription() {
     return description;
@@ -125,4 +122,3 @@ public class Exception   {
     return o.toString().replace("\n", "\n    ");
   }
 }
-

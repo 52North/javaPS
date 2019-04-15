@@ -64,7 +64,25 @@ public class RootController {
         
         Link link = new Link();
         
+        link.setHref(serviceURL + "/");
+        
+        link.setRel("self");
+        
+        link.setType("application/json");
+        
+        link.setTitle("this document");
+        
+        links.add(link);
+        
+        link = new Link();
+        
         link.setHref(serviceURL + "/api/");
+        
+        link.setRel("service");
+        
+        link.setType("application/openapi+json;version=3.0");
+        
+        link.setTitle("ththe API definition");
         
         links.add(link);
         
@@ -72,11 +90,23 @@ public class RootController {
         
         link.setHref(serviceURL + "/conformance/");
         
+        link.setRel("conformance");
+        
+        link.setType("application/json");
+        
+        link.setTitle("WPS 2.0 REST/JSON Binding Extension conformance classes implemented by this server");
+        
         links.add(link);
         
         link = new Link();
         
         link.setHref(serviceURL + "/processes/");
+        
+        link.setRel("processes");
+        
+        link.setType("application/json");
+        
+        link.setTitle("The processes offered by this server");
         
         links.add(link);
         

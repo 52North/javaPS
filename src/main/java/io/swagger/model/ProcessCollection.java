@@ -37,8 +37,7 @@ import javax.validation.constraints.*;
  * ProcessCollection
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-16T13:43:05.776Z[GMT]")
-
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-03-28T09:55:34.783Z[GMT]")
 public class ProcessCollection   {
   @JsonProperty("processes")
   @Valid
@@ -60,9 +59,7 @@ public class ProcessCollection   {
   **/
   @ApiModelProperty(required = true, value = "")
   @NotNull
-
   @Valid
-
   public List<ProcessSummary> getProcesses() {
     return processes;
   }
@@ -110,4 +107,3 @@ public class ProcessCollection   {
     return o.toString().replace("\n", "\n    ");
   }
 }
-

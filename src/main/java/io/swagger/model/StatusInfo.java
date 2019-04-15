@@ -30,6 +30,9 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.model.Link;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -38,7 +41,7 @@ import javax.validation.constraints.*;
  * StatusInfo
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-16T13:43:05.776Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-04-15T08:44:25.353Z[GMT]")
 @JsonInclude(Include.NON_NULL)
 public class StatusInfo   {
   /**
@@ -75,7 +78,6 @@ public class StatusInfo   {
       return null;
     }
   }
-
   @JsonProperty("status")
   private StatusEnum status = null;
 
@@ -84,6 +86,10 @@ public class StatusInfo   {
 
   @JsonProperty("progress")
   private Integer progress = null;
+
+  @JsonProperty("links")
+  @Valid
+  private List<Link> links = new ArrayList<Link>();
 
   public StatusInfo status(StatusEnum status) {
     this.status = status;
@@ -96,7 +102,6 @@ public class StatusInfo   {
   **/
   @ApiModelProperty(required = true, value = "")
   @NotNull
-
 
   public StatusEnum getStatus() {
     return status;
@@ -116,7 +121,6 @@ public class StatusInfo   {
    * @return message
   **/
   @ApiModelProperty(value = "")
-
 
   public String getMessage() {
     return message;
@@ -139,13 +143,37 @@ public class StatusInfo   {
   **/
   @ApiModelProperty(value = "")
 
-@Min(0) @Max(100) 
-  public Integer getProgress() {
+@Min(0) @Max(100)   public Integer getProgress() {
     return progress;
   }
 
   public void setProgress(Integer progress) {
     this.progress = progress;
+  }
+
+  public StatusInfo links(List<Link> links) {
+    this.links = links;
+    return this;
+  }
+
+  public StatusInfo addLinksItem(Link linksItem) {
+    this.links.add(linksItem);
+    return this;
+  }
+
+  /**
+   * Get links
+   * @return links
+  **/
+  @ApiModelProperty(required = true, value = "")
+  @NotNull
+  @Valid
+  public List<Link> getLinks() {
+    return links;
+  }
+
+  public void setLinks(List<Link> links) {
+    this.links = links;
   }
 
 
@@ -160,12 +188,13 @@ public class StatusInfo   {
     StatusInfo statusInfo = (StatusInfo) o;
     return Objects.equals(this.status, statusInfo.status) &&
         Objects.equals(this.message, statusInfo.message) &&
-        Objects.equals(this.progress, statusInfo.progress);
+        Objects.equals(this.progress, statusInfo.progress) &&
+        Objects.equals(this.links, statusInfo.links);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(status, message, progress);
+    return Objects.hash(status, message, progress, links);
   }
 
   @Override
@@ -176,6 +205,7 @@ public class StatusInfo   {
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    message: ").append(toIndentedString(message)).append("\n");
     sb.append("    progress: ").append(toIndentedString(progress)).append("\n");
+    sb.append("    links: ").append(toIndentedString(links)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -191,4 +221,3 @@ public class StatusInfo   {
     return o.toString().replace("\n", "\n    ");
   }
 }
-

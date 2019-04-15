@@ -27,6 +27,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.model.LiteralDataDomain;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -35,32 +37,37 @@ import javax.validation.constraints.*;
  * LiteralDataType
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-16T13:43:05.776Z[GMT]")
-
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-03-28T09:55:34.783Z[GMT]")
 public class LiteralDataType   {
-  @JsonProperty("literalDataDomain")
-  private LiteralDataDomain literalDataDomain = null;
+  @JsonProperty("literalDataDomains")
+  @Valid
+  private List<LiteralDataDomain> literalDataDomains = null;
 
-  public LiteralDataType literalDataDomain(LiteralDataDomain literalDataDomain) {
-    this.literalDataDomain = literalDataDomain;
+  public LiteralDataType literalDataDomains(List<LiteralDataDomain> literalDataDomains) {
+    this.literalDataDomains = literalDataDomains;
+    return this;
+  }
+
+  public LiteralDataType addLiteralDataDomainsItem(LiteralDataDomain literalDataDomainsItem) {
+    if (this.literalDataDomains == null) {
+      this.literalDataDomains = new ArrayList<LiteralDataDomain>();
+    }
+    this.literalDataDomains.add(literalDataDomainsItem);
     return this;
   }
 
   /**
-   * Get literalDataDomain
-   * @return literalDataDomain
+   * Get literalDataDomains
+   * @return literalDataDomains
   **/
-  @ApiModelProperty(required = true, value = "")
-  @NotNull
-
+  @ApiModelProperty(value = "")
   @Valid
-
-  public LiteralDataDomain getLiteralDataDomain() {
-    return literalDataDomain;
+  public List<LiteralDataDomain> getLiteralDataDomains() {
+    return literalDataDomains;
   }
 
-  public void setLiteralDataDomain(LiteralDataDomain literalDataDomain) {
-    this.literalDataDomain = literalDataDomain;
+  public void setLiteralDataDomains(List<LiteralDataDomain> literalDataDomains) {
+    this.literalDataDomains = literalDataDomains;
   }
 
 
@@ -73,12 +80,12 @@ public class LiteralDataType   {
       return false;
     }
     LiteralDataType literalDataType = (LiteralDataType) o;
-    return Objects.equals(this.literalDataDomain, literalDataType.literalDataDomain);
+    return Objects.equals(this.literalDataDomains, literalDataType.literalDataDomains);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(literalDataDomain);
+    return Objects.hash(literalDataDomains);
   }
 
   @Override
@@ -86,7 +93,7 @@ public class LiteralDataType   {
     StringBuilder sb = new StringBuilder();
     sb.append("class LiteralDataType {\n");
     
-    sb.append("    literalDataDomain: ").append(toIndentedString(literalDataDomain)).append("\n");
+    sb.append("    literalDataDomains: ").append(toIndentedString(literalDataDomains)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -102,4 +109,3 @@ public class LiteralDataType   {
     return o.toString().replace("\n", "\n    ");
   }
 }
-

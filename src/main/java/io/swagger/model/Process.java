@@ -28,6 +28,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.model.InputDescription;
 import io.swagger.model.JobControlOptions;
+import io.swagger.model.Link;
 import io.swagger.model.OutputDescription;
 import io.swagger.model.ProcessSummary;
 import io.swagger.model.TransmissionMode;
@@ -41,8 +42,7 @@ import javax.validation.constraints.*;
  * Process
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-16T13:43:05.776Z[GMT]")
-
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-03-28T11:12:42.703Z[GMT]")
 public class Process extends ProcessSummary  {
   @JsonProperty("inputs")
   @Valid
@@ -52,8 +52,9 @@ public class Process extends ProcessSummary  {
   @Valid
   private List<OutputDescription> outputs = null;
 
-  @JsonProperty("executeEndpoint")
-  private String executeEndpoint = null;
+  @JsonProperty("links")
+  @Valid
+  private List<Link> links = null;
 
   public Process inputs(List<InputDescription> inputs) {
     this.inputs = inputs;
@@ -73,9 +74,7 @@ public class Process extends ProcessSummary  {
    * @return inputs
   **/
   @ApiModelProperty(value = "")
-
   @Valid
-
   public List<InputDescription> getInputs() {
     return inputs;
   }
@@ -102,9 +101,7 @@ public class Process extends ProcessSummary  {
    * @return outputs
   **/
   @ApiModelProperty(value = "")
-
   @Valid
-
   public List<OutputDescription> getOutputs() {
     return outputs;
   }
@@ -113,24 +110,31 @@ public class Process extends ProcessSummary  {
     this.outputs = outputs;
   }
 
-  public Process executeEndpoint(String executeEndpoint) {
-    this.executeEndpoint = executeEndpoint;
+  public Process links(List<Link> links) {
+    this.links = links;
+    return this;
+  }
+
+  public Process addLinksItem(Link linksItem) {
+    if (this.links == null) {
+      this.links = new ArrayList<Link>();
+    }
+    this.links.add(linksItem);
     return this;
   }
 
   /**
-   * Get executeEndpoint
-   * @return executeEndpoint
+   * Get links
+   * @return links
   **/
   @ApiModelProperty(value = "")
-
-
-  public String getExecuteEndpoint() {
-    return executeEndpoint;
+  @Valid
+  public List<Link> getLinks() {
+    return links;
   }
 
-  public void setExecuteEndpoint(String executeEndpoint) {
-    this.executeEndpoint = executeEndpoint;
+  public void setLinks(List<Link> links) {
+    this.links = links;
   }
 
 
@@ -145,13 +149,13 @@ public class Process extends ProcessSummary  {
     Process process = (Process) o;
     return Objects.equals(this.inputs, process.inputs) &&
         Objects.equals(this.outputs, process.outputs) &&
-        Objects.equals(this.executeEndpoint, process.executeEndpoint) &&
+        Objects.equals(this.links, process.links) &&
         super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(inputs, outputs, executeEndpoint, super.hashCode());
+    return Objects.hash(inputs, outputs, links, super.hashCode());
   }
 
   @Override
@@ -161,7 +165,7 @@ public class Process extends ProcessSummary  {
     sb.append("    ").append(toIndentedString(super.toString())).append("\n");
     sb.append("    inputs: ").append(toIndentedString(inputs)).append("\n");
     sb.append("    outputs: ").append(toIndentedString(outputs)).append("\n");
-    sb.append("    executeEndpoint: ").append(toIndentedString(executeEndpoint)).append("\n");
+    sb.append("    links: ").append(toIndentedString(links)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -177,4 +181,3 @@ public class Process extends ProcessSummary  {
     return o.toString().replace("\n", "\n    ");
   }
 }
-

@@ -35,8 +35,7 @@ import javax.validation.constraints.*;
  * Range
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-16T13:43:05.776Z[GMT]")
-
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-03-28T09:55:34.783Z[GMT]")
 public class Range   {
   @JsonProperty("minimumValue")
   private String minimumValue = null;
@@ -81,7 +80,6 @@ public class Range   {
       return null;
     }
   }
-
   @JsonProperty("rangeClosure")
   private RangeClosureEnum rangeClosure = null;
 
@@ -95,7 +93,6 @@ public class Range   {
    * @return minimumValue
   **/
   @ApiModelProperty(value = "")
-
 
   public String getMinimumValue() {
     return minimumValue;
@@ -116,7 +113,6 @@ public class Range   {
   **/
   @ApiModelProperty(value = "")
 
-
   public String getMaximumValue() {
     return maximumValue;
   }
@@ -136,7 +132,6 @@ public class Range   {
   **/
   @ApiModelProperty(value = "")
 
-
   public String getSpacing() {
     return spacing;
   }
@@ -155,7 +150,6 @@ public class Range   {
    * @return rangeClosure
   **/
   @ApiModelProperty(value = "")
-
 
   public RangeClosureEnum getRangeClosure() {
     return rangeClosure;
@@ -210,4 +204,3 @@ public class Range   {
     return o.toString().replace("\n", "\n    ");
   }
 }
-

@@ -37,8 +37,7 @@ import javax.validation.constraints.*;
  * BoundingBoxDataType
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-16T13:43:05.776Z[GMT]")
-
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-03-28T09:55:34.783Z[GMT]")
 public class BoundingBoxDataType   {
   @JsonProperty("supportedCRS")
   @Valid
@@ -60,9 +59,7 @@ public class BoundingBoxDataType   {
   **/
   @ApiModelProperty(required = true, value = "")
   @NotNull
-
   @Valid
-
   public List<SupportedCRS> getSupportedCRS() {
     return supportedCRS;
   }
@@ -110,4 +107,3 @@ public class BoundingBoxDataType   {
     return o.toString().replace("\n", "\n    ");
   }
 }
-

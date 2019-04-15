@@ -23,81 +23,65 @@ package io.swagger.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.model.Input;
-import io.swagger.model.Output;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * Execute
+ * LiteralDataDomainDataType
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-03-28T09:55:34.783Z[GMT]")
-public class Execute   {
-  @JsonProperty("inputs")
-  @Valid
-  private List<Input> inputs = null;
+@JsonInclude(Include.NON_NULL)
+public class LiteralDataDomainDataType   {
+  @JsonProperty("name")
+  private String name = null;
 
-  @JsonProperty("outputs")
-  @Valid
-  private List<Output> outputs = new ArrayList<Output>();
+  @JsonProperty("reference")
+  private String reference = null;
 
-  public Execute inputs(List<Input> inputs) {
-    this.inputs = inputs;
-    return this;
-  }
-
-  public Execute addInputsItem(Input inputsItem) {
-    if (this.inputs == null) {
-      this.inputs = new ArrayList<Input>();
-    }
-    this.inputs.add(inputsItem);
+  public LiteralDataDomainDataType name(String name) {
+    this.name = name;
     return this;
   }
 
   /**
-   * Get inputs
-   * @return inputs
+   * Get name
+   * @return name
   **/
   @ApiModelProperty(value = "")
-  @Valid
-  public List<Input> getInputs() {
-    return inputs;
+
+  public String getName() {
+    return name;
   }
 
-  public void setInputs(List<Input> inputs) {
-    this.inputs = inputs;
+  public void setName(String name) {
+    this.name = name;
   }
 
-  public Execute outputs(List<Output> outputs) {
-    this.outputs = outputs;
-    return this;
-  }
-
-  public Execute addOutputsItem(Output outputsItem) {
-    this.outputs.add(outputsItem);
+  public LiteralDataDomainDataType reference(String reference) {
+    this.reference = reference;
     return this;
   }
 
   /**
-   * Get outputs
-   * @return outputs
+   * Get reference
+   * @return reference
   **/
-  @ApiModelProperty(required = true, value = "")
-  @NotNull
-  @Valid
-  public List<Output> getOutputs() {
-    return outputs;
+  @ApiModelProperty(value = "")
+
+  public String getReference() {
+    return reference;
   }
 
-  public void setOutputs(List<Output> outputs) {
-    this.outputs = outputs;
+  public void setReference(String reference) {
+    this.reference = reference;
   }
 
 
@@ -109,23 +93,23 @@ public class Execute   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Execute execute = (Execute) o;
-    return Objects.equals(this.inputs, execute.inputs) &&
-        Objects.equals(this.outputs, execute.outputs);
+    LiteralDataDomainDataType literalDataDomainDataType = (LiteralDataDomainDataType) o;
+    return Objects.equals(this.name, literalDataDomainDataType.name) &&
+        Objects.equals(this.reference, literalDataDomainDataType.reference);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(inputs, outputs);
+    return Objects.hash(name, reference);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Execute {\n");
+    sb.append("class LiteralDataDomainDataType {\n");
     
-    sb.append("    inputs: ").append(toIndentedString(inputs)).append("\n");
-    sb.append("    outputs: ").append(toIndentedString(outputs)).append("\n");
+    sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    reference: ").append(toIndentedString(reference)).append("\n");
     sb.append("}");
     return sb.toString();
   }

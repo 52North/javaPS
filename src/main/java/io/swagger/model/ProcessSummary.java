@@ -28,6 +28,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.model.DescriptionType;
 import io.swagger.model.JobControlOptions;
+import io.swagger.model.Link;
 import io.swagger.model.Metadata;
 import io.swagger.model.TransmissionMode;
 import java.util.ArrayList;
@@ -40,8 +41,7 @@ import javax.validation.constraints.*;
  * ProcessSummary
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-16T13:43:05.776Z[GMT]")
-
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-03-28T09:55:34.783Z[GMT]")
 public class ProcessSummary extends DescriptionType  {
   @JsonProperty("id")
   private String id = null;
@@ -57,8 +57,9 @@ public class ProcessSummary extends DescriptionType  {
   @Valid
   private List<TransmissionMode> outputTransmission = null;
 
-  @JsonProperty("processDescriptionURL")
-  private String processDescriptionURL = null;
+  @JsonProperty("links")
+  @Valid
+  private List<Link> links = null;
 
   public ProcessSummary id(String id) {
     this.id = id;
@@ -71,7 +72,6 @@ public class ProcessSummary extends DescriptionType  {
   **/
   @ApiModelProperty(required = true, value = "")
   @NotNull
-
 
   public String getId() {
     return id;
@@ -92,7 +92,6 @@ public class ProcessSummary extends DescriptionType  {
   **/
   @ApiModelProperty(required = true, value = "")
   @NotNull
-
 
   public String getVersion() {
     return version;
@@ -120,9 +119,7 @@ public class ProcessSummary extends DescriptionType  {
    * @return jobControlOptions
   **/
   @ApiModelProperty(value = "")
-
   @Valid
-
   public List<JobControlOptions> getJobControlOptions() {
     return jobControlOptions;
   }
@@ -149,9 +146,7 @@ public class ProcessSummary extends DescriptionType  {
    * @return outputTransmission
   **/
   @ApiModelProperty(value = "")
-
   @Valid
-
   public List<TransmissionMode> getOutputTransmission() {
     return outputTransmission;
   }
@@ -160,24 +155,31 @@ public class ProcessSummary extends DescriptionType  {
     this.outputTransmission = outputTransmission;
   }
 
-  public ProcessSummary processDescriptionURL(String processDescriptionURL) {
-    this.processDescriptionURL = processDescriptionURL;
+  public ProcessSummary links(List<Link> links) {
+    this.links = links;
+    return this;
+  }
+
+  public ProcessSummary addLinksItem(Link linksItem) {
+    if (this.links == null) {
+      this.links = new ArrayList<Link>();
+    }
+    this.links.add(linksItem);
     return this;
   }
 
   /**
-   * Get processDescriptionURL
-   * @return processDescriptionURL
+   * Get links
+   * @return links
   **/
   @ApiModelProperty(value = "")
-
-
-  public String getProcessDescriptionURL() {
-    return processDescriptionURL;
+  @Valid
+  public List<Link> getLinks() {
+    return links;
   }
 
-  public void setProcessDescriptionURL(String processDescriptionURL) {
-    this.processDescriptionURL = processDescriptionURL;
+  public void setLinks(List<Link> links) {
+    this.links = links;
   }
 
 
@@ -194,13 +196,13 @@ public class ProcessSummary extends DescriptionType  {
         Objects.equals(this.version, processSummary.version) &&
         Objects.equals(this.jobControlOptions, processSummary.jobControlOptions) &&
         Objects.equals(this.outputTransmission, processSummary.outputTransmission) &&
-        Objects.equals(this.processDescriptionURL, processSummary.processDescriptionURL) &&
+        Objects.equals(this.links, processSummary.links) &&
         super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, version, jobControlOptions, outputTransmission, processDescriptionURL, super.hashCode());
+    return Objects.hash(id, version, jobControlOptions, outputTransmission, links, super.hashCode());
   }
 
   @Override
@@ -212,7 +214,7 @@ public class ProcessSummary extends DescriptionType  {
     sb.append("    version: ").append(toIndentedString(version)).append("\n");
     sb.append("    jobControlOptions: ").append(toIndentedString(jobControlOptions)).append("\n");
     sb.append("    outputTransmission: ").append(toIndentedString(outputTransmission)).append("\n");
-    sb.append("    processDescriptionURL: ").append(toIndentedString(processDescriptionURL)).append("\n");
+    sb.append("    links: ").append(toIndentedString(links)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -228,4 +230,3 @@ public class ProcessSummary extends DescriptionType  {
     return o.toString().replace("\n", "\n    ");
   }
 }
-

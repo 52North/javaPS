@@ -35,14 +35,13 @@ import javax.validation.constraints.*;
  * FormatDescription
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-16T13:43:05.776Z[GMT]")
-
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-03-28T09:55:34.783Z[GMT]")
 public class FormatDescription extends Format  {
   @JsonProperty("maximumMegabytes")
   private Integer maximumMegabytes = null;
 
   @JsonProperty("default")
-  private Boolean _default;
+  private Boolean _default = false;
 
   public FormatDescription maximumMegabytes(Integer maximumMegabytes) {
     this.maximumMegabytes = maximumMegabytes;
@@ -54,7 +53,6 @@ public class FormatDescription extends Format  {
    * @return maximumMegabytes
   **/
   @ApiModelProperty(value = "")
-
 
   public Integer getMaximumMegabytes() {
     return maximumMegabytes;
@@ -74,7 +72,6 @@ public class FormatDescription extends Format  {
    * @return _default
   **/
   @ApiModelProperty(value = "")
-
 
   public Boolean isDefault() {
     return _default;
@@ -126,4 +123,3 @@ public class FormatDescription extends Format  {
     return o.toString().replace("\n", "\n    ");
   }
 }
-

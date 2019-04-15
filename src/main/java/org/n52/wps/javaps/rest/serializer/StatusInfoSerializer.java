@@ -21,16 +21,40 @@
  */
 package org.n52.wps.javaps.rest.serializer;
 
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+import org.n52.faroe.Validation;
+import org.n52.faroe.annotation.Configurable;
+import org.n52.faroe.annotation.Setting;
+import org.n52.iceland.service.ServiceSettings;
+import org.n52.shetland.ogc.wps.JobId;
 import org.n52.shetland.ogc.wps.JobStatus;
 
+import io.swagger.model.Link;
 import io.swagger.model.StatusInfo;
 import io.swagger.model.StatusInfo.StatusEnum;
 
+@Configurable
 public class StatusInfoSerializer {
 
-    public static StatusInfo serialize(org.n52.shetland.ogc.wps.StatusInfo statusInfo) {
+    private String serviceURL;
+
+    @Setting(ServiceSettings.SERVICE_URL)
+    public void setServiceURL(URI serviceURL) {
+        Validation.notNull("serviceURL", serviceURL);
+        String url = serviceURL.toString();
+        if (url.contains("?")) {
+            url = url.split("[?]")[0];
+        }
+        this.serviceURL = url.replace("/service", "/rest/processes/");
+    }
+
+    public StatusInfoSerializer() {}
+    
+    public StatusInfo serialize(org.n52.shetland.ogc.wps.StatusInfo statusInfo, String processId, String jobId) {
         
         StatusInfo serializedStatusInfo = new StatusInfo();
         
@@ -42,11 +66,44 @@ public class StatusInfoSerializer {
             serializedStatusInfo.setProgress(Integer.valueOf(percentCompleted.get()));
         }
         
+        List<Link> links = new ArrayList<>();
+        
+        Link link = new Link();
+        
+        String selfHref = createSelfHref(processId, jobId);
+        
+        link.setHref(selfHref);
+        
+        link.setRel("self");
+        
+        link.setType("application/json");
+        
+        link.setTitle("this document");
+        
+        links.add(link);        
+        
+        if(serializedStatusInfo.getStatus().equals(StatusEnum.SUCCESSFUL)) {
+            
+            link = new Link();
+            
+            link.setHref(createResultURL(selfHref));
+            
+            link.setRel("result");
+            
+            link.setType("application/json");
+            
+            link.setTitle("Process result");
+            
+            links.add(link);
+        }
+        
+        serializedStatusInfo.setLinks(links);
+        
         return serializedStatusInfo;
         
     }
 
-    private static StatusEnum mapStatus(JobStatus status) {
+    private StatusEnum mapStatus(JobStatus status) {
         
         if(status.equals(JobStatus.succeeded())) {
             return StatusEnum.SUCCESSFUL;
@@ -57,6 +114,14 @@ public class StatusInfoSerializer {
         }
         
         throw new IllegalArgumentException("Status not valid: " + status);
+    }
+    
+    private String createSelfHref(String processId, String jobId) {
+        return serviceURL + processId + "/jobs/" + jobId;
+    }
+    
+    private String createResultURL(String selfHref) {
+        return selfHref + "/result";
     }
     
 }

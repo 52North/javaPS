@@ -25,6 +25,7 @@ import java.math.BigInteger;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -63,7 +64,9 @@ import io.swagger.model.ComplexDataType;
 import io.swagger.model.FormatDescription;
 import io.swagger.model.InputDescription;
 import io.swagger.model.JobControlOptions;
+import io.swagger.model.Link;
 import io.swagger.model.LiteralDataDomain;
+import io.swagger.model.LiteralDataDomainDataType;
 import io.swagger.model.LiteralDataType;
 import io.swagger.model.OutputDescription;
 import io.swagger.model.Process;
@@ -102,7 +105,15 @@ public class ProcessSerializer {
         
         addProcessSummary((ProcessSummary)process, processOffering);
         
-        process.setExecuteEndpoint(serviceURL + process.getId() + "/jobs");
+        Link executeEndpointLink = new Link();
+        
+        executeEndpointLink.setHref(serviceURL + process.getId() + "/jobs");
+        
+        executeEndpointLink.setRel("canonical");
+        
+        executeEndpointLink.setTitle("Execute endpoint");
+        
+        process.setLinks(Collections.singletonList(executeEndpointLink));
         
         ProcessDescription processDescription = processOffering.getProcessDescription();
         
@@ -158,7 +169,7 @@ public class ProcessSerializer {
         process.setOutputTransmission(serializedOutputTransmissionModes);
         
         try {
-            process.setAbstract(processDescription.getAbstract().get().getValue());
+            process.setDescription(processDescription.getAbstract().get().getValue());
         } catch (Exception e) {
             log.trace("Abstract not present.");
         }
@@ -183,7 +194,7 @@ public class ProcessSerializer {
             outputDescription.setId(processOutputDescription.getId().getValue());
             
             try {
-                outputDescription.setAbstract(processOutputDescription.getAbstract().get().getValue());
+                outputDescription.setDescription(processOutputDescription.getAbstract().get().getValue());
             } catch (Exception e) {
                 log.trace("Abstract not present.");
             }
@@ -213,7 +224,15 @@ public class ProcessSerializer {
                 
                 LiteralOutputDescription literalOutputDescription = processOutputDescription.asLiteral();
                 
-                literalOutput.setLiteralDataDomain(serializeLiteralDataDomain(literalOutputDescription.getDefaultLiteralDataDomain()));//TODO what about the supported domains?
+                List<LiteralDataDomain> literalDataDomains = new ArrayList<>();
+                
+                literalDataDomains.add(serializeLiteralDataDomain(literalOutputDescription.getDefaultLiteralDataDomain()));
+                
+                for(org.n52.shetland.ogc.wps.description.LiteralDataDomain literalDataDomain : literalOutputDescription.getSupportedLiteralDataDomains()) {
+                    literalDataDomains.add(serializeLiteralDataDomain(literalDataDomain));
+                }
+                
+                literalOutput.setLiteralDataDomains(literalDataDomains);
                 
                 outputDescription.setOutput(literalOutput);
                 
@@ -282,7 +301,15 @@ public class ProcessSerializer {
                 
                 LiteralInputDescription literalInputDescription = processInputDescription.asLiteral();
                 
-                literalInput.setLiteralDataDomain(serializeLiteralDataDomain(literalInputDescription.getDefaultLiteralDataDomain()));//TODO what about the supported domains?
+                List<LiteralDataDomain> literalDataDomains = new ArrayList<>();
+                
+                literalDataDomains.add(serializeLiteralDataDomain(literalInputDescription.getDefaultLiteralDataDomain()));
+                
+                for(org.n52.shetland.ogc.wps.description.LiteralDataDomain literalDataDomain : literalInputDescription.getSupportedLiteralDataDomains()) {
+                    literalDataDomains.add(serializeLiteralDataDomain(literalDataDomain));
+                }
+                
+                literalInput.setLiteralDataDomains(literalDataDomains);
                 
                 descriptionType.setInput(literalInput);
                 
@@ -303,7 +330,7 @@ public class ProcessSerializer {
             descriptionType.setId(processInputDescription.getId().getValue());
             
             try {
-                descriptionType.setAbstract(processInputDescription.getAbstract().get().getValue());
+                descriptionType.setDescription(processInputDescription.getAbstract().get().getValue());
             } catch (Exception e) {
                 log.trace("Abstract not present.");
             }
@@ -353,7 +380,12 @@ public class ProcessSerializer {
         LiteralDataDomain domain = new LiteralDataDomain();
 
         try {
-            domain.setDataType(defaultLiteralDataDomain.getDataType().get().getValue().get());
+            
+            LiteralDataDomainDataType dataType = new LiteralDataDomainDataType();
+            
+            dataType.setName(defaultLiteralDataDomain.getDataType().get().getValue().get());
+            
+            domain.setDataType(dataType);
         } catch (Exception e) {
             log.info("No data type present.");
         }
@@ -524,7 +556,17 @@ public class ProcessSerializer {
            
           addProcessSummary(process, processOffering);
           
-          process.setProcessDescriptionURL(serviceURL + process.getId());
+          Link processDescriptionLink = new Link();
+          
+          processDescriptionLink.setHref(serviceURL + process.getId());
+          
+          processDescriptionLink.setType("application/json");
+          
+          processDescriptionLink.setRel("canonical");
+          
+          processDescriptionLink.setTitle("Process description");
+          
+          process.setLinks(Collections.singletonList(processDescriptionLink));
           
           processes.add(process);
           

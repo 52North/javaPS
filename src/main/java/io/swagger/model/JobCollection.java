@@ -36,12 +36,11 @@ import javax.validation.constraints.*;
  * JobCollection
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-16T13:43:05.776Z[GMT]")
-
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-03-28T09:55:34.783Z[GMT]")
 public class JobCollection   {
   @JsonProperty("jobs")
   @Valid
-  private List<String> jobs = null;
+  private List<String> jobs = new ArrayList<String>();
 
   public JobCollection jobs(List<String> jobs) {
     this.jobs = jobs;
@@ -49,9 +48,6 @@ public class JobCollection   {
   }
 
   public JobCollection addJobsItem(String jobsItem) {
-    if (this.jobs == null) {
-      this.jobs = new ArrayList<String>();
-    }
     this.jobs.add(jobsItem);
     return this;
   }
@@ -60,8 +56,8 @@ public class JobCollection   {
    * Get jobs
    * @return jobs
   **/
-  @ApiModelProperty(value = "")
-
+  @ApiModelProperty(required = true, value = "")
+  @NotNull
 
   public List<String> getJobs() {
     return jobs;
@@ -110,4 +106,3 @@ public class JobCollection   {
     return o.toString().replace("\n", "\n    ");
   }
 }
-

@@ -21,26 +21,26 @@
  */
 package io.swagger.model;
 
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.model.Metadata;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
 import org.springframework.validation.annotation.Validated;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import io.swagger.annotations.ApiModelProperty;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
 
 /**
  * DescriptionType
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-16T13:43:05.776Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-03-28T09:55:34.783Z[GMT]")
 @JsonInclude(Include.NON_NULL)
 public class DescriptionType   {
   @JsonProperty("id")
@@ -49,8 +49,8 @@ public class DescriptionType   {
   @JsonProperty("title")
   private String title = null;
 
-  @JsonProperty("abstract")
-  private String _abstract = null;
+  @JsonProperty("description")
+  private String description = null;
 
   @JsonProperty("keywords")
   @Valid
@@ -72,7 +72,6 @@ public class DescriptionType   {
   @ApiModelProperty(required = true, value = "")
   @NotNull
 
-
   public String getId() {
     return id;
   }
@@ -92,7 +91,6 @@ public class DescriptionType   {
   **/
   @ApiModelProperty(value = "")
 
-
   public String getTitle() {
     return title;
   }
@@ -101,24 +99,23 @@ public class DescriptionType   {
     this.title = title;
   }
 
-  public DescriptionType _abstract(String _abstract) {
-    this._abstract = _abstract;
+  public DescriptionType description(String description) {
+    this.description = description;
     return this;
   }
 
   /**
-   * Get _abstract
-   * @return _abstract
+   * Get description
+   * @return description
   **/
   @ApiModelProperty(value = "")
 
-
-  public String getAbstract() {
-    return _abstract;
+  public String getDescription() {
+    return description;
   }
 
-  public void setAbstract(String _abstract) {
-    this._abstract = _abstract;
+  public void setDescription(String description) {
+    this.description = description;
   }
 
   public DescriptionType keywords(List<String> keywords) {
@@ -139,7 +136,6 @@ public class DescriptionType   {
    * @return keywords
   **/
   @ApiModelProperty(value = "")
-
 
   public List<String> getKeywords() {
     return keywords;
@@ -167,9 +163,7 @@ public class DescriptionType   {
    * @return metadata
   **/
   @ApiModelProperty(value = "")
-
   @Valid
-
   public List<Metadata> getMetadata() {
     return metadata;
   }
@@ -190,14 +184,14 @@ public class DescriptionType   {
     DescriptionType descriptionType = (DescriptionType) o;
     return Objects.equals(this.id, descriptionType.id) &&
         Objects.equals(this.title, descriptionType.title) &&
-        Objects.equals(this._abstract, descriptionType._abstract) &&
+        Objects.equals(this.description, descriptionType.description) &&
         Objects.equals(this.keywords, descriptionType.keywords) &&
         Objects.equals(this.metadata, descriptionType.metadata);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, title, _abstract, keywords, metadata);
+    return Objects.hash(id, title, description, keywords, metadata);
   }
 
   @Override
@@ -207,7 +201,7 @@ public class DescriptionType   {
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    title: ").append(toIndentedString(title)).append("\n");
-    sb.append("    _abstract: ").append(toIndentedString(_abstract)).append("\n");
+    sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    keywords: ").append(toIndentedString(keywords)).append("\n");
     sb.append("    metadata: ").append(toIndentedString(metadata)).append("\n");
     sb.append("}");
@@ -225,4 +219,3 @@ public class DescriptionType   {
     return o.toString().replace("\n", "\n    ");
   }
 }
-

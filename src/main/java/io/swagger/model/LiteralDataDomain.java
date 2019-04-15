@@ -29,6 +29,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.model.LiteralDataDomainDataType;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -37,39 +38,38 @@ import javax.validation.constraints.*;
  * LiteralDataDomain
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-16T13:43:05.776Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-03-28T10:34:22.504Z[GMT]")
 @JsonInclude(Include.NON_NULL)
 public class LiteralDataDomain   {
-  @JsonProperty("dataType")
-  private String dataType = null;
+  @JsonProperty("valueDefinition")
+  private Object valueDefinition = null;
 
   @JsonProperty("defaultValue")
   private String defaultValue = null;
 
-  @JsonProperty("valueDefinition")
-  private Object valueDefinition = null;
+  @JsonProperty("dataType")
+  private LiteralDataDomainDataType dataType = null;
 
   @JsonProperty("uom")
-  private String uom = null;
+  private LiteralDataDomainDataType uom = null;
 
-  public LiteralDataDomain dataType(String dataType) {
-    this.dataType = dataType;
+  public LiteralDataDomain valueDefinition(Object valueDefinition) {
+    this.valueDefinition = valueDefinition;
     return this;
   }
 
   /**
-   * Get dataType
-   * @return dataType
+   * Get valueDefinition
+   * @return valueDefinition
   **/
   @ApiModelProperty(value = "")
 
-
-  public String getDataType() {
-    return dataType;
+  public Object getValueDefinition() {
+    return valueDefinition;
   }
 
-  public void setDataType(String dataType) {
-    this.dataType = dataType;
+  public void setValueDefinition(Object valueDefinition) {
+    this.valueDefinition = valueDefinition;
   }
 
   public LiteralDataDomain defaultValue(String defaultValue) {
@@ -83,7 +83,6 @@ public class LiteralDataDomain   {
   **/
   @ApiModelProperty(value = "")
 
-
   public String getDefaultValue() {
     return defaultValue;
   }
@@ -92,28 +91,27 @@ public class LiteralDataDomain   {
     this.defaultValue = defaultValue;
   }
 
-  public LiteralDataDomain valueDefinition(Object valueDefinition) {
-    this.valueDefinition = valueDefinition;
+  public LiteralDataDomain dataType(LiteralDataDomainDataType dataType) {
+    this.dataType = dataType;
     return this;
   }
 
   /**
-   * Get valueDefinition
-   * @return valueDefinition
+   * Get dataType
+   * @return dataType
   **/
-  @ApiModelProperty(required = true, value = "")
-  @NotNull
+  @ApiModelProperty(value = "")
 
-
-  public Object getValueDefinition() {
-    return valueDefinition;
+  @Valid
+  public LiteralDataDomainDataType getDataType() {
+    return dataType;
   }
 
-  public void setValueDefinition(Object valueDefinition) {
-    this.valueDefinition = valueDefinition;
+  public void setDataType(LiteralDataDomainDataType dataType) {
+    this.dataType = dataType;
   }
 
-  public LiteralDataDomain uom(String uom) {
+  public LiteralDataDomain uom(LiteralDataDomainDataType uom) {
     this.uom = uom;
     return this;
   }
@@ -124,12 +122,12 @@ public class LiteralDataDomain   {
   **/
   @ApiModelProperty(value = "")
 
-
-  public String getUom() {
+  @Valid
+  public LiteralDataDomainDataType getUom() {
     return uom;
   }
 
-  public void setUom(String uom) {
+  public void setUom(LiteralDataDomainDataType uom) {
     this.uom = uom;
   }
 
@@ -143,15 +141,15 @@ public class LiteralDataDomain   {
       return false;
     }
     LiteralDataDomain literalDataDomain = (LiteralDataDomain) o;
-    return Objects.equals(this.dataType, literalDataDomain.dataType) &&
+    return Objects.equals(this.valueDefinition, literalDataDomain.valueDefinition) &&
         Objects.equals(this.defaultValue, literalDataDomain.defaultValue) &&
-        Objects.equals(this.valueDefinition, literalDataDomain.valueDefinition) &&
+        Objects.equals(this.dataType, literalDataDomain.dataType) &&
         Objects.equals(this.uom, literalDataDomain.uom);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(dataType, defaultValue, valueDefinition, uom);
+    return Objects.hash(valueDefinition, defaultValue, dataType, uom);
   }
 
   @Override
@@ -159,9 +157,9 @@ public class LiteralDataDomain   {
     StringBuilder sb = new StringBuilder();
     sb.append("class LiteralDataDomain {\n");
     
-    sb.append("    dataType: ").append(toIndentedString(dataType)).append("\n");
-    sb.append("    defaultValue: ").append(toIndentedString(defaultValue)).append("\n");
     sb.append("    valueDefinition: ").append(toIndentedString(valueDefinition)).append("\n");
+    sb.append("    defaultValue: ").append(toIndentedString(defaultValue)).append("\n");
+    sb.append("    dataType: ").append(toIndentedString(dataType)).append("\n");
     sb.append("    uom: ").append(toIndentedString(uom)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -178,4 +176,3 @@ public class LiteralDataDomain   {
     return o.toString().replace("\n", "\n    ");
   }
 }
-

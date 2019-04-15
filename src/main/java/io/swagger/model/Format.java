@@ -37,7 +37,7 @@ import javax.validation.constraints.*;
  * Format
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-16T13:43:05.776Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-03-28T09:55:34.783Z[GMT]")
 @JsonInclude(Include.NON_NULL)
 public class Format   {
   @JsonProperty("mimeType")
@@ -61,7 +61,6 @@ public class Format   {
   @ApiModelProperty(required = true, value = "")
   @NotNull
 
-
   public String getMimeType() {
     return mimeType;
   }
@@ -81,7 +80,6 @@ public class Format   {
   **/
   @ApiModelProperty(value = "")
 
-
   public String getSchema() {
     return schema;
   }
@@ -100,7 +98,6 @@ public class Format   {
    * @return encoding
   **/
   @ApiModelProperty(value = "")
-
 
   public String getEncoding() {
     return encoding;
@@ -153,4 +150,3 @@ public class Format   {
     return o.toString().replace("\n", "\n    ");
   }
 }
-

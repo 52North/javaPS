@@ -36,8 +36,7 @@ import javax.validation.constraints.*;
  * ReqClasses
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-16T13:43:05.776Z[GMT]")
-
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-03-28T09:55:34.783Z[GMT]")
 public class ReqClasses   {
   @JsonProperty("conformsTo")
   @Valid
@@ -57,9 +56,8 @@ public class ReqClasses   {
    * Get conformsTo
    * @return conformsTo
   **/
-  @ApiModelProperty(example = "[\"http://www.opengis.net/spec/wps-rest/req/core\",\"http://www.opengis.net/spec/wps-rest/req/oas30\",\"http://www.opengis.net/spec/wps-rest/req/html\"]", required = true, value = "")
+  @ApiModelProperty(required = true, value = "")
   @NotNull
-
 
   public List<String> getConformsTo() {
     return conformsTo;
@@ -108,4 +106,3 @@ public class ReqClasses   {
     return o.toString().replace("\n", "\n    ");
   }
 }
-

@@ -37,8 +37,7 @@ import javax.validation.constraints.*;
  * Root
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-16T13:43:05.776Z[GMT]")
-
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-03-28T09:55:34.783Z[GMT]")
 public class Root   {
   @JsonProperty("links")
   @Valid
@@ -58,11 +57,9 @@ public class Root   {
    * Get links
    * @return links
   **/
-  @ApiModelProperty(example = "[{\"href\":\"http://data.example.org/\",\"rel\":\"self\",\"type\":\"application/json\",\"title\":\"this document\"},{\"href\":\"http://data.example.org/api\",\"rel\":\"service\",\"type\":\"application/openapi+json;version=3.0\",\"title\":\"the API definition\"},{\"href\":\"http://data.example.org/conformance\",\"rel\":\"conformance\",\"type\":\"application/json\",\"title\":\"WPS 2.0 REST/JSON Binding conformance classes implemented by this server\"},{\"href\":\"http://data.example.org/processes\",\"rel\":\"data\",\"type\":\"application/json\",\"title\":\"Metadata about the processes\"}]", required = true, value = "")
+  @ApiModelProperty(required = true, value = "")
   @NotNull
-
   @Valid
-
   public List<Link> getLinks() {
     return links;
   }
@@ -110,4 +107,3 @@ public class Root   {
     return o.toString().replace("\n", "\n    ");
   }
 }
-

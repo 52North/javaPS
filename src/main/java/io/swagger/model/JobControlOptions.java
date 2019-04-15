@@ -33,10 +33,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
  * Gets or Sets jobControlOptions
  */
 public enum JobControlOptions {
-  
   SYNC_EXECUTE("sync-execute"),
-  
-  ASYNC_EXECUTE("async-execute");
+    ASYNC_EXECUTE("async-execute");
 
   private String value;
 
@@ -60,4 +58,3 @@ public enum JobControlOptions {
     return null;
   }
 }
-

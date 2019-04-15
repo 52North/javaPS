@@ -37,7 +37,7 @@ import javax.validation.constraints.*;
  * Link
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-16T13:43:05.776Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-03-28T10:04:44.552Z[GMT]")
 @JsonInclude(Include.NON_NULL)
 public class Link   {
   @JsonProperty("href")
@@ -52,6 +52,9 @@ public class Link   {
   @JsonProperty("hreflang")
   private String hreflang = null;
 
+  @JsonProperty("title")
+  private String title = null;
+
   public Link href(String href) {
     this.href = href;
     return this;
@@ -63,7 +66,6 @@ public class Link   {
   **/
   @ApiModelProperty(required = true, value = "")
   @NotNull
-
 
   public String getHref() {
     return href;
@@ -82,8 +84,7 @@ public class Link   {
    * Get rel
    * @return rel
   **/
-  @ApiModelProperty(example = "prev", value = "")
-
+  @ApiModelProperty(example = "service", value = "")
 
   public String getRel() {
     return rel;
@@ -102,8 +103,7 @@ public class Link   {
    * Get type
    * @return type
   **/
-  @ApiModelProperty(example = "application/geo+json", value = "")
-
+  @ApiModelProperty(example = "application/json", value = "")
 
   public String getType() {
     return type;
@@ -124,13 +124,31 @@ public class Link   {
   **/
   @ApiModelProperty(example = "en", value = "")
 
-
   public String getHreflang() {
     return hreflang;
   }
 
   public void setHreflang(String hreflang) {
     this.hreflang = hreflang;
+  }
+
+  public Link title(String title) {
+    this.title = title;
+    return this;
+  }
+
+  /**
+   * Get title
+   * @return title
+  **/
+  @ApiModelProperty(value = "")
+
+  public String getTitle() {
+    return title;
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
   }
 
 
@@ -146,12 +164,13 @@ public class Link   {
     return Objects.equals(this.href, link.href) &&
         Objects.equals(this.rel, link.rel) &&
         Objects.equals(this.type, link.type) &&
-        Objects.equals(this.hreflang, link.hreflang);
+        Objects.equals(this.hreflang, link.hreflang) &&
+        Objects.equals(this.title, link.title);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(href, rel, type, hreflang);
+    return Objects.hash(href, rel, type, hreflang, title);
   }
 
   @Override
@@ -163,6 +182,7 @@ public class Link   {
     sb.append("    rel: ").append(toIndentedString(rel)).append("\n");
     sb.append("    type: ").append(toIndentedString(type)).append("\n");
     sb.append("    hreflang: ").append(toIndentedString(hreflang)).append("\n");
+    sb.append("    title: ").append(toIndentedString(title)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -178,4 +198,3 @@ public class Link   {
     return o.toString().replace("\n", "\n    ");
   }
 }
-

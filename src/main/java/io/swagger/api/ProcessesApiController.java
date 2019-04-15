@@ -114,6 +114,9 @@ public class ProcessesApiController implements ProcessesApi {
     @Inject
     private ProcessSerializer processSerializer;
     
+    @Inject
+    private StatusInfoSerializer statusInfoSerializer;
+    
 //    @Inject
 //    private ExceptionSerializer exceptionSerializer;
 
@@ -306,7 +309,7 @@ public class ProcessesApiController implements ProcessesApi {
             
             org.n52.shetland.ogc.wps.StatusInfo status = engine.getStatus(jobId);
             
-            return ResponseEntity.ok(StatusInfoSerializer.serialize(status));
+            return ResponseEntity.ok(statusInfoSerializer.serialize(status, id, jobID));
             
         } catch (EngineException e) {
             // TODO Auto-generated catch block
