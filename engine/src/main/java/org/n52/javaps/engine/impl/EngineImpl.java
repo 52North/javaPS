@@ -160,8 +160,6 @@ public class EngineImpl implements Engine, Destroyable {
         IAlgorithm algorithm = getProcess(identifier);
         TypedProcessDescription description = algorithm.getDescription();
 
-//        ProcessInputs processInputs = this.processInputDecoder.decode(description, inputs);
-
         List<OutputDefinition> outputDefinitionsOrDefault = outputDefinitions;
 
         if (outputDefinitionsOrDefault == null || outputDefinitionsOrDefault.isEmpty()) {
