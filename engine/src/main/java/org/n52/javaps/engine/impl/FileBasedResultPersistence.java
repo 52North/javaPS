@@ -20,10 +20,12 @@ import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -33,6 +35,8 @@ import java.nio.file.StandardCopyOption;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.Base64;
+import java.util.Base64.Encoder;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -49,6 +53,7 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
+import org.apache.commons.io.IOUtils;
 import org.n52.faroe.annotation.Configurable;
 import org.n52.faroe.annotation.Setting;
 import org.n52.iceland.util.MoreFiles;
@@ -286,9 +291,25 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
                 encodeFormat(valueData.getFormat(), outputNode.putObject(Keys.FORMAT));
                 Path outputFile = Files.createTempFile(directory, null, null);
                 outputNode.put(Keys.FILE, outputFile.toString());
-                try (InputStream in = valueData.getData()) {
-                    Files.copy(in, outputFile, StandardCopyOption.REPLACE_EXISTING);
+
+                Optional<String> encoding = valueData.getFormat().getEncoding();
+
+                if (encoding.isPresent() && encoding.get().equals(Format.BASE64_ENCODING)) {
+
+                    try (InputStream in = valueData.getData()) {
+
+                        Encoder base64encoder = Base64.getEncoder();
+
+                        OutputStream outputStream = base64encoder.wrap(new FileOutputStream(outputFile.toFile()));
+                        IOUtils.copy(in, outputStream);
+                    }
+
+                } else {
+                    try (InputStream in = valueData.getData()) {
+                        Files.copy(in, outputFile, StandardCopyOption.REPLACE_EXISTING);
+                    }
                 }
+
             }
         }
     }
