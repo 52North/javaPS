@@ -28,6 +28,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -166,10 +167,11 @@ public class ProcessesApiController implements ProcessesApi {
         
         try {
             jobId = engine.execute(owsCode, inputs, outputs, ResponseMode.DOCUMENT);
-        } catch (ProcessNotFoundException ex) {
-            throw new InvalidParameterValueException("identifier", owsCode.getValue());
+        } catch (ProcessNotFoundException ex) {            
+            return exception(404, String.format("The process with id '%s' does not exist.", owsCode.getValue()), "Invalidparameter");
+//            throw new InvalidParameterValueException("identifier", owsCode.getValue());
         } catch (InputDecodingException ex) {
-            throw new NoApplicableCodeException().causedBy(ex);
+            return exception(500, ex.getMessage(), "NoApplicableCode");
         }
         
         if (!syncExecute) {
@@ -190,7 +192,7 @@ public class ProcessesApiController implements ProcessesApi {
                 return ResponseEntity.ok(ResultSerializer.serializeResult(result));
                 
             } catch (EngineException | InterruptedException | ExecutionException | IOException e) {
-                throw new RuntimeException(e.getMessage());//TODO
+                return exception(500, e.getMessage(), "NoApplicableCode");
             }
             
         }
@@ -224,24 +226,27 @@ public class ProcessesApiController implements ProcessesApi {
         return "../../../jsp/test_client";
     }
 
-    public ResponseEntity<io.swagger.model.ProcessOffering> getProcessDescription(@ApiParam(value = "The id of a process",required=true) @PathVariable("id") String id) {
+    public ResponseEntity<?> getProcessDescription(@ApiParam(value = "The id of a process",required=true) @PathVariable("id") String id) {
         String accept = request.getHeader("Accept");
         
         OwsCode owsCode = new OwsCode(id);
         
-        ProcessOffering offering = engine.getProcessDescription(owsCode).map(ProcessOffering::new).get();
+        Optional<ProcessOffering> offering = engine.getProcessDescription(owsCode).map(ProcessOffering::new);
         
-//        io.swagger.model.ProcessOffering processOffering = new io.swagger.model.ProcessOffering();
-//        
-//        Process process = new Process();
-//        
-//        process.setId(id);
-//        
-//        process.setExecuteEndpoint(serviceURL + id + "/jobs");
-//        
-//        processOffering.process(process);
+        if(!offering.isPresent()) {
+            
+            return exception(404, String.format("The process with id '%s' does not exist.", id), "Invalidparameter");
+            
+//            io.swagger.model.Exception  = new io.swagger.model.Exception();
+//            exception.setCode("Invalidparameter");
+//            exception.setDescription();
+//            
+//            ResponseEntity<io.swagger.model.Exception> response = new ResponseEntity<io.swagger.model.Exception>(exception, HttpStatus.valueOf(404));
+//            return response;
+            
+        }
         
-        return ResponseEntity.ok(processSerializer.serializeProcessOffering(offering));
+        return ResponseEntity.ok(processSerializer.serializeProcessOffering(offering.get()));
     }
 
     public ResponseEntity<ProcessCollection> getProcesses() {
@@ -249,30 +254,6 @@ public class ProcessesApiController implements ProcessesApi {
         
         Set<ProcessOffering> offerings = engine.getProcessDescriptions().stream().map(ProcessOffering::new).collect(toSet());
         
-//        ProcessSummary process;
-//        
-////        process.setJobControlOptions(jobControlOptions);
-//        
-//        ProcessCollection collection = new ProcessCollection();
-//        
-//        List<ProcessSummary> processes = new ArrayList<>();
-//        
-//        for (ProcessOffering processOffering : offerings) {
-//            process = new ProcessSummary();
-//            
-//            String id = processOffering.getProcessDescription().getId().getValue();
-//            
-//            process.setId(id);
-//            
-//            process.setProcessDescriptionURL(serviceURL + id);
-//            
-//            processes.add(process);
-//            
-//        }
-//        
-//        collection.setProcesses(processes);
-//        
-//        return ResponseEntity.ok(collection);
         return ResponseEntity.ok(processSerializer.serializeProcessOfferings(offerings));
     }
 
@@ -296,14 +277,19 @@ public class ProcessesApiController implements ProcessesApi {
             return ResponseEntity.ok(ResultSerializer.serializeResult(futureResult.get()));
         } catch (EngineException | InterruptedException | ExecutionException | IOException e) {
             log.error(e.getMessage());
-            return ResponseEntity.badRequest().body(ExceptionSerializer.serializeException("NoApplicableCode", "Internal server error."));            
+            return ResponseEntity.badRequest().body(ExceptionSerializer.serializeException("NoApplicableCode", "Internal server error."));
         }
     }
 
-    public ResponseEntity<StatusInfo> getStatus(@ApiParam(value = "The id of a process",required=true) @PathVariable("id") String id,@ApiParam(value = "The id of a job",required=true) @PathVariable("jobID") String jobID) {
+    public ResponseEntity<?> getStatus(@ApiParam(value = "The id of a process",required=true) @PathVariable("id") String id,@ApiParam(value = "The id of a job",required=true) @PathVariable("jobID") String jobID) {
         String accept = request.getHeader("Accept");
         
         JobId jobId = new JobId(jobID);
+        
+        if(!engine.hasJob(jobId)) {
+            
+            return ResponseEntity.badRequest().body(ExceptionSerializer.serializeException("NoSuchJob", String.format("Job with id %s not found.", jobId)));
+        }
         
         try {
             
@@ -312,11 +298,16 @@ public class ProcessesApiController implements ProcessesApi {
             return ResponseEntity.ok(statusInfoSerializer.serialize(status, id, jobID));
             
         } catch (EngineException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResponseEntity.badRequest().body(ExceptionSerializer.serializeException("NoApplicableCode", "Internal server error."));
         }
-        
-        return new ResponseEntity<StatusInfo>(HttpStatus.NOT_IMPLEMENTED);
+    }
+    
+    private ResponseEntity<io.swagger.model.Exception> exception(int httpStatusCode, String description, String exceptionCode){
+        io.swagger.model.Exception exception = new io.swagger.model.Exception();
+        exception.setCode(exceptionCode);
+        exception.setDescription(description);
+        return new ResponseEntity<io.swagger.model.Exception>(exception, HttpStatus.valueOf(httpStatusCode));
     }
 
 }

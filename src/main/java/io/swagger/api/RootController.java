@@ -57,14 +57,14 @@ public class RootController {
         this.serviceURL = url.replace("/service", baseURL);
     }
     
-    @RequestMapping(value = "/rest/")
+    @RequestMapping(value = "/rest")
     public ResponseEntity<Root> index() {
         
         List<Link> links = new ArrayList<>();
         
         Link link = new Link();
         
-        link.setHref(serviceURL + "/");
+        link.setHref(serviceURL);
         
         link.setRel("self");
         

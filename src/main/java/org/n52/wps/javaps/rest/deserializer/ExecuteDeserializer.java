@@ -161,7 +161,7 @@ public class ExecuteDeserializer {
 
                 if (complexValueMap.containsKey(INLINE_VALUE_KEY)) {
 
-                    Format format = new Format();
+                    Format format = new Format("text/plain");
 
                     if (linkedHashMap.containsKey(FORMAT_KEY)) {
                         format = getFormat(linkedHashMap.get(FORMAT_KEY));

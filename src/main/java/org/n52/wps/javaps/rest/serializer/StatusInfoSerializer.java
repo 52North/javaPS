@@ -92,7 +92,20 @@ public class StatusInfoSerializer {
             
             link.setType("application/json");
             
-            link.setTitle("Process result");
+            link.setTitle("Job result");
+            
+            links.add(link);
+        }else if(serializedStatusInfo.getStatus().equals(StatusEnum.FAILED)) {
+            
+            link = new Link();
+            
+            link.setHref(createResultURL(selfHref));
+            
+            link.setRel("exception");
+            
+            link.setType("application/json");
+            
+            link.setTitle("Job exception");
             
             links.add(link);
         }

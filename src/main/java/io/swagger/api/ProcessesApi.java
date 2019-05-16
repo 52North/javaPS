@@ -93,7 +93,7 @@ public interface ProcessesApi {
     @RequestMapping(value = baseURL + "/processes/{id:.+}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<ProcessOffering> getProcessDescription(@ApiParam(value = "The id of a process",required=true) @PathVariable("id") String id);
+    ResponseEntity<?> getProcessDescription(@ApiParam(value = "The id of a process",required=true) @PathVariable("id") String id);
 
 
     @ApiOperation(value = "retrieve available processes", nickname = "getProcesses", notes = "TODO", response = ProcessCollection.class, tags={ "Processes", })
@@ -125,6 +125,6 @@ public interface ProcessesApi {
     @RequestMapping(value = baseURL + "/processes/{id}/jobs/{jobID}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<StatusInfo> getStatus(@ApiParam(value = "The id of a process",required=true) @PathVariable("id") String id,@ApiParam(value = "The id of a job",required=true) @PathVariable("jobID") String jobID);
+    ResponseEntity<?> getStatus(@ApiParam(value = "The id of a process",required=true) @PathVariable("id") String id,@ApiParam(value = "The id of a job",required=true) @PathVariable("jobID") String jobID);
 
 }
