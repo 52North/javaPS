@@ -10,7 +10,7 @@ RUN mvn --batch-mode --errors --fail-fast \
   --define maven.javadoc.skip=true \
   --define skipTests=true install
 
-FROM jetty:jre8
+FROM jetty:jre8-alpine
 
 ARG JAVAPS_VERSION=1.3.0-SNAPSHOT
 ENV JAVAPS_VERSION ${JAVAPS_VERSION}
@@ -25,9 +25,7 @@ COPY etc/docker-configuration.json /var/lib/jetty/webapps/ROOT/WEB-INF/config/co
 
 USER root
 RUN set -ex \
- && apt-get update \
- && apt-get install -y --no-install-recommends jq \
- && rm -rf /var/lib/apt/lists/* \
+ && apk add --no-cache jq \
  && wget -q -P /usr/local/bin https://raw.githubusercontent.com/52North/arctic-sea/master/etc/faroe-entrypoint.sh \
  && chmod +x /usr/local/bin/faroe-entrypoint.sh \
  && ln -sf ${JAVAPS_CONFIG}/log4j2.xml ${JAVAPS_ROOT}/WEB-INF/classes/log4j2.xml \

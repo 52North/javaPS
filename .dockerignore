@@ -1,6 +1,7 @@
 **/target/
 docs/
 Dockerfile
+Dockerfile-alpine
 NOTICE
 LICENSE
 README.md
