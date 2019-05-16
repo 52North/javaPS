@@ -37,7 +37,7 @@ VOLUME /var/lib/jetty/webapps/ROOT/WEB-INF/tmp
 VOLUME /var/lib/jetty/webapps/ROOT/WEB-INF/config
 
 HEALTHCHECK --interval=5s --timeout=20s --retries=3 \
-  CMD wget http://localhost:8080/ -q -O - > /dev/null 2>&1
+  CMD wget 'http://localhost:8080/service?service=WPS&request=GetCapabilities' -q -O - > /dev/null 2>&1
 
 ENV FAROE_CONFIGURATION ${JAVAPS_CONFIG}/configuration.json
 
