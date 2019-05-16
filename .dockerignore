@@ -1,0 +1,9 @@
+**/target/
+docs/
+Dockerfile
+NOTICE
+LICENSE
+README.md
+.gitignore
+.travis.yml
+
