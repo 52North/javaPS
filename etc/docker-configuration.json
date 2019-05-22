@@ -1,0 +1,162 @@
+{
+  "settings" : {
+    "misc.httpResponseCodeUseInKvpAndPoxBinding" : {
+      "type" : "boolean",
+      "value" : false
+    },
+    "serviceProvider.name" : {
+      "type" : "string",
+      "value" : "52North"
+    },
+    "serviceProvider.file" : {
+      "type" : "file",
+      "value" : null
+    },
+    "serviceProvider.site" : {
+      "type" : "uri",
+      "value" : "http://52north.org"
+    },
+    "serviceProvider.individualName" : {
+      "type" : "string",
+      "value" : "TBA"
+    },
+    "serviceProvider.phone" : {
+      "type" : "string",
+      "value" : "+49(0)251/396 371-0"
+    },
+    "serviceProvider.facsimile" : {
+      "type" : "string",
+      "value" : "+49(0)251/396 371-11"
+    },
+    "serviceProvider.address" : {
+      "type" : "string",
+      "value" : "Martin-Luther-King-Weg 24"
+    },
+    "serviceProvider.city" : {
+      "type" : "string",
+      "value" : "Münster"
+    },
+    "serviceProvider.postalCode" : {
+      "type" : "string",
+      "value" : "48155"
+    },
+    "serviceProvider.country" : {
+      "type" : "string",
+      "value" : "Germany"
+    },
+    "serviceProvider.email" : {
+      "type" : "string",
+      "value" : "info@52north.org"
+    },
+    "serviceProvider.state" : {
+      "type" : "string",
+      "value" : "North Rhine-Westphalia"
+    },
+    "serviceProvider.positionName" : {
+      "type" : "string",
+      "value" : "TBA"
+    },
+    "serviceProvider.hoursOfService" : {
+      "type" : "string",
+      "value" : "9 to 5"
+    },
+    "serviceProvider.contactInstructions" : {
+      "type" : "string",
+      "value" : "Call or email, please!"
+    },
+    "serviceProvider.onlineResource" : {
+      "type" : "string",
+      "value" : "team website|https://github.com/orgs/52North/teams/geoprocessing/members"
+    },
+    "serviceProvider.role.value" : {
+      "type" : "string",
+      "value" : "resourceProvider"
+    },
+    "serviceProvider.role.codespace" : {
+      "type" : "uri",
+      "value" : "http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode"
+    },
+    "serviceIdentification.file" : {
+      "type" : "file",
+      "value" : null
+    },
+    "serviceIdentification.abstract" : {
+      "type" : "multilingual",
+      "value" : {
+        "en" : "52North WPS 2.0 Service",
+        "de" : "52North WPS 2.0 Dienst"
+      }
+    },
+    "serviceIdentification.title" : {
+      "type" : "multilingual",
+      "value" : {
+        "en" : "javaPS",
+        "de" : "javaPS"
+      }
+    },
+    "serviceIdentification.keywords" : {
+      "type" : "string",
+      "value" : "OGC, WPS 2.0"
+    },
+    "serviceIdentification.serviceType" : {
+      "type" : "string",
+      "value" : "OGC:TEST"
+    },
+    "i18n.defaultLanguage" : {
+      "type" : "string",
+      "value" : "en"
+    },
+    "serviceIdentification.serviceTypeCodeSpace" : {
+      "type" : "string",
+      "value" : null
+    },
+    "serviceIdentification.fees" : {
+      "type" : "string",
+      "value" : "NONE"
+    },
+    "serviceIdentification.accessConstraints" : {
+      "type" : "string",
+      "value" : "NONE"
+    },
+    "misc.includeStackTraceInExceptionReport" : {
+      "type" : "boolean",
+      "value" : true
+    },
+    "misc.characterEncoding" : {
+      "type" : "string",
+      "value" : "UTF-8"
+    },
+    "i18n.showAllLanguageValues" : {
+      "type" : "boolean",
+      "value" : false
+    },
+    "statistics.counting-outputstream" : {
+      "type" : "boolean",
+      "value" : false
+    },
+    "service.serviceURL" : {
+      "type" : "uri",
+      "value" : "http://localhost:8080/service"
+    },
+    "filewatcher.enabled" : {
+      "type" : "boolean",
+      "value" : true
+    },
+    "misc.includeOriginalRequest" : {
+      "type" : "boolean",
+      "value" : false
+    },
+    "misc.baseDirectory" : {
+      "type" : "file",
+      "value" : "/var/lib/jetty/webapps/ROOT/WEB-INF/tmp/"
+    },
+    "misc.duration" : {
+      "type" : "string",
+      "value" : "PT2H"
+    },
+    "misc.checkInterval" : {
+      "type" : "string",
+      "value" : "PT1H"
+    }
+  }
+}
