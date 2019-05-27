@@ -179,6 +179,9 @@ public final class IOUtils {
         try (ZipInputStream zipInputStream = new ZipInputStream(new BufferedInputStream(new FileInputStream(file)))) {
             while ((entry = zipInputStream.getNextEntry()) != null) {
                 entryFile = new File(tempDir, entry.getName());
+                if (!file.toPath().normalize().startsWith(tempDir.toPath())) {
+                    throw new IOException("Bad zip entry: " + entry.getName());
+                }
                 boolean created = entryFile.createNewFile();
                 if (!created) {
                     LOGGER.info("File already exists: " + entryFile.getAbsolutePath());
