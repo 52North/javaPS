@@ -181,6 +181,7 @@
                             <filtering>true</filtering>
                             <includes>
                                 <include>**/web.xml</include>
+                                <include>**/index.html</include>
                             </includes>
                         </resource>
                     </webResources>
