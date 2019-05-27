@@ -48,7 +48,7 @@ Try out the latest javaPS alpha-release on on our [Geoprocessing Demo Server](ht
 
 ## References
 
-* [WPS for Coordinate Transformation](http://ows.dev.52north.org:8080/javaps/service?request=GetCapabilities&service=WPS) - WPS service deployed for the Testbed-13 project.
+* [WPS for Tsunami Simulation](http://tsunami-riesgos.awi.de:8080/javaps/service?request=GetCapabilities&service=WPS) - WPS service deployed in the RIESGOS project.
 
 ## Contact
 
