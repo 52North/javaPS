@@ -16,7 +16,7 @@ javaPS implements the [OGC WPS specification, version 2.0](http://docs.opengeosp
 * General Features
   * Full java-based Open Source implementation.
   * Pluggable framework for algorithms and XML data handling and processing frameworks
-  * Built upon the [iceland project](https://github.com/52North/iceland)
+  * Built upon the [arctic-sea project](https://github.com/52North/arctic-sea)
   * Streaming de-/encoders for inputs and outputs
 
 ## License
