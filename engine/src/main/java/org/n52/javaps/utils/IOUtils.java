@@ -178,9 +178,13 @@ public final class IOUtils {
 
         try (ZipInputStream zipInputStream = new ZipInputStream(new BufferedInputStream(new FileInputStream(file)))) {
             while ((entry = zipInputStream.getNextEntry()) != null) {
-                entryFile = new File(tempDir, entry.getName());
+                String entryName = entry.getName();
+                if (entryName.isEmpty()) {
+                    throw new IOException("Empty zip entry.");
+                }
+                entryFile = new File(tempDir, entryName);
                 if (!file.toPath().normalize().startsWith(tempDir.toPath())) {
-                    throw new IOException("Bad zip entry: " + entry.getName());
+                    throw new IOException("Bad zip entry: " + entryName);
                 }
                 boolean created = entryFile.createNewFile();
                 if (!created) {
