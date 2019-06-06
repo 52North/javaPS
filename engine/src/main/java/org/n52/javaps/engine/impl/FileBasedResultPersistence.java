@@ -301,12 +301,18 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
                         Encoder base64encoder = Base64.getEncoder();
 
                         OutputStream outputStream = null;
+                        OutputStream fileOutputStream = null;
 
-                        try  {
-                            outputStream = base64encoder.wrap(new FileOutputStream(outputFile
-                                    .toFile()));
+                        try {
+                            fileOutputStream = new FileOutputStream(outputFile
+                                    .toFile());
+
+                            outputStream = base64encoder.wrap(fileOutputStream);
                             IOUtils.copy(in, outputStream);
                         } finally {
+                            if (fileOutputStream != null) {
+                                fileOutputStream.close();
+                            }
                             if (outputStream != null) {
                                 outputStream.close();
                             }

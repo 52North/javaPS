@@ -183,7 +183,7 @@ public final class IOUtils {
                     throw new IOException("Empty zip entry.");
                 }
                 entryFile = new File(tempDir, entryName);
-                if (!file.toPath().normalize().startsWith(tempDir.toPath())) {
+                if (!entryFile.toPath().normalize().startsWith(tempDir.toPath())) {
                     throw new IOException("Bad zip entry: " + entryName);
                 }
                 boolean created = entryFile.createNewFile();
