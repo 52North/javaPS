@@ -120,31 +120,21 @@
 		<dependency>
             <groupId>org.n52.wps</groupId>
 			<artifactId>52n-xml-wps-v20</artifactId>
-			<version>2.6.1</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
             <groupId>org.n52.sensorweb</groupId>
 			<artifactId>52n-xml-ows-v20</artifactId>
-			<version>2.6.1</version>
 			<scope>test</scope>
 		</dependency>
-<!-- 		<dependency> -->
-<!--             <groupId>org.n52.geoprocessing</groupId> -->
-<!-- 			<artifactId>wps-client-lib</artifactId> -->
-<!-- 			<version>1.0.2-SNAPSHOT</version> -->
-<!-- 			<scope>test</scope> -->
-<!-- 		</dependency> -->
 		<dependency>
             <groupId>org.apache.xmlbeans</groupId>
 			<artifactId>xmlbeans</artifactId>
-			<version>3.0.2</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
             <groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
-			<scope>test</scope>
 		</dependency>
         <dependency>
             <groupId>org.xmlmatchers</groupId>
@@ -227,12 +217,12 @@
                             </includes>
                         </resource>
                     </webResources>
-                    <packagingExcludes>WEB-INF/lib/javaps-iohandler-1.1.2-SNAPSHOT.jar, 
-                    WEB-INF/lib/javaps-test-processes-1.1.2-SNAPSHOT.jar, 
-                    WEB-INF/lib/xmlbeans-3.0.2.jar</packagingExcludes>
+                    <packagingExcludes>WEB-INF/lib/javaps-iohandler-${version.iohandler}.jar, 
+                    WEB-INF/lib/javaps-test-processes-${version.test.processes}.jar, 
+                    WEB-INF/lib/xmlbeans-${version.xmlbeans}.jar</packagingExcludes>
                 </configuration>
-            </plugin>            
-        </plugins>                
+            </plugin>
+        </plugins>
     </build>
     <profiles>
 		<profile>
@@ -338,15 +328,15 @@
 			</build>
 			<dependencies>
 		        <dependency>
-			       <groupId>org.n52.wps</groupId>
+			       <groupId>org.n52.geoprocessing</groupId>
 			       <artifactId>javaps-test-processes</artifactId>
-			       <version>1.1.2-SNAPSHOT</version>
+			       <version>${version.test.processes}</version>
 			       <scope>runtime</scope>
 		        </dependency>
 		        <dependency>
 			       <groupId>org.apache.xmlbeans</groupId>
 			       <artifactId>xmlbeans</artifactId>
-			       <version>3.0.2</version>
+			       <version>${version.xmlbeans}</version>
 			       <scope>runtime</scope>
 		         </dependency>
 			</dependencies>
