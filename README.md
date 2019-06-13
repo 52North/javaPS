@@ -1,4 +1,4 @@
-# javaPS [![Maven Central](https://img.shields.io/maven-central/v/org.n52.wps/javaPS.svg)](https://search.maven.org/search?q=g:org.n52.wps%20and%20a:webapp)
+# javaPS [![Maven Central](https://img.shields.io/maven-central/v/org.n52.wps/javaPS.svg)](https://search.maven.org/search?q=g:org.n52.wps%20and%20a:webapp) [![Total alerts](https://img.shields.io/lgtm/alerts/g/52North/javaPS.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/52North/javaPS/alerts/) [![Language grade: Java](https://img.shields.io/lgtm/grade/java/g/52North/javaPS.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/52North/javaPS/context:java)
 
 ## Description
 
