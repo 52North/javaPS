@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>iceland skeleton</title>
+        <title>javaPS</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -20,14 +20,14 @@
 
         <!-- Add your site or application content here -->
         <header>
-            <h1>iceland Server</h1>
+            <h1>javaPS</h1>
         </header>
 
         <main>
             <h2>Service information</h2>
             <div>
-                <p>Service endpoint: <span id="service_endpoint"></span></p>
-                <p>Service version: <span id="service_version"></span></p>
+                <p>Service endpoint: <span id="service_endpoint"><a href="./service?request=GetCapabilities&service=WPS" target="_blank">GetCapabilities</a></span></p>
+                <p>Service version: <span id="service_version">${project.version}</span></p>
             </div>
             
             <h2>Test requests</h2>
@@ -40,11 +40,10 @@
         </main>
 
         <footer>
-            <p>Powered by <a href="https://github.com/52North/iceland" title="iceland website">iceland</a> from <a href="http://52north.org" title="52°North website">52&deg;North</a>.</p>
+            <p>Powered by <a href="https://github.com/52North/arctic-sea" title="arctic-sea website">arctic-sea</a> from <a href="http://52north.org" title="52°North website">52&deg;North</a>.</p>
         </footer>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.3.min.js"><\/script>')</script>
         <script src="js/plugins.js"></script>
         <script src="js/main.js"></script>
     </body>

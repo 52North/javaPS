@@ -16,12 +16,8 @@
  */
 package org.n52.javaps.engine;
 
-import java.util.List;
-
-import org.n52.shetland.ogc.wps.JobId;
-import org.n52.shetland.ogc.wps.OutputDefinition;
 import org.n52.javaps.algorithm.IAlgorithm;
-import org.n52.javaps.algorithm.ProcessInputs;
+import org.n52.shetland.ogc.wps.JobId;
 
 /**
  * TODO JavaDoc
@@ -29,7 +25,5 @@ import org.n52.javaps.algorithm.ProcessInputs;
  * @author Christian Autermann
  */
 public interface JobIdGenerator {
-    JobId create(IAlgorithm algorithm,
-            ProcessInputs inputs,
-            List<OutputDefinition> outputs);
+    JobId create(IAlgorithm algorithm);
 }

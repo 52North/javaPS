@@ -1,4 +1,4 @@
-# javaPS
+# javaPS [![Maven Central](https://img.shields.io/maven-central/v/org.n52.wps/javaPS.svg)](https://search.maven.org/search?q=g:org.n52.wps%20and%20a:webapp)
 
 ## Description
 
@@ -16,7 +16,7 @@ javaPS implements the [OGC WPS specification, version 2.0](http://docs.opengeosp
 * General Features
   * Full java-based Open Source implementation.
   * Pluggable framework for algorithms and XML data handling and processing frameworks
-  * Built upon the [iceland project](https://github.com/52North/iceland)
+  * Built upon the [arctic-sea project](https://github.com/52North/arctic-sea)
   * Streaming de-/encoders for inputs and outputs
 
 ## License
@@ -25,8 +25,17 @@ This project is licensed under the Apache Software License, version 2.0.
 
 ## Changelog
 
-  * Changes since last release
-    * N/A First release
+### New features ---
+
+- Updated to arctic-sea v6
+- Added Dockerfile
+
+### Fixed issues ---
+
+- Test if inputs are null, This can be the case for optional inputs
+- Enabled storing of outputs encoded in base64
+- Removed test algorithm
+- Updated jackson-databind dependency
 
 ## Quick Start
 
@@ -48,7 +57,7 @@ Try out the latest javaPS alpha-release on on our [Geoprocessing Demo Server](ht
 
 ## References
 
-* [WPS for Coordinate Transformation](http://ows.dev.52north.org:8080/javaps/service?request=GetCapabilities&service=WPS) - WPS service deployed for the Testbed-13 project.
+* [WPS for Tsunami Simulation](http://tsunami-riesgos.awi.de:8080/javaps/service?request=GetCapabilities&service=WPS) - WPS service deployed in the RIESGOS project.
 
 ## Contact
 
@@ -78,4 +87,5 @@ https://52north.org/software/licensing/guidelines/
  * GLUES
  * TaMIS
  * OGC Testbeds
+ * RIESGOS
 
