@@ -58,6 +58,8 @@ This project includes:
   Java Architecture for XML Binding under CDDL 1.1 or GPL2 w/ CPE
   Java Property Utility under The Apache Software License, Version 2.0
   JavaBeans(TM) Activation Framework under COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
+  javaPS input/output handler under The Apache Software License, Version 2.0
+  javaps-test-processes under The Apache Software License, Version 2.0
   javax.inject under The Apache Software License, Version 2.0
   JCL 1.2 implemented over SLF4J under MIT License
   Joda-Time under Apache 2

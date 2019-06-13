@@ -24,7 +24,6 @@ import static org.xmlmatchers.xpath.XpathReturnType.returningAString;
 
 import java.io.IOException;
 
-import org.junit.Test;
 import org.xmlmatchers.xpath.XpathReturnType;
 
 /**
@@ -33,28 +32,26 @@ import org.xmlmatchers.xpath.XpathReturnType;
  */
 public class KvpIT extends Base {
 
-    @Test
+    // @Test
     public void testGetCapabilities() throws IOException {
-        String response = kvp("service=skeleton&request=GetCapabilities");
+        String response = kvp("service=WPS&request=GetCapabilities");
 
-        assertThat("document contains root element", the(response),
-                hasXPath("/ows:Capabilities", usingNamespaces));
-        assertThat("service type version is correct in root", the(response),
-                hasXPath("/ows:Capabilities/@version", usingNamespaces, returningAString(), equalTo("0.0.1")));
+        assertThat("document contains root element", the(response), hasXPath("/ows:Capabilities", usingNamespaces));
+        assertThat("service type version is correct in root", the(response), hasXPath("/ows:Capabilities/@version",
+                usingNamespaces, returningAString(), equalTo("0.0.1")));
     }
 
-    @Test
+    // @Test
     public void testDemo() throws IOException {
         String response = kvp("service=skeleton&request=demo&one=52North&two=48151");
 
-        assertThat("document contains root element", the(response),
-                hasXPath("/DemoResponse", usingNamespaces));
-        assertThat("parameters three is corret", the(response),
-                hasXPath("count(/*/three[1])", usingNamespaces, XpathReturnType.returningANumber(), equalTo(2.0)));
-        assertThat("parameters three is corret", the(response),
-                hasXPath("/*/three[1]", usingNamespaces, returningAString(), equalTo("htroN25")));
-        assertThat("parameter three is corret", the(response),
-                hasXPath("/*/three[2]", usingNamespaces, returningAString(), equalTo("15184")));
+        assertThat("document contains root element", the(response), hasXPath("/DemoResponse", usingNamespaces));
+        assertThat("parameters three is corret", the(response), hasXPath("count(/*/three[1])", usingNamespaces,
+                XpathReturnType.returningANumber(), equalTo(2.0)));
+        assertThat("parameters three is corret", the(response), hasXPath("/*/three[1]", usingNamespaces,
+                returningAString(), equalTo("htroN25")));
+        assertThat("parameter three is corret", the(response), hasXPath("/*/three[2]", usingNamespaces,
+                returningAString(), equalTo("15184")));
 
     }
 }

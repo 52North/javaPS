@@ -79,7 +79,7 @@
         <connection>scm:git:git://github.com/52North/javaPS.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/52North/javaPS.git</developerConnection>
       <tag>HEAD</tag>
-  </scm>
+    </scm>
 
     <issueManagement>
         <system>GitHub issues</system>
@@ -94,6 +94,10 @@
         <version.slf4j>1.7.26</version.slf4j>
         <version.log4j>2.3</version.log4j>
         <version.arctic.sea>6.0.0</version.arctic.sea>
+        <version.xmlbeans>3.1.0</version.xmlbeans>
+        <version.test.processes>1.3.0</version.test.processes>
+        <version.iohandler>1.3.0</version.iohandler>
+        <version.common.xml>2.6.1</version.common.xml>
     </properties>
 
     <dependencyManagement>
@@ -350,6 +354,24 @@
         	    <artifactId>mockito-core</artifactId>
         	    <version>2.27.0</version>
         	    <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.n52.wps</groupId>
+                <artifactId>52n-xml-wps-v20</artifactId>
+                <version>${version.common.xml}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.n52.sensorweb</groupId>
+                <artifactId>52n-xml-ows-v20</artifactId>
+                <version>${version.common.xml}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.xmlbeans</groupId>
+                <artifactId>xmlbeans</artifactId>
+                <version>${version.xmlbeans}</version>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>net.sf.saxon</groupId>

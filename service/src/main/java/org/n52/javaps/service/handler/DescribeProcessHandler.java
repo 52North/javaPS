@@ -25,17 +25,17 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
-import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
+import org.n52.iceland.request.handler.GenericOperationHandler;
+import org.n52.iceland.request.handler.OperationHandlerKey;
+import org.n52.javaps.engine.Engine;
 import org.n52.shetland.ogc.ows.OwsAllowedValues;
 import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.shetland.ogc.ows.OwsDomain;
 import org.n52.shetland.ogc.ows.OwsValue;
+import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
 import org.n52.shetland.ogc.wps.ProcessOffering;
 import org.n52.shetland.ogc.wps.ProcessOfferings;
 import org.n52.shetland.ogc.wps.WPSConstants;
-import org.n52.iceland.request.handler.GenericOperationHandler;
-import org.n52.iceland.request.handler.OperationHandlerKey;
-import org.n52.javaps.engine.Engine;
 import org.n52.shetland.ogc.wps.request.DescribeProcessRequest;
 import org.n52.shetland.ogc.wps.response.DescribeProcessResponse;
 
@@ -59,8 +59,14 @@ public class DescribeProcessHandler extends AbstractEngineHandler implements Gen
     @Override
     public DescribeProcessResponse handle(DescribeProcessRequest request) throws OwsExceptionReport {
 
-        Set<ProcessOffering> offerings = request.getProcessIdentifier().stream().map(getEngine()::getProcessDescription)
-                .filter(Optional::isPresent).map(Optional::get).map(ProcessOffering::new).collect(toSet());
+        Set<ProcessOffering> offerings;
+
+        if (request.isAll()) {
+            offerings = getEngine().getProcessDescriptions().stream().map(ProcessOffering::new).collect(toSet());
+        } else {
+            offerings = request.getProcessIdentifier().stream().map(getEngine()::getProcessDescription)
+            .filter(Optional::isPresent).map(Optional::get).map(ProcessOffering::new).collect(toSet());
+        }
 
         return new DescribeProcessResponse(request.getService(), request.getVersion(), new ProcessOfferings(offerings));
     }

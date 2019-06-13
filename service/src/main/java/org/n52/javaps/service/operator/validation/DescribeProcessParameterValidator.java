@@ -38,8 +38,10 @@ public class DescribeProcessParameterValidator extends EngineParameterValidator<
     public void validate(DescribeProcessRequest request) throws OwsExceptionReport {
 
         List<OwsCode> identifiers = request.getProcessIdentifier();
-        if (identifiers == null || identifiers.isEmpty()) {
+        if (identifiers == null) {
             throw new MissingParameterValueException(IDENTIFIER);
+        } else if (identifiers.isEmpty()) {
+            throw new InvalidParameterValueException(IDENTIFIER, "");
         }
         checkIdentifiers(identifiers);
     }
