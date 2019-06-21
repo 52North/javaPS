@@ -37,7 +37,7 @@ import javax.validation.constraints.*;
  * BoundingBoxData
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-03-28T09:55:34.783Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-06-20T11:06:03.350Z[GMT]")
 public class BoundingBoxData   {
   @JsonProperty("crs")
   private String crs = null;

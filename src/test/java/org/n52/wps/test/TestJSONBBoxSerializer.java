@@ -21,7 +21,10 @@
  */
 package org.n52.wps.test;
 
+import static org.junit.Assert.assertTrue;
+
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -29,6 +32,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.junit.Test;
+import org.n52.javaps.io.Data;
+import org.n52.javaps.io.DecodingException;
 import org.n52.javaps.io.EncodingException;
 import org.n52.javaps.io.bbox.BoundingBoxData;
 import org.n52.javaps.io.bbox.json.JSONBoundingBoxInputOutputHandler;
@@ -53,6 +58,30 @@ public class TestJSONBBoxSerializer {
         while((line = bufferedReader.readLine()) != null) {
             System.out.println(line);
         }
+        
+    }
+    
+    @Test
+    public void testJSONBBoxDeserializer() {
+        
+        String jsonBBoxString = "{\"bbox\":[51.9,7.1,52.0,7.2],\"crs\":\"EPSG:4326\"}";
+        
+        JSONBoundingBoxInputOutputHandler boundingBoxInputOutputHandler = new JSONBoundingBoxInputOutputHandler();
+        
+        try {
+            Data<?> boundingBox = boundingBoxInputOutputHandler.parse(null, new ByteArrayInputStream(jsonBBoxString.getBytes()), null);
+            
+            assertTrue(boundingBox instanceof BoundingBoxData);
+            
+            BoundingBoxData boundingBoxData = (BoundingBoxData)boundingBox;
+            
+            assertTrue(boundingBoxData.getPayload().getLowerCorner()[0] == 51.9d);
+        } catch (IOException | DecodingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        
         
     }
     

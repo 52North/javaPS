@@ -50,6 +50,7 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class JSONBoundingBoxInputOutputHandler implements InputHandler, OutputHandler {
@@ -66,6 +67,12 @@ public class JSONBoundingBoxInputOutputHandler implements InputHandler, OutputHa
 
     public static final Set<Format> FORMATS = Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(FORMAT_APPLICATION_JSON)));
     private static final Set<Class<? extends Data<?>>> BINDINGS = Collections.singleton(BoundingBoxData.class);
+
+    public static final String BBOX = "bbox";
+
+    private static final double maxX = 0;
+
+    private static final double maxY = 0;
     
     @Override
     public Set<Format> getSupportedFormats() {
@@ -104,9 +111,14 @@ public class JSONBoundingBoxInputOutputHandler implements InputHandler, OutputHa
             ObjectMapper objectMapper = new ObjectMapper();
 
             ObjectNode rootNode = objectMapper.createObjectNode();
-
-            rootNode.put(LOWER_CORNER_KEY, lowerCornerString);
-            rootNode.put(UPPER_CORNER_KEY, upperCornerString);
+            
+            //TODO what about 6 coordinates?
+            ArrayNode arrayNode = rootNode.arrayNode();
+            arrayNode.add(lowerCorner[0]);
+            arrayNode.add(lowerCorner[1]);
+            arrayNode.add(upperCorner[0]);
+            arrayNode.add(upperCorner[1]);
+            rootNode.set(BBOX, arrayNode);
             rootNode.put(CRS_KEY, crs);
             
             result = new ByteArrayInputStream(rootNode.toString().getBytes());
@@ -121,19 +133,28 @@ public class JSONBoundingBoxInputOutputHandler implements InputHandler, OutputHa
             Format format) throws IOException, DecodingException {
                 
         JsonNode bboxNode = new ObjectMapper().readTree(input);
+      
+        ArrayNode arrayNode = (ArrayNode) bboxNode.get(BBOX);
         
-        JsonNode lowerCornerNode = bboxNode.path(LOWER_CORNER_KEY);
-        JsonNode upperCornerNode = bboxNode.path(UPPER_CORNER_KEY);
         JsonNode crsNode = bboxNode.path(CRS_KEY);
         
-        OwsBoundingBox boundingBox;
+        OwsBoundingBox boundingBox = null;
         try {
-            boundingBox = createOWSBoundingbox(lowerCornerNode.asText(), upperCornerNode.asText(), crsNode.asText());
+            boundingBox = createOWSBoundingbox(crsNode.asText(), arrayNode.get(0).asDouble(), arrayNode.get(1).asDouble(), arrayNode.get(2).asDouble(), arrayNode.get(3).asDouble());
         } catch (URISyntaxException e) {
             throw new DecodingException(e);
         }
         
         return new BoundingBoxData(boundingBox);
+    }
+
+    private OwsBoundingBox createOWSBoundingbox(
+            String crsNodeString, double minX, double minY, double maxX, double maxY) throws URISyntaxException {
+        
+        double[] lowerCorner = new double[]{minX, minY};
+        double[] upperCorner = new double[]{maxX, maxY};
+        URI crs = new URI(crsNodeString);
+        return new OwsBoundingBox(lowerCorner, upperCorner, crs);
     }
 
     private OwsBoundingBox createOWSBoundingbox(String lowerCornerNodeString,

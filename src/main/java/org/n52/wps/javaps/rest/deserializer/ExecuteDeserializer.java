@@ -185,7 +185,7 @@ public class ExecuteDeserializer {
             } else if (value instanceof String) {
                 processData = new StringValueProcessData(id, FORMAT_TEXT_PLAIN, (String) value);
             }
-        }else if(linkedHashMap.containsKey(JSONBoundingBoxInputOutputHandler.LOWER_CORNER_KEY)) {
+        }else if(linkedHashMap.containsKey(JSONBoundingBoxInputOutputHandler.BBOX)) {
             processData = new StringValueProcessData(id, JSONBoundingBoxInputOutputHandler.FORMAT_APPLICATION_JSON, new ObjectMapper().writeValueAsString(linkedHashMap));
         }
 
