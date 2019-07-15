@@ -19,7 +19,10 @@ package org.n52.javaps.service.handler;
 import java.util.Objects;
 
 import org.n52.iceland.request.handler.AbstractOperationHandler;
+import org.n52.janmayen.http.HTTPStatus;
 import org.n52.javaps.engine.Engine;
+import org.n52.shetland.ogc.ows.exception.CodedException;
+import org.n52.shetland.ogc.ows.exception.NoApplicableCodeException;
 
 /**
  * TODO JavaDoc
@@ -36,6 +39,12 @@ public abstract class AbstractEngineHandler extends AbstractOperationHandler {
 
     protected Engine getEngine() {
         return engine;
+    }
+    
+    protected CodedException createNoApplicableCodeExceptionWithHttpStatusInternalServerError(Throwable cause) {
+        CodedException noApplicableCodeException = new NoApplicableCodeException().causedBy(cause);
+        noApplicableCodeException.setStatus(HTTPStatus.INTERNAL_SERVER_ERROR);
+        return noApplicableCodeException;
     }
 
 }

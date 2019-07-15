@@ -80,7 +80,7 @@ public class ExecuteHandler extends AbstractEngineHandler implements GenericOper
         } catch (ProcessNotFoundException ex) {
             throw new InvalidParameterValueException(IDENTIFIER, request.getId().getValue());
         } catch (InputDecodingException ex) {
-            throw new NoApplicableCodeException().causedBy(ex);
+            throw createNoApplicableCodeExceptionWithHttpStatusInternalServerError(ex);
         }
 
         if (request.getExecutionMode() == ExecutionMode.SYNC) {
@@ -98,18 +98,18 @@ public class ExecuteHandler extends AbstractEngineHandler implements GenericOper
                 return response;
 
             } catch (InterruptedException | JobNotFoundException ex) {
-                throw new NoApplicableCodeException().causedBy(ex);
+                throw createNoApplicableCodeExceptionWithHttpStatusInternalServerError(ex);
             } catch (ExecutionException ex) {
-                throw new NoApplicableCodeException().causedBy(ex.getCause());
+                throw createNoApplicableCodeExceptionWithHttpStatusInternalServerError(ex.getCause());
             } catch (EngineException ex) {
-                throw new NoApplicableCodeException().causedBy(ex);
+                throw createNoApplicableCodeExceptionWithHttpStatusInternalServerError(ex);
             }
         } else {
             StatusInfo status;
             try {
                 status = getEngine().getStatus(jobId);
             } catch (EngineException ex) {
-                throw new NoApplicableCodeException().causedBy(ex);
+                throw createNoApplicableCodeExceptionWithHttpStatusInternalServerError(ex);
             }
             return new ExecuteResponse(service, version, status);
         }
