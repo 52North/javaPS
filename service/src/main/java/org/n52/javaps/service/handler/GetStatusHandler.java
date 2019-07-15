@@ -23,13 +23,10 @@ import javax.inject.Inject;
 
 import org.n52.iceland.request.handler.GenericOperationHandler;
 import org.n52.iceland.request.handler.OperationHandlerKey;
-import org.n52.janmayen.http.HTTPStatus;
 import org.n52.javaps.engine.Engine;
 import org.n52.javaps.engine.EngineException;
 import org.n52.javaps.engine.JobNotFoundException;
-import org.n52.shetland.ogc.ows.exception.CodedException;
 import org.n52.shetland.ogc.ows.exception.InvalidParameterValueException;
-import org.n52.shetland.ogc.ows.exception.NoApplicableCodeException;
 import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
 import org.n52.shetland.ogc.wps.JobId;
 import org.n52.shetland.ogc.wps.StatusInfo;

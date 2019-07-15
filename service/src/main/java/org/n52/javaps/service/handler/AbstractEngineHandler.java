@@ -40,7 +40,7 @@ public abstract class AbstractEngineHandler extends AbstractOperationHandler {
     protected Engine getEngine() {
         return engine;
     }
-    
+
     protected CodedException createNoApplicableCodeExceptionWithHttpStatusInternalServerError(Throwable cause) {
         CodedException noApplicableCodeException = new NoApplicableCodeException().causedBy(cause);
         noApplicableCodeException.setStatus(HTTPStatus.INTERNAL_SERVER_ERROR);
