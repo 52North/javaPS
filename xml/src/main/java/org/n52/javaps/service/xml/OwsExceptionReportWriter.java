@@ -24,6 +24,8 @@ import java.util.Optional;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.n52.faroe.annotation.Configurable;
+import org.n52.faroe.annotation.Setting;
 import org.n52.shetland.ogc.ows.exception.CodedException;
 import org.n52.shetland.ogc.ows.exception.OwsExceptionCode;
 import org.n52.shetland.w3c.SchemaLocation;
@@ -37,6 +39,7 @@ import com.google.common.base.Charsets;
  *
  * @author Christian Autermann
  */
+@Configurable
 public class OwsExceptionReportWriter extends AbstractSingleElementXmlStreamWriter<OwsExceptionReportResponse> {
     private boolean includeStackTraceInExceptionReport;
 
@@ -44,8 +47,9 @@ public class OwsExceptionReportWriter extends AbstractSingleElementXmlStreamWrit
         super(OwsExceptionReportResponse.class);
     }
 
-    public void setIncludeStackTraceInExceptionReport(boolean include) {
-        this.includeStackTraceInExceptionReport = include;
+    @Setting("misc.includeStackTraceInExceptionReport")
+    public void setIncludeStackTraceInExceptionReport(boolean includeStackTraceInExceptionReport) {
+        this.includeStackTraceInExceptionReport = includeStackTraceInExceptionReport;
     }
 
     @Override
