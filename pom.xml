@@ -28,7 +28,7 @@
 
     <groupId>org.n52.wps</groupId>
     <artifactId>javaPS</artifactId>
-    <version>1.3.1</version>
+    <version>1.4.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>52°North javaPS</name>
@@ -78,7 +78,7 @@
         <url>https://github.com/52North/javaPS</url>
         <connection>scm:git:git://github.com/52North/javaPS.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/52North/javaPS.git</developerConnection>
-      <tag>v1.3.1</tag>
+      <tag>HEAD</tag>
     </scm>
 
     <issueManagement>
