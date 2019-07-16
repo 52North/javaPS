@@ -30,7 +30,6 @@ import org.n52.javaps.engine.Engine;
 import org.n52.javaps.engine.EngineException;
 import org.n52.javaps.engine.JobNotFoundException;
 import org.n52.shetland.ogc.ows.exception.InvalidParameterValueException;
-import org.n52.shetland.ogc.ows.exception.NoApplicableCodeException;
 import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
 import org.n52.shetland.ogc.wps.JobId;
 import org.n52.shetland.ogc.wps.ResponseMode;
@@ -73,9 +72,9 @@ public class GetResultHandler extends AbstractJobHandler implements GenericOpera
         } catch (JobNotFoundException ex) {
             throw new InvalidParameterValueException(JOB_ID, jobId.getValue()).causedBy(ex);
         } catch (InterruptedException | EngineException ex) {
-            throw new NoApplicableCodeException().causedBy(ex);
+            throw createNoApplicableCodeExceptionWithHttpStatusInternalServerError(ex);
         } catch (ExecutionException ex) {
-            throw new NoApplicableCodeException().causedBy(ex.getCause());
+            throw createNoApplicableCodeExceptionWithHttpStatusInternalServerError(ex.getCause());
         }
 
     }

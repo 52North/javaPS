@@ -117,6 +117,25 @@
             <scope>test</scope>
             <type>jar</type>
         </dependency>
+		<dependency>
+            <groupId>org.n52.wps</groupId>
+			<artifactId>52n-xml-wps-v20</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+            <groupId>org.n52.sensorweb</groupId>
+			<artifactId>52n-xml-ows-v20</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+            <groupId>org.apache.xmlbeans</groupId>
+			<artifactId>xmlbeans</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+		</dependency>
         <dependency>
             <groupId>org.xmlmatchers</groupId>
             <artifactId>xml-matchers</artifactId>
@@ -132,6 +151,19 @@
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-all</artifactId>
             <scope>test</scope>
+        </dependency>
+         <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+         <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+        </dependency>
+         <dependency>
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -181,26 +213,133 @@
                             <filtering>true</filtering>
                             <includes>
                                 <include>**/web.xml</include>
+                                <include>**/index.html</include>
                             </includes>
                         </resource>
                     </webResources>
+                    <packagingExcludes>WEB-INF/lib/javaps-iohandler-${version.iohandler}.jar, 
+                    WEB-INF/lib/javaps-test-processes-${version.test.processes}.jar, 
+                    WEB-INF/lib/xmlbeans-${version.xmlbeans}.jar</packagingExcludes>
                 </configuration>
             </plugin>
-            
-            <plugin>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
-                <version>9.3.2.v20150730</version>
-                <configuration>
-                    <webApp>
-                        <contextPath>/wps</contextPath>
-                    </webApp>
-                    <dumpOnStart>false</dumpOnStart>
-                    <contextXml>${basedir}/src/main/webapp/WEB-INF/jetty-web.xml</contextXml>
-                </configuration>
-            </plugin>
-            
         </plugins>
     </build>
-    
+    <profiles>
+		<profile>
+			<id>integration-test</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>build-helper-maven-plugin</artifactId>
+						<version>1.9</version>
+						<executions>
+							<execution>
+								<id>reserve-network-port</id>
+								<goals>
+									<goal>reserve-network-port</goal>
+								</goals>
+								<phase>pre-integration-test</phase>
+								<configuration>
+									<portNames>
+										<portName>jetty.http.port</portName>
+										<portName>jetty.http.stop.port</portName>
+									</portNames>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.eclipse.jetty</groupId>
+						<artifactId>jetty-maven-plugin</artifactId>
+						<version>9.3.2.v20150730</version>
+						<configuration>
+							<httpConnector>
+								<port>${jetty.http.port}</port>
+								<idleTimeout>60000</idleTimeout>
+							</httpConnector>
+							<stopPort>${jetty.http.stop.port}</stopPort>
+							<stopKey>STOP</stopKey>
+							<stopWait>5</stopWait>
+							<webApp>
+								<contextPath>/javaps</contextPath>
+							</webApp>
+							<systemProperties>
+								<systemProperty>
+									<name>catalina.base</name>
+									<value>${project.build.directory}</value>
+								</systemProperty>
+								<systemProperty>
+									<name>catalina.home</name>
+									<value>${project.build.directory}</value>
+								</systemProperty>
+							</systemProperties>
+						</configuration>
+						<executions>
+							<execution>
+								<id>start-jetty</id>
+								<phase>pre-integration-test</phase>
+								<goals>
+									<goal>deploy-war</goal>
+								</goals>
+								<configuration>
+									<war>${project.build.directory}/${project.build.finalName}</war>
+									<scanIntervalSeconds>0</scanIntervalSeconds>
+									<daemon>true</daemon>
+								</configuration>
+							</execution>
+							<execution>
+								<id>stop-jetty</id>
+								<phase>post-integration-test</phase>
+								<goals>
+									<goal>stop</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-failsafe-plugin</artifactId>
+						<version>2.17</version>
+						<executions>
+							<execution>
+								<id>integration-test</id>
+								<goals>
+									<goal>integration-test</goal>
+									<goal>verify</goal>
+								</goals>
+								<configuration>
+
+									<argLine>-Xmx1024m</argLine>
+									<summaryFile>target/failsafe-reports/failsafe-summary.xml</summaryFile>
+									<systemPropertyVariables>
+										<com.sun.media.jai.disableMediaLib>true</com.sun.media.jai.disableMediaLib>
+										<test.host>127.0.0.1</test.host>
+										<test.port>${jetty.http.port}</test.port>
+										<test.context>/javaps</test.context>
+										<catalina.home>${project.build.directory}</catalina.home>
+										<catalina.base>${project.build.directory}</catalina.base>
+									</systemPropertyVariables>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+			<dependencies>
+		        <dependency>
+			       <groupId>org.n52.geoprocessing</groupId>
+			       <artifactId>javaps-test-processes</artifactId>
+			       <version>${version.test.processes}</version>
+			       <scope>runtime</scope>
+		        </dependency>
+		        <dependency>
+			       <groupId>org.apache.xmlbeans</groupId>
+			       <artifactId>xmlbeans</artifactId>
+			       <version>${version.xmlbeans}</version>
+			       <scope>runtime</scope>
+		         </dependency>
+			</dependencies>
+		</profile>
+    </profiles>    
 </project>

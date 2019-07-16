@@ -32,13 +32,13 @@ import com.google.common.io.Resources;
  */
 public class Base {
 
-    static SimpleNamespaceContext usingNamespaces = new SimpleNamespaceContext().
-            withBinding("gmd", "http://www.isotc211.org/2005/gmd").
-            withBinding("ogc", "http://www.opengis.net/ogc").
-            withBinding("xlink", "http://www.w3.org/1999/xlink").
-            withBinding("xsi", "http://www.w3.org/2001/XMLSchema-instance").
-            withBinding("xs", "http://www.w3.org/2001/XMLSchema").
-            withBinding("ows", "http://www.opengis.net/ows/2.0");
+    static SimpleNamespaceContext usingNamespaces = new SimpleNamespaceContext().withBinding("gmd",
+            "http://www.isotc211.org/2005/gmd").withBinding("ogc", "http://www.opengis.net/ogc").withBinding("xlink",
+                    "http://www.w3.org/1999/xlink").withBinding("xsi", "http://www.w3.org/2001/XMLSchema-instance")
+            .withBinding("xs", "http://www.w3.org/2001/XMLSchema").withBinding("ows", "http://www.opengis.net/ows/2.0");
+
+    GetClient getClient = new GetClient();
+    PostClient postClient = new PostClient();
 
     public int getPort() {
         return Integer.parseInt(System.getProperty("test.port", "8080"));
@@ -49,7 +49,7 @@ public class Base {
     }
 
     public String getContext() {
-        return System.getProperty("test.context", "/elastic-csw");
+        return System.getProperty("test.context", "/javaps");
     }
 
     public String getURL() {
@@ -68,8 +68,8 @@ public class Base {
     public String pox(String filename) throws IOException {
         URL url = Resources.getResource("requests/" + filename);
         InputStream request = Resources.asByteSource(url).openBufferedStream();
-        return Request.Post(getEndpointURL()).bodyStream(request, ContentType.APPLICATION_XML)
-                .execute().returnContent().asString();
+        return Request.Post(getEndpointURL()).bodyStream(request, ContentType.APPLICATION_XML).execute().returnContent()
+                .asString();
     }
 
 }

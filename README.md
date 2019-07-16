@@ -1,4 +1,4 @@
-# javaPS
+# javaPS [![Maven Central](https://img.shields.io/maven-central/v/org.n52.wps/javaPS.svg)](https://search.maven.org/search?q=g:org.n52.wps%20and%20a:webapp) [![Total alerts](https://img.shields.io/lgtm/alerts/g/52North/javaPS.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/52North/javaPS/alerts/) [![Language grade: Java](https://img.shields.io/lgtm/grade/java/g/52North/javaPS.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/52North/javaPS/context:java)
 
 ## Description
 
@@ -16,7 +16,7 @@ javaPS implements the [OGC WPS specification, version 2.0](http://docs.opengeosp
 * General Features
   * Full java-based Open Source implementation.
   * Pluggable framework for algorithms and XML data handling and processing frameworks
-  * Built upon the [iceland project](https://github.com/52North/iceland)
+  * Built upon the [arctic-sea project](https://github.com/52North/arctic-sea)
   * Streaming de-/encoders for inputs and outputs
 
 ## License
@@ -25,8 +25,17 @@ This project is licensed under the Apache Software License, version 2.0.
 
 ## Changelog
 
-  * Changes since last release
-    * N/A First release
+### New features ---
+
+- Updated to arctic-sea v6
+- Added Dockerfile
+
+### Fixed issues ---
+
+- Test if inputs are null, This can be the case for optional inputs
+- Enabled storing of outputs encoded in base64
+- Removed test algorithm
+- Updated jackson-databind dependency
 
 ## Quick Start
 
@@ -78,4 +87,5 @@ https://52north.org/software/licensing/guidelines/
  * GLUES
  * TaMIS
  * OGC Testbeds
+ * RIESGOS
 

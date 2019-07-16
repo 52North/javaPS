@@ -16,9 +16,11 @@
  */
 package org.n52.javaps.service.kvp;
 
+import org.n52.janmayen.http.MediaTypes;
 import org.n52.shetland.ogc.wps.WPS200Constants;
 import org.n52.shetland.ogc.wps.WPSConstants;
 import org.n52.shetland.ogc.wps.request.GetResultRequest;
+import org.n52.svalbard.decode.OperationDecoderKey;
 
 /**
  * @author Christian Autermann
@@ -26,6 +28,9 @@ import org.n52.shetland.ogc.wps.request.GetResultRequest;
 public class GetResultKvpDecoder extends AbstractJobIdKvpDecoder<GetResultRequest> {
 
     public GetResultKvpDecoder() {
-        super(GetResultRequest::new, WPSConstants.SERVICE, WPS200Constants.VERSION, WPSConstants.Operations.GetResult);
+        super(GetResultRequest::new, new OperationDecoderKey(WPSConstants.SERVICE, WPS200Constants.VERSION,
+                WPSConstants.Operations.GetResult.name(), MediaTypes.APPLICATION_KVP), new OperationDecoderKey(
+                        WPSConstants.SERVICE, null, WPSConstants.Operations.GetResult.name(),
+                        MediaTypes.APPLICATION_KVP));
     }
 }

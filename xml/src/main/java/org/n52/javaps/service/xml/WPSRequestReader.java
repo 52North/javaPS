@@ -163,7 +163,15 @@ public class WPSRequestReader extends AbstractElementXmlStreamReader {
             if (event.isStartElement()) {
                 StartElement start = event.asStartElement();
                 if (start.getName().equals(OWSConstants.Elem.QN_IDENTIFIER)) {
-                    request.addProcessIdentifier(readIdentifier(start, reader));
+                    OwsCode identifier = null;
+                    try {
+                        identifier = readIdentifier(start, reader);
+                    } catch (NullPointerException e) {
+                        // do nothing
+                    }
+                    if (identifier != null) {
+                        request.addProcessIdentifier(identifier);
+                    }
                 } else {
                     throw unexpectedTag(start);
                 }
