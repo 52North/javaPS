@@ -21,23 +21,11 @@
  */
 package io.swagger.api;
 
-import static java.util.stream.Collectors.toSet;
-
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
-import javax.inject.Inject;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import io.swagger.annotations.ApiParam;
+import io.swagger.model.Execute;
+import io.swagger.model.JobCollection;
+import io.swagger.model.ProcessCollection;
 import org.n52.faroe.Validation;
 import org.n52.faroe.annotation.Configurable;
 import org.n52.faroe.annotation.Setting;
@@ -49,12 +37,7 @@ import org.n52.javaps.engine.ProcessNotFoundException;
 import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.shetland.ogc.ows.exception.CodedException;
 import org.n52.shetland.ogc.ows.exception.InvalidParameterValueException;
-import org.n52.shetland.ogc.ows.exception.NoApplicableCodeException;
-import org.n52.shetland.ogc.wps.JobId;
-import org.n52.shetland.ogc.wps.OutputDefinition;
-import org.n52.shetland.ogc.wps.ProcessOffering;
-import org.n52.shetland.ogc.wps.ResponseMode;
-import org.n52.shetland.ogc.wps.Result;
+import org.n52.shetland.ogc.wps.*;
 import org.n52.shetland.ogc.wps.data.ProcessData;
 import org.n52.wps.javaps.rest.deserializer.ExecuteDeserializer;
 import org.n52.wps.javaps.rest.serializer.ExceptionSerializer;
@@ -70,16 +53,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
-import io.swagger.annotations.ApiParam;
-import io.swagger.model.Execute;
-import io.swagger.model.JobCollection;
-import io.swagger.model.ProcessCollection;
-import io.swagger.model.StatusInfo;
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-08T09:36:12.450Z[GMT]")
+import static java.util.stream.Collectors.toSet;
 
 @Controller
 @Configurable
@@ -92,8 +79,8 @@ public class ProcessesApiController implements ProcessesApi {
 
     @Autowired
     ServletContext context;
-    
-    @Inject
+
+    @Autowired
     public void setEngine(Engine engine) {
         this.engine = engine;
     }
@@ -109,205 +96,169 @@ public class ProcessesApiController implements ProcessesApi {
         }
         this.serviceURL = url.replace("/service", baseURL + "/processes/");
     }
-    
-    private final HttpServletRequest request;
-    
-    @Inject
-    private ProcessSerializer processSerializer;
-    
-    @Inject
-    private StatusInfoSerializer statusInfoSerializer;
-    
-//    @Inject
-//    private ExceptionSerializer exceptionSerializer;
 
-    @org.springframework.beans.factory.annotation.Autowired
+    private final HttpServletRequest request;
+
+    @Autowired
+    private ProcessSerializer processSerializer;
+    @Autowired
+    private StatusInfoSerializer statusInfoSerializer;
+    @Autowired
+    private ExceptionSerializer exceptionSerializer;
+    @Autowired
+    private ResultSerializer resultSerializer;
+    @Autowired
+    private ExecuteDeserializer executeDeserializer;
+
+    @Autowired
     public ProcessesApiController(HttpServletRequest request) {
         this.request = request;
     }
 
-    public ResponseEntity<?> execute(@ApiParam(value = "Mandatory execute request JSON" ,required=true )  @Valid @RequestBody Execute body,@ApiParam(value = "The id of a process.",required=true) @PathVariable("id") String id) throws CodedException {
-        String accept = request.getHeader("Accept");        
-        
+    public ResponseEntity<?> execute(Execute body, String id) throws CodedException {
         Map<String, String[]> parameterMap = request.getParameterMap();
-        
+
         boolean syncExecute = false;
-        
+
         for (String parameterName : parameterMap.keySet()) {
-            if(parameterName.equalsIgnoreCase("sync-execute")) {
+            if (parameterName.equalsIgnoreCase("sync-execute")) {
                 String[] syncExecuteValues = parameterMap.get(parameterName);
-                
-                if(syncExecuteValues.length > 0) {
+
+                if (syncExecuteValues.length > 0) {
                     try {
                         syncExecute = Boolean.parseBoolean(syncExecuteValues[0]);
                     } catch (Exception e) {
                         //ignore
                         //TODO log 
-                    }                    
+                    }
                     break;
-                }else {
+                } else {
                     break;
                 }
             }
         }
-        
+
         OwsCode owsCode = new OwsCode(id);
-        
+
         List<ProcessData> inputs;
         try {
-            inputs = ExecuteDeserializer.readInputs(body.getInputs());
+            inputs = executeDeserializer.readInputs(body.getInputs());
         } catch (URISyntaxException | JsonProcessingException e) {
             log.error("Could not resolve URI: ", e);
             throw new InvalidParameterValueException("identifier", owsCode.getValue());//TODO
         }
-        
-        List<OutputDefinition> outputs = ExecuteDeserializer.readOutputs(body.getOutputs());
-        
-        JobId jobId = null;
-        
+
+        List<OutputDefinition> outputs = executeDeserializer.readOutputs(body.getOutputs());
+
+        JobId jobId;
+
         try {
             jobId = engine.execute(owsCode, inputs, outputs, ResponseMode.DOCUMENT);
-        } catch (ProcessNotFoundException ex) {            
-            return exception(404, String.format("The process with id '%s' does not exist.", owsCode.getValue()), "Invalidparameter");
-//            throw new InvalidParameterValueException("identifier", owsCode.getValue());
+        } catch (ProcessNotFoundException ex) {
+            return exception(HttpStatus.NOT_FOUND, String.format("The process with id '%s' does not exist.", owsCode.getValue()), "Invalidparameter");
         } catch (InputDecodingException ex) {
-            return exception(500, ex.getMessage(), "NoApplicableCode");
+            return exception(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), "NoApplicableCode");
         }
-        
+
         if (!syncExecute) {
             HttpHeaders httpHeaders = new HttpHeaders();
 
             httpHeaders.add("location", serviceURL + id + "/jobs/" + jobId.getValue());
 
-            ResponseEntity<Void> responseEntity = new ResponseEntity<>(httpHeaders, HttpStatus.CREATED);
+            return new ResponseEntity<Void>(httpHeaders, HttpStatus.CREATED);
+        } else {
 
-            return responseEntity;
-        }else {
-            
             try {
                 Future<Result> futureResult = engine.getResult(jobId);
-                
+
                 Result result = futureResult.get();
-                
-                return ResponseEntity.ok(ResultSerializer.serializeResult(result));
-                
+
+                return ResponseEntity.ok(resultSerializer.serializeResult(result));
+
             } catch (EngineException | InterruptedException | ExecutionException | IOException e) {
-                return exception(500, e.getMessage(), "NoApplicableCode");
+                return exception(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), "NoApplicableCode");
             }
-            
+
         }
     }
 
-    public ResponseEntity<?> getJobList(@ApiParam(value = "The id of a process.",required=true) @PathVariable("id") String id) {
-        String accept = request.getHeader("Accept");
-        
+    public ResponseEntity<?> getJobList(@ApiParam(value = "The id of a process.", required = true) @PathVariable("id") String id) {
         OwsCode owsCode = new OwsCode(id);
-        
-        Set<String> values = engine.getJobIdentifiers(owsCode).stream().map(JobId::getValue).collect(toSet());
-        
-        JobCollection jobCollection = new JobCollection();        
-        
-        for (String jobID : values) {
-            jobCollection.addJobsItem(jobID);
-        }
-        
+        JobCollection jobCollection = new JobCollection();
+        engine.getJobIdentifiers(owsCode).stream().map(JobId::getValue).forEach(jobCollection::addJobsItem);
         return ResponseEntity.ok(jobCollection);
     }
-    
-    public String getExecuteForm(@ApiParam(value = "The id of a process.",required=true) @PathVariable("id") String id, Model model) {
-        String accept = request.getHeader("Accept");    
-        
-        OwsCode owsCode = new OwsCode(id);    
 
+    public String getExecuteForm(@ApiParam(value = "The id of a process.", required = true) @PathVariable("id") String id, Model model) {
+        OwsCode owsCode = new OwsCode(id);
         context.setAttribute("processId", id);
-        
         context.setAttribute("jobSet", engine.getJobIdentifiers(owsCode).stream().map(JobId::getValue).collect(toSet()));
-        
         return "../../../jsp/test_client";
     }
 
-    public ResponseEntity<?> getProcessDescription(@ApiParam(value = "The id of a process",required=true) @PathVariable("id") String id) {
-        String accept = request.getHeader("Accept");
-        
+    public ResponseEntity<?> getProcessDescription(@ApiParam(value = "The id of a process", required = true) @PathVariable("id") String id) {
         OwsCode owsCode = new OwsCode(id);
-        
         Optional<ProcessOffering> offering = engine.getProcessDescription(owsCode).map(ProcessOffering::new);
-        
-        if(!offering.isPresent()) {
-            
-            return exception(404, String.format("The process with id '%s' does not exist.", id), "Invalidparameter");
-            
-//            io.swagger.model.Exception  = new io.swagger.model.Exception();
-//            exception.setCode("Invalidparameter");
-//            exception.setDescription();
-//            
-//            ResponseEntity<io.swagger.model.Exception> response = new ResponseEntity<io.swagger.model.Exception>(exception, HttpStatus.valueOf(404));
-//            return response;
-            
+        if (!offering.isPresent()) {
+            return exception(HttpStatus.NOT_FOUND, String.format("The process with id '%s' does not exist.", id), "Invalidparameter");
         }
-        
+
         return ResponseEntity.ok(processSerializer.serializeProcessOffering(offering.get()));
     }
 
     public ResponseEntity<ProcessCollection> getProcesses() {
-        String accept = request.getHeader("Accept");
-        
+
         Set<ProcessOffering> offerings = engine.getProcessDescriptions().stream().map(ProcessOffering::new).collect(toSet());
-        
-        return ResponseEntity.ok(processSerializer.serializeProcessOfferings(offerings));
+
+        return ResponseEntity.ok(processSerializer.createProcessCollection(offerings));
     }
 
-    public ResponseEntity<?> getResult(@ApiParam(value = "The id of a process",required=true) @PathVariable("id") String id,@ApiParam(value = "The id of a job",required=true) @PathVariable("jobID") String jobID) {
-        
+    public ResponseEntity<?> getResult(@ApiParam(value = "The id of a process", required = true) @PathVariable("id") String id, @ApiParam(value = "The id of a job", required = true) @PathVariable("jobID") String jobID) {
+
         JobId jobId = new JobId(jobID);
-        
-        if(!engine.hasJob(jobId)) {
-            
-            return ResponseEntity.badRequest().body(ExceptionSerializer.serializeException("NoSuchJob", String.format("Job with id %s not found.", jobId)));
+
+        if (!engine.hasJob(jobId)) {
+            return ResponseEntity.badRequest().body(exceptionSerializer.serializeException("NoSuchJob", String.format("Job with id %s not found.", jobId)));
         }
-            
+
         try {
-            
+
             Future<org.n52.shetland.ogc.wps.Result> futureResult = engine.getResult(jobId);
-            
-            if(!futureResult.isDone()) {
-                return ResponseEntity.badRequest().body(ExceptionSerializer.serializeException("ResultNotReady", String.format("Job with id %s not ready.", jobId)));
+
+            if (!futureResult.isDone()) {
+                return ResponseEntity.badRequest().body(exceptionSerializer.serializeException("ResultNotReady", String.format("Job with id %s not ready.", jobId)));
             }
-            
-            return ResponseEntity.ok(ResultSerializer.serializeResult(futureResult.get()));
+
+            return ResponseEntity.ok(resultSerializer.serializeResult(futureResult.get()));
         } catch (EngineException | InterruptedException | ExecutionException | IOException e) {
             log.error(e.getMessage());
-            return ResponseEntity.badRequest().body(ExceptionSerializer.serializeException("NoApplicableCode", "Internal server error."));
+            return ResponseEntity.badRequest().body(exceptionSerializer.serializeException("NoApplicableCode", "Internal server error."));
         }
     }
 
-    public ResponseEntity<?> getStatus(@ApiParam(value = "The id of a process",required=true) @PathVariable("id") String id,@ApiParam(value = "The id of a job",required=true) @PathVariable("jobID") String jobID) {
-        String accept = request.getHeader("Accept");
-        
+    public ResponseEntity<?> getStatus(@ApiParam(value = "The id of a process", required = true) @PathVariable("id") String id, @ApiParam(value = "The id of a job", required = true) @PathVariable("jobID") String jobID) {
+
         JobId jobId = new JobId(jobID);
-        
-        if(!engine.hasJob(jobId)) {
-            
-            return ResponseEntity.badRequest().body(ExceptionSerializer.serializeException("NoSuchJob", String.format("Job with id %s not found.", jobId)));
+
+        if (!engine.hasJob(jobId)) {
+
+            return ResponseEntity.badRequest().body(exceptionSerializer.serializeException("NoSuchJob", String.format("Job with id %s not found.", jobId)));
         }
-        
+
         try {
-            
+
             org.n52.shetland.ogc.wps.StatusInfo status = engine.getStatus(jobId);
-            
+
             return ResponseEntity.ok(statusInfoSerializer.serialize(status, id, jobID));
-            
+
         } catch (EngineException e) {
             log.error(e.getMessage());
-            return ResponseEntity.badRequest().body(ExceptionSerializer.serializeException("NoApplicableCode", "Internal server error."));
+            return ResponseEntity.badRequest().body(exceptionSerializer.serializeException("NoApplicableCode", "Internal server error."));
         }
     }
-    
-    private ResponseEntity<io.swagger.model.Exception> exception(int httpStatusCode, String description, String exceptionCode){
-        io.swagger.model.Exception exception = new io.swagger.model.Exception();
-        exception.setCode(exceptionCode);
-        exception.setDescription(description);
-        return new ResponseEntity<io.swagger.model.Exception>(exception, HttpStatus.valueOf(httpStatusCode));
+
+    private ResponseEntity<io.swagger.model.Exception> exception(HttpStatus httpStatusCode, String description, String exceptionCode) {
+        return ResponseEntity.status(httpStatusCode).body(exceptionSerializer.serializeException(exceptionCode, description));
     }
 
 }

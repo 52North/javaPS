@@ -21,30 +21,29 @@
  */
 package io.swagger.api;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-
+import io.swagger.model.Link;
+import io.swagger.model.Root;
 import org.n52.faroe.Validation;
 import org.n52.faroe.annotation.Configurable;
 import org.n52.faroe.annotation.Setting;
 import org.n52.iceland.service.ServiceSettings;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 
-import io.swagger.model.Link;
-import io.swagger.model.Root;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Home redirection to swagger api documentation 
+ * Home redirection to swagger api documentation
  */
 @Controller
 @Configurable
 public class RootController {
 
-    final String baseURL = "/rest";
-    
+    private static final String baseURL = "/rest";
+
     private String serviceURL;
 
     @Setting(ServiceSettings.SERVICE_URL)
@@ -56,64 +55,44 @@ public class RootController {
         }
         this.serviceURL = url.replace("/service", baseURL);
     }
-    
-    @RequestMapping(value = "/rest")
+
+    @GetMapping(value = "/rest")
     public ResponseEntity<Root> index() {
-        
+
         List<Link> links = new ArrayList<>();
-        
+
         Link link = new Link();
-        
         link.setHref(serviceURL);
-        
         link.setRel("self");
-        
         link.setType("application/json");
-        
         link.setTitle("this document");
-        
         links.add(link);
-        
+
         link = new Link();
-        
         link.setHref(serviceURL + "/api/");
-        
         link.setRel("service");
-        
         link.setType("application/openapi+json;version=3.0");
-        
         link.setTitle("ththe API definition");
-        
         links.add(link);
-        
+
         link = new Link();
-        
         link.setHref(serviceURL + "/conformance/");
-        
         link.setRel("conformance");
-        
         link.setType("application/json");
-        
         link.setTitle("WPS 2.0 REST/JSON Binding Extension conformance classes implemented by this server");
-        
         links.add(link);
-        
+
         link = new Link();
-        
         link.setHref(serviceURL + "/processes/");
-        
         link.setRel("processes");
-        
         link.setType("application/json");
-        
         link.setTitle("The processes offered by this server");
-        
         links.add(link);
-        
+
         Root root = new Root();
-        
+
         root.setLinks(links);
-        
+
         return ResponseEntity.ok(root);
     }
 }

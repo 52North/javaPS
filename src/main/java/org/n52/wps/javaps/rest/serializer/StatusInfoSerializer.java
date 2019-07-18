@@ -21,120 +21,85 @@
  */
 package org.n52.wps.javaps.rest.serializer;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
+import io.swagger.model.Link;
+import io.swagger.model.StatusInfo;
+import io.swagger.model.StatusInfo.StatusEnum;
 import org.n52.faroe.Validation;
 import org.n52.faroe.annotation.Configurable;
 import org.n52.faroe.annotation.Setting;
 import org.n52.iceland.service.ServiceSettings;
-import org.n52.shetland.ogc.wps.JobId;
 import org.n52.shetland.ogc.wps.JobStatus;
 
-import io.swagger.model.Link;
-import io.swagger.model.StatusInfo;
-import io.swagger.model.StatusInfo.StatusEnum;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 @Configurable
-public class StatusInfoSerializer {
+public class StatusInfoSerializer extends  AbstractSerializer{
 
-    private String serviceURL;
-
-    @Setting(ServiceSettings.SERVICE_URL)
-    public void setServiceURL(URI serviceURL) {
-        Validation.notNull("serviceURL", serviceURL);
-        String url = serviceURL.toString();
-        if (url.contains("?")) {
-            url = url.split("[?]")[0];
-        }
-        this.serviceURL = url.replace("/service", "/rest/processes/");
+    public StatusInfoSerializer() {
     }
 
-    public StatusInfoSerializer() {}
-    
     public StatusInfo serialize(org.n52.shetland.ogc.wps.StatusInfo statusInfo, String processId, String jobId) {
-        
+
         StatusInfo serializedStatusInfo = new StatusInfo();
-        
-        serializedStatusInfo.setStatus(mapStatus(statusInfo.getStatus()));
-        
-        Optional<Short> percentCompleted = statusInfo.getPercentCompleted();
-        
-        if(percentCompleted.isPresent()) {
-            serializedStatusInfo.setProgress(Integer.valueOf(percentCompleted.get()));
+
+        serializedStatusInfo.setStatus(createStatusEnum(statusInfo.getStatus()));
+
+        statusInfo.getPercentCompleted().map(Integer::valueOf).ifPresent(serializedStatusInfo::setProgress);
+
+        List<Link> links = new ArrayList<>(2);
+        links.add(createSelfLink(processId, jobId));
+        if (statusInfo.getStatus().equals(JobStatus.succeeded())) {
+            links.add(createResultLink(processId, jobId));
+        } else if (statusInfo.getStatus().equals(JobStatus.failed())) {
+            links.add(createExceptionLink(processId, jobId));
         }
-        
-        List<Link> links = new ArrayList<>();
-        
-        Link link = new Link();
-        
-        String selfHref = createSelfHref(processId, jobId);
-        
-        link.setHref(selfHref);
-        
-        link.setRel("self");
-        
-        link.setType("application/json");
-        
-        link.setTitle("this document");
-        
-        links.add(link);        
-        
-        if(serializedStatusInfo.getStatus().equals(StatusEnum.SUCCESSFUL)) {
-            
-            link = new Link();
-            
-            link.setHref(createResultURL(selfHref));
-            
-            link.setRel("result");
-            
-            link.setType("application/json");
-            
-            link.setTitle("Job result");
-            
-            links.add(link);
-        }else if(serializedStatusInfo.getStatus().equals(StatusEnum.FAILED)) {
-            
-            link = new Link();
-            
-            link.setHref(createResultURL(selfHref));
-            
-            link.setRel("exception");
-            
-            link.setType("application/json");
-            
-            link.setTitle("Job exception");
-            
-            links.add(link);
-        }
-        
+
         serializedStatusInfo.setLinks(links);
-        
+
         return serializedStatusInfo;
-        
+
     }
 
-    private StatusEnum mapStatus(JobStatus status) {
-        
-        if(status.equals(JobStatus.succeeded())) {
+    private Link createSelfLink(String processId, String jobId) {
+        Link selfLink = new Link();
+        selfLink.setHref(createJobHref(processId, jobId));
+        selfLink.setRel("self");
+        selfLink.setType(APPLICATION_JSON);
+        selfLink.setTitle("this document");
+        return selfLink;
+    }
+
+    private Link createResultLink(String processId, String jobId) {
+        Link resultLink = new Link();
+        resultLink.setHref(createResultHref(processId, jobId));
+        resultLink.setRel("result");
+        resultLink.setType(APPLICATION_JSON);
+        resultLink.setTitle("Job result");
+        return resultLink;
+    }
+
+    private Link createExceptionLink(String processId, String jobId) {
+        Link exceptionLink = new Link();
+        exceptionLink.setHref(createResultHref(processId, jobId));
+        exceptionLink.setRel("exception");
+        exceptionLink.setType(APPLICATION_JSON);
+        exceptionLink.setTitle("Job exception");
+        return exceptionLink;
+    }
+
+    private StatusEnum createStatusEnum(JobStatus status) {
+        if (status.equals(JobStatus.succeeded())) {
             return StatusEnum.SUCCESSFUL;
-        } else if(status.equals(JobStatus.failed())) {
+        } else if (status.equals(JobStatus.failed())) {
             return StatusEnum.FAILED;
-        } else if(status.equals(JobStatus.accepted()) || status.equals(JobStatus.running())) {
+        } else if (status.equals(JobStatus.accepted())) {
+            return StatusEnum.ACCEPTED;
+        } else if (status.equals(JobStatus.running())) {
             return StatusEnum.RUNNING;
         }
-        
         throw new IllegalArgumentException("Status not valid: " + status);
     }
-    
-    private String createSelfHref(String processId, String jobId) {
-        return serviceURL + processId + "/jobs/" + jobId;
-    }
-    
-    private String createResultURL(String selfHref) {
-        return selfHref + "/result";
-    }
-    
+
 }

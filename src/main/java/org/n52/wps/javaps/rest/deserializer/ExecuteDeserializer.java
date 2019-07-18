@@ -21,154 +21,115 @@
  */
 package org.n52.wps.javaps.rest.deserializer;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.model.Input;
+import io.swagger.model.Output;
+import io.swagger.model.TransmissionMode;
 import org.n52.javaps.io.bbox.json.JSONBoundingBoxInputOutputHandler;
 import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.shetland.ogc.wps.DataTransmissionMode;
 import org.n52.shetland.ogc.wps.Format;
 import org.n52.shetland.ogc.wps.OutputDefinition;
-import org.n52.shetland.ogc.wps.data.FormattedProcessData;
 import org.n52.shetland.ogc.wps.data.ProcessData;
 import org.n52.shetland.ogc.wps.data.ReferenceProcessData;
 import org.n52.shetland.ogc.wps.data.impl.StringValueProcessData;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
-import io.swagger.model.InlineValue;
-import io.swagger.model.Input;
-import io.swagger.model.Output;
-import io.swagger.model.TransmissionMode;
+import static java.util.stream.Collectors.toList;
 
 public class ExecuteDeserializer {
-
     private static final String VALUE_KEY = "value";
-
     private static final String INLINE_VALUE_KEY = "inlineValue";
-
     private static final String HREF_KEY = "href";
-
     private static final String FORMAT_KEY = "format";
-
     private static final String MIME_TYPE_KEY = "mimeType";
-
     private static final String ENCODING_KEY = "encoding";
-
     private static final String SCHEMA_KEY = "schema";
-
     private static final Format FORMAT_TEXT_PLAIN = new Format("text/plain");
 
-    public static List<OutputDefinition> readOutputs(List<Output> outputs) {
-
-        List<OutputDefinition> outputDefinitions = new ArrayList<>();
-
-        for (Output output : outputs) {
-            OutputDefinition outputDefinition = new OutputDefinition();
-
-            outputDefinition.setId(createId(output.getId()));
-
-            outputDefinition.setFormat(getFormat((io.swagger.model.Format) output.getFormat()));
-
-            outputDefinition.setDataTransmissionMode(getTransmisionMode(output.getTransmissionMode()));
-
-            outputDefinitions.add(outputDefinition);
-        }
-
-        return outputDefinitions;
+    public List<OutputDefinition> readOutputs(List<Output> outputs) {
+        return outputs.stream().map(output -> {
+            OutputDefinition definition = new OutputDefinition();
+            definition.setId(createId(output.getId()));
+            definition.setFormat(getFormat(output.getFormat()));
+            definition.setDataTransmissionMode(getTransmisionMode(output.getTransmissionMode()));
+            return definition;
+        }).collect(toList());
     }
 
-    private static DataTransmissionMode getTransmisionMode(TransmissionMode transmissionMode) {
+    private DataTransmissionMode getTransmisionMode(TransmissionMode transmissionMode) {
         switch (transmissionMode) {
-        case REFERENCE:
-            return DataTransmissionMode.REFERENCE;
-        case VALUE:
-            return DataTransmissionMode.VALUE;
-        default:
-            return DataTransmissionMode.REFERENCE;
+            case VALUE:
+                return DataTransmissionMode.VALUE;
+            case REFERENCE:
+            default:
+                return DataTransmissionMode.REFERENCE;
         }
     }
 
-    private static Format getFormat(Object object) {
-
+    private Format getFormat(Object object) {
         String mimeType = "";
         String encoding = "";
         String schema = "";
 
-        if (object instanceof LinkedHashMap<?, ?>) {
+        if (object instanceof Map<?, ?>) {
 
-            LinkedHashMap<?, ?> linkedHashMap = (LinkedHashMap<?, ?>) object;
+            Map<?, ?> map = (Map<?, ?>) object;
 
-            mimeType = linkedHashMap.containsKey(MIME_TYPE_KEY) ? linkedHashMap.get(MIME_TYPE_KEY).toString() : "";
-            encoding = linkedHashMap.containsKey(ENCODING_KEY) ? linkedHashMap.get(ENCODING_KEY).toString() : "";
-            schema = linkedHashMap.containsKey(SCHEMA_KEY) ? linkedHashMap.get(SCHEMA_KEY).toString() : "";
+            mimeType = map.containsKey(MIME_TYPE_KEY) ? map.get(MIME_TYPE_KEY).toString() : "";
+            encoding = map.containsKey(ENCODING_KEY) ? map.get(ENCODING_KEY).toString() : "";
+            schema = map.containsKey(SCHEMA_KEY) ? map.get(SCHEMA_KEY).toString() : "";
 
         } else if (object instanceof io.swagger.model.Format) {
-            
-            io.swagger.model.Format format = (io.swagger.model.Format)object;
-            
+
+            io.swagger.model.Format format = (io.swagger.model.Format) object;
+
             return new Format(format.getMimeType(), format.getEncoding(), format.getSchema());
         }
         return new Format(mimeType, encoding, schema);
     }
 
-    private static OwsCode createId(String id) {
+    private OwsCode createId(String id) {
         return new OwsCode(id);
     }
 
-    public static List<ProcessData> readInputs(List<Input> inputs) throws URISyntaxException, JsonProcessingException {
-
+    public List<ProcessData> readInputs(List<Input> inputs) throws URISyntaxException, JsonProcessingException {
         List<ProcessData> processDataList = new ArrayList<>();
-
         for (Input input : inputs) {
-
-            ProcessData processData = null;
-
             OwsCode id = createId(input.getId());
-
             Object object = input.getInput();
-
-            if (object instanceof LinkedHashMap<?, ?>) {
-
-                LinkedHashMap<?, ?> linkedHashMap = (LinkedHashMap<?, ?>) object;
-
-                processData = readInput(id, processData, linkedHashMap);
-
+            if (object instanceof Map<?, ?>) {
+                Map<?, ?> map = (Map<?, ?>) object;
+                processDataList.add(readInput(id, map));
             }
-
-            processDataList.add(processData);
         }
-
         return processDataList;
     }
 
-    private static ProcessData readInput(OwsCode id,
-            ProcessData processData,
-            LinkedHashMap<?, ?> linkedHashMap) throws URISyntaxException, JsonProcessingException {
+    private ProcessData readInput(OwsCode id, Map<?, ?> map) throws URISyntaxException, JsonProcessingException {
+        if (map.containsKey(VALUE_KEY)) {
 
-        //
-        if (linkedHashMap.containsKey(VALUE_KEY)) {
+            Object value = map.get(VALUE_KEY);
 
-            Object value = linkedHashMap.get(VALUE_KEY);
-
-            if (value instanceof LinkedHashMap<?, ?>) {
+            if (value instanceof Map<?, ?>) {
                 // complex data
-                LinkedHashMap<?, ?> complexValueMap = (LinkedHashMap<?, ?>) value;
+                Map<?, ?> complexValueMap = (Map<?, ?>) value;
 
                 if (complexValueMap.containsKey(INLINE_VALUE_KEY)) {
 
                     Format format = new Format("text/plain");
 
-                    if (linkedHashMap.containsKey(FORMAT_KEY)) {
-                        format = getFormat(linkedHashMap.get(FORMAT_KEY));
+                    if (map.containsKey(FORMAT_KEY)) {
+                        format = getFormat(map.get(FORMAT_KEY));
                     }
 
-                    processData = new StringValueProcessData(id, format,
-                            complexValueMap.get(INLINE_VALUE_KEY).toString());
+                    return new StringValueProcessData(id, format, complexValueMap.get(INLINE_VALUE_KEY).toString());
 
                 } else if (complexValueMap.containsKey(HREF_KEY)) {
 
@@ -176,20 +137,20 @@ public class ExecuteDeserializer {
 
                     Format format = new Format();
 
-                    if (linkedHashMap.containsKey(FORMAT_KEY)) {
-                        format = getFormat(linkedHashMap.get(FORMAT_KEY));
+                    if (map.containsKey(FORMAT_KEY)) {
+                        format = getFormat(map.get(FORMAT_KEY));
                     }
 
-                    processData = new ReferenceProcessData(id, format, uri);
+                    return new ReferenceProcessData(id, format, uri);
                 }
             } else if (value instanceof String) {
-                processData = new StringValueProcessData(id, FORMAT_TEXT_PLAIN, (String) value);
+                return new StringValueProcessData(id, FORMAT_TEXT_PLAIN, (String) value);
             }
-        }else if(linkedHashMap.containsKey(JSONBoundingBoxInputOutputHandler.BBOX)) {
-            processData = new StringValueProcessData(id, JSONBoundingBoxInputOutputHandler.FORMAT_APPLICATION_JSON, new ObjectMapper().writeValueAsString(linkedHashMap));
+        } else if (map.containsKey(JSONBoundingBoxInputOutputHandler.BBOX)) {
+            return new StringValueProcessData(id, JSONBoundingBoxInputOutputHandler.FORMAT_APPLICATION_JSON, new ObjectMapper().writeValueAsString(map));
         }
 
-        return processData;
+        return null;
     }
 
 }

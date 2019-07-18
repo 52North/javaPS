@@ -21,560 +21,299 @@
  */
 package org.n52.wps.javaps.rest.serializer;
 
-import java.math.BigInteger;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
-import org.n52.faroe.Validation;
+import io.swagger.model.LiteralDataDomain;
+import io.swagger.model.Process;
+import io.swagger.model.*;
+import io.swagger.model.Range.RangeClosureEnum;
 import org.n52.faroe.annotation.Configurable;
-import org.n52.faroe.annotation.Setting;
-import org.n52.iceland.service.ServiceSettings;
-import org.n52.shetland.ogc.ows.OwsCRS;
-import org.n52.shetland.ogc.ows.OwsPossibleValues;
-import org.n52.shetland.ogc.ows.OwsRange;
-import org.n52.shetland.ogc.ows.OwsRange.BoundType;
-import org.n52.shetland.ogc.ows.OwsValue;
-import org.n52.shetland.ogc.ows.OwsValueRestriction;
+import org.n52.shetland.ogc.ows.*;
 import org.n52.shetland.ogc.wps.DataTransmissionMode;
 import org.n52.shetland.ogc.wps.Format;
-import org.n52.shetland.ogc.wps.InputOccurence;
 import org.n52.shetland.ogc.wps.JobControlOption;
-import org.n52.shetland.ogc.wps.description.BoundingBoxInputDescription;
-import org.n52.shetland.ogc.wps.description.BoundingBoxOutputDescription;
-import org.n52.shetland.ogc.wps.description.ComplexInputDescription;
-import org.n52.shetland.ogc.wps.description.ComplexOutputDescription;
-import org.n52.shetland.ogc.wps.description.LiteralInputDescription;
-import org.n52.shetland.ogc.wps.description.LiteralOutputDescription;
-import org.n52.shetland.ogc.wps.description.ProcessDescription;
-import org.n52.shetland.ogc.wps.description.ProcessInputDescription;
-import org.n52.shetland.ogc.wps.description.ProcessOutputDescription;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.n52.shetland.ogc.wps.description.*;
 
-import io.swagger.model.AllowedValues;
-import io.swagger.model.AnyValue;
-import io.swagger.model.BoundingBoxDataType;
-import io.swagger.model.ComplexDataType;
-import io.swagger.model.FormatDescription;
-import io.swagger.model.InputDescription;
-import io.swagger.model.JobControlOptions;
-import io.swagger.model.Link;
-import io.swagger.model.LiteralDataDomain;
-import io.swagger.model.LiteralDataDomainDataType;
-import io.swagger.model.LiteralDataType;
-import io.swagger.model.OutputDescription;
-import io.swagger.model.Process;
-import io.swagger.model.ProcessCollection;
-import io.swagger.model.ProcessOffering;
-import io.swagger.model.ProcessSummary;
-import io.swagger.model.Range;
-import io.swagger.model.Range.RangeClosureEnum;
-import io.swagger.model.SupportedCRS;
-import io.swagger.model.TransmissionMode;
+import java.math.BigInteger;
+import java.net.URI;
+import java.util.*;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toCollection;
+import static java.util.stream.Collectors.toList;
 
 @Configurable
-public class ProcessSerializer {
-    
-    private static final Logger log = LoggerFactory.getLogger(ProcessSerializer.class);
-
-    private String serviceURL;
-
-    @Setting(ServiceSettings.SERVICE_URL)
-    public void setServiceURL(URI serviceURL) {
-        Validation.notNull("serviceURL", serviceURL);
-        String url = serviceURL.toString();
-        if (url.contains("?")) {
-            url = url.split("[?]")[0];
-        }
-        this.serviceURL = url.replace("/service", "/rest/processes/");
+public class ProcessSerializer extends AbstractSerializer {
+    public ProcessSerializer() {
     }
-    
-    public ProcessSerializer() {}
-    
+
     public ProcessOffering serializeProcessOffering(org.n52.shetland.ogc.wps.ProcessOffering processOffering) {
-                
-        io.swagger.model.ProcessOffering serializedProcessOffering = new io.swagger.model.ProcessOffering();
-        
-        Process process = new Process();
-        
-        addProcessSummary((ProcessSummary)process, processOffering);
-        
-        Link executeEndpointLink = new Link();
-        
-        executeEndpointLink.setHref(serviceURL + process.getId() + "/jobs");
-        
-        executeEndpointLink.setRel("canonical");
-        
-        executeEndpointLink.setTitle("Execute endpoint");
-        
-        process.setLinks(Collections.singletonList(executeEndpointLink));
-        
-        ProcessDescription processDescription = processOffering.getProcessDescription();
-        
-        process.setInputs(createInputs(processDescription.getInputDescriptions()));
-        
-        process.setOutputs(createOutputs(processDescription.getOutputDescriptions()));
-        
-        serializedProcessOffering.process(process);
-        
-        return serializedProcessOffering;
+        Process process = createProcessSummary(processOffering, Process::new);
+        process.setLinks(Collections.singletonList(createExecuteLink(process)));
+        process.setInputs(createInputDescriptions(processOffering.getProcessDescription().getInputDescriptions()));
+        process.setOutputs(createOutputDescriptions(processOffering.getProcessDescription().getOutputDescriptions()));
+        return new io.swagger.model.ProcessOffering().process(process);
     }
 
-    private void addProcessSummary(ProcessSummary process, org.n52.shetland.ogc.wps.ProcessOffering processOffering) {
-
-        ProcessDescription processDescription = processOffering.getProcessDescription();
-        
-        String id = processDescription.getId().getValue();
-        
-        process.setId(id);
-        
-        try {            
-            process.setVersion(processOffering.getProcessVersion().get());
-        } catch (Exception e) {
-            log.trace("Version not present.");
-        }
-        
-        Collection<JobControlOption> jobControlOptions = processOffering.getJobControlOptions();
-        
-        List<JobControlOptions> serializedJobControlOptions = new ArrayList<>();
-        
-        for (JobControlOption jobControlOption : jobControlOptions) {
-            if(jobControlOption.equals(JobControlOption.async())) {
-                serializedJobControlOptions.add(JobControlOptions.ASYNC_EXECUTE);
-            } else if(jobControlOption.equals(JobControlOption.sync())) {
-                    serializedJobControlOptions.add(JobControlOptions.SYNC_EXECUTE);
-                }
-        }
-        
-        process.setJobControlOptions(serializedJobControlOptions);
-        
-        Collection<DataTransmissionMode> outputTransmissionModes = processOffering.getOutputTransmissionModes();
-        
-        List<TransmissionMode> serializedOutputTransmissionModes = new ArrayList<>();
-        
-        for (DataTransmissionMode outputTransmissionMode : outputTransmissionModes) {
-            if(outputTransmissionMode.equals(DataTransmissionMode.VALUE)) {
-                serializedOutputTransmissionModes.add(TransmissionMode.VALUE);
-            } else if(outputTransmissionMode.equals(DataTransmissionMode.REFERENCE)) {
-                    serializedOutputTransmissionModes.add(TransmissionMode.REFERENCE);
-                }
-        }
-        
-        process.setOutputTransmission(serializedOutputTransmissionModes);
-        
-        try {
-            process.setDescription(processDescription.getAbstract().get().getValue());
-        } catch (Exception e) {
-            log.trace("Abstract not present.");
-        }
-        
-        try {
-            process.setTitle(processDescription.getTitle().getValue());
-        } catch (Exception e) {
-            log.trace("Title not present.");
-        }
-        //TODO keywords, metadata
-        
+    private <T extends ProcessSummary> T createProcessSummary(org.n52.shetland.ogc.wps.ProcessOffering processOffering, Supplier<T> factory) {
+        T processSummary = createDescription(processOffering.getProcessDescription(), factory);
+        processOffering.getProcessVersion().ifPresent(processSummary::setVersion);
+        processSummary.setJobControlOptions(createJobControlOptions(processOffering));
+        processSummary.setOutputTransmission(createOutputTransmissionModes(processOffering));
+        return processSummary;
     }
 
-    private List<OutputDescription> createOutputs(Collection<? extends ProcessOutputDescription> outputDescriptions) {
-              
-        List<OutputDescription> outputs = new ArrayList<>();        
-        
-        for (ProcessOutputDescription processOutputDescription : outputDescriptions) {
-
-            OutputDescription outputDescription = new OutputDescription();
-            
-            outputDescription.setId(processOutputDescription.getId().getValue());
-            
-            try {
-                outputDescription.setDescription(processOutputDescription.getAbstract().get().getValue());
-            } catch (Exception e) {
-                log.trace("Abstract not present.");
-            }
-            
-            try {
-                outputDescription.setTitle(processOutputDescription.getTitle().getValue());
-            } catch (Exception e) {
-                log.trace("Title not present.");
-            }
-            
-            if(processOutputDescription.isComplex()) {
-                ComplexOutputDescription complexOutputDescription = processOutputDescription.asComplex();
-                ComplexDataType complexInputType = new ComplexDataType();
-                
-                BigInteger maximumMegabytes = null;
-                
-                if(complexOutputDescription.getMaximumMegabytes().isPresent()) {
-                    maximumMegabytes = complexOutputDescription.getMaximumMegabytes().get();
-                }
-                
-                complexInputType.setFormats(createFormats(complexOutputDescription.getDefaultFormat(), complexOutputDescription.getSupportedFormats(), maximumMegabytes));
-                
-                outputDescription.setOutput(complexInputType);
-                
-            }   else if(processOutputDescription.isLiteral()) {
-                LiteralDataType literalOutput = new LiteralDataType();
-                
-                LiteralOutputDescription literalOutputDescription = processOutputDescription.asLiteral();
-                
-                List<LiteralDataDomain> literalDataDomains = new ArrayList<>();
-                
-                literalDataDomains.add(serializeLiteralDataDomain(literalOutputDescription.getDefaultLiteralDataDomain()));
-                
-                for(org.n52.shetland.ogc.wps.description.LiteralDataDomain literalDataDomain : literalOutputDescription.getSupportedLiteralDataDomains()) {
-                    literalDataDomains.add(serializeLiteralDataDomain(literalDataDomain));
-                }
-                
-                literalOutput.setLiteralDataDomains(literalDataDomains);
-                
-                outputDescription.setOutput(literalOutput);
-                
-            } else if(processOutputDescription.isBoundingBox()) {
-                BoundingBoxDataType boundingBoxOutput = new BoundingBoxDataType();
-                
-                BoundingBoxOutputDescription boundingBoxDescription = processOutputDescription.asBoundingBox();
-                
-                OwsCRS defaultCRS = boundingBoxDescription.getDefaultCRS();
-                
-                Set<OwsCRS> supportedCRS = boundingBoxDescription.getSupportedCRS();
-                
-                boundingBoxOutput.setSupportedCRS(createSupportedCR(defaultCRS, supportedCRS));
-                
-                outputDescription.setOutput(boundingBoxOutput);
-            }
-            
-            outputs.add(outputDescription);
-            
-        }
-        
-        return outputs;
+    private List<TransmissionMode> createOutputTransmissionModes(org.n52.shetland.ogc.wps.ProcessOffering processOffering) {
+        return processOffering.getOutputTransmissionModes().stream().map(this::createDataTransmissionMode).collect(toList());
     }
 
-    private List<InputDescription> createInputs(Collection<? extends ProcessInputDescription> inputDescriptions) {
-        
-        List<InputDescription> inputs = new ArrayList<>();
-        
-        for (ProcessInputDescription processInputDescription : inputDescriptions) {
-            
-            InputDescription descriptionType = new InputDescription();
-            
-            InputOccurence occurrence = processInputDescription.getOccurence();
-            try {
-                descriptionType.setMinOccurs(Integer.parseInt(""+occurrence.getMin()));
-            } catch (Exception e) {
-                log.trace("Could not parse BigInteger: " + occurrence.getMin());
-            }
-            
-            Optional<BigInteger> maxOccurrence = occurrence.getMax();
-            
-            if(maxOccurrence.isPresent()) {
-                try {
-                    descriptionType.setMaxOccurs(Integer.parseInt(""+maxOccurrence.get()));
-                } catch (Exception e) {
-                    log.trace("Could not parse BigInteger: " + maxOccurrence.get());
-                }
-            }
-            
-            if(processInputDescription.isComplex()) {
-                ComplexInputDescription complexInputDescription = processInputDescription.asComplex();
-                ComplexDataType complexInputType = new ComplexDataType();
-                
-                BigInteger maximumMegabytes = null;
-                
-                if(complexInputDescription.getMaximumMegabytes().isPresent()) {
-                    maximumMegabytes = complexInputDescription.getMaximumMegabytes().get();
-                }
-                
-                complexInputType.setFormats(createFormats(complexInputDescription.getDefaultFormat(), complexInputDescription.getSupportedFormats(), maximumMegabytes));
-                
-                descriptionType.setInput(complexInputType);
-                
-            } else if(processInputDescription.isLiteral()) {
-                LiteralDataType literalInput = new LiteralDataType();
-                
-                LiteralInputDescription literalInputDescription = processInputDescription.asLiteral();
-                
-                List<LiteralDataDomain> literalDataDomains = new ArrayList<>();
-                
-                literalDataDomains.add(serializeLiteralDataDomain(literalInputDescription.getDefaultLiteralDataDomain()));
-                
-                for(org.n52.shetland.ogc.wps.description.LiteralDataDomain literalDataDomain : literalInputDescription.getSupportedLiteralDataDomains()) {
-                    literalDataDomains.add(serializeLiteralDataDomain(literalDataDomain));
-                }
-                
-                literalInput.setLiteralDataDomains(literalDataDomains);
-                
-                descriptionType.setInput(literalInput);
-                
-            } else if(processInputDescription.isBoundingBox()) {
-                BoundingBoxDataType boundingBoxInput = new BoundingBoxDataType();
-                
-                BoundingBoxInputDescription boundingBoxDescription = processInputDescription.asBoundingBox();
-                
-                OwsCRS defaultCRS = boundingBoxDescription.getDefaultCRS();
-                
-                Set<OwsCRS> supportedCRS = boundingBoxDescription.getSupportedCRS();
-                
-                boundingBoxInput.setSupportedCRS(createSupportedCR(defaultCRS, supportedCRS));
-                
-                descriptionType.setInput(boundingBoxInput);
-            }
-            
-            descriptionType.setId(processInputDescription.getId().getValue());
-            
-            try {
-                descriptionType.setDescription(processInputDescription.getAbstract().get().getValue());
-            } catch (Exception e) {
-                log.trace("Abstract not present.");
-            }
-            
-            try {
-                descriptionType.setTitle(processInputDescription.getTitle().getValue());
-            } catch (Exception e) {
-                log.trace("Title not present.");
-            }
-            //TODO keywords
-            
-            inputs.add(descriptionType);
+    private TransmissionMode createDataTransmissionMode(DataTransmissionMode outputTransmissionMode) {
+        switch (outputTransmissionMode) {
+            case VALUE:
+                return TransmissionMode.VALUE;
+            case REFERENCE:
+                return TransmissionMode.REFERENCE;
+            default:
+                throw new IllegalArgumentException("unsupported data transmission mode" + outputTransmissionMode);
         }
-        
-        return inputs;
     }
 
-    private List<SupportedCRS> createSupportedCR(OwsCRS defaultCRS,
-            Set<OwsCRS> supportedCRS) {
-        
-        List<SupportedCRS> serializedSupportedCRS = new ArrayList<>();
-        
-        SupportedCRS defaultSupportedCRS = new SupportedCRS();
-        
-        defaultSupportedCRS.setDefault(true);
-        
-        defaultSupportedCRS.setCrs(defaultCRS.getValue().toString());
-        
-        serializedSupportedCRS.add(defaultSupportedCRS);
-        
-        for (OwsCRS owsCRS : supportedCRS) {
-            SupportedCRS supportedSupportedCRS = new SupportedCRS();
-            
-            supportedSupportedCRS.setDefault(false);
-            
-            supportedSupportedCRS.setCrs(owsCRS.getValue().toString()); 
-            
-            serializedSupportedCRS.add(supportedSupportedCRS);     
+    private List<JobControlOptions> createJobControlOptions(org.n52.shetland.ogc.wps.ProcessOffering processOffering) {
+        return processOffering.getJobControlOptions().stream()
+                .map(this::createJobControlOption).filter(Objects::nonNull).collect(toList());
+    }
+
+    private JobControlOptions createJobControlOption(JobControlOption jobControlOption) {
+        if (jobControlOption.equals(JobControlOption.async())) {
+            return JobControlOptions.ASYNC_EXECUTE;
+        } else if (jobControlOption.equals(JobControlOption.sync())) {
+            return JobControlOptions.SYNC_EXECUTE;
+        } else {
+            return null;
         }
-        
+    }
+
+    private <T extends DescriptionType> T createDescription(Description description, Supplier<T> factory) {
+        T descriptionType = factory.get();
+        descriptionType.setId(description.getId().getValue());
+        descriptionType.setTitle(description.getTitle().getValue());
+        List<String> keywords = description.getKeywords().stream()
+                .map(OwsKeyword::getKeyword).map(OwsLanguageString::getValue)
+                .collect(toList());
+        descriptionType.setKeywords(keywords);
+        description.getAbstract().map(OwsLanguageString::getValue).ifPresent(descriptionType::setDescription);
+        description.getAbstract().map(OwsLanguageString::getValue).ifPresent(descriptionType::setDescription);
+        descriptionType.setMetadata(description.getMetadata().stream().map(this::createMetadata).collect(toList()));
+        return descriptionType;
+    }
+
+    private Metadata createMetadata(OwsMetadata x) {
+        Metadata metadata = new Metadata();
+        x.getRole().map(URI::toString).ifPresent(metadata::setRole);
+        x.getHref().map(URI::toString).ifPresent(metadata::setHref);
+        return metadata;
+    }
+
+    private List<OutputDescription> createOutputDescriptions(Collection<? extends ProcessOutputDescription> descriptions) {
+        return descriptions.stream().map(this::createProcessOutputDescription).collect(toList());
+    }
+
+    private OutputDescription createProcessOutputDescription(ProcessOutputDescription processOutputDescription) {
+        OutputDescription outputDescription = createDescription(processOutputDescription, OutputDescription::new);
+        if (processOutputDescription.isComplex()) {
+            outputDescription.setOutput(createComplexOutput(processOutputDescription.asComplex()));
+        } else if (processOutputDescription.isLiteral()) {
+            outputDescription.setOutput(createLiteralOutput(processOutputDescription.asLiteral()));
+        } else if (processOutputDescription.isBoundingBox()) {
+            outputDescription.setOutput(createBoundingBoxOutput(processOutputDescription.asBoundingBox()));
+        }
+        return outputDescription;
+    }
+
+    private BoundingBoxDataType createBoundingBoxOutput(BoundingBoxOutputDescription description) {
+        return new BoundingBoxDataType().supportedCRS(createSupportedCRS(description));
+    }
+
+    private LiteralDataType createLiteralOutput(LiteralOutputDescription description) {
+        return new LiteralDataType().literalDataDomains(createLiteralDataDomains(description));
+    }
+
+    private ComplexDataType createComplexOutput(ComplexOutputDescription description) {
+        return new ComplexDataType().formats(createFormats(description));
+    }
+
+    private List<LiteralDataDomain> createLiteralDataDomains(LiteralDescription description) {
+        return Stream.concat(Stream.of(description.getDefaultLiteralDataDomain()),
+                description.getSupportedLiteralDataDomains().stream())
+                .map(this::createLiteralDataDomain).collect(toList());
+    }
+
+
+    private List<InputDescription> createInputDescriptions(Collection<? extends ProcessInputDescription> descriptions) {
+        return descriptions.stream().map(this::createInputDescription).collect(toList());
+    }
+
+    private InputDescription createInputDescription(ProcessInputDescription processInputDescription) {
+        InputDescription inputDescription = createDescription(processInputDescription, InputDescription::new);
+        inputDescription.setMinOccurs(processInputDescription.getOccurence().getMin());
+        processInputDescription.getOccurence().getMax().ifPresent(inputDescription::setMaxOccurs);
+        if (processInputDescription.isComplex()) {
+            inputDescription.setInput(createComplexInput(processInputDescription.asComplex()));
+        } else if (processInputDescription.isLiteral()) {
+            inputDescription.setInput(createLiteralInput(processInputDescription.asLiteral()));
+        } else if (processInputDescription.isBoundingBox()) {
+            inputDescription.setInput(createBoundingBoxInput(processInputDescription.asBoundingBox()));
+        } else if (processInputDescription.isGroup()) {
+            throw new IllegalArgumentException("group inputs are not supported");
+        }
+        return inputDescription;
+    }
+
+    private BoundingBoxDataType createBoundingBoxInput(BoundingBoxInputDescription description) {
+        return new BoundingBoxDataType().supportedCRS(createSupportedCRS(description));
+    }
+
+    private LiteralDataType createLiteralInput(LiteralInputDescription description) {
+        return new LiteralDataType().literalDataDomains(createLiteralDataDomains(description));
+    }
+
+    private ComplexDataType createComplexInput(ComplexInputDescription description) {
+        return new ComplexDataType().formats(createFormats(description));
+    }
+
+    private List<SupportedCRS> createSupportedCRS(BoundingBoxDescription description) {
+        List<SupportedCRS> serializedSupportedCRS = Stream.concat(Stream.of(description.getDefaultCRS()), description.getSupportedCRS().stream())
+                .map(OwsCRS::getValue)
+                .map(URI::toString)
+                .map(x -> new SupportedCRS().crs(x))
+                .collect(Collectors.toList());
+        serializedSupportedCRS.get(0).setDefault(true);
         return serializedSupportedCRS;
     }
 
-    private LiteralDataDomain serializeLiteralDataDomain(
-            org.n52.shetland.ogc.wps.description.LiteralDataDomain defaultLiteralDataDomain) {
-
-        LiteralDataDomain domain = new LiteralDataDomain();
-
-        try {
-            
-            LiteralDataDomainDataType dataType = new LiteralDataDomainDataType();
-            
-            dataType.setName(defaultLiteralDataDomain.getDataType().get().getValue().get());
-            
-            domain.setDataType(dataType);
-        } catch (Exception e) {
-            log.info("No data type present.");
-        }
-
-        Optional<OwsValue> defaultValue = defaultLiteralDataDomain.getDefaultValue();
-
-        if (defaultValue.isPresent() && !defaultValue.get().getValue().isEmpty()) {
-            domain.setDefaultValue(defaultValue.get().getValue());// TODO range possible here?
-        }
-
-        domain.setValueDefinition(serializeValueDefinition(defaultLiteralDataDomain));
-
-        return domain;
+    private LiteralDataDomain createLiteralDataDomain(org.n52.shetland.ogc.wps.description.LiteralDataDomain defaultLiteralDataDomain) {
+        LiteralDataDomain literalDataDomain = new LiteralDataDomain();
+        literalDataDomain.setDataType(createLiteralDataDomainDataType(defaultLiteralDataDomain));
+        literalDataDomain.setValueDefinition(createPossibleValues(defaultLiteralDataDomain.getPossibleValues()));
+        defaultLiteralDataDomain.getDefaultValue().map(OwsValue::getValue).ifPresent(literalDataDomain::setDefaultValue);
+        return literalDataDomain;
     }
 
-    private Object serializeValueDefinition(org.n52.shetland.ogc.wps.description.LiteralDataDomain defaultLiteralDataDomain) {
-        
-        OwsPossibleValues possibleValues = defaultLiteralDataDomain.getPossibleValues();
-        
-        if(possibleValues.isAnyValue()) {
+    private LiteralDataDomainDataType createLiteralDataDomainDataType(org.n52.shetland.ogc.wps.description.LiteralDataDomain literalDataDomain) {
+        LiteralDataDomainDataType literalDataDomainDataType = new LiteralDataDomainDataType();
+        Optional<OwsDomainMetadata> dataType = literalDataDomain.getDataType();
+        dataType.flatMap(OwsDomainMetadata::getValue).ifPresent(literalDataDomainDataType::setName);
+        dataType.flatMap(OwsDomainMetadata::getReference).map(URI::toString).ifPresent(literalDataDomainDataType::setReference);
+        return literalDataDomainDataType;
+    }
+
+    private Object createPossibleValues(OwsPossibleValues possibleValues) {
+        if (possibleValues.isAnyValue()) {
             return new AnyValue().anyValue(true);
-        } else if(possibleValues.isAllowedValues()) {
-            
-          AllowedValues allowedValues = new AllowedValues();
-          
-            Iterator<OwsValueRestriction> valueIterator = possibleValues.asAllowedValues().iterator();
-            
-            while (valueIterator.hasNext()) {
-                
-                OwsValueRestriction owsValueRestriction = (OwsValueRestriction) valueIterator.next();
-                
-                if(owsValueRestriction.isValue()) {
-                    allowedValues.add(owsValueRestriction.asValue().getValue());
-                } else if(owsValueRestriction.isRange()) {
-                    Range serializedRange = new Range();
-                    OwsRange range = owsValueRestriction.asRange();
-                    
-                    Optional<OwsValue> lowerBound = range.getLowerBound();
-                    if(lowerBound.isPresent()) {
-                        serializedRange.setMinimumValue(lowerBound.get().getValue());
-                    }
-                    
-                    Optional<OwsValue> upperBound = range.getLowerBound();
-                    if(upperBound.isPresent()) {
-                        serializedRange.setMaximumValue(upperBound.get().getValue());
-                    }
-                    
-                    Optional<OwsValue> spacing = range.getSpacing();
-                    if(spacing.isPresent()) {
-                        serializedRange.setSpacing(spacing.get().getValue());
-                    }
-                    
-                    createBoundType(range, serializedRange);
-                    
-                    allowedValues.add(owsValueRestriction.asValue().getValue());
+        } else if (possibleValues.isAllowedValues()) {
+            return createAllowedValues(possibleValues.asAllowedValues());
+        } else if (possibleValues.isValuesReference()) {
+            return createValuesReference(possibleValues.asValuesReference());
+        } else {
+            throw new IllegalArgumentException("unsupported possible values: " + possibleValues);
+        }
+    }
+
+    private Object createValuesReference(OwsValuesReference valuesReference) {
+        return new ValueReference().valueReference(valuesReference.getReference().toString());
+    }
+
+    private AllowedValues createAllowedValues(OwsAllowedValues allowedValues) {
+        return allowedValues.stream().map(this::createAllowedValue).collect(toCollection(AllowedValues::new));
+    }
+
+    private Object createAllowedValue(OwsValueRestriction allowedValue) {
+        if (allowedValue.isValue()) {
+            return allowedValue.asValue().getValue();
+        } else if (allowedValue.isRange()) {
+            return createRange(allowedValue.asRange());
+        } else {
+            throw new IllegalArgumentException("unsupported allowed value " + allowedValue);
+        }
+    }
+
+    private Range createRange(OwsRange owsRange) {
+        Range range = new Range();
+        owsRange.getLowerBound().map(OwsValue::getValue).ifPresent(range::setMinimumValue);
+        owsRange.getUpperBound().map(OwsValue::getValue).ifPresent(range::setMaximumValue);
+        owsRange.getSpacing().map(OwsValue::getValue).ifPresent(range::setSpacing);
+        range.setRangeClosure(getRangeClosure(owsRange));
+        return range;
+    }
+
+    private RangeClosureEnum getRangeClosure(OwsRange range) {
+        switch (range.getLowerBoundType()) {
+            case CLOSED:
+                switch (range.getUpperBoundType()) {
+                    case CLOSED:
+                        return RangeClosureEnum.CLOSED;
+                    case OPEN:
+                        return RangeClosureEnum.CLOSED_OPEN;
+                    default:
+                        throw new IllegalArgumentException("unsupported bound type: " + range.getUpperBoundType());
                 }
-            }
-            
-            return allowedValues;
-        }
-        
-        throw new IllegalArgumentException("No value definition present." + defaultLiteralDataDomain);
-    }
-
-    private void createBoundType(OwsRange range,
-            Range serializedRange) {
-        
-        BoundType lowerBoundType = range.getLowerBoundType();
-        BoundType upperBoundType = range.getUpperBoundType();
-        
-        RangeClosureEnum rangeClosureEnum = null;
-        
-        switch (lowerBoundType) {
-        case CLOSED:
-            switch (upperBoundType) {
-            case CLOSED:
-                rangeClosureEnum = RangeClosureEnum.CLOSED;
-                break;
             case OPEN:
-                rangeClosureEnum = RangeClosureEnum.CLOSED_OPEN;
-                break;
+                switch (range.getUpperBoundType()) {
+                    case CLOSED:
+                        return RangeClosureEnum.OPEN_CLOSED;
+                    case OPEN:
+                        return RangeClosureEnum.OPEN;
+                    default:
+                        throw new IllegalArgumentException("unsupported bound type: " + range.getUpperBoundType());
+                }
             default:
-                break;
-            }
-            break;
-        case OPEN:
-            switch (upperBoundType) {
-            case CLOSED:
-                rangeClosureEnum = RangeClosureEnum.OPEN_CLOSED;
-                break;
-            case OPEN:
-                rangeClosureEnum = RangeClosureEnum.OPEN;
-                break;
-            default:
-                break;
-            }
-        default:
-            break;
-        }
-        if(rangeClosureEnum != null) {
-            serializedRange.setRangeClosure(rangeClosureEnum);
-        }
-        
-    }
-
-    private List<FormatDescription> createFormats(Format defaultFormat,
-            Set<Format> supportedFormats, BigInteger maximumMegabytes) {
-        
-        List<FormatDescription> formatDescriptions = new ArrayList<>();
-        
-        FormatDescription defaultFormatDescription = new FormatDescription();
-        
-        defaultFormatDescription.setDefault(true);
-        
-        addFormat(defaultFormatDescription, defaultFormat, maximumMegabytes);
-        
-        formatDescriptions.add(defaultFormatDescription);
-        
-        for (Format format : supportedFormats) {
-            
-            FormatDescription supportedFormatDescription = new FormatDescription();
-            
-            addFormat(supportedFormatDescription, format, maximumMegabytes);
-            
-            formatDescriptions.add(supportedFormatDescription);
-            
-        }
-        
-        return formatDescriptions;
-    }
-
-    private void addFormat(FormatDescription formatDescription,
-            Format format, BigInteger maximumMegabytes) {
-        
-        try {
-            formatDescription.setMimeType(format.getMimeType().get());            
-        } catch (Exception e) {
-            log.error("MIME type not present.");
-        }
-        try {
-            formatDescription.setSchema(format.getSchema().get());            
-        } catch (Exception e) {
-            log.trace("Schema not present.");
-        }
-        try {
-            formatDescription.setEncoding(format.getEncoding().get());            
-        } catch (Exception e) {
-            log.trace("Encoding not present.");
-        }
-        if(maximumMegabytes != null) {
-            try {
-                formatDescription.setMaximumMegabytes(Integer.parseInt(""+maximumMegabytes));
-            } catch (Exception e) {
-                log.trace("Could not parse BigInteger: " + maximumMegabytes);
-            }
+                throw new IllegalArgumentException("unsupported bound type: " + range.getLowerBoundType());
         }
     }
 
-    public ProcessCollection serializeProcessOfferings(Set<org.n52.shetland.ogc.wps.ProcessOffering> offerings) {
-        ProcessCollection collection = new ProcessCollection();
-        
-      List<ProcessSummary> processes = new ArrayList<>();
-      
-      ProcessSummary process;
-      
-      for (org.n52.shetland.ogc.wps.ProcessOffering processOffering : offerings) {
-          process = new ProcessSummary();
-           
-          addProcessSummary(process, processOffering);
-          
-          Link processDescriptionLink = new Link();
-          
-          processDescriptionLink.setHref(serviceURL + process.getId());
-          
-          processDescriptionLink.setType("application/json");
-          
-          processDescriptionLink.setRel("canonical");
-          
-          processDescriptionLink.setTitle("Process description");
-          
-          process.setLinks(Collections.singletonList(processDescriptionLink));
-          
-          processes.add(process);
-          
-      }
-      
-      collection.setProcesses(processes);
-        
-        return collection;
+    private List<FormatDescription> createFormats(ComplexDescription description) {
+        List<FormatDescription> formats = Stream.concat(Stream.of(description.getDefaultFormat()), description.getSupportedFormats().stream())
+                .map(format -> createFormat(format, description.getMaximumMegabytes()))
+                .collect(toList());
+        formats.get(0).setDefault(true);
+        return formats;
     }
-    
+
+    private FormatDescription createFormat(Format format, Optional<BigInteger> maximumMegabytes) {
+        FormatDescription formatDescription = new FormatDescription();
+        format.getMimeType().ifPresent(formatDescription::setMimeType);
+        format.getSchema().ifPresent(formatDescription::setSchema);
+        format.getEncoding().ifPresent(formatDescription::setEncoding);
+        maximumMegabytes.ifPresent(formatDescription::setMaximumMegabytes);
+        return formatDescription;
+    }
+
+    public ProcessCollection createProcessCollection(Set<org.n52.shetland.ogc.wps.ProcessOffering> offerings) {
+        return new ProcessCollection().processes(offerings.stream().map(this::createProcessSummary).collect(toList()));
+    }
+
+    private ProcessSummary createProcessSummary(org.n52.shetland.ogc.wps.ProcessOffering processOffering) {
+        ProcessSummary process = createProcessSummary(processOffering, ProcessSummary::new);
+        process.links(Collections.singletonList(getProcessLink(process)));
+        return process;
+    }
+
+    private Link createExecuteLink(ProcessSummary process) {
+        Link executeEndpointLink = new Link();
+        executeEndpointLink.setHref(getJobsHref(process.getId()));
+        executeEndpointLink.setRel("canonical");
+        executeEndpointLink.setTitle("Execute endpoint");
+        return executeEndpointLink;
+    }
+
+    private Link getProcessLink(ProcessSummary process) {
+        Link link = new Link();
+        link.setHref(getProcessHref(process.getId()));
+        link.setType(APPLICATION_JSON);
+        link.setRel("canonical");
+        link.setTitle("Process description");
+        return link;
+    }
+
+
 }

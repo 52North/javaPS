@@ -21,6 +21,7 @@
  */
 package io.swagger.model;
 
+import java.math.BigInteger;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -38,12 +39,12 @@ import javax.validation.constraints.*;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-03-28T09:55:34.783Z[GMT]")
 public class FormatDescription extends Format  {
   @JsonProperty("maximumMegabytes")
-  private Integer maximumMegabytes = null;
+  private BigInteger maximumMegabytes = null;
 
   @JsonProperty("default")
   private Boolean _default = false;
 
-  public FormatDescription maximumMegabytes(Integer maximumMegabytes) {
+  public FormatDescription maximumMegabytes(BigInteger maximumMegabytes) {
     this.maximumMegabytes = maximumMegabytes;
     return this;
   }
@@ -54,11 +55,11 @@ public class FormatDescription extends Format  {
   **/
   @ApiModelProperty(value = "")
 
-  public Integer getMaximumMegabytes() {
+  public BigInteger getMaximumMegabytes() {
     return maximumMegabytes;
   }
 
-  public void setMaximumMegabytes(Integer maximumMegabytes) {
+  public void setMaximumMegabytes(BigInteger maximumMegabytes) {
     this.maximumMegabytes = maximumMegabytes;
   }
 

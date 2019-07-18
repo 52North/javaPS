@@ -21,15 +21,12 @@
  */
 package io.swagger.model;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.model.DataDescriptionType;
 import org.springframework.validation.annotation.Validated;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
+
+import java.math.BigInteger;
+import java.util.Objects;
 
 /**
  * InputDescription
@@ -41,10 +38,10 @@ public class InputDescription extends DataDescriptionType  {
   private Object input = null;
 
   @JsonProperty("minOccurs")
-  private Integer minOccurs = null;
+  private BigInteger minOccurs = null;
 
   @JsonProperty("maxOccurs")
-  private Integer maxOccurs = null;
+  private BigInteger maxOccurs = null;
 
   public InputDescription input(Object input) {
     this.input = input;
@@ -65,7 +62,7 @@ public class InputDescription extends DataDescriptionType  {
     this.input = input;
   }
 
-  public InputDescription minOccurs(Integer minOccurs) {
+  public InputDescription minOccurs(BigInteger minOccurs) {
     this.minOccurs = minOccurs;
     return this;
   }
@@ -76,15 +73,15 @@ public class InputDescription extends DataDescriptionType  {
   **/
   @ApiModelProperty(value = "")
 
-  public Integer getMinOccurs() {
+  public BigInteger getMinOccurs() {
     return minOccurs;
   }
 
-  public void setMinOccurs(Integer minOccurs) {
+  public void setMinOccurs(BigInteger minOccurs) {
     this.minOccurs = minOccurs;
   }
 
-  public InputDescription maxOccurs(Integer maxOccurs) {
+  public InputDescription maxOccurs(BigInteger maxOccurs) {
     this.maxOccurs = maxOccurs;
     return this;
   }
@@ -95,11 +92,11 @@ public class InputDescription extends DataDescriptionType  {
   **/
   @ApiModelProperty(value = "")
 
-  public Integer getMaxOccurs() {
+  public BigInteger getMaxOccurs() {
     return maxOccurs;
   }
 
-  public void setMaxOccurs(Integer maxOccurs) {
+  public void setMaxOccurs(BigInteger maxOccurs) {
     this.maxOccurs = maxOccurs;
   }
 

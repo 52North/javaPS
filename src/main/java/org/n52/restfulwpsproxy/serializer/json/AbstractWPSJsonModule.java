@@ -21,25 +21,24 @@
  */
 package org.n52.restfulwpsproxy.serializer.json;
 
-import java.io.IOException;
-import java.util.List;
-
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
+import java.io.IOException;
+import java.util.List;
+
 /**
- *
  * @author adewa
  */
 public abstract class AbstractWPSJsonModule extends SimpleModule {
 
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1294800523104618214L;
+     *
+     */
+    private static final long serialVersionUID = 1294800523104618214L;
 
-	protected String getFirstArrayElementAsStringIfExist(List<?> arrayList) {
+    protected String getFirstArrayElementAsStringIfExist(List<?> arrayList) {
         if (arrayList != null && arrayList.size() > 0) {
             return arrayList.get(0).toString();
         }
@@ -53,7 +52,7 @@ public abstract class AbstractWPSJsonModule extends SimpleModule {
         }
         jg.writeEndArray();
     }
-    
+
     protected static final void writeArrayOfStrings(String fieldName, String[] strings, JsonGenerator jg) throws IOException {
         jg.writeArrayFieldStart(fieldName);
         for (String s : strings) {
@@ -61,23 +60,23 @@ public abstract class AbstractWPSJsonModule extends SimpleModule {
         }
         jg.writeEndArray();
     }
-    
-    protected static final String toStringOrEmpty(Object object){
+
+    protected static final String toStringOrEmpty(Object object) {
         return object == null ? "" : object.toString();
     }
-    
-    protected static final String toStringOrNull(Object object){
+
+    protected static final String toStringOrNull(Object object) {
         return object == null ? null : object.toString();
     }
-    
-    protected static final void writeStringFieldIfNotNull(JsonGenerator jg, String field,  Object object) throws JsonGenerationException, IOException{
-        if(object != null){
+
+    protected static final void writeStringFieldIfNotNull(JsonGenerator jg, String field, Object object) throws JsonGenerationException, IOException {
+        if (object != null) {
             jg.writeStringField(field, object.toString());
         }
     }
-    
-    protected static final void writeObjectFieldIfNotNull(JsonGenerator jg, String field,  Object object) throws JsonGenerationException, IOException{
-        if(object != null){
+
+    protected static final void writeObjectFieldIfNotNull(JsonGenerator jg, String field, Object object) throws JsonGenerationException, IOException {
+        if (object != null) {
             jg.writeObjectField(field, object);
         }
     }
