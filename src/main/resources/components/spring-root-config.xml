@@ -15,6 +15,8 @@
     <bean class="org.n52.wps.javaps.rest.serializer.StatusInfoSerializer"/>
     <bean class="org.n52.wps.javaps.rest.serializer.ExceptionSerializer"/>
     <bean class="org.n52.wps.javaps.rest.serializer.ResultSerializer"/>
+    <bean class="org.n52.wps.javaps.rest.deserializer.ExecuteDeserializer"/>
+
     <bean id="jsonBoundingBoxInputOutputHandler" class="org.n52.javaps.io.bbox.json.JSONBoundingBoxInputOutputHandler"/>
 
     <bean id="viewResolver"
