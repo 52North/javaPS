@@ -34,6 +34,7 @@ import org.n52.shetland.ogc.wps.OutputDefinition;
 import org.n52.shetland.ogc.wps.data.ProcessData;
 import org.n52.shetland.ogc.wps.data.ReferenceProcessData;
 import org.n52.shetland.ogc.wps.data.impl.StringValueProcessData;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -52,6 +53,9 @@ public class ExecuteDeserializer {
     private static final String ENCODING_KEY = "encoding";
     private static final String SCHEMA_KEY = "schema";
     private static final Format FORMAT_TEXT_PLAIN = new Format("text/plain");
+
+    @Autowired
+    private  ObjectMapper objectMapper;
 
     public List<OutputDefinition> readOutputs(List<Output> outputs) {
         return outputs.stream().map(output -> {
@@ -120,16 +124,14 @@ public class ExecuteDeserializer {
             if (value instanceof Map<?, ?>) {
                 // complex data
                 Map<?, ?> complexValueMap = (Map<?, ?>) value;
-
                 if (complexValueMap.containsKey(INLINE_VALUE_KEY)) {
-
-                    Format format = new Format("text/plain");
-
+                    Format format = FORMAT_TEXT_PLAIN;
                     if (map.containsKey(FORMAT_KEY)) {
                         format = getFormat(map.get(FORMAT_KEY));
                     }
 
-                    return new StringValueProcessData(id, format, complexValueMap.get(INLINE_VALUE_KEY).toString());
+                    String stringValue = objectMapper.writeValueAsString(complexValueMap.get(INLINE_VALUE_KEY));
+                    return new StringValueProcessData(id, format, stringValue);
 
                 } else if (complexValueMap.containsKey(HREF_KEY)) {
 
@@ -147,7 +149,8 @@ public class ExecuteDeserializer {
                 return new StringValueProcessData(id, FORMAT_TEXT_PLAIN, (String) value);
             }
         } else if (map.containsKey(JSONBoundingBoxInputOutputHandler.BBOX)) {
-            return new StringValueProcessData(id, JSONBoundingBoxInputOutputHandler.FORMAT_APPLICATION_JSON, new ObjectMapper().writeValueAsString(map));
+            return new StringValueProcessData(id, JSONBoundingBoxInputOutputHandler.FORMAT_APPLICATION_JSON,
+                                              new ObjectMapper().writeValueAsString(map));
         }
 
         return null;
