@@ -33,114 +33,115 @@ import java.util.Objects;
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-03-28T09:55:34.783Z[GMT]")
-public class InputDescription extends DataDescriptionType  {
-  @JsonProperty("input")
-  private Object input = null;
+public class InputDescription extends DataDescriptionType {
+    @JsonProperty("input")
+    private Object input = null;
 
-  @JsonProperty("minOccurs")
-  private BigInteger minOccurs = null;
+    @JsonProperty("minOccurs")
+    private BigInteger minOccurs = null;
 
-  @JsonProperty("maxOccurs")
-  private BigInteger maxOccurs = null;
+    @JsonProperty("maxOccurs")
+    private BigInteger maxOccurs = null;
 
-  public InputDescription input(Object input) {
-    this.input = input;
-    return this;
-  }
-
-  /**
-   * Get input
-   * @return input
-  **/
-  @ApiModelProperty(value = "")
-
-  public Object getInput() {
-    return input;
-  }
-
-  public void setInput(Object input) {
-    this.input = input;
-  }
-
-  public InputDescription minOccurs(BigInteger minOccurs) {
-    this.minOccurs = minOccurs;
-    return this;
-  }
-
-  /**
-   * Get minOccurs
-   * @return minOccurs
-  **/
-  @ApiModelProperty(value = "")
-
-  public BigInteger getMinOccurs() {
-    return minOccurs;
-  }
-
-  public void setMinOccurs(BigInteger minOccurs) {
-    this.minOccurs = minOccurs;
-  }
-
-  public InputDescription maxOccurs(BigInteger maxOccurs) {
-    this.maxOccurs = maxOccurs;
-    return this;
-  }
-
-  /**
-   * Get maxOccurs
-   * @return maxOccurs
-  **/
-  @ApiModelProperty(value = "")
-
-  public BigInteger getMaxOccurs() {
-    return maxOccurs;
-  }
-
-  public void setMaxOccurs(BigInteger maxOccurs) {
-    this.maxOccurs = maxOccurs;
-  }
-
-
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
+    public InputDescription input(Object input) {
+        this.input = input;
+        return this;
     }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
+
+    /**
+     * Get input
+     *
+     * @return input
+     **/
+    @ApiModelProperty(value = "")
+
+    public Object getInput() {
+        return input;
     }
-    InputDescription inputDescription = (InputDescription) o;
-    return Objects.equals(this.input, inputDescription.input) &&
-        Objects.equals(this.minOccurs, inputDescription.minOccurs) &&
-        Objects.equals(this.maxOccurs, inputDescription.maxOccurs) &&
-        super.equals(o);
-  }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(input, minOccurs, maxOccurs, super.hashCode());
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class InputDescription {\n");
-    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
-    sb.append("    input: ").append(toIndentedString(input)).append("\n");
-    sb.append("    minOccurs: ").append(toIndentedString(minOccurs)).append("\n");
-    sb.append("    maxOccurs: ").append(toIndentedString(maxOccurs)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
+    public void setInput(Object input) {
+        this.input = input;
     }
-    return o.toString().replace("\n", "\n    ");
-  }
+
+    public InputDescription minOccurs(BigInteger minOccurs) {
+        this.minOccurs = minOccurs;
+        return this;
+    }
+
+    /**
+     * Get minOccurs
+     *
+     * @return minOccurs
+     **/
+    @ApiModelProperty(value = "")
+
+    public BigInteger getMinOccurs() {
+        return minOccurs;
+    }
+
+    public void setMinOccurs(BigInteger minOccurs) {
+        this.minOccurs = minOccurs;
+    }
+
+    public InputDescription maxOccurs(BigInteger maxOccurs) {
+        this.maxOccurs = maxOccurs;
+        return this;
+    }
+
+    /**
+     * Get maxOccurs
+     *
+     * @return maxOccurs
+     **/
+    @ApiModelProperty(value = "")
+
+    public BigInteger getMaxOccurs() {
+        return maxOccurs;
+    }
+
+    public void setMaxOccurs(BigInteger maxOccurs) {
+        this.maxOccurs = maxOccurs;
+    }
+
+    @Override
+    public boolean equals(java.lang.Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        InputDescription inputDescription = (InputDescription) o;
+        return Objects.equals(this.input, inputDescription.input) &&
+                Objects.equals(this.minOccurs, inputDescription.minOccurs) &&
+                Objects.equals(this.maxOccurs, inputDescription.maxOccurs) &&
+                super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(input, minOccurs, maxOccurs, super.hashCode());
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("class InputDescription {\n");
+        sb.append("    ").append(toIndentedString(super.toString())).append("\n");
+        sb.append("    input: ").append(toIndentedString(input)).append("\n");
+        sb.append("    minOccurs: ").append(toIndentedString(minOccurs)).append("\n");
+        sb.append("    maxOccurs: ").append(toIndentedString(maxOccurs)).append("\n");
+        sb.append("}");
+        return sb.toString();
+    }
+
+    /**
+     * Convert the given object to string with each line indented by 4 spaces (except the first line).
+     */
+    private String toIndentedString(java.lang.Object o) {
+        if (o == null) {
+            return "null";
+        }
+        return o.toString().replace("\n", "\n    ");
+    }
 }

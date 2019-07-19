@@ -21,19 +21,13 @@
  */
 package io.swagger.model;
 
-import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
-
-import io.swagger.annotations.ApiModel;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.model.InlineValue;
-import io.swagger.model.ReferenceValue;
 import org.springframework.validation.annotation.Validated;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
+
+import java.util.Objects;
 
 /**
  * ValueType
@@ -41,89 +35,89 @@ import javax.validation.constraints.*;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-03-28T09:55:34.783Z[GMT]")
 @JsonInclude(Include.NON_NULL)
-public class ValueType   {
-  @JsonProperty("inlineValue")
-  private Object inlineValue = null;
+public class ValueType {
+    @JsonProperty("inlineValue")
+    private Object inlineValue = null;
 
-  @JsonProperty("href")
-  private String href = null;
+    @JsonProperty("href")
+    private String href = null;
 
-  public ValueType inlineValue(Object inlineValue) {
-    this.inlineValue = inlineValue;
-    return this;
-  }
-
-  /**
-   * Get inlineValue
-   * @return inlineValue
-  **/
-  @ApiModelProperty(value = "")
-
-  public Object getInlineValue() {
-    return inlineValue;
-  }
-
-  public void setInlineValue(Object inlineValue) {
-    this.inlineValue = inlineValue;
-  }
-
-  public ValueType href(String href) {
-    this.href = href;
-    return this;
-  }
-
-  /**
-   * Get href
-   * @return href
-  **/
-  @ApiModelProperty(value = "")
-
-  public String getHref() {
-    return href;
-  }
-
-  public void setHref(String href) {
-    this.href = href;
-  }
-
-
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
+    public ValueType inlineValue(Object inlineValue) {
+        this.inlineValue = inlineValue;
+        return this;
     }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
+
+    /**
+     * Get inlineValue
+     *
+     * @return inlineValue
+     **/
+    @ApiModelProperty(value = "")
+
+    public Object getInlineValue() {
+        return inlineValue;
     }
-    ValueType valueType = (ValueType) o;
-    return Objects.equals(this.inlineValue, valueType.inlineValue) &&
-        Objects.equals(this.href, valueType.href);
-  }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(inlineValue, href);
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class ValueType {\n");
-    
-    sb.append("    inlineValue: ").append(toIndentedString(inlineValue)).append("\n");
-    sb.append("    href: ").append(toIndentedString(href)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
+    public void setInlineValue(Object inlineValue) {
+        this.inlineValue = inlineValue;
     }
-    return o.toString().replace("\n", "\n    ");
-  }
+
+    public ValueType href(String href) {
+        this.href = href;
+        return this;
+    }
+
+    /**
+     * Get href
+     *
+     * @return href
+     **/
+    @ApiModelProperty(value = "")
+
+    public String getHref() {
+        return href;
+    }
+
+    public void setHref(String href) {
+        this.href = href;
+    }
+
+    @Override
+    public boolean equals(java.lang.Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ValueType valueType = (ValueType) o;
+        return Objects.equals(this.inlineValue, valueType.inlineValue) &&
+                Objects.equals(this.href, valueType.href);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(inlineValue, href);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("class ValueType {\n");
+
+        sb.append("    inlineValue: ").append(toIndentedString(inlineValue)).append("\n");
+        sb.append("    href: ").append(toIndentedString(href)).append("\n");
+        sb.append("}");
+        return sb.toString();
+    }
+
+    /**
+     * Convert the given object to string with each line indented by 4 spaces (except the first line).
+     */
+    private String toIndentedString(java.lang.Object o) {
+        if (o == null) {
+            return "null";
+        }
+        return o.toString().replace("\n", "\n    ");
+    }
 }

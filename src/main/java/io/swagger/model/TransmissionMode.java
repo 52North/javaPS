@@ -21,40 +21,35 @@
  */
 package io.swagger.model;
 
-import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonValue;
-import org.springframework.validation.annotation.Validated;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
  * Gets or Sets transmissionMode
  */
 public enum TransmissionMode {
-  VALUE("value"),
+    VALUE("value"),
     REFERENCE("reference");
 
-  private String value;
+    private String value;
 
-  TransmissionMode(String value) {
-    this.value = value;
-  }
-
-  @Override
-  @JsonValue
-  public String toString() {
-    return String.valueOf(value);
-  }
-
-  @JsonCreator
-  public static TransmissionMode fromValue(String text) {
-    for (TransmissionMode b : TransmissionMode.values()) {
-      if (String.valueOf(b.value).equals(text)) {
-        return b;
-      }
+    TransmissionMode(String value) {
+        this.value = value;
     }
-    return null;
-  }
+
+    @Override
+    @JsonValue
+    public String toString() {
+        return String.valueOf(value);
+    }
+
+    @JsonCreator
+    public static TransmissionMode fromValue(String text) {
+        for (TransmissionMode b : TransmissionMode.values()) {
+            if (String.valueOf(b.value).equals(text)) {
+                return b;
+            }
+        }
+        return null;
+    }
 }

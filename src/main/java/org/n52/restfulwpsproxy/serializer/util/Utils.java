@@ -26,33 +26,31 @@ import java.util.List;
 
 /**
  * Utility class.
- * 
- * @author bpr
  *
+ * @author bpr
  */
 public class Utils {
 
-    
     /**
      * Creates a String from an Object List. Concatenates the objects with an empty string as separator.
-     * 
+     *
      * @param objectList The List containing the Objects.
      * @return Concatenated Objects as String with an empty string as separator.
      */
-    public static String getStringFromObjectList(List<?> objectList){
-        
+    public static String getStringFromObjectList(List<?> objectList) {
+
         String result = "";
-        
+
         Iterator<?> objectIterator = objectList.iterator();
-        
+
         while (objectIterator.hasNext()) {
             result = result.concat(objectIterator.next().toString());
-            if(objectIterator.hasNext()){
+            if (objectIterator.hasNext()) {
                 result = result.concat(" ");
-            }            
+            }
         }
-        
-        return result;        
+
+        return result;
     }
 
 }

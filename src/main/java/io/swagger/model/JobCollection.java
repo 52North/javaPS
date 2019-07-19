@@ -21,88 +21,86 @@
  */
 package io.swagger.model;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.validation.annotation.Validated;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.validation.annotation.Validated;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
+import java.util.Objects;
 
 /**
  * JobCollection
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-03-28T09:55:34.783Z[GMT]")
-public class JobCollection   {
-  @JsonProperty("jobs")
-  @Valid
-  private List<String> jobs = new ArrayList<String>();
+public class JobCollection {
+    @JsonProperty("jobs")
+    @Valid
+    private List<String> jobs = new ArrayList<String>();
 
-  public JobCollection jobs(List<String> jobs) {
-    this.jobs = jobs;
-    return this;
-  }
-
-  public JobCollection addJobsItem(String jobsItem) {
-    this.jobs.add(jobsItem);
-    return this;
-  }
-
-  /**
-   * Get jobs
-   * @return jobs
-  **/
-  @ApiModelProperty(required = true, value = "")
-  @NotNull
-
-  public List<String> getJobs() {
-    return jobs;
-  }
-
-  public void setJobs(List<String> jobs) {
-    this.jobs = jobs;
-  }
-
-
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
+    public JobCollection jobs(List<String> jobs) {
+        this.jobs = jobs;
+        return this;
     }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
+
+    public JobCollection addJobsItem(String jobsItem) {
+        this.jobs.add(jobsItem);
+        return this;
     }
-    JobCollection jobCollection = (JobCollection) o;
-    return Objects.equals(this.jobs, jobCollection.jobs);
-  }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(jobs);
-  }
+    /**
+     * Get jobs
+     *
+     * @return jobs
+     **/
+    @ApiModelProperty(required = true, value = "")
+    @NotNull
 
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class JobCollection {\n");
-    
-    sb.append("    jobs: ").append(toIndentedString(jobs)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
+    public List<String> getJobs() {
+        return jobs;
     }
-    return o.toString().replace("\n", "\n    ");
-  }
+
+    public void setJobs(List<String> jobs) {
+        this.jobs = jobs;
+    }
+
+    @Override
+    public boolean equals(java.lang.Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        JobCollection jobCollection = (JobCollection) o;
+        return Objects.equals(this.jobs, jobCollection.jobs);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(jobs);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("class JobCollection {\n");
+
+        sb.append("    jobs: ").append(toIndentedString(jobs)).append("\n");
+        sb.append("}");
+        return sb.toString();
+    }
+
+    /**
+     * Convert the given object to string with each line indented by 4 spaces (except the first line).
+     */
+    private String toIndentedString(java.lang.Object o) {
+        if (o == null) {
+            return "null";
+        }
+        return o.toString().replace("\n", "\n    ");
+    }
 }

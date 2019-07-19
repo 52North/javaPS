@@ -21,20 +21,65 @@
  */
 package org.n52.wps.javaps.rest.serializer;
 
+import io.swagger.model.AllowedValues;
+import io.swagger.model.AnyValue;
+import io.swagger.model.BoundingBoxDataType;
+import io.swagger.model.ComplexDataType;
+import io.swagger.model.DescriptionType;
+import io.swagger.model.FormatDescription;
+import io.swagger.model.InputDescription;
+import io.swagger.model.JobControlOptions;
+import io.swagger.model.Link;
 import io.swagger.model.LiteralDataDomain;
+import io.swagger.model.LiteralDataDomainDataType;
+import io.swagger.model.LiteralDataType;
+import io.swagger.model.Metadata;
+import io.swagger.model.OutputDescription;
 import io.swagger.model.Process;
-import io.swagger.model.*;
+import io.swagger.model.ProcessCollection;
+import io.swagger.model.ProcessOffering;
+import io.swagger.model.ProcessSummary;
+import io.swagger.model.Range;
 import io.swagger.model.Range.RangeClosureEnum;
+import io.swagger.model.SupportedCRS;
+import io.swagger.model.TransmissionMode;
+import io.swagger.model.ValueReference;
 import org.n52.faroe.annotation.Configurable;
-import org.n52.shetland.ogc.ows.*;
+import org.n52.shetland.ogc.ows.OwsAllowedValues;
+import org.n52.shetland.ogc.ows.OwsCRS;
+import org.n52.shetland.ogc.ows.OwsDomainMetadata;
+import org.n52.shetland.ogc.ows.OwsKeyword;
+import org.n52.shetland.ogc.ows.OwsLanguageString;
+import org.n52.shetland.ogc.ows.OwsMetadata;
+import org.n52.shetland.ogc.ows.OwsPossibleValues;
+import org.n52.shetland.ogc.ows.OwsRange;
+import org.n52.shetland.ogc.ows.OwsValue;
+import org.n52.shetland.ogc.ows.OwsValueRestriction;
+import org.n52.shetland.ogc.ows.OwsValuesReference;
 import org.n52.shetland.ogc.wps.DataTransmissionMode;
 import org.n52.shetland.ogc.wps.Format;
 import org.n52.shetland.ogc.wps.JobControlOption;
-import org.n52.shetland.ogc.wps.description.*;
+import org.n52.shetland.ogc.wps.description.BoundingBoxDescription;
+import org.n52.shetland.ogc.wps.description.BoundingBoxInputDescription;
+import org.n52.shetland.ogc.wps.description.BoundingBoxOutputDescription;
+import org.n52.shetland.ogc.wps.description.ComplexDescription;
+import org.n52.shetland.ogc.wps.description.ComplexInputDescription;
+import org.n52.shetland.ogc.wps.description.ComplexOutputDescription;
+import org.n52.shetland.ogc.wps.description.Description;
+import org.n52.shetland.ogc.wps.description.LiteralDescription;
+import org.n52.shetland.ogc.wps.description.LiteralInputDescription;
+import org.n52.shetland.ogc.wps.description.LiteralOutputDescription;
+import org.n52.shetland.ogc.wps.description.ProcessInputDescription;
+import org.n52.shetland.ogc.wps.description.ProcessOutputDescription;
 
 import java.math.BigInteger;
 import java.net.URI;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -144,10 +189,9 @@ public class ProcessSerializer extends AbstractSerializer {
 
     private List<LiteralDataDomain> createLiteralDataDomains(LiteralDescription description) {
         return Stream.concat(Stream.of(description.getDefaultLiteralDataDomain()),
-                description.getSupportedLiteralDataDomains().stream())
+                             description.getSupportedLiteralDataDomains().stream())
                 .map(this::createLiteralDataDomain).collect(toList());
     }
-
 
     private List<InputDescription> createInputDescriptions(Collection<? extends ProcessInputDescription> descriptions) {
         return descriptions.stream().map(this::createInputDescription).collect(toList());
@@ -314,6 +358,5 @@ public class ProcessSerializer extends AbstractSerializer {
         link.setTitle("Process description");
         return link;
     }
-
 
 }

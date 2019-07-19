@@ -21,15 +21,12 @@
  */
 package io.swagger.model;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.model.AllowedValues;
 import org.springframework.validation.annotation.Validated;
+
 import javax.validation.Valid;
-import javax.validation.constraints.*;
+import java.util.Objects;
 
 /**
  * LiteralDataDomainValueDefinition
@@ -37,93 +34,92 @@ import javax.validation.constraints.*;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2018-11-08T12:20:58.856+01:00[Europe/Berlin]")
 
-public class LiteralDataDomainValueDefinition   {
-  @JsonProperty("defaultValue")
-  private String defaultValue = null;
+public class LiteralDataDomainValueDefinition {
+    @JsonProperty("defaultValue")
+    private String defaultValue = null;
 
-  @JsonProperty("allowedValues")
-  private AllowedValues allowedValues = null;
+    @JsonProperty("allowedValues")
+    private AllowedValues allowedValues = null;
 
-  public LiteralDataDomainValueDefinition defaultValue(String defaultValue) {
-    this.defaultValue = defaultValue;
-    return this;
-  }
-
-  /**
-   * Get defaultValue
-   * @return defaultValue
-  **/
-  @ApiModelProperty(value = "")
-
-
-  public String getDefaultValue() {
-    return defaultValue;
-  }
-
-  public void setDefaultValue(String defaultValue) {
-    this.defaultValue = defaultValue;
-  }
-
-  public LiteralDataDomainValueDefinition allowedValues(AllowedValues allowedValues) {
-    this.allowedValues = allowedValues;
-    return this;
-  }
-
-  /**
-   * Get allowedValues
-   * @return allowedValues
-  **/
-  @ApiModelProperty(value = "")
-
-  @Valid
-
-  public AllowedValues getAllowedValues() {
-    return allowedValues;
-  }
-
-  public void setAllowedValues(AllowedValues allowedValues) {
-    this.allowedValues = allowedValues;
-  }
-
-
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
+    public LiteralDataDomainValueDefinition defaultValue(String defaultValue) {
+        this.defaultValue = defaultValue;
+        return this;
     }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
+
+    /**
+     * Get defaultValue
+     *
+     * @return defaultValue
+     **/
+    @ApiModelProperty(value = "")
+
+    public String getDefaultValue() {
+        return defaultValue;
     }
-    LiteralDataDomainValueDefinition literalDataDomainValueDefinition = (LiteralDataDomainValueDefinition) o;
-    return Objects.equals(this.defaultValue, literalDataDomainValueDefinition.defaultValue) &&
-        Objects.equals(this.allowedValues, literalDataDomainValueDefinition.allowedValues);
-  }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(defaultValue, allowedValues);
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class LiteralDataDomainValueDefinition {\n");
-    
-    sb.append("    defaultValue: ").append(toIndentedString(defaultValue)).append("\n");
-    sb.append("    allowedValues: ").append(toIndentedString(allowedValues)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
+    public void setDefaultValue(String defaultValue) {
+        this.defaultValue = defaultValue;
     }
-    return o.toString().replace("\n", "\n    ");
-  }
+
+    public LiteralDataDomainValueDefinition allowedValues(AllowedValues allowedValues) {
+        this.allowedValues = allowedValues;
+        return this;
+    }
+
+    /**
+     * Get allowedValues
+     *
+     * @return allowedValues
+     **/
+    @ApiModelProperty(value = "")
+
+    @Valid
+
+    public AllowedValues getAllowedValues() {
+        return allowedValues;
+    }
+
+    public void setAllowedValues(AllowedValues allowedValues) {
+        this.allowedValues = allowedValues;
+    }
+
+    @Override
+    public boolean equals(java.lang.Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        LiteralDataDomainValueDefinition literalDataDomainValueDefinition = (LiteralDataDomainValueDefinition) o;
+        return Objects.equals(this.defaultValue, literalDataDomainValueDefinition.defaultValue) &&
+                Objects.equals(this.allowedValues, literalDataDomainValueDefinition.allowedValues);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(defaultValue, allowedValues);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("class LiteralDataDomainValueDefinition {\n");
+
+        sb.append("    defaultValue: ").append(toIndentedString(defaultValue)).append("\n");
+        sb.append("    allowedValues: ").append(toIndentedString(allowedValues)).append("\n");
+        sb.append("}");
+        return sb.toString();
+    }
+
+    /**
+     * Convert the given object to string with each line indented by 4 spaces (except the first line).
+     */
+    private String toIndentedString(java.lang.Object o) {
+        if (o == null) {
+            return "null";
+        }
+        return o.toString().replace("\n", "\n    ");
+    }
 }
 

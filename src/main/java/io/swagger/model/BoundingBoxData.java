@@ -21,113 +21,114 @@
  */
 package io.swagger.model;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.validation.annotation.Validated;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.validation.annotation.Validated;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
+import java.util.Objects;
 
 /**
  * BoundingBoxData
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-06-20T11:06:03.350Z[GMT]")
-public class BoundingBoxData   {
-  @JsonProperty("crs")
-  private String crs = null;
+public class BoundingBoxData {
+    @JsonProperty("crs")
+    private String crs = null;
 
-  @JsonProperty("bbox")
-  @Valid
-  private List<BigDecimal> bbox = new ArrayList<BigDecimal>();
+    @JsonProperty("bbox")
+    @Valid
+    private List<BigDecimal> bbox = new ArrayList<BigDecimal>();
 
-  public BoundingBoxData crs(String crs) {
-    this.crs = crs;
-    return this;
-  }
-
-  /**
-   * Get crs
-   * @return crs
-  **/
-  @ApiModelProperty(value = "")
-
-  public String getCrs() {
-    return crs;
-  }
-
-  public void setCrs(String crs) {
-    this.crs = crs;
-  }
-
-  public BoundingBoxData bbox(List<BigDecimal> bbox) {
-    this.bbox = bbox;
-    return this;
-  }
-
-  public BoundingBoxData addBboxItem(BigDecimal bboxItem) {
-    this.bbox.add(bboxItem);
-    return this;
-  }
-
-  /**
-   * Get bbox
-   * @return bbox
-  **/
-  @ApiModelProperty(required = true, value = "")
-  @NotNull
-  @Valid
-@Size(min=4,max=6)   public List<BigDecimal> getBbox() {
-    return bbox;
-  }
-
-  public void setBbox(List<BigDecimal> bbox) {
-    this.bbox = bbox;
-  }
-
-
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
+    public BoundingBoxData crs(String crs) {
+        this.crs = crs;
+        return this;
     }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
+
+    /**
+     * Get crs
+     *
+     * @return crs
+     **/
+    @ApiModelProperty(value = "")
+
+    public String getCrs() {
+        return crs;
     }
-    BoundingBoxData boundingBoxData = (BoundingBoxData) o;
-    return Objects.equals(this.crs, boundingBoxData.crs) &&
-        Objects.equals(this.bbox, boundingBoxData.bbox);
-  }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(crs, bbox);
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class BoundingBoxData {\n");
-    
-    sb.append("    crs: ").append(toIndentedString(crs)).append("\n");
-    sb.append("    bbox: ").append(toIndentedString(bbox)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
+    public void setCrs(String crs) {
+        this.crs = crs;
     }
-    return o.toString().replace("\n", "\n    ");
-  }
+
+    public BoundingBoxData bbox(List<BigDecimal> bbox) {
+        this.bbox = bbox;
+        return this;
+    }
+
+    public BoundingBoxData addBboxItem(BigDecimal bboxItem) {
+        this.bbox.add(bboxItem);
+        return this;
+    }
+
+    /**
+     * Get bbox
+     *
+     * @return bbox
+     **/
+    @ApiModelProperty(required = true, value = "")
+    @NotNull
+    @Valid
+    @Size(min = 4, max = 6)
+    public List<BigDecimal> getBbox() {
+        return bbox;
+    }
+
+    public void setBbox(List<BigDecimal> bbox) {
+        this.bbox = bbox;
+    }
+
+    @Override
+    public boolean equals(java.lang.Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        BoundingBoxData boundingBoxData = (BoundingBoxData) o;
+        return Objects.equals(this.crs, boundingBoxData.crs) &&
+                Objects.equals(this.bbox, boundingBoxData.bbox);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(crs, bbox);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("class BoundingBoxData {\n");
+
+        sb.append("    crs: ").append(toIndentedString(crs)).append("\n");
+        sb.append("    bbox: ").append(toIndentedString(bbox)).append("\n");
+        sb.append("}");
+        return sb.toString();
+    }
+
+    /**
+     * Convert the given object to string with each line indented by 4 spaces (except the first line).
+     */
+    private String toIndentedString(java.lang.Object o) {
+        if (o == null) {
+            return "null";
+        }
+        return o.toString().replace("\n", "\n    ");
+    }
 }

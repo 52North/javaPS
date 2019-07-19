@@ -29,8 +29,8 @@ public class ApiController {
 
     @RequestMapping(value = "/rest/api")
     public String index() {
-        
+
         return "redirect:https://app.swaggerhub.com/apis/geoprocessing/WPS/1.0-draft";
     }
-    
+
 }

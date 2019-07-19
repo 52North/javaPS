@@ -45,7 +45,8 @@ public abstract class AbstractWPSJsonModule extends SimpleModule {
         return null;
     }
 
-    protected static final void writeArrayOfObjects(String fieldName, Object[] objects, JsonGenerator jg) throws IOException {
+    protected static final void writeArrayOfObjects(String fieldName, Object[] objects, JsonGenerator jg)
+            throws IOException {
         jg.writeArrayFieldStart(fieldName);
         for (Object o : objects) {
             jg.writeObject(o);
@@ -53,7 +54,8 @@ public abstract class AbstractWPSJsonModule extends SimpleModule {
         jg.writeEndArray();
     }
 
-    protected static final void writeArrayOfStrings(String fieldName, String[] strings, JsonGenerator jg) throws IOException {
+    protected static final void writeArrayOfStrings(String fieldName, String[] strings, JsonGenerator jg)
+            throws IOException {
         jg.writeArrayFieldStart(fieldName);
         for (String s : strings) {
             jg.writeString(s);
@@ -69,13 +71,15 @@ public abstract class AbstractWPSJsonModule extends SimpleModule {
         return object == null ? null : object.toString();
     }
 
-    protected static final void writeStringFieldIfNotNull(JsonGenerator jg, String field, Object object) throws JsonGenerationException, IOException {
+    protected static final void writeStringFieldIfNotNull(JsonGenerator jg, String field, Object object)
+            throws JsonGenerationException, IOException {
         if (object != null) {
             jg.writeStringField(field, object.toString());
         }
     }
 
-    protected static final void writeObjectFieldIfNotNull(JsonGenerator jg, String field, Object object) throws JsonGenerationException, IOException {
+    protected static final void writeObjectFieldIfNotNull(JsonGenerator jg, String field, Object object)
+            throws JsonGenerationException, IOException {
         if (object != null) {
             jg.writeObjectField(field, object);
         }

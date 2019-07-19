@@ -27,7 +27,11 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.n52.javaps.description.TypedProcessInputDescription;
 import org.n52.javaps.description.TypedProcessOutputDescription;
-import org.n52.javaps.io.*;
+import org.n52.javaps.io.Data;
+import org.n52.javaps.io.DecodingException;
+import org.n52.javaps.io.EncodingException;
+import org.n52.javaps.io.InputHandler;
+import org.n52.javaps.io.OutputHandler;
 import org.n52.javaps.io.bbox.BoundingBoxData;
 import org.n52.shetland.ogc.ows.OwsBoundingBox;
 import org.n52.shetland.ogc.wps.Format;
@@ -90,7 +94,6 @@ public class JSONBoundingBoxInputOutputHandler implements InputHandler, OutputHa
 
             String lowerCornerString = lowerCorner[0] + " " + lowerCorner[1];
             String upperCornerString = upperCorner[0] + " " + upperCorner[1];
-
 
             ObjectMapper objectMapper = new ObjectMapper();
 

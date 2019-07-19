@@ -24,18 +24,14 @@ package org.n52.wps.javaps.rest.serializer;
 import io.swagger.model.Link;
 import io.swagger.model.StatusInfo;
 import io.swagger.model.StatusInfo.StatusEnum;
-import org.n52.faroe.Validation;
 import org.n52.faroe.annotation.Configurable;
-import org.n52.faroe.annotation.Setting;
-import org.n52.iceland.service.ServiceSettings;
 import org.n52.shetland.ogc.wps.JobStatus;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
 @Configurable
-public class StatusInfoSerializer extends  AbstractSerializer{
+public class StatusInfoSerializer extends AbstractSerializer {
 
     public StatusInfoSerializer() {
     }

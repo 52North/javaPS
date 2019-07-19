@@ -21,91 +21,87 @@
  */
 package io.swagger.model;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.model.LiteralDataDomain;
+import org.springframework.validation.annotation.Validated;
+
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.validation.annotation.Validated;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
+import java.util.Objects;
 
 /**
  * LiteralDataType
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-03-28T09:55:34.783Z[GMT]")
-public class LiteralDataType   {
-  @JsonProperty("literalDataDomains")
-  @Valid
-  private List<LiteralDataDomain> literalDataDomains = null;
+public class LiteralDataType {
+    @JsonProperty("literalDataDomains")
+    @Valid
+    private List<LiteralDataDomain> literalDataDomains = null;
 
-  public LiteralDataType literalDataDomains(List<LiteralDataDomain> literalDataDomains) {
-    this.literalDataDomains = literalDataDomains;
-    return this;
-  }
-
-  public LiteralDataType addLiteralDataDomainsItem(LiteralDataDomain literalDataDomainsItem) {
-    if (this.literalDataDomains == null) {
-      this.literalDataDomains = new ArrayList<LiteralDataDomain>();
+    public LiteralDataType literalDataDomains(List<LiteralDataDomain> literalDataDomains) {
+        this.literalDataDomains = literalDataDomains;
+        return this;
     }
-    this.literalDataDomains.add(literalDataDomainsItem);
-    return this;
-  }
 
-  /**
-   * Get literalDataDomains
-   * @return literalDataDomains
-  **/
-  @ApiModelProperty(value = "")
-  @Valid
-  public List<LiteralDataDomain> getLiteralDataDomains() {
-    return literalDataDomains;
-  }
-
-  public void setLiteralDataDomains(List<LiteralDataDomain> literalDataDomains) {
-    this.literalDataDomains = literalDataDomains;
-  }
-
-
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
+    public LiteralDataType addLiteralDataDomainsItem(LiteralDataDomain literalDataDomainsItem) {
+        if (this.literalDataDomains == null) {
+            this.literalDataDomains = new ArrayList<LiteralDataDomain>();
+        }
+        this.literalDataDomains.add(literalDataDomainsItem);
+        return this;
     }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
+
+    /**
+     * Get literalDataDomains
+     *
+     * @return literalDataDomains
+     **/
+    @ApiModelProperty(value = "")
+    @Valid
+    public List<LiteralDataDomain> getLiteralDataDomains() {
+        return literalDataDomains;
     }
-    LiteralDataType literalDataType = (LiteralDataType) o;
-    return Objects.equals(this.literalDataDomains, literalDataType.literalDataDomains);
-  }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(literalDataDomains);
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class LiteralDataType {\n");
-    
-    sb.append("    literalDataDomains: ").append(toIndentedString(literalDataDomains)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
+    public void setLiteralDataDomains(List<LiteralDataDomain> literalDataDomains) {
+        this.literalDataDomains = literalDataDomains;
     }
-    return o.toString().replace("\n", "\n    ");
-  }
+
+    @Override
+    public boolean equals(java.lang.Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        LiteralDataType literalDataType = (LiteralDataType) o;
+        return Objects.equals(this.literalDataDomains, literalDataType.literalDataDomains);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(literalDataDomains);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("class LiteralDataType {\n");
+
+        sb.append("    literalDataDomains: ").append(toIndentedString(literalDataDomains)).append("\n");
+        sb.append("}");
+        return sb.toString();
+    }
+
+    /**
+     * Convert the given object to string with each line indented by 4 spaces (except the first line).
+     */
+    private String toIndentedString(java.lang.Object o) {
+        if (o == null) {
+            return "null";
+        }
+        return o.toString().replace("\n", "\n    ");
+    }
 }

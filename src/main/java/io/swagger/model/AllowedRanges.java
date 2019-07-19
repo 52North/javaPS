@@ -21,89 +21,86 @@
  */
 package io.swagger.model;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.model.Range;
+import org.springframework.validation.annotation.Validated;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.validation.annotation.Validated;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
+import java.util.Objects;
 
 /**
  * AllowedRanges
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-03-28T09:55:34.783Z[GMT]")
-public class AllowedRanges   {
-  @JsonProperty("allowedRanges")
-  @Valid
-  private List<Range> allowedRanges = new ArrayList<Range>();
+public class AllowedRanges {
+    @JsonProperty("allowedRanges")
+    @Valid
+    private List<Range> allowedRanges = new ArrayList<Range>();
 
-  public AllowedRanges allowedRanges(List<Range> allowedRanges) {
-    this.allowedRanges = allowedRanges;
-    return this;
-  }
-
-  public AllowedRanges addAllowedRangesItem(Range allowedRangesItem) {
-    this.allowedRanges.add(allowedRangesItem);
-    return this;
-  }
-
-  /**
-   * Get allowedRanges
-   * @return allowedRanges
-  **/
-  @ApiModelProperty(required = true, value = "")
-  @NotNull
-  @Valid
-  public List<Range> getAllowedRanges() {
-    return allowedRanges;
-  }
-
-  public void setAllowedRanges(List<Range> allowedRanges) {
-    this.allowedRanges = allowedRanges;
-  }
-
-
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
+    public AllowedRanges allowedRanges(List<Range> allowedRanges) {
+        this.allowedRanges = allowedRanges;
+        return this;
     }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
+
+    public AllowedRanges addAllowedRangesItem(Range allowedRangesItem) {
+        this.allowedRanges.add(allowedRangesItem);
+        return this;
     }
-    AllowedRanges allowedRanges = (AllowedRanges) o;
-    return Objects.equals(this.allowedRanges, allowedRanges.allowedRanges);
-  }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(allowedRanges);
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class AllowedRanges {\n");
-    
-    sb.append("    allowedRanges: ").append(toIndentedString(allowedRanges)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
+    /**
+     * Get allowedRanges
+     *
+     * @return allowedRanges
+     **/
+    @ApiModelProperty(required = true, value = "")
+    @NotNull
+    @Valid
+    public List<Range> getAllowedRanges() {
+        return allowedRanges;
     }
-    return o.toString().replace("\n", "\n    ");
-  }
+
+    public void setAllowedRanges(List<Range> allowedRanges) {
+        this.allowedRanges = allowedRanges;
+    }
+
+    @Override
+    public boolean equals(java.lang.Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        AllowedRanges allowedRanges = (AllowedRanges) o;
+        return Objects.equals(this.allowedRanges, allowedRanges.allowedRanges);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(allowedRanges);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("class AllowedRanges {\n");
+
+        sb.append("    allowedRanges: ").append(toIndentedString(allowedRanges)).append("\n");
+        sb.append("}");
+        return sb.toString();
+    }
+
+    /**
+     * Convert the given object to string with each line indented by 4 spaces (except the first line).
+     */
+    private String toIndentedString(java.lang.Object o) {
+        if (o == null) {
+            return "null";
+        }
+        return o.toString().replace("\n", "\n    ");
+    }
 }
