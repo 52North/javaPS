@@ -79,7 +79,7 @@ public class StreamingServiceResponseWriter implements ResponseWriter<OwsService
     @Override
     public boolean hasForcedHttpStatus(OwsServiceResponse t) {
         if (t instanceof OwsExceptionReportResponse) {
-            return true;
+            return ((OwsExceptionReportResponse) t).getOwsExceptionReport().getStatus() != null;
         }
         return ResponseWriter.super.hasForcedHttpStatus(t);
     }

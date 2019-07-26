@@ -19,7 +19,9 @@ package org.n52.javaps.service.xml;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -27,6 +29,8 @@ import javax.inject.Inject;
 
 import org.n52.janmayen.http.MediaType;
 import org.n52.shetland.ogc.wps.response.ExecuteResponse;
+import org.n52.shetland.ogc.wps.response.GetResultResponse;
+import org.n52.shetland.ogc.ows.service.OwsServiceResponse;
 import org.n52.shetland.ogc.wps.ResponseMode;
 import org.n52.shetland.ogc.wps.Result;
 import org.n52.shetland.ogc.wps.data.ProcessData;
@@ -45,9 +49,11 @@ import com.google.common.io.ByteStreams;
  *
  * @author Christian Autermann
  */
-public class StreamingRawWriter implements StreamWriter<ExecuteResponse> {
+public class StreamingRawWriter implements StreamWriter<OwsServiceResponse> {
 
-    private static final StreamWriterKey KEY = new StreamWriterKey(ExecuteResponse.class, new MediaType());
+    private static final Set<StreamWriterKey> KEYS = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
+            new StreamWriterKey(ExecuteResponse.class, new MediaType()), new StreamWriterKey(GetResultResponse.class,
+                    new MediaType()))));
 
     private final StreamWriterRepository streamWriterRepository;
 
@@ -57,10 +63,19 @@ public class StreamingRawWriter implements StreamWriter<ExecuteResponse> {
     }
 
     @Override
-    public void write(ExecuteResponse object,
+    public void write(OwsServiceResponse object,
             OutputStream outputStream) throws EncodingException {
-        Result result = object.getResult().filter(r -> r.getResponseMode() == ResponseMode.RAW).orElseThrow(
-                () -> new UnsupportedStreamWriterInputException(object));
+
+        Result result = null;
+
+        if (object instanceof GetResultResponse) {
+            result = ((GetResultResponse) object).getResult();
+        } else if (object instanceof ExecuteResponse) {
+            result = ((ExecuteResponse) object).getResult().filter(r -> r.getResponseMode() == ResponseMode.RAW)
+                    .orElseThrow(() -> new UnsupportedStreamWriterInputException(object));
+        } else {
+            throw new UnsupportedStreamWriterInputException(object);
+        }
 
         ProcessData data = result.getOutputs().iterator().next();
         if (data.isValue()) {
@@ -83,6 +98,6 @@ public class StreamingRawWriter implements StreamWriter<ExecuteResponse> {
 
     @Override
     public Set<StreamWriterKey> getKeys() {
-        return Collections.singleton(KEY);
+        return KEYS;
     }
 }

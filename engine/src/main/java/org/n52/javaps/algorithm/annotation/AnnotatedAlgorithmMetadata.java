@@ -225,7 +225,7 @@ public class AnnotatedAlgorithmMetadata {
 
     private Stream<Class<?>> getSuperTypeStream(Class<?> c) {
         return Stream.concat(Stream.of(c.getSuperclass()), Arrays.stream(c.getInterfaces())).filter(Objects::nonNull)
-                .flatMap(this::getSuperTypeStream).distinct();
+                .flatMap(this::asClassStream).distinct();
     }
 
     private Stream<Class<?>> asClassStream(Class<?> clazz) {
