@@ -108,8 +108,8 @@
                 <version>${version.arctic.sea}</version>
                 <exclusions>
                     <exclusion>
-                        <artifactId>joda-time</artifactId>
                         <groupId>joda-time</groupId>
+                        <artifactId>joda-time</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
@@ -119,8 +119,8 @@
                 <version>${version.arctic.sea}</version>
                 <exclusions>
                     <exclusion>
-                        <artifactId>joda-time</artifactId>
                         <groupId>joda-time</groupId>
+                        <artifactId>joda-time</artifactId>
                     </exclusion>
 				    <exclusion>
 				    	<groupId>com.fasterxml.jackson.core</groupId>
@@ -143,16 +143,16 @@
                 <version>${version.arctic.sea}</version>
                 <exclusions>
                     <exclusion>
-                        <artifactId>jackson-core</artifactId>
                         <groupId>com.fasterxml.jackson.core</groupId>
+                        <artifactId>jackson-core</artifactId>
                     </exclusion>
 				    <exclusion>
 				    	<groupId>com.fasterxml.jackson.core</groupId>
 				    	<artifactId>jackson-databind</artifactId>
 				    </exclusion>
                     <exclusion>
-                        <artifactId>joda-time</artifactId>
                         <groupId>joda-time</groupId>
+                        <artifactId>joda-time</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
