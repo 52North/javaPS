@@ -33,7 +33,6 @@
     <bean id="owsServiceMetadataRepository" class="org.n52.iceland.ogc.ows.OwsServiceMetadataRepositoryImpl"/>
 
     <bean id="bindingRepository" class="org.n52.iceland.binding.BindingRepository" />
-    <bean id="codingRepository" class="org.n52.iceland.coding.CodingRepository" />
     <bean id="supportedTypeRepository" class="org.n52.iceland.coding.SupportedTypeRepository"/>
     <bean id="owsCapabilitiesExtensionRepository" class="org.n52.iceland.ogc.ows.extension.OwsCapabilitiesExtensionRepository" />
     <bean id="owsOperationMetadataExtensionProviderRepository" class="org.n52.iceland.ogc.ows.extension.OwsOperationMetadataExtensionProviderRepository" />
