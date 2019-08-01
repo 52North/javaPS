@@ -379,7 +379,6 @@
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpcore</artifactId>
                 <version>4.4.10</version>
-                <scope>test</scope>
             </dependency>
             <dependency>
         	    <groupId>org.mockito</groupId>
@@ -391,19 +390,16 @@
                 <groupId>org.n52.wps</groupId>
                 <artifactId>52n-xml-wps-v20</artifactId>
                 <version>${version.common.xml}</version>
-                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.n52.sensorweb</groupId>
                 <artifactId>52n-xml-ows-v20</artifactId>
                 <version>${version.common.xml}</version>
-                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.xmlbeans</groupId>
                 <artifactId>xmlbeans</artifactId>
                 <version>${version.xmlbeans}</version>
-                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>net.sf.saxon</groupId>
