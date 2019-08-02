@@ -170,6 +170,10 @@
       "type" : "string",
       "value" : "unix:///var/run/docker.sock"
     },
+    "docker.dataDirectory" : {
+      "type" : "string",
+      "value" : "/tmp"
+    },
     "service.request.timeout" : {
       "type" : "integer",
       "value" : 0
