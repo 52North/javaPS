@@ -157,6 +157,22 @@
     "misc.checkInterval" : {
       "type" : "string",
       "value" : "PT1H"
+    },
+    "scihub.username" : {
+      "type" : "string",
+      "value" : "theuser"
+    },
+    "scihub.password" : {
+      "type" : "string",
+      "value" : "changeme"
+    },
+    "docker.host" : {
+      "type" : "string",
+      "value" : "unix:///var/run/docker.sock"
+    },
+    "service.request.timeout" : {
+      "type" : "integer",
+      "value" : 0
     }
   }
 }
