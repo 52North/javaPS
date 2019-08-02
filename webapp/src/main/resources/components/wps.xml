@@ -25,5 +25,7 @@
                            http://www.springframework.org/schema/util
                            http://www.springframework.org/schema/util/spring-util-4.1.xsd">
 
+    <bean class="org.n52.wps.eopad.DockerProcessRegistry" />
+    <bean class="org.n52.wps.eopad.DockerAlgorithmRepository" />
 
 </beans>

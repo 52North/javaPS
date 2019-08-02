@@ -23,32 +23,18 @@
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </Console>
 
-        <RollingFile name="javapsfile" fileName="logs/javaps.log" immediateFlush="false"
-                     filePattern="logs/$${date:yyyy-MM}/javaps-%d{MM-dd-yyyy}-%i.log.gz">
-            <PatternLayout>
-                <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
-            </PatternLayout>
-            <Policies>
-                <TimeBasedTriggeringPolicy />
-                <SizeBasedTriggeringPolicy size="25 MB"/>
-            </Policies>
-        </RollingFile>
-
     </Appenders>
 
     <Loggers>
-        <Logger name="org.n52" level="trace" additivity="false">
+        <Logger name="org.n52" level="debug" additivity="false">
             <AppenderRef ref="console"/>
-            <AppenderRef ref="javapsfile"/>
         </Logger>
         <Logger name="org.springframework" level="info" additivity="false">
             <AppenderRef ref="console"/>
-            <AppenderRef ref="javapsfile"/>
         </Logger>
 
         <Root level="warn">
             <AppenderRef ref="console"/>
-            <AppenderRef ref="javapsfile"/>
         </Root>
     </Loggers>
 </Configuration>
