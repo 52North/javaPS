@@ -73,4 +73,10 @@ public final class LiteralData implements Data<Object> {
         IOUtils.copy(new InputStreamReader(oos, StandardCharsets.UTF_8), writer);
         setUnitOfMeasurement(writer.toString());
     }
+
+    @Override
+    public String toString() {
+        return "LiteralData{" + "unitOfMeasurement=" + unitOfMeasurement + ", payload=" + payload + '}';
+    }
+
 }
