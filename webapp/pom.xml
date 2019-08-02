@@ -41,11 +41,17 @@
     </licenses>
 
     <dependencies>
+        <!-- eopad backend -->
+        <dependency>
+            <groupId>org.n52.wps</groupId>
+            <artifactId>eopad-javaps-backend</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>runtime</scope>
+        </dependency>
         <!-- custom add-ins for docker-based setup -->
         <dependency>
             <groupId>org.n52.geoprocessing</groupId>
             <artifactId>javaps-iohandler</artifactId>
-            <version>1.4.0-SNAPSHOT</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
@@ -237,6 +243,30 @@
                         WEB-INF/lib/xmlbeans-${version.xmlbeans}.jar</packagingExcludes>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>9.4.18.v20190429</version>
+                <configuration>
+                    <stopKey>C</stopKey>
+                    <stopPort>34343</stopPort>
+                    <scanIntervalSeconds>3</scanIntervalSeconds>
+                    <webAppConfig>
+                        <contextPath>/${project.build.finalName}</contextPath>
+                        <extraClasspath>../engine/target/classes;../service/target/classes;../../javaps-iohandler/target/classes;../../eopad-javaps-backend/target/classes</extraClasspath>
+                    </webAppConfig>
+                    <scanTargets>
+                        <scanTarget>../engine/target/classes</scanTarget>
+                        <scanTarget>../service/target/classes</scanTarget>
+                        <scanTarget>../../javaps-iohandler/target/classes</scanTarget>
+                        <scanTarget>../../eopad-javaps-backend/target/classes</scanTarget>
+                    </scanTargets>
+                    <httpConnector>
+                        <port>8080</port>
+                    </httpConnector>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
     <profiles>
