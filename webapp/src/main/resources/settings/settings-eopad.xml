@@ -37,9 +37,9 @@
         <property name="key" value="docker.dataDirectory" />
         <property name="title" value="Docker dataDirectory" />
         <property name="description" value="Directory to store outputs" />
-        <property name="order" value="1.0" />
+        <property name="order" value="2.0" />
         <property name="group" ref="eopadSettingDefinitionGroup" />
-        <property name="defaultValue" value="unix:///var/run/docker.sock" />
+        <property name="defaultValue" value="/tmp" />
     </bean>
     <bean class="org.n52.faroe.settings.StringSettingDefinition">
         <property name="key" value="scihub.username" />
