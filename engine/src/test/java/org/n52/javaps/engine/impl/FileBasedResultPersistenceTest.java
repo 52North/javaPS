@@ -89,11 +89,9 @@ public class FileBasedResultPersistenceTest {
         Mockito.when(output.isValue()).thenReturn(true);
         Mockito.when(output.asValue()).thenReturn(output);
 
-        Mockito.when(output.getFormat()).thenReturn(new Format("text/xml", "base64"));
+        Mockito.when(output.getFormat()).thenReturn(new Format("image/png", "base64"));
 
-        String testdata = new String("test data");
-
-        InputStream in = new ByteArrayInputStream(testdata.getBytes());
+        InputStream in = getClass().getClassLoader().getResourceAsStream("wps1266352013022967603.dat");
 
         try {
             Mockito.when(output.getData()).thenReturn(in);
