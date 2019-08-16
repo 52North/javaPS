@@ -18,7 +18,6 @@ package org.n52.javaps.engine.impl;
 
 import static org.junit.Assert.fail;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
