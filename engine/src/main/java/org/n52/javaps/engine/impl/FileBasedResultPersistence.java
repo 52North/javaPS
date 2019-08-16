@@ -310,8 +310,15 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
                             outputStream = base64encoder.wrap(fileOutputStream);
                             IOUtils.copy(in, outputStream);
                         } finally {
+                            if (fileOutputStream != null) {
+                                fileOutputStream.close();
+                            }
                             if (outputStream != null) {
-                                outputStream.close();
+                                try {
+                                    outputStream.close();
+                                } catch (IOException e) {
+                                    LOG.trace("Outputstream closed while encoding value as base64. Ignoring.");
+                                }
                             }
                         }
                     }
@@ -435,7 +442,11 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
             Throwable ex) throws IOException {
         Path outputFile = Files.createTempFile(directory, null, null);
         try (ObjectOutputStream out = new ObjectOutputStream(Files.newOutputStream(outputFile))) {
-            out.writeObject(ex);
+            if (ex instanceof EngineException) {
+                out.writeObject(ex.getCause());
+            } else {
+                out.writeObject(ex);
+            }
         }
         return outputFile;
     }
