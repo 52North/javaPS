@@ -16,16 +16,39 @@
  */
 package org.n52.javaps.description;
 
+import org.n52.javaps.algorithm.ProcessInputs;
+import org.n52.javaps.io.Data;
+import org.n52.javaps.io.GroupInputData;
 import org.n52.shetland.ogc.wps.description.GroupInputDescription;
 
 /**
- *
  * @author Christian Autermann
  */
-public interface TypedGroupInputDescription extends GroupInputDescription, TypedProcessInputDescriptionContainer {
+public interface TypedGroupInputDescription extends GroupInputDescription, TypedProcessInputDescriptionContainer,
+                                                    TypedProcessInputDescription<Class<? extends Data<ProcessInputs>>> {
+
+    @Override
+    default Class<? extends Data<ProcessInputs>> getType() {
+        return GroupInputData.class;
+    }
+
+    @Override
+    default Class<?> getPayloadType() {
+        return ProcessInputs.class;
+    }
+
+    @Override
+    default Class<? extends Data<?>> getBindingType() {
+        return GroupInputData.class;
+    }
+
     @Override
     default TypedGroupInputDescription asGroup() {
         return this;
     }
 
+    interface Builder<T extends TypedGroupInputDescription, B extends Builder<T, B>>
+            extends GroupInputDescription.Builder<T, B>,
+                    TypedProcessInputDescriptionContainer.Builder<T, B> {
+    }
 }
