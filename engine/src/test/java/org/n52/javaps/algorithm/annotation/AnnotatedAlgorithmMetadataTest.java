@@ -321,5 +321,15 @@ public class AnnotatedAlgorithmMetadataTest {
                 }
             }
         }
+
+        @Override
+        public Optional<LiteralType<?>> getLiteralType(String name) {
+            return Optional.empty();
+        }
+
+        @Override
+        public Optional<LiteralType<?>> getLiteralType(URI uri) {
+            return Optional.empty();
+        }
     }
 }
