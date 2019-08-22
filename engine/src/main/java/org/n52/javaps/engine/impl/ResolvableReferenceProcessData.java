@@ -16,13 +16,7 @@
  */
 package org.n52.javaps.engine.impl;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-
+import com.google.common.io.ByteStreams;
 import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.shetland.ogc.wps.Format;
 import org.n52.shetland.ogc.wps.data.Body;
@@ -31,7 +25,12 @@ import org.n52.shetland.ogc.wps.data.ValueProcessData;
 import org.n52.shetland.ogc.wps.data.impl.InMemoryValueProcessData;
 import org.n52.shetland.util.HTTP;
 
-import com.google.common.io.ByteStreams;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 /**
  * TODO JavaDoc
@@ -69,11 +68,11 @@ public class ResolvableReferenceProcessData extends ReferenceProcessData {
         final byte[] bytes;
         if (!getBody().isPresent()) {
             switch (getURI().getScheme()) {
-            case "file":
-                bytes = getFromLocalDisc();
-                break;
-            default:
-                bytes = HTTP.get(getURI());
+                case "file":
+                    bytes = getFromLocalDisc();
+                    break;
+                default:
+                    bytes = HTTP.get(getURI());
             }
         } else {
             bytes = HTTP.post(getURI(), getBody().get().getBody().getBytes(StandardCharsets.UTF_8));
@@ -84,7 +83,7 @@ public class ResolvableReferenceProcessData extends ReferenceProcessData {
     private byte[] getFromLocalDisc() throws IOException {
         URL fileURL = getURI().toURL();
         try (InputStream is = new FileInputStream(fileURL.getFile())) {
-           return ByteStreams.toByteArray(is);
+            return ByteStreams.toByteArray(is);
         }
     }
 

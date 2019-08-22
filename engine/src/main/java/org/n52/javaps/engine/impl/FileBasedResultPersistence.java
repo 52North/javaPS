@@ -16,43 +16,9 @@
  */
 package org.n52.javaps.engine.impl;
 
-import static java.util.stream.Collectors.toMap;
-import static java.util.stream.Collectors.toSet;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.net.URI;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.time.Duration;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
-import java.util.Base64;
-import java.util.Base64.Encoder;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
-
-import javax.inject.Inject;
-
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.io.IOUtils;
 import org.n52.faroe.annotation.Configurable;
 import org.n52.faroe.annotation.Setting;
@@ -87,12 +53,43 @@ import org.n52.shetland.ogc.wps.data.impl.FileBasedProcessData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import javax.inject.Inject;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.Duration;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.util.Base64;
+import java.util.Base64.Encoder;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toMap;
+import static java.util.stream.Collectors.toSet;
 
 /**
- *
  * @author Christian Autermann
  */
 @Configurable
@@ -164,12 +161,14 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
             OffsetDateTime expirationDate = getExpirationDate(directory);
 
             ObjectNode rootNode = Json.nodeFactory().objectNode().put(Keys.STATUS, context.getJobStatus().getValue())
-                    .put(Keys.JOB_ID, jobId).put(Keys.PROCESS_ID, processId).put(Keys.EXPIRATION_DATE, expirationDate
-                            .toString()).put(Keys.RESPONSE_MODE, context.getResponseMode().toString());
+                                      .put(Keys.JOB_ID, jobId).put(Keys.PROCESS_ID, processId)
+                                      .put(Keys.EXPIRATION_DATE, expirationDate.toString())
+                                      .put(Keys.RESPONSE_MODE, context.getResponseMode().toString());
 
             try {
-                persist(directory, context.getEncodedOutputs(), context.getOutputDefinitions(), rootNode.putArray(
-                        Keys.OUTPUTS));
+                persist(directory,
+                        context.getEncodedOutputs(), context.getOutputDefinitions(),
+                        rootNode.putArray(Keys.OUTPUTS));
 
             } catch (Throwable ex) {
                 LOG.error("Error executing job " + context.getJobId(), ex);
@@ -178,14 +177,15 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
 
             }
 
-            Files.write(directory.resolve(META_JSON_FILE_NAME), Json.print(rootNode).getBytes(StandardCharsets.UTF_8));
+            Files.write(directory.resolve(META_JSON_FILE_NAME),
+                        Json.print(rootNode).getBytes(StandardCharsets.UTF_8));
         } catch (IOException ex) {
             LOG.error("Error writing result for job " + context.getJobId(), ex);
         }
     }
 
     @Override
-    public StatusInfo getStatus(JobId jobId) throws EngineException, JobNotFoundException {
+    public StatusInfo getStatus(JobId jobId) throws EngineException {
 
         try {
             JsonNode jobMetadata = getJobMetadata(jobId);
@@ -202,7 +202,7 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
     }
 
     @Override
-    public Result getResult(JobId jobId) throws JobNotFoundException, EngineException {
+    public Result getResult(JobId jobId) throws EngineException {
 
         try {
             Result result = new Result();
@@ -247,31 +247,35 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
     }
 
     private void encodeFormat(Format format,
-            ObjectNode formatNode) {
-        formatNode.put(Keys.MIME_TYPE, format.getMimeType().orElse(null)).put(Keys.SCHEMA, format.getSchema().orElse(
-                null)).put(Keys.ENCODING, format.getEncoding().orElse(null));
+                              ObjectNode formatNode) {
+        formatNode.put(Keys.MIME_TYPE, format.getMimeType().orElse(null))
+                  .put(Keys.SCHEMA, format.getSchema().orElse(null))
+                  .put(Keys.ENCODING, format.getEncoding().orElse(null));
     }
 
     private Format decodeFormat(JsonNode node) {
-        return new Format(node.path(Keys.MIME_TYPE).textValue(), node.path(Keys.ENCODING).textValue(), node.path(
-                Keys.SCHEMA).textValue());
+        return new Format(node.path(Keys.MIME_TYPE).textValue(),
+                          node.path(Keys.ENCODING).textValue(),
+                          node.path(Keys.SCHEMA).textValue());
     }
 
     private void persist(Path directory,
-            List<ProcessData> outputs,
-            Map<OwsCode, OutputDefinition> outputDefinitions,
-            ArrayNode outputsNode) throws IOException, EncodingException {
+                         List<ProcessData> outputs,
+                         Map<OwsCode, OutputDefinition> outputDefinitions,
+                         ArrayNode outputsNode) throws IOException, EncodingException {
 
         for (ProcessData data : outputs) {
             OutputDefinition definition = outputDefinitions.get(data.getId());
 
             ObjectNode outputNode = outputsNode.addObject();
-            outputNode.putObject(Keys.ID).put(Keys.VALUE, data.getId().getValue()).put(Keys.CODE_SPACE, data.getId()
-                    .getCodeSpace().map(URI::toString).orElse(null));
+            outputNode.putObject(Keys.ID).put(Keys.VALUE, data.getId().getValue())
+                      .put(Keys.CODE_SPACE, data.getId().getCodeSpace().map(URI::toString).orElse(null));
             if (data.isGroup()) {
                 outputNode.put(Keys.TYPE, GROUP_TYPE);
-                persist(directory, data.asGroup().getElements(), definition.getOutputsById(), outputNode.putArray(
-                        Keys.OUTPUTS));
+                persist(directory,
+                        data.asGroup().getElements(),
+                        definition.getOutputsById(),
+                        outputNode.putArray(Keys.OUTPUTS));
             } else if (data.isReference()) {
                 outputNode.put(Keys.TYPE, REFERENCE_TYPE);
                 encodeFormat(data.asReference().getFormat(), outputNode.putObject(Keys.FORMAT));
@@ -301,18 +305,11 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
                         Encoder base64encoder = Base64.getEncoder();
 
                         OutputStream outputStream = null;
-                        OutputStream fileOutputStream = null;
 
-                        try {
-                            fileOutputStream = new FileOutputStream(outputFile
-                                    .toFile());
-
+                        try (OutputStream fileOutputStream = new FileOutputStream(outputFile.toFile())) {
                             outputStream = base64encoder.wrap(fileOutputStream);
                             IOUtils.copy(in, outputStream);
                         } finally {
-                            if (fileOutputStream != null) {
-                                fileOutputStream.close();
-                            }
                             if (outputStream != null) {
                                 try {
                                     outputStream.close();
@@ -349,16 +346,16 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
     @Override
     public ProcessData getOutput(OutputReference reference) throws EngineException {
         try {
-            return getOutput(reference, reference.getOutputId(), getJobMetadata(reference.getJobId()).path(
-                    Keys.OUTPUTS));
+            return getOutput(reference,
+                             reference.getOutputId(),
+                             getJobMetadata(reference.getJobId()).path(Keys.OUTPUTS));
         } catch (IOException ex) {
             throw new EngineException(ex);
         }
     }
 
-    private ProcessData getOutput(OutputReference reference,
-            Chain<OwsCode> tail,
-            JsonNode outputs) throws OutputNotFoundException, IOException {
+    private ProcessData getOutput(OutputReference reference, Chain<OwsCode> tail, JsonNode outputs)
+            throws OutputNotFoundException, IOException {
         for (JsonNode node : outputs) {
             OwsCode id = decodeIdentifier(node);
 
@@ -375,33 +372,32 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
         throw new OutputNotFoundException();
     }
 
-    private ProcessData decodeOutput(OutputReference reference,
-            JsonNode node,
-            boolean dereference) throws IOException {
+    private ProcessData decodeOutput(OutputReference reference, JsonNode node, boolean dereference) throws IOException {
         switch (node.path(Keys.TYPE).textValue()) {
-        case REFERENCE_TYPE:
-            return decodeReferenceData(reference, node);
-        case VALUE_TYPE:
-            return decodeValueData(reference, node, dereference);
-        case GROUP_TYPE:
-            return decodeGroupData(reference, node);
-        default:
-            throw new IOException("Unsupported output type");
+            case REFERENCE_TYPE:
+                return decodeReferenceData(reference, node);
+            case VALUE_TYPE:
+                return decodeValueData(reference, node, dereference);
+            case GROUP_TYPE:
+                return decodeGroupData(reference, node);
+            default:
+                throw new IOException("Unsupported output type");
         }
     }
 
     private OwsCode decodeIdentifier(JsonNode node) {
-        URI codeSpace = Optional.ofNullable(node.path(Keys.ID).path(Keys.CODE_SPACE).textValue()).map(URI::create)
-                .orElse(null);
+        URI codeSpace = Optional.ofNullable(node.path(Keys.ID)
+                                                .path(Keys.CODE_SPACE)
+                                                .textValue())
+                                .map(URI::create)
+                                .orElse(null);
         String value = node.path(Keys.ID).path(Keys.VALUE).textValue();
-        OwsCode id = new OwsCode(value, codeSpace);
-        return id;
+        return new OwsCode(value, codeSpace);
     }
 
-    private ProcessData decodeReferenceData(OutputReference reference,
-            JsonNode node) {
-        ResolvableReferenceProcessData referenceProcessData = new ResolvableReferenceProcessData(reference.getOutputId()
-                .last());
+    private ProcessData decodeReferenceData(OutputReference reference, JsonNode node) {
+        ResolvableReferenceProcessData referenceProcessData = new ResolvableReferenceProcessData(
+                reference.getOutputId().last());
         referenceProcessData.setURI(URI.create(node.path(Keys.HREF).textValue()));
         referenceProcessData.setFormat(decodeFormat(node.path(Keys.FORMAT)));
         if (!node.path(Keys.BODY).isMissingNode()) {
@@ -412,11 +408,9 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
         return referenceProcessData;
     }
 
-    private ProcessData decodeValueData(OutputReference reference,
-            JsonNode node,
-            boolean dereference) {
+    private ProcessData decodeValueData(OutputReference reference, JsonNode node, boolean dereference) {
         DataTransmissionMode mode = DataTransmissionMode.fromString(node.path(Keys.DATA_TRANSMISSION_MODE).textValue())
-                .orElse(DataTransmissionMode.VALUE);
+                                                        .orElse(DataTransmissionMode.VALUE);
         Format format = decodeFormat(node.path(Keys.FORMAT));
         if (dereference || mode == DataTransmissionMode.VALUE || !this.referencer.isPresent()) {
             Path path = Paths.get(node.path(Keys.FILE).textValue());
@@ -427,8 +421,7 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
         }
     }
 
-    private ProcessData decodeGroupData(OutputReference reference,
-            JsonNode node) throws IOException {
+    private ProcessData decodeGroupData(OutputReference reference, JsonNode node) throws IOException {
         GroupProcessData groupProcessData = new GroupProcessData(reference.getOutputId().last());
         for (JsonNode childNode : node.path(Keys.OUTPUTS)) {
             OutputReference childRefernce = reference.child(decodeIdentifier(childNode));
@@ -438,8 +431,7 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
         return groupProcessData;
     }
 
-    private Path persistFailureCause(Path directory,
-            Throwable ex) throws IOException {
+    private Path persistFailureCause(Path directory, Throwable ex) throws IOException {
         Path outputFile = Files.createTempFile(directory, null, null);
         try (ObjectOutputStream out = new ObjectOutputStream(Files.newOutputStream(outputFile))) {
             if (ex instanceof EngineException) {
@@ -454,8 +446,13 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
     @Override
     public Set<JobId> getJobIds() {
         try {
-            return Files.list(this.basePath).filter(Files::isDirectory).map(Path::getFileName).filter(Objects::nonNull)
-                    .map(Path::toString).map(JobId::new).collect(toSet());
+            return Files.list(this.basePath)
+                        .filter(Files::isDirectory)
+                        .map(Path::getFileName)
+                        .filter(Objects::nonNull)
+                        .map(Path::toString)
+                        .map(JobId::new)
+                        .collect(toSet());
         } catch (IOException ex) {
             LOG.error(COULD_NOT_LIST + basePath, ex);
             return Collections.emptySet();
@@ -468,8 +465,13 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
         Set<JobId> jobIdsforProcess = new HashSet<>();
 
         try {
-            Set<JobId> allJobIds = Files.list(this.basePath).filter(Files::isDirectory).map(Path::getFileName).filter(
-                    Objects::nonNull).map(Path::toString).map(JobId::new).collect(toSet());
+            Set<JobId> allJobIds = Files.list(this.basePath)
+                                        .filter(Files::isDirectory)
+                                        .map(Path::getFileName)
+                                        .filter(Objects::nonNull)
+                                        .map(Path::toString)
+                                        .map(JobId::new)
+                                        .collect(toSet());
 
             for (JobId jobId : allJobIds) {
                 try {
@@ -521,8 +523,8 @@ public class FileBasedResultPersistence implements ResultPersistence, Constructa
         }
 
         private Predicate<Path> shouldBeDeleted(OffsetDateTime threshold) {
-            return path -> Files.isDirectory(path) && getLastModifiedTime(path).filter(dt -> dt.compareTo(
-                    threshold) <= 0).isPresent();
+            return path -> Files.isDirectory(path) &&
+                           getLastModifiedTime(path).filter(dt -> dt.compareTo(threshold) <= 0).isPresent();
 
         }
 

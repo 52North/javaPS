@@ -37,12 +37,12 @@ public class LiteralBooleanType extends AbstractXSDLiteralType<Boolean> {
     @Override
     public Boolean parse(String value) throws DecodingException {
         switch (value) {
-        case TRUE:
-            return true;
-        case FALSE:
-            return false;
-        default:
-            throw new DecodingException("value is not a valid boolean");
+            case TRUE:
+                return true;
+            case FALSE:
+                return false;
+            default:
+                throw new DecodingException("value is not a valid boolean");
         }
     }
 
