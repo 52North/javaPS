@@ -22,11 +22,12 @@
 package org.n52.wps.javaps.rest.deserializer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.swagger.model.Input;
 import io.swagger.model.Output;
 import io.swagger.model.TransmissionMode;
-import org.n52.javaps.io.bbox.json.JSONBoundingBoxInputOutputHandler;
 import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.shetland.ogc.wps.DataTransmissionMode;
 import org.n52.shetland.ogc.wps.Format;
@@ -40,7 +41,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
 
@@ -53,15 +53,17 @@ public class ExecuteDeserializer {
     private static final String ENCODING_KEY = "encoding";
     private static final String SCHEMA_KEY = "schema";
     private static final Format FORMAT_TEXT_PLAIN = new Format("text/plain");
+    private static final String BBOX_KEY = "bbox";
 
     @Autowired
-    private  ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
 
     public List<OutputDefinition> readOutputs(List<Output> outputs) {
         return outputs.stream().map(output -> {
             OutputDefinition definition = new OutputDefinition();
             definition.setId(createId(output.getId()));
-            definition.setFormat(getFormat(output.getFormat()));
+            io.swagger.model.Format format = output.getFormat();
+            definition.setFormat(new Format(format.getMimeType(), format.getEncoding(), format.getSchema()));
             definition.setDataTransmissionMode(getTransmisionMode(output.getTransmissionMode()));
             return definition;
         }).collect(toList());
@@ -77,79 +79,47 @@ public class ExecuteDeserializer {
         }
     }
 
-    private Format getFormat(Object object) {
-        String mimeType = "";
-        String encoding = "";
-        String schema = "";
-
-        if (object instanceof Map<?, ?>) {
-
-            Map<?, ?> map = (Map<?, ?>) object;
-
-            mimeType = map.containsKey(MIME_TYPE_KEY) ? map.get(MIME_TYPE_KEY).toString() : "";
-            encoding = map.containsKey(ENCODING_KEY) ? map.get(ENCODING_KEY).toString() : "";
-            schema = map.containsKey(SCHEMA_KEY) ? map.get(SCHEMA_KEY).toString() : "";
-
-        } else if (object instanceof io.swagger.model.Format) {
-
-            io.swagger.model.Format format = (io.swagger.model.Format) object;
-
-            return new Format(format.getMimeType(), format.getEncoding(), format.getSchema());
-        }
-        return new Format(mimeType, encoding, schema);
+    @SuppressWarnings("rawtypes")
+    private Format getFormat(JsonNode object) {
+        return new Format(object.path(MIME_TYPE_KEY).asText(),
+                          object.path(ENCODING_KEY).asText(),
+                          object.path(SCHEMA_KEY).asText());
     }
 
     private OwsCode createId(String id) {
         return new OwsCode(id);
     }
 
-    public List<ProcessData> readInputs(List<Input> inputs) throws URISyntaxException, JsonProcessingException {
-        List<ProcessData> processDataList = new ArrayList<>();
+    public List<ProcessData> readInputs(List<Input> inputs) throws JsonProcessingException, URISyntaxException {
+        List<ProcessData> list = new ArrayList<>();
         for (Input input : inputs) {
-            OwsCode id = createId(input.getId());
-            Object object = input.getInput();
-            if (object instanceof Map<?, ?>) {
-                Map<?, ?> map = (Map<?, ?>) object;
-                processDataList.add(readInput(id, map));
-            }
+            list.add(readInput(createId(input.getId()), input.getInput()));
         }
-        return processDataList;
+        return list;
     }
 
-    private ProcessData readInput(OwsCode id, Map<?, ?> map) throws URISyntaxException, JsonProcessingException {
-        if (map.containsKey(VALUE_KEY)) {
-
-            Object value = map.get(VALUE_KEY);
-
-            if (value instanceof Map<?, ?>) {
-                // complex data
-                Map<?, ?> complexValueMap = (Map<?, ?>) value;
-                if (complexValueMap.containsKey(INLINE_VALUE_KEY)) {
-                    Format format = FORMAT_TEXT_PLAIN;
-                    if (map.containsKey(FORMAT_KEY)) {
-                        format = getFormat(map.get(FORMAT_KEY));
-                    }
-
-                    String stringValue = objectMapper.writeValueAsString(complexValueMap.get(INLINE_VALUE_KEY));
-                    return new StringValueProcessData(id, format, stringValue);
-
-                } else if (complexValueMap.containsKey(HREF_KEY)) {
-
-                    URI uri = new URI(complexValueMap.get(HREF_KEY).toString());
-
-                    Format format = new Format();
-
-                    if (map.containsKey(FORMAT_KEY)) {
-                        format = getFormat(map.get(FORMAT_KEY));
-                    }
-
-                    return new ReferenceProcessData(id, format, uri);
+    private ProcessData readInput(OwsCode id, JsonNode map) throws JsonProcessingException, URISyntaxException {
+        JsonNode valueNode = map.path(VALUE_KEY);
+        if (valueNode.isObject()) {
+            ObjectNode value = (ObjectNode) valueNode;
+            // complex data
+            if (value.has(INLINE_VALUE_KEY)) {
+                Format format = FORMAT_TEXT_PLAIN;
+                if (map.has(FORMAT_KEY)) {
+                    format = getFormat(map.get(FORMAT_KEY));
                 }
-            } else if (value instanceof String) {
-                return new StringValueProcessData(id, FORMAT_TEXT_PLAIN, (String) value);
+                String stringValue = objectMapper.writeValueAsString(value.get(INLINE_VALUE_KEY));
+                return new StringValueProcessData(id, format, stringValue);
+            } else if (value.has(HREF_KEY)) {
+                URI uri = new URI(value.get(HREF_KEY).toString());
+                Format format = getFormat(map.get(FORMAT_KEY));
+                return new ReferenceProcessData(id, format, uri);
             }
-        } else if (map.containsKey(JSONBoundingBoxInputOutputHandler.BBOX)) {
-            return new StringValueProcessData(id, JSONBoundingBoxInputOutputHandler.FORMAT_APPLICATION_JSON,
+        } else if (valueNode.isValueNode()) {
+            return new StringValueProcessData(id, FORMAT_TEXT_PLAIN, valueNode.asText());
+
+        } else if (map.path(BBOX_KEY).isObject()) {
+            return new StringValueProcessData(id, new Format("application/json"),
                                               new ObjectMapper().writeValueAsString(map));
         }
 

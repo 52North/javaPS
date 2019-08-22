@@ -89,10 +89,6 @@ public class RootController {
         link.setTitle("The processes offered by this server");
         links.add(link);
 
-        Root root = new Root();
-
-        root.setLinks(links);
-
-        return ResponseEntity.ok(root);
+        return ResponseEntity.ok(new Root().links(links));
     }
 }

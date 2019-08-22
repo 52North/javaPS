@@ -24,19 +24,17 @@ package org.n52.javaps.io.bbox.json;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.n52.javaps.description.TypedProcessInputDescription;
 import org.n52.javaps.description.TypedProcessOutputDescription;
 import org.n52.javaps.io.Data;
 import org.n52.javaps.io.DecodingException;
-import org.n52.javaps.io.EncodingException;
 import org.n52.javaps.io.InputHandler;
 import org.n52.javaps.io.OutputHandler;
 import org.n52.javaps.io.bbox.BoundingBoxData;
 import org.n52.shetland.ogc.ows.OwsBoundingBox;
 import org.n52.shetland.ogc.wps.Format;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -45,29 +43,16 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.stream.IntStream;
 
 public class JSONBoundingBoxInputOutputHandler implements InputHandler, OutputHandler {
-
-    private static final Logger log = LoggerFactory.getLogger(JSONBoundingBoxInputOutputHandler.class);
-
-    public static final Format FORMAT_APPLICATION_JSON = new Format("application/json");
-
-    public static final String LOWER_CORNER_KEY = "lowerCorner";
-
-    public static final String UPPER_CORNER_KEY = "upperCorner";
-
-    public static final String CRS_KEY = "crs";
-
-    public static final Set<Format> FORMATS = Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(FORMAT_APPLICATION_JSON)));
+    private static final String CRS_KEY = "crs";
+    private static final String BBOX_KEY = "bbox";
+    private static final Set<Format> FORMATS = Collections.singleton(new Format("application/json"));
     private static final Set<Class<? extends Data<?>>> BINDINGS = Collections.singleton(BoundingBoxData.class);
 
-    public static final String BBOX = "bbox";
 
-    private static final double maxX = 0;
-
-    private static final double maxY = 0;
 
     @Override
     public Set<Format> getSupportedFormats() {
@@ -80,87 +65,44 @@ public class JSONBoundingBoxInputOutputHandler implements InputHandler, OutputHa
     }
 
     @Override
-    public InputStream generate(TypedProcessOutputDescription<?> description,
-                                Data<?> data,
-                                Format format) throws IOException, EncodingException {
-
+    public InputStream generate(TypedProcessOutputDescription<?> description, Data<?> data, Format format) {
         InputStream result = null;
-
         if (data instanceof BoundingBoxData) {
             OwsBoundingBox boundingBox = ((BoundingBoxData) data).getPayload();
-
-            double[] lowerCorner = boundingBox.getLowerCorner();
-            double[] upperCorner = boundingBox.getUpperCorner();
-
-            String lowerCornerString = lowerCorner[0] + " " + lowerCorner[1];
-            String upperCornerString = upperCorner[0] + " " + upperCorner[1];
-
-            ObjectMapper objectMapper = new ObjectMapper();
-
-            ObjectNode rootNode = objectMapper.createObjectNode();
-
-            //TODO what about 6 coordinates?
-            ArrayNode arrayNode = rootNode.arrayNode();
-            arrayNode.add(lowerCorner[0]);
-            arrayNode.add(lowerCorner[1]);
-            arrayNode.add(upperCorner[0]);
-            arrayNode.add(upperCorner[1]);
-            rootNode.set(BBOX, arrayNode);
-            boundingBox.getCRS().map(URI::toString).ifPresent(crs -> rootNode.put(CRS_KEY, crs));
-            ;
-
-            result = new ByteArrayInputStream(rootNode.toString().getBytes());
+            ObjectNode root = JsonNodeFactory.instance.objectNode();
+            ArrayNode arrayNode = root.putArray(BBOX_KEY);
+            Arrays.stream(boundingBox.getLowerCorner()).forEach(arrayNode::add);
+            Arrays.stream(boundingBox.getUpperCorner()).forEach(arrayNode::add);
+            boundingBox.getCRS().map(URI::toString).ifPresent(crs -> root.put(CRS_KEY, crs));
+            result = new ByteArrayInputStream(root.toString().getBytes());
         }
-
         return result;
     }
 
     @Override
-    public Data<?> parse(TypedProcessInputDescription<?> description,
-                         InputStream input,
-                         Format format) throws IOException, DecodingException {
-
+    public Data<?> parse(TypedProcessInputDescription<?> description, InputStream input, Format format)
+            throws IOException, DecodingException {
         JsonNode bboxNode = new ObjectMapper().readTree(input);
-
-        ArrayNode arrayNode = (ArrayNode) bboxNode.get(BBOX);
-
-        JsonNode crsNode = bboxNode.path(CRS_KEY);
-
-        OwsBoundingBox boundingBox;
-        try {
-            boundingBox = createOWSBoundingbox(crsNode.asText(), arrayNode.get(0).asDouble(), arrayNode.get(1).asDouble(), arrayNode.get(2).asDouble(), arrayNode.get(3).asDouble());
-        } catch (URISyntaxException e) {
-            throw new DecodingException(e);
+        ArrayNode arrayNode = (ArrayNode) bboxNode.get(BBOX_KEY);
+        URI crs;
+        if (bboxNode.path(CRS_KEY).isTextual()) {
+            try {
+                crs = new URI(bboxNode.path(CRS_KEY).asText());
+            } catch (URISyntaxException e) {
+                throw new DecodingException(e);
+            }
+        } else {
+            crs = null;
         }
-
-        return new BoundingBoxData(boundingBox);
-    }
-
-    private OwsBoundingBox createOWSBoundingbox(
-            String crsNodeString, double minX, double minY, double maxX, double maxY) throws URISyntaxException {
-
-        double[] lowerCorner = new double[]{minX, minY};
-        double[] upperCorner = new double[]{maxX, maxY};
-        URI crs = new URI(crsNodeString);
-        return new OwsBoundingBox(lowerCorner, upperCorner, crs);
-    }
-
-    private OwsBoundingBox createOWSBoundingbox(String lowerCornerNodeString,
-                                                String upperCornerNodeString,
-                                                String crsNodeString) throws URISyntaxException {
-
-        String[] lowerCornerStringArray = lowerCornerNodeString.split(" ");
-        String[] upperCornerStringArray = upperCornerNodeString.split(" ");
-
-        double minX = Double.parseDouble(lowerCornerStringArray[1]);
-        double minY = Double.parseDouble(lowerCornerStringArray[0]);
-        double maxX = Double.parseDouble(upperCornerStringArray[1]);
-        double maxY = Double.parseDouble(upperCornerStringArray[0]);
-
-        double[] lowerCorner = new double[]{minX, minY};
-        double[] upperCorner = new double[]{maxX, maxY};
-        URI crs = new URI(crsNodeString);
-        return new OwsBoundingBox(lowerCorner, upperCorner, crs);
+        double[] lower = IntStream.range(0, arrayNode.size() / 2)
+                                  .mapToObj(arrayNode::get)
+                                  .mapToDouble(JsonNode::asDouble)
+                                  .toArray();
+        double[] upper = IntStream.range(arrayNode.size() / 2, arrayNode.size())
+                                  .mapToObj(arrayNode::get)
+                                  .mapToDouble(JsonNode::asDouble)
+                                  .toArray();
+        return new BoundingBoxData(new OwsBoundingBox(lower, upper, crs));
     }
 
 }

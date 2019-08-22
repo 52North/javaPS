@@ -22,6 +22,7 @@
 package io.swagger.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.validation.annotation.Validated;
 
@@ -38,7 +39,7 @@ public class Input {
     private String id = null;
 
     @JsonProperty("input")
-    private Object input = null;
+    private JsonNode input = null;
 
     public Input id(String id) {
         this.id = id;
@@ -61,7 +62,7 @@ public class Input {
         this.id = id;
     }
 
-    public Input input(Object input) {
+    public Input input(JsonNode input) {
         this.input = input;
         return this;
     }
@@ -74,11 +75,11 @@ public class Input {
     @ApiModelProperty(required = true, value = "")
     @NotNull
 
-    public Object getInput() {
+    public JsonNode getInput() {
         return input;
     }
 
-    public void setInput(Object input) {
+    public void setInput(JsonNode input) {
         this.input = input;
     }
 
