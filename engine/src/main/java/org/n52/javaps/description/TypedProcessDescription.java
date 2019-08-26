@@ -28,7 +28,8 @@ public interface TypedProcessDescription extends ProcessDescription,
                                                  TypedProcessOutputDescriptionContainer {
 
     interface Builder<T extends TypedProcessDescription, B extends Builder<T, B>>
-            extends TypedProcessInputDescriptionContainer.Builder<T, B>,
+            extends ProcessDescription.Builder<T, B>,
+                    TypedProcessInputDescriptionContainer.Builder<T, B>,
                     TypedProcessOutputDescriptionContainer.Builder<T, B> {
 
     }
