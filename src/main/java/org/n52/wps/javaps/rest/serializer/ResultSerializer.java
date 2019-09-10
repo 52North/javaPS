@@ -27,6 +27,7 @@ import io.swagger.model.OutputInfo;
 import io.swagger.model.Result;
 import io.swagger.model.ValueType;
 import org.apache.commons.io.IOUtils;
+import org.n52.javaps.engine.OutputEncodingException;
 import org.n52.shetland.ogc.wps.data.ProcessData;
 import org.n52.shetland.ogc.wps.data.ReferenceProcessData;
 import org.n52.shetland.ogc.wps.data.ValueProcessData;
@@ -44,14 +45,19 @@ public class ResultSerializer extends AbstractSerializer {
     private static final Logger log = LoggerFactory.getLogger(ResultSerializer.class);
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public Result serializeResult(org.n52.shetland.ogc.wps.Result result) throws IOException {
+    public Result serializeResult(org.n52.shetland.ogc.wps.Result result) throws OutputEncodingException {
         return new Result().outputs(getOutputInfos(result.getOutputs()));
+
     }
 
-    private List<OutputInfo> getOutputInfos(List<ProcessData> outputs) throws IOException {
+    private List<OutputInfo> getOutputInfos(List<ProcessData> outputs) throws OutputEncodingException {
         List<OutputInfo> outputInfos = new ArrayList<>();
         for (ProcessData processData : outputs) {
-            outputInfos.add(createOutput(processData));
+            try {
+                outputInfos.add(createOutput(processData));
+            } catch (IOException | IllegalArgumentException e) {
+                throw new OutputEncodingException(processData.getId(), e);
+            }
         }
         return outputInfos;
     }

@@ -37,6 +37,10 @@ import io.swagger.model.ProcessCollection;
 import io.swagger.model.ProcessOffering;
 import io.swagger.model.Result;
 import io.swagger.model.StatusInfo;
+import org.n52.javaps.engine.Engine;
+import org.n52.javaps.engine.EngineException;
+import org.n52.javaps.engine.JobNotFoundException;
+import org.n52.javaps.engine.ProcessNotFoundException;
 import org.n52.shetland.ogc.ows.exception.CodedException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -44,6 +48,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
 
@@ -64,7 +69,7 @@ public interface ProcessesApi {
             consumes = {"application/json"},
             method = RequestMethod.POST)
     ResponseEntity<?> execute(@ApiParam(value = "Mandatory execute request JSON", required = true) @Valid @RequestBody Execute body, @ApiParam(value = "The id of a process.", required = true) @PathVariable("id") String id)
-            throws CodedException;
+            throws EngineException;
 
     @ApiOperation(value = "retrieve the list of jobs for a process.", nickname = "getJobList", notes = "", response = JobCollection.class, tags = {"JobList",})
     @ApiResponses(value = {
@@ -89,7 +94,9 @@ public interface ProcessesApi {
     @RequestMapping(value = baseURL + "/processes/{id:.+}",
             produces = {"application/json"},
             method = RequestMethod.GET)
-    ResponseEntity<?> getProcessDescription(@ApiParam(value = "The id of a process", required = true) @PathVariable("id") String id);
+    @ResponseBody
+    ProcessOffering getProcessDescription(@ApiParam(value = "The id of a process", required = true) @PathVariable("id") String id)
+            throws ProcessNotFoundException;
 
     @ApiOperation(value = "retrieve available processes", nickname = "getProcesses", notes = "TODO", response = ProcessCollection.class, tags = {"Processes",})
     @ApiResponses(value = {
@@ -98,7 +105,8 @@ public interface ProcessesApi {
     @RequestMapping(value = baseURL + "/processes",
             produces = {"application/json"},
             method = RequestMethod.GET)
-    ResponseEntity<ProcessCollection> getProcesses();
+    @ResponseBody
+    ProcessCollection getProcesses();
 
     @ApiOperation(value = "retrieve the result(s) of a job", nickname = "getResult", notes = "", response = Result.class, tags = {"Result",})
     @ApiResponses(value = {
@@ -108,7 +116,8 @@ public interface ProcessesApi {
     @RequestMapping(value = baseURL + "/processes/{id}/jobs/{jobID}/result",
             produces = {"application/json"},
             method = RequestMethod.GET)
-    ResponseEntity<?> getResult(@ApiParam(value = "The id of a process", required = true) @PathVariable("id") String id, @ApiParam(value = "The id of a job", required = true) @PathVariable("jobID") String jobID);
+    ResponseEntity<?> getResult(@ApiParam(value = "The id of a process", required = true) @PathVariable("id") String id, @ApiParam(value = "The id of a job", required = true) @PathVariable("jobID") String jobID)
+            throws EngineException;
 
     @ApiOperation(value = "retrieve the status of a job", nickname = "getStatus", notes = "", response = StatusInfo.class, tags = {"Status",})
     @ApiResponses(value = {
@@ -118,6 +127,9 @@ public interface ProcessesApi {
     @RequestMapping(value = baseURL + "/processes/{id}/jobs/{jobID}",
             produces = {"application/json"},
             method = RequestMethod.GET)
-    ResponseEntity<?> getStatus(@ApiParam(value = "The id of a process", required = true) @PathVariable("id") String id, @ApiParam(value = "The id of a job", required = true) @PathVariable("jobID") String jobID);
+    @ResponseBody
+    StatusInfo getStatus(@ApiParam(value = "The id of a process", required = true) @PathVariable("id") String id,
+                                @ApiParam(value = "The id of a job", required = true) @PathVariable("jobID") String jobID)
+            throws ProcessNotFoundException, JobNotFoundException, EngineException;
 
 }

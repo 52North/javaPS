@@ -6,9 +6,8 @@
     <artifactId>javaps-rest</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
-
     <inceptionYear>2018</inceptionYear>
-
+    <name>javaPS RESTful interface</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

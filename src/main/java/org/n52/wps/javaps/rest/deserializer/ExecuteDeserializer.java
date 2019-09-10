@@ -28,6 +28,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.swagger.model.Input;
 import io.swagger.model.Output;
 import io.swagger.model.TransmissionMode;
+import org.n52.javaps.engine.InputDecodingException;
 import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.shetland.ogc.wps.DataTransmissionMode;
 import org.n52.shetland.ogc.wps.Format;
@@ -90,15 +91,20 @@ public class ExecuteDeserializer {
         return new OwsCode(id);
     }
 
-    public List<ProcessData> readInputs(List<Input> inputs) throws JsonProcessingException, URISyntaxException {
+    public List<ProcessData> readInputs(List<Input> inputs) throws InputDecodingException {
         List<ProcessData> list = new ArrayList<>();
         for (Input input : inputs) {
-            list.add(readInput(createId(input.getId()), input.getInput()));
+            OwsCode id = createId(input.getId());
+            try {
+                list.add(readInput(id, input.getInput()));
+            } catch (JsonProcessingException ex) {
+                throw new InputDecodingException(id, ex);
+            }
         }
         return list;
     }
 
-    private ProcessData readInput(OwsCode id, JsonNode map) throws JsonProcessingException, URISyntaxException {
+    private ProcessData readInput(OwsCode id, JsonNode map) throws InputDecodingException, JsonProcessingException {
         JsonNode valueNode = map.path(VALUE_KEY);
         if (valueNode.isObject()) {
             ObjectNode value = (ObjectNode) valueNode;
@@ -111,9 +117,13 @@ public class ExecuteDeserializer {
                 String stringValue = objectMapper.writeValueAsString(value.get(INLINE_VALUE_KEY));
                 return new StringValueProcessData(id, format, stringValue);
             } else if (value.has(HREF_KEY)) {
-                URI uri = new URI(value.get(HREF_KEY).toString());
-                Format format = getFormat(map.get(FORMAT_KEY));
-                return new ReferenceProcessData(id, format, uri);
+                try {
+                    URI uri = new URI(value.get(HREF_KEY).toString());
+                    Format format = getFormat(map.get(FORMAT_KEY));
+                    return new ReferenceProcessData(id, format, uri);
+                } catch (URISyntaxException e) {
+                    throw new InputDecodingException(id, e);
+                }
             }
         } else if (valueNode.isValueNode()) {
             return new StringValueProcessData(id, FORMAT_TEXT_PLAIN, valueNode.asText());
