@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 @RequestMapping(produces = "application/json")
 public class TransactionalEngineExceptionAdvice {
+    private static final String INVALID_PARAMETER = "InvalidParameter";
     private final ExceptionSerializer exceptionSerializer;
 
     @Autowired
@@ -39,18 +40,18 @@ public class TransactionalEngineExceptionAdvice {
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(DuplicateProcessException.class)
     public io.swagger.model.Exception handle(DuplicateProcessException ex) {
-        return exceptionSerializer.serializeException("InvalidParameter", ex.getMessage());
+        return exceptionSerializer.serializeException(INVALID_PARAMETER, ex.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(UnsupportedProcessException.class)
     public io.swagger.model.Exception handle(UnsupportedProcessException ex) {
-        return exceptionSerializer.serializeException("InvalidParameter", ex.getMessage());
+        return exceptionSerializer.serializeException(INVALID_PARAMETER, ex.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(UnsupportedProcessException.class)
     public io.swagger.model.Exception handle(NotUndeployableProcessException ex) {
-        return exceptionSerializer.serializeException("InvalidParameter", ex.getMessage());
+        return exceptionSerializer.serializeException(INVALID_PARAMETER, ex.getMessage());
     }
 }
