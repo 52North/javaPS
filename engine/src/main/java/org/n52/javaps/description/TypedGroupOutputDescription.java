@@ -24,8 +24,9 @@ import org.n52.shetland.ogc.wps.description.GroupOutputDescription;
 /**
  * @author Christian Autermann
  */
-public interface TypedGroupOutputDescription extends GroupOutputDescription, TypedProcessOutputDescriptionContainer,
-                                                     TypedProcessOutputDescription<Class<? extends Data<ProcessOutputs>>> {
+public interface TypedGroupOutputDescription
+        extends GroupOutputDescription, TypedProcessOutputDescriptionContainer,
+                TypedProcessOutputDescription<Class<? extends Data<ProcessOutputs>>> {
 
     @Override
     default Class<? extends Data<ProcessOutputs>> getType() {
