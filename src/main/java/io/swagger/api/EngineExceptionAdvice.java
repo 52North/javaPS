@@ -40,7 +40,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 @RequestMapping(produces = "application/json")
 public class EngineExceptionAdvice {
-
+    private static final String INVALID_PARAMETER = "InvalidParameter";
+    private static final String NO_APPLICABLE_CODE = "NoApplicableCode";
     private final ExceptionSerializer exceptionSerializer;
 
     @Autowired
@@ -51,48 +52,48 @@ public class EngineExceptionAdvice {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(JobNotFoundException.class)
     public io.swagger.model.Exception handle(JobNotFoundException ex) {
-        return exceptionSerializer.serializeException("InvalidParameter", ex.getMessage());
+        return exceptionSerializer.serializeException(INVALID_PARAMETER, ex.getMessage());
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(ProcessNotFoundException.class)
     public io.swagger.model.Exception handle(ProcessNotFoundException ex) {
-        return exceptionSerializer.serializeException("InvalidParameter", ex.getMessage());
+        return exceptionSerializer.serializeException(INVALID_PARAMETER, ex.getMessage());
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(OutputNotFoundException.class)
     public io.swagger.model.Exception handle(OutputNotFoundException ex) {
-        return exceptionSerializer.serializeException("InvalidParameter", ex.getMessage());
+        return exceptionSerializer.serializeException(INVALID_PARAMETER, ex.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({InputDecodingException.class})
     public io.swagger.model.Exception handle(InputDecodingException ex) {
-        return exceptionSerializer.serializeException("InvalidParameter", ex.getMessage());
+        return exceptionSerializer.serializeException(INVALID_PARAMETER, ex.getMessage());
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(OutputEncodingException.class)
     public io.swagger.model.Exception handle(OutputEncodingException ex) {
-        return exceptionSerializer.serializeException("InvalidParameter", ex.getMessage());
+        return exceptionSerializer.serializeException(INVALID_PARAMETER, ex.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(EngineException.class)
     public io.swagger.model.Exception handle(UnsupportedInputFormatException ex) {
-        return exceptionSerializer.serializeException("InvalidParameter", ex.getMessage());
+        return exceptionSerializer.serializeException(INVALID_PARAMETER, ex.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(EngineException.class)
     public io.swagger.model.Exception handle(UnsupportedOutputFormatException ex) {
-        return exceptionSerializer.serializeException("InvalidParameter", ex.getMessage());
+        return exceptionSerializer.serializeException(INVALID_PARAMETER, ex.getMessage());
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(EngineException.class)
     public io.swagger.model.Exception handle(EngineException ex) {
-        return exceptionSerializer.serializeException("NoApplicableCode", ex.getMessage());
+        return exceptionSerializer.serializeException(NO_APPLICABLE_CODE, ex.getMessage());
     }
 }
