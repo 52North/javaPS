@@ -104,7 +104,8 @@ public abstract class AbstractTransactionalAlgorithmRepository implements Transa
         return getApplicationPackage(id).map(this::createAlgorithm);
     }
 
-    private Optional<ApplicationPackage> getApplicationPackage(OwsCode id) {
+    @Override
+    public Optional<ApplicationPackage> getApplicationPackage(OwsCode id) {
         Objects.requireNonNull(id);
         lock.readLock().lock();
         try {

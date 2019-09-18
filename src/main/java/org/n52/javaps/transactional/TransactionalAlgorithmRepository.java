@@ -38,8 +38,14 @@ public interface TransactionalAlgorithmRepository extends AlgorithmRepository {
 
     @Override
     default boolean containsAlgorithm(OwsCode id) {
-        return getAlgorithm(id).isPresent();
+        return getApplicationPackage(id).isPresent();
     }
+
+    default Optional<ApplicationPackage> getApplicationPackage(String id) {
+        return getApplicationPackage(new OwsCode(id));
+    }
+
+    Optional<ApplicationPackage> getApplicationPackage(OwsCode id);
 
     OwsCode register(ApplicationPackage applicationPackage)
             throws DuplicateProcessException, UnsupportedProcessException;
