@@ -26,11 +26,13 @@ import io.swagger.model.StatusInfo;
 import io.swagger.model.StatusInfo.StatusEnum;
 import org.n52.faroe.annotation.Configurable;
 import org.n52.shetland.ogc.wps.JobStatus;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Configurable
+@Component
 public class StatusInfoSerializer extends AbstractSerializer {
 
     public StatusInfoSerializer() {

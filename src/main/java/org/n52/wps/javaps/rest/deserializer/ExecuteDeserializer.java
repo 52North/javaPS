@@ -37,6 +37,7 @@ import org.n52.shetland.ogc.wps.data.ProcessData;
 import org.n52.shetland.ogc.wps.data.ReferenceProcessData;
 import org.n52.shetland.ogc.wps.data.impl.StringValueProcessData;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -45,6 +46,7 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
+@Component
 public class ExecuteDeserializer {
     private static final String VALUE_KEY = "value";
     private static final String INLINE_VALUE_KEY = "inlineValue";

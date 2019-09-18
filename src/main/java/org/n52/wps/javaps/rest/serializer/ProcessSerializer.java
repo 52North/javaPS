@@ -71,6 +71,7 @@ import org.n52.shetland.ogc.wps.description.LiteralInputDescription;
 import org.n52.shetland.ogc.wps.description.LiteralOutputDescription;
 import org.n52.shetland.ogc.wps.description.ProcessInputDescription;
 import org.n52.shetland.ogc.wps.description.ProcessOutputDescription;
+import org.springframework.stereotype.Component;
 
 import java.math.BigInteger;
 import java.net.URI;
@@ -88,6 +89,7 @@ import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toList;
 
 @Configurable
+@Component
 public class ProcessSerializer extends AbstractSerializer {
     public ProcessSerializer() {
     }

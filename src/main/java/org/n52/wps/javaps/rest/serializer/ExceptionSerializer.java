@@ -22,7 +22,9 @@
 package org.n52.wps.javaps.rest.serializer;
 
 import io.swagger.model.Exception;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ExceptionSerializer extends AbstractSerializer {
 
     public Exception serializeException(String code, String description) {

@@ -33,6 +33,7 @@ import org.n52.shetland.ogc.wps.data.ReferenceProcessData;
 import org.n52.shetland.ogc.wps.data.ValueProcessData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -40,6 +41,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class ResultSerializer extends AbstractSerializer {
 
     private static final Logger log = LoggerFactory.getLogger(ResultSerializer.class);
@@ -47,7 +49,6 @@ public class ResultSerializer extends AbstractSerializer {
 
     public Result serializeResult(org.n52.shetland.ogc.wps.Result result) throws OutputEncodingException {
         return new Result().outputs(getOutputInfos(result.getOutputs()));
-
     }
 
     private List<OutputInfo> getOutputInfos(List<ProcessData> outputs) throws OutputEncodingException {
