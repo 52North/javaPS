@@ -31,30 +31,6 @@
 
     <repositories>
         <repository>
-            <id>n52-releases</id>
-            <name>52n Releases</name>
-            <url>http://52north.org/maven/repo/releases/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-
-        <repository>
-            <id>n52-snapshots</id>
-            <name>52n Snapshots</name>
-            <url>http://52north.org/maven/repo/snapshots/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-
-        <repository>
             <id>sonatype-snapshots</id>
             <name>Sonatype Snapshots</name>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
