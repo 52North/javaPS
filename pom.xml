@@ -126,6 +126,10 @@
                         <groupId>org.geolatte</groupId>
                         <artifactId>geolatte-geom</artifactId>
                     </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.commons</groupId>
+                        <artifactId>commons-lang3</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
             <dependency>
