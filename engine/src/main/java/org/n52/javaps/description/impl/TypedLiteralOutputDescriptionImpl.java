@@ -16,32 +16,22 @@
  */
 package org.n52.javaps.description.impl;
 
-import java.util.Objects;
-import java.util.Set;
-
-import org.n52.shetland.ogc.ows.OwsCode;
-import org.n52.shetland.ogc.ows.OwsKeyword;
-import org.n52.shetland.ogc.ows.OwsLanguageString;
-import org.n52.shetland.ogc.ows.OwsMetadata;
-import org.n52.shetland.ogc.wps.description.LiteralDataDomain;
-import org.n52.shetland.ogc.wps.description.impl.LiteralOutputDescriptionImpl;
+import org.n52.javaps.description.TypedLiteralInputDescription;
 import org.n52.javaps.description.TypedLiteralOutputDescription;
 import org.n52.javaps.io.literal.LiteralType;
+import org.n52.shetland.ogc.wps.description.LiteralOutputDescription;
+import org.n52.shetland.ogc.wps.description.ProcessDescriptionBuilderFactory;
+import org.n52.shetland.ogc.wps.description.impl.LiteralOutputDescriptionImpl;
 
-public class TypedLiteralOutputDescriptionImpl extends LiteralOutputDescriptionImpl implements
-        TypedLiteralOutputDescription {
+import java.util.Objects;
+
+public class TypedLiteralOutputDescriptionImpl extends LiteralOutputDescriptionImpl
+        implements TypedLiteralOutputDescription {
     private final LiteralType<?> type;
 
-    public TypedLiteralOutputDescriptionImpl(OwsCode id, OwsLanguageString title, OwsLanguageString abstrakt, Set<
-            OwsKeyword> keywords, Set<OwsMetadata> metadata, LiteralDataDomain defaultLiteralDataDomain, Set<
-                    LiteralDataDomain> supportedLiteralDataDomain, LiteralType<?> type) {
-        super(id, title, abstrakt, keywords, metadata, defaultLiteralDataDomain, supportedLiteralDataDomain);
-        this.type = Objects.requireNonNull(type, "type");
-    }
-
     protected TypedLiteralOutputDescriptionImpl(AbstractBuilder<?, ?> builder) {
-        this(builder.getId(), builder.getTitle(), builder.getAbstract(), builder.getKeywords(), builder.getMetadata(),
-                builder.getDefaultLiteralDataDomain(), builder.getSupportedLiteralDataDomains(), builder.getType());
+        super(builder);
+        this.type = Objects.requireNonNull(builder.getType(), "type");
     }
 
     @Override
@@ -49,16 +39,28 @@ public class TypedLiteralOutputDescriptionImpl extends LiteralOutputDescriptionI
         return this.type;
     }
 
-    public abstract static class AbstractBuilder<T extends TypedLiteralOutputDescription, B extends AbstractBuilder<T,
-            B>> extends LiteralOutputDescriptionImpl.AbstractBuilder<T, B> implements
-            TypedLiteralOutputDescription.Builder<T, B> {
+    protected abstract static class AbstractBuilder<T extends TypedLiteralOutputDescription,
+                                                           B extends AbstractBuilder<T, B>>
+            extends LiteralOutputDescriptionImpl.AbstractBuilder<T, B>
+            implements TypedLiteralOutputDescription.Builder<T, B> {
         private LiteralType<?> type;
 
+        protected AbstractBuilder(ProcessDescriptionBuilderFactory<?, ?, ?, ?, ?, ?, ?, ?, ?, ?> factory) {
+            super(factory);
+        }
+
+        protected AbstractBuilder(ProcessDescriptionBuilderFactory<?, ?, ?, ?, ?, ?, ?, ?, ?, ?> factory,
+                                  LiteralOutputDescription entity) {
+            super(factory, entity);
+            if (entity instanceof TypedLiteralInputDescription) {
+                this.type = ((TypedLiteralInputDescription) entity).getType();
+            }
+        }
+
         @Override
-        @SuppressWarnings("unchecked")
         public B withType(LiteralType<?> type) {
             this.type = Objects.requireNonNull(type);
-            return (B) this;
+            return self();
         }
 
         public LiteralType<?> getType() {
@@ -68,6 +70,15 @@ public class TypedLiteralOutputDescriptionImpl extends LiteralOutputDescriptionI
     }
 
     public static class Builder extends AbstractBuilder<TypedLiteralOutputDescription, Builder> {
+        protected Builder(ProcessDescriptionBuilderFactory<?, ?, ?, ?, ?, ?, ?, ?, ?, ?> factory) {
+            super(factory);
+        }
+
+        protected Builder(ProcessDescriptionBuilderFactory<?, ?, ?, ?, ?, ?, ?, ?, ?, ?> factory,
+                          LiteralOutputDescription entity) {
+            super(factory, entity);
+        }
+
         @Override
         public TypedLiteralOutputDescription build() {
             return new TypedLiteralOutputDescriptionImpl(this);

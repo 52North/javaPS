@@ -16,11 +16,10 @@
  */
 package org.n52.javaps.description;
 
-import org.n52.shetland.ogc.wps.description.DataDescription;
 import org.n52.javaps.io.Data;
+import org.n52.shetland.ogc.wps.description.DataDescription;
 
 /**
- *
  * @author Christian Autermann
  */
 public interface TypedDataDescription<X> extends DataDescription {
@@ -31,8 +30,8 @@ public interface TypedDataDescription<X> extends DataDescription {
 
     Class<? extends Data<?>> getBindingType();
 
-    interface Builder<X, T extends TypedDataDescription<X>, B extends Builder<X, T, B>> extends DataDescription.Builder<
-            T, B> {
+    interface Builder<X, T extends TypedDataDescription<X>, B extends Builder<X, T, B>>
+            extends DataDescription.Builder<T, B> {
         B withType(X type);
     }
 

@@ -16,27 +16,6 @@
  */
 package org.n52.javaps.io.literal;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.net.URI;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.Month;
-import java.time.MonthDay;
-import java.time.Year;
-import java.time.YearMonth;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
-
-import javax.inject.Inject;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.n52.javaps.io.literal.xsd.Day;
 import org.n52.javaps.io.literal.xsd.LiteralAnyURIType;
 import org.n52.javaps.io.literal.xsd.LiteralBase64BinaryType;
@@ -61,8 +40,27 @@ import org.n52.javaps.io.literal.xsd.LiteralTimeType;
 import org.n52.javaps.io.literal.xsd.LiteralYearMonthType;
 import org.n52.javaps.io.literal.xsd.LiteralYearType;
 import org.n52.javaps.utils.Context;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@SuppressWarnings({ "rawtypes", "unchecked" })
+import javax.inject.Inject;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.net.URI;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.Month;
+import java.time.MonthDay;
+import java.time.Year;
+import java.time.YearMonth;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
+
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class LiteralTypeRepositoryImpl implements LiteralTypeRepository {
 
     private static final Logger LOG = LoggerFactory.getLogger(LiteralTypeRepositoryImpl.class);
@@ -114,14 +112,12 @@ public class LiteralTypeRepositoryImpl implements LiteralTypeRepository {
         registerMapping(YearMonth.class, LiteralYearMonthType.class);
     }
 
-    public final <T> void registerMapping(Class<T> bindingPayloadType,
-            Class<? extends LiteralType<T>> literalType) {
+    public final <T> void registerMapping(Class<T> bindingPayloadType, Class<? extends LiteralType<T>> literalType) {
         this.mappings.put(bindingPayloadType, literalType);
     }
 
     @Override
-    public <T> LiteralType<T> getLiteralType(Class<? extends LiteralType<?>> literalType,
-            Class<?> payloadType) {
+    public <T> LiteralType<T> getLiteralType(Class<? extends LiteralType<?>> literalType, Class<?> payloadType) {
         Optional<LiteralType> type;
         if (literalType != null && !literalType.equals(LiteralType.class)) {
             type = getLiteralTypeForLiteralType(literalType);
@@ -136,13 +132,30 @@ public class LiteralTypeRepositoryImpl implements LiteralTypeRepository {
         return type.orElse(null);
     }
 
+    @Override
+    public Optional<LiteralType<?>> getLiteralType(String name) {
+        return context.getInstances(LiteralType.class).stream()
+                      .filter(i -> i.getName().equals(name))
+                      .findFirst()
+                      .map(t -> (LiteralType<?>) t);
+    }
+
+    @Override
+    public Optional<LiteralType<?>> getLiteralType(URI name) {
+        return context.getInstances(LiteralType.class).stream()
+                      .filter(i -> i.getURI().equals(name))
+                      .findFirst()
+                      .map(t -> (LiteralType<?>) t);
+    }
+
     private Optional<LiteralType> getLiteralTypeForPayloadType(Class<?> payloadType) {
         if (this.mappings.containsKey(payloadType)) {
             Class<?> typeClass = this.mappings.get(payloadType);
             return (Optional<LiteralType>) context.getInstance(typeClass);
         } else {
-            return context.getInstances(LiteralType.class).stream().filter(i -> i.getPayloadType().equals(payloadType))
-                    .findFirst();
+            return context.getInstances(LiteralType.class).stream()
+                          .filter(i -> i.getPayloadType().equals(payloadType))
+                          .findFirst();
         }
     }
 

@@ -16,13 +16,12 @@
  */
 package org.n52.javaps.description;
 
-import java.util.Collection;
-
 import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.shetland.ogc.wps.description.ProcessInputDescriptionContainer;
 
+import java.util.Collection;
+
 /**
- *
  * @author Christian Autermann
  */
 public interface TypedProcessInputDescriptionContainer extends ProcessInputDescriptionContainer {
@@ -37,4 +36,6 @@ public interface TypedProcessInputDescriptionContainer extends ProcessInputDescr
     @Override
     Collection<? extends TypedProcessInputDescription<?>> getInputDescriptions();
 
+    interface Builder<T extends TypedProcessInputDescriptionContainer, B extends Builder<T, B>>
+            extends ProcessInputDescriptionContainer.Builder<T, B> {}
 }

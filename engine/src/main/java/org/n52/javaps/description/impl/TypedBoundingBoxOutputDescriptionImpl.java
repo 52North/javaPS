@@ -16,40 +16,47 @@
  */
 package org.n52.javaps.description.impl;
 
-import java.util.Set;
-
-import org.n52.shetland.ogc.ows.OwsCRS;
-import org.n52.shetland.ogc.ows.OwsCode;
-import org.n52.shetland.ogc.ows.OwsKeyword;
-import org.n52.shetland.ogc.ows.OwsLanguageString;
-import org.n52.shetland.ogc.ows.OwsMetadata;
-import org.n52.shetland.ogc.wps.description.impl.BoundingBoxOutputDescriptionImpl;
 import org.n52.javaps.description.TypedBoundingBoxOutputDescription;
+import org.n52.shetland.ogc.wps.description.BoundingBoxOutputDescription;
+import org.n52.shetland.ogc.wps.description.ProcessDescriptionBuilderFactory;
+import org.n52.shetland.ogc.wps.description.impl.BoundingBoxOutputDescriptionImpl;
 
-public class TypedBoundingBoxOutputDescriptionImpl extends BoundingBoxOutputDescriptionImpl implements
-        TypedBoundingBoxOutputDescription {
-
-    public TypedBoundingBoxOutputDescriptionImpl(OwsCode id, OwsLanguageString title, OwsLanguageString abstrakt, Set<
-            OwsKeyword> keywords, Set<OwsMetadata> metadata, OwsCRS defaultCRS, Set<OwsCRS> supportedCRS) {
-        super(id, title, abstrakt, keywords, metadata, defaultCRS, supportedCRS);
-    }
+public class TypedBoundingBoxOutputDescriptionImpl extends BoundingBoxOutputDescriptionImpl
+        implements TypedBoundingBoxOutputDescription {
 
     protected TypedBoundingBoxOutputDescriptionImpl(AbstractBuilder<?, ?> builder) {
-        this(builder.getId(), builder.getTitle(), builder.getAbstract(), builder.getKeywords(), builder.getMetadata(),
-                builder.getDefaultCRS(), builder.getSupportedCRS());
+        super(builder);
     }
 
-    public abstract static class AbstractBuilder<T extends TypedBoundingBoxOutputDescription, B extends AbstractBuilder<
-            T, B>> extends BoundingBoxOutputDescriptionImpl.AbstractBuilder<T, B> implements
-            TypedBoundingBoxOutputDescription.Builder<T, B> {
+    protected abstract static class AbstractBuilder<T extends TypedBoundingBoxOutputDescription,
+                                                        B extends AbstractBuilder<T, B>>
+            extends BoundingBoxOutputDescriptionImpl.AbstractBuilder<T, B>
+            implements TypedBoundingBoxOutputDescription.Builder<T, B> {
+        protected AbstractBuilder(ProcessDescriptionBuilderFactory<?, ?, ?, ?, ?, ?, ?, ?, ?, ?> factory,
+                                  BoundingBoxOutputDescription entity) {
+            super(factory, entity);
+        }
+
+        protected AbstractBuilder(
+                ProcessDescriptionBuilderFactory<?, ?, ?, ?, ?, ?, ?, ?, ?, ?> factory) {
+            super(factory);
+        }
     }
 
     public static class Builder extends AbstractBuilder<TypedBoundingBoxOutputDescription, Builder> {
+        protected Builder(ProcessDescriptionBuilderFactory<?, ?, ?, ?, ?, ?, ?, ?, ?, ?> factory,
+                          BoundingBoxOutputDescription entity) {
+            super(factory, entity);
+        }
+
+        protected Builder(ProcessDescriptionBuilderFactory<?, ?, ?, ?, ?, ?, ?, ?, ?, ?> factory) {
+            super(factory);
+        }
+
         @Override
         public TypedBoundingBoxOutputDescription build() {
             return new TypedBoundingBoxOutputDescriptionImpl(this);
         }
-
     }
 
 }

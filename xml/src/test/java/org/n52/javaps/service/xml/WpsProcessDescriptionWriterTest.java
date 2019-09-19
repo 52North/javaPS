@@ -17,6 +17,7 @@
 package org.n52.javaps.service.xml;
 
 import java.io.OutputStream;
+import java.net.URI;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -339,6 +340,16 @@ public class WpsProcessDescriptionWriterTest {
                     throw new Error(ex);
                 }
             }
+        }
+
+        @Override
+        public Optional<LiteralType<?>> getLiteralType(String name) {
+            return Optional.empty();
+        }
+
+        @Override
+        public Optional<LiteralType<?>> getLiteralType(URI uri) {
+            return Optional.empty();
         }
     }
 }

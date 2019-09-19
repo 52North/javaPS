@@ -16,27 +16,23 @@
  */
 package org.n52.javaps.description.impl;
 
-import java.util.Collection;
-import java.util.Set;
-
-import org.n52.shetland.ogc.ows.OwsCode;
-import org.n52.shetland.ogc.ows.OwsKeyword;
-import org.n52.shetland.ogc.ows.OwsLanguageString;
-import org.n52.shetland.ogc.ows.OwsMetadata;
-import org.n52.shetland.ogc.wps.description.ProcessOutputDescription;
-import org.n52.shetland.ogc.wps.description.impl.GroupOutputDescriptionImpl;
 import org.n52.javaps.description.TypedGroupOutputDescription;
 import org.n52.javaps.description.TypedProcessOutputDescription;
+import org.n52.shetland.ogc.ows.OwsCode;
+import org.n52.shetland.ogc.wps.description.GroupOutputDescription;
+import org.n52.shetland.ogc.wps.description.ProcessDescriptionBuilderFactory;
+import org.n52.shetland.ogc.wps.description.ProcessOutputDescription;
+import org.n52.shetland.ogc.wps.description.impl.GroupOutputDescriptionImpl;
+
+import java.util.Collection;
 
 public class TypedGroupOutputDescriptionImpl extends GroupOutputDescriptionImpl implements TypedGroupOutputDescription {
 
     protected TypedGroupOutputDescriptionImpl(AbstractBuilder<?, ?> builder) {
         super(builder);
-    }
-
-    public TypedGroupOutputDescriptionImpl(OwsCode id, OwsLanguageString title, OwsLanguageString abstrakt, Set<
-            OwsKeyword> keywords, Set<OwsMetadata> metadata, Set<TypedProcessOutputDescription<?>> outputs) {
-        super(id, title, abstrakt, keywords, metadata, outputs);
+        if (!builder.getOutputs().stream().allMatch(TypedProcessOutputDescription.class::isInstance)) {
+            throw new IllegalArgumentException("not a typed description");
+        }
     }
 
     @Override
@@ -50,19 +46,44 @@ public class TypedGroupOutputDescriptionImpl extends GroupOutputDescriptionImpl 
         return (Collection<? extends TypedProcessOutputDescription<?>>) super.getOutputDescriptions();
     }
 
+    protected abstract static class AbstractBuilder<T extends TypedGroupOutputDescription,
+                                                           B extends AbstractBuilder<T, B>>
+            extends GroupOutputDescriptionImpl.AbstractBuilder<T, B>
+            implements TypedGroupOutputDescription.Builder<T, B> {
+
+        protected AbstractBuilder(ProcessDescriptionBuilderFactory<?, ?, ?, ?, ?, ?, ?, ?, ?, ?> factory) {
+            super(factory);
+        }
+
+        protected AbstractBuilder(ProcessDescriptionBuilderFactory<?, ?, ?, ?, ?, ?, ?, ?, ?, ?> factory,
+                                  GroupOutputDescription entity) {
+            super(factory, entity);
+        }
+
+        @Override
+        public B withOutput(ProcessOutputDescription Output) {
+            if (!(Output instanceof TypedProcessOutputDescription)) {
+                throw new IllegalArgumentException();
+            }
+            return super.withOutput(Output);
+        }
+    }
+
     public static class Builder extends AbstractBuilder<TypedGroupOutputDescription, Builder> {
+        protected Builder(ProcessDescriptionBuilderFactory<?, ?, ?, ?, ?, ?, ?, ?, ?, ?> factory) {
+            super(factory);
+        }
+
+        protected Builder(ProcessDescriptionBuilderFactory<?, ?, ?, ?, ?, ?, ?, ?, ?, ?> factory,
+                          GroupOutputDescription entity) {
+            super(factory, entity);
+        }
+
         @Override
         public TypedGroupOutputDescription build() {
             return new TypedGroupOutputDescriptionImpl(this);
         }
 
-        @Override
-        public Builder withOutput(ProcessOutputDescription output) {
-            if (!(output instanceof TypedProcessOutputDescription)) {
-                throw new IllegalArgumentException();
-            }
-            return super.withOutput(output);
-        }
     }
 
 }

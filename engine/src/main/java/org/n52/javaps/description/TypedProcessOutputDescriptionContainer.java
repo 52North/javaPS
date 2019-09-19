@@ -16,13 +16,12 @@
  */
 package org.n52.javaps.description;
 
-import java.util.Collection;
-
 import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.shetland.ogc.wps.description.ProcessOutputDescriptionContainer;
 
+import java.util.Collection;
+
 /**
- *
  * @author Christian Autermann
  */
 public interface TypedProcessOutputDescriptionContainer extends ProcessOutputDescriptionContainer {
@@ -36,4 +35,7 @@ public interface TypedProcessOutputDescriptionContainer extends ProcessOutputDes
 
     @Override
     Collection<? extends TypedProcessOutputDescription<?>> getOutputDescriptions();
+
+    interface Builder<T extends TypedProcessOutputDescriptionContainer, B extends Builder<T, B>>
+            extends ProcessOutputDescriptionContainer.Builder<T, B> {}
 }
