@@ -95,7 +95,8 @@ public class JSONBoundingBoxInputOutputHandler implements InputHandler, OutputHa
     @Override
     public Data<?> parse(TypedProcessInputDescription<?> description, InputStream input, Format format)
             throws IOException, DecodingException {
-        JsonNode node = new ObjectMapper().readTree(input).get(BBOX_KEY);
+        JsonNode root = new ObjectMapper().readTree(input);
+        JsonNode node = root.get(BBOX_KEY);
         double[] lower = IntStream.range(0, node.size() / 2)
                                   .mapToObj(node::get)
                                   .mapToDouble(JsonNode::asDouble)
@@ -104,7 +105,7 @@ public class JSONBoundingBoxInputOutputHandler implements InputHandler, OutputHa
                                   .mapToObj(node::get)
                                   .mapToDouble(JsonNode::asDouble)
                                   .toArray();
-        return new BoundingBoxData(new OwsBoundingBox(lower, upper, parseCRS(node)));
+        return new BoundingBoxData(new OwsBoundingBox(lower, upper, parseCRS(root)));
     }
 
     private URI parseCRS(JsonNode bboxNode) throws DecodingException {

@@ -21,10 +21,13 @@
  */
 package org.n52.javaps.rest;
 
+import org.springframework.beans.factory.FactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
+import org.springframework.web.accept.ContentNegotiationManager;
 import org.springframework.web.accept.ContentNegotiationManagerFactoryBean;
+import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 
@@ -34,7 +37,7 @@ import java.util.Properties;
 public class RestConfiguration {
 
     @Bean
-    public UrlBasedViewResolver viewResolver() {
+    public ViewResolver viewResolver() {
         UrlBasedViewResolver viewResolver = new UrlBasedViewResolver();
         viewResolver.setViewClass(JstlView.class);
         viewResolver.setSuffix(".jsp");
@@ -42,7 +45,7 @@ public class RestConfiguration {
     }
 
     @Bean
-    public ContentNegotiationManagerFactoryBean cnManager() {
+    public FactoryBean<ContentNegotiationManager> cnManager() {
         ContentNegotiationManagerFactoryBean cnManager = new ContentNegotiationManagerFactoryBean();
         cnManager.setFavorPathExtension(true);
         cnManager.setDefaultContentType(MediaType.TEXT_HTML);

@@ -49,7 +49,7 @@ public class RootApiImpl implements RootApi {
         if (url.contains("?")) {
             url = url.split("[?]")[0];
         }
-        this.serviceURL = url.replace("/service", RootApi.BASE_URL);
+        this.serviceURL = url.replace("/service", BASE_URL);
     }
 
     @Override
