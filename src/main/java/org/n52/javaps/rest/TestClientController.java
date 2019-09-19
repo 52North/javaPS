@@ -19,18 +19,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.swagger.api;
+package org.n52.javaps.rest;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 
+/**
+ * Handles the test client URI requests and mapping.
+ */
 @Controller
-public class ApiController {
+public class TestClientController {
 
-    @RequestMapping(value = "/rest/api")
-    public String index() {
+    private static final String BASE_URL = "/rest";
 
-        return "redirect:https://app.swaggerhub.com/apis/geoprocessing/WPS/1.0-draft";
+    /**
+     * Display the test client.
+     *
+     * @return The test client view
+     */
+    @GetMapping(value = BASE_URL + "/test_client")
+    public String display() {
+        return "../test_client";
     }
-
 }

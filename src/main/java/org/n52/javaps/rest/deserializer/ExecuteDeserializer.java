@@ -19,7 +19,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.wps.javaps.rest.deserializer;
+package org.n52.javaps.rest.deserializer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -43,6 +43,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static java.util.stream.Collectors.toList;
 
@@ -57,9 +58,12 @@ public class ExecuteDeserializer {
     private static final String SCHEMA_KEY = "schema";
     private static final Format FORMAT_TEXT_PLAIN = new Format("text/plain");
     private static final String BBOX_KEY = "bbox";
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    private ObjectMapper objectMapper;
+    public ExecuteDeserializer(ObjectMapper objectMapper) {
+        this.objectMapper = Objects.requireNonNull(objectMapper);
+    }
 
     public List<OutputDefinition> readOutputs(List<Output> outputs) {
         return outputs.stream().map(output -> {
@@ -67,12 +71,12 @@ public class ExecuteDeserializer {
             definition.setId(createId(output.getId()));
             io.swagger.model.Format format = output.getFormat();
             definition.setFormat(new Format(format.getMimeType(), format.getEncoding(), format.getSchema()));
-            definition.setDataTransmissionMode(getTransmisionMode(output.getTransmissionMode()));
+            definition.setDataTransmissionMode(getTransmissionMode(output.getTransmissionMode()));
             return definition;
         }).collect(toList());
     }
 
-    private DataTransmissionMode getTransmisionMode(TransmissionMode transmissionMode) {
+    private DataTransmissionMode getTransmissionMode(TransmissionMode transmissionMode) {
         switch (transmissionMode) {
             case VALUE:
                 return DataTransmissionMode.VALUE;
@@ -82,7 +86,6 @@ public class ExecuteDeserializer {
         }
     }
 
-    @SuppressWarnings("rawtypes")
     private Format getFormat(JsonNode object) {
         return new Format(object.path(MIME_TYPE_KEY).asText(),
                           object.path(ENCODING_KEY).asText(),

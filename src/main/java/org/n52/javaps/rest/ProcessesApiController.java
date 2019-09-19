@@ -19,9 +19,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.swagger.api;
+package org.n52.javaps.rest;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.base.Throwables;
 import io.swagger.model.Execute;
 import io.swagger.model.JobCollection;
@@ -33,38 +32,28 @@ import org.n52.faroe.annotation.Setting;
 import org.n52.iceland.service.ServiceSettings;
 import org.n52.javaps.engine.Engine;
 import org.n52.javaps.engine.EngineException;
-import org.n52.javaps.engine.InputDecodingException;
 import org.n52.javaps.engine.JobNotFoundException;
-import org.n52.javaps.engine.OutputEncodingException;
 import org.n52.javaps.engine.ProcessNotFoundException;
+import org.n52.javaps.rest.deserializer.ExecuteDeserializer;
+import org.n52.javaps.rest.serializer.ExceptionSerializer;
+import org.n52.javaps.rest.serializer.ProcessSerializer;
+import org.n52.javaps.rest.serializer.ResultSerializer;
+import org.n52.javaps.rest.serializer.StatusInfoSerializer;
 import org.n52.shetland.ogc.ows.OwsCode;
-import org.n52.shetland.ogc.ows.exception.CodedException;
-import org.n52.shetland.ogc.ows.exception.InvalidParameterValueException;
 import org.n52.shetland.ogc.wps.JobId;
 import org.n52.shetland.ogc.wps.OutputDefinition;
 import org.n52.shetland.ogc.wps.ProcessOffering;
 import org.n52.shetland.ogc.wps.ResponseMode;
 import org.n52.shetland.ogc.wps.Result;
 import org.n52.shetland.ogc.wps.data.ProcessData;
-import org.n52.wps.javaps.rest.deserializer.ExecuteDeserializer;
-import org.n52.wps.javaps.rest.serializer.ExceptionSerializer;
-import org.n52.wps.javaps.rest.serializer.ProcessSerializer;
-import org.n52.wps.javaps.rest.serializer.ResultSerializer;
-import org.n52.wps.javaps.rest.serializer.StatusInfoSerializer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -76,21 +65,55 @@ import static java.util.stream.Collectors.toSet;
 @Controller
 @Configurable
 public class ProcessesApiController implements ProcessesApi {
-
-    private static final Logger log = LoggerFactory.getLogger(ProcessesApiController.class);
     private Engine engine;
-
-//    private final ObjectMapper objectMapper;
+    private String serviceURL;
+    private ServletContext context;
+    private HttpServletRequest request;
+    private ProcessSerializer processSerializer;
+    private StatusInfoSerializer statusInfoSerializer;
+    private ExceptionSerializer exceptionSerializer;
+    private ResultSerializer resultSerializer;
+    private ExecuteDeserializer executeDeserializer;
 
     @Autowired
-    ServletContext context;
+    public void setRequest(HttpServletRequest request) {
+        this.request = request;
+    }
+
+    @Autowired
+    public void setContext(ServletContext context) {
+        this.context = context;
+    }
 
     @Autowired
     public void setEngine(Engine engine) {
         this.engine = engine;
     }
 
-    private String serviceURL;
+    @Autowired
+    public void setExceptionSerializer(ExceptionSerializer exceptionSerializer) {
+        this.exceptionSerializer = exceptionSerializer;
+    }
+
+    @Autowired
+    public void setProcessSerializer(ProcessSerializer processSerializer) {
+        this.processSerializer = processSerializer;
+    }
+
+    @Autowired
+    public void setExecuteDeserializer(ExecuteDeserializer executeDeserializer) {
+        this.executeDeserializer = executeDeserializer;
+    }
+
+    @Autowired
+    public void setResultSerializer(ResultSerializer resultSerializer) {
+        this.resultSerializer = resultSerializer;
+    }
+
+    @Autowired
+    public void setStatusInfoSerializer(StatusInfoSerializer statusInfoSerializer) {
+        this.statusInfoSerializer = statusInfoSerializer;
+    }
 
     @Setting(ServiceSettings.SERVICE_URL)
     public void setServiceURL(URI serviceURL) {
@@ -99,29 +122,11 @@ public class ProcessesApiController implements ProcessesApi {
         if (url.contains("?")) {
             url = url.split("[?]")[0];
         }
-        this.serviceURL = url.replace("/service", baseURL + "/processes/");
-    }
-
-    private final HttpServletRequest request;
-
-    @Autowired
-    private ProcessSerializer processSerializer;
-    @Autowired
-    private StatusInfoSerializer statusInfoSerializer;
-    @Autowired
-    private ExceptionSerializer exceptionSerializer;
-    @Autowired
-    private ResultSerializer resultSerializer;
-    @Autowired
-    private ExecuteDeserializer executeDeserializer;
-
-    @Autowired
-    public ProcessesApiController(HttpServletRequest request) {
-        this.request = request;
+        this.serviceURL = url.replace("/service", BASE_URL + "/processes/");
     }
 
     public ResponseEntity<?> execute(Execute body, String id)
-            throws  EngineException {
+            throws EngineException {
         Map<String, String[]> parameterMap = request.getParameterMap();
 
         boolean syncExecute = false;
@@ -157,7 +162,7 @@ public class ProcessesApiController implements ProcessesApi {
 
             Future<Result> futureResult = engine.getResult(jobId);
 
-            Result result = null;
+            Result result;
             try {
                 result = futureResult.get();
             } catch (InterruptedException e) {
@@ -229,9 +234,9 @@ public class ProcessesApiController implements ProcessesApi {
         }
     }
 
-    public StatusInfo getStatus(String id, String jobID) throws EngineException {
+    public StatusInfo getStatus(String processId, String jobID) throws EngineException {
 
-        OwsCode identifier = new OwsCode(id);
+        OwsCode identifier = new OwsCode(processId);
         if (!engine.hasProcessDescription(identifier)) {
             throw new ProcessNotFoundException(identifier);
         }
@@ -239,14 +244,7 @@ public class ProcessesApiController implements ProcessesApi {
         if (!engine.hasJob(jobId)) {
             throw new JobNotFoundException(jobId);
         }
-        return statusInfoSerializer.serialize(engine.getStatus(jobId), id, jobID);
+        return statusInfoSerializer.serialize(engine.getStatus(jobId), processId, jobID);
 
     }
-
-    private ResponseEntity<io.swagger.model.Exception> exception(HttpStatus httpStatusCode, String description,
-                                                                 String exceptionCode) {
-        return ResponseEntity.status(httpStatusCode)
-                             .body(exceptionSerializer.serializeException(exceptionCode, description));
-    }
-
 }

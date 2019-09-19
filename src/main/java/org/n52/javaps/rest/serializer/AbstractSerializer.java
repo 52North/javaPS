@@ -19,7 +19,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.wps.javaps.rest.serializer;
+package org.n52.javaps.rest.serializer;
 
 import org.n52.faroe.Validation;
 import org.n52.faroe.annotation.Configurable;
@@ -30,7 +30,6 @@ import java.net.URI;
 
 @Configurable
 public abstract class AbstractSerializer {
-    public static final String APPLICATION_JSON = "application/json";
     private String serviceURL;
 
     @Setting(ServiceSettings.SERVICE_URL)
@@ -40,23 +39,23 @@ public abstract class AbstractSerializer {
         if (url.contains("?")) {
             url = url.split("[?]")[0];
         }
-        this.serviceURL = url.replace("/service", "/rest/processes/");
+        this.serviceURL = url.replace("/service", "/rest/processes");
     }
 
     protected String createJobHref(String processId, String jobId) {
-        return serviceURL + processId + "/jobs/" + jobId;
+        return String.format("%s/%s/jobs/%s", serviceURL, processId, jobId);
     }
 
     protected String createResultHref(String processId, String jobId) {
-        return serviceURL + processId + "/jobs/" + jobId + "/result";
+        return String.format("%s/%s/jobs/%s/result", serviceURL, processId, jobId);
     }
 
     protected String getJobsHref(String processId) {
-        return serviceURL + processId + "/jobs";
+        return String.format("%s/%s/jobs", serviceURL, processId);
     }
 
     protected String getProcessHref(String processId) {
-        return serviceURL + processId;
+        return String.format("%s/%s", serviceURL, processId);
     }
 
 }

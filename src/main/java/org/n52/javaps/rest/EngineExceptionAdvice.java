@@ -19,7 +19,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.swagger.api;
+package org.n52.javaps.rest;
 
 import org.n52.javaps.engine.EngineException;
 import org.n52.javaps.engine.InputDecodingException;
@@ -29,7 +29,7 @@ import org.n52.javaps.engine.OutputNotFoundException;
 import org.n52.javaps.engine.ProcessNotFoundException;
 import org.n52.javaps.engine.UnsupportedInputFormatException;
 import org.n52.javaps.engine.UnsupportedOutputFormatException;
-import org.n52.wps.javaps.rest.serializer.ExceptionSerializer;
+import org.n52.javaps.rest.serializer.ExceptionSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;

@@ -19,19 +19,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.wps.javaps.rest.serializer;
+package org.n52.javaps.rest;
 
-import io.swagger.model.Exception;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-@Component
-public class ExceptionSerializer extends AbstractSerializer {
+@Controller
+public class ApiController {
+    private static final String BASE_URL = "/rest";
 
-    public Exception serializeException(String code, String description) {
-        Exception exception = new Exception();
-        exception.setCode(code);
-        exception.setDescription(description);
-        return exception;
+    @RequestMapping(value = BASE_URL + "/api")
+    public String index() {
+        return "redirect:https://app.swaggerhub.com/apis/geoprocessing/WPS/1.0-draft";
     }
 
 }

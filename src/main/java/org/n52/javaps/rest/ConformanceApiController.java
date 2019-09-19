@@ -19,19 +19,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.swagger.api;
+package org.n52.javaps.rest;
 
-import org.n52.javaps.engine.EngineException;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import io.swagger.model.ReqClasses;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
 
-public interface ProcessesApiExtension {
-    String baseURL = "/rest";
+import java.util.Arrays;
+import java.util.List;
 
-    @GetMapping(path = baseURL + "/processes/{processID}/jobs/{jobID}/result/{outputID}")
-    ResponseEntity<?> getOutput(@PathVariable("processID") String processID,
-                                @PathVariable("jobID") String jobID,
-                                @PathVariable("outputID") String outputID)
-            throws EngineException;
+@Controller
+public class ConformanceApiController implements ConformanceApi {
+
+    @Override
+    public ReqClasses getConformanceClasses() {
+        List<String> conformsTo = Arrays.asList(
+                "http://www.opengis.net/spec/wps-rest/req/core",
+                "http://www.opengis.net/spec/wps-rest/req/oas30",
+                "http://www.opengis.net/spec/wps-rest/req/html");
+        return new ReqClasses().conformsTo(conformsTo);
+    }
+
 }

@@ -19,7 +19,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.wps.javaps.rest.serializer;
+package org.n52.javaps.rest.serializer;
 
 import io.swagger.model.AllowedValues;
 import io.swagger.model.AnyValue;
@@ -45,6 +45,7 @@ import io.swagger.model.SupportedCRS;
 import io.swagger.model.TransmissionMode;
 import io.swagger.model.ValueReference;
 import org.n52.faroe.annotation.Configurable;
+import org.n52.javaps.rest.MediaTypes;
 import org.n52.shetland.ogc.ows.OwsAllowedValues;
 import org.n52.shetland.ogc.ows.OwsCRS;
 import org.n52.shetland.ogc.ows.OwsDomainMetadata;
@@ -355,7 +356,7 @@ public class ProcessSerializer extends AbstractSerializer {
     private Link getProcessLink(ProcessSummary process) {
         Link link = new Link();
         link.setHref(getProcessHref(process.getId()));
-        link.setType(APPLICATION_JSON);
+        link.setType(MediaTypes.APPLICATION_JSON);
         link.setRel("canonical");
         link.setTitle("Process description");
         return link;

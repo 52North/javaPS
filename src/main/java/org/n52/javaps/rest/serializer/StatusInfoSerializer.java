@@ -19,24 +19,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.wps.javaps.rest.serializer;
+package org.n52.javaps.rest.serializer;
 
 import io.swagger.model.Link;
 import io.swagger.model.StatusInfo;
 import io.swagger.model.StatusInfo.StatusEnum;
 import org.n52.faroe.annotation.Configurable;
+import org.n52.javaps.rest.MediaTypes;
 import org.n52.shetland.ogc.wps.JobStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Configurable
 @Component
+@Configurable
 public class StatusInfoSerializer extends AbstractSerializer {
-
-    public StatusInfoSerializer() {
-    }
 
     public StatusInfo serialize(org.n52.shetland.ogc.wps.StatusInfo statusInfo, String processId, String jobId) {
 
@@ -64,7 +62,7 @@ public class StatusInfoSerializer extends AbstractSerializer {
         Link selfLink = new Link();
         selfLink.setHref(createJobHref(processId, jobId));
         selfLink.setRel("self");
-        selfLink.setType(APPLICATION_JSON);
+        selfLink.setType(MediaTypes.APPLICATION_JSON);
         selfLink.setTitle("this document");
         return selfLink;
     }
@@ -73,7 +71,7 @@ public class StatusInfoSerializer extends AbstractSerializer {
         Link resultLink = new Link();
         resultLink.setHref(createResultHref(processId, jobId));
         resultLink.setRel("result");
-        resultLink.setType(APPLICATION_JSON);
+        resultLink.setType(MediaTypes.APPLICATION_JSON);
         resultLink.setTitle("Job result");
         return resultLink;
     }
@@ -82,7 +80,7 @@ public class StatusInfoSerializer extends AbstractSerializer {
         Link exceptionLink = new Link();
         exceptionLink.setHref(createResultHref(processId, jobId));
         exceptionLink.setRel("exception");
-        exceptionLink.setType(APPLICATION_JSON);
+        exceptionLink.setType(MediaTypes.APPLICATION_JSON);
         exceptionLink.setTitle("Job exception");
         return exceptionLink;
     }

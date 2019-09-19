@@ -19,10 +19,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.swagger.api;
+package org.n52.javaps.rest;
 
 import com.google.common.io.ByteStreams;
-import io.swagger.api.ProcessesApiExtension;
 import org.n52.javaps.engine.Engine;
 import org.n52.javaps.engine.EngineException;
 import org.n52.javaps.engine.JobNotFoundException;
@@ -33,6 +32,7 @@ import org.n52.shetland.ogc.wps.JobId;
 import org.n52.shetland.ogc.wps.Result;
 import org.n52.shetland.ogc.wps.data.ProcessData;
 import org.n52.shetland.ogc.wps.data.ValueProcessData;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -47,10 +47,10 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 @Controller
-public
-class ProcessesApiExtensionController implements ProcessesApiExtension {
+public class ProcessesApiExtensionController implements ProcessesApiExtension {
     private final Engine engine;
 
+    @Autowired
     private ProcessesApiExtensionController(Engine engine) {
         this.engine = Objects.requireNonNull(engine);
     }
