@@ -21,16 +21,15 @@
  */
 package org.n52.javaps.rest;
 
+import io.swagger.model.Root;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class ApiController {
-    private static final String BASE_URL = "/rest";
-
-    @RequestMapping(value = BASE_URL + "/api")
-    public String index() {
+public class ApiController implements Api {
+    @Override
+    public String api() {
         return "redirect:https://app.swaggerhub.com/apis/geoprocessing/WPS/1.0-draft";
     }
-
 }

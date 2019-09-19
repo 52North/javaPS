@@ -64,7 +64,7 @@ import static java.util.stream.Collectors.toSet;
 
 @Controller
 @Configurable
-public class ProcessesApiController implements ProcessesApi {
+public class ProcessesApiImpl implements ProcessesApi {
     private Engine engine;
     private String serviceURL;
     private ServletContext context;
@@ -122,7 +122,7 @@ public class ProcessesApiController implements ProcessesApi {
         if (url.contains("?")) {
             url = url.split("[?]")[0];
         }
-        this.serviceURL = url.replace("/service", BASE_URL + "/processes/");
+        this.serviceURL = url.replace("/service", ProcessesApi.BASE_URL);
     }
 
     public ResponseEntity<?> execute(Execute body, String id)
@@ -157,7 +157,8 @@ public class ProcessesApiController implements ProcessesApi {
         JobId jobId = engine.execute(owsCode, inputs, outputs, ResponseMode.DOCUMENT);
 
         if (!syncExecute) {
-            return ResponseEntity.created(URI.create(serviceURL + id + "/jobs/" + jobId.getValue())).build();
+            return ResponseEntity.created(URI.create(String.format("%s/%s/jobs/%s", serviceURL, id, jobId.getValue())))
+                                 .build();
         } else {
 
             Future<Result> futureResult = engine.getResult(jobId);

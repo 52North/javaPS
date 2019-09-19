@@ -27,9 +27,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 public interface ProcessesApiExtension {
-    String baseURL = "/rest";
+    String BASE_URL = ProcessesApi.BASE_URL;
 
-    @GetMapping(path = baseURL + "/processes/{processId}/jobs/{jobId}/result/{outputId}")
+    @GetMapping(path = BASE_URL + "/{processId}/jobs/{jobId}/result/{outputId}")
     ResponseEntity<?> getOutput(@PathVariable("processId") String processID,
                                 @PathVariable("jobId") String jobID,
                                 @PathVariable("outputId") String outputId)

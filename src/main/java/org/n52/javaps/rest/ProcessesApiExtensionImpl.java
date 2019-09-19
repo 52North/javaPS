@@ -47,11 +47,11 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 @Controller
-public class ProcessesApiExtensionController implements ProcessesApiExtension {
+public class ProcessesApiExtensionImpl implements ProcessesApiExtension {
     private final Engine engine;
 
     @Autowired
-    private ProcessesApiExtensionController(Engine engine) {
+    private ProcessesApiExtensionImpl(Engine engine) {
         this.engine = Objects.requireNonNull(engine);
     }
 

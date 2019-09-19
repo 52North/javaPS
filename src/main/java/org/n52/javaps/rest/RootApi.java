@@ -1,14 +1,15 @@
 package org.n52.javaps.rest;
 
-import io.swagger.model.ReqClasses;
+import io.swagger.model.Root;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-public interface ConformanceApi {
+public interface RootApi {
 
-    String BASE_URL = RootApi.BASE_URL + "/conformance";
+    String BASE_URL = "/rest";
 
     @ResponseBody
     @GetMapping(value = BASE_URL, produces = MediaTypes.APPLICATION_JSON)
-    ReqClasses getConformanceClasses();
+    Root root();
+
 }

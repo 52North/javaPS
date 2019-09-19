@@ -29,15 +29,12 @@ import org.springframework.web.bind.annotation.GetMapping;
  */
 @Controller
 public class TestClientController {
-
-    private static final String BASE_URL = "/rest";
-
     /**
      * Display the test client.
      *
      * @return The test client view
      */
-    @GetMapping(value = BASE_URL + "/test_client")
+    @GetMapping(value = RootApi.BASE_URL + "/test_client")
     public String display() {
         return "../test_client";
     }

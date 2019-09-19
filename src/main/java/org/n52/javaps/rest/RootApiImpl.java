@@ -27,9 +27,7 @@ import org.n52.faroe.Validation;
 import org.n52.faroe.annotation.Configurable;
 import org.n52.faroe.annotation.Setting;
 import org.n52.iceland.service.ServiceSettings;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -40,9 +38,7 @@ import java.util.List;
  */
 @Controller
 @Configurable
-public class RootController {
-
-    private static final String baseURL = "/rest";
+public class RootApiImpl implements RootApi {
 
     private String serviceURL;
 
@@ -53,11 +49,11 @@ public class RootController {
         if (url.contains("?")) {
             url = url.split("[?]")[0];
         }
-        this.serviceURL = url.replace("/service", baseURL);
+        this.serviceURL = url.replace("/service", RootApi.BASE_URL);
     }
 
-    @GetMapping(value = "/rest")
-    public ResponseEntity<Root> index() {
+    @Override
+    public Root root() {
 
         List<Link> links = new ArrayList<>();
 
@@ -89,6 +85,6 @@ public class RootController {
         link.setTitle("The processes offered by this server");
         links.add(link);
 
-        return ResponseEntity.ok(new Root().links(links));
+        return new Root().links(links);
     }
 }

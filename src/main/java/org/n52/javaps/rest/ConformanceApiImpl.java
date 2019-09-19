@@ -30,7 +30,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Controller
-public class ConformanceApiController implements ConformanceApi {
+public class ConformanceApiImpl implements ConformanceApi {
 
     @Override
     public ReqClasses getConformanceClasses() {
