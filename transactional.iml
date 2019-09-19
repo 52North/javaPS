@@ -1,2 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module type="JAVA_MODULE" version="4" />
+<module type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="Spring" name="Spring">
+      <configuration>
+        <fileset id="fileset" name="Spring Application Context" removed="false">
+          <file>file://$MODULE_DIR$/src/main/resources/components/components.xml</file>
+          <file>file://$MODULE_DIR$/../javaps-rest/src/main/resources/components/spring-root-config.xml</file>
+          <file>jar://$MAVEN_REPOSITORY$/org/n52/wps/engine/1.4.0-SNAPSHOT/engine-1.4.0-SNAPSHOT.jar!/components/algorithm-repositories.xml</file>
+          <file>jar://$MAVEN_REPOSITORY$/org/n52/wps/engine/1.4.0-SNAPSHOT/engine-1.4.0-SNAPSHOT.jar!/components/components.xml</file>
+          <file>jar://$MAVEN_REPOSITORY$/org/n52/wps/engine/1.4.0-SNAPSHOT/engine-1.4.0-SNAPSHOT.jar!/components/engine.xml</file>
+          <file>jar://$MAVEN_REPOSITORY$/org/n52/wps/engine/1.4.0-SNAPSHOT/engine-1.4.0-SNAPSHOT.jar!/components/input-output-handlers.xml</file>
+          <file>jar://$MAVEN_REPOSITORY$/org/n52/wps/engine/1.4.0-SNAPSHOT/engine-1.4.0-SNAPSHOT.jar!/components/literal-types.xml</file>
+          <file>file://$MAVEN_REPOSITORY$/org/n52/wps/engine/1.4.0-SNAPSHOT/engine-1.4.0-SNAPSHOT.jar</file>
+          <file>jar://$MAVEN_REPOSITORY$/org/n52/wps/iceland-stream/1.4.0-SNAPSHOT/iceland-stream-1.4.0-SNAPSHOT.jar!/components/components.xml</file>
+          <file>file://$MAVEN_REPOSITORY$/org/n52/wps/iceland-stream/1.4.0-SNAPSHOT/iceland-stream-1.4.0-SNAPSHOT.jar</file>
+          <file>jar://$MAVEN_REPOSITORY$/org/n52/wps/service/1.4.0-SNAPSHOT/service-1.4.0-SNAPSHOT.jar!/components/algorithms.xml</file>
+          <file>jar://$MAVEN_REPOSITORY$/org/n52/wps/service/1.4.0-SNAPSHOT/service-1.4.0-SNAPSHOT.jar!/components/components.xml</file>
+          <file>jar://$MAVEN_REPOSITORY$/org/n52/wps/service/1.4.0-SNAPSHOT/service-1.4.0-SNAPSHOT.jar!/components/endpoints.xml</file>
+          <file>jar://$MAVEN_REPOSITORY$/org/n52/wps/service/1.4.0-SNAPSHOT/service-1.4.0-SNAPSHOT.jar!/components/handlers.xml</file>
+          <file>jar://$MAVEN_REPOSITORY$/org/n52/wps/service/1.4.0-SNAPSHOT/service-1.4.0-SNAPSHOT.jar!/components/operations.xml</file>
+          <file>jar://$MAVEN_REPOSITORY$/org/n52/wps/service/1.4.0-SNAPSHOT/service-1.4.0-SNAPSHOT.jar!/components/request-operators.xml</file>
+          <file>jar://$MAVEN_REPOSITORY$/org/n52/wps/service/1.4.0-SNAPSHOT/service-1.4.0-SNAPSHOT.jar!/components/service-operators.xml</file>
+          <file>jar://$MAVEN_REPOSITORY$/org/n52/wps/service/1.4.0-SNAPSHOT/service-1.4.0-SNAPSHOT.jar!/components/validators.xml</file>
+          <file>file://$MAVEN_REPOSITORY$/org/n52/wps/service/1.4.0-SNAPSHOT/service-1.4.0-SNAPSHOT.jar</file>
+          <file>jar://$MAVEN_REPOSITORY$/org/n52/arctic-sea/svalbard/7.2.0-SNAPSHOT/svalbard-7.2.0-20190918.134005-15.jar!/svalbard-core-context.xml</file>
+          <file>file://$MAVEN_REPOSITORY$/org/n52/arctic-sea/svalbard/7.2.0-SNAPSHOT/svalbard-7.2.0-20190918.134005-15.jar</file>
+        </fileset>
+      </configuration>
+    </facet>
+  </component>
+</module>

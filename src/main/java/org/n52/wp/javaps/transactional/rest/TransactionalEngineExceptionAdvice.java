@@ -18,7 +18,7 @@ package org.n52.wp.javaps.transactional.rest;
 
 import org.n52.javaps.transactional.DuplicateProcessException;
 import org.n52.javaps.transactional.UnsupportedProcessException;
-import org.n52.wps.javaps.rest.serializer.ExceptionSerializer;
+import org.n52.javaps.rest.serializer.ExceptionSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
