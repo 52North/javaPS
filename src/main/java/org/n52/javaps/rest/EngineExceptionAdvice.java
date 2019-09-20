@@ -37,63 +37,72 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@RestControllerAdvice
+import java.util.Objects;
+
+@RestControllerAdvice(assignableTypes = {
+        Api.class, RootApi.class, ConformanceApi.class,
+        ProcessesApi.class, ProcessesApiExtension.class,
+})
 @RequestMapping(produces = "application/json")
 public class EngineExceptionAdvice {
-    private static final String INVALID_PARAMETER = "InvalidParameter";
-    private static final String NO_APPLICABLE_CODE = "NoApplicableCode";
+    protected static final String INVALID_PARAMETER = "InvalidParameter";
+    protected static final String NO_APPLICABLE_CODE = "NoApplicableCode";
     private final ExceptionSerializer exceptionSerializer;
 
+    protected ExceptionSerializer getExceptionSerializer() {
+        return exceptionSerializer;
+    }
+
     @Autowired
-    public EngineExceptionAdvice(ExceptionSerializer serializer) {
-        this.exceptionSerializer = serializer;
+    public EngineExceptionAdvice(ExceptionSerializer exceptionSerializer) {
+        this.exceptionSerializer = Objects.requireNonNull(exceptionSerializer);
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(JobNotFoundException.class)
     public io.swagger.model.Exception handle(JobNotFoundException ex) {
-        return exceptionSerializer.serializeException(INVALID_PARAMETER, ex.getMessage());
+        return getExceptionSerializer().serializeException(INVALID_PARAMETER, ex.getMessage());
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(ProcessNotFoundException.class)
     public io.swagger.model.Exception handle(ProcessNotFoundException ex) {
-        return exceptionSerializer.serializeException(INVALID_PARAMETER, ex.getMessage());
+        return getExceptionSerializer().serializeException(INVALID_PARAMETER, ex.getMessage());
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(OutputNotFoundException.class)
     public io.swagger.model.Exception handle(OutputNotFoundException ex) {
-        return exceptionSerializer.serializeException(INVALID_PARAMETER, ex.getMessage());
+        return getExceptionSerializer().serializeException(INVALID_PARAMETER, ex.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({InputDecodingException.class})
     public io.swagger.model.Exception handle(InputDecodingException ex) {
-        return exceptionSerializer.serializeException(INVALID_PARAMETER, ex.getMessage());
+        return getExceptionSerializer().serializeException(INVALID_PARAMETER, ex.getMessage());
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(OutputEncodingException.class)
     public io.swagger.model.Exception handle(OutputEncodingException ex) {
-        return exceptionSerializer.serializeException(INVALID_PARAMETER, ex.getMessage());
+        return getExceptionSerializer().serializeException(INVALID_PARAMETER, ex.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(EngineException.class)
+    @ExceptionHandler(UnsupportedInputFormatException.class)
     public io.swagger.model.Exception handle(UnsupportedInputFormatException ex) {
-        return exceptionSerializer.serializeException(INVALID_PARAMETER, ex.getMessage());
+        return getExceptionSerializer().serializeException(INVALID_PARAMETER, ex.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(EngineException.class)
+    @ExceptionHandler(UnsupportedOutputFormatException.class)
     public io.swagger.model.Exception handle(UnsupportedOutputFormatException ex) {
-        return exceptionSerializer.serializeException(INVALID_PARAMETER, ex.getMessage());
+        return getExceptionSerializer().serializeException(INVALID_PARAMETER, ex.getMessage());
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(EngineException.class)
     public io.swagger.model.Exception handle(EngineException ex) {
-        return exceptionSerializer.serializeException(NO_APPLICABLE_CODE, ex.getMessage());
+        return getExceptionSerializer().serializeException(NO_APPLICABLE_CODE, ex.getMessage());
     }
 }
