@@ -28,6 +28,18 @@
 
 
     <context:annotation-config/>
-    <context:component-scan base-package="org.n52.wp.javaps.transactional.rest"/>
+    <context:component-scan base-package="org.n52.javaps.transactional"/>
+
+    <bean class="org.n52.svalbard.decode.json.wps.ExecutionUnitDecoder"/>
+
+    <bean class="org.n52.svalbard.decode.json.wps.ApplicationPackageDecoder"/>
+    <bean class="org.n52.svalbard.encode.json.wps.ApplicationPackageEncoder"/>
+
+    <bean class="org.n52.svalbard.encode.json.wps.ProcessOfferingEncoder"/>
+    <bean class="org.n52.svalbard.decode.json.wps.ProcessOfferingDecoder"/>
+
+    <bean class="org.n52.svalbard.decode.json.wps.ProcessDescriptionDecoder"/>
+    <bean class="org.n52.svalbard.encode.json.wps.ProcessDescriptionEncoder"/>
+
 
 </beans>

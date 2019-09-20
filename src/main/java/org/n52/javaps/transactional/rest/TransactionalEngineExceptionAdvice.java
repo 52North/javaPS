@@ -14,11 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.wp.javaps.transactional.rest;
+package org.n52.javaps.transactional.rest;
 
-import org.n52.javaps.transactional.DuplicateProcessException;
-import org.n52.javaps.transactional.UnsupportedProcessException;
+import org.n52.javaps.rest.EngineExceptionAdvice;
 import org.n52.javaps.rest.serializer.ExceptionSerializer;
+import org.n52.javaps.transactional.DuplicateProcessException;
+import org.n52.javaps.transactional.NotUndeployableProcessException;
+import org.n52.javaps.transactional.UnsupportedProcessException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,32 +28,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@RestControllerAdvice
+@RestControllerAdvice(assignableTypes = TransactionalApi.class)
 @RequestMapping(produces = "application/json")
-public class TransactionalEngineExceptionAdvice {
-    private static final String INVALID_PARAMETER = "InvalidParameter";
-    private final ExceptionSerializer exceptionSerializer;
+public class TransactionalEngineExceptionAdvice extends EngineExceptionAdvice {
 
     @Autowired
     public TransactionalEngineExceptionAdvice(ExceptionSerializer serializer) {
-        this.exceptionSerializer = serializer;
+        super(serializer);
     }
 
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(DuplicateProcessException.class)
     public io.swagger.model.Exception handle(DuplicateProcessException ex) {
-        return exceptionSerializer.serializeException(INVALID_PARAMETER, ex.getMessage());
+        return getExceptionSerializer().serializeException(INVALID_PARAMETER, ex.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(UnsupportedProcessException.class)
     public io.swagger.model.Exception handle(UnsupportedProcessException ex) {
-        return exceptionSerializer.serializeException(INVALID_PARAMETER, ex.getMessage());
+        return getExceptionSerializer().serializeException(INVALID_PARAMETER, ex.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(UnsupportedProcessException.class)
+    @ExceptionHandler(NotUndeployableProcessException.class)
     public io.swagger.model.Exception handle(NotUndeployableProcessException ex) {
-        return exceptionSerializer.serializeException(INVALID_PARAMETER, ex.getMessage());
+        return getExceptionSerializer().serializeException(INVALID_PARAMETER, ex.getMessage());
     }
 }

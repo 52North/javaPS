@@ -16,18 +16,23 @@
  */
 package org.n52.javaps.transactional;
 
-import org.n52.shetland.ogc.ows.OwsCode;
+import org.n52.javaps.engine.EngineException;
 
-public class DuplicateProcessException extends TransactionalEngineException {
-    private static final long serialVersionUID = -5732712161388700460L;
-    private final OwsCode id;
+public class TransactionalEngineException extends EngineException {
+    private static final long serialVersionUID = 3910210009505613767L;
 
-    public DuplicateProcessException(OwsCode id) {
-        super(String.format("An algorithm with the name %s is already registered.", id));
-        this.id = id;
+    public TransactionalEngineException() {
     }
 
-    public OwsCode getId() {
-        return id;
+    public TransactionalEngineException(String message) {
+        super(message);
+    }
+
+    public TransactionalEngineException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public TransactionalEngineException(Throwable cause) {
+        super(cause);
     }
 }

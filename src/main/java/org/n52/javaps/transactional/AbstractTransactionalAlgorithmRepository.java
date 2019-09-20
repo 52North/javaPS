@@ -23,10 +23,7 @@ import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.shetland.ogc.wps.ap.ApplicationPackage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -36,22 +33,14 @@ import java.util.Set;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-public abstract class AbstractTransactionalAlgorithmRepository implements TransactionalAlgorithmRepository {
+public abstract class AbstractTransactionalAlgorithmRepository
+        implements ListenableTransactionalAlgorithmRepository {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractTransactionalAlgorithmRepository.class);
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
     private final Map<OwsCode, ApplicationPackage> applicationPackages = new HashMap<>();
-    private Set<TransactionalAlgorithmRepositoryListener> listeners = Collections.emptySet();
+    private Set<TransactionalAlgorithmRepositoryListener> listeners = new HashSet<>();
 
-    @Autowired(required = false)
-    public void setListeners(Collection<? extends TransactionalAlgorithmRepositoryListener> listeners) {
-        lock.writeLock().lock();
-        try {
-            this.listeners = listeners == null ? Collections.emptySet() : new HashSet<>(listeners);
-        } finally {
-            lock.writeLock().unlock();
-        }
-    }
-
+    @Override
     public void addListener(TransactionalAlgorithmRepositoryListener listener) {
         lock.writeLock().lock();
         try {
@@ -61,6 +50,7 @@ public abstract class AbstractTransactionalAlgorithmRepository implements Transa
         }
     }
 
+    @Override
     public void removeListener(TransactionalAlgorithmRepositoryListener listener) {
         lock.writeLock().lock();
         try {
@@ -150,6 +140,7 @@ public abstract class AbstractTransactionalAlgorithmRepository implements Transa
         lock.writeLock().lock();
         try {
             applicationPackage = applicationPackages.remove(id);
+
         } finally {
             lock.writeLock().unlock();
         }

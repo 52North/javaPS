@@ -18,12 +18,12 @@ package org.n52.javaps.transactional;
 
 import org.n52.shetland.ogc.ows.OwsCode;
 
-public class DuplicateProcessException extends TransactionalEngineException {
-    private static final long serialVersionUID = -5732712161388700460L;
+public class NotUndeployableProcessException extends TransactionalEngineException {
+    private static final long serialVersionUID = 6512402327929190325L;
     private final OwsCode id;
 
-    public DuplicateProcessException(OwsCode id) {
-        super(String.format("An algorithm with the name %s is already registered.", id));
+    public NotUndeployableProcessException(OwsCode id) {
+        super(String.format("The process with the name %s can not be undeployed.", id));
         this.id = id;
     }
 

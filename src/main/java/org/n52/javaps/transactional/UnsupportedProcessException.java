@@ -16,9 +16,7 @@
  */
 package org.n52.javaps.transactional;
 
-import org.n52.javaps.engine.EngineException;
-
-public class UnsupportedProcessException extends EngineException {
+public class UnsupportedProcessException extends TransactionalEngineException {
     private static final long serialVersionUID = -5567512086281553472L;
 
     public UnsupportedProcessException() {

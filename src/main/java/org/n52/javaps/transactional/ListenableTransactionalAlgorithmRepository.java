@@ -14,21 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.wp.javaps.transactional.rest;
+package org.n52.javaps.transactional;
 
-import org.n52.javaps.engine.EngineException;
-import org.n52.shetland.ogc.ows.OwsCode;
+public interface ListenableTransactionalAlgorithmRepository extends TransactionalAlgorithmRepository {
+    void addListener(TransactionalAlgorithmRepositoryListener listener);
 
-public class NotUndeployableProcessException extends EngineException {
-    private static final long serialVersionUID = 6512402327929190325L;
-    private final OwsCode id;
-
-    public NotUndeployableProcessException(OwsCode id) {
-        super(String.format("The process with the name %s can not be undeployed.", id));
-        this.id = id;
-    }
-
-    public OwsCode getId() {
-        return id;
-    }
+    void removeListener(TransactionalAlgorithmRepositoryListener listener);
 }
