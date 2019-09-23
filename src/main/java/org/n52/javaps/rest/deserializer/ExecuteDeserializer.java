@@ -119,7 +119,15 @@ public class ExecuteDeserializer {
                 if (map.has(FORMAT_KEY)) {
                     format = getFormat(map.get(FORMAT_KEY));
                 }
-                String stringValue = objectMapper.writeValueAsString(value.get(INLINE_VALUE_KEY));
+                String stringValue;
+                JsonNode inlineValue = value.path(INLINE_VALUE_KEY);
+                if (inlineValue.isValueNode()) {
+                    stringValue = inlineValue.asText();
+                } else if (inlineValue.isNull()) {
+                    stringValue = "";
+                } else {
+                    stringValue = objectMapper.writeValueAsString(inlineValue);
+                }
                 return new StringValueProcessData(id, format, stringValue);
             } else if (value.has(HREF_KEY)) {
                 try {
