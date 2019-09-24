@@ -70,7 +70,11 @@ public class ExecuteDeserializer {
             OutputDefinition definition = new OutputDefinition();
             definition.setId(createId(output.getId()));
             io.swagger.model.Format format = output.getFormat();
-            definition.setFormat(new Format(format.getMimeType(), format.getEncoding(), format.getSchema()));
+            if (format == null) {
+                definition.setFormat(Format.TEXT_PLAIN);
+            } else {
+                definition.setFormat(new Format(format.getMimeType(), format.getEncoding(), format.getSchema()));
+            }
             definition.setDataTransmissionMode(getTransmissionMode(output.getTransmissionMode()));
             return definition;
         }).collect(toList());
