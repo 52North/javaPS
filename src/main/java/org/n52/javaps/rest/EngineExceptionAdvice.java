@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpStatusCodeException;
 
 import java.util.Objects;
 
@@ -103,6 +104,12 @@ public class EngineExceptionAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(EngineException.class)
     public io.swagger.model.Exception handle(EngineException ex) {
+        return getExceptionSerializer().serializeException(NO_APPLICABLE_CODE, ex.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(EngineException.class)
+    public io.swagger.model.Exception handle(Exception ex) {
         return getExceptionSerializer().serializeException(NO_APPLICABLE_CODE, ex.getMessage());
     }
 }
