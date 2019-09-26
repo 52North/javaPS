@@ -16,20 +16,45 @@
  */
 package org.n52.javaps.transactional;
 
+/**
+ * {@link TransactionalEngineException} that can be thrown if a process is not supported by a {@linkplain
+ * TransactionalAlgorithmRepository repository}
+ *
+ * @author Christian Autermann
+ */
 public class UnsupportedProcessException extends TransactionalEngineException {
     private static final long serialVersionUID = -5567512086281553472L;
 
+    /**
+     * Creates a new {@link UnsupportedProcessException}.
+     */
     public UnsupportedProcessException() {
     }
 
+    /**
+     * Creates a new {@link UnsupportedProcessException}.
+     *
+     * @param message The message
+     */
     public UnsupportedProcessException(String message) {
         super(message);
     }
 
+    /**
+     * Creates a new {@link UnsupportedProcessException}.
+     *
+     * @param message The message
+     * @param cause   The cause
+     */
     public UnsupportedProcessException(String message, Throwable cause) {
         super(message, cause);
     }
 
+    /**
+     * Creates a new {@link UnsupportedProcessException}.
+     *
+     * @param cause The cause
+     */
     public UnsupportedProcessException(Throwable cause) {
         super(cause);
     }

@@ -18,15 +18,28 @@ package org.n52.javaps.transactional;
 
 import org.n52.shetland.ogc.ows.OwsCode;
 
+/**
+ * {@link TransactionalEngineException} that can be thrown if a process can not be unregistered.
+ */
 public class NotUndeployableProcessException extends TransactionalEngineException {
     private static final long serialVersionUID = 6512402327929190325L;
     private final OwsCode id;
 
+    /**
+     * Creates a new {@link NotUndeployableProcessException}.
+     *
+     * @param id The identifier of the process that cannot be unregistered
+     */
     public NotUndeployableProcessException(OwsCode id) {
         super(String.format("The process with the name %s can not be undeployed.", id));
         this.id = id;
     }
 
+    /**
+     * Get the identifier of the process that cannot be unregistered.
+     *
+     * @return The identifier
+     */
     public OwsCode getId() {
         return id;
     }

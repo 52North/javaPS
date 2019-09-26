@@ -18,9 +18,24 @@ package org.n52.javaps.transactional;
 
 import org.n52.shetland.ogc.wps.ap.ApplicationPackage;
 
+/**
+ * Listener for {@link ListenableTransactionalAlgorithmRepository transactional algorithm repositories}.
+ *
+ * @author Christian Autermann
+ */
 public interface TransactionalAlgorithmRepositoryListener {
 
+    /**
+     * Called when a new {@link ApplicationPackage} is registered.
+     *
+     * @param applicationPackage The newly registered {@link ApplicationPackage}.
+     */
     void onRegister(ApplicationPackage applicationPackage);
 
+    /**
+     * Called when a {@link ApplicationPackage} is unregistered.
+     *
+     * @param applicationPackage The unregistered {@link ApplicationPackage}.
+     */
     void onUnregister(ApplicationPackage applicationPackage);
 }

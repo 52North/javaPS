@@ -33,8 +33,12 @@ import java.util.Set;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-public abstract class AbstractTransactionalAlgorithmRepository
-        implements ListenableTransactionalAlgorithmRepository {
+/**
+ * Abstract implementation of {@link ListenableTransactionalAlgorithmRepository}.
+ *
+ * @author Christian Autermann
+ */
+public abstract class AbstractTransactionalAlgorithmRepository implements ListenableTransactionalAlgorithmRepository {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractTransactionalAlgorithmRepository.class);
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
     private final Map<OwsCode, ApplicationPackage> applicationPackages = new HashMap<>();
@@ -44,6 +48,7 @@ public abstract class AbstractTransactionalAlgorithmRepository
     public void addListener(TransactionalAlgorithmRepositoryListener listener) {
         lock.writeLock().lock();
         try {
+            LOG.debug("Adding listener {} to {}", listener, this);
             this.listeners.add(listener);
         } finally {
             lock.writeLock().unlock();
@@ -54,6 +59,7 @@ public abstract class AbstractTransactionalAlgorithmRepository
     public void removeListener(TransactionalAlgorithmRepositoryListener listener) {
         lock.writeLock().lock();
         try {
+            LOG.debug("Removing listener {} from {}", listener, this);
             this.listeners.remove(listener);
         } finally {
             lock.writeLock().unlock();
@@ -89,8 +95,6 @@ public abstract class AbstractTransactionalAlgorithmRepository
 
     @Override
     public Optional<IAlgorithm> getAlgorithm(OwsCode id) {
-        Objects.requireNonNull(id);
-        LOG.trace("resolving algorithm for id {}", id);
         return getApplicationPackage(id).map(this::createAlgorithm);
     }
 
@@ -109,6 +113,7 @@ public abstract class AbstractTransactionalAlgorithmRepository
     public OwsCode register(ApplicationPackage applicationPackage)
             throws DuplicateProcessException, UnsupportedProcessException {
         Objects.requireNonNull(applicationPackage);
+        LOG.debug("Registering application package {} to {}", applicationPackage, this);
         if (!isSupported(applicationPackage)) {
             throw new UnsupportedProcessException(String.format("unsupported application package %s",
                                                                 applicationPackage));
@@ -126,6 +131,7 @@ public abstract class AbstractTransactionalAlgorithmRepository
         }
         lock.readLock().lock();
         try {
+            LOG.debug("Notifying listeners for new application package {}", applicationPackage);
             this.listeners.forEach(l -> l.onRegister(applicationPackage));
         } finally {
             lock.readLock().unlock();
@@ -136,11 +142,11 @@ public abstract class AbstractTransactionalAlgorithmRepository
     @Override
     public void unregister(OwsCode id) throws ProcessNotFoundException {
         Objects.requireNonNull(id);
+        LOG.debug("Unregistering application package {} from {}", id, this);
         ApplicationPackage applicationPackage;
         lock.writeLock().lock();
         try {
             applicationPackage = applicationPackages.remove(id);
-
         } finally {
             lock.writeLock().unlock();
         }
@@ -149,13 +155,26 @@ public abstract class AbstractTransactionalAlgorithmRepository
         }
         lock.readLock().lock();
         try {
+            LOG.debug("Notifying listeners for removed application package {}", applicationPackage);
             this.listeners.forEach(l -> l.onUnregister(applicationPackage));
         } finally {
             lock.readLock().unlock();
         }
     }
 
+    /**
+     * Create the {@linkplain IAlgorithm algorithm} from the {@link ApplicationPackage}.
+     *
+     * @param applicationPackage The {@link ApplicationPackage}
+     * @return The {@linkplain IAlgorithm algorithm}
+     */
     protected abstract IAlgorithm createAlgorithm(ApplicationPackage applicationPackage);
 
+    /**
+     * Create the {@linkplain TypedProcessDescription typed process description} from the {@link ApplicationPackage}.
+     *
+     * @param applicationPackage The {@link ApplicationPackage}
+     * @return The {@linkplain TypedProcessDescription typed process description}
+     */
     protected abstract TypedProcessDescription createProcessDescription(ApplicationPackage applicationPackage);
 }

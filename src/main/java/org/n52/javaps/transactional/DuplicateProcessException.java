@@ -18,15 +18,28 @@ package org.n52.javaps.transactional;
 
 import org.n52.shetland.ogc.ows.OwsCode;
 
+/**
+ * {@link TransactionalEngineException} that can be thrown if a process already exists.
+ */
 public class DuplicateProcessException extends TransactionalEngineException {
     private static final long serialVersionUID = -5732712161388700460L;
     private final OwsCode id;
 
+    /**
+     * Creates a new {@link DuplicateProcessException}.
+     *
+     * @param id The duplicate identifier.
+     */
     public DuplicateProcessException(OwsCode id) {
         super(String.format("An algorithm with the name %s is already registered.", id));
         this.id = id;
     }
 
+    /**
+     * Get the duplicate identifier.
+     *
+     * @return The identifier
+     */
     public OwsCode getId() {
         return id;
     }

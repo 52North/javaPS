@@ -17,8 +17,13 @@
 package org.n52.javaps.transactional.rest;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.n52.javaps.engine.EngineException;
+import org.n52.javaps.engine.ProcessNotFoundException;
+import org.n52.javaps.rest.MediaTypes;
 import org.n52.javaps.rest.ProcessesApi;
+import org.n52.javaps.transactional.DuplicateProcessException;
+import org.n52.javaps.transactional.NotUndeployableProcessException;
+import org.n52.javaps.transactional.UnsupportedProcessException;
+import org.n52.shetland.ogc.wps.ap.ApplicationPackage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,19 +34,51 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+/**
+ * Extension of {@link ProcessesApi} for transactional operations.
+ *
+ * @author Christian Autermann
+ */
 public interface TransactionalApi {
 
+    /**
+     * Deletes the process with the specified id.
+     *
+     * @param id The identifier of the process.
+     * @throws ProcessNotFoundException        If the process could not be found.
+     * @throws NotUndeployableProcessException If the process is not deletable.
+     */
     @ResponseBody
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(path = ProcessesApi.BASE_URL + "/{id:.+}")
-    void undeployProcess(@PathVariable("id") String id) throws EngineException;
+    void undeployProcess(@PathVariable("id") String id)
+            throws ProcessNotFoundException, NotUndeployableProcessException;
 
+    /**
+     * Adds a new process to this service.
+     *
+     * @param request The description of the new process, a {@link ApplicationPackage}.
+     * @return The {@linkplain ResponseEntity} containing the {@code Location} of the new process.
+     * @throws DuplicateProcessException   If a process with the same identifier already exists.
+     * @throws UnsupportedProcessException If the process is not supported.
+     */
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(path = ProcessesApi.BASE_URL)
-    ResponseEntity<?> deployProcess(@RequestBody JsonNode request) throws EngineException;
+    @PostMapping(path = ProcessesApi.BASE_URL, consumes = MediaTypes.APPLICATION_JSON)
+    ResponseEntity<?> deployProcess(@RequestBody JsonNode request)
+            throws DuplicateProcessException, UnsupportedProcessException;
 
+    /**
+     * Updates the process with the specified id.
+     *
+     * @param id      The identifier of the process.
+     * @param request The description of the new process, a {@link ApplicationPackage}
+     * @throws ProcessNotFoundException        If the process could not be found.
+     * @throws UnsupportedProcessException     If the process is not supported.
+     * @throws NotUndeployableProcessException If the process cannot be updated.
+     */
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PutMapping(path = ProcessesApi.BASE_URL + "/{id:.+}")
-    void updateProcess(@PathVariable("id") String id, @RequestBody JsonNode request) throws EngineException;
+    @PutMapping(path = ProcessesApi.BASE_URL + "/{id:.+}", consumes = MediaTypes.APPLICATION_JSON)
+    void updateProcess(@PathVariable("id") String id, @RequestBody JsonNode request)
+            throws ProcessNotFoundException, UnsupportedProcessException, NotUndeployableProcessException;
 
 }

@@ -25,26 +25,51 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 
+/**
+ * Component to resolve circular dependencies between {@linkplain TransactionalAlgorithmRepositoryListener listeners}
+ * and {@linkplain ListenableTransactionalAlgorithmRepository repositories}.
+ *
+ * @author Christian Autermann
+ */
 @Component
 public class TransactionalAlgorithmRepositoryListenerRegistration {
     private Set<TransactionalAlgorithmRepositoryListener> listeners = Collections.emptySet();
     private Set<ListenableTransactionalAlgorithmRepository> repositories = Collections.emptySet();
 
+    /**
+     * The {@linkplain TransactionalAlgorithmRepositoryListener listeners} to register.
+     *
+     * @param listeners The {@linkplain TransactionalAlgorithmRepositoryListener listeners}
+     */
     @Autowired(required = false)
     public void setListeners(Set<TransactionalAlgorithmRepositoryListener> listeners) {
         this.listeners = Optional.ofNullable(listeners).orElseGet(Collections::emptySet);
     }
 
+    /**
+     * The {@linkplain ListenableTransactionalAlgorithmRepository repositories} to which the {@linkplain
+     * TransactionalAlgorithmRepositoryListener listeners} are registered.
+     *
+     * @param repositories The {@linkplain ListenableTransactionalAlgorithmRepository repositories}
+     */
     @Autowired(required = false)
     public void setRepositories(Set<ListenableTransactionalAlgorithmRepository> repositories) {
         this.repositories = Optional.ofNullable(repositories).orElseGet(Collections::emptySet);
     }
 
+    /**
+     * Adds the {@linkplain TransactionalAlgorithmRepositoryListener listeners} to the {@linkplain
+     * ListenableTransactionalAlgorithmRepository repositories}.
+     */
     @PostConstruct
     public void register() {
         repositories.forEach(repository -> listeners.forEach(repository::addListener));
     }
 
+    /**
+     * Removes the {@linkplain TransactionalAlgorithmRepositoryListener listeners} from the {@linkplain
+     * ListenableTransactionalAlgorithmRepository repositories}.
+     */
     @PreDestroy
     public void deregister() {
         repositories.forEach(repository -> listeners.forEach(repository::removeListener));

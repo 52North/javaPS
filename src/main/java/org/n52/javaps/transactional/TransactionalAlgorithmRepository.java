@@ -24,13 +24,15 @@ import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.shetland.ogc.wps.ap.ApplicationPackage;
 
 import java.util.Optional;
-import java.util.Set;
 
+/**
+ * Transactional {@link AlgorithmRepository} that is able to accept {@linkplain ApplicationPackage application packages}
+ * at runtime.
+ *
+ * @author Christian Autermann
+ * @see ListenableTransactionalAlgorithmRepository
+ */
 public interface TransactionalAlgorithmRepository extends AlgorithmRepository {
-    Set<OwsCode> getAlgorithmNames();
-
-    Optional<IAlgorithm> getAlgorithm(OwsCode id);
-
     @Override
     default Optional<TypedProcessDescription> getProcessDescription(OwsCode id) {
         return getAlgorithm(id).map(IAlgorithm::getDescription);
@@ -41,17 +43,62 @@ public interface TransactionalAlgorithmRepository extends AlgorithmRepository {
         return getApplicationPackage(id).isPresent();
     }
 
+    /**
+     * Get the {@link ApplicationPackage} with the specified {@code id}.
+     *
+     * @param id The identifier of the {@link ApplicationPackage}.
+     * @return The {@link ApplicationPackage} or {@code Optional.empty()} if the identifier is unknown.
+     */
     default Optional<ApplicationPackage> getApplicationPackage(String id) {
         return getApplicationPackage(new OwsCode(id));
     }
 
+    /**
+     * Get the {@link ApplicationPackage} with the specified {@code id}.
+     *
+     * @param id The identifier of the {@link ApplicationPackage}.
+     * @return The {@link ApplicationPackage} or {@code Optional.empty()} if the identifier is unknown.
+     */
     Optional<ApplicationPackage> getApplicationPackage(OwsCode id);
 
+    /**
+     * Checks if the {@link ApplicationPackage} is supported by this repository.
+     *
+     * @param applicationPackage The {@link ApplicationPackage}
+     * @return If the {@link ApplicationPackage} is supported
+     */
+    boolean isSupported(ApplicationPackage applicationPackage);
+
+    /**
+     * Registers the {@link ApplicationPackage} in this repository.
+     *
+     * @param applicationPackage The {@link ApplicationPackage}.
+     * @return The identifier of the {@link ApplicationPackage}.
+     * @throws DuplicateProcessException   If the identifier of the {@link ApplicationPackage} already exists within
+     *                                     this repository.
+     * @throws UnsupportedProcessException If The {@link ApplicationPackage} is not supported.
+     * @see #isSupported(ApplicationPackage)
+     */
     OwsCode register(ApplicationPackage applicationPackage)
             throws DuplicateProcessException, UnsupportedProcessException;
 
-    boolean isSupported(ApplicationPackage applicationPackage);
+    /**
+     * Unregisters the {@link ApplicationPackage}.
+     *
+     * @param applicationPackage The {@link ApplicationPackage}
+     * @throws ProcessNotFoundException If the {@link ApplicationPackage} is not registered in this repository
+     */
+    default void unregister(ApplicationPackage applicationPackage) throws ProcessNotFoundException {
+        unregister(applicationPackage.getProcessDescription().getProcessDescription().getId());
+    }
 
+    /**
+     * Unregisters the {@link ApplicationPackage} with the specified {@code id}.
+     *
+     * @param id The identifier of the {@link ApplicationPackage}
+     * @throws ProcessNotFoundException If the {@code id} is not associated with an registered {@link
+     *                                  ApplicationPackage}
+     */
     void unregister(OwsCode id) throws ProcessNotFoundException;
 
 }

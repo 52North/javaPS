@@ -28,7 +28,6 @@ import org.n52.javaps.rest.ProcessesApi;
 import org.n52.javaps.transactional.DuplicateProcessException;
 import org.n52.javaps.transactional.NotUndeployableProcessException;
 import org.n52.javaps.transactional.TransactionalAlgorithmRepository;
-import org.n52.javaps.transactional.TransactionalEngineException;
 import org.n52.javaps.transactional.UnsupportedProcessException;
 import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.shetland.ogc.wps.ap.ApplicationPackage;
@@ -45,31 +44,56 @@ import org.springframework.stereotype.Controller;
 import java.net.URI;
 import java.util.Collection;
 
+/**
+ * Implementation of {@link TransactionalApi}.
+ *
+ * @author Christian Autermann
+ */
 @Controller
 @Configurable
-public class TransactionalApiController implements TransactionalApi, Constructable {
-    private static final Logger LOG = LoggerFactory.getLogger(TransactionalApiController.class);
+public class TransactionalApiImpl implements TransactionalApi, Constructable {
+    private static final Logger LOG = LoggerFactory.getLogger(TransactionalApiImpl.class);
     private DecoderRepository decoderRepository;
     private Decoder<ApplicationPackage, JsonNode> decoder;
     private Collection<TransactionalAlgorithmRepository> repositories;
     private Engine engine;
     private String serviceURL;
 
+    /**
+     * Set the {@link DecoderRepository}.
+     *
+     * @param decoderRepository The {@link DecoderRepository}.
+     */
     @Autowired
     public void setDecoderRepository(DecoderRepository decoderRepository) {
         this.decoderRepository = decoderRepository;
     }
 
+    /**
+     * Set the {@linkplain TransactionalAlgorithmRepository transactional algorithm repositories}.
+     *
+     * @param repositories The {@linkplain TransactionalAlgorithmRepository transactional algorithm repositories}.
+     */
     @Autowired(required = false)
     public void setRepositories(Collection<TransactionalAlgorithmRepository> repositories) {
         this.repositories = repositories;
     }
 
+    /**
+     * Set the {@link Engine}.
+     *
+     * @param engine The {@link Engine}.
+     */
     @Autowired
     public void setEngine(Engine engine) {
         this.engine = engine;
     }
 
+    /**
+     * Set the service URL.
+     *
+     * @param serviceURL The service URL.
+     */
     @Setting(ServiceSettings.SERVICE_URL)
     public void setServiceURL(URI serviceURL) {
         Validation.notNull("serviceURL", serviceURL);
@@ -83,8 +107,7 @@ public class TransactionalApiController implements TransactionalApi, Constructab
     @Override
     public void undeployProcess(String id) throws ProcessNotFoundException, NotUndeployableProcessException {
         LOG.debug("undeploy {}", id);
-        OwsCode processId = new OwsCode(id);
-        engine.getProcessDescription(processId).orElseThrow(() -> new ProcessNotFoundException(processId));
+        OwsCode processId = checkProcessExists(id);
         getRepository(processId).unregister(processId);
     }
 
@@ -103,24 +126,12 @@ public class TransactionalApiController implements TransactionalApi, Constructab
 
     }
 
-    private ApplicationPackage decode(JsonNode request) throws UnsupportedProcessException {
-        ApplicationPackage applicationPackage;
-        try {
-            applicationPackage = decoder.decode(request);
-        } catch (DecodingException e) {
-            throw new UnsupportedProcessException(e);
-        }
-        return applicationPackage;
-    }
-
     @Override
     public void updateProcess(String id, JsonNode request) throws ProcessNotFoundException,
-                                                                  TransactionalEngineException {
+                                                                  UnsupportedProcessException,
+                                                                  NotUndeployableProcessException {
         LOG.info("redeploy {}", id);
-        OwsCode processIdFromPath = new OwsCode(id);
-        engine.getProcessDescription(processIdFromPath)
-              .orElseThrow(() -> new ProcessNotFoundException(processIdFromPath));
-
+        OwsCode processIdFromPath = checkProcessExists(id);
         ApplicationPackage applicationPackage = decode(request);
         OwsCode processId = applicationPackage.getProcessDescription().getProcessDescription().getId();
 
@@ -133,26 +144,73 @@ public class TransactionalApiController implements TransactionalApi, Constructab
         try {
             getRepository(applicationPackage).register(applicationPackage);
         } catch (DuplicateProcessException e) {
-            throw new TransactionalEngineException(String.format("could not undeploy process %s", processId), e);
+            throw new RuntimeException(String.format("could not undeploy process %s", processId), e);
         }
     }
 
+    /**
+     * Decodes the JSON request as an {@link ApplicationPackage}.
+     *
+     * @param request The JSON payload to the POST or PUT methods.
+     * @return The {@link ApplicationPackage}.
+     * @throws UnsupportedProcessException If the request can not be decoded.
+     */
+    private ApplicationPackage decode(JsonNode request) throws UnsupportedProcessException {
+        try {
+            return decoder.decode(request);
+        } catch (DecodingException e) {
+            throw new UnsupportedProcessException(e);
+        }
+    }
+
+    /**
+     * Get the URL of the process with the identifier {@code id}.
+     *
+     * @param id The identifier.
+     * @return The URL.
+     */
     private URI getProcessURL(OwsCode id) {
         return URI.create(String.format("%s/%s", serviceURL, id.getValue()));
     }
 
+    /**
+     * Checks that the process with the identifier {@code id} exists.
+     *
+     * @param id The identifier of the process.
+     * @return The identifier as an {@link OwsCode}.
+     * @throws ProcessNotFoundException If the process does not exists.
+     */
+    private OwsCode checkProcessExists(String id) throws ProcessNotFoundException {
+        OwsCode processId = new OwsCode(id);
+        return engine.getProcessDescription(processId)
+                     .orElseThrow(() -> new ProcessNotFoundException(processId))
+                     .getId();
+    }
+
+    /**
+     * Get the {@link TransactionalAlgorithmRepository} that contains the supplied identifier.
+     *
+     * @param processId The {@link ApplicationPackage} identifier.
+     * @return The {@link TransactionalAlgorithmRepository}.
+     * @throws NotUndeployableProcessException If no {@link TransactionalAlgorithmRepository} can be found that contains
+     *                                         the {@link ApplicationPackage}.
+     */
     private TransactionalAlgorithmRepository getRepository(OwsCode processId) throws NotUndeployableProcessException {
-        return repositories.stream()
-                           .filter(x -> x.containsAlgorithm(processId))
-                           .findFirst()
+        return repositories.stream().filter(x -> x.containsAlgorithm(processId)).findFirst()
                            .orElseThrow(() -> new NotUndeployableProcessException(processId));
     }
 
+    /**
+     * Get the {@link TransactionalAlgorithmRepository} that supports the supplied {@link ApplicationPackage}.
+     *
+     * @param applicationPackage The {@link ApplicationPackage}.
+     * @return The {@link TransactionalAlgorithmRepository}.
+     * @throws UnsupportedProcessException If no {@link TransactionalAlgorithmRepository} can be found that supports the
+     *                                     {@link ApplicationPackage}.
+     */
     private TransactionalAlgorithmRepository getRepository(ApplicationPackage applicationPackage)
             throws UnsupportedProcessException {
-        return repositories.stream()
-                           .filter(x -> x.isSupported(applicationPackage))
-                           .findFirst()
+        return repositories.stream().filter(x -> x.isSupported(applicationPackage)).findFirst()
                            .orElseThrow(UnsupportedProcessException::new);
     }
 

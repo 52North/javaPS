@@ -17,6 +17,7 @@
 package org.n52.javaps.transactional.rest;
 
 import org.n52.javaps.rest.EngineExceptionAdvice;
+import org.n52.javaps.rest.MediaTypes;
 import org.n52.javaps.rest.serializer.ExceptionSerializer;
 import org.n52.javaps.transactional.DuplicateProcessException;
 import org.n52.javaps.transactional.NotUndeployableProcessException;
@@ -28,27 +29,55 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+/**
+ * {@link RestControllerAdvice} to the {@link TransactionalApi}.
+ *
+ * @author Christian Autermann
+ */
 @RestControllerAdvice(assignableTypes = TransactionalApi.class)
-@RequestMapping(produces = "application/json")
+@RequestMapping(produces = MediaTypes.APPLICATION_JSON)
 public class TransactionalEngineExceptionAdvice extends EngineExceptionAdvice {
 
+    /**
+     * Set the {@link ExceptionSerializer}.
+     *
+     * @param serializer The {@link ExceptionSerializer}.
+     */
     @Autowired
     public TransactionalEngineExceptionAdvice(ExceptionSerializer serializer) {
         super(serializer);
     }
 
+    /**
+     * Handle a {@link DuplicateProcessException}.
+     *
+     * @param ex The exception.
+     * @return The response.
+     */
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(DuplicateProcessException.class)
     public io.swagger.model.Exception handle(DuplicateProcessException ex) {
         return getExceptionSerializer().serializeException(INVALID_PARAMETER, ex.getMessage());
     }
 
+    /**
+     * Handle a {@link UnsupportedProcessException}.
+     *
+     * @param ex The exception.
+     * @return The response.
+     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(UnsupportedProcessException.class)
     public io.swagger.model.Exception handle(UnsupportedProcessException ex) {
         return getExceptionSerializer().serializeException(INVALID_PARAMETER, ex.getMessage());
     }
 
+    /**
+     * Handle a {@link NotUndeployableProcessException}.
+     *
+     * @param ex The exception.
+     * @return The response.
+     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(NotUndeployableProcessException.class)
     public io.swagger.model.Exception handle(NotUndeployableProcessException ex) {

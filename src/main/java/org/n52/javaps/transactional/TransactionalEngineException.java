@@ -18,20 +18,44 @@ package org.n52.javaps.transactional;
 
 import org.n52.javaps.engine.EngineException;
 
+/**
+ * Extension of {@link EngineException} for {@linkplain TransactionalAlgorithmRepository transactional repositories}.
+ *
+ * @author Christian Autermann
+ */
 public class TransactionalEngineException extends EngineException {
     private static final long serialVersionUID = 3910210009505613767L;
 
+    /**
+     * Creates a new {@link TransactionalEngineException}.
+     */
     public TransactionalEngineException() {
     }
 
+    /**
+     * Creates a new {@link TransactionalEngineException}.
+     *
+     * @param message The message
+     */
     public TransactionalEngineException(String message) {
         super(message);
     }
 
+    /**
+     * Creates a new {@link TransactionalEngineException}.
+     *
+     * @param message The message
+     * @param cause   The cause
+     */
     public TransactionalEngineException(String message, Throwable cause) {
         super(message, cause);
     }
 
+    /**
+     * Creates a new {@link TransactionalEngineException}.
+     *
+     * @param cause The cause
+     */
     public TransactionalEngineException(Throwable cause) {
         super(cause);
     }

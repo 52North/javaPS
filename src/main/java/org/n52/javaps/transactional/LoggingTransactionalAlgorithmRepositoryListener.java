@@ -22,6 +22,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+/**
+ * {@linkplain TransactionalAlgorithmRepositoryListener Listener} implementation that logs the addition and removal of
+ * {@linkplain ApplicationPackage application packages}.
+ *
+ * @author Christian Autermann
+ */
 @Component
 public class LoggingTransactionalAlgorithmRepositoryListener implements TransactionalAlgorithmRepositoryListener {
     private static final Logger LOG = LoggerFactory.getLogger(LoggingTransactionalAlgorithmRepositoryListener.class);
@@ -36,6 +42,5 @@ public class LoggingTransactionalAlgorithmRepositoryListener implements Transact
     public void onUnregister(ApplicationPackage applicationPackage) {
         ProcessDescription id = applicationPackage.getProcessDescription().getProcessDescription();
         LOG.info("unregistered application package: {}", id.getId());
-
     }
 }

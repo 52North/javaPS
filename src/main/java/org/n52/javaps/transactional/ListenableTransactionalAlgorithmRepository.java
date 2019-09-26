@@ -16,8 +16,23 @@
  */
 package org.n52.javaps.transactional;
 
+/**
+ * Extension of {@link TransactionalAlgorithmRepository} that allows the subscription of listeners.
+ *
+ * @author Christian Autermann
+ */
 public interface ListenableTransactionalAlgorithmRepository extends TransactionalAlgorithmRepository {
+    /**
+     * Adds a {@linkplain TransactionalAlgorithmRepositoryListener listener} to this repository.
+     *
+     * @param listener The {@linkplain TransactionalAlgorithmRepositoryListener listener}
+     */
     void addListener(TransactionalAlgorithmRepositoryListener listener);
 
+    /**
+     * Removes the {@linkplain TransactionalAlgorithmRepositoryListener listener from this repository}.
+     *
+     * @param listener The {@linkplain TransactionalAlgorithmRepositoryListener}
+     */
     void removeListener(TransactionalAlgorithmRepositoryListener listener);
 }
