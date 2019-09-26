@@ -20,7 +20,7 @@ import org.n52.javaps.rest.EngineExceptionAdvice;
 import org.n52.javaps.rest.MediaTypes;
 import org.n52.javaps.rest.serializer.ExceptionSerializer;
 import org.n52.javaps.transactional.DuplicateProcessException;
-import org.n52.javaps.transactional.NotUndeployableProcessException;
+import org.n52.javaps.transactional.UndeletableProcessException;
 import org.n52.javaps.transactional.UnsupportedProcessException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -73,14 +73,14 @@ public class TransactionalEngineExceptionAdvice extends EngineExceptionAdvice {
     }
 
     /**
-     * Handle a {@link NotUndeployableProcessException}.
+     * Handle a {@link UndeletableProcessException}.
      *
      * @param ex The exception.
      * @return The response.
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(NotUndeployableProcessException.class)
-    public io.swagger.model.Exception handle(NotUndeployableProcessException ex) {
+    @ExceptionHandler(UndeletableProcessException.class)
+    public io.swagger.model.Exception handle(UndeletableProcessException ex) {
         return getExceptionSerializer().serializeException(INVALID_PARAMETER, ex.getMessage());
     }
 }

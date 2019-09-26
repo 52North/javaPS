@@ -64,8 +64,8 @@ public interface TransactionalAlgorithmRepository extends AlgorithmRepository {
     /**
      * Checks if the {@link ApplicationPackage} is supported by this repository.
      *
-     * @param applicationPackage The {@link ApplicationPackage}
-     * @return If the {@link ApplicationPackage} is supported
+     * @param applicationPackage The {@link ApplicationPackage}.
+     * @return If the {@link ApplicationPackage} is supported.
      */
     boolean isSupported(ApplicationPackage applicationPackage);
 
@@ -85,10 +85,12 @@ public interface TransactionalAlgorithmRepository extends AlgorithmRepository {
     /**
      * Unregisters the {@link ApplicationPackage}.
      *
-     * @param applicationPackage The {@link ApplicationPackage}
-     * @throws ProcessNotFoundException If the {@link ApplicationPackage} is not registered in this repository
+     * @param applicationPackage The {@link ApplicationPackage}.
+     * @throws ProcessNotFoundException    If the {@link ApplicationPackage} is not registered in this repository. *
+     * @throws UndeletableProcessException If the {@link ApplicationPackage} cannot be deleted.
      */
-    default void unregister(ApplicationPackage applicationPackage) throws ProcessNotFoundException {
+    default void unregister(ApplicationPackage applicationPackage)
+            throws ProcessNotFoundException, UndeletableProcessException {
         unregister(applicationPackage.getProcessDescription().getProcessDescription().getId());
     }
 
@@ -96,9 +98,10 @@ public interface TransactionalAlgorithmRepository extends AlgorithmRepository {
      * Unregisters the {@link ApplicationPackage} with the specified {@code id}.
      *
      * @param id The identifier of the {@link ApplicationPackage}
-     * @throws ProcessNotFoundException If the {@code id} is not associated with an registered {@link
-     *                                  ApplicationPackage}
+     * @throws ProcessNotFoundException    If the {@code id} is not associated with an registered {@link
+     *                                     ApplicationPackage}.
+     * @throws UndeletableProcessException If the {@link ApplicationPackage} cannot be deleted.
      */
-    void unregister(OwsCode id) throws ProcessNotFoundException;
+    void unregister(OwsCode id) throws ProcessNotFoundException, UndeletableProcessException;
 
 }

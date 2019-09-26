@@ -140,18 +140,22 @@ public abstract class AbstractTransactionalAlgorithmRepository implements Listen
     }
 
     @Override
-    public void unregister(OwsCode id) throws ProcessNotFoundException {
+    public void unregister(OwsCode id) throws ProcessNotFoundException, UndeletableProcessException {
         Objects.requireNonNull(id);
         LOG.debug("Unregistering application package {} from {}", id, this);
         ApplicationPackage applicationPackage;
         lock.writeLock().lock();
         try {
-            applicationPackage = applicationPackages.remove(id);
+            applicationPackage = applicationPackages.get(id);
+            if (applicationPackage == null) {
+                throw new ProcessNotFoundException(id);
+            }
+            if (applicationPackage instanceof UndeletableApplicationPackage) {
+                throw new UndeletableProcessException(id);
+            }
+            applicationPackages.remove(id);
         } finally {
             lock.writeLock().unlock();
-        }
-        if (applicationPackage == null) {
-            throw new ProcessNotFoundException(id);
         }
         lock.readLock().lock();
         try {

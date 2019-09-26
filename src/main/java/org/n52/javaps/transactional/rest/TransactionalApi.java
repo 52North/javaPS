@@ -21,7 +21,7 @@ import org.n52.javaps.engine.ProcessNotFoundException;
 import org.n52.javaps.rest.MediaTypes;
 import org.n52.javaps.rest.ProcessesApi;
 import org.n52.javaps.transactional.DuplicateProcessException;
-import org.n52.javaps.transactional.NotUndeployableProcessException;
+import org.n52.javaps.transactional.UndeletableProcessException;
 import org.n52.javaps.transactional.UnsupportedProcessException;
 import org.n52.shetland.ogc.wps.ap.ApplicationPackage;
 import org.springframework.http.HttpStatus;
@@ -45,14 +45,14 @@ public interface TransactionalApi {
      * Deletes the process with the specified id.
      *
      * @param id The identifier of the process.
-     * @throws ProcessNotFoundException        If the process could not be found.
-     * @throws NotUndeployableProcessException If the process is not deletable.
+     * @throws ProcessNotFoundException    If the process could not be found.
+     * @throws UndeletableProcessException If the process is not deletable.
      */
     @ResponseBody
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(path = ProcessesApi.BASE_URL + "/{id:.+}")
     void undeployProcess(@PathVariable("id") String id)
-            throws ProcessNotFoundException, NotUndeployableProcessException;
+            throws ProcessNotFoundException, UndeletableProcessException;
 
     /**
      * Adds a new process to this service.
@@ -72,13 +72,13 @@ public interface TransactionalApi {
      *
      * @param id      The identifier of the process.
      * @param request The description of the new process, a {@link ApplicationPackage}
-     * @throws ProcessNotFoundException        If the process could not be found.
-     * @throws UnsupportedProcessException     If the process is not supported.
-     * @throws NotUndeployableProcessException If the process cannot be updated.
+     * @throws ProcessNotFoundException    If the process could not be found.
+     * @throws UnsupportedProcessException If the process is not supported.
+     * @throws UndeletableProcessException If the process cannot be updated.
      */
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping(path = ProcessesApi.BASE_URL + "/{id:.+}", consumes = MediaTypes.APPLICATION_JSON)
     void updateProcess(@PathVariable("id") String id, @RequestBody JsonNode request)
-            throws ProcessNotFoundException, UnsupportedProcessException, NotUndeployableProcessException;
+            throws ProcessNotFoundException, UnsupportedProcessException, UndeletableProcessException;
 
 }

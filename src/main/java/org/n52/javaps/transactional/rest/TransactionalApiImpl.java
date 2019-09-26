@@ -17,17 +17,17 @@
 package org.n52.javaps.transactional.rest;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import org.n52.faroe.ConfigurationError;
 import org.n52.faroe.Validation;
 import org.n52.faroe.annotation.Configurable;
 import org.n52.faroe.annotation.Setting;
 import org.n52.iceland.service.ServiceSettings;
 import org.n52.janmayen.lifecycle.Constructable;
-import org.n52.javaps.engine.Engine;
 import org.n52.javaps.engine.ProcessNotFoundException;
 import org.n52.javaps.rest.ProcessesApi;
 import org.n52.javaps.transactional.DuplicateProcessException;
-import org.n52.javaps.transactional.NotUndeployableProcessException;
-import org.n52.javaps.transactional.TransactionalAlgorithmRepository;
+import org.n52.javaps.transactional.TransactionalAlgorithmRegistry;
+import org.n52.javaps.transactional.UndeletableProcessException;
 import org.n52.javaps.transactional.UnsupportedProcessException;
 import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.shetland.ogc.wps.ap.ApplicationPackage;
@@ -42,7 +42,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 
 import java.net.URI;
-import java.util.Collection;
+import java.util.Objects;
 
 /**
  * Implementation of {@link TransactionalApi}.
@@ -55,9 +55,18 @@ public class TransactionalApiImpl implements TransactionalApi, Constructable {
     private static final Logger LOG = LoggerFactory.getLogger(TransactionalApiImpl.class);
     private DecoderRepository decoderRepository;
     private Decoder<ApplicationPackage, JsonNode> decoder;
-    private Collection<TransactionalAlgorithmRepository> repositories;
-    private Engine engine;
     private String serviceURL;
+    private TransactionalAlgorithmRegistry registration;
+
+    /**
+     * Set the {@link TransactionalAlgorithmRegistry}.
+     *
+     * @param registration The {@link TransactionalAlgorithmRegistry}.
+     */
+    @Autowired
+    public void setRegistration(TransactionalAlgorithmRegistry registration) {
+        this.registration = Objects.requireNonNull(registration);
+    }
 
     /**
      * Set the {@link DecoderRepository}.
@@ -66,27 +75,7 @@ public class TransactionalApiImpl implements TransactionalApi, Constructable {
      */
     @Autowired
     public void setDecoderRepository(DecoderRepository decoderRepository) {
-        this.decoderRepository = decoderRepository;
-    }
-
-    /**
-     * Set the {@linkplain TransactionalAlgorithmRepository transactional algorithm repositories}.
-     *
-     * @param repositories The {@linkplain TransactionalAlgorithmRepository transactional algorithm repositories}.
-     */
-    @Autowired(required = false)
-    public void setRepositories(Collection<TransactionalAlgorithmRepository> repositories) {
-        this.repositories = repositories;
-    }
-
-    /**
-     * Set the {@link Engine}.
-     *
-     * @param engine The {@link Engine}.
-     */
-    @Autowired
-    public void setEngine(Engine engine) {
-        this.engine = engine;
+        this.decoderRepository = Objects.requireNonNull(decoderRepository);
     }
 
     /**
@@ -105,33 +94,22 @@ public class TransactionalApiImpl implements TransactionalApi, Constructable {
     }
 
     @Override
-    public void undeployProcess(String id) throws ProcessNotFoundException, NotUndeployableProcessException {
-        LOG.debug("undeploy {}", id);
-        OwsCode processId = checkProcessExists(id);
-        getRepository(processId).unregister(processId);
+    public void undeployProcess(String id) throws ProcessNotFoundException, UndeletableProcessException {
+        registration.unregister(id);
     }
 
     @Override
     public ResponseEntity<?> deployProcess(JsonNode request)
             throws DuplicateProcessException, UnsupportedProcessException {
-
-        ApplicationPackage applicationPackage = decode(request);
-        OwsCode id = applicationPackage.getProcessDescription().getProcessDescription().getId();
-        LOG.info("deploy {}", id.getValue());
-        if (engine.getProcessDescription(id).isPresent()) {
-            throw new DuplicateProcessException(id);
-        }
-        getRepository(applicationPackage).register(applicationPackage);
-        return ResponseEntity.created(getProcessURL(id)).build();
+        return ResponseEntity.created(getProcessURL(registration.register(decode(request)))).build();
 
     }
 
     @Override
     public void updateProcess(String id, JsonNode request) throws ProcessNotFoundException,
                                                                   UnsupportedProcessException,
-                                                                  NotUndeployableProcessException {
-        LOG.info("redeploy {}", id);
-        OwsCode processIdFromPath = checkProcessExists(id);
+                                                                  UndeletableProcessException {
+        OwsCode processIdFromPath = new OwsCode(id);
         ApplicationPackage applicationPackage = decode(request);
         OwsCode processId = applicationPackage.getProcessDescription().getProcessDescription().getId();
 
@@ -140,12 +118,7 @@ public class TransactionalApiImpl implements TransactionalApi, Constructable {
                                                                 processIdFromPath.getValue(),
                                                                 processId.getValue()));
         }
-        getRepository(processId).unregister(processId);
-        try {
-            getRepository(applicationPackage).register(applicationPackage);
-        } catch (DuplicateProcessException e) {
-            throw new RuntimeException(String.format("could not undeploy process %s", processId), e);
-        }
+        registration.update(applicationPackage);
     }
 
     /**
@@ -173,51 +146,10 @@ public class TransactionalApiImpl implements TransactionalApi, Constructable {
         return URI.create(String.format("%s/%s", serviceURL, id.getValue()));
     }
 
-    /**
-     * Checks that the process with the identifier {@code id} exists.
-     *
-     * @param id The identifier of the process.
-     * @return The identifier as an {@link OwsCode}.
-     * @throws ProcessNotFoundException If the process does not exists.
-     */
-    private OwsCode checkProcessExists(String id) throws ProcessNotFoundException {
-        OwsCode processId = new OwsCode(id);
-        return engine.getProcessDescription(processId)
-                     .orElseThrow(() -> new ProcessNotFoundException(processId))
-                     .getId();
-    }
-
-    /**
-     * Get the {@link TransactionalAlgorithmRepository} that contains the supplied identifier.
-     *
-     * @param processId The {@link ApplicationPackage} identifier.
-     * @return The {@link TransactionalAlgorithmRepository}.
-     * @throws NotUndeployableProcessException If no {@link TransactionalAlgorithmRepository} can be found that contains
-     *                                         the {@link ApplicationPackage}.
-     */
-    private TransactionalAlgorithmRepository getRepository(OwsCode processId) throws NotUndeployableProcessException {
-        return repositories.stream().filter(x -> x.containsAlgorithm(processId)).findFirst()
-                           .orElseThrow(() -> new NotUndeployableProcessException(processId));
-    }
-
-    /**
-     * Get the {@link TransactionalAlgorithmRepository} that supports the supplied {@link ApplicationPackage}.
-     *
-     * @param applicationPackage The {@link ApplicationPackage}.
-     * @return The {@link TransactionalAlgorithmRepository}.
-     * @throws UnsupportedProcessException If no {@link TransactionalAlgorithmRepository} can be found that supports the
-     *                                     {@link ApplicationPackage}.
-     */
-    private TransactionalAlgorithmRepository getRepository(ApplicationPackage applicationPackage)
-            throws UnsupportedProcessException {
-        return repositories.stream().filter(x -> x.isSupported(applicationPackage)).findFirst()
-                           .orElseThrow(UnsupportedProcessException::new);
-    }
-
     @Override
     public void init() {
         decoder = decoderRepository
                           .<ApplicationPackage, JsonNode>tryGetDecoder(new JsonDecoderKey(ApplicationPackage.class))
-                          .orElseThrow(() -> new RuntimeException("No application package decoder found"));
+                          .orElseThrow(() -> new ConfigurationError("No application package decoder found"));
     }
 }
