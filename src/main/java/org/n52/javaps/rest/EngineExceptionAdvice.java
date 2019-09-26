@@ -108,7 +108,7 @@ public class EngineExceptionAdvice {
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(EngineException.class)
+    @ExceptionHandler(Exception.class)
     public io.swagger.model.Exception handle(Exception ex) {
         return getExceptionSerializer().serializeException(NO_APPLICABLE_CODE, ex.getMessage());
     }
