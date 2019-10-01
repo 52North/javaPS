@@ -16,16 +16,15 @@
  */
 package org.n52.javaps.engine;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
 import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.shetland.ogc.wps.JobStatus;
 import org.n52.shetland.ogc.wps.OutputDefinition;
 import org.n52.shetland.ogc.wps.ResponseMode;
 import org.n52.shetland.ogc.wps.data.ProcessData;
-import org.n52.javaps.description.TypedProcessDescription;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * TODO JavaDoc
@@ -39,8 +38,6 @@ public interface EngineProcessExecutionContext extends ProcessExecutionContext {
     ResponseMode getResponseMode();
 
     JobStatus getJobStatus();
-
-    TypedProcessDescription getDescription();
 
     Map<OwsCode, OutputDefinition> getOutputDefinitions();
 

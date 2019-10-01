@@ -16,14 +16,15 @@
  */
 package org.n52.javaps.engine;
 
-import java.time.OffsetDateTime;
-import java.util.Optional;
-
+import org.n52.javaps.algorithm.ProcessInputs;
+import org.n52.javaps.algorithm.ProcessOutputs;
+import org.n52.javaps.description.TypedProcessDescription;
 import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.shetland.ogc.wps.JobId;
 import org.n52.shetland.ogc.wps.OutputDefinition;
-import org.n52.javaps.algorithm.ProcessInputs;
-import org.n52.javaps.algorithm.ProcessOutputs;
+
+import java.time.OffsetDateTime;
+import java.util.Optional;
 
 /**
  * TODO JavaDoc
@@ -50,6 +51,8 @@ public interface ProcessExecutionContext {
 
     void setNextPoll(OffsetDateTime nextPoll);
 
+    TypedProcessDescription getDescription();
+
     default boolean hasOutputDefinition(String output) {
         return hasOutputDefinition(new OwsCode(output));
     }
@@ -58,4 +61,10 @@ public interface ProcessExecutionContext {
         return getOutputDefinition(output).isPresent();
     }
 
+    /**
+     * Add an callback that is called once this {@link ProcessExecutionContext} is destroyed.
+     *
+     * @param runnable The {@link Runnable} to call.
+     */
+    void onDestroy(Runnable runnable);
 }
