@@ -21,7 +21,7 @@
  */
 package org.n52.javaps.rest.serializer;
 
-import io.swagger.model.Exception;
+import org.n52.javaps.rest.model.Exception;
 import org.springframework.stereotype.Component;
 
 @Component

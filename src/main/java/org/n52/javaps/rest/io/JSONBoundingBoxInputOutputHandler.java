@@ -55,6 +55,15 @@ public class JSONBoundingBoxInputOutputHandler implements InputHandler, OutputHa
     private static final String BBOX_KEY = "bbox";
     private static final Set<Format> FORMATS = Collections.singleton(new Format("application/json"));
     private static final Set<Class<? extends Data<?>>> BINDINGS = Collections.singleton(BoundingBoxData.class);
+    private final ObjectMapper objectMapper;
+    private final JsonNodeFactory jsonNodeFactory;
+
+    @Autowired
+    public JSONBoundingBoxInputOutputHandler(ObjectMapper objectMapper,
+                                             JsonNodeFactory jsonNodeFactory) {
+        this.objectMapper = Objects.requireNonNull(objectMapper);
+        this.jsonNodeFactory = Objects.requireNonNull(jsonNodeFactory);
+    }
 
     @Override
     public Set<Format> getSupportedFormats() {
@@ -64,16 +73,6 @@ public class JSONBoundingBoxInputOutputHandler implements InputHandler, OutputHa
     @Override
     public Set<Class<? extends Data<?>>> getSupportedBindings() {
         return BINDINGS;
-    }
-
-    private final ObjectMapper objectMapper;
-    private final JsonNodeFactory jsonNodeFactory;
-
-    @Autowired
-    public JSONBoundingBoxInputOutputHandler(ObjectMapper objectMapper,
-                                             JsonNodeFactory jsonNodeFactory) {
-        this.objectMapper = Objects.requireNonNull(objectMapper);
-        this.jsonNodeFactory = Objects.requireNonNull(jsonNodeFactory);
     }
 
     @Override

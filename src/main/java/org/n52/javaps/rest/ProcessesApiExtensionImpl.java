@@ -47,7 +47,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 @Controller
-public class ProcessesApiExtensionImpl implements ProcessesApiExtension {
+public final class ProcessesApiExtensionImpl implements ProcessesApiExtension {
     private final Engine engine;
 
     @Autowired

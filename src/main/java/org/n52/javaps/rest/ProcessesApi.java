@@ -21,10 +21,10 @@
  */
 package org.n52.javaps.rest;
 
-import io.swagger.model.Execute;
-import io.swagger.model.ProcessCollection;
-import io.swagger.model.ProcessOffering;
-import io.swagger.model.StatusInfo;
+import org.n52.javaps.rest.model.Execute;
+import org.n52.javaps.rest.model.ProcessCollection;
+import org.n52.javaps.rest.model.ProcessOffering;
+import org.n52.javaps.rest.model.StatusInfo;
 import org.n52.javaps.engine.EngineException;
 import org.n52.javaps.engine.ProcessNotFoundException;
 import org.springframework.http.ResponseEntity;

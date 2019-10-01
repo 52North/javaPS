@@ -19,12 +19,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.rest;
+package org.n52.javaps.rest.model;
 
-public interface MediaTypes {
-    String APPLICATION_JSON = "application/json";
-    String TEXT_HTML = "text/html";
-    String APPLICATION_XML = "application/xml";
-    String APPLICATION_JAVASCRIPT = "application/javascript";
-    String APPLICATION_OPENAPI_JSON_3_0 = "application/openapi+json;version=3.0";
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
+/**
+ * Gets or Sets status
+ */
+public enum StatusEnum {
+    ACCEPTED("accepted"),
+    RUNNING("running"),
+    SUCCESSFUL("successful"),
+    FAILED("failed");
+
+    private String value;
+
+    StatusEnum(String value) {
+        this.value = value;
+    }
+
+    @Override
+    @JsonValue
+    public String toString() {
+        return String.valueOf(value);
+    }
+
+    @JsonCreator
+    public static StatusEnum fromValue(String text) {
+        for (StatusEnum b : StatusEnum.values()) {
+            if (String.valueOf(b.value).equals(text)) {
+                return b;
+            }
+        }
+        return null;
+    }
 }

@@ -23,9 +23,9 @@ package org.n52.javaps.rest.serializer;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.model.OutputInfo;
-import io.swagger.model.Result;
-import io.swagger.model.ValueType;
+import org.n52.javaps.rest.model.OutputInfo;
+import org.n52.javaps.rest.model.Result;
+import org.n52.javaps.rest.model.ValueType;
 import org.apache.commons.io.IOUtils;
 import org.n52.javaps.engine.OutputEncodingException;
 import org.n52.shetland.ogc.wps.data.ProcessData;

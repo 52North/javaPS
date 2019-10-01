@@ -21,12 +21,12 @@
  */
 package org.n52.javaps.rest;
 
-import io.swagger.model.Link;
-import io.swagger.model.Root;
 import org.n52.faroe.Validation;
 import org.n52.faroe.annotation.Configurable;
 import org.n52.faroe.annotation.Setting;
 import org.n52.iceland.service.ServiceSettings;
+import org.n52.javaps.rest.model.Link;
+import org.n52.javaps.rest.model.Root;
 import org.springframework.stereotype.Controller;
 
 import java.net.URI;
@@ -60,28 +60,28 @@ public class RootApiImpl implements RootApi {
         Link link = new Link();
         link.setHref(serviceURL);
         link.setRel("self");
-        link.setType("application/json");
+        link.setType(MediaTypes.APPLICATION_JSON);
         link.setTitle("this document");
         links.add(link);
 
         link = new Link();
         link.setHref(serviceURL + "/api/");
         link.setRel("service");
-        link.setType("application/openapi+json;version=3.0");
+        link.setType(MediaTypes.APPLICATION_OPENAPI_JSON_3_0);
         link.setTitle("ththe API definition");
         links.add(link);
 
         link = new Link();
         link.setHref(serviceURL + "/conformance/");
         link.setRel("conformance");
-        link.setType("application/json");
+        link.setType(MediaTypes.APPLICATION_JSON);
         link.setTitle("WPS 2.0 REST/JSON Binding Extension conformance classes implemented by this server");
         links.add(link);
 
         link = new Link();
         link.setHref(serviceURL + "/processes/");
         link.setRel("processes");
-        link.setType("application/json");
+        link.setType(MediaTypes.APPLICATION_JSON);
         link.setTitle("The processes offered by this server");
         links.add(link);
 

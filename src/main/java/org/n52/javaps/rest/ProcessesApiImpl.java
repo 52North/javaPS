@@ -22,10 +22,6 @@
 package org.n52.javaps.rest;
 
 import com.google.common.base.Throwables;
-import io.swagger.model.Execute;
-import io.swagger.model.JobCollection;
-import io.swagger.model.ProcessCollection;
-import io.swagger.model.StatusInfo;
 import org.n52.faroe.Validation;
 import org.n52.faroe.annotation.Configurable;
 import org.n52.faroe.annotation.Setting;
@@ -35,6 +31,10 @@ import org.n52.javaps.engine.EngineException;
 import org.n52.javaps.engine.JobNotFoundException;
 import org.n52.javaps.engine.ProcessNotFoundException;
 import org.n52.javaps.rest.deserializer.ExecuteDeserializer;
+import org.n52.javaps.rest.model.Execute;
+import org.n52.javaps.rest.model.JobCollection;
+import org.n52.javaps.rest.model.ProcessCollection;
+import org.n52.javaps.rest.model.StatusInfo;
 import org.n52.javaps.rest.serializer.ExceptionSerializer;
 import org.n52.javaps.rest.serializer.ProcessSerializer;
 import org.n52.javaps.rest.serializer.ResultSerializer;
@@ -64,7 +64,7 @@ import static java.util.stream.Collectors.toSet;
 
 @Controller
 @Configurable
-public class ProcessesApiImpl implements ProcessesApi {
+public final class ProcessesApiImpl implements ProcessesApi {
     private Engine engine;
     private String serviceURL;
     private ServletContext context;
@@ -127,28 +127,16 @@ public class ProcessesApiImpl implements ProcessesApi {
 
     public ResponseEntity<?> execute(Execute body, String id)
             throws EngineException {
-        Map<String, String[]> parameterMap = request.getParameterMap();
 
-        boolean syncExecute = false;
-
-        for (String parameterName : parameterMap.keySet()) {
-            if (parameterName.equalsIgnoreCase("sync-execute")) {
-                String[] syncExecuteValues = parameterMap.get(parameterName);
-
-                if (syncExecuteValues.length > 0) {
-                    try {
-                        syncExecute = Boolean.parseBoolean(syncExecuteValues[0]);
-                    } catch (Exception e) {
-                        //ignore
-                        //TODO log 
-                    }
-                    break;
-                } else {
-                    break;
-                }
-            }
-        }
-
+        boolean syncExecute = request.getParameterMap()
+                                     .entrySet().stream()
+                                     .filter(e -> e.getKey().equalsIgnoreCase("sync-execute"))
+                                     .map(Map.Entry::getValue)
+                                     .filter(v -> v.length > 0)
+                                     .map(v -> v[0])
+                                     .findFirst()
+                                     .map(Boolean::parseBoolean)
+                                     .orElse(false);
         OwsCode owsCode = new OwsCode(id);
 
         List<ProcessData> inputs = executeDeserializer.readInputs(body.getInputs());
@@ -156,25 +144,20 @@ public class ProcessesApiImpl implements ProcessesApi {
 
         JobId jobId = engine.execute(owsCode, inputs, outputs, ResponseMode.DOCUMENT);
 
-        if (!syncExecute) {
-            return ResponseEntity.created(URI.create(String.format("%s/%s/jobs/%s", serviceURL, id, jobId.getValue())))
-                                 .build();
-        } else {
-
-            Future<Result> futureResult = engine.getResult(jobId);
-
-            Result result;
+        if (syncExecute) {
             try {
-                result = futureResult.get();
+                Future<Result> future = engine.getResult(jobId);
+                Result result = future.get();
+                return ResponseEntity.ok(resultSerializer.serializeResult(result));
             } catch (InterruptedException e) {
                 throw new EngineException(e);
             } catch (ExecutionException e) {
                 Throwables.throwIfInstanceOf(e.getCause(), EngineException.class);
                 throw new EngineException(e.getCause());
             }
-
-            return ResponseEntity.ok(resultSerializer.serializeResult(result));
-
+        } else {
+            String uri = String.format("%s/%s/jobs/%s", serviceURL, id, jobId.getValue());
+            return ResponseEntity.created(URI.create(uri)).build();
         }
     }
 
@@ -193,7 +176,7 @@ public class ProcessesApiImpl implements ProcessesApi {
         return "../../../jsp/test_client";
     }
 
-    public io.swagger.model.ProcessOffering getProcessDescription(String id) throws ProcessNotFoundException {
+    public org.n52.javaps.rest.model.ProcessOffering getProcessDescription(String id) throws ProcessNotFoundException {
         OwsCode owsCode = new OwsCode(id);
         return engine.getProcessDescription(owsCode)
                      .map(ProcessOffering::new)
@@ -225,8 +208,9 @@ public class ProcessesApiImpl implements ProcessesApi {
             Future<org.n52.shetland.ogc.wps.Result> futureResult = engine.getResult(jobId);
 
             if (!futureResult.isDone()) {
-                return ResponseEntity.badRequest().body(exceptionSerializer
-                                                                .serializeException("ResultNotReady", String.format("Job with id %s not ready.", jobId)));
+                return ResponseEntity.badRequest()
+                                     .body(exceptionSerializer.serializeException(
+                                             "ResultNotReady", String.format("Job with id %s not ready.", jobId)));
             }
 
             return ResponseEntity.ok(resultSerializer.serializeResult(futureResult.get()));

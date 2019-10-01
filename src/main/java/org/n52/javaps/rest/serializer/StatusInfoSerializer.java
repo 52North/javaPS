@@ -21,9 +21,9 @@
  */
 package org.n52.javaps.rest.serializer;
 
-import io.swagger.model.Link;
-import io.swagger.model.StatusInfo;
-import io.swagger.model.StatusInfo.StatusEnum;
+import org.n52.javaps.rest.model.Link;
+import org.n52.javaps.rest.model.StatusInfo;
+import org.n52.javaps.rest.model.StatusEnum;
 import org.n52.faroe.annotation.Configurable;
 import org.n52.javaps.rest.MediaTypes;
 import org.n52.shetland.ogc.wps.JobStatus;

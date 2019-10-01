@@ -19,12 +19,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.rest;
+package org.n52.javaps.rest.model;
 
-public interface MediaTypes {
-    String APPLICATION_JSON = "application/json";
-    String TEXT_HTML = "text/html";
-    String APPLICATION_XML = "application/xml";
-    String APPLICATION_JAVASCRIPT = "application/javascript";
-    String APPLICATION_OPENAPI_JSON_3_0 = "application/openapi+json;version=3.0";
+import org.springframework.validation.annotation.Validated;
+
+import java.util.Objects;
+
+/**
+ * DataDescriptionType
+ */
+@Validated
+public class DataDescriptionType extends DescriptionType {
+
+    @Override
+    public boolean equals(java.lang.Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode());
+    }
+
+    @Override
+    public String toString() {
+        return String.format("DataDescriptionType{%s}", super.toString());
+    }
 }

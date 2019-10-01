@@ -21,7 +21,7 @@
  */
 package org.n52.javaps.rest;
 
-import io.swagger.model.ReqClasses;
+import org.n52.javaps.rest.model.ReqClasses;
 import org.springframework.stereotype.Controller;
 
 import java.util.Arrays;

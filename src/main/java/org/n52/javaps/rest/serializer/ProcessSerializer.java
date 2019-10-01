@@ -21,31 +21,31 @@
  */
 package org.n52.javaps.rest.serializer;
 
-import io.swagger.model.AllowedValues;
-import io.swagger.model.AnyValue;
-import io.swagger.model.BoundingBoxDataType;
-import io.swagger.model.ComplexDataType;
-import io.swagger.model.DescriptionType;
-import io.swagger.model.FormatDescription;
-import io.swagger.model.InputDescription;
-import io.swagger.model.JobControlOptions;
-import io.swagger.model.Link;
-import io.swagger.model.LiteralDataDomain;
-import io.swagger.model.LiteralDataDomainDataType;
-import io.swagger.model.LiteralDataType;
-import io.swagger.model.Metadata;
-import io.swagger.model.OutputDescription;
-import io.swagger.model.Process;
-import io.swagger.model.ProcessCollection;
-import io.swagger.model.ProcessOffering;
-import io.swagger.model.ProcessSummary;
-import io.swagger.model.Range;
-import io.swagger.model.Range.RangeClosureEnum;
-import io.swagger.model.SupportedCRS;
-import io.swagger.model.TransmissionMode;
-import io.swagger.model.ValueReference;
 import org.n52.faroe.annotation.Configurable;
 import org.n52.javaps.rest.MediaTypes;
+import org.n52.javaps.rest.model.AllowedValues;
+import org.n52.javaps.rest.model.AnyValue;
+import org.n52.javaps.rest.model.BoundingBoxDataType;
+import org.n52.javaps.rest.model.ComplexDataType;
+import org.n52.javaps.rest.model.DescriptionType;
+import org.n52.javaps.rest.model.FormatDescription;
+import org.n52.javaps.rest.model.InputDescription;
+import org.n52.javaps.rest.model.JobControlOptions;
+import org.n52.javaps.rest.model.Link;
+import org.n52.javaps.rest.model.LiteralDataDomain;
+import org.n52.javaps.rest.model.LiteralDataDomainDataType;
+import org.n52.javaps.rest.model.LiteralDataType;
+import org.n52.javaps.rest.model.Metadata;
+import org.n52.javaps.rest.model.OutputDescription;
+import org.n52.javaps.rest.model.Process;
+import org.n52.javaps.rest.model.ProcessCollection;
+import org.n52.javaps.rest.model.ProcessOffering;
+import org.n52.javaps.rest.model.ProcessSummary;
+import org.n52.javaps.rest.model.Range;
+import org.n52.javaps.rest.model.Range.RangeClosureEnum;
+import org.n52.javaps.rest.model.SupportedCRS;
+import org.n52.javaps.rest.model.TransmissionMode;
+import org.n52.javaps.rest.model.ValueReference;
 import org.n52.shetland.ogc.ows.OwsAllowedValues;
 import org.n52.shetland.ogc.ows.OwsCRS;
 import org.n52.shetland.ogc.ows.OwsDomainMetadata;
@@ -100,10 +100,11 @@ public class ProcessSerializer extends AbstractSerializer {
         process.setLinks(Collections.singletonList(createExecuteLink(process)));
         process.setInputs(createInputDescriptions(processOffering.getProcessDescription().getInputDescriptions()));
         process.setOutputs(createOutputDescriptions(processOffering.getProcessDescription().getOutputDescriptions()));
-        return new io.swagger.model.ProcessOffering().process(process);
+        return new ProcessOffering().process(process);
     }
 
-    private <T extends ProcessSummary> T createProcessSummary(org.n52.shetland.ogc.wps.ProcessOffering processOffering, Supplier<T> factory) {
+    private <T extends ProcessSummary> T createProcessSummary(org.n52.shetland.ogc.wps.ProcessOffering processOffering,
+                                                              Supplier<T> factory) {
         T processSummary = createDescription(processOffering.getProcessDescription(), factory);
         processOffering.getProcessVersion().ifPresent(processSummary::setVersion);
         processSummary.setJobControlOptions(createJobControlOptions(processOffering));
@@ -111,8 +112,16 @@ public class ProcessSerializer extends AbstractSerializer {
         return processSummary;
     }
 
-    private List<TransmissionMode> createOutputTransmissionModes(org.n52.shetland.ogc.wps.ProcessOffering processOffering) {
-        return processOffering.getOutputTransmissionModes().stream().map(this::createDataTransmissionMode).collect(toList());
+    private ProcessSummary createProcessSummary(org.n52.shetland.ogc.wps.ProcessOffering processOffering) {
+        ProcessSummary process = createProcessSummary(processOffering, ProcessSummary::new);
+        process.links(Collections.singletonList(getProcessLink(process)));
+        return process;
+    }
+
+    private List<TransmissionMode> createOutputTransmissionModes(
+            org.n52.shetland.ogc.wps.ProcessOffering processOffering) {
+        return processOffering.getOutputTransmissionModes().stream().map(this::createDataTransmissionMode)
+                              .collect(toList());
     }
 
     private TransmissionMode createDataTransmissionMode(DataTransmissionMode outputTransmissionMode) {
@@ -128,7 +137,7 @@ public class ProcessSerializer extends AbstractSerializer {
 
     private List<JobControlOptions> createJobControlOptions(org.n52.shetland.ogc.wps.ProcessOffering processOffering) {
         return processOffering.getJobControlOptions().stream()
-                .map(this::createJobControlOption).filter(Objects::nonNull).collect(toList());
+                              .map(this::createJobControlOption).filter(Objects::nonNull).collect(toList());
     }
 
     private JobControlOptions createJobControlOption(JobControlOption jobControlOption) {
@@ -146,8 +155,8 @@ public class ProcessSerializer extends AbstractSerializer {
         descriptionType.setId(description.getId().getValue());
         descriptionType.setTitle(description.getTitle().getValue());
         List<String> keywords = description.getKeywords().stream()
-                .map(OwsKeyword::getKeyword).map(OwsLanguageString::getValue)
-                .collect(toList());
+                                           .map(OwsKeyword::getKeyword).map(OwsLanguageString::getValue)
+                                           .collect(toList());
         descriptionType.setKeywords(keywords);
         description.getAbstract().map(OwsLanguageString::getValue).ifPresent(descriptionType::setDescription);
         description.getAbstract().map(OwsLanguageString::getValue).ifPresent(descriptionType::setDescription);
@@ -162,7 +171,8 @@ public class ProcessSerializer extends AbstractSerializer {
         return metadata;
     }
 
-    private List<OutputDescription> createOutputDescriptions(Collection<? extends ProcessOutputDescription> descriptions) {
+    private List<OutputDescription> createOutputDescriptions(
+            Collection<? extends ProcessOutputDescription> descriptions) {
         return descriptions.stream().map(this::createProcessOutputDescription).collect(toList());
     }
 
@@ -193,7 +203,7 @@ public class ProcessSerializer extends AbstractSerializer {
     private List<LiteralDataDomain> createLiteralDataDomains(LiteralDescription description) {
         return Stream.concat(Stream.of(description.getDefaultLiteralDataDomain()),
                              description.getSupportedLiteralDataDomains().stream())
-                .map(this::createLiteralDataDomain).collect(toList());
+                     .map(this::createLiteralDataDomain).collect(toList());
     }
 
     private List<InputDescription> createInputDescriptions(Collection<? extends ProcessInputDescription> descriptions) {
@@ -229,28 +239,33 @@ public class ProcessSerializer extends AbstractSerializer {
     }
 
     private List<SupportedCRS> createSupportedCRS(BoundingBoxDescription description) {
-        List<SupportedCRS> serializedSupportedCRS = Stream.concat(Stream.of(description.getDefaultCRS()), description.getSupportedCRS().stream())
-                .map(OwsCRS::getValue)
-                .map(URI::toString)
-                .map(x -> new SupportedCRS().crs(x))
-                .collect(Collectors.toList());
+        List<SupportedCRS> serializedSupportedCRS = Stream.concat(Stream.of(description.getDefaultCRS()),
+                                                                  description.getSupportedCRS().stream())
+                                                          .map(OwsCRS::getValue)
+                                                          .map(URI::toString)
+                                                          .map(x -> new SupportedCRS().crs(x))
+                                                          .collect(Collectors.toList());
         serializedSupportedCRS.get(0).setDefault(true);
         return serializedSupportedCRS;
     }
 
-    private LiteralDataDomain createLiteralDataDomain(org.n52.shetland.ogc.wps.description.LiteralDataDomain defaultLiteralDataDomain) {
+    private LiteralDataDomain createLiteralDataDomain(
+            org.n52.shetland.ogc.wps.description.LiteralDataDomain defaultLiteralDataDomain) {
         LiteralDataDomain literalDataDomain = new LiteralDataDomain();
         literalDataDomain.setDataType(createLiteralDataDomainDataType(defaultLiteralDataDomain));
         literalDataDomain.setValueDefinition(createPossibleValues(defaultLiteralDataDomain.getPossibleValues()));
-        defaultLiteralDataDomain.getDefaultValue().map(OwsValue::getValue).ifPresent(literalDataDomain::setDefaultValue);
+        defaultLiteralDataDomain.getDefaultValue().map(OwsValue::getValue)
+                                .ifPresent(literalDataDomain::setDefaultValue);
         return literalDataDomain;
     }
 
-    private LiteralDataDomainDataType createLiteralDataDomainDataType(org.n52.shetland.ogc.wps.description.LiteralDataDomain literalDataDomain) {
+    private LiteralDataDomainDataType createLiteralDataDomainDataType(
+            org.n52.shetland.ogc.wps.description.LiteralDataDomain literalDataDomain) {
         LiteralDataDomainDataType literalDataDomainDataType = new LiteralDataDomainDataType();
         Optional<OwsDomainMetadata> dataType = literalDataDomain.getDataType();
         dataType.flatMap(OwsDomainMetadata::getValue).ifPresent(literalDataDomainDataType::setName);
-        dataType.flatMap(OwsDomainMetadata::getReference).map(URI::toString).ifPresent(literalDataDomainDataType::setReference);
+        dataType.flatMap(OwsDomainMetadata::getReference).map(URI::toString)
+                .ifPresent(literalDataDomainDataType::setReference);
         return literalDataDomainDataType;
     }
 
@@ -302,7 +317,7 @@ public class ProcessSerializer extends AbstractSerializer {
                     case OPEN:
                         return RangeClosureEnum.CLOSED_OPEN;
                     default:
-                        throw new IllegalArgumentException("unsupported bound type: " + range.getUpperBoundType());
+                        throw unsupportedBoundType(range.getUpperBoundType());
                 }
             case OPEN:
                 switch (range.getUpperBoundType()) {
@@ -311,17 +326,22 @@ public class ProcessSerializer extends AbstractSerializer {
                     case OPEN:
                         return RangeClosureEnum.OPEN;
                     default:
-                        throw new IllegalArgumentException("unsupported bound type: " + range.getUpperBoundType());
+                        throw unsupportedBoundType(range.getUpperBoundType());
                 }
             default:
-                throw new IllegalArgumentException("unsupported bound type: " + range.getLowerBoundType());
+                throw unsupportedBoundType(range.getLowerBoundType());
         }
     }
 
+    private IllegalArgumentException unsupportedBoundType(OwsRange.BoundType lowerBoundType) {
+        return new IllegalArgumentException("unsupported bound type: " + lowerBoundType);
+    }
+
     private List<FormatDescription> createFormats(ComplexDescription description) {
-        List<FormatDescription> formats = Stream.concat(Stream.of(description.getDefaultFormat()), description.getSupportedFormats().stream())
-                .map(format -> createFormat(format, description.getMaximumMegabytes()))
-                .collect(toList());
+        List<FormatDescription> formats = Stream.concat(Stream.of(description.getDefaultFormat()),
+                                                        description.getSupportedFormats().stream())
+                                                .map(format -> createFormat(format, description.getMaximumMegabytes()))
+                                                .collect(toList());
         formats.get(0).setDefault(true);
         return formats;
     }
@@ -339,16 +359,10 @@ public class ProcessSerializer extends AbstractSerializer {
         return new ProcessCollection().processes(offerings.stream().map(this::createProcessSummary).collect(toList()));
     }
 
-    private ProcessSummary createProcessSummary(org.n52.shetland.ogc.wps.ProcessOffering processOffering) {
-        ProcessSummary process = createProcessSummary(processOffering, ProcessSummary::new);
-        process.links(Collections.singletonList(getProcessLink(process)));
-        return process;
-    }
-
     private Link createExecuteLink(ProcessSummary process) {
         Link executeEndpointLink = new Link();
         executeEndpointLink.setHref(getJobsHref(process.getId()));
-        executeEndpointLink.setRel("canonical");
+        executeEndpointLink.setRel("execute");
         executeEndpointLink.setTitle("Execute endpoint");
         return executeEndpointLink;
     }

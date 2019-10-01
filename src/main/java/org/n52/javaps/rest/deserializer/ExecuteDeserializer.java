@@ -25,9 +25,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import io.swagger.model.Input;
-import io.swagger.model.Output;
-import io.swagger.model.TransmissionMode;
+import org.n52.javaps.rest.model.Input;
+import org.n52.javaps.rest.model.Output;
+import org.n52.javaps.rest.model.TransmissionMode;
 import org.n52.javaps.engine.InputDecodingException;
 import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.shetland.ogc.wps.DataTransmissionMode;
@@ -69,7 +69,7 @@ public class ExecuteDeserializer {
         return outputs.stream().map(output -> {
             OutputDefinition definition = new OutputDefinition();
             definition.setId(createId(output.getId()));
-            io.swagger.model.Format format = output.getFormat();
+            org.n52.javaps.rest.model.Format format = output.getFormat();
             if (format == null) {
                 definition.setFormat(Format.TEXT_PLAIN);
             } else {

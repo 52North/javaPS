@@ -19,12 +19,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.javaps.rest;
+package org.n52.javaps.rest.model;
 
-public interface MediaTypes {
-    String APPLICATION_JSON = "application/json";
-    String TEXT_HTML = "text/html";
-    String APPLICATION_XML = "application/xml";
-    String APPLICATION_JAVASCRIPT = "application/javascript";
-    String APPLICATION_OPENAPI_JSON_3_0 = "application/openapi+json;version=3.0";
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
+/**
+ * Gets or Sets transmissionMode
+ */
+public enum TransmissionMode {
+    VALUE("value"),
+    REFERENCE("reference");
+
+    private String value;
+
+    TransmissionMode(String value) {
+        this.value = value;
+    }
+
+    @Override
+    @JsonValue
+    public String toString() {
+        return String.valueOf(value);
+    }
+
+    @JsonCreator
+    public static TransmissionMode fromValue(String text) {
+        for (TransmissionMode b : TransmissionMode.values()) {
+            if (String.valueOf(b.value).equals(text)) {
+                return b;
+            }
+        }
+        return null;
+    }
 }
