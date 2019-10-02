@@ -18,6 +18,7 @@ package org.n52.javaps.transactional.rest;
 
 import org.n52.javaps.rest.EngineExceptionAdvice;
 import org.n52.javaps.rest.MediaTypes;
+import org.n52.javaps.rest.model.Exception;
 import org.n52.javaps.rest.serializer.ExceptionSerializer;
 import org.n52.javaps.transactional.DuplicateProcessException;
 import org.n52.javaps.transactional.UndeletableProcessException;
@@ -56,7 +57,7 @@ public class TransactionalEngineExceptionAdvice extends EngineExceptionAdvice {
      */
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(DuplicateProcessException.class)
-    public io.swagger.model.Exception handle(DuplicateProcessException ex) {
+    public Exception handle(DuplicateProcessException ex) {
         return getExceptionSerializer().serializeException(INVALID_PARAMETER, ex.getMessage());
     }
 
@@ -68,7 +69,7 @@ public class TransactionalEngineExceptionAdvice extends EngineExceptionAdvice {
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(UnsupportedProcessException.class)
-    public io.swagger.model.Exception handle(UnsupportedProcessException ex) {
+    public Exception handle(UnsupportedProcessException ex) {
         return getExceptionSerializer().serializeException(INVALID_PARAMETER, ex.getMessage());
     }
 
@@ -80,7 +81,7 @@ public class TransactionalEngineExceptionAdvice extends EngineExceptionAdvice {
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(UndeletableProcessException.class)
-    public io.swagger.model.Exception handle(UndeletableProcessException ex) {
+    public Exception handle(UndeletableProcessException ex) {
         return getExceptionSerializer().serializeException(INVALID_PARAMETER, ex.getMessage());
     }
 }
