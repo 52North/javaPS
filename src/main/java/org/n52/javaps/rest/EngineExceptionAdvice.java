@@ -21,6 +21,7 @@
  */
 package org.n52.javaps.rest;
 
+import org.n52.javaps.algorithm.ExecutionException;
 import org.n52.javaps.engine.EngineException;
 import org.n52.javaps.engine.InputDecodingException;
 import org.n52.javaps.engine.JobNotFoundException;
@@ -110,6 +111,12 @@ public class EngineExceptionAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(java.lang.Exception.class)
     public Exception handle(java.lang.Exception ex) {
+        return getExceptionSerializer().serializeException(NO_APPLICABLE_CODE, ex.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(ExecutionException.class)
+    public Exception handle(ExecutionException ex) {
         return getExceptionSerializer().serializeException(NO_APPLICABLE_CODE, ex.getMessage());
     }
 }

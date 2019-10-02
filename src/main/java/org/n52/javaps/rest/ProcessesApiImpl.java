@@ -21,11 +21,11 @@
  */
 package org.n52.javaps.rest;
 
-import com.google.common.base.Throwables;
 import org.n52.faroe.Validation;
 import org.n52.faroe.annotation.Configurable;
 import org.n52.faroe.annotation.Setting;
 import org.n52.iceland.service.ServiceSettings;
+import org.n52.javaps.algorithm.ExecutionException;
 import org.n52.javaps.engine.Engine;
 import org.n52.javaps.engine.EngineException;
 import org.n52.javaps.engine.JobNotFoundException;
@@ -57,7 +57,6 @@ import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import static java.util.stream.Collectors.toSet;
@@ -126,7 +125,7 @@ public final class ProcessesApiImpl implements ProcessesApi {
     }
 
     public ResponseEntity<?> execute(Execute body, String id)
-            throws EngineException {
+            throws EngineException, ExecutionException {
 
         boolean syncExecute = request.getParameterMap()
                                      .entrySet().stream()
@@ -151,9 +150,8 @@ public final class ProcessesApiImpl implements ProcessesApi {
                 return ResponseEntity.ok(resultSerializer.serializeResult(result));
             } catch (InterruptedException e) {
                 throw new EngineException(e);
-            } catch (ExecutionException e) {
-                Throwables.throwIfInstanceOf(e.getCause(), EngineException.class);
-                throw new EngineException(e.getCause());
+            } catch (java.util.concurrent.ExecutionException e) {
+                return handleExecutionException(e);
             }
         } else {
             String uri = String.format("%s/%s/jobs/%s", serviceURL, id, jobId.getValue());
@@ -190,7 +188,8 @@ public final class ProcessesApiImpl implements ProcessesApi {
         return processSerializer.createProcessCollection(offerings);
     }
 
-    public ResponseEntity<?> getResult(String processID, String jobID) throws EngineException {
+    public ResponseEntity<?> getResult(String processID, String jobID)
+            throws EngineException, ExecutionException {
 
         JobId jobId = new JobId(jobID);
         OwsCode processId = new OwsCode(processID);
@@ -214,13 +213,28 @@ public final class ProcessesApiImpl implements ProcessesApi {
             }
 
             return ResponseEntity.ok(resultSerializer.serializeResult(futureResult.get()));
-        } catch (InterruptedException | ExecutionException e) {
+        } catch (InterruptedException e) {
             throw new EngineException(e);
+        } catch (java.util.concurrent.ExecutionException e) {
+            return handleExecutionException(e);
         }
     }
 
-    public StatusInfo getStatus(String processId, String jobID) throws EngineException {
+    private <T> ResponseEntity<T> handleExecutionException(java.util.concurrent.ExecutionException e)
+            throws ExecutionException, EngineException {
+        if (e.getCause() instanceof EngineException) {
+            if (e.getCause().getCause() instanceof ExecutionException) {
+                throw (ExecutionException) e.getCause().getCause();
+            }
+            throw (EngineException) e.getCause();
+        }
+        if (e.getCause() instanceof ExecutionException) {
+            throw (ExecutionException) e.getCause();
+        }
+        throw new EngineException(e);
+    }
 
+    public StatusInfo getStatus(String processId, String jobID) throws EngineException {
         OwsCode identifier = new OwsCode(processId);
         if (!engine.hasProcessDescription(identifier)) {
             throw new ProcessNotFoundException(identifier);

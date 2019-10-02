@@ -21,6 +21,7 @@
  */
 package org.n52.javaps.rest;
 
+import org.n52.javaps.algorithm.ExecutionException;
 import org.n52.javaps.rest.model.Execute;
 import org.n52.javaps.rest.model.ProcessCollection;
 import org.n52.javaps.rest.model.ProcessOffering;
@@ -43,7 +44,7 @@ public interface ProcessesApi {
     @PostMapping(value = BASE_URL + "/{processId}/jobs", produces = MediaTypes.APPLICATION_JSON,
                  consumes = MediaTypes.APPLICATION_JSON)
     ResponseEntity<?> execute(@Valid @RequestBody Execute body, @PathVariable("processId") String processId)
-            throws EngineException;
+            throws EngineException, ExecutionException;
 
     @GetMapping(value = BASE_URL + "/{processId}/jobs", produces = MediaTypes.APPLICATION_JSON)
     ResponseEntity<?> getJobList(@PathVariable("processId") String processId);
@@ -62,7 +63,7 @@ public interface ProcessesApi {
     @GetMapping(value = BASE_URL + "/{processId}/jobs/{jobId}/result",
                 produces = MediaTypes.APPLICATION_JSON)
     ResponseEntity<?> getResult(@PathVariable("processId") String id, @PathVariable("jobId") String jobId)
-            throws EngineException;
+            throws EngineException, ExecutionException;
 
     @GetMapping(value = BASE_URL + "/{processId}/jobs/{jobId}",
                 produces = MediaTypes.APPLICATION_JSON)
