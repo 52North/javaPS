@@ -124,6 +124,7 @@ public final class ProcessesApiImpl implements ProcessesApi {
         this.serviceURL = url.replace("/service", ProcessesApi.BASE_URL);
     }
 
+    @Override
     public ResponseEntity<?> execute(Execute body, String id)
             throws EngineException, ExecutionException {
 
@@ -159,6 +160,7 @@ public final class ProcessesApiImpl implements ProcessesApi {
         }
     }
 
+    @Override
     public ResponseEntity<?> getJobList(String id) {
         OwsCode owsCode = new OwsCode(id);
         JobCollection jobCollection = new JobCollection();
@@ -166,6 +168,7 @@ public final class ProcessesApiImpl implements ProcessesApi {
         return ResponseEntity.ok(jobCollection);
     }
 
+    @Override
     public String getExecuteForm(String id, Model model) {
         OwsCode owsCode = new OwsCode(id);
         context.setAttribute("processId", id);
@@ -174,6 +177,7 @@ public final class ProcessesApiImpl implements ProcessesApi {
         return "../../../jsp/test_client";
     }
 
+    @Override
     public org.n52.javaps.rest.model.ProcessOffering getProcessDescription(String id) throws ProcessNotFoundException {
         OwsCode owsCode = new OwsCode(id);
         return engine.getProcessDescription(owsCode)
@@ -182,12 +186,14 @@ public final class ProcessesApiImpl implements ProcessesApi {
                      .orElseThrow(() -> new ProcessNotFoundException(owsCode));
     }
 
+    @Override
     public ProcessCollection getProcesses() {
         Set<ProcessOffering> offerings = engine.getProcessDescriptions().stream().map(ProcessOffering::new)
                                                .collect(toSet());
         return processSerializer.createProcessCollection(offerings);
     }
 
+    @Override
     public ResponseEntity<?> getResult(String processID, String jobID)
             throws EngineException, ExecutionException {
 
@@ -234,6 +240,7 @@ public final class ProcessesApiImpl implements ProcessesApi {
         throw new EngineException(e);
     }
 
+    @Override
     public StatusInfo getStatus(String processId, String jobID) throws EngineException {
         OwsCode identifier = new OwsCode(processId);
         if (!engine.hasProcessDescription(identifier)) {
