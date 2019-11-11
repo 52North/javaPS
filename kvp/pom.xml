@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.n52.wps</groupId>
         <artifactId>javaPS</artifactId>
-        <version>1.4.0</version>
+        <version>1.5.0-SNAPSHOT</version>
     </parent>
     <artifactId>kvp</artifactId>
     <name>52°North javaPS KVP Binding</name>
