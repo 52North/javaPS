@@ -16,6 +16,13 @@
  */
 package org.n52.javaps.io.literal;
 
+import org.n52.shetland.ogc.ows.OwsDomainMetadata;
+import org.n52.shetland.ogc.wps.description.LiteralDataDomain;
+import org.n52.shetland.ogc.wps.description.LiteralDescription;
+
+import java.net.URI;
+import java.util.Optional;
+
 /**
  * TODO JavaDoc
  *
@@ -27,6 +34,32 @@ public interface LiteralTypeRepository {
         return getLiteralType(literalType, null);
     }
 
-    <T> LiteralType<T> getLiteralType(Class<? extends LiteralType<?>> literalType,
-            Class<?> payloadType);
+    <T> LiteralType<T> getLiteralType(Class<? extends LiteralType<?>> literalType, Class<?> payloadType);
+
+    Optional<LiteralType<?>> getLiteralType(String name);
+
+    Optional<LiteralType<?>> getLiteralType(URI uri);
+
+    default Optional<LiteralType<?>> getLiteralType(OwsDomainMetadata dataType) {
+        if (dataType == null) {
+            return Optional.empty();
+        }
+        Optional<LiteralType<?>> literalType = dataType.getReference().flatMap(this::getLiteralType);
+        if (literalType.isPresent()) {
+            return literalType;
+        }
+        return dataType.getValue().flatMap(this::getLiteralType);
+    }
+
+    default Optional<LiteralType<?>> getLiteralType(LiteralDataDomain literalDataDomain) {
+        return Optional.ofNullable(literalDataDomain)
+                       .flatMap(LiteralDataDomain::getDataType)
+                       .flatMap(this::getLiteralType);
+    }
+
+    default Optional<LiteralType<?>> getLiteralType(LiteralDescription literalDescription) {
+        return Optional.ofNullable(literalDescription)
+                       .map(LiteralDescription::getDefaultLiteralDataDomain)
+                       .flatMap(this::getLiteralType);
+    }
 }

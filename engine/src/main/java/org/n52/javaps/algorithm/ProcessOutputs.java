@@ -16,11 +16,11 @@
  */
 package org.n52.javaps.algorithm;
 
+import org.n52.javaps.io.Data;
+import org.n52.shetland.ogc.ows.OwsCode;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import org.n52.shetland.ogc.ows.OwsCode;
-import org.n52.javaps.io.Data;
 
 /**
  * TODO JavaDoc
@@ -35,6 +35,10 @@ public class ProcessOutputs extends HashMap<OwsCode, Data<?>> {
 
     public ProcessOutputs(Map<? extends OwsCode, ? extends Data<?>> m) {
         super(m);
+    }
+
+    public ProcessOutputs(int initialCapacity) {
+        super(initialCapacity);
     }
 
 }

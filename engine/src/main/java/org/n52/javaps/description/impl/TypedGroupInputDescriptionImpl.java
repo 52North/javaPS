@@ -16,28 +16,23 @@
  */
 package org.n52.javaps.description.impl;
 
-import java.util.Collection;
-import java.util.Set;
-
-import org.n52.shetland.ogc.ows.OwsCode;
-import org.n52.shetland.ogc.ows.OwsKeyword;
-import org.n52.shetland.ogc.ows.OwsLanguageString;
-import org.n52.shetland.ogc.ows.OwsMetadata;
-import org.n52.shetland.ogc.wps.InputOccurence;
-import org.n52.shetland.ogc.wps.description.ProcessInputDescription;
-import org.n52.shetland.ogc.wps.description.impl.GroupInputDescriptionImpl;
 import org.n52.javaps.description.TypedGroupInputDescription;
 import org.n52.javaps.description.TypedProcessInputDescription;
+import org.n52.shetland.ogc.ows.OwsCode;
+import org.n52.shetland.ogc.wps.description.GroupInputDescription;
+import org.n52.shetland.ogc.wps.description.ProcessDescriptionBuilderFactory;
+import org.n52.shetland.ogc.wps.description.ProcessInputDescription;
+import org.n52.shetland.ogc.wps.description.impl.GroupInputDescriptionImpl;
+
+import java.util.Collection;
 
 public class TypedGroupInputDescriptionImpl extends GroupInputDescriptionImpl implements TypedGroupInputDescription {
+
     protected TypedGroupInputDescriptionImpl(AbstractBuilder<?, ?> builder) {
         super(builder);
-    }
-
-    public TypedGroupInputDescriptionImpl(OwsCode id, OwsLanguageString title, OwsLanguageString abstrakt, Set<
-            OwsKeyword> keywords, Set<OwsMetadata> metadata, InputOccurence occurence, Set<TypedProcessInputDescription<
-                    ?>> inputs) {
-        super(id, title, abstrakt, keywords, metadata, occurence, inputs);
+        if (!builder.getInputs().stream().allMatch(TypedProcessInputDescription.class::isInstance)) {
+            throw new IllegalArgumentException("not a typed description");
+        }
     }
 
     @Override
@@ -51,18 +46,44 @@ public class TypedGroupInputDescriptionImpl extends GroupInputDescriptionImpl im
         return (Collection<? extends TypedProcessInputDescription<?>>) super.getInputDescriptions();
     }
 
-    public static class Builder extends AbstractBuilder<TypedGroupInputDescription, Builder> {
-        @Override
-        public TypedGroupInputDescription build() {
-            return new TypedGroupInputDescriptionImpl(this);
+    protected abstract static class AbstractBuilder<T extends TypedGroupInputDescription,
+                                                           B extends AbstractBuilder<T, B>>
+            extends GroupInputDescriptionImpl.AbstractBuilder<T, B>
+            implements TypedGroupInputDescription.Builder<T, B> {
+
+        protected AbstractBuilder(ProcessDescriptionBuilderFactory<?, ?, ?, ?, ?, ?, ?, ?, ?, ?> factory) {
+            super(factory);
+        }
+
+        protected AbstractBuilder(ProcessDescriptionBuilderFactory<?, ?, ?, ?, ?, ?, ?, ?, ?, ?> factory,
+                                  GroupInputDescription entity) {
+            super(factory, entity);
         }
 
         @Override
-        public Builder withInput(ProcessInputDescription input) {
+        public B withInput(ProcessInputDescription input) {
             if (!(input instanceof TypedProcessInputDescription)) {
                 throw new IllegalArgumentException();
             }
             return super.withInput(input);
         }
+    }
+
+    public static class Builder extends AbstractBuilder<TypedGroupInputDescription, Builder> {
+
+        protected Builder(ProcessDescriptionBuilderFactory<?, ?, ?, ?, ?, ?, ?, ?, ?, ?> factory) {
+            super(factory);
+        }
+
+        protected Builder(ProcessDescriptionBuilderFactory<?, ?, ?, ?, ?, ?, ?, ?, ?, ?> factory,
+                          GroupInputDescription entity) {
+            super(factory, entity);
+        }
+
+        @Override
+        public TypedGroupInputDescription build() {
+            return new TypedGroupInputDescriptionImpl(this);
+        }
+
     }
 }

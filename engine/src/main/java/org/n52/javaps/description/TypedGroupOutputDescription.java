@@ -16,16 +16,41 @@
  */
 package org.n52.javaps.description;
 
+import org.n52.javaps.algorithm.ProcessOutputs;
+import org.n52.javaps.io.Data;
+import org.n52.javaps.io.GroupOutputData;
 import org.n52.shetland.ogc.wps.description.GroupOutputDescription;
 
 /**
- *
  * @author Christian Autermann
  */
-public interface TypedGroupOutputDescription extends GroupOutputDescription, TypedProcessOutputDescriptionContainer {
+public interface TypedGroupOutputDescription
+        extends GroupOutputDescription, TypedProcessOutputDescriptionContainer,
+                TypedProcessOutputDescription<Class<? extends Data<ProcessOutputs>>> {
+
+    @Override
+    default Class<? extends Data<ProcessOutputs>> getType() {
+        return GroupOutputData.class;
+    }
+
+    @Override
+    default Class<?> getPayloadType() {
+        return ProcessOutputs.class;
+    }
+
+    @Override
+    default Class<? extends Data<?>> getBindingType() {
+        return GroupOutputData.class;
+    }
+
     @Override
     default TypedGroupOutputDescription asGroup() {
         return this;
+    }
+
+    interface Builder<T extends TypedGroupOutputDescription, B extends Builder<T, B>>
+            extends GroupOutputDescription.Builder<T, B>,
+                    TypedProcessOutputDescriptionContainer.Builder<T, B> {
     }
 
 }

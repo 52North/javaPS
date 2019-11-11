@@ -16,38 +16,23 @@
  */
 package org.n52.javaps.description.impl;
 
-import java.math.BigInteger;
-import java.util.Objects;
-import java.util.Set;
-
-import org.n52.shetland.ogc.ows.OwsCode;
-import org.n52.shetland.ogc.ows.OwsKeyword;
-import org.n52.shetland.ogc.ows.OwsLanguageString;
-import org.n52.shetland.ogc.ows.OwsMetadata;
-import org.n52.shetland.ogc.wps.Format;
-import org.n52.shetland.ogc.wps.InputOccurence;
-import org.n52.shetland.ogc.wps.description.impl.ComplexInputDescriptionImpl;
 import org.n52.javaps.description.TypedComplexInputDescription;
 import org.n52.javaps.io.complex.ComplexData;
+import org.n52.shetland.ogc.wps.description.ComplexInputDescription;
+import org.n52.shetland.ogc.wps.description.ProcessDescriptionBuilderFactory;
+import org.n52.shetland.ogc.wps.description.impl.ComplexInputDescriptionImpl;
 
-public class TypedComplexInputDescriptionImpl extends ComplexInputDescriptionImpl implements
-        TypedComplexInputDescription {
+import java.util.Objects;
+
+public class TypedComplexInputDescriptionImpl extends ComplexInputDescriptionImpl
+        implements TypedComplexInputDescription {
 
     private static final String TYPE_STRING = "type";
     private final Class<? extends ComplexData<?>> type;
 
-    public TypedComplexInputDescriptionImpl(OwsCode id, OwsLanguageString title, OwsLanguageString abstrakt, Set<
-            OwsKeyword> keywords, Set<OwsMetadata> metadata, InputOccurence occurence, Format defaultFormat, Set<
-                    Format> supportedFormat, BigInteger maximumMegabytes, Class<? extends ComplexData<?>> type) {
-        super(id, title, abstrakt, keywords, metadata, occurence, defaultFormat, supportedFormat, maximumMegabytes);
-        this.type = Objects.requireNonNull(type, TYPE_STRING);
-    }
-
     protected TypedComplexInputDescriptionImpl(AbstractBuilder<?, ?> builder) {
-        this(builder.getId(), builder.getTitle(), builder.getAbstract(), builder.getKeywords(), builder.getMetadata(),
-                new InputOccurence(builder.getMinimalOccurence(), builder.getMaximalOccurence()), builder
-                        .getDefaultFormat(), builder.getSupportedFormats(), builder.getMaximumMegabytes(), builder
-                                .getType());
+        super(builder);
+        this.type = Objects.requireNonNull(builder.getType(), TYPE_STRING);
     }
 
     @Override
@@ -55,17 +40,29 @@ public class TypedComplexInputDescriptionImpl extends ComplexInputDescriptionImp
         return this.type;
     }
 
-    public abstract static class AbstractBuilder<T extends TypedComplexInputDescription, B extends AbstractBuilder<T,
-            B>> extends ComplexInputDescriptionImpl.AbstractBuilder<T, B> implements
-            TypedComplexInputDescription.Builder<T, B> {
+    protected abstract static class AbstractBuilder<T extends TypedComplexInputDescription,
+                                                           B extends AbstractBuilder<T, B>>
+            extends ComplexInputDescriptionImpl.AbstractBuilder<T, B>
+            implements TypedComplexInputDescription.Builder<T, B> {
 
         private Class<? extends ComplexData<?>> type;
 
+        protected AbstractBuilder(ProcessDescriptionBuilderFactory<?, ?, ?, ?, ?, ?, ?, ?, ?, ?> factory,
+                                  ComplexInputDescription entity) {
+            super(factory, entity);
+            if (entity instanceof TypedComplexInputDescription) {
+                this.type = ((TypedComplexInputDescription) entity).getType();
+            }
+        }
+
+        protected AbstractBuilder(ProcessDescriptionBuilderFactory<?, ?, ?, ?, ?, ?, ?, ?, ?, ?> factory) {
+            super(factory);
+        }
+
         @Override
-        @SuppressWarnings("unchecked")
         public B withType(Class<? extends ComplexData<?>> type) {
             this.type = Objects.requireNonNull(type, TYPE_STRING);
-            return (B) this;
+            return self();
         }
 
         public Class<? extends ComplexData<?>> getType() {
@@ -75,6 +72,15 @@ public class TypedComplexInputDescriptionImpl extends ComplexInputDescriptionImp
     }
 
     public static class Builder extends AbstractBuilder<TypedComplexInputDescription, Builder> {
+        protected Builder(ProcessDescriptionBuilderFactory<?, ?, ?, ?, ?, ?, ?, ?, ?, ?> factory,
+                          ComplexInputDescription entity) {
+            super(factory, entity);
+        }
+
+        protected Builder(ProcessDescriptionBuilderFactory<?, ?, ?, ?, ?, ?, ?, ?, ?, ?> factory) {
+            super(factory);
+        }
+
         @Override
         public TypedComplexInputDescription build() {
             return new TypedComplexInputDescriptionImpl(this);

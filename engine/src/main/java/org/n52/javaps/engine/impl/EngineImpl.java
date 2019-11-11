@@ -16,29 +16,10 @@
  */
 package org.n52.javaps.engine.impl;
 
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
-
-import java.time.OffsetDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
-
-import javax.inject.Inject;
-
+import com.google.common.util.concurrent.AbstractFuture;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.SettableFuture;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.n52.janmayen.lifecycle.Destroyable;
 import org.n52.javaps.algorithm.IAlgorithm;
 import org.n52.javaps.algorithm.ProcessInputs;
@@ -51,11 +32,9 @@ import org.n52.javaps.description.TypedProcessOutputDescriptionContainer;
 import org.n52.javaps.engine.Engine;
 import org.n52.javaps.engine.EngineException;
 import org.n52.javaps.engine.EngineProcessExecutionContext;
-import org.n52.javaps.engine.InputDecodingException;
 import org.n52.javaps.engine.JobIdGenerator;
 import org.n52.javaps.engine.JobNotFoundException;
 import org.n52.javaps.engine.OutputEncodingException;
-import org.n52.javaps.engine.ProcessExecutionContext;
 import org.n52.javaps.engine.ProcessInputDecoder;
 import org.n52.javaps.engine.ProcessNotFoundException;
 import org.n52.javaps.engine.ProcessOutputEncoder;
@@ -73,10 +52,27 @@ import org.n52.shetland.ogc.wps.description.ProcessDescription;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.util.concurrent.AbstractFuture;
-import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.SettableFuture;
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import javax.inject.Inject;
+import java.time.OffsetDateTime;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 public class EngineImpl implements Engine, Destroyable {
     private static final String EXECUTING = "Executing {}";
@@ -101,8 +97,8 @@ public class EngineImpl implements Engine, Destroyable {
 
     @Inject
     public EngineImpl(RepositoryManager repositoryManager, ProcessInputDecoder processInputDecoder,
-            ProcessOutputEncoder processOutputEncoder, JobIdGenerator jobIdGenerator,
-            ResultPersistence resultPersistence) {
+                      ProcessOutputEncoder processOutputEncoder, JobIdGenerator jobIdGenerator,
+                      ResultPersistence resultPersistence) {
         this.executor = createExecutor();
         this.repositoryManager = Objects.requireNonNull(repositoryManager);
         this.processInputDecoder = Objects.requireNonNull(processInputDecoder);
@@ -118,8 +114,7 @@ public class EngineImpl implements Engine, Destroyable {
 
     @Override
     public Set<JobId> getJobIdentifiers(OwsCode identifier) {
-        Set<JobId> jobIds = resultPersistence.getJobIds(identifier);
-        return jobIds;
+        return resultPersistence.getJobIds(identifier);
     }
 
     @Override
@@ -129,7 +124,7 @@ public class EngineImpl implements Engine, Destroyable {
 
     @Override
     public Optional<ProcessDescription> getProcessDescription(OwsCode identifier) {
-        return this.repositoryManager.getProcessDescription(identifier).map(x -> (ProcessDescription) x);
+        return this.repositoryManager.getProcessDescription(identifier).map(ProcessDescription.class::cast);
     }
 
     @Override
@@ -153,9 +148,9 @@ public class EngineImpl implements Engine, Destroyable {
 
     @Override
     public JobId execute(OwsCode identifier,
-            List<ProcessData> inputs,
-            List<OutputDefinition> outputDefinitions,
-            ResponseMode responseMode) throws ProcessNotFoundException, InputDecodingException {
+                         List<ProcessData> inputs,
+                         List<OutputDefinition> outputDefinitions,
+                         ResponseMode responseMode) throws ProcessNotFoundException {
         LOG.info(EXECUTING, identifier);
         IAlgorithm algorithm = getProcess(identifier);
         TypedProcessDescription description = algorithm.getDescription();
@@ -166,17 +161,18 @@ public class EngineImpl implements Engine, Destroyable {
             outputDefinitionsOrDefault = createDefaultOutputDefinitions(description);
         } else {
             outputDefinitionsOrDefault.stream().filter(definition -> description.getOutput(definition.getId()).isGroup()
-                    && definition.getOutputs().isEmpty()).forEach(definition -> definition.setOutputs(
-                            createDefaultOutputDefinitions(description.getOutput(identifier).asGroup())));
+                                                                     && definition.getOutputs().isEmpty())
+                                      .forEach(definition -> definition.setOutputs(
+                                              createDefaultOutputDefinitions(description.getOutput(identifier)
+                                                                                        .asGroup())));
         }
 
         JobId jobId = jobIdGenerator.create(algorithm);
 
         Job job = new Job(algorithm, jobId, inputs, OutputDefinition.getOutputsById(outputDefinitionsOrDefault),
-                responseMode);
+                          responseMode);
         LOG.info("Submitting {}", job.getJobId());
         Future<?> submit = this.executor.submit(job);
-
         this.cancelers.put(jobId, () -> submit.cancel(true));
 
         this.jobs.put(jobId, job);
@@ -185,11 +181,14 @@ public class EngineImpl implements Engine, Destroyable {
     }
 
     private Result onJobCompletion(Job job) throws EngineException {
-        this.cancelers.remove(job.getJobId());
-        this.resultPersistence.save(job);
-        this.jobs.remove(job.getJobId());
-        return this.resultPersistence.getResult(job.getJobId());
-
+        try {
+            this.cancelers.remove(job.getJobId());
+            this.resultPersistence.save(job);
+            this.jobs.remove(job.getJobId());
+            return this.resultPersistence.getResult(job.getJobId());
+        } finally {
+            job.destroy();
+        }
     }
 
     @Override
@@ -210,9 +209,7 @@ public class EngineImpl implements Engine, Destroyable {
     }
 
     private ExecutorService createExecutor() {
-        ThreadFactory threadFactory = new ThreadFactoryBuilder().setNameFormat("javaps-%d").build();
-        ExecutorService newCachedThreadPool = Executors.newCachedThreadPool(threadFactory);
-        return newCachedThreadPool;
+        return Executors.newCachedThreadPool(new ThreadFactoryBuilder().setNameFormat("javaps-%d").build());
     }
 
     @Override
@@ -269,48 +266,34 @@ public class EngineImpl implements Engine, Destroyable {
         void cancel();
     }
 
-    private final class Job extends AbstractFuture<Result> implements Runnable, ProcessExecutionContext,
-            EngineProcessExecutionContext, Future<Result> {
+    private final class Job extends AbstractFuture<Result>
+            implements Runnable, EngineProcessExecutionContext, Future<Result>, Destroyable {
 
         private final ReadWriteLock lock = new ReentrantReadWriteLock();
-
         private final JobId jobId;
-
         private final ProcessOutputs outputs;
-
         private final TypedProcessDescription description;
-
         private final IAlgorithm algorithm;
-
         private final Map<OwsCode, OutputDefinition> outputDefinitions;
-
         private final SettableFuture<List<ProcessData>> nonPersistedResult = SettableFuture.create();
-
-        private Short percentCompleted;
-
-        private OffsetDateTime estimatedCompletion;
-
-        private OffsetDateTime nextPoll;
-
-        private JobStatus jobStatus;
-
         private final ResponseMode responseMode;
-
         private final List<ProcessData> inputData;
-
+        private final List<Runnable> destroyers = new LinkedList<>();
+        private Short percentCompleted;
+        private OffsetDateTime estimatedCompletion;
+        private OffsetDateTime nextPoll;
+        private JobStatus jobStatus = JobStatus.accepted();
         private ProcessInputs inputs;
 
         Job(IAlgorithm algorithm, JobId jobId, List<ProcessData> inputData,
-                Map<OwsCode, OutputDefinition> outputDefinitions, ResponseMode responseMode) {
-
-            this.jobStatus = JobStatus.accepted();
+            Map<OwsCode, OutputDefinition> outputDefinitions, ResponseMode responseMode) {
             this.jobId = Objects.requireNonNull(jobId, "jobId");
             this.algorithm = Objects.requireNonNull(algorithm, "algorithm");
             this.inputData = inputData;
             this.description = algorithm.getDescription();
             this.outputDefinitions = Objects.requireNonNull(outputDefinitions, "outputDefinitions");
             this.responseMode = Objects.requireNonNull(responseMode, "responseMode");
-            this.outputs = new ProcessOutputs();
+            outputs = new ProcessOutputs(outputDefinitions.size());
         }
 
         @Override
@@ -452,6 +435,27 @@ public class EngineImpl implements Engine, Destroyable {
         @Override
         public ResponseMode getResponseMode() {
             return this.responseMode;
+        }
+
+        @Override
+        public void onDestroy(Runnable runnable) {
+            Objects.requireNonNull(runnable);
+            this.lock.writeLock().lock();
+            try {
+                this.destroyers.add(runnable);
+            } finally {
+                this.lock.writeLock().unlock();
+            }
+        }
+
+        @Override
+        public void destroy() {
+            this.lock.readLock().lock();
+            try {
+                this.destroyers.forEach(Runnable::run);
+            } finally {
+                this.lock.readLock().unlock();
+            }
         }
     }
 }

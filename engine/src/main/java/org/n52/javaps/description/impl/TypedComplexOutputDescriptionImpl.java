@@ -16,34 +16,21 @@
  */
 package org.n52.javaps.description.impl;
 
-import java.math.BigInteger;
-import java.util.Objects;
-import java.util.Set;
-
-import org.n52.shetland.ogc.ows.OwsCode;
-import org.n52.shetland.ogc.ows.OwsKeyword;
-import org.n52.shetland.ogc.ows.OwsLanguageString;
-import org.n52.shetland.ogc.ows.OwsMetadata;
-import org.n52.shetland.ogc.wps.Format;
-import org.n52.shetland.ogc.wps.description.impl.ComplexOutputDescriptionImpl;
 import org.n52.javaps.description.TypedComplexOutputDescription;
 import org.n52.javaps.io.complex.ComplexData;
+import org.n52.shetland.ogc.wps.description.ComplexOutputDescription;
+import org.n52.shetland.ogc.wps.description.ProcessDescriptionBuilderFactory;
+import org.n52.shetland.ogc.wps.description.impl.ComplexOutputDescriptionImpl;
 
-public class TypedComplexOutputDescriptionImpl extends ComplexOutputDescriptionImpl implements
-        TypedComplexOutputDescription {
+import java.util.Objects;
+
+public class TypedComplexOutputDescriptionImpl extends ComplexOutputDescriptionImpl
+        implements TypedComplexOutputDescription {
     private final Class<? extends ComplexData<?>> type;
 
-    public TypedComplexOutputDescriptionImpl(OwsCode id, OwsLanguageString title, OwsLanguageString abstrakt, Set<
-            OwsKeyword> keywords, Set<OwsMetadata> metadata, Format defaultFormat, Set<Format> supportedFormat,
-            BigInteger maximumMegabytes, Class<? extends ComplexData<?>> type) {
-        super(id, title, abstrakt, keywords, metadata, defaultFormat, supportedFormat, maximumMegabytes);
-        this.type = Objects.requireNonNull(type, "type");
-    }
-
-    protected TypedComplexOutputDescriptionImpl(AbstractBuilder<?, ?> builder) {
-        this(builder.getId(), builder.getTitle(), builder.getAbstract(), builder.getKeywords(), builder.getMetadata(),
-                builder.getDefaultFormat(), builder.getSupportedFormats(), builder.getMaximumMegabytes(), builder
-                        .getType());
+    public TypedComplexOutputDescriptionImpl(AbstractBuilder<?, ?> builder) {
+        super(builder);
+        this.type = Objects.requireNonNull(builder.getType(), "type");
     }
 
     @Override
@@ -51,16 +38,28 @@ public class TypedComplexOutputDescriptionImpl extends ComplexOutputDescriptionI
         return this.type;
     }
 
-    public abstract static class AbstractBuilder<T extends TypedComplexOutputDescription, B extends AbstractBuilder<T,
-            B>> extends ComplexOutputDescriptionImpl.AbstractBuilder<T, B> implements
-            TypedComplexOutputDescription.Builder<T, B> {
+    protected abstract static class AbstractBuilder<T extends TypedComplexOutputDescription,
+                                                           B extends AbstractBuilder<T, B>>
+            extends ComplexOutputDescriptionImpl.AbstractBuilder<T, B>
+            implements TypedComplexOutputDescription.Builder<T, B> {
         private Class<? extends ComplexData<?>> type;
 
+        protected AbstractBuilder(ProcessDescriptionBuilderFactory<?, ?, ?, ?, ?, ?, ?, ?, ?, ?> factory,
+                                  ComplexOutputDescription entity) {
+            super(factory, entity);
+            if (entity instanceof TypedComplexOutputDescription) {
+                this.type = ((TypedComplexOutputDescription) entity).getType();
+            }
+        }
+
+        protected AbstractBuilder(ProcessDescriptionBuilderFactory<?, ?, ?, ?, ?, ?, ?, ?, ?, ?> factory) {
+            super(factory);
+        }
+
         @Override
-        @SuppressWarnings("unchecked")
         public B withType(Class<? extends ComplexData<?>> type) {
             this.type = Objects.requireNonNull(type);
-            return (B) this;
+            return self();
         }
 
         public Class<? extends ComplexData<?>> getType() {
@@ -70,6 +69,15 @@ public class TypedComplexOutputDescriptionImpl extends ComplexOutputDescriptionI
     }
 
     public static class Builder extends AbstractBuilder<TypedComplexOutputDescription, Builder> {
+        protected Builder(ProcessDescriptionBuilderFactory<?, ?, ?, ?, ?, ?, ?, ?, ?, ?> factory,
+                          ComplexOutputDescription entity) {
+            super(factory, entity);
+        }
+
+        protected Builder(ProcessDescriptionBuilderFactory<?, ?, ?, ?, ?, ?, ?, ?, ?, ?> factory) {
+            super(factory);
+        }
+
         @Override
         public TypedComplexOutputDescription build() {
             return new TypedComplexOutputDescriptionImpl(this);

@@ -16,31 +16,28 @@
  */
 package org.n52.javaps.description.impl;
 
-import java.util.Collection;
-import java.util.Set;
-
-import org.n52.shetland.ogc.ows.OwsCode;
-import org.n52.shetland.ogc.ows.OwsKeyword;
-import org.n52.shetland.ogc.ows.OwsLanguageString;
-import org.n52.shetland.ogc.ows.OwsMetadata;
-import org.n52.shetland.ogc.wps.description.ProcessInputDescription;
-import org.n52.shetland.ogc.wps.description.ProcessOutputDescription;
-import org.n52.shetland.ogc.wps.description.impl.ProcessDescriptionImpl;
 import org.n52.javaps.description.TypedProcessDescription;
 import org.n52.javaps.description.TypedProcessInputDescription;
 import org.n52.javaps.description.TypedProcessOutputDescription;
+import org.n52.shetland.ogc.ows.OwsCode;
+import org.n52.shetland.ogc.wps.description.ProcessDescription;
+import org.n52.shetland.ogc.wps.description.ProcessDescriptionBuilderFactory;
+import org.n52.shetland.ogc.wps.description.ProcessInputDescription;
+import org.n52.shetland.ogc.wps.description.ProcessOutputDescription;
+import org.n52.shetland.ogc.wps.description.impl.ProcessDescriptionImpl;
+
+import java.util.Collection;
 
 public class TypedProcessDescriptionImpl extends ProcessDescriptionImpl implements TypedProcessDescription {
 
     public TypedProcessDescriptionImpl(AbstractBuilder<?, ?> builder) {
         super(builder);
-    }
-
-    public TypedProcessDescriptionImpl(OwsCode id, OwsLanguageString title, OwsLanguageString abstrakt, Set<
-            OwsKeyword> keywords, Set<OwsMetadata> metadata, Set<TypedProcessInputDescription<?>> inputs, Set<
-                    TypedProcessOutputDescription<?>> outputs, String version, boolean storeSupported,
-            boolean statusSupported) {
-        super(id, title, abstrakt, keywords, metadata, inputs, outputs, version, storeSupported, statusSupported);
+        if (!builder.getInputs().stream().allMatch(TypedProcessInputDescription.class::isInstance)) {
+            throw new IllegalArgumentException("not a typed input description");
+        }
+        if (!builder.getOutputs().stream().allMatch(TypedProcessOutputDescription.class::isInstance)) {
+            throw new IllegalArgumentException("not a typed output description");
+        }
     }
 
     @Override
@@ -65,14 +62,20 @@ public class TypedProcessDescriptionImpl extends ProcessDescriptionImpl implemen
         return (Collection<? extends TypedProcessOutputDescription<?>>) super.getOutputDescriptions();
     }
 
-    public static class Builder extends AbstractBuilder<TypedProcessDescription, Builder> {
-        @Override
-        public TypedProcessDescription build() {
-            return new TypedProcessDescriptionImpl(this);
+    protected abstract static class AbstractBuilder<T extends TypedProcessDescription, B extends AbstractBuilder<T, B>>
+            extends ProcessDescriptionImpl.AbstractBuilder<T, B>
+            implements TypedProcessDescription.Builder<T, B> {
+        protected AbstractBuilder(ProcessDescriptionBuilderFactory<?, ?, ?, ?, ?, ?, ?, ?, ?, ?> factory,
+                                  ProcessDescription entity) {
+            super(factory, entity);
+        }
+
+        protected AbstractBuilder(ProcessDescriptionBuilderFactory<?, ?, ?, ?, ?, ?, ?, ?, ?, ?> factory) {
+            super(factory);
         }
 
         @Override
-        public Builder withOutput(ProcessOutputDescription output) {
+        public B withOutput(ProcessOutputDescription output) {
             if (!(output instanceof TypedProcessOutputDescription)) {
                 throw new IllegalArgumentException();
             }
@@ -80,11 +83,28 @@ public class TypedProcessDescriptionImpl extends ProcessDescriptionImpl implemen
         }
 
         @Override
-        public Builder withInput(ProcessInputDescription input) {
+        public B withInput(ProcessInputDescription input) {
             if (!(input instanceof TypedProcessInputDescription)) {
                 throw new IllegalArgumentException();
             }
             return super.withInput(input);
         }
+    }
+
+    public static class Builder extends AbstractBuilder<TypedProcessDescription, Builder> {
+        protected Builder(ProcessDescriptionBuilderFactory<?, ?, ?, ?, ?, ?, ?, ?, ?, ?> factory,
+                          ProcessDescription entity) {
+            super(factory, entity);
+        }
+
+        protected Builder(ProcessDescriptionBuilderFactory<?, ?, ?, ?, ?, ?, ?, ?, ?, ?> factory) {
+            super(factory);
+        }
+
+        @Override
+        public TypedProcessDescription build() {
+            return new TypedProcessDescriptionImpl(this);
+        }
+
     }
 }
