@@ -23,7 +23,7 @@
         <version.slf4j>1.7.29</version.slf4j>
         <version.log4j>2.12.1</version.log4j>
         <version.wps>1.4.0-SNAPSHOT</version.wps>
-        <version.arctic-sea>7.2.0-SNAPSHOT</version.arctic-sea>
+        <version.arctic-sea>7.2.0</version.arctic-sea>
         <version.java>8</version.java>
     </properties>
 
