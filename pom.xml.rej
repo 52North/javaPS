@@ -1,0 +1,10 @@
+diff a/pom.xml b/pom.xml	(rejected hunks)
+@@ -499,7 +499,7 @@
+             </testResource>
+         </testResources>
+         <plugins>
+-            
++        
+             <plugin>
+                 <groupId>org.codehaus.gmaven</groupId>
+                 <artifactId>groovy-maven-plugin</artifactId>
