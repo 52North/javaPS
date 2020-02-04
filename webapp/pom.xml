@@ -222,6 +222,17 @@
                     WEB-INF/lib/xmlbeans-${version.xmlbeans}.jar</packagingExcludes>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>9.4.26.v20200117</version>
+                <configuration>
+                    <webApp>
+                        <contextPath>/javaps</contextPath>
+                    </webApp>
+                    <dumpOnStart>false</dumpOnStart>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <profiles>
