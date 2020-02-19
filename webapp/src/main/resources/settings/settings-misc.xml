@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright 2016-2019 52°North Initiative for Geospatial Open Source
+    Copyright 2016-2020 52°North Initiative for Geospatial Open Source
     Software GmbH
 
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -51,7 +51,7 @@
         <property name="defaultValue" value="false" />
     </bean>
     <bean class="org.n52.faroe.settings.BooleanSettingDefinition">
-        <property name="key" value="statistics.counting-outputstream" />
+        <property name="key" value="misc.counting-outputstream" />
         <property name="title" value="The response document size is calculated" />
         <property name="description"
                 value="The size of the response document which is sent back to the client. This could result in a small performance degradation." />
