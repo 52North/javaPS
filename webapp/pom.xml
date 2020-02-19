@@ -263,7 +263,7 @@
 					<plugin>
 						<groupId>org.eclipse.jetty</groupId>
 						<artifactId>jetty-maven-plugin</artifactId>
-						<version>9.4.26.v20200117</version>
+						<version>9.3.2.v20150730</version>
 						<configuration>
 							<httpConnector>
 								<port>${jetty.http.port}</port>
