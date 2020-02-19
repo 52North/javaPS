@@ -130,7 +130,7 @@
       "type" : "boolean",
       "value" : false
     },
-    "statistics.counting-outputstream" : {
+    "misc.counting-outputstream" : {
       "type" : "boolean",
       "value" : false
     },
