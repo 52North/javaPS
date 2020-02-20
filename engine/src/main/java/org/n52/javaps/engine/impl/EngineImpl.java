@@ -390,12 +390,14 @@ public class EngineImpl implements Engine, Destroyable {
                     // (status=succeeded -> a fast GetResult, it might not be ready)!
                     setJobCompletionInternal(JobStatus.succeeded());
                 } catch (OutputEncodingException ex) {
-                    LOG.error("Failed creating result for {}", this.jobId);
+                    LOG.error(String.format("Failed creating result for %s", this.jobId), ex.getMessage());
+                    LOG.debug(ex.getMessage(), ex);
                     this.nonPersistedResult.setException(ex);
                     setJobCompletionInternal(JobStatus.failed());
                 }
             } catch (org.n52.javaps.algorithm.ExecutionException | InputDecodingException | RuntimeException ex) {
-                LOG.error("{} failed", this.jobId);
+                LOG.error(String.format("%s failed", this.jobId), ex.getMessage());
+                LOG.debug(ex.getMessage(), ex);
                 setJobCompletionInternal(JobStatus.failed());
                 this.nonPersistedResult.setException(ex);
             }
