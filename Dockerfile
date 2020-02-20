@@ -38,8 +38,9 @@ USER jetty
 VOLUME /var/lib/jetty/webapps/ROOT/WEB-INF/tmp
 VOLUME /var/lib/jetty/webapps/ROOT/WEB-INF/config
 
-HEALTHCHECK --interval=5s --timeout=20s --retries=3 \
-  CMD wget 'http://localhost:8080/service?service=WPS&request=GetCapabilities' -q -O - > /dev/null 2>&1
+# use the info endpoint, the capabilities produces a lot of log spam
+HEALTHCHECK --interval=30s --timeout=20s --retries=3 \
+  CMD wget 'http://localhost:8080/info' -q -O - > /dev/null 2>&1
 
 ENV FAROE_CONFIGURATION ${JAVAPS_CONFIG}/configuration.json
 

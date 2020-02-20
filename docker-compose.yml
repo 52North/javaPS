@@ -1,0 +1,12 @@
+version: "3"
+services:
+  javaps:
+    build:
+      context: .
+    image: 52north/javaps:latest
+    ports:
+      - 8081:8080
+    environment:
+      SERVICE_SERVICE_URL: http://localhost:8081/service
+      SERVICE_PROVIDER_INDIVIDUAL_NAME: Jane Doe
+      SERVICE_PROVIDER_POSITION_NAME: First Line Supporter

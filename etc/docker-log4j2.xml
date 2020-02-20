@@ -28,6 +28,9 @@
         <Logger name="org.n52" level="trace" additivity="false">
             <AppenderRef ref="console"/>
         </Logger>
+        <Logger name="org.n52.iceland.config.spring.ProviderAwareListableBeanFactory" level="debug" additivity="false">
+            <AppenderRef ref="console"/>
+        </Logger>
         <Logger name="org.springframework" level="info" additivity="false">
             <AppenderRef ref="console"/>
         </Logger>
