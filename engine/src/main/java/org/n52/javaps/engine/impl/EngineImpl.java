@@ -398,8 +398,8 @@ public class EngineImpl implements Engine, Destroyable {
             } catch (org.n52.javaps.algorithm.ExecutionException | InputDecodingException | RuntimeException ex) {
                 LOG.error(String.format("%s failed", this.jobId), ex.getMessage());
                 LOG.debug(ex.getMessage(), ex);
-                setJobCompletionInternal(JobStatus.failed());
                 this.nonPersistedResult.setException(ex);
+                setJobCompletionInternal(JobStatus.failed());
             }
             LOG.info("Job '{}' execution finished. Status: {};", getJobId().getValue(),
                     getStatus().getStatus().getValue());
