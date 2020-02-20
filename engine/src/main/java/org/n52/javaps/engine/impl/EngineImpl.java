@@ -36,7 +36,6 @@ import org.n52.javaps.engine.InputDecodingException;
 import org.n52.javaps.engine.JobIdGenerator;
 import org.n52.javaps.engine.JobNotFoundException;
 import org.n52.javaps.engine.OutputEncodingException;
-import org.n52.javaps.engine.ProcessExecutionContext;
 import org.n52.javaps.engine.ProcessInputDecoder;
 import org.n52.javaps.engine.ProcessNotFoundException;
 import org.n52.javaps.engine.ProcessOutputEncoder;
@@ -96,7 +95,7 @@ public class EngineImpl implements Engine, Destroyable {
     private final JobIdGenerator jobIdGenerator;
 
     private final ResultPersistence resultPersistence;
-    
+
     private final Object jobStatusMutex = new Object();
 
     @Inject
@@ -148,7 +147,7 @@ public class EngineImpl implements Engine, Destroyable {
                 return job.getStatus();
             } else {
                 return this.resultPersistence.getStatus(identifier);
-            }            
+            }
         }
     }
 
@@ -384,7 +383,7 @@ public class EngineImpl implements Engine, Destroyable {
                 try {
                     this.nonPersistedResult.set(processOutputEncoder.create(this));
                     LOG.info("Created result for {}", this.jobId);
-                    
+
                     // setting the job completion after the status can lead to
                     // incosistent service calls
                     // (status=succeeded -> a fast GetResult, it might not be ready)!
@@ -404,14 +403,14 @@ public class EngineImpl implements Engine, Destroyable {
             LOG.info("Job '{}' execution finished. Status: {};", getJobId().getValue(),
                     getStatus().getStatus().getValue());
         }
-        
+
         private void setJobCompletionInternal(JobStatus s) {
             try {
                 synchronized (EngineImpl.this.jobStatusMutex) {
                     setJobStatus(s);
                     set(onJobCompletion(this));
                 }
-                    
+
                 LOG.info("Succesfully set job '{}' completion.", getJobId().getValue());
             } catch (EngineException ex) {
                 setException(ex);
