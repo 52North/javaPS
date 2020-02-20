@@ -32,9 +32,11 @@ import org.n52.javaps.description.TypedProcessOutputDescriptionContainer;
 import org.n52.javaps.engine.Engine;
 import org.n52.javaps.engine.EngineException;
 import org.n52.javaps.engine.EngineProcessExecutionContext;
+import org.n52.javaps.engine.InputDecodingException;
 import org.n52.javaps.engine.JobIdGenerator;
 import org.n52.javaps.engine.JobNotFoundException;
 import org.n52.javaps.engine.OutputEncodingException;
+import org.n52.javaps.engine.ProcessExecutionContext;
 import org.n52.javaps.engine.ProcessInputDecoder;
 import org.n52.javaps.engine.ProcessNotFoundException;
 import org.n52.javaps.engine.ProcessOutputEncoder;
@@ -386,17 +388,20 @@ public class EngineImpl implements Engine, Destroyable {
                     setJobCompletionInternal();
                     setJobStatus(JobStatus.failed());
                 }
-            } catch (Throwable ex) {
+            } catch (org.n52.javaps.algorithm.ExecutionException | InputDecodingException | RuntimeException ex) {
                 LOG.error("{} failed", this.jobId);
                 setJobCompletionInternal();
                 setJobStatus(JobStatus.failed());
                 this.nonPersistedResult.setException(ex);
             }
+            LOG.info("Job '{}' execution finished. Status: {};", getJobId().getValue(),
+                    getStatus().getStatus().getValue());
         }
         
         private void setJobCompletionInternal() {
             try {
                 set(onJobCompletion(this));
+                LOG.info("Succesfully set job '{}' completion.", getJobId().getValue());
             } catch (EngineException ex) {
                 setException(ex);
             }
