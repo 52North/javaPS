@@ -374,22 +374,31 @@ public class EngineImpl implements Engine, Destroyable {
                 try {
                     this.nonPersistedResult.set(processOutputEncoder.create(this));
                     LOG.info("Created result for {}", this.jobId);
+                    
+                    // setting the job completion after the status can lead to
+                    // incosistent service calls
+                    // (status=succeeded -> a fast GetResult, it might not be ready)!
+                    setJobCompletionInternal();
                     setJobStatus(JobStatus.succeeded());
                 } catch (OutputEncodingException ex) {
                     LOG.error("Failed creating result for {}", this.jobId);
-                    setJobStatus(JobStatus.failed());
                     this.nonPersistedResult.setException(ex);
+                    setJobCompletionInternal();
+                    setJobStatus(JobStatus.failed());
                 }
             } catch (Throwable ex) {
                 LOG.error("{} failed", this.jobId);
+                setJobCompletionInternal();
                 setJobStatus(JobStatus.failed());
                 this.nonPersistedResult.setException(ex);
-            } finally {
-                try {
-                    set(onJobCompletion(this));
-                } catch (EngineException ex) {
-                    setException(ex);
-                }
+            }
+        }
+        
+        private void setJobCompletionInternal() {
+            try {
+                set(onJobCompletion(this));
+            } catch (EngineException ex) {
+                setException(ex);
             }
         }
 
