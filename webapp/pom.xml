@@ -109,7 +109,10 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>fluent-hc</artifactId>
-            <scope>test</scope>
+            <!-- there can always the case be that another lib is having a dependency on this.
+            defining it as test scope  here, results in an exclusion from the WEB-INF/lib
+            and might result in runtime issues -->
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -130,7 +133,10 @@
 		<dependency>
             <groupId>org.apache.xmlbeans</groupId>
 			<artifactId>xmlbeans</artifactId>
-			<scope>test</scope>
+            <!-- there can always the case be that another lib is having a dependency on this.
+            defining it as test scope  here, results in an exclusion from the WEB-INF/lib
+            and might result in runtime issues -->
+            <scope>runtime</scope>
 		</dependency>
 		<dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -155,7 +161,10 @@
          <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <scope>test</scope>
+            <!-- there can always the case be that another lib is having a dependency on this.
+            defining it as test scope  here, results in an exclusion from the WEB-INF/lib
+            and might result in runtime issues -->
+            <scope>runtime</scope>
         </dependency>
          <dependency>
             <groupId>commons-codec</groupId>
@@ -168,6 +177,7 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpcore</artifactId>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
