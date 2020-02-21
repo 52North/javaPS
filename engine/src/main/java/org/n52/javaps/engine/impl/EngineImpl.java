@@ -96,7 +96,7 @@ public class EngineImpl implements Engine, Destroyable {
 
     private final ResultPersistence resultPersistence;
 
-    ReadWriteLock jobStatusLock = new ReentrantReadWriteLock();
+    private final ReadWriteLock jobStatusLock = new ReentrantReadWriteLock();
 
     @Inject
     public EngineImpl(RepositoryManager repositoryManager, ProcessInputDecoder processInputDecoder,
