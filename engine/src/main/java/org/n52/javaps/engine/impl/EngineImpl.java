@@ -96,7 +96,7 @@ public class EngineImpl implements Engine, Destroyable {
 
     private final ResultPersistence resultPersistence;
 
-    private final Object jobStatusMutex = new Object();
+    ReadWriteLock jobStatusLock = new ReentrantReadWriteLock();
 
     @Inject
     public EngineImpl(RepositoryManager repositoryManager, ProcessInputDecoder processInputDecoder,
@@ -140,15 +140,21 @@ public class EngineImpl implements Engine, Destroyable {
 
     @Override
     public StatusInfo getStatus(JobId identifier) throws EngineException {
-        synchronized (jobStatusMutex) {
-            LOG.info("Getting status {}", identifier);
-            Job job = this.jobs.get(identifier);
-            if (job != null) {
-                return job.getStatus();
-            } else {
-                return this.resultPersistence.getStatus(identifier);
-            }
+        LOG.info("Getting status {}", identifier);
+
+        this.jobStatusLock.readLock().lock();
+        Job job = this.jobs.get(identifier);
+
+        StatusInfo result;
+        if (job != null) {
+            result = job.getStatus();
+        } else {
+            result = this.resultPersistence.getStatus(identifier);
         }
+
+        this.jobStatusLock.readLock().unlock();
+
+        return result;
     }
 
     @Override
@@ -187,34 +193,38 @@ public class EngineImpl implements Engine, Destroyable {
 
     private Result onJobCompletion(Job job) throws EngineException {
         try {
-            synchronized (jobStatusMutex) {
-                this.cancelers.remove(job.getJobId());
-                this.resultPersistence.save(job);
-                this.jobs.remove(job.getJobId());
-                return this.resultPersistence.getResult(job.getJobId());
-            }
+            this.jobStatusLock.writeLock().lock();
+            this.cancelers.remove(job.getJobId());
+            this.resultPersistence.save(job);
+            this.jobs.remove(job.getJobId());
+            return this.resultPersistence.getResult(job.getJobId());
         } finally {
             job.destroy();
+            this.jobStatusLock.writeLock().unlock();
         }
     }
 
     @Override
     public Future<Result> getResult(JobId identifier) throws JobNotFoundException {
         LOG.info("Getting result {}", identifier);
-        synchronized (jobStatusMutex) {
-            Job job = this.jobs.get(identifier);
-            if (job != null) {
-                return job;
-            } else {
-                try {
-                    return Futures.immediateFuture(this.resultPersistence.getResult(identifier));
-                } catch (JobNotFoundException ex) {
-                    throw ex;
-                } catch (EngineException ex) {
-                    return Futures.immediateFailedFuture(ex);
-                }
+
+        this.jobStatusLock.readLock().lock();
+        Job job = this.jobs.get(identifier);
+        if (job != null) {
+            this.jobStatusLock.readLock().unlock();
+            return job;
+        } else {
+            try {
+                return Futures.immediateFuture(this.resultPersistence.getResult(identifier));
+            } catch (JobNotFoundException ex) {
+                throw ex;
+            } catch (EngineException ex) {
+                return Futures.immediateFailedFuture(ex);
+            } finally {
+                this.jobStatusLock.readLock().unlock();
             }
         }
+
     }
 
     private ExecutorService createExecutor() {
@@ -406,10 +416,8 @@ public class EngineImpl implements Engine, Destroyable {
 
         private void setJobCompletionInternal(JobStatus s) {
             try {
-                synchronized (EngineImpl.this.jobStatusMutex) {
-                    setJobStatus(s);
-                    set(onJobCompletion(this));
-                }
+                setJobStatus(s);
+                set(onJobCompletion(this));
 
                 LOG.info("Succesfully set job '{}' completion.", getJobId().getValue());
             } catch (EngineException ex) {
