@@ -142,18 +142,19 @@ public class EngineImpl implements Engine, Destroyable {
         LOG.info("Getting status {}", identifier);
 
         this.jobStatusLock.readLock().lock();
-        Job job = this.jobs.get(identifier);
+        try {
+            Job job = this.jobs.get(identifier);
 
-        StatusInfo result;
-        if (job != null) {
-            result = job.getStatus();
-        } else {
-            result = this.resultPersistence.getStatus(identifier);
+            StatusInfo result;
+            if (job != null) {
+                result = job.getStatus();
+            } else {
+                result = this.resultPersistence.getStatus(identifier);
+            }
+            return result;
+        } finally {
+            this.jobStatusLock.readLock().unlock();
         }
-
-        this.jobStatusLock.readLock().unlock();
-
-        return result;
     }
 
     @Override
@@ -191,15 +192,16 @@ public class EngineImpl implements Engine, Destroyable {
     }
 
     private Result onJobCompletion(Job job) throws EngineException {
+        this.jobStatusLock.writeLock().lock();
+
         try {
-            this.jobStatusLock.writeLock().lock();
             this.cancelers.remove(job.getJobId());
             this.resultPersistence.save(job);
             this.jobs.remove(job.getJobId());
             return this.resultPersistence.getResult(job.getJobId());
         } finally {
-            job.destroy();
             this.jobStatusLock.writeLock().unlock();
+            job.destroy();
         }
     }
 
@@ -208,21 +210,23 @@ public class EngineImpl implements Engine, Destroyable {
         LOG.info("Getting result {}", identifier);
 
         this.jobStatusLock.readLock().lock();
-        Job job = this.jobs.get(identifier);
-        if (job != null) {
-            this.jobStatusLock.readLock().unlock();
-            return job;
-        } else {
-            try {
+
+        try {
+            Job job = this.jobs.get(identifier);
+
+            if (job != null) {
+                return job;
+            } else {
                 return Futures.immediateFuture(this.resultPersistence.getResult(identifier));
-            } catch (JobNotFoundException ex) {
-                throw ex;
-            } catch (EngineException ex) {
-                return Futures.immediateFailedFuture(ex);
-            } finally {
-                this.jobStatusLock.readLock().unlock();
             }
+        } catch (JobNotFoundException ex) {
+            throw ex;
+        } catch (EngineException ex) {
+            return Futures.immediateFailedFuture(ex);
+        } finally {
+            this.jobStatusLock.readLock().unlock();
         }
+
 
     }
 
