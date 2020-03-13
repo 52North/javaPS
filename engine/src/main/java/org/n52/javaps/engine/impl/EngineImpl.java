@@ -32,6 +32,7 @@ import org.n52.javaps.description.TypedProcessOutputDescriptionContainer;
 import org.n52.javaps.engine.Engine;
 import org.n52.javaps.engine.EngineException;
 import org.n52.javaps.engine.EngineProcessExecutionContext;
+import org.n52.javaps.engine.InputDecodingException;
 import org.n52.javaps.engine.JobIdGenerator;
 import org.n52.javaps.engine.JobNotFoundException;
 import org.n52.javaps.engine.OutputEncodingException;
@@ -75,7 +76,6 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
 public class EngineImpl implements Engine, Destroyable {
-    private static final String EXECUTING = "Executing {}";
 
     private final Logger LOG = LoggerFactory.getLogger(EngineImpl.class);
 
@@ -94,6 +94,8 @@ public class EngineImpl implements Engine, Destroyable {
     private final JobIdGenerator jobIdGenerator;
 
     private final ResultPersistence resultPersistence;
+
+    private final ReadWriteLock jobStatusLock = new ReentrantReadWriteLock();
 
     @Inject
     public EngineImpl(RepositoryManager repositoryManager, ProcessInputDecoder processInputDecoder,
@@ -138,11 +140,20 @@ public class EngineImpl implements Engine, Destroyable {
     @Override
     public StatusInfo getStatus(JobId identifier) throws EngineException {
         LOG.info("Getting status {}", identifier);
-        Job job = this.jobs.get(identifier);
-        if (job != null) {
-            return job.getStatus();
-        } else {
-            return this.resultPersistence.getStatus(identifier);
+
+        this.jobStatusLock.readLock().lock();
+        try {
+            Job job = this.jobs.get(identifier);
+
+            StatusInfo result;
+            if (job != null) {
+                result = job.getStatus();
+            } else {
+                result = this.resultPersistence.getStatus(identifier);
+            }
+            return result;
+        } finally {
+            this.jobStatusLock.readLock().unlock();
         }
     }
 
@@ -151,7 +162,7 @@ public class EngineImpl implements Engine, Destroyable {
                          List<ProcessData> inputs,
                          List<OutputDefinition> outputDefinitions,
                          ResponseMode responseMode) throws ProcessNotFoundException {
-        LOG.info(EXECUTING, identifier);
+        LOG.info("Executing {}", identifier);
         IAlgorithm algorithm = getProcess(identifier);
         TypedProcessDescription description = algorithm.getDescription();
 
@@ -181,12 +192,15 @@ public class EngineImpl implements Engine, Destroyable {
     }
 
     private Result onJobCompletion(Job job) throws EngineException {
+        this.jobStatusLock.writeLock().lock();
+
         try {
             this.cancelers.remove(job.getJobId());
             this.resultPersistence.save(job);
             this.jobs.remove(job.getJobId());
             return this.resultPersistence.getResult(job.getJobId());
         } finally {
+            this.jobStatusLock.writeLock().unlock();
             job.destroy();
         }
     }
@@ -194,18 +208,26 @@ public class EngineImpl implements Engine, Destroyable {
     @Override
     public Future<Result> getResult(JobId identifier) throws JobNotFoundException {
         LOG.info("Getting result {}", identifier);
-        Job job = this.jobs.get(identifier);
-        if (job != null) {
-            return job;
-        } else {
-            try {
+
+        this.jobStatusLock.readLock().lock();
+
+        try {
+            Job job = this.jobs.get(identifier);
+
+            if (job != null) {
+                return job;
+            } else {
                 return Futures.immediateFuture(this.resultPersistence.getResult(identifier));
-            } catch (JobNotFoundException ex) {
-                throw ex;
-            } catch (EngineException ex) {
-                return Futures.immediateFailedFuture(ex);
             }
+        } catch (JobNotFoundException ex) {
+            throw ex;
+        } catch (EngineException ex) {
+            return Futures.immediateFailedFuture(ex);
+        } finally {
+            this.jobStatusLock.readLock().unlock();
         }
+
+
     }
 
     private ExecutorService createExecutor() {
@@ -366,7 +388,7 @@ public class EngineImpl implements Engine, Destroyable {
         @Override
         public void run() {
             setJobStatus(JobStatus.running());
-            LOG.info(EXECUTING, this.jobId);
+            LOG.info("Executing run() of {}", this.jobId);
             try {
                 this.inputs = processInputDecoder.decode(description, inputData);
                 this.algorithm.execute(this);
@@ -374,22 +396,35 @@ public class EngineImpl implements Engine, Destroyable {
                 try {
                     this.nonPersistedResult.set(processOutputEncoder.create(this));
                     LOG.info("Created result for {}", this.jobId);
-                    setJobStatus(JobStatus.succeeded());
+
+                    // setting the job completion after the status can lead to
+                    // incosistent service calls
+                    // (status=succeeded -> a fast GetResult, it might not be ready)!
+                    setJobCompletionInternal(JobStatus.succeeded());
                 } catch (OutputEncodingException ex) {
-                    LOG.error("Failed creating result for {}", this.jobId);
-                    setJobStatus(JobStatus.failed());
+                    LOG.error("Failed creating result for {}: {}", this.jobId, ex.getMessage());
+                    LOG.debug(ex.getMessage(), ex);
                     this.nonPersistedResult.setException(ex);
+                    setJobCompletionInternal(JobStatus.failed());
                 }
-            } catch (Throwable ex) {
-                LOG.error("{} failed", this.jobId);
-                setJobStatus(JobStatus.failed());
+            } catch (org.n52.javaps.algorithm.ExecutionException | InputDecodingException | RuntimeException ex) {
+                LOG.error("{} failed: {}", this.jobId, ex.getMessage());
+                LOG.debug(ex.getMessage(), ex);
                 this.nonPersistedResult.setException(ex);
-            } finally {
-                try {
-                    set(onJobCompletion(this));
-                } catch (EngineException ex) {
-                    setException(ex);
-                }
+                setJobCompletionInternal(JobStatus.failed());
+            }
+            LOG.info("Job '{}' execution finished. Status: {};", getJobId().getValue(),
+                    getStatus().getStatus().getValue());
+        }
+
+        private void setJobCompletionInternal(JobStatus s) {
+            try {
+                setJobStatus(s);
+                set(onJobCompletion(this));
+
+                LOG.info("Successfully set job '{}' completion.", getJobId().getValue());
+            } catch (EngineException ex) {
+                setException(ex);
             }
         }
 
