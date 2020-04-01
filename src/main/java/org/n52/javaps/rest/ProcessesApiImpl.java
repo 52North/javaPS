@@ -178,7 +178,7 @@ public final class ProcessesApiImpl implements ProcessesApi {
     }
 
     @Override
-    public org.n52.javaps.rest.model.ProcessOffering getProcessDescription(String id) throws ProcessNotFoundException {
+    public org.n52.javaps.rest.model.Process getProcessDescription(String id) throws ProcessNotFoundException {
         OwsCode owsCode = new OwsCode(id);
         return engine.getProcessDescription(owsCode)
                      .map(ProcessOffering::new)
