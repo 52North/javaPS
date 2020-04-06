@@ -22,6 +22,8 @@
 package org.n52.javaps.rest.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
@@ -29,6 +31,8 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * Execute
@@ -43,6 +47,12 @@ public class Execute {
     @Valid
     private List<Output> outputs = new ArrayList<>();
 
+    @JsonProperty("mode")
+    private ModeEnum mode = null;
+
+    @JsonProperty("response")
+    private ResponseEnum response = null;
+
     public Execute inputs(List<Input> inputs) {
         this.inputs = inputs;
         return this;
@@ -53,6 +63,16 @@ public class Execute {
             this.inputs = new ArrayList<Input>();
         }
         this.inputs.add(inputsItem);
+        return this;
+    }
+
+    public Execute mode(ModeEnum mode) {
+    	this.mode = mode;
+        return this;
+    }
+
+    public Execute response(ResponseEnum response) {
+        this.response = response;
         return this;
     }
 
@@ -95,6 +115,97 @@ public class Execute {
         this.outputs = outputs;
     }
 
+    /**
+     * Gets or Sets mode
+     */
+    public enum ModeEnum {
+      SYNC("sync"),
+      ASYNC("async"),
+      AUTO("auto");
+
+      private String value;
+
+      ModeEnum(String value) {
+        this.value = value;
+      }
+
+      @Override
+      @JsonValue
+      public String toString() {
+        return String.valueOf(value);
+      }
+
+      @JsonCreator
+      public static ModeEnum fromValue(String text) {
+        for (ModeEnum b : ModeEnum.values()) {
+          if (String.valueOf(b.value).equals(text)) {
+            return b;
+          }
+        }
+        return null;
+      }
+    }
+
+    /**
+     * Gets or Sets response
+     */
+    public enum ResponseEnum {
+      RAW("raw"),
+      DOCUMENT("document");
+
+      private String value;
+
+      ResponseEnum(String value) {
+        this.value = value;
+      }
+
+      @Override
+      @JsonValue
+      public String toString() {
+        return String.valueOf(value);
+      }
+
+      @JsonCreator
+      public static ResponseEnum fromValue(String text) {
+        for (ResponseEnum b : ResponseEnum.values()) {
+          if (String.valueOf(b.value).equals(text)) {
+            return b;
+          }
+        }
+        return null;
+      }
+    }
+
+    /**
+     * Get mode
+     * @return mode
+    **/
+    @ApiModelProperty(required = true, value = "")
+    @NotNull
+
+    public ModeEnum getMode() {
+      return mode;
+    }
+
+    public void setMode(ModeEnum mode) {
+      this.mode = mode;
+    }
+
+    /**
+     * Get response
+     * @return response
+    **/
+    @ApiModelProperty(required = true, value = "")
+    @NotNull
+
+    public ResponseEnum getResponse() {
+      return response;
+    }
+
+    public void setResponse(ResponseEnum response) {
+      this.response = response;
+    }
+
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -105,16 +216,18 @@ public class Execute {
         }
         Execute execute = (Execute) o;
         return Objects.equals(this.inputs, execute.inputs) &&
-               Objects.equals(this.outputs, execute.outputs);
+               Objects.equals(this.outputs, execute.outputs) &&
+               Objects.equals(this.mode, execute.mode) &&
+               Objects.equals(this.response, execute.response);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(inputs, outputs);
+        return Objects.hash(inputs, outputs, mode, response);
     }
 
     @Override
     public String toString() {
-        return String.format("Execute{inputs: %s, outputs: %s}", inputs, outputs);
+        return String.format("Execute{inputs: %s, outputs: %s, mode: %s, response: %s}", inputs, outputs, mode, response);
     }
 }
