@@ -24,6 +24,7 @@ package org.n52.javaps.rest.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.validation.annotation.Validated;
+import javax.validation.constraints.NotNull;
 
 import java.util.Objects;
 
@@ -31,7 +32,7 @@ import java.util.Objects;
  * InlineValue
  */
 @Validated
-public class InlineValue {
+public class InlineValue implements ValueType {
     @JsonProperty("inlineValue")
     private Object inlineValue;
 
@@ -45,7 +46,8 @@ public class InlineValue {
      *
      * @return inlineValue
      **/
-    @ApiModelProperty(value = "")
+    @ApiModelProperty(required = true, value = "")
+    @NotNull
 
     public Object getInlineValue() {
         return inlineValue;

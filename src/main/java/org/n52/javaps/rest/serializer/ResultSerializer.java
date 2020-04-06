@@ -26,6 +26,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.n52.javaps.rest.model.OutputInfo;
 import org.n52.javaps.rest.model.Result;
 import org.n52.javaps.rest.model.ValueType;
+import org.n52.javaps.rest.model.InlineValue;
+import org.n52.javaps.rest.model.ReferenceValue;
 import org.apache.commons.io.IOUtils;
 import org.n52.javaps.engine.OutputEncodingException;
 import org.n52.shetland.ogc.wps.data.ProcessData;
@@ -85,7 +87,7 @@ public class ResultSerializer extends AbstractSerializer {
     private ValueType createInlineValue(ValueProcessData valueProcessData) throws IOException {
         try {
 
-            return new ValueType().inlineValue(objectMapper.readTree(valueProcessData.getData()));
+            return new InlineValue().inlineValue(objectMapper.readTree(valueProcessData.getData()));
         } catch (JsonParseException e) {
             log.info("Could not read value as JSON node.");
             StringWriter writer = new StringWriter();
@@ -95,12 +97,12 @@ public class ResultSerializer extends AbstractSerializer {
             } catch (IOException e1) {
                 throw e;
             }
-            return new ValueType().inlineValue(writer.toString());
+            return new InlineValue().inlineValue(writer.toString());
         }
     }
 
     private ValueType createReferenceValue(ReferenceProcessData referenceProcessData) {
-        return new ValueType().href(referenceProcessData.getURI().toString());
+        return new ReferenceValue().href(referenceProcessData.getURI().toString());
     }
 
 }
