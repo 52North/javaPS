@@ -42,16 +42,22 @@ public class Process extends ProcessSummary {
     @Valid
     private List<OutputDescription> outputs;
 
+    @JsonProperty("links")
+    @Valid
+    private List<Link> links = null;
+    
     public Process inputs(List<InputDescription> inputs) {
         this.inputs = inputs;
         return this;
     }
-
-    public Process addInputsItem(InputDescription inputsItem) {
-        if (this.inputs == null) {
-            this.inputs = new ArrayList<>();
-        }
-        this.inputs.add(inputsItem);
+    
+    public Process outputs(List<OutputDescription> outputs) {
+        this.outputs = outputs;
+        return this;
+    }
+    
+    public Process links(List<Link> links) {
+        this.links = links;
         return this;
     }
 
@@ -68,17 +74,12 @@ public class Process extends ProcessSummary {
     public void setInputs(List<InputDescription> inputs) {
         this.inputs = inputs;
     }
-
-    public Process outputs(List<OutputDescription> outputs) {
-        this.outputs = outputs;
-        return this;
-    }
-
-    public Process addOutputsItem(OutputDescription outputsItem) {
-        if (this.outputs == null) {
-            this.outputs = new ArrayList<>();
+    
+    public Process addInputsItem(InputDescription inputsItem) {
+        if (this.inputs == null) {
+            this.inputs = new ArrayList<>();
         }
-        this.outputs.add(outputsItem);
+        this.inputs.add(inputsItem);
         return this;
     }
 
@@ -94,6 +95,35 @@ public class Process extends ProcessSummary {
 
     public void setOutputs(List<OutputDescription> outputs) {
         this.outputs = outputs;
+    } 
+    
+    public Process addOutputsItem(OutputDescription outputsItem) {
+        if (this.outputs == null) {
+            this.outputs = new ArrayList<>();
+        }
+        this.outputs.add(outputsItem);
+        return this;
+    }
+
+    /**
+     * Get links
+     * @return links
+    **/
+    @Valid
+    public List<Link> getLinks() {
+    	return links;
+    }
+
+    public void setLinks(List<Link> links) {
+        this.links = links;
+    }
+      
+    public Process addLinksItem(Link linksItem) {
+    	if (this.links == null) {
+    		this.links = new ArrayList<Link>();
+        }
+        this.links.add(linksItem);
+        return this;
     }
 
     @Override
@@ -107,16 +137,17 @@ public class Process extends ProcessSummary {
         Process process = (Process) o;
         return Objects.equals(this.inputs, process.inputs) &&
                Objects.equals(this.outputs, process.outputs) &&
+               Objects.equals(this.links, process.links) &&
                super.equals(o);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(inputs, outputs, super.hashCode());
+        return Objects.hash(inputs, outputs, links, super.hashCode());
     }
 
     @Override
     public String toString() {
-        return String.format("Process{%s, inputs: %s, outputs: %s}", super.toString(), inputs, outputs);
+        return String.format("Process{%s, inputs: %s, outputs: %s, links: %s}", super.toString(), inputs, outputs, links);
     }
 }
