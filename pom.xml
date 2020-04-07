@@ -31,10 +31,6 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
         </dependency>
         <dependency>
@@ -42,21 +38,8 @@
             <artifactId>engine</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.n52.wps</groupId>
-            <artifactId>javaps-rest</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.n52.arctic-sea</groupId>
             <artifactId>svalbard</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.n52.arctic-sea</groupId>
-            <artifactId>svalbard-json</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.n52.arctic-sea</groupId>
-            <artifactId>janmayen</artifactId>
         </dependency>
         <dependency>
             <groupId>org.n52.arctic-sea</groupId>
@@ -77,10 +60,6 @@
         <dependency>
             <groupId>org.n52.arctic-sea</groupId>
             <artifactId>faroe-utils</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.n52.arctic-sea</groupId>
-            <artifactId>faroe-annotations</artifactId>
         </dependency>
         <dependency>
             <groupId>javax.annotation</groupId>
