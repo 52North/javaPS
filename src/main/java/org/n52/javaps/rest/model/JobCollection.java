@@ -23,6 +23,7 @@ package org.n52.javaps.rest.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
+import org.n52.javaps.rest.model.JobInfo;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -37,14 +38,14 @@ import java.util.Objects;
 public class JobCollection {
     @JsonProperty("jobs")
     @Valid
-    private List<String> jobs = new ArrayList<>();
+    private List<JobInfo> jobs = new ArrayList<JobInfo>();
 
-    public JobCollection jobs(List<String> jobs) {
+    public JobCollection jobs(List<JobInfo> jobs) {
         this.jobs = jobs;
         return this;
     }
 
-    public JobCollection addJobsItem(String jobsItem) {
+    public JobCollection addJobsItem(JobInfo jobsItem) {
         this.jobs.add(jobsItem);
         return this;
     }
@@ -55,11 +56,11 @@ public class JobCollection {
      * @return jobs
      **/
     @NotNull
-    public List<String> getJobs() {
+    public List<JobInfo> getJobs() {
         return jobs;
     }
 
-    public void setJobs(List<String> jobs) {
+    public void setJobs(List<JobInfo> jobs) {
         this.jobs = jobs;
     }
 

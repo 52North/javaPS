@@ -33,6 +33,7 @@ import org.n52.javaps.engine.ProcessNotFoundException;
 import org.n52.javaps.rest.deserializer.ExecuteDeserializer;
 import org.n52.javaps.rest.model.Execute;
 import org.n52.javaps.rest.model.JobCollection;
+import org.n52.javaps.rest.model.JobInfo;
 import org.n52.javaps.rest.model.ProcessCollection;
 import org.n52.javaps.rest.model.StatusInfo;
 import org.n52.javaps.rest.serializer.ExceptionSerializer;
@@ -58,6 +59,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Future;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static java.util.stream.Collectors.toSet;
 
@@ -73,6 +76,8 @@ public final class ProcessesApiImpl implements ProcessesApi {
     private ExceptionSerializer exceptionSerializer;
     private ResultSerializer resultSerializer;
     private ExecuteDeserializer executeDeserializer;
+
+    private static final Logger log = LoggerFactory.getLogger(ProcessesApiImpl.class);
 
     @Autowired
     public void setRequest(HttpServletRequest request) {
@@ -163,8 +168,25 @@ public final class ProcessesApiImpl implements ProcessesApi {
     @Override
     public ResponseEntity<?> getJobList(String id) {
         OwsCode owsCode = new OwsCode(id);
+
+        Set<String> values = engine.getJobIdentifiers(owsCode).stream().map(JobId::getValue).collect(toSet());
+
         JobCollection jobCollection = new JobCollection();
-        engine.getJobIdentifiers(owsCode).stream().map(JobId::getValue).forEach(jobCollection::addJobsItem);
+
+        for (String jobID : values) {
+            JobId jobId = new JobId(jobID);
+            JobInfo jobsItem = new JobInfo();
+            jobsItem.setId(jobID);
+            try {
+                org.n52.shetland.ogc.wps.StatusInfo status = engine.getStatus(jobId);
+                jobsItem.setInfos(statusInfoSerializer.serialize(status, id, jobID));
+            } catch (EngineException e) {
+                log.error(e.getMessage());
+            }
+
+            jobCollection.addJobsItem(jobsItem);
+        }
+
         return ResponseEntity.ok(jobCollection);
     }
 
