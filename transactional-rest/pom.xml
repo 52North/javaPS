@@ -24,7 +24,6 @@
         <groupId>org.n52.wps</groupId>
         <artifactId>javaPS</artifactId>
         <version>1.6.0-SNAPSHOT</version>
-        <relativePath>../../../../processing/javaPS/</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>transactional-rest</artifactId>
@@ -32,18 +31,15 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>javaps-rest</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <artifactId>rest</artifactId>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>engine</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>transactional</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.n52.arctic-sea</groupId>
@@ -68,7 +64,6 @@
         <dependency>
             <groupId>org.n52.arctic-sea</groupId>
             <artifactId>svalbard-json</artifactId>
-            <version>${version.arctic.sea}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
