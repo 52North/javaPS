@@ -39,7 +39,7 @@ public class InputDescription extends DataDescriptionType {
     private BigInteger minOccurs;
 
     @JsonProperty("maxOccurs")
-    private BigInteger maxOccurs;
+    private Object maxOccurs;
 
     public InputDescription input(Object input) {
         this.input = input;
@@ -77,7 +77,7 @@ public class InputDescription extends DataDescriptionType {
         this.minOccurs = minOccurs;
     }
 
-    public InputDescription maxOccurs(BigInteger maxOccurs) {
+    public InputDescription maxOccurs(Object maxOccurs) {
         this.maxOccurs = maxOccurs;
         return this;
     }
@@ -87,11 +87,11 @@ public class InputDescription extends DataDescriptionType {
      *
      * @return maxOccurs
      **/
-    public BigInteger getMaxOccurs() {
+    public Object getMaxOccurs() {
         return maxOccurs;
     }
 
-    public void setMaxOccurs(BigInteger maxOccurs) {
+    public void setMaxOccurs(Object maxOccurs) {
         this.maxOccurs = maxOccurs;
     }
 
