@@ -16,6 +16,8 @@
  */
 package org.n52.javaps.transactional;
 
+import org.n52.janmayen.lifecycle.Constructable;
+import org.n52.janmayen.lifecycle.Destroyable;
 import org.n52.javaps.engine.Engine;
 import org.n52.javaps.engine.ProcessNotFoundException;
 import org.n52.shetland.ogc.ows.OwsCode;
@@ -25,8 +27,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
@@ -35,7 +35,8 @@ import java.util.Set;
 
 @Component
 public class TransactionalAlgorithmRegistryImpl implements TransactionalAlgorithmConfiguration,
-                                                           TransactionalAlgorithmRegistry {
+                                                           TransactionalAlgorithmRegistry,
+                                                           Constructable, Destroyable {
     private static final Logger LOG = LoggerFactory.getLogger(TransactionalAlgorithmRegistryImpl.class);
     private final Engine engine;
     private final ResourceAlgorithmProviderFactory resourceAlgorithmProviderFactory;
@@ -93,22 +94,27 @@ public class TransactionalAlgorithmRegistryImpl implements TransactionalAlgorith
         return this;
     }
 
-    @PostConstruct
-    public void configure() throws UnsupportedProcessException, DuplicateProcessException {
+    @Override
+    public void init() {
         configurers.forEach(configurer -> configurer.configure(this));
         repositories.stream()
                     .filter(ListenableTransactionalAlgorithmRepository.class::isInstance)
                     .map(ListenableTransactionalAlgorithmRepository.class::cast)
                     .forEach(repository -> listeners.forEach(repository::addListener));
-
         for (InitialTransactionalAlgorithmProvider provider : providers) {
             ApplicationPackage applicationPackage = provider.get();
-            OwsCode id = register(applicationPackage);
-            LOG.info("Registered application package {}", id);
+            try {
+                OwsCode id = register(applicationPackage);
+                LOG.info("Registered application package {}", id);
+            } catch (DuplicateProcessException e) {
+                LOG.warn("Duplicate application package: " + applicationPackage, e);
+            } catch (UnsupportedProcessException e) {
+                LOG.error("Unsupported application package: " + applicationPackage, e);
+            }
         }
     }
 
-    @PreDestroy
+    @Override
     public void destroy() {
         repositories.stream()
                     .filter(ListenableTransactionalAlgorithmRepository.class::isInstance)
@@ -185,4 +191,5 @@ public class TransactionalAlgorithmRegistryImpl implements TransactionalAlgorith
         return repositories.stream().filter(x -> x.isSupported(applicationPackage)).findFirst()
                            .orElseThrow(UnsupportedProcessException::new);
     }
+
 }
