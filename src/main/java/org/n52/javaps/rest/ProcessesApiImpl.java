@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 by 52 North Initiative for Geospatial Open Source Software GmbH
+ * Copyright (C) 2020 by 52 North Initiative for Geospatial Open Source Software GmbH
  *
  * Contact: Andreas Wytzisk
  * 52 North Initiative for Geospatial Open Source Software GmbH
@@ -33,6 +33,7 @@ import org.n52.javaps.engine.ProcessNotFoundException;
 import org.n52.javaps.rest.deserializer.ExecuteDeserializer;
 import org.n52.javaps.rest.model.Execute;
 import org.n52.javaps.rest.model.JobCollection;
+import org.n52.javaps.rest.model.JobInfo;
 import org.n52.javaps.rest.model.ProcessCollection;
 import org.n52.javaps.rest.model.StatusInfo;
 import org.n52.javaps.rest.serializer.ExceptionSerializer;
@@ -48,6 +49,9 @@ import org.n52.shetland.ogc.wps.Result;
 import org.n52.shetland.ogc.wps.data.ProcessData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
@@ -58,6 +62,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Future;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static java.util.stream.Collectors.toSet;
 
@@ -73,6 +79,8 @@ public final class ProcessesApiImpl implements ProcessesApi {
     private ExceptionSerializer exceptionSerializer;
     private ResultSerializer resultSerializer;
     private ExecuteDeserializer executeDeserializer;
+
+    private static final Logger log = LoggerFactory.getLogger(ProcessesApiImpl.class);
 
     @Autowired
     public void setRequest(HttpServletRequest request) {
@@ -128,27 +136,46 @@ public final class ProcessesApiImpl implements ProcessesApi {
     public ResponseEntity<?> execute(Execute body, String id)
             throws EngineException, ExecutionException {
 
-        boolean syncExecute = request.getParameterMap()
-                                     .entrySet().stream()
-                                     .filter(e -> e.getKey().equalsIgnoreCase("sync-execute"))
-                                     .map(Map.Entry::getValue)
-                                     .filter(v -> v.length > 0)
-                                     .map(v -> v[0])
-                                     .findFirst()
-                                     .map(Boolean::parseBoolean)
-                                     .orElse(false);
+    	boolean syncExecute = false;
+        try {
+            syncExecute = body.getMode().equals(Execute.ModeEnum.SYNC);
+        } catch (Exception e) {
+            log.error("Could not resolve execution mode: ", e);
+        }
+
+        ResponseMode responseMode = ResponseMode.DOCUMENT;
+        try {
+            if(body.getResponse().equals(Execute.ResponseEnum.RAW)) {
+                responseMode = ResponseMode.RAW;
+            }
+         } catch (Exception e) {
+             log.error("Could not resolve response mode. Falling back to DOCUMENT", e);
+         }
+
         OwsCode owsCode = new OwsCode(id);
 
         List<ProcessData> inputs = executeDeserializer.readInputs(body.getInputs());
         List<OutputDefinition> outputs = executeDeserializer.readOutputs(body.getOutputs());
 
-        JobId jobId = engine.execute(owsCode, inputs, outputs, ResponseMode.DOCUMENT);
+        JobId jobId = engine.execute(owsCode, inputs, outputs, responseMode);
 
         if (syncExecute) {
             try {
                 Future<Result> future = engine.getResult(jobId);
                 Result result = future.get();
-                return ResponseEntity.ok(resultSerializer.serializeResult(result));
+
+                String mimeType = "application/json";
+
+                if(result.getResponseMode().equals(ResponseMode.RAW)) {
+                    mimeType = result.getOutputs().get(0).asValue().getFormat().getMimeType().orElse("application/json");
+                }
+
+                HttpHeaders responseHeaders = new HttpHeaders();
+                responseHeaders.setContentType(MediaType.parseMediaType(mimeType));
+
+                ResponseEntity<Object> responseEntity = new ResponseEntity<Object>(resultSerializer.serializeResult(result), responseHeaders, HttpStatus.OK);
+
+                return responseEntity;
             } catch (InterruptedException e) {
                 throw new EngineException(e);
             } catch (java.util.concurrent.ExecutionException e) {
@@ -163,8 +190,25 @@ public final class ProcessesApiImpl implements ProcessesApi {
     @Override
     public ResponseEntity<?> getJobList(String id) {
         OwsCode owsCode = new OwsCode(id);
+
+        Set<String> values = engine.getJobIdentifiers(owsCode).stream().map(JobId::getValue).collect(toSet());
+
         JobCollection jobCollection = new JobCollection();
-        engine.getJobIdentifiers(owsCode).stream().map(JobId::getValue).forEach(jobCollection::addJobsItem);
+
+        for (String jobID : values) {
+            JobId jobId = new JobId(jobID);
+            JobInfo jobsItem = new JobInfo();
+            jobsItem.setId(jobID);
+            try {
+                org.n52.shetland.ogc.wps.StatusInfo status = engine.getStatus(jobId);
+                jobsItem.setInfos(statusInfoSerializer.serialize(status, id, jobID));
+            } catch (EngineException e) {
+                log.error(e.getMessage());
+            }
+
+            jobCollection.addJobsItem(jobsItem);
+        }
+
         return ResponseEntity.ok(jobCollection);
     }
 
@@ -178,7 +222,7 @@ public final class ProcessesApiImpl implements ProcessesApi {
     }
 
     @Override
-    public org.n52.javaps.rest.model.ProcessOffering getProcessDescription(String id) throws ProcessNotFoundException {
+    public org.n52.javaps.rest.model.Process getProcessDescription(String id) throws ProcessNotFoundException {
         OwsCode owsCode = new OwsCode(id);
         return engine.getProcessDescription(owsCode)
                      .map(ProcessOffering::new)
@@ -218,7 +262,20 @@ public final class ProcessesApiImpl implements ProcessesApi {
                                              "ResultNotReady", String.format("Job with id %s not ready.", jobId)));
             }
 
-            return ResponseEntity.ok(resultSerializer.serializeResult(futureResult.get()));
+            Result result = futureResult.get();
+
+            String mimeType = "application/json";
+
+            if(result.getResponseMode().equals(ResponseMode.RAW)) {
+                mimeType = result.getOutputs().get(0).asValue().getFormat().getMimeType().orElse("application/json");
+            }
+
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.setContentType(MediaType.parseMediaType(mimeType));
+
+            ResponseEntity<Object> responseEntity = new ResponseEntity<Object>(resultSerializer.serializeResult(result), responseHeaders, HttpStatus.OK);
+
+            return responseEntity;
         } catch (InterruptedException e) {
             throw new EngineException(e);
         } catch (java.util.concurrent.ExecutionException e) {

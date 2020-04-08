@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 by 52 North Initiative for Geospatial Open Source Software GmbH
+ * Copyright (C) 2020 by 52 North Initiative for Geospatial Open Source Software GmbH
  *
  * Contact: Andreas Wytzisk
  * 52 North Initiative for Geospatial Open Source Software GmbH
@@ -23,6 +23,8 @@ package org.n52.javaps.rest.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
+import io.swagger.annotations.ApiModelProperty;
+import javax.validation.constraints.NotNull;
 
 import java.util.Objects;
 
@@ -30,7 +32,7 @@ import java.util.Objects;
  * ReferenceValue
  */
 @Validated
-public class ReferenceValue {
+public class ReferenceValue implements ValueType {
     @JsonProperty("href")
     private String href;
 
@@ -44,6 +46,9 @@ public class ReferenceValue {
      *
      * @return href
      **/
+    @ApiModelProperty(required = true, value = "")
+    @NotNull
+
     public String getHref() {
         return href;
     }

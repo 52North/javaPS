@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 by 52 North Initiative for Geospatial Open Source Software GmbH
+ * Copyright (C) 2020 by 52 North Initiative for Geospatial Open Source Software GmbH
  *
  * Contact: Andreas Wytzisk
  * 52 North Initiative for Geospatial Open Source Software GmbH
@@ -68,7 +68,7 @@ public class RootApiImpl implements RootApi {
         link.setHref(serviceURL + "/api/");
         link.setRel("service");
         link.setType(MediaTypes.APPLICATION_OPENAPI_JSON_3_0);
-        link.setTitle("ththe API definition");
+        link.setTitle("the API definition");
         links.add(link);
 
         link = new Link();

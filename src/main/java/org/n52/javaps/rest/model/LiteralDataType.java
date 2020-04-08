@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 by 52 North Initiative for Geospatial Open Source Software GmbH
+ * Copyright (C) 2020 by 52 North Initiative for Geospatial Open Source Software GmbH
  *
  * Contact: Andreas Wytzisk
  * 52 North Initiative for Geospatial Open Source Software GmbH
@@ -23,7 +23,9 @@ package org.n52.javaps.rest.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
+import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +38,7 @@ import java.util.Objects;
 public class LiteralDataType {
     @JsonProperty("literalDataDomains")
     @Valid
-    private List<LiteralDataDomain> literalDataDomains;
+    private List<LiteralDataDomain> literalDataDomains = new ArrayList<LiteralDataDomain>();;
 
     public LiteralDataType literalDataDomains(List<LiteralDataDomain> literalDataDomains) {
         this.literalDataDomains = literalDataDomains;
@@ -44,9 +46,6 @@ public class LiteralDataType {
     }
 
     public LiteralDataType addLiteralDataDomainsItem(LiteralDataDomain literalDataDomainsItem) {
-        if (this.literalDataDomains == null) {
-            this.literalDataDomains = new ArrayList<LiteralDataDomain>();
-        }
         this.literalDataDomains.add(literalDataDomainsItem);
         return this;
     }
@@ -56,6 +55,8 @@ public class LiteralDataType {
      *
      * @return literalDataDomains
      **/
+    @ApiModelProperty(required = true, value = "")
+    @NotNull
     @Valid
     public List<LiteralDataDomain> getLiteralDataDomains() {
         return literalDataDomains;

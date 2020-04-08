@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 by 52 North Initiative for Geospatial Open Source Software GmbH
+ * Copyright (C) 2020 by 52 North Initiative for Geospatial Open Source Software GmbH
  *
  * Contact: Andreas Wytzisk
  * 52 North Initiative for Geospatial Open Source Software GmbH
@@ -26,8 +26,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.n52.javaps.rest.model.OutputInfo;
 import org.n52.javaps.rest.model.Result;
 import org.n52.javaps.rest.model.ValueType;
+import org.n52.javaps.rest.model.InlineValue;
+import org.n52.javaps.rest.model.ReferenceValue;
 import org.apache.commons.io.IOUtils;
 import org.n52.javaps.engine.OutputEncodingException;
+import org.n52.shetland.ogc.wps.ResponseMode;
 import org.n52.shetland.ogc.wps.data.ProcessData;
 import org.n52.shetland.ogc.wps.data.ReferenceProcessData;
 import org.n52.shetland.ogc.wps.data.ValueProcessData;
@@ -46,8 +49,27 @@ public class ResultSerializer extends AbstractSerializer {
 
     private static final Logger log = LoggerFactory.getLogger(ResultSerializer.class);
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private boolean isRaw = false;
 
-    public Result serializeResult(org.n52.shetland.ogc.wps.Result result) throws OutputEncodingException {
+    public Object serializeResult(org.n52.shetland.ogc.wps.Result result) throws OutputEncodingException {
+        isRaw = result.getResponseMode().equals(ResponseMode.RAW);
+        if(isRaw) {
+        	if (result.getOutputs().size() > 1) {
+                //TODO throw exception
+            	// io.swagger.model.Exception exception = new io.swagger.model.Exception();
+            	// exception.setCode(code);
+            	// return exception;
+        	}
+        	for (ProcessData processData : result.getOutputs()) {
+        		if (processData.isValue()) {
+        			try {
+        				createRawOutput(processData.asValue());
+        			} catch (IOException | IllegalArgumentException e) {
+        				throw new OutputEncodingException(processData.getId(), e);
+        			}
+        		}
+        	}
+        }
         return new Result().outputs(getOutputInfos(result.getOutputs()));
     }
 
@@ -84,8 +106,7 @@ public class ResultSerializer extends AbstractSerializer {
 
     private ValueType createInlineValue(ValueProcessData valueProcessData) throws IOException {
         try {
-
-            return new ValueType().inlineValue(objectMapper.readTree(valueProcessData.getData()));
+            return new InlineValue().inlineValue(objectMapper.readTree(valueProcessData.getData()));
         } catch (JsonParseException e) {
             log.info("Could not read value as JSON node.");
             StringWriter writer = new StringWriter();
@@ -95,12 +116,28 @@ public class ResultSerializer extends AbstractSerializer {
             } catch (IOException e1) {
                 throw e;
             }
-            return new ValueType().inlineValue(writer.toString());
+            return new InlineValue().inlineValue(writer.toString());
         }
     }
 
     private ValueType createReferenceValue(ReferenceProcessData referenceProcessData) {
-        return new ValueType().href(referenceProcessData.getURI().toString());
+        return new ReferenceValue().href(referenceProcessData.getURI().toString());
+    }
+
+    private Object createRawOutput(ValueProcessData valueProcessData) throws IOException {
+        try {
+            return objectMapper.readTree(valueProcessData.getData());
+        } catch (JsonParseException e) {
+            log.info("Could not read value as JSON node.");
+            StringWriter writer = new StringWriter();
+            String encoding = StandardCharsets.UTF_8.name();
+            try {
+                IOUtils.copy(valueProcessData.getData(), writer, encoding);
+            } catch (IOException e1) {
+                throw e;
+            }
+            return writer.toString();
+        }
     }
 
 }

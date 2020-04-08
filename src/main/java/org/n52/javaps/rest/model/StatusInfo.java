@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 by 52 North Initiative for Geospatial Open Source Software GmbH
+ * Copyright (C) 2020 by 52 North Initiative for Geospatial Open Source Software GmbH
  *
  * Contact: Andreas Wytzisk
  * 52 North Initiative for Geospatial Open Source Software GmbH
@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
+import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
@@ -49,6 +50,9 @@ public class StatusInfo {
 
     @JsonProperty("progress")
     private Integer progress;
+
+    @JsonProperty("jobID")
+    private String jobID = null;
 
     @JsonProperty("links")
     @Valid
@@ -121,6 +125,26 @@ public class StatusInfo {
         return this;
     }
 
+    public StatusInfo jobID(String jobID) {
+        this.jobID = jobID;
+        return this;
+    }
+
+    /**
+     * Get jobID
+     * @return jobID
+    **/
+    @ApiModelProperty(required = true, value = "")
+    @NotNull
+
+    public String getJobID() {
+    	return jobID;
+    }
+
+    public void setJobID(String jobID) {
+        this.jobID = jobID;
+    }
+
     /**
      * Get links
      *
@@ -148,17 +172,18 @@ public class StatusInfo {
         return Objects.equals(this.status, statusInfo.status) &&
                Objects.equals(this.message, statusInfo.message) &&
                Objects.equals(this.progress, statusInfo.progress) &&
+               Objects.equals(this.jobID, statusInfo.jobID) &&
                Objects.equals(this.links, statusInfo.links);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(status, message, progress, links);
+        return Objects.hash(status, message, progress, jobID, links);
     }
 
     @Override
     public String toString() {
-        return String.format("StatusInfo{status: %s, message: %s, progress: %s, links: %s}",
-                             status, message, progress, links);
+        return String.format("StatusInfo{status: %s, message: %s, progress: %s, jobID: %s, links: %s}",
+                             status, message, progress, jobID, links);
     }
 }

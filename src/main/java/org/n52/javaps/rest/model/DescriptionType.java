@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 by 52 North Initiative for Geospatial Open Source Software GmbH
+ * Copyright (C) 2020 by 52 North Initiative for Geospatial Open Source Software GmbH
  *
  * Contact: Andreas Wytzisk
  * 52 North Initiative for Geospatial Open Source Software GmbH
@@ -32,6 +32,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * DescriptionType
  */
@@ -54,6 +56,9 @@ public class DescriptionType {
     @JsonProperty("metadata")
     @Valid
     private List<Metadata> metadata;
+
+    @JsonProperty("additionalParameters")
+    private Object additionalParameters = null;
 
     public DescriptionType id(String id) {
         this.id = id;
@@ -163,6 +168,27 @@ public class DescriptionType {
         this.metadata = metadata;
     }
 
+    public DescriptionType additionalParameters(Object additionalParameters) {
+        this.additionalParameters = additionalParameters;
+        return this;
+      }
+
+      /**
+       * Get additionalParameters
+       * @return additionalParameters
+      **/
+      @ApiModelProperty(value = "")
+
+      public Object getAdditionalParameters() {
+        return additionalParameters;
+      }
+
+      public void setAdditionalParameters(Object additionalParameters) {
+        this.additionalParameters = additionalParameters;
+      }
+
+
+
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
@@ -176,17 +202,18 @@ public class DescriptionType {
                Objects.equals(this.title, descriptionType.title) &&
                Objects.equals(this.description, descriptionType.description) &&
                Objects.equals(this.keywords, descriptionType.keywords) &&
-               Objects.equals(this.metadata, descriptionType.metadata);
+               Objects.equals(this.metadata, descriptionType.metadata) &&
+        	   Objects.equals(this.additionalParameters, descriptionType.additionalParameters);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, description, keywords, metadata);
+        return Objects.hash(id, title, description, keywords, metadata, additionalParameters);
     }
 
     @Override
     public String toString() {
-        return String.format("DescriptionType{id: %s, title: %s, description: %s, keywords: %s, metadata: %s}",
-                             id, title, description, keywords, metadata);
+        return String.format("DescriptionType{id: %s, title: %s, description: %s, keywords: %s, metadata: %s, additionalParameters: %s}",
+                             id, title, description, keywords, metadata, additionalParameters);
     }
 }

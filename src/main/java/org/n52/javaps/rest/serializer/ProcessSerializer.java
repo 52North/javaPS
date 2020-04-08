@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 by 52 North Initiative for Geospatial Open Source Software GmbH
+ * Copyright (C) 2020 by 52 North Initiative for Geospatial Open Source Software GmbH
  *
  * Contact: Andreas Wytzisk
  * 52 North Initiative for Geospatial Open Source Software GmbH
@@ -39,7 +39,6 @@ import org.n52.javaps.rest.model.Metadata;
 import org.n52.javaps.rest.model.OutputDescription;
 import org.n52.javaps.rest.model.Process;
 import org.n52.javaps.rest.model.ProcessCollection;
-import org.n52.javaps.rest.model.ProcessOffering;
 import org.n52.javaps.rest.model.ProcessSummary;
 import org.n52.javaps.rest.model.Range;
 import org.n52.javaps.rest.model.Range.RangeClosureEnum;
@@ -95,12 +94,12 @@ public class ProcessSerializer extends AbstractSerializer {
     public ProcessSerializer() {
     }
 
-    public ProcessOffering serializeProcessOffering(org.n52.shetland.ogc.wps.ProcessOffering processOffering) {
+    public Process serializeProcessOffering(org.n52.shetland.ogc.wps.ProcessOffering processOffering) {
         Process process = createProcessSummary(processOffering, Process::new);
         process.setLinks(Collections.singletonList(createExecuteLink(process)));
         process.setInputs(createInputDescriptions(processOffering.getProcessDescription().getInputDescriptions()));
         process.setOutputs(createOutputDescriptions(processOffering.getProcessDescription().getOutputDescriptions()));
-        return new ProcessOffering().process(process);
+        return process;
     }
 
     private <T extends ProcessSummary> T createProcessSummary(org.n52.shetland.ogc.wps.ProcessOffering processOffering,
@@ -371,7 +370,7 @@ public class ProcessSerializer extends AbstractSerializer {
         Link link = new Link();
         link.setHref(getProcessHref(process.getId()));
         link.setType(MediaTypes.APPLICATION_JSON);
-        link.setRel("canonical");
+        link.setRel("process description");
         link.setTitle("Process description");
         return link;
     }

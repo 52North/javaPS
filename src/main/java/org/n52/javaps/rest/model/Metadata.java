@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 by 52 North Initiative for Geospatial Open Source Software GmbH
+ * Copyright (C) 2020 by 52 North Initiative for Geospatial Open Source Software GmbH
  *
  * Contact: Andreas Wytzisk
  * 52 North Initiative for Geospatial Open Source Software GmbH
@@ -31,15 +31,40 @@ import java.util.Objects;
  */
 @Validated
 public class Metadata {
+	@JsonProperty("title")
+	private String title = null;
+	
     @JsonProperty("role")
     private String role;
 
     @JsonProperty("href")
     private String href;
-
+    
+    public Metadata title(String title) {
+    	this.title = title;
+        return this;
+    }
+    
     public Metadata role(String role) {
         this.role = role;
         return this;
+    }
+    
+    public Metadata href(String href) {
+        this.href = href;
+        return this;
+    }
+
+    /**
+     * Get title
+     * @return title
+    **/    
+    public String getTitle() {
+      return title;
+    }
+
+    public void setTitle(String title) {
+      this.title = title;
     }
 
     /**
@@ -53,11 +78,6 @@ public class Metadata {
 
     public void setRole(String role) {
         this.role = role;
-    }
-
-    public Metadata href(String href) {
-        this.href = href;
-        return this;
     }
 
     /**
@@ -82,17 +102,18 @@ public class Metadata {
             return false;
         }
         Metadata metadata = (Metadata) o;
-        return Objects.equals(this.role, metadata.role) &&
+        return Objects.equals(this.title, metadata.title) &&
+               Objects.equals(this.role, metadata.role) &&
                Objects.equals(this.href, metadata.href);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(role, href);
+        return Objects.hash(title, role, href);
     }
 
     @Override
     public String toString() {
-        return String.format("Metadata{role: %s, href: %s}", role, href);
+        return String.format("Metadata{title: %s, role: %s, href: %s}", title, role, href);
     }
 }

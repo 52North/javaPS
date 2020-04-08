@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 by 52 North Initiative for Geospatial Open Source Software GmbH
+ * Copyright (C) 2020 by 52 North Initiative for Geospatial Open Source Software GmbH
  *
  * Contact: Andreas Wytzisk
  * 52 North Initiative for Geospatial Open Source Software GmbH
@@ -24,7 +24,7 @@ package org.n52.javaps.rest;
 import org.n52.javaps.algorithm.ExecutionException;
 import org.n52.javaps.rest.model.Execute;
 import org.n52.javaps.rest.model.ProcessCollection;
-import org.n52.javaps.rest.model.ProcessOffering;
+import org.n52.javaps.rest.model.Process;
 import org.n52.javaps.rest.model.StatusInfo;
 import org.n52.javaps.engine.EngineException;
 import org.n52.javaps.engine.ProcessNotFoundException;
@@ -54,13 +54,13 @@ public interface ProcessesApi {
 
     @GetMapping(value = BASE_URL + "/{processId:.+}", produces = MediaTypes.APPLICATION_JSON)
     @ResponseBody
-    ProcessOffering getProcessDescription(@PathVariable("processId") String id) throws ProcessNotFoundException;
+    Process getProcessDescription(@PathVariable("processId") String id) throws ProcessNotFoundException;
 
     @GetMapping(value = BASE_URL, produces = MediaTypes.APPLICATION_JSON)
     @ResponseBody
     ProcessCollection getProcesses();
 
-    @GetMapping(value = BASE_URL + "/{processId}/jobs/{jobId}/result",
+    @GetMapping(value = BASE_URL + "/{processId}/jobs/{jobId}/results",
                 produces = MediaTypes.APPLICATION_JSON)
     ResponseEntity<?> getResult(@PathVariable("processId") String id, @PathVariable("jobId") String jobId)
             throws EngineException, ExecutionException;

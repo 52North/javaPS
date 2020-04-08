@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 by 52 North Initiative for Geospatial Open Source Software GmbH
+ * Copyright (C) 2020 by 52 North Initiative for Geospatial Open Source Software GmbH
  *
  * Contact: Andreas Wytzisk
  * 52 North Initiative for Geospatial Open Source Software GmbH
@@ -42,6 +42,7 @@ import org.springframework.stereotype.Component;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -66,6 +67,7 @@ public class ExecuteDeserializer {
     }
 
     public List<OutputDefinition> readOutputs(List<Output> outputs) {
+    	if (outputs == null) { return Collections.emptyList(); }
         return outputs.stream().map(output -> {
             OutputDefinition definition = new OutputDefinition();
             definition.setId(createId(output.getId()));
@@ -102,6 +104,7 @@ public class ExecuteDeserializer {
 
     public List<ProcessData> readInputs(List<Input> inputs) throws InputDecodingException {
         List<ProcessData> list = new ArrayList<>();
+        if(inputs == null) { return list; }
         for (Input input : inputs) {
             OwsCode id = createId(input.getId());
             try {

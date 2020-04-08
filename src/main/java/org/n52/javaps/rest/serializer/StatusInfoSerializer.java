@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 by 52 North Initiative for Geospatial Open Source Software GmbH
+ * Copyright (C) 2020 by 52 North Initiative for Geospatial Open Source Software GmbH
  *
  * Contact: Andreas Wytzisk
  * 52 North Initiative for Geospatial Open Source Software GmbH
@@ -40,6 +40,8 @@ public class StatusInfoSerializer extends AbstractSerializer {
 
         StatusInfo serializedStatusInfo = new StatusInfo();
 
+        serializedStatusInfo.setJobID(jobId);
+
         serializedStatusInfo.setStatus(createStatusEnum(statusInfo.getStatus()));
 
         statusInfo.getPercentCompleted().map(Integer::valueOf).ifPresent(serializedStatusInfo::setProgress);
@@ -70,7 +72,7 @@ public class StatusInfoSerializer extends AbstractSerializer {
     private Link createResultLink(String processId, String jobId) {
         Link resultLink = new Link();
         resultLink.setHref(createResultHref(processId, jobId));
-        resultLink.setRel("result");
+        resultLink.setRel("results");
         resultLink.setType(MediaTypes.APPLICATION_JSON);
         resultLink.setTitle("Job result");
         return resultLink;
