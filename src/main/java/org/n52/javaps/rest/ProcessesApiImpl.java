@@ -49,6 +49,9 @@ import org.n52.shetland.ogc.wps.Result;
 import org.n52.shetland.ogc.wps.data.ProcessData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
@@ -133,27 +136,46 @@ public final class ProcessesApiImpl implements ProcessesApi {
     public ResponseEntity<?> execute(Execute body, String id)
             throws EngineException, ExecutionException {
 
-        boolean syncExecute = request.getParameterMap()
-                                     .entrySet().stream()
-                                     .filter(e -> e.getKey().equalsIgnoreCase("sync-execute"))
-                                     .map(Map.Entry::getValue)
-                                     .filter(v -> v.length > 0)
-                                     .map(v -> v[0])
-                                     .findFirst()
-                                     .map(Boolean::parseBoolean)
-                                     .orElse(false);
+    	boolean syncExecute = false;
+        try {
+            syncExecute = body.getMode().equals(Execute.ModeEnum.SYNC);
+        } catch (Exception e) {
+            log.error("Could not resolve execution mode: ", e);
+        }
+
+        ResponseMode responseMode = ResponseMode.DOCUMENT;
+        try {
+            if(body.getResponse().equals(Execute.ResponseEnum.RAW)) {
+                responseMode = ResponseMode.RAW;
+            }
+         } catch (Exception e) {
+             log.error("Could not resolve response mode. Falling back to DOCUMENT", e);
+         }
+
         OwsCode owsCode = new OwsCode(id);
 
         List<ProcessData> inputs = executeDeserializer.readInputs(body.getInputs());
         List<OutputDefinition> outputs = executeDeserializer.readOutputs(body.getOutputs());
 
-        JobId jobId = engine.execute(owsCode, inputs, outputs, ResponseMode.DOCUMENT);
+        JobId jobId = engine.execute(owsCode, inputs, outputs, responseMode);
 
         if (syncExecute) {
             try {
                 Future<Result> future = engine.getResult(jobId);
                 Result result = future.get();
-                return ResponseEntity.ok(resultSerializer.serializeResult(result));
+
+                String mimeType = "application/json";
+
+                if(result.getResponseMode().equals(ResponseMode.RAW)) {
+                    mimeType = result.getOutputs().get(0).asValue().getFormat().getMimeType().orElse("application/json");
+                }
+
+                HttpHeaders responseHeaders = new HttpHeaders();
+                responseHeaders.setContentType(MediaType.parseMediaType(mimeType));
+
+                ResponseEntity<Object> responseEntity = new ResponseEntity<Object>(resultSerializer.serializeResult(result), responseHeaders, HttpStatus.OK);
+
+                return responseEntity;
             } catch (InterruptedException e) {
                 throw new EngineException(e);
             } catch (java.util.concurrent.ExecutionException e) {
@@ -240,7 +262,20 @@ public final class ProcessesApiImpl implements ProcessesApi {
                                              "ResultNotReady", String.format("Job with id %s not ready.", jobId)));
             }
 
-            return ResponseEntity.ok(resultSerializer.serializeResult(futureResult.get()));
+            Result result = futureResult.get();
+
+            String mimeType = "application/json";
+
+            if(result.getResponseMode().equals(ResponseMode.RAW)) {
+                mimeType = result.getOutputs().get(0).asValue().getFormat().getMimeType().orElse("application/json");
+            }
+
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.setContentType(MediaType.parseMediaType(mimeType));
+
+            ResponseEntity<Object> responseEntity = new ResponseEntity<Object>(resultSerializer.serializeResult(result), responseHeaders, HttpStatus.OK);
+
+            return responseEntity;
         } catch (InterruptedException e) {
             throw new EngineException(e);
         } catch (java.util.concurrent.ExecutionException e) {
