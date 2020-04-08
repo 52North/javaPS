@@ -27,7 +27,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>transactional-rest</artifactId>
-    <name>javaPS Transactional RESTful interface</name>
+    <name>52°North javaPS Transactional RESTful interface</name>
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>

@@ -27,7 +27,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>transactional</artifactId>
-    <name>javaPS Transactional Support</name>
+    <name>52°North javaPS Transactional Support</name>
     <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>
