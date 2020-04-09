@@ -33,23 +33,23 @@ import java.util.Objects;
 public class Metadata {
 	@JsonProperty("title")
 	private String title = null;
-	
+
     @JsonProperty("role")
     private String role;
 
     @JsonProperty("href")
     private String href;
-    
+
     public Metadata title(String title) {
     	this.title = title;
         return this;
     }
-    
+
     public Metadata role(String role) {
         this.role = role;
         return this;
     }
-    
+
     public Metadata href(String href) {
         this.href = href;
         return this;
@@ -58,7 +58,7 @@ public class Metadata {
     /**
      * Get title
      * @return title
-    **/    
+    **/
     public String getTitle() {
       return title;
     }

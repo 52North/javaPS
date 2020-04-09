@@ -42,6 +42,7 @@
         <module>webapp</module>
         <module>iceland-stream</module>
         <module>engine</module>
+        <module>rest</module>
     </modules>
 
     <inceptionYear>2016</inceptionYear>
@@ -184,6 +185,11 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>xml</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>rest</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

@@ -45,17 +45,17 @@ public class Process extends ProcessSummary {
     @JsonProperty("links")
     @Valid
     private List<Link> links = null;
-    
+
     public Process inputs(List<InputDescription> inputs) {
         this.inputs = inputs;
         return this;
     }
-    
+
     public Process outputs(List<OutputDescription> outputs) {
         this.outputs = outputs;
         return this;
     }
-    
+
     public Process links(List<Link> links) {
         this.links = links;
         return this;
@@ -74,7 +74,7 @@ public class Process extends ProcessSummary {
     public void setInputs(List<InputDescription> inputs) {
         this.inputs = inputs;
     }
-    
+
     public Process addInputsItem(InputDescription inputsItem) {
         if (this.inputs == null) {
             this.inputs = new ArrayList<>();
@@ -95,8 +95,8 @@ public class Process extends ProcessSummary {
 
     public void setOutputs(List<OutputDescription> outputs) {
         this.outputs = outputs;
-    } 
-    
+    }
+
     public Process addOutputsItem(OutputDescription outputsItem) {
         if (this.outputs == null) {
             this.outputs = new ArrayList<>();
@@ -117,7 +117,7 @@ public class Process extends ProcessSummary {
     public void setLinks(List<Link> links) {
         this.links = links;
     }
-      
+
     public Process addLinksItem(Link linksItem) {
     	if (this.links == null) {
     		this.links = new ArrayList<Link>();
