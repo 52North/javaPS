@@ -125,10 +125,10 @@ public class LiteralDataDomain {
             return false;
         }
         LiteralDataDomain literalDataDomain = (LiteralDataDomain) o;
-        return Objects.equals(this.valueDefinition, literalDataDomain.valueDefinition) &&
-               Objects.equals(this.defaultValue, literalDataDomain.defaultValue) &&
-               Objects.equals(this.dataType, literalDataDomain.dataType) &&
-               Objects.equals(this.uom, literalDataDomain.uom);
+        return Objects.equals(this.valueDefinition, literalDataDomain.valueDefinition)
+                && Objects.equals(this.defaultValue, literalDataDomain.defaultValue)
+                && Objects.equals(this.dataType, literalDataDomain.dataType)
+                && Objects.equals(this.uom, literalDataDomain.uom);
     }
 
     @Override
@@ -139,7 +139,7 @@ public class LiteralDataDomain {
     @Override
     public String toString() {
         return String.format("LiteralDataDomain{valueDefinition: %s, defaultValue: %s, dataType: %s, uom: %s}",
-                             valueDefinition, defaultValue, dataType, uom);
+                valueDefinition, defaultValue, dataType, uom);
     }
 
 }

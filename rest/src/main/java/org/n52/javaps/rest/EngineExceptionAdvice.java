@@ -36,10 +36,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.Objects;
 
-@RestControllerAdvice(assignableTypes = {
-        Api.class, RootApi.class, ConformanceApi.class,
-        ProcessesApi.class, ProcessesApiExtension.class,
-})
+@RestControllerAdvice(assignableTypes = { Api.class, RootApi.class, ConformanceApi.class, ProcessesApi.class,
+        ProcessesApiExtension.class, })
 @RequestMapping(produces = MediaTypes.APPLICATION_JSON)
 public class EngineExceptionAdvice {
     protected static final String INVALID_PARAMETER = "InvalidParameter";
@@ -74,7 +72,7 @@ public class EngineExceptionAdvice {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({InputDecodingException.class})
+    @ExceptionHandler({ InputDecodingException.class })
     public Exception handle(InputDecodingException ex) {
         return getExceptionSerializer().serializeException(INVALID_PARAMETER, ex.getMessage());
     }

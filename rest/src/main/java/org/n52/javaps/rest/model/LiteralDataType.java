@@ -33,7 +33,7 @@ import java.util.Objects;
 public class LiteralDataType {
     @JsonProperty("literalDataDomains")
     @Valid
-    private List<LiteralDataDomain> literalDataDomains = new ArrayList<LiteralDataDomain>();;
+    private List<LiteralDataDomain> literalDataDomains = new ArrayList<LiteralDataDomain>();
 
     public LiteralDataType literalDataDomains(List<LiteralDataDomain> literalDataDomains) {
         this.literalDataDomains = literalDataDomains;

@@ -54,7 +54,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Future;
 import org.slf4j.Logger;
@@ -65,6 +64,9 @@ import static java.util.stream.Collectors.toSet;
 @Controller
 @Configurable
 public final class ProcessesApiImpl implements ProcessesApi {
+
+    private static final Logger log = LoggerFactory.getLogger(ProcessesApiImpl.class);
+
     private Engine engine;
     private String serviceURL;
     private ServletContext context;
@@ -74,8 +76,6 @@ public final class ProcessesApiImpl implements ProcessesApi {
     private ExceptionSerializer exceptionSerializer;
     private ResultSerializer resultSerializer;
     private ExecuteDeserializer executeDeserializer;
-
-    private static final Logger log = LoggerFactory.getLogger(ProcessesApiImpl.class);
 
     @Autowired
     public void setRequest(HttpServletRequest request) {
@@ -128,10 +128,9 @@ public final class ProcessesApiImpl implements ProcessesApi {
     }
 
     @Override
-    public ResponseEntity<?> execute(Execute body, String id)
-            throws EngineException, ExecutionException {
+    public ResponseEntity<?> execute(Execute body, String id) throws EngineException, ExecutionException {
 
-    	boolean syncExecute = false;
+        boolean syncExecute = false;
         try {
             syncExecute = body.getMode().equals(Execute.ModeEnum.SYNC);
         } catch (Exception e) {
@@ -140,12 +139,12 @@ public final class ProcessesApiImpl implements ProcessesApi {
 
         ResponseMode responseMode = ResponseMode.DOCUMENT;
         try {
-            if(body.getResponse().equals(Execute.ResponseEnum.RAW)) {
+            if (body.getResponse().equals(Execute.ResponseEnum.RAW)) {
                 responseMode = ResponseMode.RAW;
             }
-         } catch (Exception e) {
-             log.error("Could not resolve response mode. Falling back to DOCUMENT", e);
-         }
+        } catch (Exception e) {
+            log.error("Could not resolve response mode. Falling back to DOCUMENT", e);
+        }
 
         OwsCode owsCode = new OwsCode(id);
 
@@ -159,16 +158,18 @@ public final class ProcessesApiImpl implements ProcessesApi {
                 Future<Result> future = engine.getResult(jobId);
                 Result result = future.get();
 
-                String mimeType = "application/json";
+                String mimeType = MediaTypes.APPLICATION_JSON;
 
-                if(result.getResponseMode().equals(ResponseMode.RAW)) {
-                    mimeType = result.getOutputs().get(0).asValue().getFormat().getMimeType().orElse("application/json");
+                if (result.getResponseMode().equals(ResponseMode.RAW)) {
+                    mimeType = result.getOutputs().get(0).asValue().getFormat().getMimeType()
+                            .orElse(MediaTypes.APPLICATION_JSON);
                 }
 
                 HttpHeaders responseHeaders = new HttpHeaders();
                 responseHeaders.setContentType(MediaType.parseMediaType(mimeType));
 
-                ResponseEntity<Object> responseEntity = new ResponseEntity<Object>(resultSerializer.serializeResult(result), responseHeaders, HttpStatus.OK);
+                ResponseEntity<Object> responseEntity = new ResponseEntity<Object>(
+                        resultSerializer.serializeResult(result), responseHeaders, HttpStatus.OK);
 
                 return responseEntity;
             } catch (InterruptedException e) {
@@ -211,30 +212,28 @@ public final class ProcessesApiImpl implements ProcessesApi {
     public String getExecuteForm(String id, Model model) {
         OwsCode owsCode = new OwsCode(id);
         context.setAttribute("processId", id);
-        context.setAttribute("jobSet", engine.getJobIdentifiers(owsCode).stream().map(JobId::getValue)
-                                             .collect(toSet()));
+        context.setAttribute("jobSet",
+                engine.getJobIdentifiers(owsCode).stream().map(JobId::getValue).collect(toSet()));
         return "../../../jsp/test_client";
     }
 
     @Override
     public org.n52.javaps.rest.model.Process getProcessDescription(String id) throws ProcessNotFoundException {
         OwsCode owsCode = new OwsCode(id);
-        return engine.getProcessDescription(owsCode)
-                     .map(ProcessOffering::new)
-                     .map(processSerializer::serializeProcessOffering)
-                     .orElseThrow(() -> new ProcessNotFoundException(owsCode));
+        return engine.getProcessDescription(owsCode).map(ProcessOffering::new)
+                .map(processSerializer::serializeProcessOffering)
+                .orElseThrow(() -> new ProcessNotFoundException(owsCode));
     }
 
     @Override
     public ProcessCollection getProcesses() {
         Set<ProcessOffering> offerings = engine.getProcessDescriptions().stream().map(ProcessOffering::new)
-                                               .collect(toSet());
+                .collect(toSet());
         return processSerializer.createProcessCollection(offerings);
     }
 
     @Override
-    public ResponseEntity<?> getResult(String processID, String jobID)
-            throws EngineException, ExecutionException {
+    public ResponseEntity<?> getResult(String processID, String jobID) throws EngineException, ExecutionException {
 
         JobId jobId = new JobId(jobID);
         OwsCode processId = new OwsCode(processID);
@@ -252,23 +251,24 @@ public final class ProcessesApiImpl implements ProcessesApi {
             Future<org.n52.shetland.ogc.wps.Result> futureResult = engine.getResult(jobId);
 
             if (!futureResult.isDone()) {
-                return ResponseEntity.badRequest()
-                                     .body(exceptionSerializer.serializeException(
-                                             "ResultNotReady", String.format("Job with id %s not ready.", jobId)));
+                return ResponseEntity.badRequest().body(exceptionSerializer.serializeException("ResultNotReady",
+                        String.format("Job with id %s not ready.", jobId)));
             }
 
             Result result = futureResult.get();
 
             String mimeType = "application/json";
 
-            if(result.getResponseMode().equals(ResponseMode.RAW)) {
-                mimeType = result.getOutputs().get(0).asValue().getFormat().getMimeType().orElse("application/json");
+            if (result.getResponseMode().equals(ResponseMode.RAW)) {
+                mimeType = result.getOutputs().get(0).asValue().getFormat().getMimeType()
+                        .orElse(MediaTypes.APPLICATION_JSON);
             }
 
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.setContentType(MediaType.parseMediaType(mimeType));
 
-            ResponseEntity<Object> responseEntity = new ResponseEntity<Object>(resultSerializer.serializeResult(result), responseHeaders, HttpStatus.OK);
+            ResponseEntity<Object> responseEntity = new ResponseEntity<Object>(resultSerializer.serializeResult(result),
+                    responseHeaders, HttpStatus.OK);
 
             return responseEntity;
         } catch (InterruptedException e) {

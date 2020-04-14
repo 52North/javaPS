@@ -156,10 +156,9 @@ public class Range {
             return false;
         }
         Range range = (Range) o;
-        return Objects.equals(this.minimumValue, range.minimumValue) &&
-               Objects.equals(this.maximumValue, range.maximumValue) &&
-               Objects.equals(this.spacing, range.spacing) &&
-               Objects.equals(this.rangeClosure, range.rangeClosure);
+        return Objects.equals(this.minimumValue, range.minimumValue)
+                && Objects.equals(this.maximumValue, range.maximumValue) && Objects.equals(this.spacing, range.spacing)
+                && Objects.equals(this.rangeClosure, range.rangeClosure);
     }
 
     @Override
@@ -169,7 +168,7 @@ public class Range {
 
     @Override
     public String toString() {
-        return String.format("Range{minimumValue: %s, maximumValue: %s, spacing: %s, rangeClosure: %s}",
-                             minimumValue, maximumValue, spacing, rangeClosure);
+        return String.format("Range{minimumValue: %s, maximumValue: %s, spacing: %s, rangeClosure: %s}", minimumValue,
+                maximumValue, spacing, rangeClosure);
     }
 }

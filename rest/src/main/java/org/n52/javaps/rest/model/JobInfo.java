@@ -19,7 +19,6 @@ package org.n52.javaps.rest.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
-import org.n52.javaps.rest.model.StatusInfo;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -28,93 +27,77 @@ import javax.validation.constraints.*;
  * JobInfo
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-01-28T10:33:35.029Z[GMT]")
-public class JobInfo   {
-  @JsonProperty("id")
-  private String id = null;
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen",
+        date = "2020-01-28T10:33:35.029Z[GMT]")
+public class JobInfo {
+    @JsonProperty("id")
+    private String id;
 
-  @JsonProperty("infos")
-  private StatusInfo infos = null;
+    @JsonProperty("infos")
+    private StatusInfo infos;
 
-  public JobInfo id(String id) {
-    this.id = id;
-    return this;
-  }
+    public JobInfo id(String id) {
+        this.id = id;
+        return this;
+    }
 
-  /**
-   * Get id
-   * @return id
-  **/
-  @ApiModelProperty(required = true, value = "")
-      @NotNull
+    /**
+     * Get id
+     *
+     * @return id
+     **/
+    @ApiModelProperty(required = true, value = "")
+    @NotNull
 
     public String getId() {
-    return id;
-  }
+        return id;
+    }
 
-  public void setId(String id) {
-    this.id = id;
-  }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-  public JobInfo infos(StatusInfo infos) {
-    this.infos = infos;
-    return this;
-  }
+    public JobInfo infos(StatusInfo infos) {
+        this.infos = infos;
+        return this;
+    }
 
-  /**
-   * Get infos
-   * @return infos
-  **/
-  @ApiModelProperty(value = "")
+    /**
+     * Get infos
+     *
+     * @return infos
+     **/
+    @ApiModelProperty(value = "")
 
     @Valid
     public StatusInfo getInfos() {
-    return infos;
-  }
-
-  public void setInfos(StatusInfo infos) {
-    this.infos = infos;
-  }
-
-
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
+        return infos;
     }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
+
+    public void setInfos(StatusInfo infos) {
+        this.infos = infos;
     }
-    JobInfo jobInfo = (JobInfo) o;
-    return Objects.equals(this.id, jobInfo.id) &&
-        Objects.equals(this.infos, jobInfo.infos);
-  }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(id, infos);
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class JobInfo {\n");
-
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    infos: ").append(toIndentedString(infos)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
+    @Override
+    public boolean equals(java.lang.Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        JobInfo jobInfo = (JobInfo) o;
+        return Objects.equals(this.id, jobInfo.id) && Objects.equals(this.infos, jobInfo.infos);
     }
-    return o.toString().replace("\n", "\n    ");
-  }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, infos);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("JobInfo{id: %s, infos: %s}", id, infos);
+    }
+
 }
-

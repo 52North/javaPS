@@ -60,8 +60,7 @@ public class ComplexData extends DataType {
             return false;
         }
         ComplexData complexData = (ComplexData) o;
-        return Objects.equals(this.value, complexData.value) &&
-               super.equals(o);
+        return Objects.equals(this.value, complexData.value) && super.equals(o);
     }
 
     @Override

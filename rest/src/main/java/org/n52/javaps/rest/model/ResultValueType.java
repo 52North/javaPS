@@ -102,9 +102,9 @@ public class ResultValueType {
             return false;
         }
         ResultValueType resultValueType = (ResultValueType) o;
-        return Objects.equals(this.inlineValue, resultValueType.inlineValue) &&
-               Objects.equals(this.href, resultValueType.href) &&
-               Objects.equals(this.boundingBox, resultValueType.boundingBox);
+        return Objects.equals(this.inlineValue, resultValueType.inlineValue)
+                && Objects.equals(this.href, resultValueType.href)
+                && Objects.equals(this.boundingBox, resultValueType.boundingBox);
     }
 
     @Override
@@ -115,8 +115,7 @@ public class ResultValueType {
     @Override
     public String toString() {
 
-        return String.format("ResultValueType{inlineValue: %s, href: %s, boundingBox: %s}",
-                             inlineValue, href, boundingBox);
+        return String.format("ResultValueType{inlineValue: %s, href: %s, boundingBox: %s}", inlineValue, href,
+                boundingBox);
     }
 }
-

@@ -18,7 +18,6 @@ package org.n52.javaps.rest.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
-import org.n52.javaps.rest.model.JobInfo;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;

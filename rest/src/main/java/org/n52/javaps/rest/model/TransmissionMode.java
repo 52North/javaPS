@@ -23,8 +23,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * Gets or Sets transmissionMode
  */
 public enum TransmissionMode {
-    VALUE("value"),
-    REFERENCE("reference");
+    VALUE("value"), REFERENCE("reference");
 
     private String value;
 

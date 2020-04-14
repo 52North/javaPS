@@ -98,7 +98,7 @@ public class ProcessSerializer extends AbstractSerializer {
     }
 
     private <T extends ProcessSummary> T createProcessSummary(org.n52.shetland.ogc.wps.ProcessOffering processOffering,
-                                                              Supplier<T> factory) {
+            Supplier<T> factory) {
         T processSummary = createDescription(processOffering.getProcessDescription(), factory);
         processOffering.getProcessVersion().ifPresent(processSummary::setVersion);
         processSummary.setJobControlOptions(createJobControlOptions(processOffering));
@@ -115,7 +115,7 @@ public class ProcessSerializer extends AbstractSerializer {
     private List<TransmissionMode> createOutputTransmissionModes(
             org.n52.shetland.ogc.wps.ProcessOffering processOffering) {
         return processOffering.getOutputTransmissionModes().stream().map(this::createDataTransmissionMode)
-                              .collect(toList());
+                .collect(toList());
     }
 
     private TransmissionMode createDataTransmissionMode(DataTransmissionMode outputTransmissionMode) {
@@ -130,8 +130,8 @@ public class ProcessSerializer extends AbstractSerializer {
     }
 
     private List<JobControlOptions> createJobControlOptions(org.n52.shetland.ogc.wps.ProcessOffering processOffering) {
-        return processOffering.getJobControlOptions().stream()
-                              .map(this::createJobControlOption).filter(Objects::nonNull).collect(toList());
+        return processOffering.getJobControlOptions().stream().map(this::createJobControlOption)
+                .filter(Objects::nonNull).collect(toList());
     }
 
     private JobControlOptions createJobControlOption(JobControlOption jobControlOption) {
@@ -148,9 +148,8 @@ public class ProcessSerializer extends AbstractSerializer {
         T descriptionType = factory.get();
         descriptionType.setId(description.getId().getValue());
         descriptionType.setTitle(description.getTitle().getValue());
-        List<String> keywords = description.getKeywords().stream()
-                                           .map(OwsKeyword::getKeyword).map(OwsLanguageString::getValue)
-                                           .collect(toList());
+        List<String> keywords = description.getKeywords().stream().map(OwsKeyword::getKeyword)
+                .map(OwsLanguageString::getValue).collect(toList());
         descriptionType.setKeywords(keywords);
         description.getAbstract().map(OwsLanguageString::getValue).ifPresent(descriptionType::setDescription);
         description.getAbstract().map(OwsLanguageString::getValue).ifPresent(descriptionType::setDescription);
@@ -195,9 +194,10 @@ public class ProcessSerializer extends AbstractSerializer {
     }
 
     private List<LiteralDataDomain> createLiteralDataDomains(LiteralDescription description) {
-        return Stream.concat(Stream.of(description.getDefaultLiteralDataDomain()),
-                             description.getSupportedLiteralDataDomains().stream())
-                     .map(this::createLiteralDataDomain).collect(toList());
+        return Stream
+                .concat(Stream.of(description.getDefaultLiteralDataDomain()),
+                        description.getSupportedLiteralDataDomains().stream())
+                .map(this::createLiteralDataDomain).collect(toList());
     }
 
     private List<InputDescription> createInputDescriptions(Collection<? extends ProcessInputDescription> descriptions) {
@@ -233,12 +233,10 @@ public class ProcessSerializer extends AbstractSerializer {
     }
 
     private List<SupportedCRS> createSupportedCRS(BoundingBoxDescription description) {
-        List<SupportedCRS> serializedSupportedCRS = Stream.concat(Stream.of(description.getDefaultCRS()),
-                                                                  description.getSupportedCRS().stream())
-                                                          .map(OwsCRS::getValue)
-                                                          .map(URI::toString)
-                                                          .map(x -> new SupportedCRS().crs(x))
-                                                          .collect(Collectors.toList());
+        List<SupportedCRS> serializedSupportedCRS = Stream
+                .concat(Stream.of(description.getDefaultCRS()), description.getSupportedCRS().stream())
+                .map(OwsCRS::getValue).map(URI::toString).map(x -> new SupportedCRS().crs(x))
+                .collect(Collectors.toList());
         serializedSupportedCRS.get(0).setDefault(true);
         return serializedSupportedCRS;
     }
@@ -249,7 +247,7 @@ public class ProcessSerializer extends AbstractSerializer {
         literalDataDomain.setDataType(createLiteralDataDomainDataType(defaultLiteralDataDomain));
         literalDataDomain.setValueDefinition(createPossibleValues(defaultLiteralDataDomain.getPossibleValues()));
         defaultLiteralDataDomain.getDefaultValue().map(OwsValue::getValue)
-                                .ifPresent(literalDataDomain::setDefaultValue);
+                .ifPresent(literalDataDomain::setDefaultValue);
         return literalDataDomain;
     }
 
@@ -332,10 +330,9 @@ public class ProcessSerializer extends AbstractSerializer {
     }
 
     private List<FormatDescription> createFormats(ComplexDescription description) {
-        List<FormatDescription> formats = Stream.concat(Stream.of(description.getDefaultFormat()),
-                                                        description.getSupportedFormats().stream())
-                                                .map(format -> createFormat(format, description.getMaximumMegabytes()))
-                                                .collect(toList());
+        List<FormatDescription> formats = Stream
+                .concat(Stream.of(description.getDefaultFormat()), description.getSupportedFormats().stream())
+                .map(format -> createFormat(format, description.getMaximumMegabytes())).collect(toList());
         formats.get(0).setDefault(true);
         return formats;
     }

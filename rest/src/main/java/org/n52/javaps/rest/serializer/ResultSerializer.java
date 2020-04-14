@@ -44,26 +44,26 @@ public class ResultSerializer extends AbstractSerializer {
 
     private static final Logger log = LoggerFactory.getLogger(ResultSerializer.class);
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private boolean isRaw = false;
+    private boolean isRaw;
 
     public Object serializeResult(org.n52.shetland.ogc.wps.Result result) throws OutputEncodingException {
         isRaw = result.getResponseMode().equals(ResponseMode.RAW);
-        if(isRaw) {
-        	if (result.getOutputs().size() > 1) {
-                //TODO throw exception
-            	// io.swagger.model.Exception exception = new io.swagger.model.Exception();
-            	// exception.setCode(code);
-            	// return exception;
-        	}
-        	for (ProcessData processData : result.getOutputs()) {
-        		if (processData.isValue()) {
-        			try {
-        				createRawOutput(processData.asValue());
-        			} catch (IOException | IllegalArgumentException e) {
-        				throw new OutputEncodingException(processData.getId(), e);
-        			}
-        		}
-        	}
+        if (isRaw) {
+//           if (result.getOutputs().size() > 1) {
+//               TODO throw exception
+//               io.swagger.model.Exception exception = new io.swagger.model.Exception();
+//               exception.setCode(code);
+//               return exception;
+//           }
+            for (ProcessData processData : result.getOutputs()) {
+                if (processData.isValue()) {
+                    try {
+                        createRawOutput(processData.asValue());
+                    } catch (IOException | IllegalArgumentException e) {
+                        throw new OutputEncodingException(processData.getId(), e);
+                    }
+                }
+            }
         }
         return new Result().outputs(getOutputInfos(result.getOutputs()));
     }
@@ -100,19 +100,8 @@ public class ResultSerializer extends AbstractSerializer {
     }
 
     private ValueType createInlineValue(ValueProcessData valueProcessData) throws IOException {
-        try {
-            return new InlineValue().inlineValue(objectMapper.readTree(valueProcessData.getData()));
-        } catch (JsonParseException e) {
-            log.info("Could not read value as JSON node.");
-            StringWriter writer = new StringWriter();
-            String encoding = StandardCharsets.UTF_8.name();
-            try {
-                IOUtils.copy(valueProcessData.getData(), writer, encoding);
-            } catch (IOException e1) {
-                throw e;
-            }
-            return new InlineValue().inlineValue(writer.toString());
-        }
+        return new InlineValue().inlineValue(createRawOutput(valueProcessData));
+
     }
 
     private ValueType createReferenceValue(ReferenceProcessData referenceProcessData) {

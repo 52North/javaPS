@@ -49,9 +49,8 @@ public class JSONBoundingBoxInputOutputHandlerTest {
     private static final double X_MAX = 52.0;
     private static final double Y_MAX = 7.2;
     private static final URI EPSG_4326 = URI.create("EPSG:4326");
-    private static final String BBOX_JSON = String.format(Locale.ROOT,
-                                                          "{\"bbox\":[%s,%s,%s,%s],\"crs\":\"%s\"}",
-                                                          X_MIN, Y_MIN, X_MAX, Y_MAX, EPSG_4326);
+    private static final String BBOX_JSON = String.format(Locale.ROOT, "{\"bbox\":[%s,%s,%s,%s],\"crs\":\"%s\"}", X_MIN,
+            Y_MIN, X_MAX, Y_MAX, EPSG_4326);
     private static final double DELTA = 0.0d;
     private static final Format FORMAT = new Format("application/json");
     private JSONBoundingBoxInputOutputHandler handler;
@@ -63,11 +62,12 @@ public class JSONBoundingBoxInputOutputHandlerTest {
 
     @Test
     public void testJSONBBoxSerializer() throws IOException {
-        OwsBoundingBox bbox = new OwsBoundingBox(new double[]{X_MIN, Y_MIN}, new double[]{X_MAX, Y_MAX}, EPSG_4326);
+        OwsBoundingBox bbox = new OwsBoundingBox(new double[] { X_MIN, Y_MIN }, new double[] { X_MAX, Y_MAX },
+                EPSG_4326);
         BoundingBoxData data = new BoundingBoxData(bbox);
 
         try (InputStream in = handler.generate(null, data, FORMAT);
-             InputStreamReader reader = new InputStreamReader(in, StandardCharsets.UTF_8)) {
+                InputStreamReader reader = new InputStreamReader(in, StandardCharsets.UTF_8)) {
             assertThat(CharStreams.toString(reader), is(equalTo(BBOX_JSON)));
         }
 
@@ -80,10 +80,10 @@ public class JSONBoundingBoxInputOutputHandlerTest {
             assertThat(data, is(instanceOf(BoundingBoxData.class)));
             OwsBoundingBox bbox = ((BoundingBoxData) data).getPayload();
             assertThat(bbox.getCRS().orElse(null), is(equalTo(EPSG_4326)));
-            assertThat(Doubles.asList(bbox.getLowerCorner()), contains(is(closeTo(X_MIN, DELTA)),
-                                                                       is(closeTo(Y_MIN, DELTA))));
-            assertThat(Doubles.asList(bbox.getUpperCorner()), contains(is(closeTo(X_MAX, DELTA)),
-                                                                       is(closeTo(Y_MAX, DELTA))));
+            assertThat(Doubles.asList(bbox.getLowerCorner()),
+                    contains(is(closeTo(X_MIN, DELTA)), is(closeTo(Y_MIN, DELTA))));
+            assertThat(Doubles.asList(bbox.getUpperCorner()),
+                    contains(is(closeTo(X_MAX, DELTA)), is(closeTo(Y_MAX, DELTA))));
         }
 
     }

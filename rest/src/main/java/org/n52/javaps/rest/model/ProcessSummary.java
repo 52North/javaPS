@@ -176,12 +176,10 @@ public class ProcessSummary extends DescriptionType {
             return false;
         }
         ProcessSummary processSummary = (ProcessSummary) o;
-        return Objects.equals(this.id, processSummary.id) &&
-               Objects.equals(this.version, processSummary.version) &&
-               Objects.equals(this.jobControlOptions, processSummary.jobControlOptions) &&
-               Objects.equals(this.outputTransmission, processSummary.outputTransmission) &&
-               Objects.equals(this.links, processSummary.links) &&
-               super.equals(o);
+        return Objects.equals(this.id, processSummary.id) && Objects.equals(this.version, processSummary.version)
+                && Objects.equals(this.jobControlOptions, processSummary.jobControlOptions)
+                && Objects.equals(this.outputTransmission, processSummary.outputTransmission)
+                && Objects.equals(this.links, processSummary.links) && super.equals(o);
     }
 
     @Override
@@ -191,8 +189,9 @@ public class ProcessSummary extends DescriptionType {
 
     @Override
     public String toString() {
-        return String.format("ProcessSummary{%s, id: %s, version: %s, "
-                             + "jobControlOptions: %s, outputTransmission: %s, links: %s}",
-                             super.toString(), id, version, jobControlOptions, outputTransmission, links);
+        return String.format(
+                "ProcessSummary{%s, id: %s, version: %s, "
+                        + "jobControlOptions: %s, outputTransmission: %s, links: %s}",
+                super.toString(), id, version, jobControlOptions, outputTransmission, links);
     }
 }

@@ -92,8 +92,7 @@ public class BoundingBoxData {
             return false;
         }
         BoundingBoxData boundingBoxData = (BoundingBoxData) o;
-        return Objects.equals(this.crs, boundingBoxData.crs) &&
-               Objects.equals(this.bbox, boundingBoxData.bbox);
+        return Objects.equals(this.crs, boundingBoxData.crs) && Objects.equals(this.bbox, boundingBoxData.bbox);
     }
 
     @Override

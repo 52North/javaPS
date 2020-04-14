@@ -82,8 +82,7 @@ public class OutputInfo {
             return false;
         }
         OutputInfo outputInfo = (OutputInfo) o;
-        return Objects.equals(this.id, outputInfo.id) &&
-                Objects.equals(this.value, outputInfo.value);
+        return Objects.equals(this.id, outputInfo.id) && Objects.equals(this.value, outputInfo.value);
     }
 
     @Override

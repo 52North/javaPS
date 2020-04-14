@@ -25,8 +25,6 @@ public interface ProcessesApiExtension {
     String BASE_URL = ProcessesApi.BASE_URL;
 
     @GetMapping(path = BASE_URL + "/{processId}/jobs/{jobId}/results/{outputId}")
-    ResponseEntity<?> getOutput(@PathVariable("processId") String processID,
-                                @PathVariable("jobId") String jobID,
-                                @PathVariable("outputId") String outputId)
-            throws EngineException;
+    ResponseEntity<?> getOutput(@PathVariable("processId") String processID, @PathVariable("jobId") String jobID,
+            @PathVariable("outputId") String outputId) throws EngineException;
 }

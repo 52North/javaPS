@@ -27,10 +27,8 @@ public class ConformanceApiImpl implements ConformanceApi {
 
     @Override
     public ReqClasses getConformanceClasses() {
-        List<String> conformsTo = Arrays.asList(
-                "http://www.opengis.net/spec/wps-rest/req/core",
-                "http://www.opengis.net/spec/wps-rest/req/oas30",
-                "http://www.opengis.net/spec/wps-rest/req/html");
+        List<String> conformsTo = Arrays.asList("http://www.opengis.net/spec/wps-rest/req/core",
+                "http://www.opengis.net/spec/wps-rest/req/oas30", "http://www.opengis.net/spec/wps-rest/req/html");
         return new ReqClasses().conformsTo(conformsTo);
     }
 

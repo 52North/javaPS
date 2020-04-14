@@ -79,8 +79,8 @@ public class LiteralDataDomainValueDefinition {
             return false;
         }
         LiteralDataDomainValueDefinition literalDataDomainValueDefinition = (LiteralDataDomainValueDefinition) o;
-        return Objects.equals(this.defaultValue, literalDataDomainValueDefinition.defaultValue) &&
-               Objects.equals(this.allowedValues, literalDataDomainValueDefinition.allowedValues);
+        return Objects.equals(this.defaultValue, literalDataDomainValueDefinition.defaultValue)
+                && Objects.equals(this.allowedValues, literalDataDomainValueDefinition.allowedValues);
     }
 
     @Override
@@ -90,9 +90,8 @@ public class LiteralDataDomainValueDefinition {
 
     @Override
     public String toString() {
-        return String.format("LiteralDataDomainValueDefinition{defaultValue: %s, allowedValues: %s}",
-                             defaultValue, allowedValues);
+        return String.format("LiteralDataDomainValueDefinition{defaultValue: %s, allowedValues: %s}", defaultValue,
+                allowedValues);
     }
 
 }
-

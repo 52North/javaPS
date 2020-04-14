@@ -53,7 +53,7 @@ public class DescriptionType {
     private List<Metadata> metadata;
 
     @JsonProperty("additionalParameters")
-    private Object additionalParameters = null;
+    private Object additionalParameters;
 
     public DescriptionType id(String id) {
         this.id = id;
@@ -166,23 +166,22 @@ public class DescriptionType {
     public DescriptionType additionalParameters(Object additionalParameters) {
         this.additionalParameters = additionalParameters;
         return this;
-      }
+    }
 
-      /**
-       * Get additionalParameters
-       * @return additionalParameters
-      **/
-      @ApiModelProperty(value = "")
+    /**
+     * Get additionalParameters
+     *
+     * @return additionalParameters
+     **/
+    @ApiModelProperty(value = "")
 
-      public Object getAdditionalParameters() {
+    public Object getAdditionalParameters() {
         return additionalParameters;
-      }
+    }
 
-      public void setAdditionalParameters(Object additionalParameters) {
+    public void setAdditionalParameters(Object additionalParameters) {
         this.additionalParameters = additionalParameters;
-      }
-
-
+    }
 
     @Override
     public boolean equals(java.lang.Object o) {
@@ -193,12 +192,11 @@ public class DescriptionType {
             return false;
         }
         DescriptionType descriptionType = (DescriptionType) o;
-        return Objects.equals(this.id, descriptionType.id) &&
-               Objects.equals(this.title, descriptionType.title) &&
-               Objects.equals(this.description, descriptionType.description) &&
-               Objects.equals(this.keywords, descriptionType.keywords) &&
-               Objects.equals(this.metadata, descriptionType.metadata) &&
-        	   Objects.equals(this.additionalParameters, descriptionType.additionalParameters);
+        return Objects.equals(this.id, descriptionType.id) && Objects.equals(this.title, descriptionType.title)
+                && Objects.equals(this.description, descriptionType.description)
+                && Objects.equals(this.keywords, descriptionType.keywords)
+                && Objects.equals(this.metadata, descriptionType.metadata)
+                && Objects.equals(this.additionalParameters, descriptionType.additionalParameters);
     }
 
     @Override
@@ -208,7 +206,8 @@ public class DescriptionType {
 
     @Override
     public String toString() {
-        return String.format("DescriptionType{id: %s, title: %s, description: %s, keywords: %s, metadata: %s, additionalParameters: %s}",
-                             id, title, description, keywords, metadata, additionalParameters);
+        return String.format(
+           "DescriptionType{id: %s, title: %s, description: %s, keywords: %s, metadata: %s, additionalParameters: %s}",
+           id, title, description, keywords, metadata, additionalParameters);
     }
 }

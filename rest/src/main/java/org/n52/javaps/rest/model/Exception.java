@@ -81,8 +81,7 @@ public class Exception {
             return false;
         }
         Exception exception = (Exception) o;
-        return Objects.equals(this.code, exception.code) &&
-               Objects.equals(this.description, exception.description);
+        return Objects.equals(this.code, exception.code) && Objects.equals(this.description, exception.description);
     }
 
     @Override

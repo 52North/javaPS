@@ -36,8 +36,8 @@ import javax.validation.Valid;
 public interface ProcessesApi {
     String BASE_URL = RootApi.BASE_URL + "/processes";
 
-    @PostMapping(value = BASE_URL + "/{processId}/jobs", produces = MediaTypes.APPLICATION_JSON,
-                 consumes = MediaTypes.APPLICATION_JSON)
+    @PostMapping(value = BASE_URL
+            + "/{processId}/jobs", produces = MediaTypes.APPLICATION_JSON, consumes = MediaTypes.APPLICATION_JSON)
     ResponseEntity<?> execute(@Valid @RequestBody Execute body, @PathVariable("processId") String processId)
             throws EngineException, ExecutionException;
 
@@ -55,13 +55,11 @@ public interface ProcessesApi {
     @ResponseBody
     ProcessCollection getProcesses();
 
-    @GetMapping(value = BASE_URL + "/{processId}/jobs/{jobId}/results",
-                produces = MediaTypes.APPLICATION_JSON)
+    @GetMapping(value = BASE_URL + "/{processId}/jobs/{jobId}/results", produces = MediaTypes.APPLICATION_JSON)
     ResponseEntity<?> getResult(@PathVariable("processId") String id, @PathVariable("jobId") String jobId)
             throws EngineException, ExecutionException;
 
-    @GetMapping(value = BASE_URL + "/{processId}/jobs/{jobId}",
-                produces = MediaTypes.APPLICATION_JSON)
+    @GetMapping(value = BASE_URL + "/{processId}/jobs/{jobId}", produces = MediaTypes.APPLICATION_JSON)
     @ResponseBody
     StatusInfo getStatus(@PathVariable("processId") String processId, @PathVariable("jobId") String jobId)
             throws EngineException;

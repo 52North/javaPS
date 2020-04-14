@@ -56,8 +56,7 @@ public class OutputDescription extends DataDescriptionType {
             return false;
         }
         OutputDescription outputDescription = (OutputDescription) o;
-        return Objects.equals(this.output, outputDescription.output) &&
-               super.equals(o);
+        return Objects.equals(this.output, outputDescription.output) && super.equals(o);
     }
 
     @Override

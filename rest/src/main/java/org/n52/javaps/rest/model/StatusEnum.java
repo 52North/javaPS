@@ -23,10 +23,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * Gets or Sets status
  */
 public enum StatusEnum {
-    ACCEPTED("accepted"),
-    RUNNING("running"),
-    SUCCESSFUL("successful"),
-    FAILED("failed");
+    ACCEPTED("accepted"), RUNNING("running"), SUCCESSFUL("successful"), FAILED("failed");
 
     private String value;
 

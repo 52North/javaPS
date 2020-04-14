@@ -54,8 +54,7 @@ public class JSONBoundingBoxInputOutputHandler implements InputHandler, OutputHa
     private final JsonNodeFactory jsonNodeFactory;
 
     @Autowired
-    public JSONBoundingBoxInputOutputHandler(ObjectMapper objectMapper,
-                                             JsonNodeFactory jsonNodeFactory) {
+    public JSONBoundingBoxInputOutputHandler(ObjectMapper objectMapper, JsonNodeFactory jsonNodeFactory) {
         this.objectMapper = Objects.requireNonNull(objectMapper);
         this.jsonNodeFactory = Objects.requireNonNull(jsonNodeFactory);
     }
@@ -91,14 +90,10 @@ public class JSONBoundingBoxInputOutputHandler implements InputHandler, OutputHa
             throws IOException, DecodingException {
         JsonNode root = new ObjectMapper().readTree(input);
         JsonNode node = root.get(BBOX_KEY);
-        double[] lower = IntStream.range(0, node.size() / 2)
-                                  .mapToObj(node::get)
-                                  .mapToDouble(JsonNode::asDouble)
-                                  .toArray();
-        double[] upper = IntStream.range(node.size() / 2, node.size())
-                                  .mapToObj(node::get)
-                                  .mapToDouble(JsonNode::asDouble)
-                                  .toArray();
+        double[] lower = IntStream.range(0, node.size() / 2).mapToObj(node::get).mapToDouble(JsonNode::asDouble)
+                .toArray();
+        double[] upper = IntStream.range(node.size() / 2, node.size()).mapToObj(node::get)
+                .mapToDouble(JsonNode::asDouble).toArray();
         return new BoundingBoxData(new OwsBoundingBox(lower, upper, parseCRS(root)));
     }
 

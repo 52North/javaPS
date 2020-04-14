@@ -69,9 +69,8 @@ public final class ProcessesApiExtensionImpl implements ProcessesApiExtension {
             if (!future.isDone()) {
                 throw new OutputNotFoundException();
             }
-            ProcessData output = future.get().getOutputs().stream()
-                                       .filter(x -> x.getId().equals(outputId)).findFirst()
-                                       .orElseThrow(OutputNotFoundException::new);
+            ProcessData output = future.get().getOutputs().stream().filter(x -> x.getId().equals(outputId)).findFirst()
+                    .orElseThrow(OutputNotFoundException::new);
             return getResponseEntity(output);
         } catch (InterruptedException | ExecutionException e) {
             throw new OutputNotFoundException(e);
@@ -88,7 +87,7 @@ public final class ProcessesApiExtensionImpl implements ProcessesApiExtension {
             byte[] value;
 
             try (InputStream data = valueProcessData.getData();
-                 ByteArrayOutputStream out = new ByteArrayOutputStream();) {
+                    ByteArrayOutputStream out = new ByteArrayOutputStream();) {
                 ByteStreams.copy(data, out);
                 value = out.toByteArray();
             } catch (IOException ex) {

@@ -26,8 +26,8 @@ import java.util.Objects;
  */
 @Validated
 public class Metadata {
-	@JsonProperty("title")
-	private String title = null;
+    @JsonProperty("title")
+    private String title;
 
     @JsonProperty("role")
     private String role;
@@ -36,7 +36,7 @@ public class Metadata {
     private String href;
 
     public Metadata title(String title) {
-    	this.title = title;
+        this.title = title;
         return this;
     }
 
@@ -52,14 +52,15 @@ public class Metadata {
 
     /**
      * Get title
+     *
      * @return title
-    **/
+     **/
     public String getTitle() {
-      return title;
+        return title;
     }
 
     public void setTitle(String title) {
-      this.title = title;
+        this.title = title;
     }
 
     /**
@@ -97,9 +98,8 @@ public class Metadata {
             return false;
         }
         Metadata metadata = (Metadata) o;
-        return Objects.equals(this.title, metadata.title) &&
-               Objects.equals(this.role, metadata.role) &&
-               Objects.equals(this.href, metadata.href);
+        return Objects.equals(this.title, metadata.title) && Objects.equals(this.role, metadata.role)
+                && Objects.equals(this.href, metadata.href);
     }
 
     @Override

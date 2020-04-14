@@ -81,9 +81,8 @@ public class FormatDescription extends Format {
             return false;
         }
         FormatDescription formatDescription = (FormatDescription) o;
-        return Objects.equals(this.maximumMegabytes, formatDescription.maximumMegabytes) &&
-               Objects.equals(this._default, formatDescription._default) &&
-               super.equals(o);
+        return Objects.equals(this.maximumMegabytes, formatDescription.maximumMegabytes)
+                && Objects.equals(this._default, formatDescription._default) && super.equals(o);
     }
 
     @Override
@@ -93,8 +92,8 @@ public class FormatDescription extends Format {
 
     @Override
     public String toString() {
-        return String.format("FormatDescription {%s, maximumMegabytes: %s, default: %s}",
-                             super.toString(), maximumMegabytes, _default);
+        return String.format("FormatDescription {%s, maximumMegabytes: %s, default: %s}", super.toString(),
+                maximumMegabytes, _default);
     }
 
 }

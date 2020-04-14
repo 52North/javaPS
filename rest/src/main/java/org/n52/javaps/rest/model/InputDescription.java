@@ -99,10 +99,9 @@ public class InputDescription extends DataDescriptionType {
             return false;
         }
         InputDescription inputDescription = (InputDescription) o;
-        return Objects.equals(this.input, inputDescription.input) &&
-               Objects.equals(this.minOccurs, inputDescription.minOccurs) &&
-               Objects.equals(this.maxOccurs, inputDescription.maxOccurs) &&
-               super.equals(o);
+        return Objects.equals(this.input, inputDescription.input)
+                && Objects.equals(this.minOccurs, inputDescription.minOccurs)
+                && Objects.equals(this.maxOccurs, inputDescription.maxOccurs) && super.equals(o);
     }
 
     @Override
@@ -112,7 +111,7 @@ public class InputDescription extends DataDescriptionType {
 
     @Override
     public String toString() {
-        return String.format("InputDescription{%s, input: %s, minOccurs: %s, maxOccurs: %s}",
-                             super.toString(), input, minOccurs, maxOccurs);
+        return String.format("InputDescription{%s, input: %s, minOccurs: %s, maxOccurs: %s}", super.toString(), input,
+                minOccurs, maxOccurs);
     }
 }

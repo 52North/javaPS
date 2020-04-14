@@ -82,9 +82,8 @@ public class Output extends DataType {
             return false;
         }
         Output output = (Output) o;
-        return Objects.equals(this.id, output.id) &&
-               Objects.equals(this.transmissionMode, output.transmissionMode) &&
-               super.equals(o);
+        return Objects.equals(this.id, output.id) && Objects.equals(this.transmissionMode, output.transmissionMode)
+                && super.equals(o);
     }
 
     @Override

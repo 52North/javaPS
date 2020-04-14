@@ -18,7 +18,6 @@ package org.n52.javaps.rest.model;
 
 import org.springframework.validation.annotation.Validated;
 
-
 /**
  * ValueType
  */

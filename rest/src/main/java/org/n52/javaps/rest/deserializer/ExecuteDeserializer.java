@@ -62,7 +62,9 @@ public class ExecuteDeserializer {
     }
 
     public List<OutputDefinition> readOutputs(List<Output> outputs) {
-    	if (outputs == null) { return Collections.emptyList(); }
+        if (outputs == null) {
+            return Collections.emptyList();
+        }
         return outputs.stream().map(output -> {
             OutputDefinition definition = new OutputDefinition();
             definition.setId(createId(output.getId()));
@@ -88,9 +90,8 @@ public class ExecuteDeserializer {
     }
 
     private Format getFormat(JsonNode object) {
-        return new Format(object.path(MIME_TYPE_KEY).asText(),
-                          object.path(ENCODING_KEY).asText(),
-                          object.path(SCHEMA_KEY).asText());
+        return new Format(object.path(MIME_TYPE_KEY).asText(), object.path(ENCODING_KEY).asText(),
+                object.path(SCHEMA_KEY).asText());
     }
 
     private OwsCode createId(String id) {
@@ -99,7 +100,9 @@ public class ExecuteDeserializer {
 
     public List<ProcessData> readInputs(List<Input> inputs) throws InputDecodingException {
         List<ProcessData> list = new ArrayList<>();
-        if(inputs == null) { return list; }
+        if (inputs == null) {
+            return list;
+        }
         for (Input input : inputs) {
             OwsCode id = createId(input.getId());
             try {
@@ -145,7 +148,7 @@ public class ExecuteDeserializer {
 
         } else if (map.path(BBOX_KEY).isObject()) {
             return new StringValueProcessData(id, new Format("application/json"),
-                                              new ObjectMapper().writeValueAsString(map));
+                    new ObjectMapper().writeValueAsString(map));
         }
 
         return null;

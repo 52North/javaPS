@@ -43,10 +43,10 @@ public class Execute {
     private List<Output> outputs = new ArrayList<>();
 
     @JsonProperty("mode")
-    private ModeEnum mode = null;
+    private ModeEnum mode;
 
     @JsonProperty("response")
-    private ResponseEnum response = null;
+    private ResponseEnum response;
 
     public Execute inputs(List<Input> inputs) {
         this.inputs = inputs;
@@ -62,7 +62,7 @@ public class Execute {
     }
 
     public Execute mode(ModeEnum mode) {
-    	this.mode = mode;
+        this.mode = mode;
         return this;
     }
 
@@ -114,91 +114,90 @@ public class Execute {
      * Gets or Sets mode
      */
     public enum ModeEnum {
-      SYNC("sync"),
-      ASYNC("async"),
-      AUTO("auto");
+        SYNC("sync"), ASYNC("async"), AUTO("auto");
 
-      private String value;
+        private String value;
 
-      ModeEnum(String value) {
-        this.value = value;
-      }
-
-      @Override
-      @JsonValue
-      public String toString() {
-        return String.valueOf(value);
-      }
-
-      @JsonCreator
-      public static ModeEnum fromValue(String text) {
-        for (ModeEnum b : ModeEnum.values()) {
-          if (String.valueOf(b.value).equals(text)) {
-            return b;
-          }
+        ModeEnum(String value) {
+            this.value = value;
         }
-        return null;
-      }
+
+        @Override
+        @JsonValue
+        public String toString() {
+            return String.valueOf(value);
+        }
+
+        @JsonCreator
+        public static ModeEnum fromValue(String text) {
+            for (ModeEnum b : ModeEnum.values()) {
+                if (String.valueOf(b.value).equals(text)) {
+                    return b;
+                }
+            }
+            return null;
+        }
     }
 
     /**
      * Gets or Sets response
      */
     public enum ResponseEnum {
-      RAW("raw"),
-      DOCUMENT("document");
+        RAW("raw"), DOCUMENT("document");
 
-      private String value;
+        private String value;
 
-      ResponseEnum(String value) {
-        this.value = value;
-      }
-
-      @Override
-      @JsonValue
-      public String toString() {
-        return String.valueOf(value);
-      }
-
-      @JsonCreator
-      public static ResponseEnum fromValue(String text) {
-        for (ResponseEnum b : ResponseEnum.values()) {
-          if (String.valueOf(b.value).equals(text)) {
-            return b;
-          }
+        ResponseEnum(String value) {
+            this.value = value;
         }
-        return null;
-      }
+
+        @Override
+        @JsonValue
+        public String toString() {
+            return String.valueOf(value);
+        }
+
+        @JsonCreator
+        public static ResponseEnum fromValue(String text) {
+            for (ResponseEnum b : ResponseEnum.values()) {
+                if (String.valueOf(b.value).equals(text)) {
+                    return b;
+                }
+            }
+            return null;
+        }
     }
 
     /**
      * Get mode
+     *
      * @return mode
-    **/
+     **/
     @ApiModelProperty(required = true, value = "")
     @NotNull
 
     public ModeEnum getMode() {
-      return mode;
+        return mode;
     }
 
     public void setMode(ModeEnum mode) {
-      this.mode = mode;
+        this.mode = mode;
     }
 
     /**
      * Get response
+     *
      * @return response
-    **/
+     **/
     @ApiModelProperty(required = true, value = "")
     @NotNull
 
     public ResponseEnum getResponse() {
-      return response;
+        return response;
     }
 
     public void setResponse(ResponseEnum response) {
-      this.response = response;
+        this.response = response;
     }
 
     @Override
@@ -210,10 +209,8 @@ public class Execute {
             return false;
         }
         Execute execute = (Execute) o;
-        return Objects.equals(this.inputs, execute.inputs) &&
-               Objects.equals(this.outputs, execute.outputs) &&
-               Objects.equals(this.mode, execute.mode) &&
-               Objects.equals(this.response, execute.response);
+        return Objects.equals(this.inputs, execute.inputs) && Objects.equals(this.outputs, execute.outputs)
+                && Objects.equals(this.mode, execute.mode) && Objects.equals(this.response, execute.response);
     }
 
     @Override
@@ -223,6 +220,7 @@ public class Execute {
 
     @Override
     public String toString() {
-        return String.format("Execute{inputs: %s, outputs: %s, mode: %s, response: %s}", inputs, outputs, mode, response);
+        return String.format("Execute{inputs: %s, outputs: %s, mode: %s, response: %s}", inputs, outputs, mode,
+                response);
     }
 }

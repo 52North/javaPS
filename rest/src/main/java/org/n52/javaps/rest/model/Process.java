@@ -39,7 +39,7 @@ public class Process extends ProcessSummary {
 
     @JsonProperty("links")
     @Valid
-    private List<Link> links = null;
+    private List<Link> links;
 
     public Process inputs(List<InputDescription> inputs) {
         this.inputs = inputs;
@@ -102,11 +102,12 @@ public class Process extends ProcessSummary {
 
     /**
      * Get links
+     *
      * @return links
-    **/
+     **/
     @Valid
     public List<Link> getLinks() {
-    	return links;
+        return links;
     }
 
     public void setLinks(List<Link> links) {
@@ -114,8 +115,8 @@ public class Process extends ProcessSummary {
     }
 
     public Process addLinksItem(Link linksItem) {
-    	if (this.links == null) {
-    		this.links = new ArrayList<Link>();
+        if (this.links == null) {
+            this.links = new ArrayList<Link>();
         }
         this.links.add(linksItem);
         return this;
@@ -130,10 +131,8 @@ public class Process extends ProcessSummary {
             return false;
         }
         Process process = (Process) o;
-        return Objects.equals(this.inputs, process.inputs) &&
-               Objects.equals(this.outputs, process.outputs) &&
-               Objects.equals(this.links, process.links) &&
-               super.equals(o);
+        return Objects.equals(this.inputs, process.inputs) && Objects.equals(this.outputs, process.outputs)
+                && Objects.equals(this.links, process.links) && super.equals(o);
     }
 
     @Override
@@ -143,6 +142,7 @@ public class Process extends ProcessSummary {
 
     @Override
     public String toString() {
-        return String.format("Process{%s, inputs: %s, outputs: %s, links: %s}", super.toString(), inputs, outputs, links);
+        return String.format("Process{%s, inputs: %s, outputs: %s, links: %s}", super.toString(), inputs, outputs,
+                links);
     }
 }

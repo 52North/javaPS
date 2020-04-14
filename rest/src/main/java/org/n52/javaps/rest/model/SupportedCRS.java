@@ -77,8 +77,7 @@ public class SupportedCRS {
             return false;
         }
         SupportedCRS supportedCRS = (SupportedCRS) o;
-        return Objects.equals(this.crs, supportedCRS.crs) &&
-               Objects.equals(this._default, supportedCRS._default);
+        return Objects.equals(this.crs, supportedCRS.crs) && Objects.equals(this._default, supportedCRS._default);
     }
 
     @Override

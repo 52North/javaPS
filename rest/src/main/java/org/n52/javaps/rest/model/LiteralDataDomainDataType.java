@@ -80,8 +80,8 @@ public class LiteralDataDomainDataType {
             return false;
         }
         LiteralDataDomainDataType literalDataDomainDataType = (LiteralDataDomainDataType) o;
-        return Objects.equals(this.name, literalDataDomainDataType.name) &&
-               Objects.equals(this.reference, literalDataDomainDataType.reference);
+        return Objects.equals(this.name, literalDataDomainDataType.name)
+                && Objects.equals(this.reference, literalDataDomainDataType.reference);
     }
 
     @Override

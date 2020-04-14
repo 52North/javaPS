@@ -103,9 +103,8 @@ public class Format {
             return false;
         }
         Format format = (Format) o;
-        return Objects.equals(this.mimeType, format.mimeType) &&
-               Objects.equals(this.schema, format.schema) &&
-               Objects.equals(this.encoding, format.encoding);
+        return Objects.equals(this.mimeType, format.mimeType) && Objects.equals(this.schema, format.schema)
+                && Objects.equals(this.encoding, format.encoding);
     }
 
     @Override

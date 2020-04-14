@@ -81,8 +81,7 @@ public class Input {
             return false;
         }
         Input other = (Input) o;
-        return Objects.equals(this.id, other.id) &&
-               Objects.equals(this.input, other.input);
+        return Objects.equals(this.id, other.id) && Objects.equals(this.input, other.input);
     }
 
     @Override

@@ -54,7 +54,7 @@ public class JacksonConfiguration {
     @ConditionalOnMissingBean
     public ObjectMapper objectMapper(JsonNodeFactory jsonNodeFactory) {
         return new ObjectMapper().setNodeFactory(jsonNodeFactory)
-                                 .enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
+                .enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
     }
 
 }

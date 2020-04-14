@@ -145,11 +145,9 @@ public class Link {
             return false;
         }
         Link link = (Link) o;
-        return Objects.equals(this.href, link.href) &&
-               Objects.equals(this.rel, link.rel) &&
-               Objects.equals(this.type, link.type) &&
-               Objects.equals(this.hreflang, link.hreflang) &&
-               Objects.equals(this.title, link.title);
+        return Objects.equals(this.href, link.href) && Objects.equals(this.rel, link.rel)
+                && Objects.equals(this.type, link.type) && Objects.equals(this.hreflang, link.hreflang)
+                && Objects.equals(this.title, link.title);
     }
 
     @Override
@@ -160,8 +158,7 @@ public class Link {
     @Override
     public String toString() {
 
-        return String.format("Link{href: %s, rel: %s, type: %s, hreflang: %s, title: %s}",
-                             href, rel, type, hreflang, title);
+        return String.format("Link{href: %s, rel: %s, type: %s, hreflang: %s, title: %s}", href, rel, type, hreflang,
+                title);
     }
 }
-

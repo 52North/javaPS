@@ -69,4 +69,3 @@ public class ValueReference {
         return String.format("ValueReference{valueReference: %s}", valueReference);
     }
 }
-

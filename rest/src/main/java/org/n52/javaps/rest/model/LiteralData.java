@@ -98,9 +98,8 @@ public class LiteralData {
             return false;
         }
         LiteralData literalData = (LiteralData) o;
-        return Objects.equals(this.value, literalData.value) &&
-               Objects.equals(this.dataType, literalData.dataType) &&
-               Objects.equals(this.uom, literalData.uom);
+        return Objects.equals(this.value, literalData.value) && Objects.equals(this.dataType, literalData.dataType)
+                && Objects.equals(this.uom, literalData.uom);
     }
 
     @Override

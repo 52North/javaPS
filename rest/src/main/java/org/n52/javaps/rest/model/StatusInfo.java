@@ -47,7 +47,7 @@ public class StatusInfo {
     private Integer progress;
 
     @JsonProperty("jobID")
-    private String jobID = null;
+    private String jobID;
 
     @JsonProperty("links")
     @Valid
@@ -127,13 +127,14 @@ public class StatusInfo {
 
     /**
      * Get jobID
+     *
      * @return jobID
-    **/
+     **/
     @ApiModelProperty(required = true, value = "")
     @NotNull
 
     public String getJobID() {
-    	return jobID;
+        return jobID;
     }
 
     public void setJobID(String jobID) {
@@ -164,11 +165,9 @@ public class StatusInfo {
             return false;
         }
         StatusInfo statusInfo = (StatusInfo) o;
-        return Objects.equals(this.status, statusInfo.status) &&
-               Objects.equals(this.message, statusInfo.message) &&
-               Objects.equals(this.progress, statusInfo.progress) &&
-               Objects.equals(this.jobID, statusInfo.jobID) &&
-               Objects.equals(this.links, statusInfo.links);
+        return Objects.equals(this.status, statusInfo.status) && Objects.equals(this.message, statusInfo.message)
+                && Objects.equals(this.progress, statusInfo.progress) && Objects.equals(this.jobID, statusInfo.jobID)
+                && Objects.equals(this.links, statusInfo.links);
     }
 
     @Override
@@ -178,7 +177,7 @@ public class StatusInfo {
 
     @Override
     public String toString() {
-        return String.format("StatusInfo{status: %s, message: %s, progress: %s, jobID: %s, links: %s}",
-                             status, message, progress, jobID, links);
+        return String.format("StatusInfo{status: %s, message: %s, progress: %s, jobID: %s, links: %s}", status, message,
+                progress, jobID, links);
     }
 }

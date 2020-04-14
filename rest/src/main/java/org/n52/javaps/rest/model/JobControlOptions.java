@@ -23,8 +23,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * Gets or Sets jobControlOptions
  */
 public enum JobControlOptions {
-    SYNC_EXECUTE("sync-execute"),
-    ASYNC_EXECUTE("async-execute");
+    SYNC_EXECUTE("sync-execute"), ASYNC_EXECUTE("async-execute");
 
     private String value;
 
