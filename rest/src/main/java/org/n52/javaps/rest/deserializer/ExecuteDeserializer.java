@@ -146,7 +146,7 @@ public class ExecuteDeserializer {
         } else if (valueNode.isValueNode()) {
             return new StringValueProcessData(id, FORMAT_TEXT_PLAIN, valueNode.asText());
 
-        } else if (map.path(BBOX_KEY).isObject()) {
+        } else if (map.path(BBOX_KEY).isArray()) {
             return new StringValueProcessData(id, new Format("application/json"),
                     new ObjectMapper().writeValueAsString(map));
         }

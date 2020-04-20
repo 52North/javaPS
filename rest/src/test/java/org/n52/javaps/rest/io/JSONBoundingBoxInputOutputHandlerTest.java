@@ -24,6 +24,7 @@ import org.junit.Test;
 import org.n52.janmayen.Json;
 import org.n52.javaps.io.Data;
 import org.n52.javaps.io.DecodingException;
+import org.n52.javaps.io.EncodingException;
 import org.n52.javaps.io.bbox.BoundingBoxData;
 import org.n52.shetland.ogc.ows.OwsBoundingBox;
 import org.n52.shetland.ogc.wps.Format;
@@ -61,7 +62,7 @@ public class JSONBoundingBoxInputOutputHandlerTest {
     }
 
     @Test
-    public void testJSONBBoxSerializer() throws IOException {
+    public void testJSONBBoxSerializer() throws IOException, EncodingException {
         OwsBoundingBox bbox = new OwsBoundingBox(new double[] { X_MIN, Y_MIN }, new double[] { X_MAX, Y_MAX },
                 EPSG_4326);
         BoundingBoxData data = new BoundingBoxData(bbox);
