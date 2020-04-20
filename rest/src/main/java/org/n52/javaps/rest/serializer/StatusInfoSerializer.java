@@ -31,7 +31,10 @@ import java.util.List;
 @Configurable
 public class StatusInfoSerializer extends AbstractSerializer {
 
-    public StatusInfo serialize(org.n52.shetland.ogc.wps.StatusInfo statusInfo, String processId, String jobId) {
+    public StatusInfo serialize(org.n52.shetland.ogc.wps.StatusInfo statusInfo,
+            String processId,
+            String jobId,
+            boolean isList) {
 
         StatusInfo serializedStatusInfo = new StatusInfo();
 
@@ -42,7 +45,12 @@ public class StatusInfoSerializer extends AbstractSerializer {
         statusInfo.getPercentCompleted().map(Integer::valueOf).ifPresent(serializedStatusInfo::setProgress);
 
         List<Link> links = new ArrayList<>(2);
-        links.add(createSelfLink(processId, jobId));
+        // if this a job list is requested, use rel "status" instead of "self"
+        if (isList) {
+            links.add(createStatusLink(processId, jobId));
+        } else {
+            links.add(createSelfLink(processId, jobId));
+        }
         if (statusInfo.getStatus().equals(JobStatus.succeeded())) {
             links.add(createResultLink(processId, jobId));
         } else if (statusInfo.getStatus().equals(JobStatus.failed())) {
@@ -55,30 +63,43 @@ public class StatusInfoSerializer extends AbstractSerializer {
 
     }
 
-    private Link createSelfLink(String processId, String jobId) {
+    private Link createSelfLink(String processId,
+            String jobId) {
         Link selfLink = new Link();
         selfLink.setHref(createJobHref(processId, jobId));
         selfLink.setRel("self");
         selfLink.setType(MediaTypes.APPLICATION_JSON);
-        selfLink.setTitle("this document");
+        selfLink.setTitle("This document");
         return selfLink;
     }
 
-    private Link createResultLink(String processId, String jobId) {
+    private Link createStatusLink(String processId,
+            String jobId) {
+        Link selfLink = new Link();
+        selfLink.setHref(createJobHref(processId, jobId));
+        selfLink.setRel("status");
+        selfLink.setType(MediaTypes.APPLICATION_JSON);
+        selfLink.setTitle("Status document");
+        return selfLink;
+    }
+
+    private Link createResultLink(String processId,
+            String jobId) {
         Link resultLink = new Link();
         resultLink.setHref(createResultHref(processId, jobId));
         resultLink.setRel("results");
         resultLink.setType(MediaTypes.APPLICATION_JSON);
-        resultLink.setTitle("Job result");
+        resultLink.setTitle("Job results");
         return resultLink;
     }
 
-    private Link createExceptionLink(String processId, String jobId) {
+    private Link createExceptionLink(String processId,
+            String jobId) {
         Link exceptionLink = new Link();
         exceptionLink.setHref(createResultHref(processId, jobId));
-        exceptionLink.setRel("exception");
+        exceptionLink.setRel("exceptions");
         exceptionLink.setType(MediaTypes.APPLICATION_JSON);
-        exceptionLink.setTitle("Job exception");
+        exceptionLink.setTitle("Job exceptions");
         return exceptionLink;
     }
 

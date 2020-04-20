@@ -16,6 +16,16 @@
  */
 package org.n52.javaps.rest;
 
+import static java.util.stream.Collectors.toSet;
+
+import java.net.URI;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.Future;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+
 import org.n52.faroe.Validation;
 import org.n52.faroe.annotation.Configurable;
 import org.n52.faroe.annotation.Setting;
@@ -42,24 +52,15 @@ import org.n52.shetland.ogc.wps.ProcessOffering;
 import org.n52.shetland.ogc.wps.ResponseMode;
 import org.n52.shetland.ogc.wps.Result;
 import org.n52.shetland.ogc.wps.data.ProcessData;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import java.net.URI;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.Future;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static java.util.stream.Collectors.toSet;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 
 @Controller
 @Configurable
@@ -197,12 +198,12 @@ public final class ProcessesApiImpl implements ProcessesApi {
             jobsItem.setId(jobID);
             try {
                 org.n52.shetland.ogc.wps.StatusInfo status = engine.getStatus(jobId);
-                jobsItem.setInfos(statusInfoSerializer.serialize(status, id, jobID));
+                jobsItem.setInfos(statusInfoSerializer.serialize(status, id, jobID, true));
             } catch (EngineException e) {
                 log.error(e.getMessage());
             }
 
-            jobCollection.addJobsItem(jobsItem);
+            jobCollection.add(jobsItem);
         }
 
         return ResponseEntity.ok(jobCollection);
@@ -303,7 +304,7 @@ public final class ProcessesApiImpl implements ProcessesApi {
         if (!engine.hasJob(jobId)) {
             throw new JobNotFoundException(jobId);
         }
-        return statusInfoSerializer.serialize(engine.getStatus(jobId), processId, jobID);
+        return statusInfoSerializer.serialize(engine.getStatus(jobId), processId, jobID, false);
 
     }
 }
