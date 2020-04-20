@@ -366,7 +366,7 @@ public class ProcessSerializer extends AbstractSerializer {
         Link link = new Link();
         link.setHref(getProcessHref(process.getId()));
         link.setType(MediaTypes.APPLICATION_JSON);
-        link.setRel("process description");
+        link.setRel("process-desc");
         link.setTitle("Process description");
         return link;
     }
