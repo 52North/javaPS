@@ -16,17 +16,18 @@
  */
 package org.n52.javaps.rest.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.validation.annotation.Validated;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
+import org.springframework.validation.annotation.Validated;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * DescriptionType
@@ -52,7 +53,7 @@ public class DescriptionType {
     private List<Metadata> metadata;
 
     @JsonProperty("additionalParameters")
-    private Object additionalParameters;
+    private List<AdditionalParameter> additionalParameters;
 
     public DescriptionType id(String id) {
         this.id = id;
@@ -162,7 +163,7 @@ public class DescriptionType {
         this.metadata = metadata;
     }
 
-    public DescriptionType additionalParameters(Object additionalParameters) {
+    public DescriptionType additionalParameters(List<AdditionalParameter> additionalParameters) {
         this.additionalParameters = additionalParameters;
         return this;
     }
@@ -172,11 +173,11 @@ public class DescriptionType {
      *
      * @return additionalParameters
      **/
-    public Object getAdditionalParameters() {
+    public List<AdditionalParameter> getAdditionalParameters() {
         return additionalParameters;
     }
 
-    public void setAdditionalParameters(Object additionalParameters) {
+    public void setAdditionalParameters(List<AdditionalParameter> additionalParameters) {
         this.additionalParameters = additionalParameters;
     }
 
