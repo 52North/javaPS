@@ -17,7 +17,6 @@
 package org.n52.javaps.rest.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModelProperty;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.Objects;
@@ -40,7 +39,6 @@ public class AnyValue {
      *
      * @return anyValue
      **/
-    @ApiModelProperty(value = "")
 
     public Boolean isAnyValue() {
         return anyValue;

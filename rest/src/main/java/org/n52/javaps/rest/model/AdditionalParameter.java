@@ -18,7 +18,6 @@ package org.n52.javaps.rest.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.validation.annotation.Validated;
@@ -49,7 +48,6 @@ public class AdditionalParameter {
      *
      * @return name
      **/
-    @ApiModelProperty(required = true, value = "")
     @NotNull
 
     public String getName() {
@@ -75,7 +73,6 @@ public class AdditionalParameter {
      *
      * @return value
      **/
-    @ApiModelProperty(required = true, value = "")
     @NotNull
 
     public List<Object> getValue() {

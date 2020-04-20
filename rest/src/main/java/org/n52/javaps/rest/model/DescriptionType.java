@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import io.swagger.annotations.ApiModelProperty;
 
 /**
  * DescriptionType
@@ -173,8 +172,6 @@ public class DescriptionType {
      *
      * @return additionalParameters
      **/
-    @ApiModelProperty(value = "")
-
     public Object getAdditionalParameters() {
         return additionalParameters;
     }

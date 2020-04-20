@@ -27,8 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import io.swagger.annotations.ApiModelProperty;
-
 /**
  * Execute
  */
@@ -173,7 +171,6 @@ public class Execute {
      *
      * @return mode
      **/
-    @ApiModelProperty(required = true, value = "")
     @NotNull
 
     public ModeEnum getMode() {
@@ -189,7 +186,6 @@ public class Execute {
      *
      * @return response
      **/
-    @ApiModelProperty(required = true, value = "")
     @NotNull
 
     public ResponseEnum getResponse() {

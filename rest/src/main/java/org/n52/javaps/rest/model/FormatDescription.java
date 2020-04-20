@@ -17,7 +17,6 @@
 package org.n52.javaps.rest.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModelProperty;
 import org.springframework.validation.annotation.Validated;
 
 import java.math.BigInteger;
@@ -44,7 +43,6 @@ public class FormatDescription extends Format {
      *
      * @return maximumMegabytes
      **/
-    @ApiModelProperty(value = "")
 
     public BigInteger getMaximumMegabytes() {
         return maximumMegabytes;

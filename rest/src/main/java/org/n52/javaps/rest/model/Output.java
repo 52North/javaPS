@@ -17,7 +17,6 @@
 package org.n52.javaps.rest.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModelProperty;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
@@ -62,7 +61,6 @@ public class Output extends DataType {
      *
      * @return transmissionMode
      **/
-    @ApiModelProperty(value = "")
 
     @Valid
     public TransmissionMode getTransmissionMode() {

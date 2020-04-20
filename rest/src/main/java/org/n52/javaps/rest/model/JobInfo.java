@@ -18,7 +18,6 @@ package org.n52.javaps.rest.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModelProperty;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -46,7 +45,6 @@ public class JobInfo {
      *
      * @return id
      **/
-    @ApiModelProperty(required = true, value = "")
     @NotNull
 
     public String getId() {
@@ -67,7 +65,6 @@ public class JobInfo {
      *
      * @return infos
      **/
-    @ApiModelProperty(value = "")
 
     @Valid
     public StatusInfo getInfos() {

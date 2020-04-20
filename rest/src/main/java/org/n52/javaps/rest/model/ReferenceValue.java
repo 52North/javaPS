@@ -18,7 +18,6 @@ package org.n52.javaps.rest.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
-import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.NotNull;
 
 import java.util.Objects;
@@ -41,7 +40,6 @@ public class ReferenceValue implements ValueType {
      *
      * @return href
      **/
-    @ApiModelProperty(required = true, value = "")
     @NotNull
 
     public String getHref() {

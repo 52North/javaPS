@@ -20,7 +20,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
-import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
@@ -130,7 +129,6 @@ public class StatusInfo {
      *
      * @return jobID
      **/
-    @ApiModelProperty(required = true, value = "")
     @NotNull
 
     public String getJobID() {
