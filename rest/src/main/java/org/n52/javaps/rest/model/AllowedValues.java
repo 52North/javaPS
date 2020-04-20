@@ -27,6 +27,11 @@ import java.util.Objects;
 @Validated
 public class AllowedValues extends ArrayList<Object> {
 
+    /**
+     *
+     */
+    private static final long serialVersionUID = 3188528125357828614L;
+
     @Override
     public boolean equals(java.lang.Object o) {
         if (this == o) {
