@@ -42,7 +42,7 @@ public abstract class AbstractSerializer {
     }
 
     protected String createResultHref(String processId, String jobId) {
-        return String.format("%s/%s/jobs/%s/result", serviceURL, processId, jobId);
+        return String.format("%s/%s/jobs/%s/results", serviceURL, processId, jobId);
     }
 
     protected String getJobsHref(String processId) {
