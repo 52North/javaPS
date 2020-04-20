@@ -214,6 +214,7 @@ public final class ProcessesApiImpl implements ProcessesApi {
         context.setAttribute("processId", id);
         context.setAttribute("jobSet",
                 engine.getJobIdentifiers(owsCode).stream().map(JobId::getValue).collect(toSet()));
+        context.setAttribute("originalRequestURL", request.getRequestURL().toString());
         return "../../../jsp/test_client";
     }
 
