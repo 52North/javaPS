@@ -16,67 +16,40 @@
  */
 package org.n52.javaps.rest.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.validation.annotation.Validated;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
+
+import org.springframework.validation.annotation.Validated;
 
 /**
  * JobCollection
  */
 @Validated
-public class JobCollection {
-    @JsonProperty("jobs")
-    @Valid
-    private List<JobInfo> jobs = new ArrayList<JobInfo>();
+public class JobCollection extends ArrayList<JobInfo>  {
 
-    public JobCollection jobs(List<JobInfo> jobs) {
-        this.jobs = jobs;
-        return this;
-    }
-
-    public JobCollection addJobsItem(JobInfo jobsItem) {
-        this.jobs.add(jobsItem);
-        return this;
-    }
-
-    /**
-     * Get jobs
+      /**
      *
-     * @return jobs
-     **/
-    @NotNull
-    public List<JobInfo> getJobs() {
-        return jobs;
-    }
-
-    public void setJobs(List<JobInfo> jobs) {
-        this.jobs = jobs;
-    }
+     */
+    private static final long serialVersionUID = 6588344608051005961L;
 
     @Override
-    public boolean equals(java.lang.Object o) {
+      public boolean equals(java.lang.Object o) {
         if (this == o) {
-            return true;
+          return true;
         }
         if (o == null || getClass() != o.getClass()) {
-            return false;
+          return false;
         }
-        JobCollection jobCollection = (JobCollection) o;
-        return Objects.equals(this.jobs, jobCollection.jobs);
-    }
+        return true;
+      }
 
     @Override
     public int hashCode() {
-        return Objects.hash(jobs);
+        return Objects.hash(this);
     }
 
     @Override
     public String toString() {
-        return String.format("JobCollection{jobs: %s}", jobs);
+        return String.format("JobCollection{jobs: %s}", this);
     }
 }

@@ -16,6 +16,21 @@
  */
 package org.n52.javaps.rest.serializer;
 
+import static java.util.stream.Collectors.toCollection;
+import static java.util.stream.Collectors.toList;
+
+import java.math.BigInteger;
+import java.net.URI;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.n52.faroe.annotation.Configurable;
 import org.n52.javaps.rest.MediaTypes;
 import org.n52.javaps.rest.model.AllowedValues;
@@ -67,21 +82,6 @@ import org.n52.shetland.ogc.wps.description.LiteralOutputDescription;
 import org.n52.shetland.ogc.wps.description.ProcessInputDescription;
 import org.n52.shetland.ogc.wps.description.ProcessOutputDescription;
 import org.springframework.stereotype.Component;
-
-import java.math.BigInteger;
-import java.net.URI;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.toCollection;
-import static java.util.stream.Collectors.toList;
 
 @Configurable
 @Component
@@ -347,7 +347,11 @@ public class ProcessSerializer extends AbstractSerializer {
     }
 
     public ProcessCollection createProcessCollection(Set<org.n52.shetland.ogc.wps.ProcessOffering> offerings) {
-        return new ProcessCollection().processes(offerings.stream().map(this::createProcessSummary).collect(toList()));
+        ProcessCollection collection = new ProcessCollection();
+
+        offerings.stream().map(this::createProcessSummary).forEachOrdered(collection::add);
+
+        return collection;
     }
 
     private Link createExecuteLink(ProcessSummary process) {

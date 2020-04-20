@@ -16,69 +16,41 @@
  */
 package org.n52.javaps.rest.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.validation.annotation.Validated;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
+
+import org.springframework.validation.annotation.Validated;
 
 /**
  * ProcessCollection
  */
 @Validated
-public class ProcessCollection {
-    @JsonProperty("processes")
-    @Valid
-    private List<ProcessSummary> processes = new ArrayList<>();
+public class ProcessCollection extends ArrayList<ProcessSummary>  {
 
-    public ProcessCollection processes(List<ProcessSummary> processes) {
-        this.processes = processes;
-        return this;
-    }
-
-    public ProcessCollection addProcessesItem(ProcessSummary processesItem) {
-        this.processes.add(processesItem);
-        return this;
-    }
-
-    /**
-     * Get processes
+      /**
      *
-     * @return processes
-     **/
-    @NotNull
-    @Valid
-    public List<ProcessSummary> getProcesses() {
-        return processes;
-    }
-
-    public void setProcesses(List<ProcessSummary> processes) {
-        this.processes = processes;
-    }
+     */
+    private static final long serialVersionUID = -7777042090876147646L;
 
     @Override
-    public boolean equals(java.lang.Object o) {
+      public boolean equals(java.lang.Object o) {
         if (this == o) {
-            return true;
+          return true;
         }
         if (o == null || getClass() != o.getClass()) {
-            return false;
+          return false;
         }
-        ProcessCollection processCollection = (ProcessCollection) o;
-        return Objects.equals(this.processes, processCollection.processes);
-    }
+        return true;
+      }
 
     @Override
     public int hashCode() {
-        return Objects.hash(processes);
+        return Objects.hash(this);
     }
 
     @Override
     public String toString() {
-        return String.format("ProcessCollection{processes: %s}", processes);
+        return String.format("ProcessCollection{processes: %s}", this);
     }
 
 }
