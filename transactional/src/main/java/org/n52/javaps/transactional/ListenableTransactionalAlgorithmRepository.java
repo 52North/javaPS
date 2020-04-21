@@ -30,7 +30,7 @@ public interface ListenableTransactionalAlgorithmRepository extends Transactiona
     void addListener(TransactionalAlgorithmRepositoryListener listener);
 
     /**
-     * Removes the {@linkplain TransactionalAlgorithmRepositoryListener listener from this repository}.
+     * Removes the {@linkplain TransactionalAlgorithmRepositoryListener listener} from this repository.
      *
      * @param listener The {@linkplain TransactionalAlgorithmRepositoryListener}
      */
