@@ -9,4 +9,5 @@ jdk:
 cache:
   directories:
     - $HOME/.m2
-
+after_success:
+  - curl -Ls https://git.io/deploy-maven-snapshot | bash
