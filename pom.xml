@@ -42,6 +42,7 @@
         <module>webapp</module>
         <module>iceland-stream</module>
         <module>engine</module>
+        <module>rest</module>
     </modules>
 
     <inceptionYear>2016</inceptionYear>
@@ -175,6 +176,11 @@
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
+                <artifactId>rest</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
                 <artifactId>iceland-wps</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -251,6 +257,11 @@
                 <artifactId>spring-core</artifactId>
                 <version>${version.spring}</version>
             </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-autoconfigure</artifactId>
+                 <version>2.2.4.RELEASE</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.slf4j</groupId>
@@ -299,6 +310,11 @@
                 <scope>runtime</scope>
             </dependency>
 
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${version.jackson}</version>
+            </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
@@ -403,9 +419,20 @@
                 <version>3.1.0</version>
             </dependency>
             <dependency>
+                <groupId>javax.servlet</groupId>
+		        <artifactId>jstl</artifactId>
+		        <version>1.2</version>
+		        <scope>runtime</scope>
+		    </dependency>
+            <dependency>
                 <groupId>javax.inject</groupId>
                 <artifactId>javax.inject</artifactId>
                 <version>1</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.validation</groupId>
+                <artifactId>validation-api</artifactId>
+                <version>1.1.0.Final</version>
             </dependency>
 
             <dependency>
@@ -436,6 +463,14 @@
             	<version>1.4.01</version>
             	<scope>runtime</scope>
             </dependency>
+            
+            <dependency>
+	            <groupId>com.github.spotbugs</groupId>
+		        <artifactId>spotbugs-annotations</artifactId>
+		        <version>3.1.12</version>
+		        <scope>provided</scope>
+	        </dependency>
+      
         </dependencies>
     </dependencyManagement>
 
