@@ -43,9 +43,9 @@ import org.n52.javaps.rest.model.InputDescription;
 import org.n52.javaps.rest.model.JobControlOptions;
 import org.n52.javaps.rest.model.Link;
 import org.n52.javaps.rest.model.LiteralDataDomain;
-import org.n52.javaps.rest.model.LiteralDataDomainDataType;
 import org.n52.javaps.rest.model.LiteralDataType;
 import org.n52.javaps.rest.model.Metadata;
+import org.n52.javaps.rest.model.NameReferenceType;
 import org.n52.javaps.rest.model.OutputDescription;
 import org.n52.javaps.rest.model.Process;
 import org.n52.javaps.rest.model.ProcessCollection;
@@ -251,9 +251,9 @@ public class ProcessSerializer extends AbstractSerializer {
         return literalDataDomain;
     }
 
-    private LiteralDataDomainDataType createLiteralDataDomainDataType(
+    private NameReferenceType createLiteralDataDomainDataType(
             org.n52.shetland.ogc.wps.description.LiteralDataDomain literalDataDomain) {
-        LiteralDataDomainDataType literalDataDomainDataType = new LiteralDataDomainDataType();
+        NameReferenceType literalDataDomainDataType = new NameReferenceType();
         Optional<OwsDomainMetadata> dataType = literalDataDomain.getDataType();
         dataType.flatMap(OwsDomainMetadata::getValue).ifPresent(literalDataDomainDataType::setName);
         dataType.flatMap(OwsDomainMetadata::getReference).map(URI::toString)

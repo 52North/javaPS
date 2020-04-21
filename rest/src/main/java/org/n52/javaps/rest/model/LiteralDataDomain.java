@@ -37,10 +37,10 @@ public class LiteralDataDomain {
     private String defaultValue;
 
     @JsonProperty("dataType")
-    private LiteralDataDomainDataType dataType;
+    private NameReferenceType dataType;
 
     @JsonProperty("uom")
-    private LiteralDataDomainDataType uom;
+    private NameReferenceType uom;
 
     public LiteralDataDomain valueDefinition(Object valueDefinition) {
         this.valueDefinition = valueDefinition;
@@ -78,7 +78,7 @@ public class LiteralDataDomain {
         this.defaultValue = defaultValue;
     }
 
-    public LiteralDataDomain dataType(LiteralDataDomainDataType dataType) {
+    public LiteralDataDomain dataType(NameReferenceType dataType) {
         this.dataType = dataType;
         return this;
     }
@@ -89,15 +89,15 @@ public class LiteralDataDomain {
      * @return dataType
      **/
     @Valid
-    public LiteralDataDomainDataType getDataType() {
+    public NameReferenceType getDataType() {
         return dataType;
     }
 
-    public void setDataType(LiteralDataDomainDataType dataType) {
+    public void setDataType(NameReferenceType dataType) {
         this.dataType = dataType;
     }
 
-    public LiteralDataDomain uom(LiteralDataDomainDataType uom) {
+    public LiteralDataDomain uom(NameReferenceType uom) {
         this.uom = uom;
         return this;
     }
@@ -108,11 +108,11 @@ public class LiteralDataDomain {
      * @return uom
      **/
     @Valid
-    public LiteralDataDomainDataType getUom() {
+    public NameReferenceType getUom() {
         return uom;
     }
 
-    public void setUom(LiteralDataDomainDataType uom) {
+    public void setUom(NameReferenceType uom) {
         this.uom = uom;
     }
 

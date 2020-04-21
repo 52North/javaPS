@@ -30,10 +30,10 @@ public class LiteralData {
     private String value;
 
     @JsonProperty("dataType")
-    private String dataType;
+    private NameReferenceType dataType;
 
     @JsonProperty("uom")
-    private String uom;
+    private NameReferenceType uom;
 
     public LiteralData value(String value) {
         this.value = value;
@@ -53,7 +53,7 @@ public class LiteralData {
         this.value = value;
     }
 
-    public LiteralData dataType(String dataType) {
+    public LiteralData dataType(NameReferenceType dataType) {
         this.dataType = dataType;
         return this;
     }
@@ -63,15 +63,15 @@ public class LiteralData {
      *
      * @return dataType
      **/
-    public String getDataType() {
+    public NameReferenceType getDataType() {
         return dataType;
     }
 
-    public void setDataType(String dataType) {
+    public void setDataType(NameReferenceType dataType) {
         this.dataType = dataType;
     }
 
-    public LiteralData uom(String uom) {
+    public LiteralData uom(NameReferenceType uom) {
         this.uom = uom;
         return this;
     }
@@ -81,11 +81,11 @@ public class LiteralData {
      *
      * @return uom
      **/
-    public String getUom() {
+    public NameReferenceType getUom() {
         return uom;
     }
 
-    public void setUom(String uom) {
+    public void setUom(NameReferenceType uom) {
         this.uom = uom;
     }
 
