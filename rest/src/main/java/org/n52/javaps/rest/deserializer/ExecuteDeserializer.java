@@ -136,7 +136,7 @@ public class ExecuteDeserializer {
                 return new StringValueProcessData(id, format, stringValue);
             } else if (value.has(HREF_KEY)) {
                 try {
-                    URI uri = new URI(value.get(HREF_KEY).toString());
+                    URI uri = new URI(value.get(HREF_KEY).asText());
                     Format format = getFormat(map.get(FORMAT_KEY));
                     return new ReferenceProcessData(id, format, uri);
                 } catch (URISyntaxException e) {
