@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 public interface ConformanceApi {
 
-    String BASE_URL = RootApi.BASE_URL + "/conformance";
+    String BASE_URL = LandingPageApi.BASE_URL + "/conformance";
 
     @ResponseBody
     @GetMapping(value = BASE_URL, produces = MediaTypes.APPLICATION_JSON)

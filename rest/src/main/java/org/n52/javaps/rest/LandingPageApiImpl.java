@@ -21,7 +21,7 @@ import org.n52.faroe.annotation.Configurable;
 import org.n52.faroe.annotation.Setting;
 import org.n52.iceland.service.ServiceSettings;
 import org.n52.javaps.rest.model.Link;
-import org.n52.javaps.rest.model.Root;
+import org.n52.javaps.rest.model.LandingPage;
 import org.springframework.stereotype.Controller;
 
 import java.net.URI;
@@ -33,7 +33,7 @@ import java.util.List;
  */
 @Controller
 @Configurable
-public class RootApiImpl implements RootApi {
+public class LandingPageApiImpl implements LandingPageApi {
 
     private String serviceURL;
 
@@ -48,7 +48,11 @@ public class RootApiImpl implements RootApi {
     }
 
     @Override
-    public Root root() {
+    public LandingPage landingPage() {
+
+        String title = "52°North OGC API - Processes";
+
+        String description = "52°North OGC API - Processes, powered by javaPS";
 
         List<Link> links = new ArrayList<>();
 
@@ -80,6 +84,6 @@ public class RootApiImpl implements RootApi {
         link.setTitle("The processes offered by this server");
         links.add(link);
 
-        return new Root().links(links);
+        return new LandingPage().title(title).description(description).links(links);
     }
 }

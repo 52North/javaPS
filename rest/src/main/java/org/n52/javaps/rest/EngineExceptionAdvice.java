@@ -36,7 +36,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.Objects;
 
-@RestControllerAdvice(assignableTypes = { Api.class, RootApi.class, ConformanceApi.class, ProcessesApi.class,
+@RestControllerAdvice(assignableTypes = { Api.class, LandingPageApi.class, ConformanceApi.class, ProcessesApi.class,
         ProcessesApiExtension.class, })
 @RequestMapping(produces = MediaTypes.APPLICATION_JSON)
 public class EngineExceptionAdvice {

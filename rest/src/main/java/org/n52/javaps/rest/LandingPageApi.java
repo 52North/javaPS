@@ -16,16 +16,16 @@
  */
 package org.n52.javaps.rest;
 
-import org.n52.javaps.rest.model.Root;
+import org.n52.javaps.rest.model.LandingPage;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-public interface RootApi {
+public interface LandingPageApi {
 
     String BASE_URL = "/rest";
 
     @ResponseBody
     @GetMapping(value = BASE_URL, produces = MediaTypes.APPLICATION_JSON)
-    Root root();
+    LandingPage landingPage();
 
 }

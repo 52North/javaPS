@@ -29,7 +29,7 @@ public class TestClientController {
      *
      * @return The test client view
      */
-    @GetMapping(value = RootApi.BASE_URL + "/test_client")
+    @GetMapping(value = LandingPageApi.BASE_URL + "/test_client")
     public String display() {
         return "../test_client";
     }

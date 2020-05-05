@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.validation.Valid;
 
 public interface ProcessesApi {
-    String BASE_URL = RootApi.BASE_URL + "/processes";
+    String BASE_URL = LandingPageApi.BASE_URL + "/processes";
 
     @PostMapping(value = BASE_URL
             + "/{processId}/jobs", produces = MediaTypes.APPLICATION_JSON, consumes = MediaTypes.APPLICATION_JSON)
