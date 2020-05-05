@@ -4,7 +4,9 @@
 
 ### Next generation standardized web-based geo-processing.
 
-**javaPS enables the deployment of geo-processes on the web in a standardized way. It features a pluggable architecture for processes and data encodings.**
+**Interoperable processing framework for web applications/distributed workflow systems**
+
+javaPS enables the deployment of geo-processes on the web in a standardized way. One of its main goals ist the provision of an interoperable processing framework for web applications or distributed workflow systems. It features a pluggable architecture for processes and data encodings.
 
 javaPS implements the [OGC WPS specification, version 2.0](http://docs.opengeospatial.org/is/14-065/14-065.html).
 
