@@ -1,5 +1,9 @@
 # javaPS [![Maven Central](https://img.shields.io/maven-central/v/org.n52.wps/javaPS.svg)](https://search.maven.org/search?q=g:org.n52.wps%20and%20a:webapp) [![Total alerts](https://img.shields.io/lgtm/alerts/g/52North/javaPS.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/52North/javaPS/alerts/) [![Language grade: Java](https://img.shields.io/lgtm/grade/java/g/52North/javaPS.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/52North/javaPS/context:java)
 
+## Build Status
+* Master: [![Master Build Status](https://travis-ci.org/52North/javaPS.png?branch=master)](https://travis-ci.org/52North/javaPS)
+* Develop: [![Develop Build Status](https://travis-ci.org/52North/javaPS.png?branch=develop)](https://travis-ci.org/52North/javaPS)
+
 ## Description
 
 ### Next generation standardized web-based geo-processing.
@@ -9,10 +13,6 @@
 javaPS enables the deployment of geo-processes on the web in a standardized way. One of its main goals ist the provision of an interoperable processing framework for web applications or distributed workflow systems. It features a pluggable architecture for processes and data encodings.
 
 javaPS implements the [OGC WPS specification, version 2.0](http://docs.opengeospatial.org/is/14-065/14-065.html).
-
-## Build Status
-* Master: [![Master Build Status](https://travis-ci.org/52North/javaPS.png?branch=master)](https://travis-ci.org/52North/javaPS)
-* Develop: [![Develop Build Status](https://travis-ci.org/52North/javaPS.png?branch=develop)](https://travis-ci.org/52North/javaPS)
 
 **Features:**
 
