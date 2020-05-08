@@ -14,20 +14,23 @@ javaPS implements the [OGC WPS specification, version 2.0](http://docs.opengeosp
 * Master: [![Master Build Status](https://travis-ci.org/52North/javaPS.png?branch=master)](https://travis-ci.org/52North/javaPS)
 * Develop: [![Develop Build Status](https://travis-ci.org/52North/javaPS.png?branch=develop)](https://travis-ci.org/52North/javaPS)
 
-## Features
+**Features:**
+
 * General Features
   * Full java-based Open Source implementation.
   * Pluggable framework for algorithms and XML data handling and processing frameworks
   * Built upon the [arctic-sea project](https://github.com/52North/arctic-sea)
   * Streaming de-/encoders for inputs and outputs
 
-## Key Technologies
+**Key Technologies:**
+
 * Java
 * Spring
 * Arctic Sea
 * OpenAPI
 
-## Benefits
+**Benefits**
+
 * Abstraction of (existing) processing tools
 * Support for the majority of standardized geo-data formats
 * Lightweight API, following the latest state of the draft OGC API Processes standard
