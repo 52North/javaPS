@@ -14,7 +14,7 @@ javaPS enables the deployment of geo-processes on the web in a standardized way.
 
 javaPS implements the [OGC WPS specification, version 2.0](http://docs.opengeospatial.org/is/14-065/14-065.html).
 
-Features:
+**Features:**
 
 * General Features
   * Full java-based Open Source implementation.
