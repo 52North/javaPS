@@ -47,7 +47,7 @@ Then just run `mvn clean install` on the repositories root directory.
 
 ## User guide/tutorial
 
-http://52north.github.io/javaPS/documentation_markdown/site/index.html
+Check out the [JavaPS Documentation](http://52north.github.io/javaPS/documentation_markdown/site/index.html).
 
 ## Demo
 
