@@ -73,7 +73,7 @@ public class BoundingBoxInputHandlerTest {
     public void testDecoding() throws IOException, DecodingException {
 
         String value
-                = "<ows:BoundingBox xmlns:ows=\"http://www.opengis.net/ows/2.0\" dimension=\"3\" crs=\"EPSG:4326\"><ows:LowerCorner>1 2 3</ows:LowerCorner><ows:UpperCorner>4 5 6</ows:UpperCorner></ows:BoundingBox>";
+                = "<ows:BoundingBox xmlns:ows=\"http://www.opengis.net/ows/2.0\" dimensions=\"3\" crs=\"EPSG:4326\"><ows:LowerCorner>1 2 3</ows:LowerCorner><ows:UpperCorner>4 5 6</ows:UpperCorner></ows:BoundingBox>";
 
         Charset charset = StandardCharsets.ISO_8859_1;
         Format format = Format.TEXT_XML.withEncoding(charset);
