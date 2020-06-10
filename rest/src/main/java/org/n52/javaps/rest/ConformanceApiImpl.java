@@ -29,9 +29,9 @@ public class ConformanceApiImpl implements ConformanceApi {
     public ReqClasses getConformanceClasses() {
         List<String> conformsTo = Arrays.asList("http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/core",
                 "http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/ogc-process-collection",
-                "http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/oas30", 
-                "http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/job-collection", 
-                "http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/json", 
+                "http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/oas30",
+                "http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/job-collection",
+                "http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/json",
                 "http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/html");
         return new ReqClasses().conformsTo(conformsTo);
     }
