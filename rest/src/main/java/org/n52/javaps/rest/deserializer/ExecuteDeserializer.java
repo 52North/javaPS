@@ -54,6 +54,7 @@ public class ExecuteDeserializer {
     private static final String SCHEMA_KEY = "schema";
     private static final Format FORMAT_TEXT_PLAIN = new Format("text/plain");
     private static final String BBOX_KEY = "bbox";
+    private static final String REFERENCE_VALUE_KEY = "referenceValue";
     private final ObjectMapper objectMapper;
 
     @Autowired
@@ -134,9 +135,9 @@ public class ExecuteDeserializer {
                     stringValue = objectMapper.writeValueAsString(inlineValue);
                 }
                 return new StringValueProcessData(id, format, stringValue);
-            } else if (value.has(HREF_KEY)) {
+            } else if (value.has(REFERENCE_VALUE_KEY)) {
                 try {
-                    URI uri = new URI(value.get(HREF_KEY).asText());
+                    URI uri = new URI(value.get(REFERENCE_VALUE_KEY).get(HREF_KEY).asText());
                     Format format = getFormat(map.get(FORMAT_KEY));
                     return new ReferenceProcessData(id, format, uri);
                 } catch (URISyntaxException e) {
