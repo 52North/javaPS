@@ -31,6 +31,8 @@ import org.n52.shetland.ogc.wps.OutputDefinition;
 import org.n52.shetland.ogc.wps.data.ProcessData;
 import org.n52.shetland.ogc.wps.data.ReferenceProcessData;
 import org.n52.shetland.ogc.wps.data.impl.StringValueProcessData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -45,6 +47,7 @@ import static java.util.stream.Collectors.toList;
 
 @Component
 public class ExecuteDeserializer {
+    private static final Logger log = LoggerFactory.getLogger(ExecuteDeserializer.class);
     private static final String VALUE_KEY = "value";
     private static final String INLINE_VALUE_KEY = "inlineValue";
     private static final String HREF_KEY = "href";
@@ -70,9 +73,7 @@ public class ExecuteDeserializer {
             OutputDefinition definition = new OutputDefinition();
             definition.setId(createId(output.getId()));
             org.n52.javaps.rest.model.Format format = output.getFormat();
-            if (format == null) {
-                definition.setFormat(Format.TEXT_PLAIN);
-            } else {
+            if (format != null) {
                 definition.setFormat(new Format(format.getMimeType(), format.getEncoding(), format.getSchema()));
             }
             definition.setDataTransmissionMode(getTransmissionMode(output.getTransmissionMode()));
@@ -135,10 +136,17 @@ public class ExecuteDeserializer {
                     stringValue = objectMapper.writeValueAsString(inlineValue);
                 }
                 return new StringValueProcessData(id, format, stringValue);
-            } else if (value.has(REFERENCE_VALUE_KEY)) {
+            } else if (value.has(HREF_KEY)) {
                 try {
-                    URI uri = new URI(value.get(REFERENCE_VALUE_KEY).get(HREF_KEY).asText());
-                    Format format = getFormat(map.get(FORMAT_KEY));
+                    URI uri = new URI(value.get(HREF_KEY).asText());
+                    Format format = null;
+                    JsonNode formatNode = map.get(FORMAT_KEY);
+
+                    if (formatNode != null) {
+                        format = getFormat(formatNode);
+                    } else {
+                        log.info("Could not get format.");
+                    }
                     return new ReferenceProcessData(id, format, uri);
                 } catch (URISyntaxException e) {
                     throw new InputDecodingException(id, e);
