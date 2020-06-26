@@ -43,6 +43,8 @@
         <module>iceland-stream</module>
         <module>engine</module>
         <module>rest</module>
+        <module>transactional</module>
+        <module>transactional-rest</module>
     </modules>
 
     <inceptionYear>2016</inceptionYear>
@@ -136,6 +138,11 @@
             </dependency>
             <dependency>
                 <groupId>org.n52.arctic-sea</groupId>
+                <artifactId>svalbard-json</artifactId>
+                <version>${version.arctic.sea}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.n52.arctic-sea</groupId>
                 <artifactId>iceland</artifactId>
                 <version>${version.arctic.sea}</version>
             </dependency>
@@ -192,6 +199,16 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>transactional</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>transactional-rest</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
