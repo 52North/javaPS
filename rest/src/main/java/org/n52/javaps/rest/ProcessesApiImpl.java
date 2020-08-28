@@ -131,9 +131,11 @@ public final class ProcessesApiImpl implements ProcessesApi {
 
     @ExceptionHandler({ RuntimeException.class })
     public ResponseEntity<?> handleException(RuntimeException e) {
-        log.error(String.format("Runtime exception during request processing: %s", e.getMessage()), e);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionSerializer.serializeException("ExecutionError",
-                String.format("Runtime exception during request processing: %s", e.getMessage())));
+        String msg = String.format("Runtime exception during request processing: %s", e.getMessage());
+        log.error(msg, e);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(exceptionSerializer.serializeException("ExecutionError",
+                msg));
     }
 
     @Override
