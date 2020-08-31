@@ -63,6 +63,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @Controller
 @Configurable
@@ -129,6 +130,15 @@ public final class ProcessesApiImpl implements ProcessesApi {
             url = url.split("[?]")[0];
         }
         this.serviceURL = url.replace("/service", ProcessesApi.BASE_URL);
+    }
+
+    @ExceptionHandler({ RuntimeException.class })
+    public ResponseEntity<?> handleException(RuntimeException e) {
+        String msg = String.format("Runtime exception during request processing: %s", e.getMessage());
+        log.error(msg, e);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(exceptionSerializer.serializeException("ExecutionError",
+                msg));
     }
 
     @Setting(RestSettingsConstants.ENABLE_JOB_LIST_EXTENSION)
