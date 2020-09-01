@@ -19,6 +19,7 @@ package org.n52.javaps.rest;
 import static java.util.stream.Collectors.toSet;
 
 import java.net.URI;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Future;
@@ -45,6 +46,7 @@ import org.n52.javaps.rest.serializer.ExceptionSerializer;
 import org.n52.javaps.rest.serializer.ProcessSerializer;
 import org.n52.javaps.rest.serializer.ResultSerializer;
 import org.n52.javaps.rest.serializer.StatusInfoSerializer;
+import org.n52.javaps.rest.settings.RestSettingsConstants;
 import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.shetland.ogc.wps.JobId;
 import org.n52.shetland.ogc.wps.OutputDefinition;
@@ -71,6 +73,7 @@ public final class ProcessesApiImpl implements ProcessesApi {
 
     private Engine engine;
     private String serviceURL;
+    private boolean isJobListEnabled;
     private ServletContext context;
     private HttpServletRequest request;
     private ProcessSerializer processSerializer;
@@ -138,6 +141,12 @@ public final class ProcessesApiImpl implements ProcessesApi {
                 msg));
     }
 
+    @Setting(RestSettingsConstants.ENABLE_JOB_LIST_EXTENSION)
+    public void setIsJobListEnabled(Boolean isJobListEnabled) {
+        Validation.notNull("isJobListEnabled", isJobListEnabled);
+        this.isJobListEnabled = isJobListEnabled;
+    }
+
     @Override
     public ResponseEntity<?> execute(Execute body, String id) throws EngineException, ExecutionException {
 
@@ -196,6 +205,11 @@ public final class ProcessesApiImpl implements ProcessesApi {
 
     @Override
     public ResponseEntity<?> getJobList(String id) {
+
+        if (!isJobListEnabled) {
+            return ResponseEntity.status(501).build();
+        }
+
         OwsCode owsCode = new OwsCode(id);
 
         Set<String> values = engine.getJobIdentifiers(owsCode).stream().map(JobId::getValue).collect(toSet());
@@ -223,8 +237,13 @@ public final class ProcessesApiImpl implements ProcessesApi {
     public String getExecuteForm(String id, Model model) {
         OwsCode owsCode = new OwsCode(id);
         context.setAttribute("processId", id);
-        context.setAttribute("jobSet",
-                engine.getJobIdentifiers(owsCode).stream().map(JobId::getValue).collect(toSet()));
+
+        Set<String> jobSet = Collections.emptySet();
+
+        if (isJobListEnabled) {
+            jobSet = engine.getJobIdentifiers(owsCode).stream().map(JobId::getValue).collect(toSet());
+        }
+        context.setAttribute("jobSet", jobSet);
         context.setAttribute("originalRequestURL", request.getRequestURL().toString());
         return "../../../jsp/test_client";
     }

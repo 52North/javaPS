@@ -136,7 +136,7 @@
     },
     "service.serviceURL" : {
       "type" : "uri",
-      "value" : "http://localhost:8080/wps/service"
+      "value" : "http://localhost:8080/javaps/service"
     },
     "filewatcher.enabled" : {
       "type" : "boolean",
@@ -157,6 +157,10 @@
     "misc.checkInterval" : {
       "type" : "string",
       "value" : "PT1H"
+    },
+    "rest.enable.joblist.extension" : {
+      "type" : "boolean",
+      "value" : false
     }
   }
 }
