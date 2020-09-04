@@ -76,14 +76,7 @@ public class LocalAlgorithmRepository implements AlgorithmRepository {
 
     @Override
     public Optional<IAlgorithm> getAlgorithm(OwsCode id) {
-
-        try {
-            return Optional.ofNullable(loadAlgorithm(id.getValue()));
-        } catch (Exception e) {
-            LOG.error("Could not load algorithm. ", e.getMessage());
-        }
-
-        return Optional.empty();
+        return Optional.ofNullable(this.algorithms.get(id)).map(Supplier::get);
     }
 
     @Override
@@ -166,7 +159,13 @@ public class LocalAlgorithmRepository implements AlgorithmRepository {
     }
 
     private Optional<IAlgorithm> instantiate(Class<?> clazz) {
-        Object instance = getInstance(clazz);
+        Object instance;
+        try {
+            instance = beanFactory.createBean(clazz);
+        } catch (BeansException ex) {
+            LOG.warn("Could not instantiate algorithm", ex);
+            return Optional.empty();
+        }
 
         if (clazz.isAnnotationPresent(Algorithm.class) && !(instance instanceof AnnotatedAlgorithm)) {
             return Optional.of(new AnnotatedAlgorithm(parserRepository, generatorRepository, literalTypeRepository,
@@ -177,34 +176,6 @@ public class LocalAlgorithmRepository implements AlgorithmRepository {
             LOG.warn("Algorithm class is not annotated and does not implement IAlgorithm: {}", clazz);
             return Optional.empty();
         }
-    }
-
-    private IAlgorithm loadAlgorithm(String algorithmClassName) throws Exception {
-        Class<?> algorithmClass = LocalAlgorithmRepository.class.getClassLoader().loadClass(algorithmClassName);
-
-        Object instance = getInstance(algorithmClass);
-
-        IAlgorithm algorithm = null;
-        if (IAlgorithm.class.isAssignableFrom(algorithmClass)) {
-            algorithm = IAlgorithm.class.cast(algorithmClass.newInstance());
-        } else if (algorithmClass.isAnnotationPresent(Algorithm.class)) {
-            algorithm = new AnnotatedAlgorithm(parserRepository, generatorRepository, literalTypeRepository,
-                    instance);
-        } else {
-            throw new Exception("Could not load algorithm " + algorithmClassName
-                    + " does not implement IAlgorithm or have a Algorithm annotation.");
-        }
-        return algorithm;
-    }
-
-    private Object getInstance(Class<?> algorithmClass) {
-        Object instance = null;
-        try {
-            instance = beanFactory.createBean(algorithmClass);
-        } catch (BeansException ex) {
-            LOG.warn("Could not instantiate algorithm", ex);
-        }
-        return instance;
     }
 
 }
