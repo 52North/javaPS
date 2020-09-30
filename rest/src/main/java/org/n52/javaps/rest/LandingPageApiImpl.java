@@ -50,9 +50,9 @@ public class LandingPageApiImpl implements LandingPageApi {
     @Override
     public LandingPage landingPage() {
 
-        String title = "52°North OGC API - Processes";
+        String title = "52°North draft OGC API - Processes";
 
-        String description = "52°North OGC API - Processes, powered by javaPS";
+        String description = "52°North draft OGC API - Processes, powered by javaPS";
 
         List<Link> links = new ArrayList<>();
 
@@ -60,21 +60,21 @@ public class LandingPageApiImpl implements LandingPageApi {
         link.setHref(serviceURL);
         link.setRel("self");
         link.setType(MediaTypes.APPLICATION_JSON);
-        link.setTitle("this document");
+        link.setTitle("This document");
         links.add(link);
 
         link = new Link();
         link.setHref(serviceURL + "/api/");
         link.setRel("service");
         link.setType(MediaTypes.APPLICATION_OPENAPI_JSON_3_0);
-        link.setTitle("the API definition");
+        link.setTitle("The API definition");
         links.add(link);
 
         link = new Link();
         link.setHref(serviceURL + "/conformance/");
         link.setRel("conformance");
         link.setType(MediaTypes.APPLICATION_JSON);
-        link.setTitle("WPS 2.0 REST/JSON Binding Extension conformance classes implemented by this server");
+        link.setTitle("Conformance classes implemented by this server");
         links.add(link);
 
         link = new Link();
