@@ -22,23 +22,21 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Supplier;
 
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
-import org.springframework.context.ApplicationContext;
-
-import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.javaps.algorithm.annotation.Algorithm;
 import org.n52.javaps.algorithm.annotation.AnnotatedAlgorithm;
 import org.n52.javaps.description.TypedProcessDescription;
 import org.n52.javaps.io.InputHandlerRepository;
 import org.n52.javaps.io.OutputHandlerRepository;
 import org.n52.javaps.io.literal.LiteralTypeRepository;
+import org.n52.shetland.ogc.ows.OwsCode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.context.ApplicationContext;
 
 /**
  * A static repository to retrieve the available algorithms.
@@ -52,7 +50,7 @@ public class LocalAlgorithmRepository implements AlgorithmRepository {
 
     private final Map<OwsCode, TypedProcessDescription> descriptions = new HashMap<>();
 
-    private final Map<OwsCode, Supplier<IAlgorithm>> algorithms = new HashMap<>();
+    private final Map<OwsCode, String> algorithms = new HashMap<>();
 
     private final InputHandlerRepository parserRepository;
 
@@ -63,6 +61,8 @@ public class LocalAlgorithmRepository implements AlgorithmRepository {
     private final AutowireCapableBeanFactory beanFactory;
 
     private final String duplicateAlgorithmId = "Duplicate algorithm identifier: {}";
+
+    private final String COULD_NOT_LOAD_ALGORITHM_CLASS = "Could not load algorithm class ";
 
     @Inject
     public LocalAlgorithmRepository(InputHandlerRepository parserRepository,
@@ -76,7 +76,15 @@ public class LocalAlgorithmRepository implements AlgorithmRepository {
 
     @Override
     public Optional<IAlgorithm> getAlgorithm(OwsCode id) {
-        return Optional.ofNullable(this.algorithms.get(id)).map(Supplier::get);
+
+        String className = this.algorithms.get(id);
+
+        try {
+            return instantiate(getClass().getClassLoader().loadClass(className));
+        } catch (ClassNotFoundException e) {
+            LOG.error(COULD_NOT_LOAD_ALGORITHM_CLASS + className, e);
+        }
+        return Optional.empty();
     }
 
     @Override
@@ -99,7 +107,7 @@ public class LocalAlgorithmRepository implements AlgorithmRepository {
         try {
             addAlgorithm(getClass().getClassLoader().loadClass(className));
         } catch (ClassNotFoundException ex) {
-            LOG.error("Could not load algorithm class " + className, ex);
+            LOG.error(COULD_NOT_LOAD_ALGORITHM_CLASS + className, ex);
         }
     }
 
@@ -110,8 +118,7 @@ public class LocalAlgorithmRepository implements AlgorithmRepository {
             if (this.descriptions.put(description.getId(), description) != null) {
                 LOG.warn(duplicateAlgorithmId, description.getId());
             }
-            Supplier<Error> error = () -> new Error("Could not instantiate algorithm " + description.getId());
-            this.algorithms.put(description.getId(), () -> instantiate(clazz).orElseThrow(error));
+            this.algorithms.put(description.getId(), clazz.getCanonicalName());
             LOG.info("Algorithm class {} with id {} registered", clazz, description.getId());
 
         });
@@ -123,7 +130,7 @@ public class LocalAlgorithmRepository implements AlgorithmRepository {
         if (this.descriptions.put(description.getId(), description) != null) {
             LOG.warn(duplicateAlgorithmId, description.getId());
         }
-        this.algorithms.put(description.getId(), () -> instance);
+        this.algorithms.put(description.getId(), instance.getClass().getCanonicalName());
         LOG.info("Algorithm {} with id {} registered", instance, description.getId());
     }
 
@@ -134,7 +141,7 @@ public class LocalAlgorithmRepository implements AlgorithmRepository {
         } else if (object instanceof Class<?>) {
             addAlgorithm((Class<?>) object);
         } else if (object.getClass().isAnnotationPresent(Algorithm.class)) {
-            addAlgorithm(new AnnotatedAlgorithm(parserRepository, generatorRepository, literalTypeRepository, object));
+            addAlgorithm(object.getClass());
         } else {
             LOG.error("Could not add algorithm {}", object);
         }
@@ -149,7 +156,7 @@ public class LocalAlgorithmRepository implements AlgorithmRepository {
 
     public boolean removeAlgorithm(OwsCode identifier) {
 
-        Supplier<IAlgorithm> removedAlgorithm = this.algorithms.remove(identifier);
+        String removedAlgorithm = this.algorithms.remove(identifier);
 
         if (removedAlgorithm != null) {
             return true;

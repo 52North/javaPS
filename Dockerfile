@@ -12,14 +12,12 @@ RUN mvn --batch-mode --errors --fail-fast \
 
 FROM jetty:jre8
 
-ARG JAVAPS_VERSION=1.6.0-SNAPSHOT
-ENV JAVAPS_VERSION ${JAVAPS_VERSION}
 ENV JAVAPS_ROOT ${JETTY_BASE}/webapps/ROOT
 ENV JAVAPS_TMP ${JAVAPS_ROOT}/WEB-INF/tmp
 ENV JAVAPS_CONFIG ${JAVAPS_ROOT}/WEB-INF/config
 ENV JAVAPS_LIB ${JAVAPS_ROOT}/WEB-INF/lib
 
-COPY --from=BUILD /usr/src/app/webapp/target/javaPS-webapp-${JAVAPS_VERSION}/ /var/lib/jetty/webapps/ROOT
+COPY --from=BUILD /usr/src/app/webapp/target/javaPS-webapp/ /var/lib/jetty/webapps/ROOT
 COPY etc/docker-log4j2.xml /var/lib/jetty/webapps/ROOT/WEB-INF/config/log4j2.xml
 COPY etc/docker-configuration.json /var/lib/jetty/webapps/ROOT/WEB-INF/config/configuration.json
 
@@ -52,7 +50,6 @@ LABEL maintainer="Benjamin Proß <b.pross@52north.org>" \
       org.opencontainers.image.vendor="52°North GmbH" \
       org.opencontainers.image.source="https://github.com/52north/javaPS.git" \
       org.opencontainers.image.documentation="https://github.com/52North/javaPS/blob/develop/README.md" \
-      org.opencontainers.image.version="${JAVAPS_VERSION}" \
       org.opencontainers.image.authors="Benjamin Proß <b.pross@52north.org>, Christian Autermann <c.autermann@52north.org>"
 
 ARG GIT_COMMIT

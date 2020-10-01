@@ -65,7 +65,7 @@ public class BoundingBoxInputOutputHandler extends XmlFactories implements Input
     private static final String EN_UPPER_CORNER = "UpperCorner";
     private static final String EN_LOWER_CORNER = "LowerCorner";
     private static final String EN_BOUNDING_BOX = "BoundingBox";
-    private static final String AN_DIMENSION = "dimension";
+    private static final String AN_DIMENSION = "dimensions";
     private static final String AN_CRS = "crs";
     private static final QName QN_BOUNDING_BOX = new QName(NS_URI, EN_BOUNDING_BOX);
     private static final QName QN_CRS = new QName(AN_CRS);
