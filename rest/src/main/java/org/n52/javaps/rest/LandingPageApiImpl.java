@@ -16,26 +16,29 @@
  */
 package org.n52.javaps.rest;
 
-import org.n52.faroe.Validation;
-import org.n52.faroe.annotation.Configurable;
-import org.n52.faroe.annotation.Setting;
-import org.n52.iceland.service.ServiceSettings;
-import org.n52.javaps.rest.model.Link;
-import org.n52.javaps.rest.model.LandingPage;
-import org.springframework.stereotype.Controller;
-
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.n52.faroe.Validation;
+import org.n52.faroe.annotation.Configurable;
+import org.n52.faroe.annotation.Setting;
+import org.n52.iceland.service.ServiceSettings;
+import org.n52.javaps.rest.model.LandingPage;
+import org.n52.javaps.rest.model.Link;
+import org.n52.javaps.rest.settings.RestSettingsConstants;
+import org.springframework.stereotype.Controller;
+
 /**
- * Home redirection to swagger api documentation
+ * Landing page
  */
 @Controller
 @Configurable
 public class LandingPageApiImpl implements LandingPageApi {
 
     private String serviceURL;
+    private String title;
+    private String description;
 
     @Setting(ServiceSettings.SERVICE_URL)
     public void setServiceURL(URI serviceURL) {
@@ -47,12 +50,20 @@ public class LandingPageApiImpl implements LandingPageApi {
         this.serviceURL = url.replace("/service", BASE_URL);
     }
 
+    @Setting(RestSettingsConstants.TITLE)
+    public void setTitle(String title) {
+        Validation.notNull("title", title);
+        this.title = title;
+    }
+
+    @Setting(RestSettingsConstants.DESCRIPTION)
+    public void setDescription(String description) {
+        Validation.notNull("description", description);
+        this.description = description;
+    }
+
     @Override
     public LandingPage landingPage() {
-
-        String title = "52°North draft OGC API - Processes";
-
-        String description = "52°North draft OGC API - Processes, powered by javaPS";
 
         List<Link> links = new ArrayList<>();
 

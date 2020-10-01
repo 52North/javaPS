@@ -35,4 +35,31 @@
         <property name="defaultValue" value="false" />
     </bean>
 
+    <bean class="org.n52.faroe.settings.StringSettingDefinition">
+        <property name="key" value="rest.title" />
+        <property name="title" value="REST title" />
+        <property name="description" value="The title of the REST landingpage" />
+        <property name="order" value="6.0" />
+        <property name="group" ref="restSettingDefinitionGroup" />
+        <property name="defaultValue" value="52°North draft OGC API - Processes" />
+    </bean>
+
+    <bean class="org.n52.faroe.settings.StringSettingDefinition">
+        <property name="key" value="rest.description" />
+        <property name="title" value="Rest description" />
+        <property name="description" value="The description of the REST landingpage" />
+        <property name="order" value="6.0" />
+        <property name="group" ref="restSettingDefinitionGroup" />
+        <property name="defaultValue" value="52°North draft OGC API - Processes, powered by javaPS" />
+    </bean>
+
+    <bean class="org.n52.faroe.settings.UriSettingDefinition">
+        <property name="key" value="rest.api.uri" />
+        <property name="title" value="API URI" />
+        <property name="description" value="The URI of the API. A calll to /api will redirect to this URI" />
+        <property name="order" value="6.0" />
+        <property name="group" ref="restSettingDefinitionGroup" />
+        <property name="defaultValue" value="https://app.swaggerhub.com/apis/geoprocessing/WPS/1.0-draft" />
+    </bean>
+
 </beans>

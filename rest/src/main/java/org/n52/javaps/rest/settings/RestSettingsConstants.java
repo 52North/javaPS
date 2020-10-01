@@ -19,5 +19,8 @@ package org.n52.javaps.rest.settings;
 public class RestSettingsConstants {
 
     public static final String ENABLE_JOB_LIST_EXTENSION = "rest.enable.joblist.extension";
+    public static final String TITLE = "rest.title";
+    public static final String DESCRIPTION = "rest.description";
+    public static final String API_URI = "rest.api.uri";
 
 }

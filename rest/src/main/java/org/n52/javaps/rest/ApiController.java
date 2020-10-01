@@ -16,12 +16,28 @@
  */
 package org.n52.javaps.rest;
 
+import java.net.URI;
+
+import org.n52.faroe.Validation;
+import org.n52.faroe.annotation.Configurable;
+import org.n52.faroe.annotation.Setting;
+import org.n52.javaps.rest.settings.RestSettingsConstants;
 import org.springframework.stereotype.Controller;
 
 @Controller
+@Configurable
 public class ApiController implements Api {
+
+    private URI apiURI;
+
+    @Setting(RestSettingsConstants.API_URI)
+    public void setDescription(URI apiURI) {
+        Validation.notNull("apiURI", apiURI);
+        this.apiURI = apiURI;
+    }
+
     @Override
     public String api() {
-        return "redirect:https://app.swaggerhub.com/apis/geoprocessing/WPS/1.0-draft";
+        return "redirect:" + apiURI;
     }
 }

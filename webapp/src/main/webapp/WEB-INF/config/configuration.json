@@ -161,6 +161,18 @@
     "rest.enable.joblist.extension" : {
       "type" : "boolean",
       "value" : false
+    },
+    "rest.title" : {
+      "type" : "string",
+      "value" : "52\u00B0North draft OGC API - Processes"
+    },
+    "rest.description" : {
+      "type" : "string",
+      "value" : "52\u00B0North draft OGC API - Processes, powered by javaPS"
+    },
+    "rest.api.uri" : {
+      "type" : "uri",
+      "value" : "https://app.swaggerhub.com/apiproxy/schema/file/apis/geoprocessing/WPS/1.0-draft.4?format=json"
     }
   }
 }
