@@ -3,7 +3,7 @@ FROM alpine/git as clone
 WORKDIR /app
 
 RUN git clone https://github.com/52North/javaps-docker-backend.git \
-	&& git -C ./javaps-docker-backend checkout master
+	&& git -C ./javaps-docker-backend checkout master && cd ./javaps-docker-backend && git status
 
 FROM maven:3-jdk-8-alpine AS BUILD
 
