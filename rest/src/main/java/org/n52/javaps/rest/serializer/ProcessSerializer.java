@@ -16,7 +16,6 @@
  */
 package org.n52.javaps.rest.serializer;
 
-import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toList;
 
 import java.math.BigInteger;
@@ -279,15 +278,15 @@ public class ProcessSerializer extends AbstractSerializer {
     }
 
     private AllowedValues createAllowedValues(OwsAllowedValues allowedValues) {
-        
+
         List<Object> allowedValuesList = new ArrayList<Object>();
-        
+
         allowedValues.stream().map(this::createAllowedValue).collect(Collectors.toCollection(() -> allowedValuesList));
-        
+
         AllowedValues allowedValues2Serialize = new AllowedValues();
-        
+
         allowedValues2Serialize.allowedValues(allowedValuesList);
-        
+
         return allowedValues2Serialize;
     }
 
