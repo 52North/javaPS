@@ -21,6 +21,7 @@ import static java.util.stream.Collectors.toList;
 
 import java.math.BigInteger;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -278,7 +279,16 @@ public class ProcessSerializer extends AbstractSerializer {
     }
 
     private AllowedValues createAllowedValues(OwsAllowedValues allowedValues) {
-        return allowedValues.stream().map(this::createAllowedValue).collect(toCollection(AllowedValues::new));
+        
+        List<Object> allowedValuesList = new ArrayList<Object>();
+        
+        allowedValues.stream().map(this::createAllowedValue).collect(Collectors.toCollection(() -> allowedValuesList));
+        
+        AllowedValues allowedValues2Serialize = new AllowedValues();
+        
+        allowedValues2Serialize.allowedValues(allowedValuesList);
+        
+        return allowedValues2Serialize;
     }
 
     private Object createAllowedValue(OwsValueRestriction allowedValue) {

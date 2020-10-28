@@ -16,21 +16,29 @@
  */
 package org.n52.javaps.rest.model;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+import javax.validation.Valid;
+
 import org.springframework.validation.annotation.Validated;
 
-import java.util.ArrayList;
-import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * AllowedValues
  */
 @Validated
-public class AllowedValues extends ArrayList<Object> {
+public class AllowedValues {
+    @JsonProperty("allowedValues")
+    @Valid
+    private List<Object> allowedValues = new ArrayList<>();
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = 3188528125357828614L;
+    public AllowedValues allowedValues(List<Object> allowedValues) {
+        this.allowedValues = allowedValues;
+        return this;
+    }
 
     @Override
     public boolean equals(java.lang.Object o) {
@@ -47,6 +55,6 @@ public class AllowedValues extends ArrayList<Object> {
 
     @Override
     public String toString() {
-        return String.format("AllowedValues {%s}", super.toString());
+        return String.format("AllowedValues {%s}", allowedValues);
     }
 }
