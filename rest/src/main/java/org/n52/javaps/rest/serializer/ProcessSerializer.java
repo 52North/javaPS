@@ -246,9 +246,27 @@ public class ProcessSerializer extends AbstractSerializer {
         LiteralDataDomain literalDataDomain = new LiteralDataDomain();
         literalDataDomain.setDataType(createLiteralDataDomainDataType(defaultLiteralDataDomain));
         literalDataDomain.setValueDefinition(createPossibleValues(defaultLiteralDataDomain.getPossibleValues()));
+        literalDataDomain.setUom(createUom(defaultLiteralDataDomain.getUOM()));
         defaultLiteralDataDomain.getDefaultValue().map(OwsValue::getValue)
                 .ifPresent(literalDataDomain::setDefaultValue);
         return literalDataDomain;
+    }
+
+    private NameReferenceType createUom(Optional<OwsDomainMetadata> uom) {
+        NameReferenceType uomNameReferenceType = null;
+        if (uom.isPresent()) {
+            uomNameReferenceType = new NameReferenceType();
+            OwsDomainMetadata owsDomainMetadata = uom.get();
+            Optional<String> valueOptional = owsDomainMetadata.getValue();
+            if (valueOptional.isPresent()) {
+                uomNameReferenceType.setName(valueOptional.get());
+            }
+            Optional<URI> referenceOptional = owsDomainMetadata.getReference();
+            if (referenceOptional.isPresent()) {
+                uomNameReferenceType.setReference(referenceOptional.get().toString());
+            }
+        }
+        return uomNameReferenceType;
     }
 
     private NameReferenceType createLiteralDataDomainDataType(
