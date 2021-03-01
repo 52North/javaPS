@@ -26,7 +26,7 @@ import java.util.Objects;
  * InputDescription
  */
 @Validated
-public class InputDescription extends DataDescriptionType {
+public class InputDescription extends DescriptionType {
     @JsonProperty("input")
     private Object input;
 

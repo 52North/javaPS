@@ -21,6 +21,7 @@ import org.n52.javaps.rest.model.Execute;
 import org.n52.javaps.rest.model.ProcessCollection;
 import org.n52.javaps.rest.model.Process;
 import org.n52.javaps.rest.model.StatusInfo;
+import org.n52.shetland.ogc.ows.exception.CodedOwsException;
 import org.n52.javaps.engine.EngineException;
 import org.n52.javaps.engine.ProcessNotFoundException;
 import org.springframework.http.ResponseEntity;
@@ -34,34 +35,34 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.validation.Valid;
 
 public interface ProcessesApi {
-    String BASE_URL = LandingPageApi.BASE_URL + "/processes";
+    String BASE_URL = LandingPageApi.BASE_URL;
 
     @PostMapping(value = BASE_URL
-            + "/{processId}/jobs", produces = MediaTypes.APPLICATION_JSON, consumes = MediaTypes.APPLICATION_JSON)
-    ResponseEntity<?> execute(@Valid @RequestBody Execute body, @PathVariable("processId") String processId)
-            throws EngineException, ExecutionException;
+            + "/jobs", produces = MediaTypes.APPLICATION_JSON, consumes = MediaTypes.APPLICATION_JSON)
+    ResponseEntity<?> execute(@Valid @RequestBody Execute body)
+            throws EngineException, ExecutionException, CodedOwsException;
 
-    @GetMapping(value = BASE_URL + "/{processId}/jobs", produces = MediaTypes.APPLICATION_JSON)
-    ResponseEntity<?> getJobList(@PathVariable("processId") String processId);
+    @GetMapping(value = BASE_URL + "/jobs", produces = MediaTypes.APPLICATION_JSON)
+    ResponseEntity<?> getJobList();
 
-    @GetMapping(value = BASE_URL + "/{processId}/jobs", produces = MediaTypes.TEXT_HTML)
-    String getExecuteForm(@PathVariable("processId") String processId, Model model);
+    @GetMapping(value = BASE_URL + "/jobs", produces = MediaTypes.TEXT_HTML)
+    String getExecuteForm(Model model);
 
-    @GetMapping(value = BASE_URL + "/{processId:.+}", produces = MediaTypes.APPLICATION_JSON)
+    @GetMapping(value = BASE_URL + "/processes/{processId:.+}", produces = MediaTypes.APPLICATION_JSON)
     @ResponseBody
     Process getProcessDescription(@PathVariable("processId") String id) throws ProcessNotFoundException;
 
-    @GetMapping(value = BASE_URL, produces = MediaTypes.APPLICATION_JSON)
+    @GetMapping(value = BASE_URL + "/processes", produces = MediaTypes.APPLICATION_JSON)
     @ResponseBody
     ProcessCollection getProcesses();
 
-    @GetMapping(value = BASE_URL + "/{processId}/jobs/{jobId}/results", produces = MediaTypes.APPLICATION_JSON)
-    ResponseEntity<?> getResult(@PathVariable("processId") String id, @PathVariable("jobId") String jobId)
+    @GetMapping(value = BASE_URL + "/jobs/{jobId}/results", produces = MediaTypes.APPLICATION_JSON)
+    ResponseEntity<?> getResult(@PathVariable("jobId") String jobId)
             throws EngineException, ExecutionException;
 
-    @GetMapping(value = BASE_URL + "/{processId}/jobs/{jobId}", produces = MediaTypes.APPLICATION_JSON)
+    @GetMapping(value = BASE_URL + "/jobs/{jobId}", produces = MediaTypes.APPLICATION_JSON)
     @ResponseBody
-    StatusInfo getStatus(@PathVariable("processId") String processId, @PathVariable("jobId") String jobId)
+    StatusInfo getStatus(@PathVariable("jobId") String jobId)
             throws EngineException;
 
 }

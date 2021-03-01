@@ -16,15 +16,16 @@
  */
 package org.n52.javaps.rest.serializer;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.n52.javaps.rest.model.OutputInfo;
-import org.n52.javaps.rest.model.Result;
-import org.n52.javaps.rest.model.ValueType;
-import org.n52.javaps.rest.model.InlineValue;
-import org.n52.javaps.rest.model.ReferenceValue;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+
 import org.apache.commons.io.IOUtils;
 import org.n52.javaps.engine.OutputEncodingException;
+import org.n52.javaps.rest.model.Format;
+import org.n52.javaps.rest.model.InlineOrRefData;
+import org.n52.javaps.rest.model.Result;
 import org.n52.shetland.ogc.wps.ResponseMode;
 import org.n52.shetland.ogc.wps.data.ProcessData;
 import org.n52.shetland.ogc.wps.data.ReferenceProcessData;
@@ -33,28 +34,29 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @Component
 public class ResultSerializer extends AbstractSerializer {
 
     private static final Logger log = LoggerFactory.getLogger(ResultSerializer.class);
+
     private final ObjectMapper objectMapper = new ObjectMapper();
+
     private boolean isRaw;
 
     public Object serializeResult(org.n52.shetland.ogc.wps.Result result) throws OutputEncodingException {
         isRaw = result.getResponseMode().equals(ResponseMode.RAW);
         if (isRaw) {
-//           if (result.getOutputs().size() > 1) {
-//               TODO throw exception
-//               io.swagger.model.Exception exception = new io.swagger.model.Exception();
-//               exception.setCode(code);
-//               return exception;
-//           }
+            // if (result.getOutputs().size() > 1) {
+            // TODO throw exception
+            // io.swagger.model.Exception exception = new
+            // io.swagger.model.Exception();
+            // exception.setCode(code);
+            // return exception;
+            // }
             for (ProcessData processData : result.getOutputs()) {
                 if (processData.isValue()) {
                     try {
@@ -65,47 +67,70 @@ public class ResultSerializer extends AbstractSerializer {
                 }
             }
         }
-        return new Result().outputs(getOutputInfos(result.getOutputs()));
+        return createResult(result.getOutputs(), isRaw);
     }
 
-    private List<OutputInfo> getOutputInfos(List<ProcessData> outputs) throws OutputEncodingException {
-        List<OutputInfo> outputInfos = new ArrayList<>();
+    private Result createResult(List<ProcessData> outputs,
+            boolean isRaw) {
+
+        Result result = new Result();
+
         for (ProcessData processData : outputs) {
-            try {
-                outputInfos.add(createOutput(processData));
-            } catch (IOException | IllegalArgumentException e) {
-                throw new OutputEncodingException(processData.getId(), e);
+            String id = processData.getId().getValue();
+            if (processData.isValue()) {
+                ValueProcessData valueProcessData = processData.asValue();
+                try {
+                    Object value = createRawOutput(valueProcessData);
+                    if (value instanceof ObjectNode) {
+                        ObjectNode valueAsObjectNode = (ObjectNode) value;
+                        if (!valueAsObjectNode.findPath("bbox").isMissingNode()) {
+                            // bbox data, simply put id and value in result
+                            // hashmap
+                            result.put(id, value);
+                        } else {
+                            result.put(id, createInlineOrRefData(valueProcessData));
+                        }
+                    } else {
+                        result.put(id, createInlineOrRefData(valueProcessData));
+                    }
+                } catch (IOException e) {
+                    log.error("Could not create output with id: " + id, e);
+                }
+
+            } else if (processData.isReference()) {
+                return createReferenceValue(processData.asReference());
             }
         }
-        return outputInfos;
+
+        return result;
     }
 
-    private OutputInfo createOutput(ProcessData processData) throws IOException {
-        OutputInfo output = new OutputInfo();
-        output.setId(processData.getId().getValue());
-        output.setValue(createValueType(processData));
-        return output;
+    private Object createInlineOrRefData(ValueProcessData valueProcessData) {
+        InlineOrRefData result = new InlineOrRefData();
+        result.setFormat(transformFormat(valueProcessData.getFormat()));
+        return result;
     }
 
-    private ValueType createValueType(ProcessData processData) throws IOException {
-        if (processData.isReference()) {
-            return createReferenceValue(processData.asReference());
-        } else if (processData.isValue()) {
-            return createInlineValue(processData.asValue());
-        } else if (processData.isGroup()) {
-            throw new IllegalArgumentException("group outputs are not supported");
-        } else {
-            throw new IllegalArgumentException("outputs type not supported: " + processData);
+    private Format transformFormat(org.n52.shetland.ogc.wps.Format format) {
+        Format result = new Format();
+        if (format.getMimeType().isPresent()) {
+            result.setMimeType(format.getMimeType().get());
         }
+        if (format.getSchema().isPresent()) {
+            result.setSchema(format.getSchema().get());
+        }
+        if (format.getEncoding().isPresent()) {
+            result.setEncoding(format.getEncoding().get());
+        }
+        return result;
     }
 
-    private ValueType createInlineValue(ValueProcessData valueProcessData) throws IOException {
-        return new InlineValue().inlineValue(createRawOutput(valueProcessData));
-
-    }
-
-    private ValueType createReferenceValue(ReferenceProcessData referenceProcessData) {
-        return new ReferenceValue().href(referenceProcessData.getURI().toString());
+    private Result createReferenceValue(ReferenceProcessData referenceProcessData) {
+        Result result = new Result();
+        InlineOrRefData inlineOrRefData = new InlineOrRefData();
+        inlineOrRefData.setHref(referenceProcessData.getURI().toString());
+        result.put(referenceProcessData.getId().getValue(), inlineOrRefData);
+        return result;
     }
 
     private Object createRawOutput(ValueProcessData valueProcessData) throws IOException {

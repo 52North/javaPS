@@ -95,6 +95,13 @@ public class LandingPageApiImpl implements LandingPageApi {
         link.setTitle("The processes offered by this server");
         links.add(link);
 
+        link = new Link();
+        link.setHref(serviceURL + "/jobs/");
+        link.setRel("execute");
+        link.setType(MediaTypes.APPLICATION_JSON);
+        link.setTitle("The execute endpoint of this server");
+        links.add(link);
+
         return new LandingPage().title(title).description(description).links(links);
     }
 }

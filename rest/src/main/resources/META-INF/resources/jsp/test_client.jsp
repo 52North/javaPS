@@ -31,8 +31,6 @@
 
 <%@page import="java.util.Set"%>
 <% ServletContext sc = request.getServletContext();%>
-<% String processid = sc.getAttribute("processId").toString();%>
-<% Set<?> jobSet = (Set<?>)sc.getAttribute("jobSet");%>
 <% String originalRequestURL = sc.getAttribute("originalRequestURL").toString();%>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -41,11 +39,6 @@
 
 <h2>Jobs</h2>
 <a href="${originalRequestURL}.json" target="_blank">Show this page as JSON document</a>
-<ul>
-<c:forEach var="job" items="${jobSet}">
-<li>${job}</li>
-</c:forEach>
-</ul>
 </div>
 
 <h2>Submit new job</h2>
@@ -117,12 +110,6 @@ $(document).ready(
 				});
 				$('#openButton').click(function(event){
 					window.open($('#locationText').val(), '_blank');			
-				});
-				$('#loadButton').click(function(event){
-					
-					$.getJSON("../../../requests/<%= processid %>.json", function(json) {
-						$('#requestTextarea').val(JSON.stringify(json,null,4))
-					});			
 				});
 			});
 			

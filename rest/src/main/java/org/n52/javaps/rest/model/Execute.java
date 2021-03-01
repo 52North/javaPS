@@ -32,6 +32,11 @@ import java.util.Objects;
  */
 @Validated
 public class Execute {
+
+    @JsonProperty("id")
+    @Valid
+    private String id;
+
     @JsonProperty("inputs")
     @Valid
     private List<Input> inputs;
@@ -81,6 +86,20 @@ public class Execute {
 
     public void setInputs(List<Input> inputs) {
         this.inputs = inputs;
+    }
+
+    /**
+     * Get id
+     *
+     * @return id
+     **/
+    @Valid
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public Execute outputs(List<Output> outputs) {

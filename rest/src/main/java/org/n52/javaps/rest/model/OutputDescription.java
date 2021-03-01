@@ -25,7 +25,7 @@ import java.util.Objects;
  * OutputDescription
  */
 @Validated
-public class OutputDescription extends DataDescriptionType {
+public class OutputDescription extends DescriptionType {
     @JsonProperty("output")
     private Object output;
 

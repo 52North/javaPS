@@ -34,23 +34,23 @@ public abstract class AbstractSerializer {
         if (url.contains("?")) {
             url = url.split("[?]")[0];
         }
-        this.serviceURL = url.replace("/service", "/rest/processes");
+        this.serviceURL = url.replace("/service", "/rest");
     }
 
-    protected String createJobHref(String processId, String jobId) {
-        return String.format("%s/%s/jobs/%s", serviceURL, processId, jobId);
+    protected String createJobHref(String jobId) {
+        return String.format("%s/jobs/%s", serviceURL, jobId);
     }
 
-    protected String createResultHref(String processId, String jobId) {
-        return String.format("%s/%s/jobs/%s/results", serviceURL, processId, jobId);
+    protected String createResultHref(String jobId) {
+        return String.format("%s/jobs/%s/results", serviceURL, jobId);
     }
 
-    protected String getJobsHref(String processId) {
-        return String.format("%s/%s/jobs", serviceURL, processId);
+    protected String getJobsHref() {
+        return String.format("%s/jobs", serviceURL);
     }
 
     protected String getProcessHref(String processId) {
-        return String.format("%s/%s", serviceURL, processId);
+        return String.format("%s/processes/%s", serviceURL, processId);
     }
 
 }

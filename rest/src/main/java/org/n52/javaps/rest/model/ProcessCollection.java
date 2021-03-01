@@ -25,23 +25,23 @@ import org.springframework.validation.annotation.Validated;
  * ProcessCollection
  */
 @Validated
-public class ProcessCollection extends ArrayList<ProcessSummary>  {
+public class ProcessCollection extends ArrayList<ProcessSummary> {
 
-      /**
-     *
-     */
+    /**
+    *
+    */
     private static final long serialVersionUID = -7777042090876147646L;
 
     @Override
-      public boolean equals(java.lang.Object o) {
+    public boolean equals(java.lang.Object o) {
         if (this == o) {
-          return true;
+            return true;
         }
         if (o == null || getClass() != o.getClass()) {
-          return false;
+            return false;
         }
         return true;
-      }
+    }
 
     @Override
     public int hashCode() {

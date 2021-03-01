@@ -19,7 +19,6 @@ package org.n52.javaps.rest;
 import static java.util.stream.Collectors.toSet;
 
 import java.net.URI;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Future;
@@ -48,6 +47,8 @@ import org.n52.javaps.rest.serializer.ResultSerializer;
 import org.n52.javaps.rest.serializer.StatusInfoSerializer;
 import org.n52.javaps.rest.settings.RestSettingsConstants;
 import org.n52.shetland.ogc.ows.OwsCode;
+import org.n52.shetland.ogc.ows.exception.CodedOwsException;
+import org.n52.shetland.ogc.ows.exception.MissingParameterValueException;
 import org.n52.shetland.ogc.wps.JobId;
 import org.n52.shetland.ogc.wps.OutputDefinition;
 import org.n52.shetland.ogc.wps.ProcessOffering;
@@ -148,7 +149,7 @@ public final class ProcessesApiImpl implements ProcessesApi {
     }
 
     @Override
-    public ResponseEntity<?> execute(Execute body, String id) throws EngineException, ExecutionException {
+    public ResponseEntity<?> execute(Execute body) throws EngineException, ExecutionException, CodedOwsException {
 
         boolean syncExecute = false;
         try {
@@ -166,7 +167,12 @@ public final class ProcessesApiImpl implements ProcessesApi {
             log.error("Could not resolve response mode. Falling back to DOCUMENT", e);
         }
 
-        OwsCode owsCode = new OwsCode(id);
+        String processId = body.getId();
+        if(processId == null || processId.isEmpty()) {
+            throw new MissingParameterValueException("id");
+        }
+        
+        OwsCode owsCode = new OwsCode(processId);
 
         List<ProcessData> inputs = executeDeserializer.readInputs(body.getInputs());
         List<OutputDefinition> outputs = executeDeserializer.readOutputs(body.getOutputs());
@@ -198,21 +204,19 @@ public final class ProcessesApiImpl implements ProcessesApi {
                 return handleExecutionException(e);
             }
         } else {
-            String uri = String.format("%s/%s/jobs/%s", serviceURL, id, jobId.getValue());
+            String uri = String.format("%s/jobs/%s", serviceURL, jobId.getValue());
             return ResponseEntity.created(URI.create(uri)).build();
         }
     }
 
     @Override
-    public ResponseEntity<?> getJobList(String id) {
+    public ResponseEntity<?> getJobList() {
 
         if (!isJobListEnabled) {
             return ResponseEntity.status(501).build();
         }
 
-        OwsCode owsCode = new OwsCode(id);
-
-        Set<String> values = engine.getJobIdentifiers(owsCode).stream().map(JobId::getValue).collect(toSet());
+        Set<String> values = engine.getJobIdentifiers().stream().map(JobId::getValue).collect(toSet());
 
         JobCollection jobCollection = new JobCollection();
 
@@ -222,7 +226,7 @@ public final class ProcessesApiImpl implements ProcessesApi {
             jobsItem.setId(jobID);
             try {
                 org.n52.shetland.ogc.wps.StatusInfo status = engine.getStatus(jobId);
-                jobsItem.setInfos(statusInfoSerializer.serialize(status, id, jobID, true));
+                jobsItem.setInfos(statusInfoSerializer.serialize(status, jobID, true));
             } catch (EngineException e) {
                 log.error(e.getMessage());
             }
@@ -234,18 +238,18 @@ public final class ProcessesApiImpl implements ProcessesApi {
     }
 
     @Override
-    public String getExecuteForm(String id, Model model) {
-        OwsCode owsCode = new OwsCode(id);
-        context.setAttribute("processId", id);
-
-        Set<String> jobSet = Collections.emptySet();
-
-        if (isJobListEnabled) {
-            jobSet = engine.getJobIdentifiers(owsCode).stream().map(JobId::getValue).collect(toSet());
-        }
-        context.setAttribute("jobSet", jobSet);
+    public String getExecuteForm(Model model) {
+//        OwsCode owsCode = new OwsCode(id);
+//        context.setAttribute("processId", id);
+//
+//        Set<String> jobSet = Collections.emptySet();
+//
+//        if (isJobListEnabled) {
+//            jobSet = engine.getJobIdentifiers(owsCode).stream().map(JobId::getValue).collect(toSet());
+//        }
+//        context.setAttribute("jobSet", jobSet);
         context.setAttribute("originalRequestURL", request.getRequestURL().toString());
-        return "../../../jsp/test_client";
+        return "../jsp/test_client";
     }
 
     @Override
@@ -264,14 +268,9 @@ public final class ProcessesApiImpl implements ProcessesApi {
     }
 
     @Override
-    public ResponseEntity<?> getResult(String processID, String jobID) throws EngineException, ExecutionException {
+    public ResponseEntity<?> getResult(String jobID) throws EngineException, ExecutionException {
 
         JobId jobId = new JobId(jobID);
-        OwsCode processId = new OwsCode(processID);
-
-        if (!engine.hasProcessDescription(processId)) {
-            throw new ProcessNotFoundException(processId);
-        }
 
         if (!engine.hasJob(jobId)) {
             throw new JobNotFoundException(jobId);
@@ -324,16 +323,12 @@ public final class ProcessesApiImpl implements ProcessesApi {
     }
 
     @Override
-    public StatusInfo getStatus(String processId, String jobID) throws EngineException {
-        OwsCode identifier = new OwsCode(processId);
-        if (!engine.hasProcessDescription(identifier)) {
-            throw new ProcessNotFoundException(identifier);
-        }
+    public StatusInfo getStatus(String jobID) throws EngineException {
         JobId jobId = new JobId(jobID);
         if (!engine.hasJob(jobId)) {
             throw new JobNotFoundException(jobId);
         }
-        return statusInfoSerializer.serialize(engine.getStatus(jobId), processId, jobID, false);
+        return statusInfoSerializer.serialize(engine.getStatus(jobId), jobID, false);
 
     }
 }

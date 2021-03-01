@@ -383,7 +383,7 @@ public class ProcessSerializer extends AbstractSerializer {
 
     private Link createExecuteLink(ProcessSummary process) {
         Link executeEndpointLink = new Link();
-        executeEndpointLink.setHref(getJobsHref(process.getId()));
+        executeEndpointLink.setHref(getJobsHref());
         executeEndpointLink.setRel("execute");
         executeEndpointLink.setTitle("Execute endpoint");
         return executeEndpointLink;

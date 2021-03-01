@@ -16,48 +16,21 @@
  */
 package org.n52.javaps.rest.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.validation.annotation.Validated;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Objects;
+
+import org.springframework.validation.annotation.Validated;
 
 /**
  * Result
  */
 @Validated
-public class Result {
-    @JsonProperty("outputs")
-    @Valid
-    private List<OutputInfo> outputs = new ArrayList<>();
-
-    public Result outputs(List<OutputInfo> outputs) {
-        this.outputs = outputs;
-        return this;
-    }
-
-    public Result addOutputsItem(OutputInfo outputsItem) {
-        this.outputs.add(outputsItem);
-        return this;
-    }
+public class Result extends HashMap<String, Object> {
 
     /**
-     * Get outputs
      *
-     * @return outputs
-     **/
-    @NotNull
-    @Valid
-    public List<OutputInfo> getOutputs() {
-        return outputs;
-    }
-
-    public void setOutputs(List<OutputInfo> outputs) {
-        this.outputs = outputs;
-    }
+     */
+    private static final long serialVersionUID = 8217640036233561253L;
 
     @Override
     public boolean equals(java.lang.Object o) {
@@ -67,17 +40,16 @@ public class Result {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Result result = (Result) o;
-        return Objects.equals(this.outputs, result.outputs);
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(outputs);
+        return Objects.hash(this);
     }
 
     @Override
     public String toString() {
-        return String.format("Result{outputs: %s}", outputs);
+        return String.format("Result{outputs: %s}", this);
     }
 }
