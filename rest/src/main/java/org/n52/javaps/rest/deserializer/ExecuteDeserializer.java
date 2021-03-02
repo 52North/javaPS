@@ -16,14 +16,18 @@
  */
 package org.n52.javaps.rest.deserializer;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.Objects;
+
+import org.n52.javaps.engine.InputDecodingException;
 import org.n52.javaps.rest.model.Input;
 import org.n52.javaps.rest.model.Output;
 import org.n52.javaps.rest.model.TransmissionMode;
-import org.n52.javaps.engine.InputDecodingException;
 import org.n52.shetland.ogc.ows.OwsCode;
 import org.n52.shetland.ogc.wps.DataTransmissionMode;
 import org.n52.shetland.ogc.wps.Format;
@@ -36,14 +40,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-
-import static java.util.stream.Collectors.toList;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @Component
 public class ExecuteDeserializer {
@@ -65,20 +65,20 @@ public class ExecuteDeserializer {
         this.objectMapper = Objects.requireNonNull(objectMapper);
     }
 
-    public List<OutputDefinition> readOutputs(List<Output> outputs) {
-        if (outputs == null) {
+    public List<OutputDefinition> readOutputs(Output outputs) {
+//        if (outputs == null) {
             return Collections.emptyList();
-        }
-        return outputs.stream().map(output -> {
-            OutputDefinition definition = new OutputDefinition();
-            definition.setId(createId(output.getId()));
-            org.n52.javaps.rest.model.Format format = output.getFormat();
-            if (format != null) {
-                definition.setFormat(new Format(format.getMimeType(), format.getEncoding(), format.getSchema()));
-            }
-            definition.setDataTransmissionMode(getTransmissionMode(output.getTransmissionMode()));
-            return definition;
-        }).collect(toList());
+//        }
+//        return outputs.stream().map(output -> {
+//            OutputDefinition definition = new OutputDefinition();
+//            definition.setId(createId(output.getId()));
+//            org.n52.javaps.rest.model.Format format = output.getFormat();
+//            if (format != null) {
+//                definition.setFormat(new Format(format.getMimeType(), format.getEncoding(), format.getSchema()));
+//            }
+//            definition.setDataTransmissionMode(getTransmissionMode(output.getTransmissionMode()));
+//            return definition;
+//        }).collect(toList());
     }
 
     private DataTransmissionMode getTransmissionMode(TransmissionMode transmissionMode) {
@@ -100,31 +100,41 @@ public class ExecuteDeserializer {
         return new OwsCode(id);
     }
 
-    public List<ProcessData> readInputs(List<Input> inputs) throws InputDecodingException {
+    public List<ProcessData> readInputs(Input inputs) throws InputDecodingException {
         List<ProcessData> list = new ArrayList<>();
         if (inputs == null) {
             return list;
         }
-        for (Input input : inputs) {
-            OwsCode id = createId(input.getId());
+        for (Entry<String, Object> input : inputs.entrySet()) {
+            String idString = input.getKey();
+            Object value = input.getValue();
+            OwsCode id = createId(idString);
             try {
-                list.add(readInput(id, input.getInput()));
+                list.add(readInput(id, value));
             } catch (JsonProcessingException ex) {
                 throw new InputDecodingException(id, ex);
             }
+
         }
         return list;
     }
 
-    private ProcessData readInput(OwsCode id, JsonNode map) throws InputDecodingException, JsonProcessingException {
-        JsonNode valueNode = map.path(VALUE_KEY);
+    private ProcessData readInput(OwsCode id, Object object) throws InputDecodingException, JsonProcessingException {
+        JsonNode inputNode = null;
+        if (object instanceof JsonNode) {
+            inputNode = (JsonNode) object;
+        } else {
+            log.error("Input not instance of JsonNode.");
+            return null;
+        }
+        JsonNode valueNode = inputNode.path(VALUE_KEY);
         if (valueNode.isObject()) {
             ObjectNode value = (ObjectNode) valueNode;
             // complex data
             if (value.has(INLINE_VALUE_KEY)) {
                 Format format = FORMAT_TEXT_PLAIN;
-                if (map.has(FORMAT_KEY)) {
-                    format = getFormat(map.get(FORMAT_KEY));
+                if (inputNode.has(FORMAT_KEY)) {
+                    format = getFormat(inputNode.get(FORMAT_KEY));
                 }
                 String stringValue;
                 JsonNode inlineValue = value.path(INLINE_VALUE_KEY);
@@ -140,7 +150,7 @@ public class ExecuteDeserializer {
                 try {
                     URI uri = new URI(value.get(HREF_KEY).asText());
                     Format format = null;
-                    JsonNode formatNode = map.get(FORMAT_KEY);
+                    JsonNode formatNode = inputNode.get(FORMAT_KEY);
 
                     if (formatNode != null) {
                         format = getFormat(formatNode);
@@ -155,9 +165,9 @@ public class ExecuteDeserializer {
         } else if (valueNode.isValueNode()) {
             return new StringValueProcessData(id, FORMAT_TEXT_PLAIN, valueNode.asText());
 
-        } else if (map.path(BBOX_KEY).isArray()) {
+        } else if (inputNode.path(BBOX_KEY).isArray()) {
             return new StringValueProcessData(id, new Format("application/json"),
-                    new ObjectMapper().writeValueAsString(map));
+                    new ObjectMapper().writeValueAsString(object));
         }
 
         return null;

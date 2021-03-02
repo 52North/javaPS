@@ -50,6 +50,6 @@ public class Result extends HashMap<String, Object> {
 
     @Override
     public String toString() {
-        return String.format("Result{outputs: %s}", this);
+        return String.format("Result{%s}", this);
     }
 }

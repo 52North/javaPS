@@ -16,122 +16,40 @@
  */
 package org.n52.javaps.rest.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import org.springframework.validation.annotation.Validated;
+import java.util.Objects;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+
+import org.springframework.validation.annotation.Validated;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
  * Execute
  */
 @Validated
 public class Execute {
-
     @JsonProperty("id")
-    @Valid
     private String id;
 
     @JsonProperty("inputs")
-    @Valid
-    private List<Input> inputs;
+    private Input inputs;
 
     @JsonProperty("outputs")
-    @Valid
-    private List<Output> outputs = new ArrayList<>();
-
-    @JsonProperty("mode")
-    private ModeEnum mode;
-
-    @JsonProperty("response")
-    private ResponseEnum response;
-
-    public Execute inputs(List<Input> inputs) {
-        this.inputs = inputs;
-        return this;
-    }
-
-    public Execute addInputsItem(Input inputsItem) {
-        if (this.inputs == null) {
-            this.inputs = new ArrayList<Input>();
-        }
-        this.inputs.add(inputsItem);
-        return this;
-    }
-
-    public Execute mode(ModeEnum mode) {
-        this.mode = mode;
-        return this;
-    }
-
-    public Execute response(ResponseEnum response) {
-        this.response = response;
-        return this;
-    }
-
-    /**
-     * Get inputs
-     *
-     * @return inputs
-     **/
-    @Valid
-    public List<Input> getInputs() {
-        return inputs;
-    }
-
-    public void setInputs(List<Input> inputs) {
-        this.inputs = inputs;
-    }
-
-    /**
-     * Get id
-     *
-     * @return id
-     **/
-    @Valid
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Execute outputs(List<Output> outputs) {
-        this.outputs = outputs;
-        return this;
-    }
-
-    public Execute addOutputsItem(Output outputsItem) {
-        this.outputs.add(outputsItem);
-        return this;
-    }
-
-    /**
-     * Get outputs
-     *
-     * @return outputs
-     **/
-    @NotNull
-    @Valid
-    public List<Output> getOutputs() {
-        return outputs;
-    }
-
-    public void setOutputs(List<Output> outputs) {
-        this.outputs = outputs;
-    }
+    private Output outputs;
 
     /**
      * Gets or Sets mode
      */
     public enum ModeEnum {
-        SYNC("sync"), ASYNC("async"), AUTO("auto");
+        SYNC("sync"),
+
+        ASYNC("async"),
+
+        AUTO("auto");
 
         private String value;
 
@@ -156,11 +74,16 @@ public class Execute {
         }
     }
 
+    @JsonProperty("mode")
+    private ModeEnum mode;
+
     /**
      * Gets or Sets response
      */
     public enum ResponseEnum {
-        RAW("raw"), DOCUMENT("document");
+        RAW("raw"),
+
+        DOCUMENT("document");
 
         private String value;
 
@@ -185,13 +108,81 @@ public class Execute {
         }
     }
 
+    @JsonProperty("response")
+    private ResponseEnum response;
+
+    @JsonProperty("subscriber")
+    private Subscriber subscriber;
+
+    public Execute id(String id) {
+        this.id = id;
+        return this;
+    }
+
+    /**
+     * Get id
+     *
+     * @return id
+     **/
+    @NotNull
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Execute inputs(Input inputs) {
+        this.inputs = inputs;
+        return this;
+    }
+
+    /**
+     * Get inputs
+     *
+     * @return inputs
+     **/
+    @Valid
+    public Input getInputs() {
+        return inputs;
+    }
+
+    public void setInputs(Input inputs) {
+        this.inputs = inputs;
+    }
+
+    public Execute outputs(Output outputs) {
+        this.outputs = outputs;
+        return this;
+    }
+
+    /**
+     * Get outputs
+     *
+     * @return outputs
+     **/
+    @NotNull
+    @Valid
+    public Output getOutputs() {
+        return outputs;
+    }
+
+    public void setOutputs(Output outputs) {
+        this.outputs = outputs;
+    }
+
+    public Execute mode(ModeEnum mode) {
+        this.mode = mode;
+        return this;
+    }
+
     /**
      * Get mode
      *
      * @return mode
      **/
     @NotNull
-
     public ModeEnum getMode() {
         return mode;
     }
@@ -200,19 +191,42 @@ public class Execute {
         this.mode = mode;
     }
 
+    public Execute response(ResponseEnum response) {
+        this.response = response;
+        return this;
+    }
+
     /**
      * Get response
      *
      * @return response
      **/
     @NotNull
-
     public ResponseEnum getResponse() {
         return response;
     }
 
     public void setResponse(ResponseEnum response) {
         this.response = response;
+    }
+
+    public Execute subscriber(Subscriber subscriber) {
+        this.subscriber = subscriber;
+        return this;
+    }
+
+    /**
+     * Get subscriber
+     *
+     * @return subscriber
+     **/
+    @Valid
+    public Subscriber getSubscriber() {
+        return subscriber;
+    }
+
+    public void setSubscriber(Subscriber subscriber) {
+        this.subscriber = subscriber;
     }
 
     @Override

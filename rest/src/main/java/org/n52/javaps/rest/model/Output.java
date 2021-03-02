@@ -16,60 +16,21 @@
  */
 package org.n52.javaps.rest.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.validation.annotation.Validated;
-
-import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.Objects;
+
+import org.springframework.validation.annotation.Validated;
 
 /**
  * Output
  */
 @Validated
-public class Output extends DataType {
-    @JsonProperty("id")
-    private String id;
-
-    @JsonProperty("transmissionMode")
-    private TransmissionMode transmissionMode;
-
-    public Output id(String id) {
-        this.id = id;
-        return this;
-    }
+public class Output extends HashMap<String, Object> {
 
     /**
-     * Get id
      *
-     * @return id
-     **/
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Output transmissionMode(TransmissionMode transmissionMode) {
-        this.transmissionMode = transmissionMode;
-        return this;
-    }
-
-    /**
-     * Get transmissionMode
-     *
-     * @return transmissionMode
-     **/
-
-    @Valid
-    public TransmissionMode getTransmissionMode() {
-        return transmissionMode;
-    }
-
-    public void setTransmissionMode(TransmissionMode transmissionMode) {
-        this.transmissionMode = transmissionMode;
-    }
+     */
+    private static final long serialVersionUID = 2986780216271091258L;
 
     @Override
     public boolean equals(java.lang.Object o) {
@@ -79,18 +40,16 @@ public class Output extends DataType {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Output output = (Output) o;
-        return Objects.equals(this.id, output.id) && Objects.equals(this.transmissionMode, output.transmissionMode)
-                && super.equals(o);
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, transmissionMode, super.hashCode());
+        return Objects.hash(this);
     }
 
     @Override
     public String toString() {
-        return String.format("Output {%s, id: %s, transmissionMode: %s}", super.toString(), id, transmissionMode);
+        return String.format("Output {%s}", this);
     }
 }

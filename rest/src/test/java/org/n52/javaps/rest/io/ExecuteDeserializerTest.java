@@ -55,9 +55,7 @@ public class ExecuteDeserializerTest {
 
         Input input1 = new Input();
 
-        input1.setId("input1");
-
-        input1.setInput(complexDataNode);
+        input1.put("input1", complexDataNode);
 
         List<Input> inputs = new ArrayList<Input>(3);
 
@@ -66,7 +64,7 @@ public class ExecuteDeserializerTest {
         List<ProcessData> processData = null;
 
         try {
-             processData = new ExecuteDeserializer(objectMapper).readInputs(inputs);
+             processData = new ExecuteDeserializer(objectMapper).readInputs(input1);
         } catch (InputDecodingException e) {
            fail(e.getMessage());
         }
@@ -90,9 +88,7 @@ public class ExecuteDeserializerTest {
 
         Input input1 = new Input();
 
-        input1.setId("input1");
-
-        input1.setInput(complexDataNode);
+        input1.put("input1", complexDataNode);
 
         List<Input> inputs = new ArrayList<Input>(3);
 
@@ -101,7 +97,7 @@ public class ExecuteDeserializerTest {
         List<ProcessData> processData = null;
 
         try {
-             processData = new ExecuteDeserializer(objectMapper).readInputs(inputs);
+             processData = new ExecuteDeserializer(objectMapper).readInputs(input1);
         } catch (InputDecodingException e) {
            fail(e.getMessage());
         }
@@ -122,9 +118,7 @@ public class ExecuteDeserializerTest {
 
         Input input1 = new Input();
 
-        input1.setId("input1");
-
-        input1.setInput(literalDataNode);
+        input1.put("input1", literalDataNode);
 
         List<Input> inputs = new ArrayList<Input>(3);
 
@@ -133,7 +127,7 @@ public class ExecuteDeserializerTest {
         List<ProcessData> processData = null;
 
         try {
-             processData = new ExecuteDeserializer(objectMapper).readInputs(inputs);
+             processData = new ExecuteDeserializer(objectMapper).readInputs(input1);
         } catch (InputDecodingException e) {
            fail(e.getMessage());
         }
@@ -159,9 +153,7 @@ public class ExecuteDeserializerTest {
 
         Input input1 = new Input();
 
-        input1.setId("input1");
-
-        input1.setInput(bboxNode);
+        input1.put("input1", bboxNode);
 
         List<Input> inputs = new ArrayList<Input>(3);
 
@@ -170,7 +162,7 @@ public class ExecuteDeserializerTest {
         List<ProcessData> processData = null;
 
         try {
-             processData = new ExecuteDeserializer(objectMapper).readInputs(inputs);
+             processData = new ExecuteDeserializer(objectMapper).readInputs(input1);
         } catch (InputDecodingException e) {
            fail(e.getMessage());
         }

@@ -168,10 +168,10 @@ public final class ProcessesApiImpl implements ProcessesApi {
         }
 
         String processId = body.getId();
-        if(processId == null || processId.isEmpty()) {
+        if (processId == null || processId.isEmpty()) {
             throw new MissingParameterValueException("id");
         }
-        
+
         OwsCode owsCode = new OwsCode(processId);
 
         List<ProcessData> inputs = executeDeserializer.readInputs(body.getInputs());

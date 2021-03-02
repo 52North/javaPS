@@ -16,61 +16,21 @@
  */
 package org.n52.javaps.rest.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.JsonNode;
-import org.springframework.validation.annotation.Validated;
-
-import javax.validation.constraints.NotNull;
+import java.util.HashMap;
 import java.util.Objects;
+
+import org.springframework.validation.annotation.Validated;
 
 /**
  * Input
  */
 @Validated
-public class Input {
-    @JsonProperty("id")
-    private String id;
-
-    @JsonProperty("input")
-    private JsonNode input;
-
-    public Input id(String id) {
-        this.id = id;
-        return this;
-    }
+public class Input extends HashMap<String, Object> {
 
     /**
-     * Get id
      *
-     * @return id
-     **/
-    @NotNull
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Input input(JsonNode input) {
-        this.input = input;
-        return this;
-    }
-
-    /**
-     * Get input
-     *
-     * @return input
-     **/
-    @NotNull
-    public JsonNode getInput() {
-        return input;
-    }
-
-    public void setInput(JsonNode input) {
-        this.input = input;
-    }
+     */
+    private static final long serialVersionUID = 736494756853150842L;
 
     @Override
     public boolean equals(java.lang.Object o) {
@@ -80,17 +40,16 @@ public class Input {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Input other = (Input) o;
-        return Objects.equals(this.id, other.id) && Objects.equals(this.input, other.input);
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, input);
+        return Objects.hash(this);
     }
 
     @Override
     public String toString() {
-        return String.format("class Input {id: %s, input: %s}", id, input);
+        return String.format("Input {%s}", this);
     }
 }
