@@ -249,7 +249,7 @@ public final class ProcessesApiImpl implements ProcessesApi {
 //        }
 //        context.setAttribute("jobSet", jobSet);
         context.setAttribute("originalRequestURL", request.getRequestURL().toString());
-        return "../jsp/test_client";
+        return "/jsp/test_client";
     }
 
     @Override
