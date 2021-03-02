@@ -75,28 +75,28 @@ public class LandingPageApiImpl implements LandingPageApi {
         links.add(link);
 
         link = new Link();
-        link.setHref(serviceURL + "/api/");
-        link.setRel("service");
+        link.setHref(serviceURL + "/api");
+        link.setRel("service-desc");
         link.setType(MediaTypes.APPLICATION_OPENAPI_JSON_3_0);
         link.setTitle("The API definition");
         links.add(link);
 
         link = new Link();
-        link.setHref(serviceURL + "/conformance/");
+        link.setHref(serviceURL + "/conformance");
         link.setRel("conformance");
         link.setType(MediaTypes.APPLICATION_JSON);
         link.setTitle("Conformance classes implemented by this server");
         links.add(link);
 
         link = new Link();
-        link.setHref(serviceURL + "/processes/");
+        link.setHref(serviceURL + "/processes");
         link.setRel("processes");
         link.setType(MediaTypes.APPLICATION_JSON);
         link.setTitle("The processes offered by this server");
         links.add(link);
 
         link = new Link();
-        link.setHref(serviceURL + "/jobs/");
+        link.setHref(serviceURL + "/jobs");
         link.setRel("execute");
         link.setType(MediaTypes.APPLICATION_JSON);
         link.setTitle("The execute endpoint of this server");
