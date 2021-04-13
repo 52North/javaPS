@@ -128,9 +128,9 @@
             </resource>
             <resource>
                 <directory>src/test/resources</directory>
-                <filtering>true</filtering>
+                <filtering>false</filtering>
                 <includes>
-                    <include>**/*</include>
+                    <include>**/*.dat</include>
                 </includes>
             </resource>
         </resources>
