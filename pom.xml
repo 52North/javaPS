@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright 2016-2020 52°North Initiative for Geospatial Open Source
+    Copyright 2016-2021 52°North Initiative for Geospatial Open Source
     Software GmbH
 
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.n52</groupId>
         <artifactId>parent</artifactId>
-        <version>19</version>
+        <version>21</version>
     </parent>
 
     <groupId>org.n52.wps</groupId>
@@ -96,10 +96,10 @@
         <version.spring>5.2.3.RELEASE</version.spring>
         <version.slf4j>1.7.28</version.slf4j>
         <version.log4j>2.13.3</version.log4j>
-        <version.arctic.sea>8.0.1</version.arctic.sea>
+        <version.arctic.sea>8.2.0</version.arctic.sea>
         <version.xmlbeans>3.1.0</version.xmlbeans>
         <version.common.xml>2.6.1</version.common.xml>
-        <version.jackson>2.10.3</version.jackson>
+        <version.jackson>2.12.1</version.jackson>
     </properties>
 
     <dependencyManagement>
@@ -234,7 +234,7 @@
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
-                <version>4.12</version>
+                <version>4.13.1</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.hamcrest</groupId>
@@ -351,7 +351,7 @@
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>28.2-jre</version>
+                <version>30.0-jre</version>
                 <exclusions>
                    <exclusion>
                        <groupId>com.google.code.findbugs</groupId>
@@ -507,6 +507,9 @@
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
+                <excludes>
+                    <exclude>**/*.jsp</exclude>
+                </excludes>
                 <includes>
                     <include>**/*</include>
                 </includes>
@@ -516,6 +519,9 @@
             <testResource>
                 <directory>src/test/resources</directory>
                 <filtering>true</filtering>
+                <excludes>
+                    <exclude>**/*.dat</exclude>
+                </excludes>
                 <includes>
                     <include>**/*</include>
                 </includes>

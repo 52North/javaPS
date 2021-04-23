@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright 2016-2020 52°North Initiative for Geospatial Open Source
+    Copyright 2016-2021 52°North Initiative for Geospatial Open Source
     Software GmbH
 
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -128,9 +128,9 @@
             </resource>
             <resource>
                 <directory>src/test/resources</directory>
-                <filtering>true</filtering>
+                <filtering>false</filtering>
                 <includes>
-                    <include>**/*</include>
+                    <include>**/*.dat</include>
                 </includes>
             </resource>
         </resources>

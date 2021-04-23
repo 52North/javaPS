@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2020 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2021 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,11 +16,11 @@
  */
 package org.n52.javaps.rest.serializer;
 
-import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toList;
 
 import java.math.BigInteger;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -246,9 +246,27 @@ public class ProcessSerializer extends AbstractSerializer {
         LiteralDataDomain literalDataDomain = new LiteralDataDomain();
         literalDataDomain.setDataType(createLiteralDataDomainDataType(defaultLiteralDataDomain));
         literalDataDomain.setValueDefinition(createPossibleValues(defaultLiteralDataDomain.getPossibleValues()));
+        literalDataDomain.setUom(createUom(defaultLiteralDataDomain.getUOM()));
         defaultLiteralDataDomain.getDefaultValue().map(OwsValue::getValue)
                 .ifPresent(literalDataDomain::setDefaultValue);
         return literalDataDomain;
+    }
+
+    private NameReferenceType createUom(Optional<OwsDomainMetadata> uom) {
+        NameReferenceType uomNameReferenceType = null;
+        if (uom.isPresent()) {
+            uomNameReferenceType = new NameReferenceType();
+            OwsDomainMetadata owsDomainMetadata = uom.get();
+            Optional<String> valueOptional = owsDomainMetadata.getValue();
+            if (valueOptional.isPresent()) {
+                uomNameReferenceType.setName(valueOptional.get());
+            }
+            Optional<URI> referenceOptional = owsDomainMetadata.getReference();
+            if (referenceOptional.isPresent()) {
+                uomNameReferenceType.setReference(referenceOptional.get().toString());
+            }
+        }
+        return uomNameReferenceType;
     }
 
     private NameReferenceType createLiteralDataDomainDataType(
@@ -278,7 +296,16 @@ public class ProcessSerializer extends AbstractSerializer {
     }
 
     private AllowedValues createAllowedValues(OwsAllowedValues allowedValues) {
-        return allowedValues.stream().map(this::createAllowedValue).collect(toCollection(AllowedValues::new));
+
+        List<Object> allowedValuesList = new ArrayList<Object>();
+
+        allowedValues.stream().map(this::createAllowedValue).collect(Collectors.toCollection(() -> allowedValuesList));
+
+        AllowedValues allowedValues2Serialize = new AllowedValues();
+
+        allowedValues2Serialize.allowedValues(allowedValuesList);
+
+        return allowedValues2Serialize;
     }
 
     private Object createAllowedValue(OwsValueRestriction allowedValue) {

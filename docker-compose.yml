@@ -21,5 +21,7 @@ services:
       SERVICE_SERVICE_URL: http://localhost:8082/service
       SERVICE_PROVIDER_INDIVIDUAL_NAME: Jane Doe
       SERVICE_PROVIDER_POSITION_NAME: First Line Supporter
+      DOCKER_ENVPREFIX: TEST_
+      TEST_MY_PROPERTY: custom-value
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
