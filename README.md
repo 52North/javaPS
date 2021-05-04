@@ -59,17 +59,23 @@ This project is licensed under the Apache Software License, version 2.0.
 
 ## Changelog
 
-### New features ---
-
-- Updated to arctic-sea v6
-- Added Dockerfile
-
 ### Fixed issues ---
 
-- Test if inputs are null, This can be the case for optional inputs
-- Enabled storing of outputs encoded in base64
-- Removed test algorithm
-- Updated jackson-databind dependency
+- Bugfix, add allowedValues element
+- REST Serialize UOM
+- Fix missing .jsp file
+
+### Dependency updates ---
+
+- Bump junit from 4.12 to 4.13.1
+- Bump version.jackson from 2.10.3 to 2.12.1
+- Bump guava from 28.2-jre to 29.0-jre
+- Update parent and artic-sea versions
+- Bump commons-io from 2.6 to 2.7
+
+### Other ---
+
+- Bump year
 
 ## References
 
