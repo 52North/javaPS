@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2020 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2021 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,123 +14,118 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-//package org.n52.javaps;
+package org.n52.javaps;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+
+import java.io.IOException;
+import java.util.List;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.n52.geoprocessing.wps.client.ExecuteRequestBuilder;
+import org.n52.geoprocessing.wps.client.WPSClientException;
+import org.n52.geoprocessing.wps.client.WPSClientSession;
+import org.n52.geoprocessing.wps.client.model.ExceptionReport;
+import org.n52.geoprocessing.wps.client.model.Process;
+import org.n52.geoprocessing.wps.client.model.Result;
+import org.n52.geoprocessing.wps.client.model.StatusInfo;
+import org.n52.geoprocessing.wps.client.model.execution.Data;
+
+public class ExecutePostIT extends Base {
+
+    private final static String TIFF_MAGIC = "<![CDATA[II";
+    private String url = getEndpointURL();
+
+    public final String referenceComplexBinaryInputURL = getURL() +
+            "static/testData/elev_srtm_30m21.tif";
+    public final String referenceComplexXMLInputURL = getURL() +
+         "static/testData/test-data.xml";
+
+    private ExecuteRequestBuilder echoProcessExecuteRequestBuilder;
+    private final String echoProcessIdentifier = "org.n52.javaps.test.EchoProcess";
+    private final String echoProcessInlineComplexXMLInput = "<TestData><this><is><xml><Data>Test</Data></xml></is></this></TestData>";
+    private final String testDataNodeName = "TestData";
+    private final String echoProcessLiteralInputID = "literalInput";
+    private final String echoProcessLiteralInputString = "testData";
+    private final String echoProcessComplexInputID = "complexInput";
+    private final String echoProcessComplexMimeTypeTextXML = "text/xml";
+    private final String echoProcessLiteralMimeTypeTextXML = "text/xml";
+    private final String echoProcessComplexOutputID = "complexOutput";
+    private final String echoProcessLiteralOutputID = "literalOutput";
+
+    private ExecuteRequestBuilder multiReferenceBinaryInputAlgorithmExecuteRequestBuilder;
+    private final String multiReferenceBinaryInputAlgorithmIdentifier = "org.n52.wps.server.algorithm.test.MultiReferenceBinaryInputAlgorithm";
+    private final String multiReferenceBinaryInputAlgorithmComplexInputID = "data";
+    private final String multiReferenceBinaryInputAlgorithmComplexOutputID = "result";
+    private final String multiReferenceBinaryInputAlgorithmComplexMimeTypeImageTiff= "image/tiff";
+    private final String base64TiffStart= "SUkqAAgAAAASAAA";
+
+    private String tiffImageBinaryInputAsBase64String;
+
+    private String version200 = "2.0.0";
+
+    @Before
+    public void before(){
+
+        WPSClientSession wpsClient = WPSClientSession.getInstance();
+
+        try {
+            wpsClient.connect(url, version200);
+        } catch (WPSClientException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        Process echoProcessDescription;
+
+            echoProcessDescription = wpsClient
+                    .getProcessDescription(url, echoProcessIdentifier, version200);
+
+            echoProcessExecuteRequestBuilder = new ExecuteRequestBuilder(echoProcessDescription);
+
+
+        assertThat(echoProcessExecuteRequestBuilder, is(not(nullValue())));
+
+//        Process multiReferenceBinaryInputAlgorithmDescription;
 //
-//import static org.hamcrest.MatcherAssert.assertThat;
-//import static org.hamcrest.Matchers.equalTo;
-//import static org.hamcrest.Matchers.instanceOf;
-//import static org.hamcrest.Matchers.is;
-//import static org.hamcrest.Matchers.not;
-//import static org.hamcrest.Matchers.nullValue;
-//import static org.junit.Assert.assertTrue;
-//import static org.junit.Assert.fail;
+//            multiReferenceBinaryInputAlgorithmDescription = wpsClient
+//                    .getProcessDescription(url, multiReferenceBinaryInputAlgorithmIdentifier, version200);
 //
-//import java.io.BufferedReader;
-//import java.io.IOException;
-//import java.io.InputStream;
-//import java.io.InputStreamReader;
-//import java.util.List;
+//            multiReferenceBinaryInputAlgorithmExecuteRequestBuilder = new ExecuteRequestBuilder(multiReferenceBinaryInputAlgorithmDescription);
 //
-//import javax.xml.parsers.ParserConfigurationException;
 //
-//import org.junit.Before;
-//import org.junit.Test;
-//import org.n52.geoprocessing.wps.client.ExecuteRequestBuilder;
-//import org.n52.geoprocessing.wps.client.WPSClientException;
-//import org.n52.geoprocessing.wps.client.WPSClientSession;
-//import org.n52.geoprocessing.wps.client.model.Process;
-//import org.n52.geoprocessing.wps.client.model.Result;
-//import org.n52.geoprocessing.wps.client.model.execution.Data;
-//import org.xml.sax.SAXException;
+//        assertThat(multiReferenceBinaryInputAlgorithmExecuteRequestBuilder, is(not(nullValue())));
 //
-//import net.opengis.ows.x20.ExceptionReportDocument;
+//        InputStream tiffImageInputStream = getClass().getResourceAsStream("/Execute/image.tiff.base64");
 //
-//public class ExecutePostIT extends Base {
+//        BufferedReader tiffImageInputStreamReader = new BufferedReader(new InputStreamReader(tiffImageInputStream));
 //
-//    private final static String TIFF_MAGIC = "<![CDATA[II";
-//    private String url = getEndpointURL();
+//        StringBuilder tiffImageInputStringBuilder = new StringBuilder();
 //
-//    public final String referenceComplexBinaryInputURL = getURL() +
-//            "static/testData/elev_srtm_30m21.tif";
-//    public final String referenceComplexXMLInputURL = getURL() +
-//         "static/testData/test-data.xml";
-//
-//    private ExecuteRequestBuilder echoProcessExecuteRequestBuilder;
-//    private final String echoProcessIdentifier = "org.n52.javaps.test.EchoProcess";
-//    private final String echoProcessInlineComplexXMLInput = "<TestData><this><is><xml><Data>Test</Data></xml></is></this></TestData>";
-//    private final String testDataNodeName = "TestData";
-//    private final String echoProcessLiteralInputID = "literalInput";
-//    private final String echoProcessLiteralInputString = "testData";
-//    private final String echoProcessComplexInputID = "complexInput";
-//    private final String echoProcessComplexMimeTypeTextXML = "text/xml";
-//    private final String echoProcessComplexOutputID = "complexOutput";
-//    private final String echoProcessLiteralOutputID = "literalOutput";
-//
-//    private ExecuteRequestBuilder multiReferenceBinaryInputAlgorithmExecuteRequestBuilder;
-//    private final String multiReferenceBinaryInputAlgorithmIdentifier = "org.n52.wps.server.algorithm.test.MultiReferenceBinaryInputAlgorithm";
-//    private final String multiReferenceBinaryInputAlgorithmComplexInputID = "data";
-//    private final String multiReferenceBinaryInputAlgorithmComplexOutputID = "result";
-//    private final String multiReferenceBinaryInputAlgorithmComplexMimeTypeImageTiff= "image/tiff";
-//    private final String base64TiffStart= "SUkqAAgAAAASAAA";
-//
-//    private String tiffImageBinaryInputAsBase64String;
-//
-//    private String version200 = "2.0.0";
-//
-//    @Before
-//    public void before(){
-//
-//        WPSClientSession wpsClient = WPSClientSession.getInstance();
+//        String line = "";
 //
 //        try {
-//            wpsClient.connect(url, version200);
-//        } catch (WPSClientException e) {
-//            // TODO Auto-generated catch block
+//            while ((line = tiffImageInputStreamReader.readLine()) != null) {
+//                tiffImageInputStringBuilder.append(line);
+//            }
+//        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
 //
-//        Process echoProcessDescription;
+//        tiffImageBinaryInputAsBase64String = tiffImageInputStringBuilder.toString();
 //
-//            echoProcessDescription = wpsClient
-//                    .getProcessDescription(url, echoProcessIdentifier, version200);
-//
-//            echoProcessExecuteRequestBuilder = new ExecuteRequestBuilder(echoProcessDescription);
-//
-//
-//        assertThat(echoProcessExecuteRequestBuilder, is(not(nullValue())));
-//
-////        Process multiReferenceBinaryInputAlgorithmDescription;
-////
-////            multiReferenceBinaryInputAlgorithmDescription = wpsClient
-////                    .getProcessDescription(url, multiReferenceBinaryInputAlgorithmIdentifier, version200);
-////
-////            multiReferenceBinaryInputAlgorithmExecuteRequestBuilder = new ExecuteRequestBuilder(multiReferenceBinaryInputAlgorithmDescription);
-////
-////
-////        assertThat(multiReferenceBinaryInputAlgorithmExecuteRequestBuilder, is(not(nullValue())));
-////
-////        InputStream tiffImageInputStream = getClass().getResourceAsStream("/Execute/image.tiff.base64");
-////
-////        BufferedReader tiffImageInputStreamReader = new BufferedReader(new InputStreamReader(tiffImageInputStream));
-////
-////        StringBuilder tiffImageInputStringBuilder = new StringBuilder();
-////
-////        String line = "";
-////
-////        try {
-////            while ((line = tiffImageInputStreamReader.readLine()) != null) {
-////                tiffImageInputStringBuilder.append(line);
-////            }
-////        } catch (IOException e) {
-////            e.printStackTrace();
-////        }
-////
-////        tiffImageBinaryInputAsBase64String = tiffImageInputStringBuilder.toString();
-////
-////        assertThat(tiffImageBinaryInputAsBase64String, is(not(nullValue())));
-////        assertThat(tiffImageBinaryInputAsBase64String, is(not(equalTo(""))));
-//
-//    }
+//        assertThat(tiffImageBinaryInputAsBase64String, is(not(nullValue())));
+//        assertThat(tiffImageBinaryInputAsBase64String, is(not(equalTo(""))));
+
+    }
 //
 //    /*Complex inline XML input */
 //    @Test
@@ -634,36 +629,102 @@
 //        }
 //    }
 //
-//    /*Complex inline XML Output*/
+    /*Complex inline XML Output*/
+    @Test
+    public void testExecutePOSTComplexXMLSynchronousXMLOutputStatusTrue() throws IOException {
+        System.out.println("\nRunning testExecutePOSTComplexXMLSynchronousXMLOutputStatusTrue");
+
+        try {
+
+            Object responseObject =  createAndSubmitEchoProcessExecuteWithResponseDocument(false, false);
+
+            assertThat(responseObject, is(not(nullValue())));
+            assertThat(responseObject, is(not(instanceOf(ExceptionReport.class))));
+
+            if (responseObject instanceof Result) {
+
+                Result result = (Result) responseObject;
+
+                checkIdentifier(result,
+                        echoProcessComplexOutputID);
+
+                checkOutputContainsValue(result, echoProcessComplexOutputID, testDataNodeName);
+            }
+        } catch (WPSClientException e) {
+            fail(e.getMessage());
+        }
+    }
+
+    /*Test concurrent process execution*/
 //    @Test
-//    public void testExecutePOSTComplexXMLSynchronousXMLOutputStatusTrue() throws IOException, ParserConfigurationException, SAXException {
-//        System.out.println("\nRunning testExecutePOSTComplexXMLSynchronousXMLOutputStatusTrue");
-//
-//        try {
-//
-//            Object responseObject =  createAndSubmitEchoProcessExecuteWithResponseDocument(true, false, false);
-//
-//            assertThat(responseObject, is(not(nullValue())));
-//            assertThat(responseObject, is(not(instanceOf(ExceptionReportDocument.class))));
-//
-//            if (responseObject instanceof ExecuteResponseDocument) {
-//
-//                ExecuteResponseDocument executeResponseDocument = (ExecuteResponseDocument) responseObject;
-//
-//                checkIdentifier(executeResponseDocument,
-//                        echoProcessComplexOutputID);
-//
-//                String response = executeResponseDocument.toString();
-//
-//                assertThat(AllTestsIT.parseXML(response), is(not(nullValue())));
-//                assertThat(response, response, not(containsString("ExceptionReport")));
-//                assertThat(response, response, containsString(testDataNodeName));
-//                assertThat(response, response, containsString("ProcessSucceeded"));
-//            }
-//        } catch (WPSClientException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    public void testExecutePOSTConcurrency() throws IOException {
+        System.out.println("\nRunning testExecutePOSTConcurrency");
+
+
+        new Thread("testExecutePOSTConcurrency thread 2") {
+            public void run() {
+            };
+        }.start();
+
+        String statusLocation005 = "";
+
+        String literalValue005 = "0.05";
+
+        try {
+
+            Object responseObject =  createAndSubmitEchoProcessExecuteForConcurrencyTest(3000, literalValue005);
+
+            assertThat(responseObject, is(not(nullValue())));
+            assertThat(responseObject, is(not(instanceOf(ExceptionReport.class))));
+
+            if (responseObject instanceof StatusInfo) {
+
+                StatusInfo result = (StatusInfo) responseObject;
+
+                statusLocation005 = result.getStatusLocation();
+            }
+        } catch (WPSClientException e) {
+            fail(e.getMessage());
+        }
+
+        String statusLocation006 = "";
+        String literalValue006 = "0.06";
+
+        try {
+
+            Object responseObject =  createAndSubmitEchoProcessExecuteForConcurrencyTest(1000, literalValue006);
+
+            assertThat(responseObject, is(not(nullValue())));
+            assertThat(responseObject, is(not(instanceOf(ExceptionReport.class))));
+
+            if (responseObject instanceof StatusInfo) {
+
+                StatusInfo result = (StatusInfo) responseObject;
+
+                statusLocation006 = result.getStatusLocation();
+            }
+        } catch (WPSClientException | IOException e) {
+            fail(e.getMessage());
+        }
+
+        System.out.println(statusLocation005);
+        System.out.println(statusLocation006);
+
+        try {
+            Result result005 = (Result) WPSClientSession.getInstance().getResultFromStatusLocation(statusLocation005);
+
+            checkOutputContainsValue(result005, echoProcessLiteralOutputID, literalValue005);
+
+            Result result006 = (Result) WPSClientSession.getInstance().getResultFromStatusLocation(statusLocation006);
+
+            checkOutputContainsValue(result006, echoProcessLiteralOutputID, literalValue006);
+        } catch (WPSClientException | IOException e) {
+            fail(e.getMessage());
+        }
+
+    }
+
+
 //
 //    @Test
 //    public void testExecutePOSTComplexXMLASynchronousXMLOutputStoreStatusTrue() throws IOException, ParserConfigurationException, SAXException {
@@ -1339,7 +1400,7 @@
 //        }
 //    }
 
-//    private Object createAndSubmitMultiReferenceBinaryInputAlgorithmExecuteWithResponseDocument(boolean status, boolean storeSupport, boolean asReference, String outputEncoding) throws WPSClientException, IOException{
+    //    private Object createAndSubmitMultiReferenceBinaryInputAlgorithmExecuteWithResponseDocument(boolean status, boolean storeSupport, boolean asReference, String outputEncoding) throws WPSClientException, IOException{
 //
 //        multiReferenceBinaryInputAlgorithmExecuteRequestBuilder.addComplexDataReference(multiReferenceBinaryInputAlgorithmComplexInputID,
 //                                                                                        referenceComplexBinaryInputURL,
@@ -1410,20 +1471,95 @@
 //        return responseObject;
 //    }
 //
-//    private Object createAndSubmitEchoProcessExecuteWithResponseDocument(boolean status, boolean storeSupport, boolean asReference) throws WPSClientException, IOException {
+    private Object createAndSubmitEchoProcessExecuteWithResponseDocument(boolean async, boolean asReference) throws WPSClientException, IOException {
+
+        echoProcessExecuteRequestBuilder.reset();
+
+        echoProcessExecuteRequestBuilder.addComplexData(echoProcessComplexInputID, echoProcessInlineComplexXMLInput, null, null, echoProcessComplexMimeTypeTextXML);
+
+        echoProcessExecuteRequestBuilder.setResponseDocument(echoProcessComplexOutputID, null, null, echoProcessComplexMimeTypeTextXML);
+
+//        echoProcessExecuteRequestBuilder.setStoreSupport(echoProcessComplexOutputID, storeSupport);
+//        echoProcessExecuteRequestBuilder.setStatus(echoProcessComplexOutputID, status);
+
+        echoProcessExecuteRequestBuilder.setAsReference(echoProcessComplexOutputID, asReference);
+
+        if(async) {
+            echoProcessExecuteRequestBuilder.setAsynchronousExecute();
+        }
+
+
+
+        Object responseObject =  WPSClientSession.getInstance().execute(url, echoProcessExecuteRequestBuilder.getExecute(), version200);
+
+        return responseObject;
+    }
 //
-//        echoProcessExecuteRequestBuilder.addComplexData(echoProcessComplexInputID, echoProcessInlineComplexXMLInput, null, null, echoProcessComplexMimeTypeTextXML);
-//
-//        echoProcessExecuteRequestBuilder.setResponseDocument(echoProcessComplexOutputID, null, null, echoProcessComplexMimeTypeTextXML);
-//
-////        echoProcessExecuteRequestBuilder.setStoreSupport(echoProcessComplexOutputID, storeSupport);
-////        echoProcessExecuteRequestBuilder.setStatus(echoProcessComplexOutputID, status);
-//        echoProcessExecuteRequestBuilder.setAsReference(echoProcessComplexOutputID, asReference);
-//
-//
-//        Object responseObject =  WPSClientSession.getInstance().execute(url, echoProcessExecuteRequestBuilder.getExecute(), version200);
-//
-//        return responseObject;
-//    }
-//
-//}
+    private synchronized Object createAndSubmitEchoProcessExecuteForConcurrencyTest(int duration, String literalValue) throws WPSClientException, IOException {
+
+        echoProcessExecuteRequestBuilder.reset();
+
+        echoProcessExecuteRequestBuilder.addLiteralData("duration", "" + duration, null, null, echoProcessLiteralMimeTypeTextXML);
+        echoProcessExecuteRequestBuilder.addLiteralData(echoProcessLiteralInputID, literalValue, null, null, echoProcessLiteralMimeTypeTextXML);
+
+        echoProcessExecuteRequestBuilder.setResponseDocument(echoProcessLiteralOutputID, null, null, echoProcessLiteralMimeTypeTextXML);
+
+        echoProcessExecuteRequestBuilder.setAsynchronousExecute();
+
+        Object responseObject =  WPSClientSession.getInstance().executeAsyncGetResponseImmediately(url, echoProcessExecuteRequestBuilder.getExecute(), version200);
+
+        return responseObject;
+    }
+
+    private void checkIdentifier(Result result, String outputID){
+
+        String identifier = getFirstOutputData(result).getId();
+
+        assertThat(identifier, is(equalTo(outputID)));
+    }
+
+    private Data getFirstOutputData(Result result){
+        List<Data> outputs = result.getOutputs();
+
+        assertThat(outputs, not(nullValue()));
+        assertThat(outputs.size(), not(0));
+
+        Data outputData= outputs.get(0);
+
+        return outputData;
+    }
+
+    private Data getData(Result result, String outputID) {
+
+        List<Data> outputs = result.getOutputs();
+
+        assertThat(outputs, not(nullValue()));
+        assertThat(outputs.size(), not(0));
+
+        Data outputData = null;
+
+        for (Data data : outputs) {
+            if(data.getId().equals(outputID)) {
+                outputData = data;
+                break;
+            }
+        }
+
+        return outputData;
+    }
+
+    private void checkOutputContainsValue(Result result,
+            String outputID,
+            String value) {
+        Data data = getData(result, outputID);
+
+        assertNotNull("Data must not be null.", data);
+
+        Object valueObj =  data.getValue();
+
+        assertNotNull("Data value must not be null.", valueObj);
+        assertThat("Data value must be String.", valueObj, is(instanceOf(String.class)));
+        assertThat("Data value must contain " + value, ((String)valueObj).contains(value));
+    }
+
+}

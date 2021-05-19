@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright 2016-2020 52°North Initiative for Geospatial Open Source
+    Copyright 2016-2021 52°North Initiative for Geospatial Open Source
     Software GmbH
 
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.n52.wps</groupId>
         <artifactId>javaPS</artifactId>
-        <version>1.6.0-SNAPSHOT</version>
+        <version>1.8.0-SNAPSHOT</version>
     </parent>
     <artifactId>iceland-stream</artifactId>
     <name>52°North Iceland Streaming Interfaces</name>

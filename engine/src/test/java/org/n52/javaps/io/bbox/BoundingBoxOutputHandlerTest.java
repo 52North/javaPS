@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2020 52°North Initiative for Geospatial Open Source
+ * Copyright 2016-2021 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -79,7 +79,7 @@ public class BoundingBoxOutputHandlerTest {
 
         try (Reader reader = new InputStreamReader(stream, charset)) {
             String string = CharStreams.toString(reader);
-            errors.checkThat(string, is("<ows:BoundingBox xmlns:ows=\"http://www.opengis.net/ows/2.0\" crs=\"EPSG:4326\" dimension=\"3\"><ows:LowerCorner>1.0 2.0 3.0</ows:LowerCorner><ows:UpperCorner>4.0 5.0 6.0</ows:UpperCorner></ows:BoundingBox>"));
+            errors.checkThat(string, is("<ows:BoundingBox xmlns:ows=\"http://www.opengis.net/ows/2.0\" crs=\"EPSG:4326\" dimensions=\"3\"><ows:LowerCorner>1.0 2.0 3.0</ows:LowerCorner><ows:UpperCorner>4.0 5.0 6.0</ows:UpperCorner></ows:BoundingBox>"));
         }
     }
 
@@ -96,7 +96,7 @@ public class BoundingBoxOutputHandlerTest {
 
         try (Reader reader = new InputStreamReader(new Base64InputStream(stream, false), charset)) {
             String string = CharStreams.toString(reader);
-            errors.checkThat(string, is("<ows:BoundingBox xmlns:ows=\"http://www.opengis.net/ows/2.0\" crs=\"EPSG:4326\" dimension=\"3\"><ows:LowerCorner>1.0 2.0 3.0</ows:LowerCorner><ows:UpperCorner>4.0 5.0 6.0</ows:UpperCorner></ows:BoundingBox>"));
+            errors.checkThat(string, is("<ows:BoundingBox xmlns:ows=\"http://www.opengis.net/ows/2.0\" crs=\"EPSG:4326\" dimensions=\"3\"><ows:LowerCorner>1.0 2.0 3.0</ows:LowerCorner><ows:UpperCorner>4.0 5.0 6.0</ows:UpperCorner></ows:BoundingBox>"));
         }
     }
 
