@@ -142,12 +142,11 @@ public abstract class AbstractElementXmlStreamWriter extends XmlFactories implem
     }
 
     protected void chars(String chars) throws XMLStreamException {
-        context().dispatch(eventFactory().createCharacters(chars));
+        chars(chars, true);
     }
 
     protected void chars(String chars,
             boolean escape) throws XMLStreamException {
-        // TODO escape by default
         context().dispatch(eventFactory().createCharacters(escape ? escaper().escape(chars) : chars));
     }
 
