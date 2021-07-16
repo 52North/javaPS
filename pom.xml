@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright 2016-2021 52°North Initiative for Geospatial Open Source
-    Software GmbH
+    Copyright 2016-2021 52°North Spatial Information Research GmbH
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -93,10 +92,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <timestamp>${maven.build.timestamp}</timestamp>
         <maven.build.timestamp.format>yyyyMMdd-HHmm</maven.build.timestamp.format>
-        <version.spring>5.2.3.RELEASE</version.spring>
+        <version.spring>5.2.4.RELEASE</version.spring>
         <version.slf4j>1.7.28</version.slf4j>
         <version.log4j>2.13.3</version.log4j>
-        <version.arctic.sea>8.2.0</version.arctic.sea>
+        <version.arctic.sea>8.2.1</version.arctic.sea>
         <version.xmlbeans>3.1.0</version.xmlbeans>
         <version.common.xml>2.6.1</version.common.xml>
         <version.jackson>2.12.1</version.jackson>
@@ -367,7 +366,7 @@
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
-                <version>4.5.6</version>
+                <version>4.5.13</version>
                 <exclusions>
                     <exclusion>
                         <groupId>commons-codec</groupId>
@@ -589,6 +588,7 @@
                         <groupId>org.jasig.maven</groupId>
                         <artifactId>maven-notice-plugin</artifactId>
                         <configuration>
+                            <noticeTemplate>etc/notice-template.txt</noticeTemplate>
                             <licenseMapping>
                                 <param>http://52north.github.io/cdn/licenses/license-mappings.xml</param>
                             </licenseMapping>
@@ -608,6 +608,7 @@
                         <groupId>org.jasig.maven</groupId>
                         <artifactId>maven-notice-plugin</artifactId>
                         <configuration>
+                            <noticeTemplate>etc/notice-template.txt</noticeTemplate>
                             <licenseMapping>
                                 <param>http://52north.github.io/cdn/licenses/license-mappings-jdk9.xml</param>
                             </licenseMapping>

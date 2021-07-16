@@ -1,6 +1,5 @@
 /*
- * Copyright 2016-2021 52°North Initiative for Geospatial Open Source
- * Software GmbH
+ * Copyright 2016-2021 52°North Spatial Information Research GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -142,12 +141,11 @@ public abstract class AbstractElementXmlStreamWriter extends XmlFactories implem
     }
 
     protected void chars(String chars) throws XMLStreamException {
-        context().dispatch(eventFactory().createCharacters(chars));
+        chars(chars, true);
     }
 
     protected void chars(String chars,
             boolean escape) throws XMLStreamException {
-        // TODO escape by default
         context().dispatch(eventFactory().createCharacters(escape ? escaper().escape(chars) : chars));
     }
 

@@ -1,17 +1,19 @@
-Licensed under the Apache License, Version 2.0 (the
-"License"); you may not use this file except in compliance
-with the License. You may obtain a copy of the License at:
+Copyright (C) 2016-2021 52°North Spatial Information Research GmbH
 
-http://www.apache.org/licenses/LICENSE-2.0
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
-Unless required by applicable law or agreed to in writing,
-software distributed under the License is distributed on
-an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, either express or implied. See the License for the
-specific language governing permissions and limitations
-under the License.
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
 
 This project includes:
+
   52°North Faroe under The Apache Software License, Version 2.0
   52°North Faroe Annotations under The Apache Software License, Version 2.0
   52°North Faroe JSON Backend under The Apache Software License, Version 2.0
@@ -23,21 +25,30 @@ This project includes:
   52°North javaPS KVP Binding under The Apache Software License, Version 2.0
   52°North javaPS POX Binding under The Apache Software License, Version 2.0
   52°North javaPS Processing API Implementation under The Apache Software License, Version 2.0
+  52°North javaPS RESTful interface under The Apache Software License, Version 2.0
   52°North javaPS Service Implementation under The Apache Software License, Version 2.0
+  52°North javaPS Transactional RESTful interface under The Apache Software License, Version 2.0
+  52°North javaPS Transactional Support under The Apache Software License, Version 2.0
   52°North javaPS Webapp under The Apache Software License, Version 2.0
   52°North Shetland under The Apache Software License, Version 2.0
   52°North Svalbard Core under The Apache Software License, Version 2.0
-  Animal Sniffer Annotations under MIT license
+  52°North Svalbard JSON Common under The Apache Software License, Version 2.0
+  52°North Svalbard JSON encoding under The Apache Software License, Version 2.0
   Apache Commons Codec under Apache License, Version 2.0
   Apache Commons Configuration under Apache License, Version 2.0
   Apache Commons IO under Apache License, Version 2.0
   Apache Commons Lang under Apache License, Version 2.0
   Apache Commons Logging under The Apache Software License, Version 2.0
+  Apache Commons Text under Apache License, Version 2.0
   Apache HttpClient under Apache License, Version 2.0
-  Apache Log4j API under The Apache Software License, Version 2.0
-  Apache Log4j Core under The Apache Software License, Version 2.0
-  Apache Log4j SLF4J Binding under The Apache Software License, Version 2.0
-  Apache Log4j Web under The Apache Software License, Version 2.0
+  Apache HttpClient Fluent API under Apache License, Version 2.0
+  Apache HttpCore under Apache License, Version 2.0
+  Apache Log4j API under Apache License, Version 2.0
+  Apache Log4j Core under Apache License, Version 2.0
+  Apache Log4j SLF4J Binding under Apache License, Version 2.0
+  Apache Log4j Web under Apache License, Version 2.0
+  Bean Validation API under The Apache Software License, Version 2.0
+  c3p0 under GNU Lesser General Public License, Version 2.1 or Eclipse Public License, Version 1.0
   Checker Qual under The MIT License
   ClassLoader Leak Prevention library under Apache 2
   Commons Lang under The Apache Software License, Version 2.0
@@ -47,30 +58,39 @@ This project includes:
   EXIficient-Core under MIT License
   EXIficient-Grammars under MIT License
   FindBugs-jsr305 under The Apache Software License, Version 2.0
-  geolatte-geom under LGPL 3.0
   Guava InternalFutureFailureAccess and InternalFutures under The Apache Software License, Version 2.0
   Guava ListenableFuture only under The Apache Software License, Version 2.0
-  Guava: Google Core Libraries for Java under The Apache Software License, Version 2.0
+  Guava: Google Core Libraries for Java under Apache License, Version 2.0
+  HikariCP under The Apache Software License, Version 2.0
   J2ObjC Annotations under The Apache Software License, Version 2.0
   Jackson-annotations under The Apache Software License, Version 2.0
   Jackson-core under The Apache Software License, Version 2.0
   jackson-databind under The Apache Software License, Version 2.0
-  Java Architecture for XML Binding under CDDL 1.1 or GPL2 w/ CPE
   Java Property Utility under The Apache Software License, Version 2.0
   JavaBeans(TM) Activation Framework under COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
-  javaPS input/output handler under The Apache Software License, Version 2.0
-  javaps-test-processes under The Apache Software License, Version 2.0
+  JavaMail API jar under CDDL or GPLv2+CE
   javax.inject under The Apache Software License, Version 2.0
   JCL 1.2 implemented over SLF4J under MIT License
-  Joda-Time under Apache 2
-  Old JAXB Core under CDDL+GPL License
-  Old JAXB Runtime under CDDL+GPL License
-  org.locationtech.jts:jts-core under Eclipse Publish License, Version 1.0 or Eclipse Distribution License - v 1.0
+  Joda-Time under Apache License, Version 2.0
+  JOpt Simple under The MIT License
+  jstl under CDDL 1.1 or GPL2 w/ CPE
+  libphonenumber under The Apache Software License, Version 2.0
+  Log4j Implemented Over SLF4J under Apache Software Licenses
+  mchange-commons-java under GNU Lesser General Public License, Version 2.1 or Eclipse Public License, Version 1.0
+  Mozilla Rhino under Mozilla Public License, Version 2.0
+  Neo Visionaries Internationalization Package under The Apache Software License, Version 2.0
+  null under Lesser General Public License, version 3 or greater or Apache Software License, version 2.0
+  Old JAXB Core under CDDL 1.1 or GPL2 w/ CPE
+  Old JAXB Runtime under CDDL 1.1 or GPL2 w/ CPE
+  org.locationtech.jts:jts-core under Eclipse Public License, Version 2.0 or Eclipse Distribution License - v 1.0
   PJL Compressing Filter under Apache Software License V2.0
+  quartz under The Apache Software License, Version 2.0
   SLF4J API Module under MIT License
   SLF4J Simple Binding under MIT License
   Spring AOP under Apache License, Version 2.0
   Spring Beans under Apache License, Version 2.0
+  Spring Boot under Apache License, Version 2.0
+  Spring Boot AutoConfigure under Apache License, Version 2.0
   Spring Commons Logging Bridge under Apache License, Version 2.0
   Spring Context under Apache License, Version 2.0
   Spring Core under Apache License, Version 2.0
