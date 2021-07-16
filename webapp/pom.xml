@@ -297,7 +297,7 @@
             <id>integration-test</id>
             <properties>
                 <version.test.processes>2</version.test.processes>
-                <version.iohandler>2</version.iohandler>
+                <version.iohandler>3</version.iohandler>
             </properties>
             <build>
                 <plugins>
