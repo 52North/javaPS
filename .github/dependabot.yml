@@ -66,4 +66,4 @@ updates:
     - 8.1.0
   - dependency-name: org.apache.xmlbeans:xmlbeans
     versions:
-    - 4.0.0
+    - 5.1.0
