@@ -94,7 +94,7 @@
         <maven.build.timestamp.format>yyyyMMdd-HHmm</maven.build.timestamp.format>
         <version.spring>5.3.13</version.spring>
         <version.slf4j>1.7.28</version.slf4j>
-        <version.log4j>2.15.0</version.log4j>
+        <version.log4j>2.16.0</version.log4j>
         <version.arctic.sea>8.2.1</version.arctic.sea>
         <version.xmlbeans>3.1.0</version.xmlbeans>
         <version.common.xml>2.6.1</version.common.xml>
@@ -385,7 +385,7 @@
             <dependency>
         	    <groupId>org.mockito</groupId>
         	    <artifactId>mockito-core</artifactId>
-        	    <version>2.27.0</version>
+        	    <version>4.1.0</version>
         	    <scope>test</scope>
             </dependency>
             <dependency>
