@@ -446,9 +446,9 @@
                 <version>3.1.0</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.taglibs</groupId>
-                <artifactId>taglibs-standard-impl</artifactId>
-		        <version>1.2.5</version>
+                <groupId>javax.servlet</groupId>
+		        <artifactId>jstl</artifactId>
+		        <version>1.2</version>
 		        <scope>runtime</scope>
 		    </dependency>
             <dependency>

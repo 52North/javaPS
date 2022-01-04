@@ -166,8 +166,8 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.taglibs</groupId>
-            <artifactId>taglibs-standard-impl</artifactId>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
             <scope>runtime</scope>
         </dependency>
         <dependency>
