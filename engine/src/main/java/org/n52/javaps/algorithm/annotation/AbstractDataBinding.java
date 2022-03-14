@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2021 52°North Spatial Information Research GmbH
+ * Copyright 2016-2022 52°North Spatial Information Research GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -79,7 +79,7 @@ abstract class AbstractDataBinding<M extends AccessibleObject & Member, D extend
     }
 
     public static boolean isEnum(Type type) {
-        return (type instanceof Class<?>) && ((Class<?>) type).isEnum();
+        return type instanceof Class<?> && ((Class<?>) type).isEnum();
     }
 
     public void setDescription(D description) {
