@@ -79,7 +79,7 @@ abstract class AbstractDataBinding<M extends AccessibleObject & Member, D extend
     }
 
     public static boolean isEnum(Type type) {
-        return (type instanceof Class<?>) && ((Class<?>) type).isEnum();
+        return type instanceof Class<?> && ((Class<?>) type).isEnum();
     }
 
     public void setDescription(D description) {
