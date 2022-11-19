@@ -71,7 +71,7 @@ public final class IOUtils {
 
     public static File writeStreamToFile(InputStream inputStream,
             String extension) throws IOException {
-        File file = File.createTempFile(FILE + UUID.randomUUID(), "." + extension);
+        File file = Files.createTempFile(FILE + UUID.randomUUID(), "." + extension).toFile();
         return writeStreamToFile(inputStream, extension, file);
     }
 
@@ -112,7 +112,7 @@ public final class IOUtils {
      *             if the zipping process fails.
      */
     public static File zip(File... files) throws IOException {
-        File zip = File.createTempFile("zip" + UUID.randomUUID(), ".zip");
+        File zip = Files.createTempFile("zip" + UUID.randomUUID(), ".zip").toFile();
 
         try (ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zip))) {
             byte[] buffer = new byte[4096];

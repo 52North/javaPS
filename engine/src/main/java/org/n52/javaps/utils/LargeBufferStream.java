@@ -21,6 +21,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 
 /**
@@ -127,7 +128,7 @@ public class LargeBufferStream extends OutputStream {
             return false;
         }
 
-        onDiskFile = File.createTempFile("jgit_", ".buffer");
+        onDiskFile = Files.createTempFile("jgit_", ".buffer").toFile();
         diskOut = new FileOutputStream(onDiskFile);
 
         final Block last = blocks.remove(blocks.size() - 1);
