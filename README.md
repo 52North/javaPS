@@ -10,7 +10,7 @@
 
 **Interoperable processing framework for web applications/distributed workflow systems**
 
-javaPS enables the deployment of geo-processes on the web in a standardized way. One of its main goals ist the provision of an interoperable processing framework for web applications or distributed workflow systems. It features a pluggable architecture for processes and data encodings.
+javaPS enables the deployment of geo-processes on the web in a standardized way. One of its main goals is the provision of an interoperable processing framework for web applications or distributed workflow systems. It features a pluggable architecture for processes and data encodings.
 
 javaPS implements the [OGC WPS specification, version 2.0](http://docs.opengeospatial.org/is/14-065/14-065.html).
 
@@ -51,7 +51,7 @@ Check out the [JavaPS Documentation](http://52north.github.io/javaPS/documentati
 
 ## Demo
 
-Try out the latest javaPS alpha-release on on our [Geoprocessing Demo Server](http://geoprocessing.demo.52north.org/).
+Try out the latest javaPS alpha-release on our [Geoprocessing Demo Server](http://geoprocessing.demo.52north.org/).
 
 ## License
 
@@ -96,8 +96,8 @@ https://52north.org/discuss/#mailing-lists
 
 ## Contribute
 
-Are you are interesting in contributing to javaPS and you want to pull your changes to the 52°North repository to make it available to all?
-In that case we need your official permission and for this purpose we have a so called contributors license agreement (CLA) in place. With this agreement you grant us the rights to use and publish your code under an open source license.
+Are you are interested in contributing to javaPS and you want to pull your changes to the 52°North repository to make it available to all?
+In that case we need your official permission and for this purpose we have a so called contributor's license agreement (CLA) in place. With this agreement you grant us the rights to use and publish your code under an open source license.
 A link to the contributors license agreement and further explanations are available here:
 https://52north.org/software/licensing/guidelines/
 
