@@ -25,9 +25,7 @@
 
     <ctx:annotation-config />
 
-    <bean id="eventBus" class="org.n52.janmayen.event.EventBus">
-        <property name="async" value="false" />
-    </bean>
+    <bean id="eventBus" class="org.n52.janmayen.event.EventBus"/>
 
     <!--  settings related beans -->
     <bean id="configLocationProvider" class="org.n52.iceland.service.ServletConfigLocationProvider" />
