@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2022 52°North Spatial Information Research GmbH
+ * Copyright 2016-2023 52°North Spatial Information Research GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -91,5 +91,12 @@ public class StreamingServiceResponseWriter implements ResponseWriter<OwsService
         }
         return ResponseWriter.super.getForcedHttpStatus(t);
     }
+
+	@Override
+	public void write(OwsServiceResponse t, OutputStream out) throws IOException, EncodingException {
+        StreamWriterKey key = new StreamWriterKey(t.getClass(), t.getContentType());
+        StreamWriter<Object> writer = repository.getWriter(key).orElseThrow(() -> new NoEncoderForKeyException(key));
+        writer.write(t, out);
+	}
 
 }
