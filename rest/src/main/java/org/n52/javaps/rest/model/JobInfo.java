@@ -25,8 +25,6 @@ import javax.validation.constraints.*;
  * JobInfo
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen",
-        date = "2020-01-28T10:33:35.029Z[GMT]")
 public class JobInfo {
     @JsonProperty("id")
     private String id;

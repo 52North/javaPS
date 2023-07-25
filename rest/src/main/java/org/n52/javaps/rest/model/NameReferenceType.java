@@ -27,9 +27,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * NameReferenceType
  */
 @Validated
-@javax.annotation.Generated(
-        value = "io.swagger.codegen.v3.generators.java.SpringCodegen",
-        date = "2020-04-01T13:54:06.047Z[GMT]")
 public class NameReferenceType {
     @JsonProperty("name")
     private String name;
