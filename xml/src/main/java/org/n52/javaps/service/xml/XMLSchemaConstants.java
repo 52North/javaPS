@@ -26,7 +26,7 @@ public interface XMLSchemaConstants {
 
     String OWS20_SCHEMALOCTION = "http://schemas.opengis.net/ows/2.0/owsAll.xsd";
 
-    public interface Attr {
+    interface Attr {
         String AN_MAX_OCCURS = "maxOccurs";
 
         String AN_MIN_OCCURS = "minOccurs";

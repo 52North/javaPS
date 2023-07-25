@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<!--
+
+    Copyright 2016-2023 52°North Spatial Information Research GmbH
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<FindBugsFilter>
+	<Match>
+	  <Or>
+	    <Class name="org.n52.svalbard.decode.stream.xml.DocumentXmlStreamReader"/>
+	    <Class name="org.n52.svalbard.decode.stream.xml.ElementXmlStreamReaderRepository"/>
+        <Class name="org.n52.svalbard.decode.stream.xml.XmlStreamingOperationDecoder"/>
+        <Class name="org.n52.svalbard.encode.stream.OwsExceptionReportResponse"/>
+        <Class name="org.n52.svalbard.encode.stream.ServiceResponseWriterFactory"/>
+        <Class name="org.n52.svalbard.encode.stream.StreamingServiceResponseWriter"/>
+        <Class name="org.n52.svalbard.encode.stream.xml.AbstractElementXmlStreamWriter"/>
+        <Class name="org.n52.svalbard.encode.stream.xml.DocumentXmlStreamWriter"/>
+        <Class name="org.n52.svalbard.encode.stream.xml.ElementXmlStreamWriterRepository"/>
+        <Class name="org.n52.svalbard.encode.stream.xml.XmlStreamWritingContext"/>
+        <Class name="org.n52.javaps.algorithm.ContextAlgorithmRegistrator"/>
+        <Class name="org.n52.javaps.algorithm.RepositoryManager"/>
+        <Class name="org.n52.javaps.commons.FileExtensions"/>
+        <Class name="org.n52.javaps.engine.impl.EngineImpl"/>
+        <Class name="org.n52.javaps.io.GroupInputData"/>
+        <Class name="org.n52.javaps.io.GroupOutputData"/>
+        <Class name="org.n52.javaps.service.reference.OutputReferenceEndpoint"/>
+        <Class name="org.n52.javaps.service.xml.StreamingRawWriter"/>
+        <Class name="org.n52.javaps.rest.EngineExceptionAdvice"/>
+	    <Class name="org.n52.javaps.rest.ProcessesApiImpl"/>
+	    <Class name="org.n52.javaps.rest.deserializer.ExecuteDeserializer"/>
+	    <Class name="org.n52.javaps.rest.io.JSONBoundingBoxInputOutputHandler"/>
+	    <Class name="org.n52.javaps.rest.model.AdditionalParameter"/>
+	    <Class name="org.n52.javaps.rest.model.AllowedRanges"/>
+	    <Class name="org.n52.javaps.rest.model.AllowedValues"/>
+	    <Class name="org.n52.javaps.rest.model.BoundingBoxData"/>
+	    <Class name="org.n52.javaps.rest.model.BoundingBoxDataType"/>
+	    <Class name="org.n52.javaps.rest.model.ComplexDataType"/>
+	    <Class name="org.n52.javaps.rest.model.DataType"/>
+	    <Class name="org.n52.javaps.rest.model.DescriptionType"/>
+	    <Class name="org.n52.javaps.rest.model.Execute"/>
+	    <Class name="org.n52.javaps.rest.model.JobInfo"/>
+	    <Class name="org.n52.javaps.rest.model.LandingPage"/>
+	    <Class name="org.n52.javaps.rest.model.LiteralData"/>
+	    <Class name="org.n52.javaps.rest.model.LiteralDataDomain"/>
+	    <Class name="org.n52.javaps.rest.model.LiteralDataType"/>
+	    <Class name="org.n52.javaps.rest.model.Process"/>
+	    <Class name="org.n52.javaps.rest.model.ProcessSummary"/>
+	    <Class name="org.n52.javaps.rest.model.ReqClasses"/>
+	    <Class name="org.n52.javaps.rest.model.Result"/>
+	    <Class name="org.n52.javaps.rest.model.ResultBoundingBox"/>
+	    <Class name="org.n52.javaps.rest.model.ResultValueType"/>
+	    <Class name="org.n52.javaps.rest.model.StatusInfo"/>
+	    <Class name="org.n52.javaps.transactional.ResourceAlgorithmProvider"/>
+	    <Class name="org.n52.javaps.transactional.UndeletableApplicationPackage"/>
+	    <Class name="org.n52.javaps.transactional.ResourceAlgorithmProviderFactory"/>
+	    <Class name="org.n52.javaps.transactional.rest.TransactionalApiImpl"/>
+        </Or>
+	    <Bug pattern="EI_EXPOSE_REP2" />
+	</Match>
+	<Match>
+	  <Or>
+        <Class name="org.n52.svalbard.encode.stream.OwsExceptionReportResponse"/>
+        <Class name="org.n52.javaps.io.GroupInputData"/>
+        <Class name="org.n52.javaps.io.GroupOutputData"/>
+        <Class name="org.n52.javaps.rest.EngineExceptionAdvice"/>
+	    <Class name="org.n52.javaps.rest.ProcessesApiImpl"/>
+	    <Class name="org.n52.javaps.rest.deserializer.ExecuteDeserializer"/>
+	    <Class name="org.n52.javaps.rest.io.JSONBoundingBoxInputOutputHandler"/>
+	    <Class name="org.n52.javaps.rest.model.AdditionalParameter"/>
+	    <Class name="org.n52.javaps.rest.model.AllowedRanges"/>
+	    <Class name="org.n52.javaps.rest.model.AllowedValues"/>
+	    <Class name="org.n52.javaps.rest.model.BoundingBoxData"/>
+	    <Class name="org.n52.javaps.rest.model.BoundingBoxDataType"/>
+	    <Class name="org.n52.javaps.rest.model.ComplexDataType"/>
+	    <Class name="org.n52.javaps.rest.model.DataType"/>
+	    <Class name="org.n52.javaps.rest.model.DescriptionType"/>
+	    <Class name="org.n52.javaps.rest.model.Execute"/>
+	    <Class name="org.n52.javaps.rest.model.JobInfo"/>
+	    <Class name="org.n52.javaps.rest.model.LandingPage"/>
+	    <Class name="org.n52.javaps.rest.model.LiteralData"/>
+	    <Class name="org.n52.javaps.rest.model.LiteralDataDomain"/>
+	    <Class name="org.n52.javaps.rest.model.LiteralDataType"/>
+	    <Class name="org.n52.javaps.rest.model.Process"/>
+	    <Class name="org.n52.javaps.rest.model.ProcessSummary"/>
+	    <Class name="org.n52.javaps.rest.model.ReqClasses"/>
+	    <Class name="org.n52.javaps.rest.model.Result"/>
+	    <Class name="org.n52.javaps.rest.model.ResultBoundingBox"/>
+	    <Class name="org.n52.javaps.rest.model.ResultValueType"/>
+	    <Class name="org.n52.javaps.rest.model.StatusInfo"/>
+      </Or>
+	    <Bug pattern="EI_EXPOSE_REP" />
+	</Match>
+</FindBugsFilter>

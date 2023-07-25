@@ -31,7 +31,7 @@ public interface OWSConstants {
         return new QName(NS_OWS, element, NS_OWS_PREFIX);
     }
 
-    public interface Attr {
+    interface Attr {
         String AN_ABOUT = "about";
 
         QName QN_ABOUT = ows(AN_ABOUT);
@@ -89,7 +89,7 @@ public interface OWSConstants {
         QName QN_VERSION = ows(AN_VERSION);
     }
 
-    public interface Elem {
+    interface Elem {
         String EN_ABSTRACT = "Abstract";
 
         QName QN_ABSTRACT = ows(EN_ABSTRACT);

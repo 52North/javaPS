@@ -165,8 +165,8 @@ public class WPSRequestReader extends AbstractElementXmlStreamReader {
                     OwsCode identifier = null;
                     try {
                         identifier = readIdentifier(start, reader);
-                    } catch (NullPointerException e) {
-                        // do nothing
+                    } catch (Exception e) {
+                        identifier = null;
                     }
                     if (identifier != null) {
                         request.addProcessIdentifier(identifier);

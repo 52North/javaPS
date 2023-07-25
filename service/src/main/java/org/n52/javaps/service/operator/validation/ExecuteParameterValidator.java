@@ -111,8 +111,8 @@ public class ExecuteParameterValidator implements ParameterValidator<ExecuteRequ
             ProcessDescription description) throws OwsExceptionReport {
         CompositeOwsException exception = new CompositeOwsException();
 
-        if (request.getResponseMode() == ResponseMode.RAW && (request.getOutputs().size() > 1 || (request.getOutputs()
-                .isEmpty() && description.getOutputs().size() > 1))) {
+        if (request.getResponseMode() == ResponseMode.RAW && (request.getOutputs().size() > 1 || request.getOutputs()
+                .isEmpty() && description.getOutputs().size() > 1)) {
             exception.add(new InvalidParameterValueException().at("responseMode").withMessage(
                     "The value 'raw' of the parameter 'responseMode' is invalid. Single output is required."));
         }

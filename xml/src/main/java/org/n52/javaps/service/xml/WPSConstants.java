@@ -31,7 +31,7 @@ public interface WPSConstants {
         return new QName(NS_WPS, element, NS_WPS_PREFIX);
     }
 
-    public interface Attr {
+    interface Attr {
         String AN_DATA_TYPE = "dataType";
 
         QName QN_DATA_TYPE = wps(AN_DATA_TYPE);
@@ -101,7 +101,7 @@ public interface WPSConstants {
         QName QN_VERSION = wps(AN_VERSION);
     }
 
-    public interface Elem {
+    interface Elem {
         String EN_BODY = "Body";
 
         QName QN_BODY = wps(EN_BODY);

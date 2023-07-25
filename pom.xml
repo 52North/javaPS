@@ -573,6 +573,14 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                    <groupId>com.github.spotbugs</groupId>
+                    <artifactId>spotbugs-maven-plugin</artifactId>
+                    <configuration>
+                        <excludeFilterFile>etc/spotbugs-exclude-filter.xml</excludeFilterFile>
+                        <failOnError>true</failOnError>
+                    </configuration>
+             </plugin>
         </plugins>
     </build>
     
