@@ -65,6 +65,13 @@ public class StreamingServiceResponseWriter implements ResponseWriter<OwsService
     }
 
     @Override
+    public void write(OwsServiceResponse t, OutputStream out) throws IOException, EncodingException {
+        StreamWriterKey key = new StreamWriterKey(t.getClass(), t.getContentType());
+        StreamWriter<Object> writer = repository.getWriter(key).orElseThrow(() -> new NoEncoderForKeyException(key));
+        writer.write(t, out);
+    }
+
+    @Override
     public boolean supportsGZip(OwsServiceResponse t) {
         return true;
     }
@@ -91,12 +98,5 @@ public class StreamingServiceResponseWriter implements ResponseWriter<OwsService
         }
         return ResponseWriter.super.getForcedHttpStatus(t);
     }
-
-	@Override
-	public void write(OwsServiceResponse t, OutputStream out) throws IOException, EncodingException {
-        StreamWriterKey key = new StreamWriterKey(t.getClass(), t.getContentType());
-        StreamWriter<Object> writer = repository.getWriter(key).orElseThrow(() -> new NoEncoderForKeyException(key));
-        writer.write(t, out);
-	}
 
 }
