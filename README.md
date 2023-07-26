@@ -1,8 +1,8 @@
-# javaPS [![Maven Central](https://img.shields.io/maven-central/v/org.n52.wps/javaPS.svg)](https://search.maven.org/search?q=g:org.n52.wps%20and%20a:webapp) [![Total alerts](https://img.shields.io/lgtm/alerts/g/52North/javaPS.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/52North/javaPS/alerts/) [![Language grade: Java](https://img.shields.io/lgtm/grade/java/g/52North/javaPS.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/52North/javaPS/context:java)
+# javaPS 
+[![Maven Central](https://img.shields.io/maven-central/v/org.n52.wps/javaPS.svg)](https://search.maven.org/search?q=g:org.n52.wps%20and%20a:webapp) 
 
 ## Build Status
-* Master: [![Master Build Status](https://travis-ci.org/52North/javaPS.png?branch=master)](https://travis-ci.org/52North/javaPS)
-* Develop: [![Develop Build Status](https://travis-ci.org/52North/javaPS.png?branch=develop)](https://travis-ci.org/52North/javaPS)
+* Develop: ![Develop Build Status](https://github.com/52North/javaPS/actions/workflows/daily.yml/badge.svg)
 
 ## Description
 
@@ -79,7 +79,7 @@ This project is licensed under the Apache Software License, version 2.0.
 
 ## References
 
-* [WPS for Tsunami Simulation](http://tsunami-riesgos.awi.de:8080/javaps/service?request=GetCapabilities&service=WPS) - WPS service deployed in the RIESGOS project.
+* [WPS for Tsunami Simulation](https://riesgos.52north.org/javaps/service?request=GetCapabilities&service=WPS) - WPS service deployed in the RIESGOS project.
 * [OGC Testbed 15](https://www.opengeospatial.org/projects/initiatives/testbed15)
 * [OGC Routing Pilot](https://www.opengeospatial.org/projects/initiatives/routingpilot)
 * [WaCoDiS](https://wacodis.fbg-hsbo.de/)
