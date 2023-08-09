@@ -2,7 +2,7 @@
 [![Maven Central](https://img.shields.io/maven-central/v/org.n52.wps/javaPS.svg)](https://search.maven.org/search?q=g:org.n52.wps%20and%20a:webapp) 
 
 ## Build Status
-* Develop: ![Develop Build Status](https://github.com/52North/javaPS/actions/workflows/daily.yml/badge.svg)
+* Develop: [![Develop Build Status](https://github.com/52North/javaPS/actions/workflows/daily.yml/badge.svg)](https://github.com/52North/javaPS/actions/workflows/daily.yml)
 
 ## Description
 
